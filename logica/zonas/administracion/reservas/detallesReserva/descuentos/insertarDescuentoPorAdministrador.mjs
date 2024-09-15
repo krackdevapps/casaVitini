@@ -67,8 +67,10 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
                 }
             }
         })
-        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
-
+        await actualizarDesgloseFinacieroPorReservaUID({
+            desgloseFinanciero,
+            reservaUID
+        })
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",

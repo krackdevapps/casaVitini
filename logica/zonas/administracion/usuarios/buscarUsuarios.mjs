@@ -15,6 +15,7 @@ export const buscarUsuarios = async (entrada, salida) => {
         const esquemaBusqueda = Joi.object({
             buscar: Joi.string().required(),
             pagina: Joi.number(),
+            tipoBusqueda: Joi.string(),
             nombreColumna: Joi.string(),
             sentidoColumna: Joi.string()
         }).required()

@@ -14,7 +14,7 @@ export const modificarBloqueo = async (entrada, salida) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 4
+            numeroDeLLavesMaximo: 6
         })
         const bloqueoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.bloqueoUID,

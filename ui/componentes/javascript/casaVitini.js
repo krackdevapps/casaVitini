@@ -1062,6 +1062,7 @@ const casaVitini = {
                             const marcoElasticoRelativo = document.createElement('div');
                             marcoElasticoRelativo.classList.add('marcoElasticoRelativo');
                             marcoElasticoRelativo.setAttribute("espacio", "marcoElastico")
+                            marcoElasticoRelativo.style.transition = "background 250ms linear"
                             marcoElasticoRelativo.style.flex = "1"
                             marcoElasticoRelativo.style.padding = "6px"
                             marcoElasticoRelativo.classList.add(
@@ -1267,6 +1268,7 @@ const casaVitini = {
                                 document.body.removeAttribute("class")
                                 document.querySelector("[calendario=entrada]").classList.add("parpadeaFondo")
                                 document.querySelector("[calendario=salida]").classList.remove("parpadeaFondo")
+                                document.querySelector("[espacio=marcoElastico]").classList.remove("fondoTransparente")
                                 document.querySelector("[componente=botonDisponibilidad]").classList.remove("parpadeaFondo")
                                 const selectorCalendarios = document.querySelectorAll("[calendario]")
                                 selectorCalendarios.forEach((memoriaVolatil) => {
@@ -1396,6 +1398,8 @@ const casaVitini = {
                             return casaVitini.ui.componentes.advertenciaInmersiva(error)
                         }
                         document.querySelector("[espacio=marcoElastico]").classList.remove("fondoAlojamiento")
+                        document.querySelector("[espacio=marcoElastico]").classList.add("fondoTransparente")
+
                         document.body.style.backgroundColor = "rgb(214, 192, 157)"
                         document.querySelector(".bloquePernoctacion")?.remove()
                         document.querySelector(".bloqueBotonResumenReserva")?.remove()
@@ -20214,7 +20218,7 @@ const casaVitini = {
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                             // calendario_entrada_asistido_detallesReserva_conPasado
-                            console.log (mesActual_decimal , mesSalidaReserva_decimal , anoActual_decimal , anoSalidaReserva_decimal)
+                            console.log(mesActual_decimal, mesSalidaReserva_decimal, anoActual_decimal, anoSalidaReserva_decimal)
                             if (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal) {
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
@@ -21164,7 +21168,7 @@ const casaVitini = {
                     contenedorCarga.setAttribute("elemento", "flotante")
                     contenedorCarga.appendChild(spinner)
                     contenedorCalendario.appendChild(contenedorCarga)
-                    
+
                     casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
                 },
                 seleccionarDiaProcesadoNuevo: (metadatosDia) => {
@@ -22959,28 +22963,42 @@ const casaVitini = {
                                     contenedor.appendChild(contenedorBotones)
                                 }
                                 // Crear dos contenedors, uno para las oferta de dos tipos y otro para los totales
+
+
+
+
+
+                            }
+                            const contenedorListaOfertas_selector = document.querySelector(destino).querySelector("[contenedor=financiero]")
+                                .querySelector("[contenedor=ofertas]")
+                                .querySelector("[contenedor=data]")
+                                .querySelector("[contenedor=listaOfertas]")
+
+                            if (!contenedorListaOfertas_selector) {
+
+                                const contenedorOfertasRenderizado = document.querySelector(destino).querySelector("[contenedor=financiero]")
+                                    .querySelector("[contenedor=ofertas]")
+                                    .querySelector("[contenedor=data]")
+
+
                                 const contenedorListaOfertas = document.createElement("div")
                                 contenedorListaOfertas.setAttribute("contenedor", "listaOfertas")
                                 contenedorListaOfertas.classList.add(
                                     "flexVertical",
                                     "gap6"
                                 )
-                                contenedor.appendChild(contenedorListaOfertas)
-
-                                const contenedorDescuentosAplicadosAlTotalNeto = document.createElement("div")
-                                contenedorDescuentosAplicadosAlTotalNeto.setAttribute("contenedor", "listaDescuentosPorTotal")
-                                contenedorDescuentosAplicadosAlTotalNeto.classList.add(
-                                    "flexVertical",
-                                    "gap6"
-
-                                )
-                                contenedor.appendChild(contenedorDescuentosAplicadosAlTotalNeto)
+                                contenedorOfertasRenderizado.appendChild(contenedorListaOfertas)
 
                             }
-                            const contenedorOfertas_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]")
+
+
+
+
+                            const contenedorListaOfertas_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]")
                                 .querySelector("[contenedor=ofertas]")
                                 .querySelector("[contenedor=data]")
                                 .querySelector("[contenedor=listaOfertas]")
+
 
                             this.componentesUI.utilidades.limpiarOfertasObsoletas({
                                 contenedores: ofertasPorCondicion,
@@ -22995,15 +23013,24 @@ const casaVitini = {
                             })
 
                             if (ofertasPorAdministradorArray.length === 0) {
-                                contenedorOfertas_renderizado?.querySelector(`[contenedor=porAdministrador]`)?.remove()
+                                contenedorListaOfertas_renderizado?.querySelector(`[contenedor=porAdministrador]`)?.remove()
                             }
 
                             if (ofertasPorCondicionArray.length === 0) {
-                                contenedorOfertas_renderizado?.querySelector(`[contenedor=porCondicion]`)?.remove()
+                                contenedorListaOfertas_renderizado?.querySelector(`[contenedor=porCondicion]`)?.remove()
+                            }
+                            if (ofertasPorAdministradorArray.length === 0
+                                &&
+                                ofertasPorCondicionArray.length === 0
+                            ) {
+                                document.querySelector(destino).querySelector("[contenedor=financiero]")
+                                    .querySelector("[contenedor=ofertas]")
+                                    .querySelector("[contenedor=data]")
+                                    ?.querySelector("[contenedor=listaOfertas]")?.remove()
                             }
                             ofertasPorCondicion.forEach((contenedorOferta, posicion) => {
 
-                                const selectorContenedorPorCondicion = contenedorOfertas_renderizado.querySelector(`[contenedor=porCondicion]`)
+                                const selectorContenedorPorCondicion = contenedorListaOfertas_renderizado.querySelector(`[contenedor=porCondicion]`)
                                 if (!selectorContenedorPorCondicion) {
                                     const contenedorPorCondicion = document.createElement("div")
                                     contenedorPorCondicion.setAttribute("contenedor", "porCondicion")
@@ -23022,7 +23049,7 @@ const casaVitini = {
                                     )
                                     tituloContendor.innerText = "Ofertas aplicadas por condición"
                                     contenedorPorCondicion.appendChild(tituloContendor)
-                                    contenedorOfertas_renderizado.appendChild(contenedorPorCondicion)
+                                    contenedorListaOfertas_renderizado.appendChild(contenedorPorCondicion)
                                 }
 
                                 this.componentesUI.globalUI({
@@ -23046,8 +23073,8 @@ const casaVitini = {
                             })
 
                             ofertasPorAdministrador.forEach((contenedorOferta, posicion) => {
-
-                                const selectorContenedorPorAdministrador = contenedorOfertas_renderizado.querySelector(`[contenedor=porAdministrador]`)
+                                console.log("contenedorListaOfertas_renderizado", contenedorListaOfertas_renderizado)
+                                const selectorContenedorPorAdministrador = contenedorListaOfertas_renderizado?.querySelector(`[contenedor=porAdministrador]`)
                                 if (!selectorContenedorPorAdministrador) {
                                     const contenedorPorAdministrador = document.createElement("div")
                                     contenedorPorAdministrador.setAttribute("contenedor", "porAdministrador")
@@ -23066,7 +23093,7 @@ const casaVitini = {
                                     )
                                     tituloContendor.innerText = "Ofertas aplicadas por administrador"
                                     contenedorPorAdministrador.appendChild(tituloContendor)
-                                    contenedorOfertas_renderizado.appendChild(contenedorPorAdministrador)
+                                    contenedorListaOfertas_renderizado.appendChild(contenedorPorAdministrador)
                                 }
 
                                 this.componentesUI.globalUI({
@@ -24033,16 +24060,37 @@ const casaVitini = {
                                     .querySelector("[contenedor=ofertas]")
                                     .querySelector("[contenedor=data]")
                                     ?.querySelector("[contenedor=listadescuentosAplicadosAlTotalNetoOfertas]")
-                                    ?.querySelector("[contenedor=porTotal]")
                                     ?.remove()
                                 return
                             }
+
+
+                            const contenedorPorTotalOfertas_selector = document.querySelector(destino).querySelector("[contenedor=financiero]")
+                                .querySelector("[contenedor=ofertas]")
+                                .querySelector("[contenedor=data]")
+                                .querySelector("[contenedor=listadescuentosAplicadosAlTotalNetoOfertas]")
+
+                            if (!contenedorPorTotalOfertas_selector) {
+                                const contenedorOfertas = document.querySelector(destino)
+                                    .querySelector("[contenedor=financiero]")
+                                    .querySelector("[contenedor=ofertas]")
+                                    .querySelector("[contenedor=data]")
+
+                                const contenedorDescuentosPorTotal = document.createElement("div")
+                                contenedorDescuentosPorTotal.setAttribute("contenedor", "listadescuentosAplicadosAlTotalNetoOfertas")
+                                contenedorDescuentosPorTotal.classList.add(
+                                    "flexVertical",
+                                    "gap6"
+                                )
+                                contenedorOfertas.appendChild(contenedorDescuentosPorTotal)
+                            }
+
 
                             const contenedorPorTotal_selector = document.querySelector(destino)
                                 .querySelector("[contenedor=financiero]")
                                 .querySelector("[contenedor=ofertas]")
                                 .querySelector("[contenedor=data]")
-                                .querySelector("[contenedor=listaDescuentosPorTotal]")
+                                .querySelector("[contenedor=listadescuentosAplicadosAlTotalNetoOfertas]")
                                 .querySelector("[contenedor=porTotal]")
                             if (!contenedorPorTotal_selector) {
                                 const contenedor = document.createElement("div")
@@ -24052,11 +24100,12 @@ const casaVitini = {
                                     "flexVertical",
                                     "gap6"
                                 )
+                                
                                 document.querySelector(destino)
                                     .querySelector("[contenedor=financiero]")
                                     .querySelector("[contenedor=ofertas]")
                                     .querySelector("[contenedor=data]")
-                                    .querySelector("[contenedor=listaDescuentosPorTotal]")
+                                    .querySelector("[contenedor=listadescuentosAplicadosAlTotalNetoOfertas]")
                                     .appendChild(contenedor)
 
                                 const tituloContendor = document.createElement("div")

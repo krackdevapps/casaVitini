@@ -16,7 +16,7 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 4
+            numeroDeLLavesMaximo: 6
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,

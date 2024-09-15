@@ -205,14 +205,23 @@ details {
 
 details summary {
     cursor: default;
-    transition: margin 150ms ease-out;
+    transition: margin 150ms ease-out, background 250ms linear;
+    ;
     user-select: none;
     -webkit-user-select: none;
 }
 
 details[open] summary {
     margin-bottom: 10px;
+}
 
+summary {
+    margin: 6px;
+    border-radius: 10px;
+}
+
+summary:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 [zonaCSS="/"] .bloqueReservasPortada {
@@ -1087,7 +1096,7 @@ details[open] summary {
 
 .plaza_alojamiento_contenedor {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr auto;
     grid-gap: 0px;
     grid-auto-rows: minmax(auto, auto);
     gap: 6px;
@@ -1322,6 +1331,7 @@ details[open] summary {
     padding: 14px;
     border-radius: 15px;
     width: 100%;
+    
 }
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoBotonIreAResumenReserva {
@@ -1389,7 +1399,7 @@ details[open] summary {
     user-select: none;
     -webkit-user-select: none;
     scale: 1;
-    transition: scale 500ms ease-in-out, box-shadow 500ms ease-in-out;
+    transition: scale 500ms ease-in-out, box-shadow 150ms ease-in-out;
 
     @starting-style {
         scale: 0;
@@ -3933,12 +3943,12 @@ details[open] summary {
 }
 
 .errorUI {
-    background: #a5a5a500;
+    background: rgba(255, 255, 255, 0.0);
     position: fixed;
     height: 100%;
     width: 100%;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     top: 0px;
     display: flex;
     flex-wrap: nowrap;
@@ -4052,7 +4062,7 @@ details[open] summary {
 }
 
 .errorBoton {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.223);
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 20px;
@@ -10665,7 +10675,6 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     gap: 6px;
     flex-direction: column;
-    padding: 6px;
 }
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorListaEnlacesDePago {
@@ -11310,7 +11319,16 @@ grid-template-columns: 0.5fr 1.5fr;
     font-weight: bold;
     padding: 10px;
 }
-
+.fondoTransparente {
+    background-image: url("/componentes/imagenes/transparente.png");
+    flex: 1;
+    border-radius: 15px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    border-radius: 12px;
+}
 .parpadea {
     animation-name: parpadeo;
     animation-duration: 1250ms;
@@ -12065,6 +12083,12 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [ui="reservaUI"] .componentes_ui_desloseTotales_contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .componentes_ui_desloseTotales_contenedor {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -14512,13 +14536,10 @@ grid-template-columns: 0.5fr 1.5fr;
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
-
-    transition: opacity 3s;
+    transition: opacity 2s linear;
     opacity: 1;
-
     @starting-style {
         opacity: 0;
-
     }
 }
 

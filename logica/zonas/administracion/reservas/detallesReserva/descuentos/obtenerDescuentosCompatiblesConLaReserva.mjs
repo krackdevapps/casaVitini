@@ -46,7 +46,8 @@ export const obtenerDescuentosCompatiblesConLaReserva = async (entrada) => {
             fechaEntrada: fechaEntradaReserva,
             fechaSalida: fechaSalidaReserva,
             apartamentosArray,
-            zonasArray
+            zonasArray,
+            ignorarCodigosDescuentos: "si"
         })
 
         const ok = {

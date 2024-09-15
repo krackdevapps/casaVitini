@@ -17,7 +17,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 3
+            numeroDeLLavesMaximo: 4
         })
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,

@@ -78,7 +78,8 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
                     operacion: {
                         tipo: "insertarDescuentoCompatibleConReserva",
                     },
-                    ofertaUID: ofertaUID
+                    ofertaUID: ofertaUID,
+                    ignorarCodigosDescuentos: "si"
                 },
                 impuestos: {
                     origen: "instantaneaImpuestosEnReserva",
@@ -91,6 +92,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             desgloseFinanciero,
             reservaUID
         })
+    
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",

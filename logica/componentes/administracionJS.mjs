@@ -21785,10 +21785,10 @@ const casaVitini = {
                         document.addEventListener("scroll", controladorAlturaTituloDinamico)
 
                         const contenedorSimulacion = document.querySelector("[contenedor=simulacion]")
-                        contenedorSimulacion.classList.add(
-                            "borderRadius12",
-                            "borderGrey1"
-                        )
+                        // contenedorSimulacion.classList.add(
+                        //     "borderRadius12",
+                        //     "borderGrey1"
+                        // )
                         const contenedorGlobal = simulacionUI.querySelector("[contenedor=botones]")
 
 
@@ -24226,9 +24226,9 @@ const casaVitini = {
                             servicioUI.setAttribute("servicioUID_enSimulacion", servicioUID_enSimulacion)
                             servicioUI.classList.add(
                                 "flexVertical",
-                                "padding14",
+                                "padding6",
                                 "backgroundGrey1",
-                                "borderRadius14"
+                                "borderRadius10"
                             )
                             const contenedorInterno = document.createElement("div")
                             contenedorInterno.classList.add(
@@ -24237,13 +24237,26 @@ const casaVitini = {
                             )
                             servicioUI.appendChild(contenedorInterno)
 
+                            const contenedorNombreInterno = document.createElement("div")
+                            contenedorNombreInterno.classList.add(
+                                "flexVertical",
+                                "padding8"
+                            )
+                            contenedorInterno.appendChild(contenedorNombreInterno)
+
+                            const tituluNombreInternoUI = document.createElement("p")
+                            tituluNombreInternoUI.innerText = `Nombre adminitrativo`
+                            contenedorNombreInterno.appendChild(tituluNombreInternoUI)
+
                             const nombreInternoUI = document.createElement("p")
+                            nombreInternoUI.classList.add(
+                                "negrita")
                             nombreInternoUI.innerText = `${nombreInterno}`
-                            contenedorInterno.appendChild(nombreInternoUI)
+                            contenedorNombreInterno.appendChild(nombreInternoUI)
 
                             const contenedorGlobal = document.createElement("div")
                             contenedorGlobal.classList.add(
-                                "contenedorGlobal"
+                                "flexVertical"
                             )
                             servicioUI.appendChild(contenedorGlobal)
 
@@ -24260,13 +24273,22 @@ const casaVitini = {
                             )
                             esferaSeleccionable.appendChild(indicadorDeSeleccion)
 
+                            const contenedorNombrePublico = document.createElement("div")
+                            contenedorNombrePublico.classList.add(
+                                "flexVertical",
+                                "padding6"
+                            )
+                            contenedorGlobal.appendChild(contenedorNombrePublico)
+
+                            const tituluNombrePublico = document.createElement("p")
+                            tituluNombrePublico.innerText = `Nombre público`
+                            contenedorNombrePublico.appendChild(tituluNombrePublico)
+
                             const titulo = document.createElement("p")
                             titulo.classList.add(
-                                "padding6",
-                                "negrita"
-                            )
+                                "negrita")
                             titulo.innerText = tituloPublico
-                            contenedorGlobal.appendChild(titulo)
+                            contenedorNombrePublico.appendChild(titulo)
 
 
                             const disponibilidadUI = document.createElement("p")
@@ -24327,8 +24349,8 @@ const casaVitini = {
                             //contenedorBotones.appendChild(botonIr)
 
                             const botonEliminar = document.createElement("div")
-                            botonEliminar.classList.add("administracion_reservas_detallesReservas_enlacesDePago_botonV1")
-                            botonEliminar.innerText = "Eliminar servicio de la reserva"
+                            botonEliminar.classList.add("botonV1")
+                            botonEliminar.innerText = "Eliminar servicio de la simulación"
                             botonEliminar.addEventListener("click", () => {
                                 casaVitini
                                     .administracion
@@ -24364,9 +24386,9 @@ const casaVitini = {
                                 const constructor = ui.querySelector("[componente=constructor]")
 
                                 const titulo = constructor.querySelector("[componente=titulo]")
-                                titulo.innerText = `Confirmar eliminar el servicio ${nombreInterno} de la reserva`
+                                titulo.innerText = `Confirmar eliminar el servicio ${nombreInterno} de la reserva simulada`
                                 const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                                mensaje.innerText = "Var a eliminar el servicio de la reserva, ¿Estas de acuerdo?"
+                                mensaje.innerText = "Var a eliminar el servicio de la reserva simulada, ¿Estas de acuerdo?"
 
                                 const botonAceptar = constructor.querySelector("[boton=aceptar]")
                                 botonAceptar.innerText = "Comfirmar la eliminacion"
@@ -36607,6 +36629,7 @@ const casaVitini = {
                 const parametros = granuladoURL.parametros
                 const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
                 const calendario = {}
+                const configuracionCalendario = {}
                 const ultimoDirectorio = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                 // document.body.style.backgroundImage = "url("/componentes/imagenes/f5.jpeg")";
                 //document.body.classList.add("fondoConDesenfoque")
@@ -36623,6 +36646,7 @@ const casaVitini = {
                 }
                 casaVitini.shell.controladoresUI.controlLogoScroll(metadatosControaldorLogo)
                 calendario.instanciaUID = instanciaUID
+                // este 1
                 calendario.instanciaUIDMes = "uidInicialMes"
                 const contenedorCapas = {
                     capas: [],
@@ -36654,6 +36678,7 @@ const casaVitini = {
                         }
                     }
                     if (parametrosURL.length === 0) {
+                        // el url tambien 2
                         calendario.url = ""
                     } else {
                         calendario.url = parametrosURL.join("/")
@@ -36685,6 +36710,7 @@ const casaVitini = {
                                    }               
                                    */
                     contenedorCapas.capas = ["global"]
+                    // url tambien
                     calendario.url = `fecha:${calendarioResuelto.mes}-${calendarioResuelto.ano}/capa:global`
                 } else {
 
