@@ -1043,7 +1043,7 @@ const casaVitini = {
                     },
                     buscarAlojamientoUI: async () => {
                         try {
-                            
+
                             document.querySelector("html").style.height = "100%"
                             const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
                             const reservaLocal = JSON.parse(sessionStorage.getItem("reserva"))
@@ -1051,8 +1051,8 @@ const casaVitini = {
                             const reservaConfirmadaLocal = reservaEnCache ? JSON.parse(reservaEnCache) : null;
                             const main = document.querySelector("main")
                             main.style.padding = "6px"
-                       
-          
+
+
 
                             const metodoSelectorPasarela = "casaVitini.ui.vistas.alojamiento.portada.metodoSelectorPasarela"
                             const tituloUI = document.createElement("p")
@@ -1069,7 +1069,7 @@ const casaVitini = {
                             )
 
 
-                            marcoElasticoRelativo.style.justifyContent="flex-start"
+                            marcoElasticoRelativo.style.justifyContent = "flex-start"
                             main.appendChild(marcoElasticoRelativo);
 
                             const bloquePasosReservaNuevo = document.createElement('div');
@@ -1324,7 +1324,7 @@ const casaVitini = {
                             img.style.backgroundRepeat = "no-repeat";
                             img.style.backgroundAttachment = "fixed";
                             img.style.backgroundPosition = "center center";
-                           // marcoElasticoRelativo.appendChild(img)
+                            // marcoElasticoRelativo.appendChild(img)
 
                         } catch (error) {
 
@@ -4726,7 +4726,7 @@ const casaVitini = {
                         },
                         iconosGlobales: () => {
                             const iconosGlobales = document.createElement("div")
-                   
+
                             iconosGlobales.style.pointerEvents = "none"
                             iconosGlobales.style.position = "sticky"
                             iconosGlobales.style.top = "10px"
@@ -6459,7 +6459,7 @@ const casaVitini = {
 
                                             const informacionImplicacion = document.createElement("div")
                                             informacionImplicacion.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                            informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control.`
+                                            informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
                                             contenedorPropuesta.appendChild(informacionImplicacion)
 
                                             const botonAceptarPropuesta = document.createElement("div")
@@ -6506,7 +6506,7 @@ const casaVitini = {
 
                                             const informacionImplicacion = document.createElement("div")
                                             informacionImplicacion.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                            informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control.`
+                                            informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
                                             contenedorPropuesta.appendChild(informacionImplicacion)
 
 
@@ -19043,7 +19043,7 @@ const casaVitini = {
                         botonNavegacionMesAtras.setAttribute("id", "botonAtras")
                         botonNavegacionMesAtras.setAttribute("sentido", "atras")
                         botonNavegacionMesAtras.innerText = "Atras"
-                        botonNavegacionMesAtras.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
+                        botonNavegacionMesAtras.addEventListener("click", casaVitini.ui.componentes.calendario.navegacionCalendarioNuevo)
                         navegacionMes.appendChild(botonNavegacionMesAtras)
                         const navegacionMesReferencia = document.createElement("div")
                         navegacionMesReferencia.setAttribute("id", "navegacionMesReferencia")
@@ -19055,7 +19055,7 @@ const casaVitini = {
                         botonNavegacionMesAdelante.setAttribute("id", "botonAdelante")
                         botonNavegacionMesAdelante.innerText = "Adelante"
                         botonNavegacionMesAdelante.setAttribute("sentido", "adelante")
-                        botonNavegacionMesAdelante.addEventListener("click", casaVitini.componentes.navegacionCalendarioNuevo)
+                        botonNavegacionMesAdelante.addEventListener("click", casaVitini.ui.componentes.calendario.navegacionCalendarioNuevo)
                         navegacionMes.appendChild(botonNavegacionMesAdelante)
                         const marcoMes = document.createElement("ol")
                         marcoMes.setAttribute("id", "marcoMes")
@@ -19476,8 +19476,7 @@ const casaVitini = {
                                     selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                                 }
                             }
-                        }
-                        if (perfilMes === "calendario_salida_publico_sinPasado") {
+                        } else if (perfilMes === "calendario_salida_publico_sinPasado") {
                             const mesActual_string = String(calendario.mes).padStart(2, '0')
                             const anoActual_string = String(calendario.ano).padStart(4, '0')
                             const mesActual_decimal = parseInt(calendario.mes, 10)
@@ -19797,7 +19796,7 @@ const casaVitini = {
                                 }
                             }
                         }
-                        if (perfilMes === "calendario_entrada_asistido_detallesReserva_conPasado") {
+                        else if (perfilMes === "calendario_entrada_asistido_detallesReserva_conPasado") {
                             const mesActual_string = String(calendario.mes).padStart(2, '0');
                             const anoActual_string = String(calendario.ano).padStart(4, '0');
                             const mesActual_decimal = parseInt(calendario.mes, 10)
@@ -19980,7 +19979,7 @@ const casaVitini = {
                                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
                             }
                         }
-                        if (perfilMes === "calendario_salida_asistido_detallesReserva_conPasado") {
+                        else if (perfilMes === "calendario_salida_asistido_detallesReserva_conPasado") {
                             const mesActual_string = String(calendario.mes).padStart(2, '0');
                             const anoActual_string = String(calendario.ano).padStart(4, '0');
                             const mesActual_decimal = parseInt(calendario.mes, 10)
@@ -20175,7 +20174,7 @@ const casaVitini = {
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
                             }
                         }
-                        if (perfilMes === "calendario_entrada_asistido_detallesReserva_checkIn_conPasado") {
+                        else if (perfilMes === "calendario_entrada_asistido_detallesReserva_checkIn_conPasado") {
                             const mesActual_decimal = parseInt(calendario.mes, 10)
                             const anoActual_decimal = parseInt(calendario.ano, 10)
                             const fechaCheckIN = document
@@ -20215,6 +20214,7 @@ const casaVitini = {
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                             // calendario_entrada_asistido_detallesReserva_conPasado
+                            console.log (mesActual_decimal , mesSalidaReserva_decimal , anoActual_decimal , anoSalidaReserva_decimal)
                             if (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal) {
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
@@ -20279,11 +20279,13 @@ const casaVitini = {
                                         bloqueDia.setAttribute("estadoDia", "deshabilitado")
                                     }
                                     if (diaEntradaReserva_decimal === diaFinal_decimal) {
-                                        bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                        bloqueDia.classList.add("calendarioDiaReserva")
                                         //bloqueDia.style.pointerEvents = "none"
                                         //bloqueDia.setAttribute("estadoDia", "deshabilitado")
                                         bloqueDia.innerText = "E " + diaFinal_decimal
                                         bloqueDia.style.pointerEvents = "all"
+                                        bloqueDia.addEventListener("click", eval(metodoSelectorDia))
+
                                     }
                                     if (diaEntradaReserva_decimal < diaFinal_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReserva")
@@ -20364,7 +20366,7 @@ const casaVitini = {
                                 marcoMes.appendChild(bloqueDia)
                             }
                         }
-                        if (perfilMes === "calendario_salida_asistido_detallesReserva_checkOut_conPasado") {
+                        else if (perfilMes === "calendario_salida_asistido_detallesReserva_checkOut_conPasado") {
                             const mesActual_string = String(calendario.mes).padStart(2, '0');
                             const anoActual_string = String(calendario.ano).padStart(4, '0');
                             const mesActual_decimal = parseInt(calendario.mes, 10)
@@ -20406,6 +20408,7 @@ const casaVitini = {
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                             // calendario_entrada_asistido_detallesReserva_conPasado
+                            console.log(mesActual_decimal, mesSalidaReserva_decimal, anoActual_decimal, anoSalidaReserva_decimal)
                             if (mesActual_decimal === mesSalidaReserva_decimal && anoActual_decimal === anoSalidaReserva_decimal) {
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
@@ -20562,7 +20565,7 @@ const casaVitini = {
                                 marcoMes.appendChild(bloqueDia)
                             }
                         }
-                        if (perfilMes === "calendario_entrada_perfilSimple") {
+                        else if (perfilMes === "calendario_entrada_perfilSimple") {
                             const contenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
                             if (!contenedorFechas) {
                                 const error = "El perfil de calendario_entrada_perfilSimple no encuentra el contenedor de fechas de destino"
@@ -20777,7 +20780,7 @@ const casaVitini = {
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                             }
                         }
-                        if (perfilMes === "calendario_salida_perfilSimple") {
+                        else if (perfilMes === "calendario_salida_perfilSimple") {
 
                             const contenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
                             if (!contenedorFechas) {
@@ -21011,7 +21014,7 @@ const casaVitini = {
                                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                             }
                         }
-                        if (perfilMes === "calendario_unico_perfilSimple") {
+                        else if (perfilMes === "calendario_unico_perfilSimple") {
                             const contenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
                             if (!contenedorFechas) {
                                 const error = "El perfil de calendario_unico_perfilSimple no encuentra el contenedor de fechas de destino"
@@ -21154,13 +21157,14 @@ const casaVitini = {
                         contenedorRenderizado.remove()
                     })
                     const mensajeSpinner = "Construyendo mes..."
-                    const spinner = casaVitini.ui.componentes.spinner(mensajeSpinner)
+                    const spinner = casaVitini.ui.componentes.spinnerSimple(mensajeSpinner)
                     const contenedorCarga = document.createElement("div")
                     contenedorCarga.classList.add("componente_calendario_contenedoCarga_Mes")
                     contenedorCarga.setAttribute("contenedor", "construyendoCalendario")
                     contenedorCarga.setAttribute("elemento", "flotante")
                     contenedorCarga.appendChild(spinner)
                     contenedorCalendario.appendChild(contenedorCarga)
+                    
                     casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
                 },
                 seleccionarDiaProcesadoNuevo: (metadatosDia) => {
@@ -21826,7 +21830,6 @@ const casaVitini = {
                                     const tituloContenedorPlegable = document.createElement('summary');
                                     tituloContenedorPlegable.classList.add(
                                         "padding12",
-                                        "textSize16"
                                     )
                                     tituloContenedorPlegable.textContent = 'Alojamiento';
                                     contenedorPlegable.appendChild(tituloContenedorPlegable)
@@ -22407,7 +22410,6 @@ const casaVitini = {
                                     const tituloContenedorPlegable = document.createElement('summary');
                                     tituloContenedorPlegable.classList.add(
                                         "padding12",
-                                        "textSize16"
                                     )
                                     tituloContenedorPlegable.textContent = 'Servicios';
                                     contenedorPlegable.appendChild(tituloContenedorPlegable)
@@ -22873,7 +22875,6 @@ const casaVitini = {
                                 const tituloContendor = document.createElement("summary")
                                 tituloContendor.classList.add(
                                     "padding12",
-                                    "textSize16"
                                 )
                                 tituloContendor.innerText = "Ofertas aplicadas"
                                 contenedorPlegable.appendChild(tituloContendor)
@@ -24498,7 +24499,6 @@ const casaVitini = {
                             tituloContenedorPlegable.setAttribute("elemento", "impuestos")
                             tituloContenedorPlegable.classList.add(
                                 "padding12",
-                                "textSize16"
                             )
                             tituloContenedorPlegable.textContent = 'Impuestos aplicados';
                             contenedorPlegable.appendChild(tituloContenedorPlegable)
@@ -24779,7 +24779,6 @@ const casaVitini = {
                             const totalesUITituloBloque = document.createElement("summary")
                             totalesUITituloBloque.classList.add(
                                 "padding12",
-                                "textSize16"
                             )
                             totalesUITituloBloque.innerText = "Totales globales"
                             contenedorPlegable.appendChild(totalesUITituloBloque)

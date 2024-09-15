@@ -17,7 +17,6 @@ export const precioReservaPublica = async (entrada) => {
         const fechaEntrada = reservaPublica.fechaEntrada
         const fechaSalida = reservaPublica.fechaSalida
         const apartamentosIDVArray = Object.keys(reservaPublica.alojamiento)
-
    
         await limitesReservaPublica({
             fechaEntrada: fechaEntrada,
@@ -36,9 +35,6 @@ export const precioReservaPublica = async (entrada) => {
         const apartamentosIDV = Object.keys(alojamiento)
         const contenedorCodigosDescuento = reservaPublica.codigosDescuento || []
         const serviciosUIDSolicitados = reservaPublica?.servicios || []
-
-
-        // Si la fecha de entrad es inferior a HOY, que aviso que no se puede
 
         const ok = {
             ok: "Precio actualizado en base a componentes solicitados"

@@ -10,6 +10,7 @@ import { actualizarFechaEntradaReserva } from "../../../../../repositorio/reserv
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs";
 import { actualizarFechaSalidaReserva } from "../../../../../repositorio/reservas/rangoFlexible/actualizarFechaSalidaReserva.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../sistema/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
+import { eliminarChecksPasadosPorNuevasFechasReserva } from "../../../../../repositorio/reservas/pernoctantes/eliminarChecksPasadosPorNuevasFechasReserva.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -115,8 +116,16 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 fechaSolicitada_ISO: fechaSolicitada_ISO,
                 reservaUID: reservaUID
             })
-            const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
 
+            // Si la nueva fecha de entrada esta por delatne de checkint, que borre esos checkin y esos checkouts
+
+
+            const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+            await eliminarChecksPasadosPorNuevasFechasReserva({
+                reservaUID,
+                fechaEntrada: fechaSolicitada_ISO,
+                fechaSalida: fechaSalida,
+            })
             await campoDeTransaccion("confirmar")
 
             const nuevaFechaEntrada = reservaActualizada.fechaEntrada;
@@ -162,6 +171,11 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             })
             const nuevaFechaSalida = reservaActualizada.fechaSalida;
             const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+            await eliminarChecksPasadosPorNuevasFechasReserva({
+                reservaUID,
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSolicitada_ISO,
+            })
             await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha actualizado correctamente la fecha de entrada en la reserva",

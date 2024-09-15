@@ -59,20 +59,27 @@ export const sumarTotales = (data) => {
             totalesGlobal.totalDescuentos = new Decimal(totalDescuentos).plus(totalesGlobal.totalDescuentos)
 
         }
-
-
-        // ojo con los impuestso globalex
-
-        // redondeos
-        const totalFinal = new Decimal(totalesGlobal.totalNetoConDescuentos).plus(totalesGlobal.impuestosAplicados).toFixed(2)
         totalesGlobal.totalNeto = new Decimal(totalesGlobal.totalNeto).toFixed(2)
-        totalesGlobal.totalFinal = new Decimal(totalesGlobal.totalFinal).toFixed(2)
-        totalesGlobal.impuestosAplicados = new Decimal(totalesGlobal.impuestosAplicados).toFixed(2)
-        totalesGlobal.totalNetoConDescuentos = new Decimal(totalesGlobal.totalNetoConDescuentos).toFixed(2)
-        totalesGlobal.totalDescuentos = new Decimal(totalesGlobal.totalDescuentos).toFixed(2)
+
+        const totalDescuentos = new Decimal(totalesGlobal.totalDescuentos).toFixed(2)
+        delete totalesGlobal.totalDescuentos
+        totalesGlobal.totalDescuentos = totalDescuentos
+
+        const totalNetoConDescuentos = new Decimal(totalesGlobal.totalNetoConDescuentos).toFixed(2)
+        delete totalesGlobal.totalNetoConDescuentos
+        totalesGlobal.totalNetoConDescuentos = totalNetoConDescuentos
+
+        const impuestosAplicados = new Decimal(totalesGlobal.impuestosAplicados).toFixed(2)
+        delete totalesGlobal.impuestosAplicados
+        totalesGlobal.impuestosAplicados = impuestosAplicados
+
+
+        //totalesGlobal.totalFinal = new Decimal(totalesGlobal.totalFinal).toFixed(2)       
+        const totalFinal = new Decimal(totalesGlobal.totalNetoConDescuentos).plus(totalesGlobal.impuestosAplicados).toFixed(2)
+        delete totalesGlobal.totalFinal
         totalesGlobal.totalFinal = totalFinal
 
-
+        
 
     } catch (error) {
         throw error

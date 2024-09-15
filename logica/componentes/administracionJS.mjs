@@ -2530,7 +2530,7 @@ const casaVitini = {
 
                                 const informacionImplicacion = document.createElement("div")
                                 informacionImplicacion.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control.`
+                                informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
                                 contenedorPropuesta.appendChild(informacionImplicacion)
 
                                 const botonAceptarPropuesta = document.createElement("div")
@@ -2577,7 +2577,7 @@ const casaVitini = {
 
                                 const informacionImplicacion = document.createElement("div")
                                 informacionImplicacion.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control`
+                                informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
                                 contenedorPropuesta.appendChild(informacionImplicacion)
 
 
@@ -2752,6 +2752,12 @@ const casaVitini = {
                                     const selectorFechaSalidaUI = document.querySelector("[fechaUI=fechaFin]")
                                     selectorFechaSalida.setAttribute("memoriaVolatil", fecha_ISO)
                                     selectorFechaSalidaUI.innerText = fecha_Humano
+                                }
+
+                                // Detersar si se esta en la pantalla de alojamiento y actualizarla
+                                const selectorMarcoAlojamiento = document.querySelector(`[reservaUID="${reservaUID}"] [componente=marcoAlojamiento]`)
+                                if (selectorMarcoAlojamiento) {
+                                    casaVitini.administracion.reservas.detallesReserva.categoriasGlobales.alojamiento.arranque()
                                 }
                             }
                         },
@@ -3792,6 +3798,8 @@ const casaVitini = {
                                 boton.setAttribute("estadoCategoria", "otra")
                             })
                             document.querySelector("[componente=contenedorDinamico]").innerHTML = null
+                            const contenedorDinamico = document.querySelector("[componente=contenedorDinamico]")
+                            contenedorDinamico.removeAttribute("style")
                         },
                         categoriasGlobalesBotonesUI: (metadatos) => {
                             const rectangularidad = metadatos.rectangularidad
@@ -4341,12 +4349,17 @@ const casaVitini = {
                                 titulo.innerText = "Alojamiento"
                                 banner.appendChild(titulo)
 
-                                const habitacionUI = document.createElement("p")
-                                habitacionUI.classList.add(
+                                const alojamientoUI = document.createElement("p")
+                                alojamientoUI.classList.add(
                                     "negrita"
                                 )
-                                habitacionUI.innerText = `${apartamentoUI} (${apartamentoIDV})`
-                                banner.appendChild(habitacionUI)
+                                if (apartamentoIDV) {
+                                    alojamientoUI.innerText = `${apartamentoUI} (${apartamentoIDV})`
+                                } else {
+                                    alojamientoUI.innerText = `${apartamentoUI}`
+                                    alojamientoUI.style.color = "red"
+                                }
+                                banner.appendChild(alojamientoUI)
                                 return banner
 
                             },
@@ -4369,7 +4382,12 @@ const casaVitini = {
                                 habitacionUI_UI.classList.add(
                                     "negrita"
                                 )
-                                habitacionUI_UI.innerText = `${habitacionUI} (${habitacionIDV})`
+                                if (habitacionIDV) {
+                                    habitacionUI_UI.innerText = `${habitacionUI} (${habitacionIDV})`
+                                } else {
+                                    habitacionUI_UI.innerText = `${habitacionUI}`
+                                    habitacionUI_UI.style.color = "red"
+                                }
                                 banner.appendChild(habitacionUI_UI)
                                 return banner
 
@@ -5847,6 +5865,11 @@ const casaVitini = {
                                 mensaje.innerText = mensajeUI
 
                                 const contenedorEspacio = constructor.querySelector("[componente=contenedor]")
+                                contenedorEspacio.classList.add(
+                                    "padding6",
+                                    "borderRadius10",
+                                    "backgroundGrey1"
+                                )
                                 const nombreCompletoPropuesta = document.createElement("p")
                                 nombreCompletoPropuesta.classList.add("administracionReservaDetallesPropuedaCambioClientePoolnombreCompletoPropuesta")
                                 nombreCompletoPropuesta.setAttribute("componente", "nombrePropuesto")
@@ -5883,7 +5906,9 @@ const casaVitini = {
                                 UI: async (pernoctanteUID) => {
 
                                     const main = document.querySelector("main")
-                                    const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                                    const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada({
+                                        alineacion: "arriba"
+                                    })
                                     const instanciaUID = ui.getAttribute("instanciaUID")
                                     ui.setAttribute("contenedor", "checkin")
                                     main.appendChild(ui)
@@ -7275,10 +7300,10 @@ const casaVitini = {
                                         if (ui) {
 
                                             const selectorPernoctante = document.querySelector(`[pernoctanteUID="${pernoctanteUID}"]`)
-                                            const apartamentoUI = selectorPernoctante.closest("[apartamentoUI]").getAttribute("apartamentoUI")
-                                            const apartamentoIDV = selectorPernoctante.closest("[apartamentoIDV]").getAttribute("apartamentoIDV")
-                                            const habitacionUI = selectorPernoctante.closest("[habitacionIDV]").querySelector("[habitacionUI]").getAttribute("habitacionUI")
-                                            const habitacionIDV = selectorPernoctante.closest("[habitacionIDV]").getAttribute("habitacionIDV")
+                                            const apartamentoUI = selectorPernoctante.closest("[apartamentoUI]")?.getAttribute("apartamentoUI") || "Pernoctante sin alojamiento asignado"
+                                            const apartamentoIDV = selectorPernoctante.closest("[apartamentoIDV]")?.getAttribute("apartamentoIDV") || ""
+                                            const habitacionUI = selectorPernoctante.closest("[habitacionIDV]")?.querySelector("[habitacionUI]")?.getAttribute("habitacionUI") || "Pernoctante sin habbitación asignada"
+                                            const habitacionIDV = selectorPernoctante.closest("[habitacionIDV]")?.getAttribute("habitacionIDV") || ""
 
 
                                             const titulo = "Detalles del pernoctante"
@@ -9572,7 +9597,11 @@ const casaVitini = {
                             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                             const contenedorEnlacesDePago = document.createElement("div")
                             const spinnerPorRenderizar = casaVitini.ui.componentes.spinnerSimple()
-                            contenedorEnlacesDePago.setAttribute("class", "administracion_reservas_detallesReserva_enlacesDePago_contenedorEnlacesDePago")
+                            contenedorEnlacesDePago.classList.add(
+                                "padding6",
+                                "flexVertical", 
+                                "gap6"
+                            )
                             contenedorEnlacesDePago.setAttribute("instanciaUID", instanciaUID)
                             contenedorEnlacesDePago.setAttribute("componente", "categoriaEnlacesDePago")
                             contenedorEnlacesDePago.appendChild(spinnerPorRenderizar)
@@ -12460,6 +12489,7 @@ const casaVitini = {
                             botonCategoria.setAttribute("categoria", "desgloseTotal")
                             const contenedorDinamico = document.querySelector("[componente=contenedorDinamico]")
                             contenedorDinamico.innerHTML = null
+                            contenedorDinamico.style.background = "transparent"
                             const spinnerPorRenderizar = casaVitini.ui.componentes.spinnerSimple()
                             const contenedorDesgloseDelTotal = document.createElement("div")
                             contenedorDesgloseDelTotal.classList.add("administracion_reserver_detallesReserva_contenedorDesgloseTotal")
@@ -14551,7 +14581,7 @@ const casaVitini = {
                                     const contenedorTitularUI = document.createElement("div")
                                     contenedorTitularUI.classList.add(
                                         "flexVertical",
-                                        "padding12"
+                                        "padding14"
                                     )
                                     contenedorInformacion.appendChild(contenedorTitularUI)
 

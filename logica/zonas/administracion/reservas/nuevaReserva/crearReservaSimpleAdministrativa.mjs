@@ -205,17 +205,14 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                         zonasArray: ["global", "privada"],
                         operacion: {
                             tipo: configuracionOfertasInicial(estadoIniciarOfertasIDV)
-                                .tipo,
                         },
                         ignorarCodigosDescuentos: configuracionOfertasInicial(estadoIniciarOfertasIDV)
-                            .ignorarCodigosDescuentos
                     },
                     impuestos: {
                         origen: "hubImuestos"
                     }
                 }
             })
-
             await insertarDesgloseFinacieroPorReservaUID({
                 reservaUID: reservaUID,
                 desgloseFinanciero

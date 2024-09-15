@@ -1,4 +1,5 @@
 import { utilidades } from "../../../componentes/utilidades.mjs";
+import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 

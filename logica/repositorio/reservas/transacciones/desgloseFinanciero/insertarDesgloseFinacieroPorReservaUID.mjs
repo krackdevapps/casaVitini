@@ -28,6 +28,8 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
         VALUES ($1,$2,$3,$4,$5,$6)
         RETURNING *
         `
+        console.log("desgloseFinanciero Entrada", desgloseFinanciero)
+
         const parametros = [
             desgloseFinanciero,
             instantaneaNoches,
@@ -41,6 +43,8 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
             const error = "No se ha podido insertar el desgloseFinaciero en la reserva.";
             throw new Error(error)
         }
+        console.log("desgloseFinanciero salida", resuelve.rows[0].desgloseFinanciero)
+
         return resuelve.rows[0]
 
     } catch (errorCapturado) {

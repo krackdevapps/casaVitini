@@ -16,7 +16,7 @@ export const realizarReembolso = async (entrada, salida) => {
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 4
+            numeroDeLLavesMaximo: 6
         })
 
         const reservaUID = validadoresCompartidos.tipos.cadena({

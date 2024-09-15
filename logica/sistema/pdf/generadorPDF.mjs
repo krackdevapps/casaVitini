@@ -30,7 +30,6 @@ export const generadorPDF = async (reserva) => {
             throw new Error(error)
         }
 
-
         const nombreTitular = contenedorTitular.nombreTitular || ""
         const pasaporteTitular = contenedorTitular.pasaporteTitular || ""
         const telefonoTitular = contenedorTitular.telefonoTitular || ""
@@ -162,7 +161,7 @@ export const generadorPDF = async (reserva) => {
                             [
                                 [
                                     {
-                                        text: fechaEntrada_humana,
+                                        text: fechaEntrada,
                                         style: 'celdaTablaGlobalReserva',
                                         colSpan: 2,
                                         alignment: 'center'
@@ -181,7 +180,7 @@ export const generadorPDF = async (reserva) => {
                                 ],
                                 [
                                     {
-                                        text: fechaSalida_humana,
+                                        text: fechaSalida,
                                         style: 'celdaTablaGlobalReserva',
                                         colSpan: 2,
                                         alignment: 'center'
@@ -372,11 +371,6 @@ export const generadorPDF = async (reserva) => {
             }
             docDefinition.content.push(tablaFormatoPDFMake)
         }
-
-
-
-
-
         const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
         if (impuestos.length > 0) {
             const tablaFormatoPDFMake = {
@@ -435,17 +429,14 @@ export const generadorPDF = async (reserva) => {
         const totales = contenedorFinanciero.desgloseFinanciero.global.totales
         const objetoTraductor = {
             totalNeto: "Total reserva neto",
-            totalFinal: "Total bruto final a pagar",
+            totalFinal: "Total final a pagar",
             totalDescuentos: "Total suma descuentos aplicados",
             promedioNocheNeto: "Promedio neto por noche ponderado",
             impuestosAplicados: "Total impuestos aplicados",
             totalNetoConDescuentos: "Total neto con descuentos aplicados",
             promedioNocheNetoConDescuentos: "Promedio noche neto con descuentos",
         }
-        if (!totales.totalDescuento) {
-            delete totales.totalDescuento
-            delete totales.totalReservaNetoSinOfertas
-        }
+
         const tablaTotales = {
             style: 'tablaTotales',
             layout: 'lightHorizontalLines',
@@ -469,6 +460,7 @@ export const generadorPDF = async (reserva) => {
                 ]
             }
         }
+        console.log("totales", totales)
         for (const [nombreTotal, valorTotal] of Object.entries(totales)) {
             const nombreTotalUI = objetoTraductor[nombreTotal]
             const fila = [
@@ -489,7 +481,7 @@ export const generadorPDF = async (reserva) => {
         }
         docDefinition.content.push(tablaTotales)
         const mensaje1 = {
-            text: 'Este documento es solo un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva.',
+            text: 'Este documento es solo un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva. Puede encontrar la dirección de correo electrónico que se usó para hacer la reserva en la parte superior derecha de este documento, justo al lado del código QR.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje1)
@@ -499,15 +491,23 @@ export const generadorPDF = async (reserva) => {
         }
         docDefinition.content.push(mensaje2)
         const mensaje3 = {
-            text: 'Este documento es meramente informativo. Para realizar el check-in, es necesario presentar algún tipo de documento identificativo, como un pasaporte o un documento nacional de identidad.',
+            text: `Existen distintos formatos para expresar fechas por escrito. Dependiendo del país, el formato nacional para representar fechas puede variar con respecto al de otros países. Debido al uso de distintos formatos nacionales para expresar fechas, este documento presenta las fechas en el estándar mundial ISO 8601, definido por la Organización Internacional de Normalización (ISO). Este estándar está diseñado para representar las fechas de manera internacional. Utiliza la estructura YYYY-MM-DD, donde YYYY representa el año, MM el mes y DD el día. Por ejemplo, la fecha 1234-02-01 hace referencia al 1 de febrero de 1234. Este formato es el que se utiliza en este documento para expresar las fechas de entrada y salida. Si necesita más información sobre este formato o desea conocer otros detalles, puede acceder a la web oficial del estándar o a su ficha en Wikipedia. A continuación, se detallan las URL de ambas:
+            
+            https://www.iso.org/iso-8601-date-and-time-format.html
+            https://es.wikipedia.org/wiki/ISO_8601`,
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje3)
         const mensaje4 = {
-            text: 'Puede usar el codigo qr para ir a los detalles de esta reserva de una manera fácil y comoda. Si necesitas otra copia de este pdf, tambien puedes obtenerla mediante el qr.',
+            text: 'Este documento es meramente informativo. Para realizar el check-in, es necesario presentar algún tipo de documento identificativo, como un pasaporte o un documento nacional de identidad.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje4)
+        const mensaje5 = {
+            text: 'Puede usar el codigo qr para ir a los detalles de esta reserva de una manera fácil y comoda. Si necesitas otra copia de este pdf, tambien puedes obtenerla mediante el qr.',
+            style: 'textoSimple'
+        }
+        docDefinition.content.push(mensaje5)
 
         const generarPDF = async (docDefinition) => {
             return new Promise((resolve, reject) => {

@@ -3,6 +3,7 @@ import { obtenerResultadosBusqueda } from "../../../repositorio/clientes/obtener
 import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 import { validadoresCompartidos } from "../../../sistema/validadores/validadoresCompartidos.mjs";
+import { controlEstructuraPorJoi } from "../../../sistema/validadores/controlEstructuraPorJoi.mjs";
 
 export const buscar = async (entrada, salida) => {
     try {
