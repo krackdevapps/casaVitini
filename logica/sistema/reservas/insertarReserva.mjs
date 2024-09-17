@@ -36,7 +36,7 @@ export const insertarReserva = async (reserva) => {
         const pasaporteTitularPool = titular.pasaporteTitular
         const correoTitular = titular.correoTitular
         const telefonoTitular = titular.telefonoTitular
-        const codigosDescuento = reserva.codigosDescuento
+        const codigosDescuento = reserva.codigosDescuento || []
         const contendorServicios = reserva?.servicios || []
 
         const reservaUID = await generadorReservaUID()
@@ -110,9 +110,17 @@ export const insertarReserva = async (reserva) => {
         const serviciosUID = contendorServicios.map((contenedor) => {
             return contenedor.servicioUID
         })
-        const codigoDescuentosArrayBASE64 = codigosDescuento.map((contenedor) => {
-            return contenedor.codigoUID
+        const soloCodigosBase64Descunetos = []
+        codigosDescuento.forEach((contenedor) => {
+            const codigosUID = contenedor.codigosUID
+            codigosUID.forEach((codigo) => {
+                soloCodigosBase64Descunetos.push(codigo)
+            })
+
         })
+
+
+
 
         const desgloseFinanciero = await procesador({
             entidades: {

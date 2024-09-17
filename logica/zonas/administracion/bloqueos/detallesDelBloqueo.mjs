@@ -32,6 +32,8 @@ export const detallesDelBloqueo = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
+        
+
         await eliminarBloqueoCaducado();
         const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,

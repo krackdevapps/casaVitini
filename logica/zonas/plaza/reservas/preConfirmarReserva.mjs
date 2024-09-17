@@ -26,12 +26,14 @@ export const preConfirmarReserva = async (entrada) => {
         await mutex.acquire()
 
         const reservaPublica = entrada.body.reserva;
+
+
+
         await validarObjetoReservaPublica({
             reservaPublica,
             filtroTitular: "activado",
             filtroHabitacionesCamas: "activado"
         })
-
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
             reservaPublica.testingVI = testingVI
@@ -44,6 +46,8 @@ export const preConfirmarReserva = async (entrada) => {
         const apartamentosIDVArray = Object.keys(reservaPublica.alojamiento)
         const codigosDescuento = reservaPublica.codigosDescuento
         const serviciosPorValidar = reservaPublica?.servicios
+
+
 
         await validarHoraLimitePublica()
 
@@ -70,7 +74,7 @@ export const preConfirmarReserva = async (entrada) => {
             }
             contenedorErrorInfoObsoleta.push(e)
         }
-  
+
         const codigosDescuentosValidados = await validarDescuentosPorCodigo({
             zonasArray: ["global", "publica"],
             contenedorCodigosDescuento: codigosDescuento,
@@ -88,7 +92,6 @@ export const preConfirmarReserva = async (entrada) => {
             }
             contenedorErrorInfoObsoleta.push(e)
         }
-        
         if (contenedorErrorInfoObsoleta.length > 0) {
             const error = {
                 error: "Se han detectado componentes obsoletos",
@@ -99,6 +102,7 @@ export const preConfirmarReserva = async (entrada) => {
         const ok1 = {
             ok: "bien"
         }
+
         const resolvertInsertarReserva = await insertarReserva(reservaPublica)
         const reservaUID = resolvertInsertarReserva.reservaUID
 

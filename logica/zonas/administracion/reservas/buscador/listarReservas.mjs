@@ -17,6 +17,7 @@ export const listarReservas = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
+
         const esquemaBusqueda = Joi.object({
             tipoConsulta: Joi.string(),
             pagina: Joi.number(),

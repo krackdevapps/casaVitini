@@ -196,18 +196,13 @@ export const validarObjetoReservaPublica = async (data) => {
                     'object.base': '{{#label}} debe ser un objeto',
                     'any.required': '{{#label}} es una llave obligatoria',
                 }),
-
             )
                 .min(1)
                 .messages({
                     'array.base': '{{#label}} debe ser un array',
                     'any.required': '{{#label}} es un array campo obligatorio',
                     'array.min': '{{#label}} debe contener al menos un servicios si de declara la llave servicios',
-
                 })
-
-
-
         }
 
         const esquemaTitular = Joi.object({
@@ -364,6 +359,12 @@ export const validarObjetoReservaPublica = async (data) => {
         const codigosDescuento = reservaPublica.codigosDescuento || []
         const codigosUIDUnicos = {}
         codigosDescuento.forEach((contenedor) => {
+
+            // const ofertaUID = contenedor.ofertaUID
+            // if (ofertaUID) {
+            //     throw new Error("ofertaUID detectado", ofertaUID)
+            // }
+
             const codigosASCI = contenedor.codigosUID
 
             codigosASCI.forEach((codigoASCI, i) => {
@@ -379,11 +380,9 @@ export const validarObjetoReservaPublica = async (data) => {
                     filtro: "transformaABase64",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
-
                 })
                 codigosASCI[i] = codigoB64
             })
-
         })
 
         const servicios = reservaPublica.servicios || []
@@ -418,7 +417,6 @@ export const validarObjetoReservaPublica = async (data) => {
             fechaSalida: fechaSalida,
             tipoVector: "diferente"
         })
-        console.log("fechaEntradaReserva_ISO", fechaEntradaReserva_ISO, "fechaActualTZ", fechaPresenteTZ)
         if (fechaEntradaReserva_ISO < fechaPresenteTZ) {
             const error = `La fecha de entrada seleccionada (${fechaEntrada}) es anterior a la fecha actual (${fechaActualTZ}). Por favor, revise la fecha de entrada para que sea presente o futura. Gracias`
             throw new Error(error)

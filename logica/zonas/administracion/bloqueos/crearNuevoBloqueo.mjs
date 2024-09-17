@@ -6,6 +6,8 @@ import { VitiniIDX } from "../../../sistema/VitiniIDX/control.mjs";
 
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarNuevoBloqueo } from "../../../repositorio/bloqueos/insertarNuevoBloqueo.mjs";
+import Joi from "joi";
+import { controlEstructuraPorJoi } from "../../../sistema/validadores/controlEstructuraPorJoi.mjs";
 
 export const crearNuevoBloqueo = async (entrada, salida) => {
     try {
@@ -14,6 +16,37 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
+
+
+        const schema = Joi.object({
+            apartamentoIDV: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            tipoBloqueoIDV: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            zonaIDV: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            motivo: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            fechaInicio: Joi.date().messages({
+                'date.base': '{{#label}} debe ser una fecha en formato iso'
+            }),
+            fechaFin: Joi.date().messages({
+                'date.base': '{{#label}} debe ser una fecha en formato iso'
+            }),
+        }).required().messages({
+            'any.required': '{{#label}} es una llave obligatoria'
+        })
+
+        controlEstructuraPorJoi({
+            schema: schema,
+            objeto: entrada.body
+        })
+
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 6

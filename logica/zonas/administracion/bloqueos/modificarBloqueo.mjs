@@ -5,6 +5,8 @@ import { obtenerBloqueoPorBloqueoUID } from "../../../repositorio/bloqueos/obten
 import { actualizarBloqueoPorBloqueoUID } from "../../../repositorio/bloqueos/actualizarBloqueoPorBloqueoUID.mjs";
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../sistema/configuracion/codigoZonaHoraria.mjs";
+import Joi from "joi";
+import { controlEstructuraPorJoi } from "../../../sistema/validadores/controlEstructuraPorJoi.mjs";
 
 export const modificarBloqueo = async (entrada, salida) => {
     try {
@@ -12,10 +14,36 @@ export const modificarBloqueo = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.control()
-        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
-            objeto: entrada.body,
-            numeroDeLLavesMaximo: 6
+
+        
+        const schema = Joi.object({
+            apartamentoIDV: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            tipoBloqueoIDV: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            zonaIDV: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            motivo: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            fechaInicio: Joi.date().messages({
+                'date.base': '{{#label}} debe ser una fecha en formato iso'
+            }),
+            fechaFin: Joi.date().messages({
+                'date.base': '{{#label}} debe ser una fecha en formato iso'
+            }),
+        }).required().messages({
+            'any.required': '{{#label}} es una llave obligatoria'
         })
+
+        controlEstructuraPorJoi({
+            schema: schema,
+            objeto: entrada.body
+        })
+
         const bloqueoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.bloqueoUID,
             nombreCampo: "El identificador universal de la bloque (bloqueoUID)",

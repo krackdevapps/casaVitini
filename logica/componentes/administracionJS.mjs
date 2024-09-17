@@ -268,21 +268,13 @@ const casaVitini = {
 
 
                     const contenedorResultados = document.createElement("div")
-                    contenedorResultados.setAttribute("contenedor", "resultados")
+                    contenedorResultados.setAttribute("contenedor", "reservasEncontradas")
                     contenedorResultados.classList.add(
                         "flexVertical",
                     )
                     espacioReservas.appendChild(contenedorResultados)
 
 
-                    const contenedorFiltros = document.createElement("div")
-                    contenedorFiltros.setAttribute("contenedor", "filtros")
-                    contenedorResultados.appendChild(contenedorFiltros)
-
-
-                    const contenedorEncontrados = document.createElement("div")
-                    contenedorEncontrados.setAttribute("contenedor", "encontrados")
-                    contenedorResultados.appendChild(contenedorEncontrados)
 
 
                     marcoElastico.appendChild(espacioReservas)
@@ -545,12 +537,16 @@ const casaVitini = {
                     const parametros = JSON.parse(gridEnlazado.getAttribute("parametros"))
                     const paginaTipo = cambiarPagina.paginaTipo
                     const transacccion = {
-                        nombreColumna: nombreColumna,
-                        sentidoColumna: sentidoColumna,
-                        buscar: terminoBusqueda,
-                        tipoBusqueda: "rapido",
+                        termino: terminoBusqueda,
+                        //tipoBusqueda: "rapido",
                         paginaTipo: paginaTipo,
                         instanciaUID: instanciaUID
+                    }
+                    if (nombreColumna) {
+                        transacccion.nombreColumna = nombreColumna
+                    }
+                    if (sentidoColumna) {
+                        transacccion.sentidoColumna = sentidoColumna
                     }
                     if (tipoBoton === "numeroPagina") {
                         const numeroPagina = cambiarPagina.numeroPagina
@@ -791,79 +787,111 @@ const casaVitini = {
                     delete transaccion.instanciaUID
                     const origen = transaccion.origen
                     delete transaccion.origen
-                    const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
-                    delete transaccion.tipoConstruccionGrid
                     const granuladoURL = casaVitini.utilidades.granuladorURL()
-                    delete transaccion.granuladoURL
-                    const consultaDeEntrada = transaccion.tipoConsulta
+                    // delete transaccion.granuladoURL
                     const paginaTipo = transaccion.paginaTipo
                     delete transaccion.paginaTipo
-                    const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
-                    const selectorFechaEntradaUI = selectorCuadradoFechaEntrada?.querySelector("[fechaUI=fechaInicio]")
-                    const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
-                    const selectorFechaSalidaUI = selectorCuadradoFechaSalida?.querySelector("[fechaUI=fechaFin]")
+                    // const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
+                    // const selectorFechaEntradaUI = selectorCuadradoFechaEntrada?.querySelector("[fechaUI=fechaInicio]")
+                    // const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
+                    // const selectorFechaSalidaUI = selectorCuadradoFechaSalida?.querySelector("[fechaUI=fechaFin]")
+                    const selectorAlmacen = document.querySelector("[areaGrid=gridBuscadorReservas]")?.getAttribute("almacen") || "{}"
+                    const almacen = JSON.parse(selectorAlmacen)
 
-                    if (transaccion.parametros?.rango) {
-                        if (fechaEntrada) {
-                            transaccion.fechaEntrada = fechaEntrada
-                            const estructurarFecha = fechaEntrada.split("/")
-                            const memoriaVolatil = {
-                                dia: estructurarFecha[0],
-                                mes: estructurarFecha[1],
-                                ano: estructurarFecha[2]
-                            }
-                            selectorCuadradoFechaEntrada.setAttribute("memoriaVolatil", JSON.stringify(memoriaVolatil))
-                            selectorFechaEntradaUI.innerText = fechaEntrada
-                        }
-                        if (fechaSalida) {
-                            transaccion.fechaEntrada = fechaSalida
-                            const estructurarFecha = fechaSalida.split("/")
-                            const memoriaVolatil = {
-                                dia: estructurarFecha[0],
-                                mes: estructurarFecha[1],
-                                ano: estructurarFecha[2]
-                            }
-                            selectorCuadradoFechaSalida.setAttribute("memoriaVolatil", JSON.stringify(memoriaVolatil))
-                            selectorFechaSalidaUI.innerText = fechaSalida
-                        }
-                        transaccion.rango = transaccion.rango ? tranformaDeGuionBajoACAmello(transaccion.rango) : ""
-                        if (transaccion.rango) {
-                            const selectorRango = document.querySelector(`[selectorRango=${transaccion.rango}]`)
-                            selectorRango.style.background = "rgb(8, 0, 255)"
-                            selectorRango.style.color = "white"
-                        }
-                        if (transaccion.tipoConsulta === "hoy") {
-                            const selectorRango = document.querySelector(`[selectorRango=porFechaDeEntrada]`)
-                            selectorRango.style.background = "rgb(8, 0, 255)"
-                            selectorRango.style.color = "white"
-                            selectorCuadradoFechaEntrada.setAttribute("memoriaVolatil", JSON.stringify(memoriaVolatil))
-                            selectorFechaEntradaUI.innerText = fechaEntrada
-                        }
-                        transaccion.tipoCoincidencia = transaccion.rango
+                    let nombreColumnaURL
+                    const nombreColumna = transaccion.nombreColumna
+                    if ((nombreColumna)?.toLowerCase() === "reservauid") {
+                        nombreColumnaURL = "reservaUID_uid"
+                    } else if (nombreColumna) {
+                        nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
                     }
-                    if (transaccion.parametros?.porTerminos) {
-                        const campoBuscador = document.querySelector("[componenteCampo=buscadorPorId]")
-                        campoBuscador.value = transaccion.porTerminos
-                        const selectorRangos = document.querySelectorAll(`[selectorRango]`)
-                        selectorRangos.forEach((selectorRango) => {
-                            selectorRango.removeAttribute("style")
-                        })
-                        selectorCuadradoFechaEntrada.removeAttribute("memoriaVolatil")
-                        selectorFechaEntradaUI.innerText = "Seleccionar"
-                        selectorCuadradoFechaSalida.removeAttribute("memoriaVolatil")
-                        selectorFechaSalidaUI.innerText = "Seleccionar"
-                    }
-                    //const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
 
-                    const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                    if (!instanciaRenderizada) {
-                        return
+                    // if (transaccion.parametros?.rango) {
+                    //     if (fechaEntrada) {
+                    //         transaccion.fechaEntrada = fechaEntrada
+                    //         const estructurarFecha = fechaEntrada.split("/")
+                    //         const memoriaVolatil = {
+                    //             dia: estructurarFecha[0],
+                    //             mes: estructurarFecha[1],
+                    //             ano: estructurarFecha[2]
+                    //         }
+                    //         selectorCuadradoFechaEntrada.setAttribute("memoriaVolatil", JSON.stringify(memoriaVolatil))
+                    //         selectorFechaEntradaUI.innerText = fechaEntrada
+                    //     }
+                    //     if (fechaSalida) {
+                    //         transaccion.fechaEntrada = fechaSalida
+                    //         const estructurarFecha = fechaSalida.split("/")
+                    //         const memoriaVolatil = {
+                    //             dia: estructurarFecha[0],
+                    //             mes: estructurarFecha[1],
+                    //             ano: estructurarFecha[2]
+                    //         }
+                    //         selectorCuadradoFechaSalida.setAttribute("memoriaVolatil", JSON.stringify(memoriaVolatil))
+                    //         selectorFechaSalidaUI.innerText = fechaSalida
+                    //     }
+                    //     transaccion.rango = transaccion.rango ? tranformaDeGuionBajoACAmello(transaccion.rango) : ""
+                    //     if (transaccion.rango) {
+                    //         const selectorRango = document.querySelector(`[selectorRango=${transaccion.rango}]`)
+                    //         selectorRango.style.background = "rgb(8, 0, 255)"
+                    //         selectorRango.style.color = "white"
+                    //     }
+                    //     if (transaccion.tipoConsulta === "hoy") {
+                    //         const selectorRango = document.querySelector(`[selectorRango=porFechaDeEntrada]`)
+                    //         selectorRango.style.background = "rgb(8, 0, 255)"
+                    //         selectorRango.style.color = "white"
+                    //         selectorCuadradoFechaEntrada.setAttribute("memoriaVolatil", JSON.stringify(memoriaVolatil))
+                    //         selectorFechaEntradaUI.innerText = fechaEntrada
+                    //     }
+                    //     transaccion.tipoCoincidencia = transaccion.rango
+                    // }
+                    // if (transaccion.parametros?.porTerminos) {
+                    //     const campoBuscador = document.querySelector("[componenteCampo=buscadorPorId]")
+                    //     campoBuscador.value = transaccion.porTerminos
+                    //     const selectorRangos = document.querySelectorAll(`[selectorRango]`)
+                    //     selectorRangos.forEach((selectorRango) => {
+                    //         selectorRango.removeAttribute("style")
+                    //     })
+                    //     selectorCuadradoFechaEntrada.removeAttribute("memoriaVolatil")
+                    //     selectorFechaEntradaUI.innerText = "Seleccionar"
+                    //     selectorCuadradoFechaSalida.removeAttribute("memoriaVolatil")
+                    //     selectorFechaSalidaUI.innerText = "Seleccionar"
+                    // }
+                    // const resolverReservas = await casaVitini.administracion.reservas.buscador.resolverReservas(transaccion)
+                    const tipoConsulta_entrada = transaccion.tipoConsulta || almacen?.tipoConsulta
+                    const peticion = {
+                        zona: "administracion/reservas/buscador/listarReservas",
+                        tipoConsulta: tipoConsulta_entrada
                     }
+                    if (tipoConsulta_entrada === "porTerminos") {
+                        peticion.pagina = transaccion.pagina
+                        peticion.termino = transaccion.termino || almacen?.termino
+                        peticion.nombreColumna = transaccion.nombreColumna
+                        peticion.sentidoColumna = transaccion.sentidoColumna
+                    }
+
+                    if (tipoConsulta_entrada === "hoy") {
+                        peticion.pagina = transaccion.pagina
+                        peticion.tipoCoincidencia = transaccion.tipoCoincidencia
+                    }
+
+                    if (tipoConsulta_entrada === "rango") {
+                        peticion.pagina = transaccion.pagina
+                        peticion.tipoCoincidencia = transaccion.tipoCoincidencia || almacen?.tipoCoincidencia
+                        peticion.fechaEntrada = transaccion.fechaEntrada || almacen?.fechaEntrada
+                        peticion.fechaSalida = transaccion.fechaSalida || almacen?.fechaSalida
+
+                        peticion.nombreColumna = transaccion.nombreColumna
+                        peticion.sentidoColumna = transaccion.sentidoColumna
+                    }
+                    const respuestaServidor = await casaVitini.shell.servidor(peticion)
+
+                    // const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                    // if (!instanciaRenderizada) {
+                    //     return
+                    // }
                     if (!respuestaServidor) {
                         return
                     }
-                    //document.querySelector("[gridUID=gridReservas]")?.remove()
                     if (respuestaServidor?.error) {
                         document.querySelector("[componente=estadoBusqueda]").innerText = respuestaServidor?.error
                         return
@@ -874,19 +902,19 @@ const casaVitini = {
                         document.querySelector("[componente=estadoBusqueda]").innerText = "No se han encontrado reservas"
                         return
                     }
-                    if (transaccion.tipoConsulta === "hoy") {
-                        const selectorRango = document.querySelector(`[selectorRango=porFechaDeEntrada]`)
-                        selectorRango.style.background = "rgb(8, 0, 255)"
-                        selectorRango.style.color = "white"
-                        selectorFechaEntradaUI.innerText = respuestaServidor.fechaEntrada
-                    }
+                    // if (transaccion.tipoConsulta === "hoy") {
+                    //     const selectorRango = document.querySelector(`[selectorRango=porFechaDeEntrada]`)
+                    //     selectorRango.style.background = "rgb(8, 0, 255)"
+                    //     selectorRango.style.color = "white"
+                    //     selectorFechaEntradaUI.innerText = respuestaServidor.fechaEntrada
+                    // }
 
                     document.querySelector("[componente=estadoBusqueda]")?.remove()
+                    console.log("respuestaServidor", respuestaServidor)
                     const reservas = respuestaServidor.reservas
-                    const buscar = respuestaServidor.buscar
                     const paginasTotales = respuestaServidor.paginasTotales
-                    const paginaActual = respuestaServidor.pagina
-                    const nombreColumna = respuestaServidor.nombreColumna
+                    const pagina = respuestaServidor.pagina
+                    // const nombreColumna = respuestaServidor.nombreColumna
                     const sentidoColumna = respuestaServidor.sentidoColumna
                     const tipoConsulta = respuestaServidor.tipoConsulta
                     const tipoCoincidencia = respuestaServidor.tipoCoincidencia
@@ -894,90 +922,70 @@ const casaVitini = {
                     const fechaEntrada = respuestaServidor.fechaEntrada
                     const fechaSalida = respuestaServidor.fechaSalida
 
-
-
-
                     const columnasGrid = [
                         {
                             columnaUI: "Reserva",
-                            columnaIDV: "reserva",
-                            columnaClase: "idColumna"
+                            columnaIDV: "reservaUID",
                         },
                         {
                             columnaUI: "Fecha de entrada",
                             columnaIDV: "fechaEntrada",
-                            columnaClase: "entradaColumna"
                         },
                         {
                             columnaUI: "Fecha de salida",
                             columnaIDV: "fechaSalida",
-                            columnaClase: "salidaColuma"
                         },
                         {
                             columnaUI: "Estado de la reserva",
-                            columnaIDV: "estadoReserva",
-                            columnaClase: "estadoColumna"
+                            columnaIDV: "estadoReservaIDV",
                         },
                         {
                             columnaUI: "Titular de la reserva",
                             columnaIDV: "nombreCompleto",
-                            columnaClase: "pagoColumna"
                         },
                         {
                             columnaUI: "Pasaporte del titular",
                             columnaIDV: "pasaporteTitular",
-                            columnaClase: "pagoColumna"
                         },
                         {
                             columnaUI: "Correo del titular",
                             columnaIDV: "mailTitular",
-                            columnaClase: "pagoColumna"
                         },
                         {
                             columnaUI: "Fecha de la reserva",
                             columnaIDV: "fechaCreacion",
-                            columnaClase: "pagoColumna"
                         },
                     ]
-                    const parametros = {
-                        tipoConsulta: transaccion.tipoConsulta,
-                        tipoCoincidencia: transaccion.tipoCoincidencia,
-                        fechaEntrada: transaccion.fechaEntrada,
-                        fechaSalida: transaccion.fechaSalida,
-                        termino: transaccion.termino
-                    }
-                    if (consultaDeEntrada === "hoy") {
-                        parametros.tipoConsulta = "rango"
-                        parametros.tipoCoincidencia = tipoCoincidencia
-                        parametros.fechaEntrada = fechaEntrada
-                    }
-                    const dectectorBuscador = granuladoURL.directorios[granuladoURL.directorios.length - 1].toLowerCase()
-                    if (dectectorBuscador !== "buscador") {
-                        granuladoURL.directoriosFusion = granuladoURL.directoriosFusion + "/buscador"
-                    }
+
                     const parametrosFinales = {}
+
                     if (tipoConsulta === "porTerminos") {
-                        parametrosFinales.por_terminos = encodeURIComponent(termino);
+                        parametrosFinales.tipo_consulta = "por_terminos"
+                        parametrosFinales.termino = termino
                     }
                     if (tipoConsulta === "rango") {
-                        parametrosFinales.rango = tipoCoincidencia.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase()
-                        if (tipoCoincidencia === "cualquieraQueCoincida" || tipoCoincidencia === "soloDentroDelRango") {
-                            parametrosFinales.fecha_entrada = fechaEntrada.replaceAll("/", "-")
-                            parametrosFinales.fecha_salida = fechaSalida.replaceAll("/", "-")
-                        }
-                        if (tipoCoincidencia === "porFechaDeSalida") {
-                            parametrosFinales.fecha_salida = fechaSalida.replaceAll("/", "-")
-                        }
-                        if (tipoCoincidencia === "porFechaDeEntrada") {
-                            parametrosFinales.fecha_entrada = fechaEntrada.replaceAll("/", "-")
+                        parametrosFinales.tipo_consulta = "rango"
+                        parametrosFinales.tipo_coincidencia = casaVitini.utilidades.cadenas.camelToSnake(tipoCoincidencia)
+
+                        if (tipoCoincidencia === "cualquieraQueCoincida") {
+                            parametrosFinales.fecha_entrada = fechaEntrada
+                            parametrosFinales.fecha_salida = fechaSalida
+                        } else if (tipoCoincidencia === "soloDentroDelRango") {
+                            parametrosFinales.fecha_entrada = fechaEntrada
+                            parametrosFinales.fecha_salida = fechaSalida
+                        } else if (tipoCoincidencia === "porFechaDeEntrada") {
+                            parametrosFinales.fecha_entrada = fechaEntrada
+                        } else if (tipoCoincidencia === "porFechaDeSalida") {
+                            parametrosFinales.fecha_salida = fechaSalida
                         }
                     }
-                    if (paginaActual > 1 && paginasTotales > 1) {
-                        parametrosFinales.pagina = paginaActual
+
+                    if (pagina > 1 && paginasTotales > 1) {
+                        parametrosFinales.pagina = pagina
                     }
                     if (nombreColumna) {
-                        parametrosFinales.pagina = paginaActual
-                        parametrosFinales.nombre_columna = nombreColumna.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+                        parametrosFinales.pagina = pagina
+                        parametrosFinales.nombre_columna = nombreColumnaURL
                         parametrosFinales.sentido_columna = sentidoColumna
                     }
                     const estructuraParametrosFinales = []
@@ -989,58 +997,46 @@ const casaVitini = {
                     if (estructuraParametrosFinales.length > 0) {
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
-                    this.selectorFiltro.ui({
-                        columnas: columnasGrid,
-                        columnaSeleccioanda: nombreColumna,
-                        sentidoSeleccionado: sentidoColumna,
-                        destino: "[contenedor=filtros]"
-                    })
-
-                    this.constructorTarjetas({
-                        tarjetas: reservas,
-                        destino: "[contenedor=encontrados]"
-
-                    })
 
                     const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-                    const metadatosGrid = {
-                        filas: reservas,
-                        sentidoColumna: sentidoColumna,
-                        nombreColumna: nombreColumna,
-                        tipoConstruccionGrid: tipoConstruccionGrid,
-                        buscar: buscar,
-                        pagina: paginaActual,
-                        destino: "[contenedor=encontrados]",
-                        columnasGrid: columnasGrid,
-                        gridUID: "gridReservas",
-                        numeroColumnas: 8,
-                        metodoColumna: "casaVitini.administracion.reservas.buscador.ordenarPorColumna",
-                        metodoFila: "casaVitini.administracion.reservas.buscador.resolverFila",
-                        mascaraHref: {
-                            urlStatica: "/administracion/reservas/reserva:",
-                            parametro: "reservaUID"
+                    const constructorAlmacen = {
+                        tipoConsulta
+                    }
+                    if (tipoConsulta === "porTerminos") {
+                        constructorAlmacen.termino = termino
+                    }
+                    if (tipoConsulta === "rango") {
+                        constructorAlmacen.tipoCoincidencia = tipoCoincidencia
+                        constructorAlmacen.fechaEntrada = fechaEntrada
+                        constructorAlmacen.fechaSalida = fechaSalida
+                    }
+
+                    casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                        metodoSalida: "administracion.reservas.buscador.mostrarReservasResueltas",
+                        configuracionGrid: {
+                            filas: reservas,
+                            almacen: constructorAlmacen,
+                            sentidoColumna: sentidoColumna,
+                            nombreColumna: nombreColumna,
+                            pagina: pagina,
+                            destino: "[contenedor=reservasEncontradas]",
+                            columnasGrid: columnasGrid,
+                            gridUID: "gridBuscadorReservas",
+                            mascaraURL: {
+                                mascara: "/administracion/reservas/reserva:",
+                                parametro: "reservaUID"
+                            },
                         },
-                        parametros: parametros,
-                        //mascaraURL: constructorURLFinal
-                    }
-                    casaVitini.ui.componentes.grid(metadatosGrid)
-
-
-
-                    const metadatosPaginador = {
-                        paginaActual: paginaActual,
-                        paginasTotales: paginasTotales,
-                        destino: "[componente=espacioReservas]",
-                        metodoBoton: "casaVitini.administracion.reservas.buscador.cambiarPagina",
-                        gridUID: "gridReservas",
-                        granuladoURL: {
-                            parametros: parametrosFinales,
-                            directoriosFusion: granuladoURL.directoriosFusion
+                        configuracionPaginador: {
+                            paginasTotales: paginasTotales,
+                            granuladoURL: {
+                                parametros: parametrosFinales,
+                                directoriosFusion: granuladoURL.directoriosFusion
+                            },
                         }
-                    }
-                    casaVitini.ui.componentes.paginador(metadatosPaginador)
-                    transaccion.tipoConstruccionGrid = "soloLista"
-                    const titulo = "Administar reservas"
+                    })
+
+                    const titulo = ""
                     const estado = {
                         zona: constructorURLFinal,
                         EstadoInternoZona: "estado",
@@ -1051,11 +1047,9 @@ const casaVitini = {
                     }
                     if (origen === "url" || origen === "botonMostrarReservas") {
                         window.history.replaceState(estado, titulo, constructorURLFinal);
-                    }
-                    if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
+                    } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
                         window.history.pushState(estado, titulo, constructorURLFinal);
-                    }
-                    if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
+                    } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
                         window.history.replaceState(estado, titulo, constructorURLFinal);
                     }
                 },
@@ -1449,7 +1443,7 @@ const casaVitini = {
                 verReservasHoy: () => {
                     const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
 
-                    const espacioReservas = document.querySelector("[contenedor=encontrados]")
+                    const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
                     const buscadorUI = document.querySelector("[componente=navegacionZonaAdministracion]")
                     document.querySelector("[componente=estadoBusqueda]")?.remove()
                     document.querySelector("[gridUID=gridReservas]")?.remove()
@@ -1464,13 +1458,11 @@ const casaVitini = {
                     buscadorUI.parentNode.insertBefore(estadoBusquedaUI, buscadorUI.nextSibling);
 
                     const peticion = {
-                        zona: "administracion/reservas/buscador/listarReservas",
                         pagina: 1,
                         tipoConsulta: "hoy",
-                        tipoConstruccionGrid: "total",
                         origen: "url",
                         instanciaUID: instanciaUID,
-                        rango: "porFechaEntrada"
+                        tipoCoincidencia: "porFechaEntrada"
                     }
                     casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion)
                 },
@@ -1487,7 +1479,7 @@ const casaVitini = {
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[contenedor=filtrosOrden]")?.remove()
 
-                    const espacioReservas = document.querySelector("[contenedor=encontrados]")
+                    const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
                     espacioReservas.innerHTML = null
 
                     const estadoBusquedaUI = document.createElement("div")
@@ -1499,14 +1491,12 @@ const casaVitini = {
                     const selectorCampoBuscador = document.querySelector("[componenteCampo=buscadorPorId]")
                     selectorCampoBuscador.value = null
                     const peticion = {
-                        zona: "administracion/reservas/buscador/listarReservas",
                         pagina: 1,
                         tipoConsulta: "rango",
                         tipoCoincidencia: tipoRango,
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
                         origen: "botonMostrarReservas",
-                        tipoConstruccionGrid: "total",
                         instanciaUID: instanciaUID
                     }
 
@@ -1514,14 +1504,13 @@ const casaVitini = {
                 },
                 buscadorReservas: (reserva) => {
                     const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
-                    const espacioReservas = document.querySelector("[contenedor=encontrados]")
+                    const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
                     const buscadorUI = document.querySelector("[componente=navegacionZonaAdministracion]")
                     clearTimeout(casaVitini.componentes.temporizador);
                     document.querySelector("[componente=resultadosSinReservas]")?.remove()
                     document.querySelector("[gridUID=gridReservas")?.remove()
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[componente=estadoBusqueda]")?.remove()
-                    document.querySelector("[contenedor=filtrosOrden]")?.remove()
                     espacioReservas.innerHTML = null
 
                     const estadoBusquedaUI = document.createElement("div")
@@ -1550,13 +1539,10 @@ const casaVitini = {
                     }
                     casaVitini.componentes.temporizador = setTimeout(() => {
                         const peticion = {
-                            zona: "administracion/reservas/buscador/listarReservas",
                             pagina: Number("1"),
                             tipoConsulta: "porTerminos",
                             termino: terminoBusqueda,
                             origen: "botonMostrarReservas",
-                            tipoConstruccionGrid: "total",
-                            instanciaUID: instanciaUID
                         }
                         casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion);
                     }, 1500);
@@ -3730,7 +3716,7 @@ const casaVitini = {
                             const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
                             ui.setAttribute("controlador", "controlResponsivoVisibilidad")
                             document.querySelector("main").appendChild(ui)
-                            console.log("ee")
+
 
                             const contenedor = ui.querySelector("[componente=contenedor]")
                             contenedor.style.paddingTop = "0px"
@@ -3770,12 +3756,12 @@ const casaVitini = {
                                 const selectorElementoObservado = document.querySelector("[controlador=controlResponsivoVisibilidad]")
                                 if (!selectorElementoObservado) {
                                     window.removeEventListener("resize", controlResponsivoVisibilidad);
-                                    console.log("ya no existe el elemento")
+
                                     return
                                 }
                                 const windowWidth = window.innerWidth;
                                 const threshold = "922"
-                                console.log("vetana horizontal", windowWidth)
+
                                 if (windowWidth > threshold) {
                                     selectorElementoObservado?.remove()
                                 }
@@ -9599,7 +9585,7 @@ const casaVitini = {
                             const spinnerPorRenderizar = casaVitini.ui.componentes.spinnerSimple()
                             contenedorEnlacesDePago.classList.add(
                                 "padding6",
-                                "flexVertical", 
+                                "flexVertical",
                                 "gap6"
                             )
                             contenedorEnlacesDePago.setAttribute("instanciaUID", instanciaUID)
@@ -12242,6 +12228,7 @@ const casaVitini = {
                                 const duracionIDV = contenedor.duracionIDV
                                 const fechaInicio = contenedor.fechaInicio
                                 const tituloPublico = contenedor.tituloPublico
+                                const servicioUID = contenedor.servicioUID
                                 const disponibilidadIDV = contenedor.disponibilidadIDV
 
                                 const diccionario = {
@@ -12255,83 +12242,82 @@ const casaVitini = {
                                 servicioUI.setAttribute("servicioUID_enReserva", servicioUID_enReserva)
                                 servicioUI.classList.add(
                                     "flexVertical",
-                                    "padding14",
+                                    "padding6",
                                     "backgroundGrey1",
-                                    "borderRadius14"
+                                    "borderRadius14",
+                                    "flexAlineacionI"
                                 )
-                                const contenedorInterno = document.createElement("div")
-                                contenedorInterno.classList.add(
+                                const contenedorData = document.createElement("div")
+                                contenedorData.classList.add(
                                     "flexVertical",
-                                    "gap6"
+                                    "gap6",
+                                    "padding10"
                                 )
-                                servicioUI.appendChild(contenedorInterno)
+                                servicioUI.appendChild(contenedorData)
+
+                                const contenedorNombreInterno = document.createElement("div")
+                                contenedorNombreInterno.classList.add(
+                                    "flexVertical",
+                                )
+                                contenedorData.appendChild(contenedorNombreInterno)
+
+                                const tituluNombreInternoUI = document.createElement("p")
+                                tituluNombreInternoUI.innerText = `Nombre adminitrativo`
+                                contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                                 const nombreInternoUI = document.createElement("p")
+                                nombreInternoUI.classList.add(
+                                    "negrita")
                                 nombreInternoUI.innerText = `${nombreInterno}`
-                                contenedorInterno.appendChild(nombreInternoUI)
+                                contenedorNombreInterno.appendChild(nombreInternoUI)
 
-                                const contenedorGlobal = document.createElement("div")
-                                contenedorGlobal.classList.add(
-                                    "contenedorGlobal"
+                                const contenedorNombrePublico = document.createElement("div")
+                                contenedorNombrePublico.classList.add(
+                                    "flexVertical",
                                 )
-                                servicioUI.appendChild(contenedorGlobal)
+                                contenedorData.appendChild(contenedorNombrePublico)
 
-                                const esferaSeleccionable = document.createElement("div")
-                                esferaSeleccionable.classList.add(
-                                    "esferaSeleccionable"
-                                )
-                                contenedorGlobal.appendChild(esferaSeleccionable)
-
-                                const indicadorDeSeleccion = document.createElement("div")
-                                indicadorDeSeleccion.setAttribute("componente", "indicadorSelecion")
-                                indicadorDeSeleccion.classList.add(
-                                    "indicadorDeSeleccion"
-                                )
-                                esferaSeleccionable.appendChild(indicadorDeSeleccion)
+                                const tituluNombrePublico = document.createElement("p")
+                                tituluNombrePublico.innerText = `Nombre público`
+                                contenedorNombrePublico.appendChild(tituluNombrePublico)
 
                                 const titulo = document.createElement("p")
                                 titulo.classList.add(
-                                    "padding6",
-                                    "negrita"
-                                )
+                                    "negrita")
                                 titulo.innerText = tituloPublico
-                                contenedorGlobal.appendChild(titulo)
+                                contenedorNombrePublico.appendChild(titulo)
 
 
                                 const disponibilidadUI = document.createElement("p")
                                 disponibilidadUI.classList.add(
-                                    "padding6"
                                 )
                                 disponibilidadUI.innerText = diccionario.disponibilidad[disponibilidadIDV]
-                                servicioUI.appendChild(disponibilidadUI)
+                                contenedorData.appendChild(disponibilidadUI)
 
 
                                 if (disponibilidadIDV === "variable") {
 
                                     const info = document.createElement("p")
                                     info.classList.add(
-                                        "padding6"
                                     )
                                     info.innerText = `Este servicio tiene una disponibilidad limitada. Es por eso que si selecciona este servicio, nos pondremos en contacto con el titular de la reserva en las próximas horas para confirmarle la disponibilidad del servicio para su reserva.`
-                                    servicioUI.appendChild(info)
+                                    contenedorData.appendChild(info)
                                 }
 
                                 const precioUI = document.createElement("p")
                                 precioUI.classList.add(
-                                    "padding6",
                                     "negrita"
                                 )
                                 precioUI.innerText = precio + "$"
-                                servicioUI.appendChild(precioUI)
+                                contenedorData.appendChild(precioUI)
 
                                 if (duracionIDV === "rango") {
                                     const contenedorDuracion = document.createElement("div")
                                     contenedorDuracion.classList.add(
                                         "flexVertical",
-                                        "padding6"
 
                                     )
-                                    servicioUI.appendChild(contenedorDuracion)
+                                    contenedorData.appendChild(contenedorDuracion)
 
                                     const info = document.createElement("p")
                                     info.classList.add("negrita")
@@ -12341,19 +12327,21 @@ const casaVitini = {
                                 }
                                 const definicionUI = document.createElement("p")
                                 definicionUI.classList.add(
-                                    "padding6"
                                 )
                                 definicionUI.innerText = definicion
-                                servicioUI.appendChild(definicionUI)
+                                contenedorData.appendChild(definicionUI)
 
                                 const contenedorBotones = document.createElement("div")
-                                contenedorBotones.classList.add("administracion_reservas_detallesReservas_enlacesDePago_contenedorBotones")
+                                contenedorBotones.classList.add(
+                                    "flexHorizontal",
+                                    "gap6"
+                                )
                                 const botonIr = document.createElement("a")
                                 botonIr.classList.add("administracion_reservas_detallesReservas_enlacesDePago_botonV1")
                                 botonIr.innerText = "Ir al servicio"
-                                // botonIr.setAttribute("href", "/servicios/servicio:" + servicioUID)
+                                botonIr.setAttribute("href", "/servicios/servicio:" + servicioUID)
                                 botonIr.setAttribute("target", "_blank")
-                                //contenedorBotones.appendChild(botonIr)
+                                contenedorBotones.appendChild(botonIr)
 
                                 const botonEliminar = document.createElement("div")
                                 botonEliminar.classList.add("administracion_reservas_detallesReservas_enlacesDePago_botonV1")
@@ -15463,7 +15451,7 @@ const casaVitini = {
 
                 },
                 contenedorBotones: () => {
-                    const espacio = document.querySelector("[componente=servicios]")
+                    const espacio = document.querySelector("[componente=espacio]")
                     const contenedorBotones = document.createElement("div")
                     contenedorBotones.classList.add("contenedorBotonesGlobales")
                     contenedorBotones.setAttribute("componente", "contenedorBotonesServicios")
@@ -15509,7 +15497,17 @@ const casaVitini = {
                     delete transaccion.origen
                     const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
                     delete transaccion.tipoConstruccionGrid
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                    const peticion = {
+                        zona: "administracion/servicios/listaServiciosPaginados",
+                        pagina: transaccion.pagina,
+                    }
+                    if (transaccion.nombreColumna) {
+                        peticion.nombreColumna = transaccion.nombreColumna
+                    }
+                    if (transaccion.sentidoColumna) {
+                        peticion.sentidoColumna = transaccion.sentidoColumna
+                    }
+                    const respuestaServidor = await casaVitini.shell.servidor(peticion)
 
                     const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                     if (!seccionRenderizada) { return }
@@ -15550,22 +15548,18 @@ const casaVitini = {
                         {
                             columnaUI: "UID",
                             columnaIDV: "servicioUID",
-                            columnaClase: "idColumna"
                         },
                         {
                             columnaUI: "Nombre",
                             columnaIDV: "nombre",
-                            columnaClase: "entradaColumna"
                         },
                         {
                             columnaUI: "Estado",
                             columnaIDV: "estadoIDV",
-                            columnaClase: "salidaColuma"
                         },
                         {
                             columnaUI: "Zona",
                             columnaIDV: "zonaIDV",
-                            columnaClase: "estadoColumna"
                         },
                     ]
                     const parametrosFinales = {}
@@ -15587,54 +15581,32 @@ const casaVitini = {
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
 
-                    this.selectorFiltro.ui({
-                        columnas: columnasGrid,
-                        columnaSeleccioanda: nombreColumna,
-                        sentidoSeleccionado: sentidoColumna,
-                        destino: "[contenedor=resultados]"
-                    })
-
-                    this.constructorTarjetas({
-                        tarjetas: servicios,
-                        destino: "[contenedor=resultados]"
-
-                    })
-
-
-
                     const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-                    const metadatosGrid = {
-                        filas: servicios,
-                        sentidoColumna: sentidoColumna,
-                        nombreColumna: nombreColumna,
-                        tipoConstruccionGrid: tipoConstruccionGrid,
-                        pagina: pagina,
-                        destino: "[contenedor=resultados]",
-                        columnasGrid: columnasGrid,
-                        gridUID: "gridServicios",
-                        numeroColumnas: 4,
-                        metodoColumna: "casaVitini.administracion.servicios.portada.ordenarPorColumna",
-                        metodoFila: "casaVitini.administracion.servicios.portada.resolverFila",
-                        mascaraHref: {
-                            urlStatica: "/administracion/servicios/servicio:",
-                            parametro: "servicioUID"
+                    casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                        metodoSalida: "administracion.servicios.portada.mostrarServiciosResueltos",
+                        configuracionGrid: {
+                            filas: servicios,
+                            sentidoColumna: sentidoColumna,
+                            nombreColumna: nombreColumna,
+                            tipoConstruccionGrid: tipoConstruccionGrid,
+                            pagina: pagina,
+                            destino: "[componente=espacio]",
+                            columnasGrid: columnasGrid,
+                            gridUID: "gridServicios",
+                            mascaraURL: {
+                                mascara: "/administracion/servicios/servicio:",
+                                parametro: "servicioUID"
+                            },
                         },
-                        //mascaraURL: constructorURLFinal
-                    }
-                    casaVitini.ui.componentes.grid(metadatosGrid)
-                    const metadatosPaginador = {
-                        paginaActual: pagina,
-                        paginasTotales: paginasTotales,
-                        destino: "[componente=espacio]",
-                        metodoBoton: "casaVitini.administracion.servicios.portada.cambiarPagina",
-                        prefijoHref: "/administracion/servicios/",
-                        gridUID: "gridServicios",
-                        granuladoURL: {
-                            parametros: parametrosFinales,
-                            directoriosFusion: granuladoURL.directoriosFusion
+                        configuracionPaginador: {
+                            paginasTotales: paginasTotales,
+                            granuladoURL: {
+                                parametros: parametrosFinales,
+                                directoriosFusion: granuladoURL.directoriosFusion
+                            },
                         }
-                    }
-                    casaVitini.ui.componentes.paginador(metadatosPaginador)
+                    })
+
                     transaccion.tipoConstruccionGrid = "soloLista"
                     const titulo = "Administrar reservas"
                     const estado = {
@@ -15646,8 +15618,6 @@ const casaVitini = {
                         datosPaginacion: transaccion
                     }
 
-
-
                     if (origen === "url" || origen === "botonMostrarClientes") {
                         window.history.replaceState(estado, titulo, constructorURLFinal);
                     }
@@ -15657,299 +15627,10 @@ const casaVitini = {
                         window.history.pushState(estado, titulo, constructorURLFinal);
                     }
                 },
-                resolverFila: (transaccion) => {
-                    transaccion.preventDefault()
-                    transaccion.stopPropagation()
-                    const servicioUID = transaccion.target.parentNode.getAttribute("href")
-                    const navegacion = {
-                        vista: servicioUID,
-                        tipoOrigen: "menuNavegador"
-                    }
-                    casaVitini.shell.navegacion.controladorVista(navegacion)
-                },
-                cambiarPagina: async (cambiarPagina) => {
-                    const gridUID = cambiarPagina.gridUID
-                    const gridEnlazado = document.querySelector(`[gridUID=${gridUID}]`)
-                    const main = document.querySelector("main")
-                    const instanciaUID = main.getAttribute("instanciaUID")
-                    const tipoBoton = cambiarPagina.componenteID
-                    const nombreColumna = gridEnlazado.getAttribute("nombreColumnaSeleccionada")
-                    const sentidoColumna = gridEnlazado.getAttribute("sentidoColumna")
-                    const terminoBusqueda = gridEnlazado.getAttribute("terminoBusqueda")
-                    const paginaActual = Number(gridEnlazado.getAttribute("numeroPagina"))
-                    const transacccion = {
-                        zona: "administracion/servicios/listaServiciosPaginados",
-                        nombreColumna: nombreColumna,
-                        sentidoColumna: sentidoColumna,
-                        buscar: terminoBusqueda,
-                        tipoBusqueda: "rapido",
-                        instanciaUID: instanciaUID
-                    }
-                    if (tipoBoton === "numeroPagina") {
-                        const numeroPagina = cambiarPagina.numeroPagina
-                        transacccion.pagina = Number(numeroPagina)
-                        transacccion.origen = "botonNumeroPagina"
-                    }
-                    if (tipoBoton === "botonAdelantePaginacion") {
-                        const posicionRelativa = document.querySelector("[paginaTipo=actual]").getAttribute("posicionRelativa")
-                        let mueveNavegadorHaciaAdelante = "Desactivado";
-                        if (Number(posicionRelativa) === 10) {
-                            mueveNavegadorHaciaAdelante = "Activado"
-                        }
-                        transacccion.pagina = paginaActual + 1
-                        transacccion.origen = "botonNumeroPagina"
-                        transacccion.moverHaciaAdelanteNavegacion = mueveNavegadorHaciaAdelante
-                        transacccion.sentidoNavegacion = "Adelante"
-                    }
-                    if (tipoBoton === "botonAtrasPaginacion") {
-                        const posicionRelativa = document.querySelector("[paginaTipo=actual]").getAttribute("posicionRelativa")
-                        let mueveNavegadorHaciaAtras = "Desactivado";
-                        if (Number(posicionRelativa) === 1) {
-                            mueveNavegadorHaciaAtras = "Activado"
-                        }
-                        transacccion.pagina = paginaActual - 1
-                        transacccion.origen = "botonNumeroPagina"
-                        transacccion.mueveNavegadorHaciaAtras = mueveNavegadorHaciaAtras
-                        transacccion.sentidoNavegacion = "Atras"
-                    }
-                    transacccion.tipoConstruccionGrid = "soloLista"
-                    casaVitini.administracion.servicios.portada.mostrarServiciosResueltos(transacccion)
-                },
-                ordenarPorColumna: async (columna) => {
 
-                    const nombreColumna = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("nombreColumna")
-                    const selectorColumnasentido = columna.target.closest("[componenteGrid=celdaTituloColumna]").getAttribute("sentidoColumna")
-                    const numeroPagina = columna.target.closest("[gridUID]").getAttribute("numeroPagina")
-                    const transaccion = {
-                        zona: "administracion/servicios/listaServiciosPaginados",
-                        pagina: Number(numeroPagina),
-                        tipoConstruccionGrid: "soloLista",
-                        origen: "tituloColumna"
-                    }
 
-                    if (selectorColumnasentido === "ascendente") {
-                        transaccion.sentidoColumna = "descendente"
-                        transaccion.nombreColumna = nombreColumna
-                    }
-                    if (!selectorColumnasentido) {
-                        transaccion.sentidoColumna = "ascendente"
-                        transaccion.nombreColumna = nombreColumna
-                    }
-                    casaVitini.administracion.servicios.portada.mostrarServiciosResueltos(transaccion)
-                },
-                constructorTarjetas: (data) => {
-                    const servicios = data.tarjetas
-                    const destino = data.destino
 
-                    const contenedorTarjetas = document.querySelector("[contenedor=tarjetas]")
-                    contenedorTarjetas?.remove()
 
-                    const contenedor = document.createElement("div")
-                    contenedor.setAttribute("contenedor", "tarjetas")
-                    contenedor.classList.add(
-                        "flexVertical",
-                        "gap6"
-                    )
-
-                    servicios.forEach(i => {
-                        const servicioUID = i.servicioUID
-                        const nombre = i.nombre
-                        const estadoIDV = i.estadoIDV
-                        const zonaIDV = i.zonaIDV
-
-                        const tarjeta = document.createElement("a")
-                        tarjeta.setAttribute("componente", "tarjeta")
-                        tarjeta.classList.add(
-                            "flexVertical",
-                            "gap6",
-                            "tarjeta",
-                            "borderRadius10",
-                            "backgroundGrey1",
-                            "padding10",
-                            "areaSinDecoracionPredeterminada",
-                            "ratonDefault",
-                            "comportamientoBoton"
-                        )
-                        tarjeta.href = `/administracion/servicios/servicio:${servicioUID}`
-                        tarjeta.setAttribute("vista", `/administracion/servicios/servicio:${servicioUID}`)
-                        tarjeta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-                        contenedor.appendChild(tarjeta)
-
-                        const datosPar = {
-                            "ServicioUID": servicioUID,
-                            "Nombre": nombre,
-                            "Zona": zonaIDV,
-                            "Estado": estadoIDV
-                        }
-
-                        Object.entries(datosPar).forEach(([datoUI, data]) => {
-
-                            const contenedor = document.createElement("div")
-                            contenedor.classList.add(
-                                "flexVertical"
-                            )
-                            if (data) {
-                                tarjeta.appendChild(contenedor)
-                            }
-                            const titulo = document.createElement("div")
-                            titulo.innerHTML = datoUI
-                            contenedor.appendChild(titulo)
-
-                            const dataUI = document.createElement("div")
-                            dataUI.classList.add(
-                                "negrita",
-                                "textoElipsis"
-                            )
-                            dataUI.innerText = data
-                            contenedor.appendChild(dataUI)
-                        })
-                    })
-                    document.querySelector(destino).appendChild(contenedor)
-                },
-                selectorFiltro: {
-                    ui: function (data) {
-                        const destino = data.destino
-                        const columnas = data.columnas
-
-                        const columnaSeleccioanda = data?.columnaSeleccioanda || null
-                        const sentidoSeleccionado = data?.sentidoSeleccionado || null
-                        const selectorFiltroOrden = document.querySelector("[contenedor=filtrosOrden]")
-                        if (selectorFiltroOrden) {
-                            const selectorOrdenPorColumna = selectorFiltroOrden.querySelector("[selector=ordenPorColumna]")
-                            const selectorSentido = selectorFiltroOrden.querySelector("[selector=sentido]")
-
-                            if (columnaSeleccioanda) {
-                                selectorOrdenPorColumna.value = columnaSeleccioanda
-
-                            } else {
-                                selectorOrdenPorColumna.selectedIndex = 0
-                            }
-                            if (sentidoSeleccionado) {
-                                selectorSentido.value = sentidoSeleccionado
-                            } else {
-                                selectorSentido.selectedIndex = 0
-                            }
-                            return
-                        }
-
-                        const contenedorFiltrosOrden = document.createElement("div")
-                        contenedorFiltrosOrden.classList.add(
-                            "gap6",
-                            "flexDerecha"
-                        )
-                        contenedorFiltrosOrden.setAttribute("contenedor", "filtrosOrden")
-
-                        const botonReseteo = document.createElement("div")
-                        botonReseteo.classList.add(
-                            "selector",
-                            "textoCentrado",
-                            "comportamientoBoton",
-                            "noSelecionable",
-                            "ratonDefault"
-                        )
-                        botonReseteo.innerText = "Resetear filtros"
-                        botonReseteo.addEventListener("click", (e) => {
-                            const contenedor = e.target.closest("[contenedor=filtrosOrden]")
-                            const selectorColumna = contenedor.querySelector("[selector=ordenPorColumna]")
-                            const selectorSentido = contenedor.querySelector("[selector=sentido]")
-                            selectorColumna.selectedIndex = 0
-                            selectorSentido.selectedIndex = 0
-                            this.pasarela(e)
-                        })
-                        contenedorFiltrosOrden.appendChild(botonReseteo)
-
-                        const selectorColumna = document.createElement("select")
-                        selectorColumna.setAttribute("selector", "ordenPorColumna")
-                        selectorColumna.addEventListener("change", this.pasarela)
-                        selectorColumna.classList.add(
-                            "selector",
-                            "textoCentrado"
-                        )
-                        contenedorFiltrosOrden.appendChild(selectorColumna)
-                        const opcionPreterminada = document.createElement("option");
-                        opcionPreterminada.disabled = "true"
-                        opcionPreterminada.value = ""
-                        opcionPreterminada.text = "Ordenar por columna";
-                        if (!columnaSeleccioanda) {
-                            opcionPreterminada.selected = "true"
-                        }
-
-                        selectorColumna.add(opcionPreterminada)
-
-                        columnas.forEach((columna) => {
-                            const columnaUI = columna.columnaUI
-                            const columnaIDV = columna.columnaIDV
-                            const opcion = document.createElement("option");
-                            opcion.value = columnaIDV;
-                            opcion.text = columnaUI;
-                            if (columnaSeleccioanda === columnaIDV) {
-                                opcion.selected = "true"
-                            }
-                            selectorColumna.add(opcion);
-                        })
-
-                        const selectorSentido = document.createElement("select")
-                        selectorSentido.setAttribute("selector", "sentido")
-                        selectorSentido.addEventListener("change", this.pasarela)
-
-                        selectorSentido.classList.add(
-                            "selector",
-                            "textoCentrado"
-                        )
-                        contenedorFiltrosOrden.appendChild(selectorSentido)
-                        const opcionSentido = document.createElement("option");
-                        opcionSentido.disabled = "true"
-                        opcionSentido.text = "Sentido";
-                        opcionSentido.value = ""
-                        if (!sentidoSeleccionado) {
-                            opcionSentido.selected = "true"
-                        }
-                        selectorSentido.add(opcionSentido)
-
-                        const sentidos = [
-                            {
-                                sentidoUI: "Ascendente",
-                                sentidoIDV: "ascendente"
-                            },
-                            {
-                                sentidoUI: "Descendente",
-                                sentidoIDV: "descendente"
-                            }
-                        ]
-
-                        sentidos.forEach((sentido) => {
-                            const sentidoUI = sentido.sentidoUI
-                            const sentidoIDV = sentido.sentidoIDV
-                            const opcion = document.createElement("option");
-                            opcion.value = sentidoIDV;
-                            opcion.text = sentidoUI;
-                            if (sentidoSeleccionado === sentidoIDV) {
-                                opcion.selected = "true"
-                            }
-                            selectorSentido.add(opcion);
-                        })
-                        document.querySelector(destino).appendChild(contenedorFiltrosOrden)
-                    },
-                    pasarela: (e) => {
-                        const contenedor = e.target.closest("[contenedor=filtrosOrden]")
-                        const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
-                        const selectorColumna = contenedor.querySelector("[selector=ordenPorColumna]").value
-                        const selectorSentido = contenedor.querySelector("[selector=sentido]").value
-                        const ui = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                        const numeroPagina = ui.querySelector("[gridUID]").getAttribute("numeroPagina")
-                        const transaccion = {
-                            zona: "administracion/servicios/listaServiciosPaginados",
-                            pagina: Number(numeroPagina),
-                            tipoConstruccionGrid: "soloLista",
-                            origen: "tituloColumna",
-                            granuladoURL: casaVitini.utilidades.granuladorURL()
-                        }
-                        transaccion.sentidoColumna = selectorSentido
-                        transaccion.nombreColumna = selectorColumna
-
-                        casaVitini.administracion.servicios.portada.mostrarServiciosResueltos(transaccion)
-                    }
-                },
             },
             detallesServicio: {
                 arranque: async function (servicioUID) {
@@ -18559,69 +18240,66 @@ const casaVitini = {
                 const main = document.querySelector("main")
                 const instanciaUID = main.getAttribute("instanciaUID")
                 const parametroBuscar = granuladoURL.parametros.buscar
+                const parametros = granuladoURL.parametros
                 const rawArray = granuladoURL.rawArray
-
-                if (rawArray.length === 2) {
+                console.log("parametros", parametros)
+                if (Object.keys(parametros).length === 0) {
+                    console.log("4")
                     main.setAttribute("zonaCSS", "administracion/clientes/buscador")
                     casaVitini.administracion.clientes.buscador.buscadorUI()
-                } else if (comandoInicial === "fusion") {
+                } else if (parametros.buscar) {
+                    console.log("3")
 
-                    casaVitini.administracion.clientes.fusion.portada()
-                    main.setAttribute("zonaCSS", "administracion/clientes/fusion")
-
-
-                } else if (parametroBuscar?.length > 0) {
                     main.setAttribute("zonaCSS", "administracion/clientes/buscador")
                     casaVitini.administracion.clientes.buscador.buscadorUI()
                     if (!granuladoURL.parametros.buscar) {
                         return
                     }
-                    const transaccion = {
-                        zona: "administracion/clientes/buscar",
-                        tipoConstruccionGrid: "total",
-                        origen: "url",
-                        instanciaUID: instanciaUID,
-                        ...granuladoURL.parametros,
-                        //granuladoURL: granuladorURL
-                    }
-                    transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
-                    transaccion.buscar = decodeURI(transaccion.buscar)
-                    if (transaccion.nombre_columna) {
-                        transaccion.nombreColumna = transaccion.nombre_columna.replace(/_([a-z])/g, (match, group) => group.toUpperCase());
-                        delete transaccion.nombre_columna
-                    }
-                    if (transaccion.sentido_columna) {
-                        transaccion.sentidoColumna = transaccion.sentido_columna
-                        delete transaccion.sentido_columna
-                    }
+
                     const campoBuscador = document.querySelector("[componenteCampo=buscadorPorId]")
-                    campoBuscador.value = transaccion.buscar
-                    casaVitini.administracion.clientes.buscador.mostrarClientesResueltos(transaccion)
-                } else if (rawArray.length === 3) {
-                    const cliente = comandoInicial
-                    await casaVitini.administracion.clientes.detallesCliente.portada.UI(cliente)
-                    main.setAttribute("zonaCSS", "administracion/clientes/detalles")
-                    const transaccion = {
-                        zona: "administracion/clientes/reservasDelCliente",
-                        clienteUID: cliente,
-                        origen: "url",
-                        tipoConstruccionGrid: "total",
-                        ...granuladoURL.parametros,
-                        //granuladoURL: granuladorURL
-                    }
-                    transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
-                    if (transaccion.nombre_columna) {
-                        transaccion.nombreColumna = transaccion.nombre_columna.replace(/_([a-z])/g, (match, group) => group.toUpperCase());
-                        delete transaccion.nombre_columna
-                    }
-                    if (transaccion.sentido_columna) {
-                        transaccion.sentidoColumna = transaccion.sentido_columna
-                        delete transaccion.sentido_columna
-                    }
-                    await casaVitini.administracion.clientes.detallesCliente.portada.mostrarReservasDelClienteResueltas(transaccion)
-                } else if (rawArray.length === 4 && comandoInicial === "editar") {
+                    campoBuscador.value = decodeURI(parametroBuscar)
+
+                    const parametrosFormatoURL = granuladoURL.parametros
+                    const parametrosFormatoIDV = {}
+                    Object.entries(parametrosFormatoURL).forEach(([nombreParametroURL, valorParametroURL]) => {
+                        const nombreParametroIDV = casaVitini.utilidades.cadenas.snakeToCamel(nombreParametroURL)
+                        let nombreColumnaIDV
+                        if ((valorParametroURL)?.toLowerCase() === "cliente_uid") {
+                            nombreColumnaIDV = "clienteUID"
+                        } else if (valorParametroURL) {
+                            nombreColumnaIDV = casaVitini.utilidades.cadenas.snakeToCamel(valorParametroURL)
+                        } else if ((nombreParametroIDV)?.toLowerCase() === "buscar") {
+                            valorParametroURL = decodeURI(valorParametroURL)
+                        }
+                        parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
+                    })
+
+                    casaVitini.administracion.clientes.buscador.mostrarClientesResueltos(parametrosFormatoIDV)
+                } else if (parametros.cliente && comandoInicial === "editar") {
+                    console.log("1")
                     main.setAttribute("zonaCSS", "administracion/clientes/editar")
                     await casaVitini.administracion.clientes.detallesCliente.editar.UI()
+                } else if (parametros.cliente) {
+                    console.log("2")
+                    const clienteUID = parametros.cliente
+                    await casaVitini.administracion.clientes.detallesCliente.portada.UI(clienteUID)
+                    main.setAttribute("zonaCSS", "administracion/clientes/detalles")
+
+                    const parametrosFormatoURL = granuladoURL.parametros
+                    const parametrosFormatoIDV = {}
+                    Object.entries(parametrosFormatoURL).forEach(([nombreParametroURL, valorParametroURL]) => {
+                        const nombreParametroIDV = casaVitini.utilidades.cadenas.snakeToCamel(nombreParametroURL)
+                        let nombreColumnaIDV
+                        if ((valorParametroURL)?.toLowerCase() === "reserva_uid") {
+                            nombreColumnaIDV = "reservaUID"
+                        } else if (valorParametroURL) {
+                            nombreColumnaIDV = casaVitini.utilidades.cadenas.snakeToCamel(valorParametroURL)
+                        }
+                        parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
+
+                    })
+                    parametrosFormatoIDV.clienteUID = parametros.cliente
+                    await casaVitini.administracion.clientes.detallesCliente.portada.mostrarReservasDelClienteResueltas(parametrosFormatoIDV)
                 }
             },
             nuevo: {
@@ -18745,23 +18423,34 @@ const casaVitini = {
                 },
                 mostrarClientesResueltos: async function (transaccion) {
                     const instanciaUID = transaccion.instanciaUID
-                    delete transaccion.instanciaUID
                     const origen = transaccion.origen
                     delete transaccion.origen
                     const granuladoURL = casaVitini.utilidades.granuladorURL()
-                    delete transaccion.granuladoURL
-                    const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
-                    delete transaccion.tipoConstruccionGrid
                     const paginaTipo = transaccion.paginaTipo
-                    delete transaccion.paginaTipo
+                    const selectorAlmacen = document.querySelector("[areaGrid=gridClientes]")?.getAttribute("almacen") || "{}"
+                    const almacen = JSON.parse(selectorAlmacen)
+                    const busquedaInicial = transaccion.buscar || almacen?.buscar
 
-
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                    const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                    if (!instanciaRenderizada) {
-                        return
+                    let nombreColumnaURL
+                    const nombreColumna = transaccion.nombreColumna
+                    if ((nombreColumna)?.toLowerCase() === "clienteuid") {
+                        nombreColumnaURL = "cliente_uid"
+                    } else if (nombreColumna) {
+                        nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
                     }
 
+                    const respuestaServidor = await casaVitini.shell.servidor({
+                        zona: "administracion/clientes/buscar",
+                        buscar: busquedaInicial,
+                        nombreColumna: transaccion.nombreColumna,
+                        sentidoColumna: transaccion.sentidoColumna,
+                        pagina: Number(transaccion?.pagina || 1)
+                    })
+
+                    // const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    // if (!instanciaRenderizada) {
+                    //     return
+                    // }
                     if (respuestaServidor?.error) {
                         //document.querySelector("[gridUID=gridClientes]")?.remove()
                         document.querySelector("[componente=estadoBusqueda]").innerText = respuestaServidor?.error
@@ -18776,55 +18465,48 @@ const casaVitini = {
                     const clientes = respuestaServidor.clientes
                     const buscar = respuestaServidor.buscar
                     const paginasTotales = respuestaServidor.paginasTotales
-                    const paginaActual = respuestaServidor.pagina
-                    const nombreColumna = respuestaServidor.nombreColumna
+                    const pagina = respuestaServidor.pagina
                     const sentidoColumna = respuestaServidor.sentidoColumna
+
                     const columnasGrid = [
                         {
                             columnaUI: "UID",
-                            columnaIDV: "uid",
-                            columnaClase: "idColumna"
+                            columnaIDV: "clienteUID",
                         },
                         {
                             columnaUI: "Nombre",
                             columnaIDV: "nombre",
-                            columnaClase: "entradaColumna"
                         },
                         {
                             columnaUI: "Primer apellido",
                             columnaIDV: "primerApellido",
-                            columnaClase: "salidaColuma"
                         },
                         {
                             columnaUI: "Segundo Apellido",
                             columnaIDV: "segundoApellido",
-                            columnaClase: "estadoColumna"
                         },
                         {
                             columnaUI: "Pasaporte",
                             columnaIDV: "pasaporte",
-                            columnaClase: "pagoColumna"
                         },
                         {
                             columnaUI: "Teléfono",
                             columnaIDV: "telefono",
-                            columnaClase: "pagoColumna"
                         },
                         {
                             columnaUI: "Mail",
                             columnaIDV: "mail",
-                            columnaClase: "pagoColumna"
                         },
                     ]
                     const parametrosFinales = {
                         buscar: buscar
                     }
-                    if (paginaActual > 1 && paginasTotales > 1) {
-                        parametrosFinales.pagina = paginaActual
+                    if (pagina > 1 && paginasTotales > 1) {
+                        parametrosFinales.pagina = pagina
                     }
                     if (nombreColumna) {
-                        parametrosFinales.pagina = paginaActual
-                        parametrosFinales.nombre_columna = nombreColumna.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+                        parametrosFinales.pagina = pagina
+                        parametrosFinales.nombre_columna = nombreColumnaURL;
                         parametrosFinales.sentido_columna = sentidoColumna
                     }
                     const estructuraParametrosFinales = []
@@ -18837,54 +18519,34 @@ const casaVitini = {
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
 
-                    this.selectorFiltro.ui({
-                        columnas: columnasGrid,
-                        columnaSeleccioanda: nombreColumna,
-                        sentidoSeleccionado: sentidoColumna,
-                        destino: "[contenedor=resultados]"
-                    })
-
-                    this.constructorTarjetas({
-                        tarjetas: clientes,
-                        destino: "[contenedor=resultados]"
-
-                    })
-
-
                     const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-                    const metadatosGrid = {
-                        filas: clientes,
-                        sentidoColumna: sentidoColumna,
-                        nombreColumna: nombreColumna,
-                        tipoConstruccionGrid: tipoConstruccionGrid,
-                        buscar: buscar,
-                        pagina: paginaActual,
-                        destino: "[contenedor=resultados]",
-                        columnasGrid: columnasGrid,
-                        gridUID: "gridClientes",
-                        numeroColumnas: 7,
-                        metodoColumna: "casaVitini.administracion.clientes.buscador.ordenarPorColumna",
-                        metodoFila: "casaVitini.administracion.clientes.buscador.resolverFila",
-                        mascaraHref: {
-                            urlStatica: "/administracion/clientes/",
-                            parametro: "clienteUID"
+                    casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                        metodoSalida: "administracion.clientes.buscador.mostrarClientesResueltos",
+                        configuracionGrid: {
+                            filas: clientes,
+                            almacen: {
+                                buscar: buscar,
+                            },
+                            sentidoColumna: sentidoColumna,
+                            nombreColumna: nombreColumna,
+                            pagina: pagina,
+                            destino: "[componente=espacioClientes]",
+                            columnasGrid: columnasGrid,
+                            gridUID: "gridClientes",
+                            mascaraURL: {
+                                mascara: "/administracion/clientes/cliente:",
+                                parametro: "clienteUID"
+                            },
                         },
-                        //mascaraURL: constructorURLFinal
-                    }
-                    casaVitini.ui.componentes.grid(metadatosGrid)
-                    const metadatosPaginador = {
-                        paginaActual: paginaActual,
-                        paginasTotales: paginasTotales,
-                        destino: "[componente=espacioClientes]",
-                        metodoBoton: "casaVitini.administracion.clientes.buscador.cambiarPagina",
-                        gridUID: "gridClientes",
-                        granuladoURL: {
-                            parametros: parametrosFinales,
-                            directoriosFusion: granuladoURL.directoriosFusion
+                        configuracionPaginador: {
+                            paginasTotales: paginasTotales,
+                            granuladoURL: {
+                                parametros: parametrosFinales,
+                                directoriosFusion: granuladoURL.directoriosFusion
+                            },
                         }
-                    }
-                    casaVitini.ui.componentes.paginador(metadatosPaginador)
-                    transaccion.tipoConstruccionGrid = "soloLista"
+                    })
+
                     const titulo = "Casa Vitini"
                     const estado = {
                         zona: constructorURLFinal,
@@ -18894,14 +18556,12 @@ const casaVitini = {
                         funcionPersonalizada: "casaVitini.administracion.clientes.buscador.mostrarClientesResueltos",
                         datosPaginacion: transaccion
                     }
+
                     if (origen === "url" || origen === "botonMostrarClientes") {
                         window.history.replaceState(estado, titulo, constructorURLFinal);
-                    }
-
-                    if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
+                    } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
                         window.history.pushState(estado, titulo, constructorURLFinal);
-                    }
-                    if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
+                    } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
                         window.history.replaceState(estado, titulo, constructorURLFinal);
                     }
                 },
@@ -18952,8 +18612,6 @@ const casaVitini = {
                     const transacccion = {
                         tipoConstruccionGrid: "soloLista",
                         zona: "administracion/clientes/buscar",
-                        nombreColumna: nombreColumna,
-                        sentidoColumna: sentidoColumna,
                         buscar: terminoBusqueda,
                         tipoBusqueda: "rapido",
                         origen: "botonNumeroPagina",
@@ -18971,6 +18629,12 @@ const casaVitini = {
                     }
                     if (tipoBoton === "botonAtrasPaginacion") {
                         transacccion.pagina = paginaActual - 1
+                    }
+                    if (nombreColumna) {
+                        transacccion.nombreColumna = nombreColumna
+                    }
+                    if (sentidoColumna) {
+                        transacccion.sentidoColumna = sentidoColumna
                     }
 
                     casaVitini.administracion.clientes.buscador.mostrarClientesResueltos(transacccion)
@@ -19256,8 +18920,8 @@ const casaVitini = {
                             )
                             boton.setAttribute("boton", "editar")
                             boton.innerText = "Editar datos"
-                            boton.href = `/administracion/clientes/${clienteUID}/editar`
-                            boton.setAttribute("vista", `/administracion/clientes/${clienteUID}/editar`)
+                            boton.href = `/administracion/clientes/cliente:${clienteUID}/editar`
+                            boton.setAttribute("vista", `/administracion/clientes/cliente:${clienteUID}/editar`)
                             boton.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
                             deatallesClienteUI.appendChild(boton)
@@ -19387,7 +19051,7 @@ const casaVitini = {
                             }
                             selectorEspacioClientes.appendChild(deatallesClienteUI)
                             const contenedorResultados = document.createElement("div")
-                            contenedorResultados.setAttribute("contenedor", "resultados")
+                            contenedorResultados.setAttribute("contenedor", "reservasDelCliente")
                             contenedorResultados.classList.add(
                                 "flexVertical"
                             )
@@ -19401,14 +19065,31 @@ const casaVitini = {
                         delete transaccion.origen
                         const granuladoURL = casaVitini.utilidades.granuladorURL()
                         delete transaccion.granuladoURL
-                        const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
-                        delete transaccion.tipoConstruccionGrid
-                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
+                        const paginaTipo = transaccion.paginaTipo
+                        let nombreColumnaURL
+                        const nombreColumna = transaccion.nombreColumna
+                        transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
+                        if ((nombreColumna)?.toLowerCase() === "reservauid") {
+                            nombreColumnaURL = "reserva_uid"
+                        } else if (nombreColumna) {
+                            nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
+                        }
+                        const selectorAlmacen = document.querySelector("[areaGrid=grisReservasDelCliente]")?.getAttribute("almacen") || "{}"
+                        const almacen = JSON.parse(selectorAlmacen)
+                        const clienteUID = transaccion.clienteUID || almacen?.clienteUID
+
+                        const respuestaServidor = await casaVitini.shell.servidor({
+                            zona: "administracion/clientes/reservasDelCliente",
+                            pagina: transaccion.pagina,
+                            nombreColumna: nombreColumna,
+                            sentidoColumna: transaccion.sentidoColumna,
+                            clienteUID: String(clienteUID),
+                        })
                         const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
 
-                        if (!instanciaRenderizada) {
 
-                        }
+
                         if (respuestaServidor?.error) {
                             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
@@ -19427,39 +19108,35 @@ const casaVitini = {
                         document.querySelector("[componente=estadoBusqueda]")?.remove()
                         const reservasDelCliente = respuestaServidor.reservas
                         const paginasTotales = respuestaServidor.paginasTotales
-                        const paginaActual = respuestaServidor.pagina
-                        const nombreColumna = respuestaServidor.nombreColumna
+                        const pagina = respuestaServidor.pagina
                         const sentidoColumna = respuestaServidor.sentidoColumna
                         const columnasGrid = [
                             {
                                 columnaUI: "Como",
                                 columnaIDV: "como",
-                                columnaClase: "idColumna"
                             },
                             {
                                 columnaUI: "Reserva",
-                                columnaIDV: "reserva",
-                                columnaClase: "entradaColumna"
+                                columnaIDV: "reservaUID",
                             },
                             {
                                 columnaUI: "Fecha de entrada",
                                 columnaIDV: "fechaEntrada",
-                                columnaClase: "salidaColuma"
                             },
                             {
                                 columnaUI: "Fecha de salida",
                                 columnaIDV: "fechaSalida",
-                                columnaClase: "estadoColumna"
                             }
                         ]
                         const parametrosFinales = {}
                         if (respuestaServidor?.pagina > 1 && paginasTotales > 1) {
-                            parametrosFinales.pagina = paginaActual
+                            parametrosFinales.pagina = pagina
                         }
                         if (nombreColumna) {
-                            parametrosFinales.pagina = paginaActual
-                            parametrosFinales.nombre_columna = nombreColumna.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+                            parametrosFinales.cliente = clienteUID
+                            parametrosFinales.nombre_columna = nombreColumnaURL
                             parametrosFinales.sentido_columna = sentidoColumna
+                            parametrosFinales.pagina = pagina
                         }
                         const estructuraParametrosFinales = []
                         for (const [parametroFinal, valorFinal] of Object.entries(parametrosFinales)) {
@@ -19471,53 +19148,72 @@ const casaVitini = {
                             parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                         }
 
-                        this.selectorFiltro.ui({
-                            columnas: columnasGrid,
-                            columnaSeleccioanda: nombreColumna,
-                            sentidoSeleccionado: sentidoColumna,
-                            destino: "[contenedor=resultados]"
-                        })
-                        this.constructorTarjetas({
-                            tarjetas: reservasDelCliente,
-                            destino: "[contenedor=resultados]"
-                        })
 
                         const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-                        const metadatosGrid = {
-                            filas: reservasDelCliente,
-                            sentidoColumna: sentidoColumna,
-                            nombreColumna: nombreColumna,
-                            tipoConstruccionGrid: tipoConstruccionGrid,
-                            //buscar: buscar,
-                            pagina: paginaActual,
-                            destino: "[contenedor=resultados]",
-                            columnasGrid: columnasGrid,
-                            gridUID: "gridReservaDelCliente",
-                            numeroColumnas: 4,
-                            metodoColumna: "casaVitini.administracion.clientes.detallesCliente.portada.ordenarPorColumna",
-                            metodoFila: "casaVitini.administracion.clientes.resolverFila",
-                            mascaraHref: {
-                                urlStatica: "/administracion/reservas/reserva:",
-                                parametro: "reservaUID"
+
+
+                        // const metadatosGrid = {
+                        //     filas: reservasDelCliente,
+                        //     sentidoColumna: sentidoColumna,
+                        //     nombreColumna: nombreColumna,
+                        //     tipoConstruccionGrid: tipoConstruccionGrid,
+                        //     //buscar: buscar,
+                        //     pagina: paginaActual,
+                        //     destino: "[contenedor=resultados]",
+                        //     columnasGrid: columnasGrid,
+                        //     gridUID: "gridReservaDelCliente",
+                        //     numeroColumnas: 4,
+                        //     metodoColumna: "casaVitini.administracion.clientes.detallesCliente.portada.ordenarPorColumna",
+                        //     metodoFila: "casaVitini.administracion.clientes.resolverFila",
+                        //     mascaraHref: {
+                        //         urlStatica: "/administracion/reservas/reserva:",
+                        //         parametro: "reservaUID"
+                        //     },
+                        //     //mascaraURL: constructorURLFinal
+                        // }
+                        // casaVitini.ui.componentes.grid(metadatosGrid)
+                        // const metadatosPaginador = {
+                        //     paginaActual: paginaActual,
+                        //     paginasTotales: paginasTotales,
+                        //     destino: "[componente=espacioClientes]",
+                        //     metodoBoton: "casaVitini.administracion.clientes.detallesCliente.portada.cambiarPagina",
+                        //     gridUID: "gridReservaDelCliente",
+                        //     granuladoURL: {
+                        //         parametros: parametrosFinales,
+                        //         directoriosFusion: granuladoURL.directoriosFusion
+                        //     }
+                        // }
+                        // casaVitini.ui.componentes.paginador(metadatosPaginador)
+
+
+                        casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                            metodoSalida: "administracion.clientes.detallesCliente.portada.mostrarReservasDelClienteResueltas",
+                            configuracionGrid: {
+                                filas: reservasDelCliente,
+                                almacen: {
+                                    clienteUID: clienteUID,
+                                },
+                                sentidoColumna: sentidoColumna,
+                                nombreColumna: nombreColumna,
+                                pagina: pagina,
+                                destino: "[contenedor=reservasDelCliente]",
+                                columnasGrid: columnasGrid,
+                                gridUID: "grisReservasDelCliente",
+                                mascaraURL: {
+                                    mascara: "/administracion/reservas/reserva:",
+                                    parametro: "reservaUID"
+                                },
                             },
-                            //mascaraURL: constructorURLFinal
-                        }
-                        casaVitini.ui.componentes.grid(metadatosGrid)
-                        const metadatosPaginador = {
-                            paginaActual: paginaActual,
-                            paginasTotales: paginasTotales,
-                            destino: "[componente=espacioClientes]",
-                            metodoBoton: "casaVitini.administracion.clientes.detallesCliente.portada.cambiarPagina",
-                            gridUID: "gridReservaDelCliente",
-                            granuladoURL: {
-                                parametros: parametrosFinales,
-                                directoriosFusion: granuladoURL.directoriosFusion
+                            configuracionPaginador: {
+                                paginasTotales: paginasTotales,
+                                granuladoURL: {
+                                    parametros: parametrosFinales,
+                                    directoriosFusion: granuladoURL.directoriosFusion
+                                },
                             }
-                        }
-                        casaVitini.ui.componentes.paginador(metadatosPaginador)
-                        const clienteUID = document.querySelector("[clienteUID]").getAttribute("clienteUID")
-                        transaccion.tipoConstruccionGrid = "soloLista"
-                        const titulo = "ADminstar reservas"
+                        })
+                        console.log("clienteUID para guardar componentes exisdten", clienteUID)
+                        const titulo = "Administrar reservas"
                         const estado = {
                             zona: constructorURLFinal,
                             EstadoInternoZona: "estado",
@@ -19528,9 +19224,10 @@ const casaVitini = {
                         }
                         if (origen === "url" || origen === "botonMostrarClientes") {
                             window.history.replaceState(estado, titulo, constructorURLFinal);
-                        }
-                        if (origen === "botonNumeroPagina" || origen === "tituloColumna") {
+                        } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
                             window.history.pushState(estado, titulo, constructorURLFinal);
+                        } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
+                            window.history.replaceState(estado, titulo, constructorURLFinal);
                         }
                     },
                     ordenarPorColumna: async (columna) => {
@@ -19569,13 +19266,19 @@ const casaVitini = {
                         const clienteUID = document.querySelector("[clienteUID]").getAttribute("clienteUID")
                         const transacccion = {
                             zona: "administracion/clientes/reservasDelCliente",
-                            nombreColumna: nombreColumna,
-                            sentidoColumna: sentidoColumna,
+
                             cliente: Number(clienteUID),
                             tipoConstruccionGrid: "soloLista",
                             origen: "botonNumeroPagina",
                             granuladoURL: casaVitini.utilidades.granuladorURL()
                         }
+                        if (nombreColumna) {
+                            transacccion.nombreColumna = nombreColumna
+                        }
+                        if (sentidoColumna) {
+                            transacccion.sentidoColumna = sentidoColumna
+                        }
+
                         if (tipoBoton === "numeroPagina") {
                             const numeroPagina = cambiarPagina.numeroPagina
                             transacccion.pagina = Number(numeroPagina)
@@ -19968,8 +19671,8 @@ const casaVitini = {
                 editar: {
                     UI: async () => {
                         const granuladoURL = casaVitini.utilidades.granuladorURL()
-                        const clienteUID = granuladoURL.directorios[granuladoURL.directorios.length - 2]
-
+                        const parametros = granuladoURL.parametros
+                        const clienteUID = parametros.cliente
 
                         const transaccion = {
                             zona: "administracion/clientes/detallesCliente",
@@ -21007,7 +20710,20 @@ const casaVitini = {
                 const parametros = granuladoURL.parametros
                 if (comandoInicial === "simulador_de_precios" && !parametros.simulacion) {
                     this.portada.contenedorBotones()
-                    this.portada.mostrarSimulacionesResueltas(granuladoURL.parametros)
+                    const parametrosFormatoURL = granuladoURL.parametros
+                    const parametrosFormatoIDV = {}
+                    Object.entries(parametrosFormatoURL).forEach(([nombreParametroURL, valorParametroURL]) => {
+                        const nombreParametroIDV = casaVitini.utilidades.cadenas.snakeToCamel(nombreParametroURL)
+                        let nombreColumnaIDV
+                        if ((valorParametroURL)?.toLowerCase() === "simulacion_uid") {
+                            nombreColumnaIDV = "simulacionUID"
+                        } else if (valorParametroURL) {
+                            nombreColumnaIDV = casaVitini.utilidades.cadenas.snakeToCamel(valorParametroURL)
+                        }
+                        parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
+                    })
+
+                    this.portada.mostrarSimulacionesResueltas(parametrosFormatoIDV)
                 } else if (comandoInicial === "simulador_de_precios" && parametros.simulacion) {
                     main.setAttribute("zonaCSS", "administracion/simuladorDePrecios/detalles")
                     const transaccion = {
@@ -21033,25 +20749,25 @@ const casaVitini = {
 
             },
             portada: {
-                mostrarSimulacionesResueltas: async function (listasImpuestos) {
+                mostrarSimulacionesResueltas: async function (data) {
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "administracion/impuestos")
                     const instanciaUID = main.getAttribute("instanciaUID")
                     const granuladoURL = casaVitini.utilidades.granuladorURL()
                     const transaccion = {
-                        zona: "administracion/simuladorDePrecios/listaSimulacionesPaginados",
                         origen: "url",
-                        tipoConstruccionGrid: "total",
-                        ...listasImpuestos
+                        ...data
                     }
 
                     transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
-                    if ((transaccion.nombre_columna)?.toLowerCase() === "impuesto_uid") {
-                        transaccion.nombreColumna = "impuestoUID"
-                        delete transaccion.nombre_columna
-                    } else if (transaccion.nombre_columna) {
-                        transaccion.nombreColumna = transaccion.nombre_columna.replace(/_([a-z])/g, (match, group) => group.toUpperCase());
-                        delete transaccion.nombre_columna
+                    const paginaTipo = transaccion.paginaTipo
+                    const nombreColumna = transaccion.nombreColumna
+
+                    let nombreColumnaURL
+                    if ((nombreColumna)?.toLowerCase() === "simulacionuid") {
+                        nombreColumnaURL = "simulacion_uid"
+                    } else if (nombreColumna) {
+                        nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
                     }
                     if (transaccion.sentido_columna) {
                         transaccion.sentidoColumna = transaccion.sentido_columna
@@ -21059,9 +20775,12 @@ const casaVitini = {
                     }
                     const origen = transaccion.origen
                     delete transaccion.origen
-                    const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
-                    delete transaccion.tipoConstruccionGrid
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                    const respuestaServidor = await casaVitini.shell.servidor({
+                        zona: "administracion/simuladorDePrecios/listaSimulacionesPaginados",
+                        pagina: transaccion.pagina,
+                        nombreColumna: nombreColumna,
+                        sentidoColumna: transaccion.sentidoColumna
+                    })
 
                     const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                     if (!seccionRenderizada) { return }
@@ -21086,34 +20805,28 @@ const casaVitini = {
                     }
                     const simulaciones = respuestaServidor.simulaciones
                     const sentidoColumna = respuestaServidor.sentidoColumna
-                    const nombreColumna = respuestaServidor.nombreColumna
                     const pagina = respuestaServidor.pagina
                     const paginasTotales = respuestaServidor.paginasTotales
                     const columnasGrid = [
                         {
                             columnaUI: "UID",
-                            columnaIDV: "uid",
-                            columnaClase: "idColumna"
+                            columnaIDV: "simulacionUID",
                         },
                         {
                             columnaUI: "Nombre",
                             columnaIDV: "nombre",
-                            columnaClase: "entradaColumna"
                         },
                         {
                             columnaUI: "Fecah de creación",
                             columnaIDV: "fechaCreacion",
-                            columnaClase: "salidaColuma"
                         },
                         {
                             columnaUI: "Fecha de entrada",
                             columnaIDV: "fechaEntrada",
-                            columnaClase: "estadoColumna"
                         },
                         {
                             columnaUI: "Fecha de salida",
                             columnaIDV: "fechaSalida",
-                            columnaClase: "pagoColumna"
                         }
                     ]
                     const parametrosFinales = {}
@@ -21122,7 +20835,7 @@ const casaVitini = {
                     }
                     if (nombreColumna) {
                         parametrosFinales.pagina = pagina
-                        parametrosFinales.nombre_columna = nombreColumna.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+                        parametrosFinales.nombre_columna = nombreColumnaURL
                         parametrosFinales.sentido_columna = sentidoColumna
                     }
                     const estructuraParametrosFinales = []
@@ -21135,67 +20848,48 @@ const casaVitini = {
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
 
-                    this.selectorFiltro.ui({
-                        columnas: columnasGrid,
-                        columnaSeleccioanda: nombreColumna,
-                        sentidoSeleccionado: sentidoColumna,
-                        destino: "[contenedor=resultados]"
-                    })
-
-                    this.constructorTarjetas({
-                        tarjetas: simulaciones,
-                        destino: "[contenedor=resultados]"
-
-                    })
-
                     const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-                    const metadatosGrid = {
-                        filas: simulaciones,
-                        sentidoColumna: sentidoColumna,
-                        nombreColumna: nombreColumna,
-                        tipoConstruccionGrid: tipoConstruccionGrid,
-                        pagina: pagina,
-                        destino: "[contenedor=resultados]",
-                        columnasGrid: columnasGrid,
-                        gridUID: "gridSimulaciones",
-                        numeroColumnas: 5,
-                        metodoColumna: "casaVitini.administracion.simuladorDePrecios.portada.ordenarPorColumna",
-                        metodoFila: "casaVitini.administracion.simuladorDePrecios.portada.resolverFila",
-                        mascaraHref: {
-                            urlStatica: "/administracion/simulador_de_precios/simulacion:",
-                            parametro: "simulacionUID"
+
+                    casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                        metodoSalida: "administracion.simuladorDePrecios.portada.mostrarSimulacionesResueltas",
+                        configuracionGrid: {
+                            filas: simulaciones,
+                            sentidoColumna: sentidoColumna,
+                            nombreColumna: nombreColumna,
+                            pagina: pagina,
+                            destino: "[componente=espacio]",
+                            columnasGrid: columnasGrid,
+                            gridUID: "gridSimuladorDePrecios",
+                            mascaraURL: {
+                                mascara: "/administracion/simulador_de_precios/simulacion:",
+                                parametro: "simulacionUID"
+                            },
                         },
-                        //mascaraURL: constructorURLFinal
-                    }
-                    casaVitini.ui.componentes.grid(metadatosGrid)
-                    const metadatosPaginador = {
-                        paginaActual: pagina,
-                        paginasTotales: paginasTotales,
-                        destino: "[componente=espacio]",
-                        metodoBoton: "casaVitini.administracion.simuladorDePrecios.portada.cambiarPagina",
-                        prefijoHref: "/administracion/simulador_de_precios/simulacion:",
-                        gridUID: "gridSimulaciones",
-                        granuladoURL: {
-                            parametros: parametrosFinales,
-                            directoriosFusion: granuladoURL.directoriosFusion
+                        configuracionPaginador: {
+                            paginasTotales: paginasTotales,
+                            granuladoURL: {
+                                parametros: parametrosFinales,
+                                directoriosFusion: granuladoURL.directoriosFusion
+                            },
                         }
-                    }
-                    casaVitini.ui.componentes.paginador(metadatosPaginador)
-                    transaccion.tipoConstruccionGrid = "soloLista"
+                    })
+
                     const titulo = "ADminstar reservas"
                     const estado = {
                         zona: constructorURLFinal,
                         EstadoInternoZona: "estado",
                         tipoCambio: "parcial",
                         componenteExistente: "contenedorBotonesSimulador",
-                        funcionPersonalizada: "casaVitini.administracion.simuladorDePrecios.portada.mostrarImpuestosResueltos",
+                        funcionPersonalizada: "casaVitini.administracion.simuladorDePrecios.portada.mostrarSimulacionesResueltas",
                         datosPaginacion: transaccion
                     }
                     if (origen === "url" || origen === "botonMostrarClientes") {
                         window.history.replaceState(estado, titulo, constructorURLFinal);
-                    }
-                    if (origen === "botonNumeroPagina" || origen === "tituloColumna") {
+                    } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
                         window.history.pushState(estado, titulo, constructorURLFinal);
+                    } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
+                        window.history.replaceState(estado, titulo, constructorURLFinal);
+
                     }
                 },
                 resolverFila: (transaccion) => {
@@ -21439,11 +21133,16 @@ const casaVitini = {
                     const paginaActual = Number(gridEnlazado.getAttribute("numeroPagina"))
                     const transacccion = {
                         zona: "administracion/simuladorDePrecios/listaSimulacionesPaginados",
-                        nombreColumna: nombreColumna,
-                        sentidoColumna: sentidoColumna,
-                        buscar: terminoBusqueda,
+
+                        //buscar: terminoBusqueda,
                         tipoBusqueda: "rapido",
-                        instanciaUID: instanciaUID
+                        //instanciaUID: instanciaUID
+                    }
+                    if (nombreColumna) {
+                        transacccion.nombreColumna = nombreColumna
+                    }
+                    if (sentidoColumna) {
+                        transacccion.sentidoColumna = sentidoColumna
                     }
                     if (tipoBoton === "numeroPagina") {
                         const numeroPagina = cambiarPagina.numeroPagina
@@ -24984,7 +24683,27 @@ const casaVitini = {
 
                 if (comandoInicial === "impuestos") {
                     casaVitini.administracion.impuestos.contenedorBotones()
-                    casaVitini.administracion.impuestos.mostrarImpuestosResueltos(granuladoURL.parametros)
+
+                    const parametrosFormatoURL = granuladoURL.parametros
+                    const parametrosFormatoIDV = {}
+                    Object.entries(parametrosFormatoURL).forEach(([nombreParametroURL, valorParametroURL]) => {
+                        const nombreParametroIDV = casaVitini.utilidades.cadenas.snakeToCamel(nombreParametroURL)
+                        let nombreColumnaIDV
+                        if ((valorParametroURL)?.toLowerCase() === "impuesto_uid") {
+                            nombreColumnaIDV = "impuestoUID"
+                        } else if ((valorParametroURL)?.toLowerCase() === "tipo_valor") {
+                            nombreColumnaIDV = "tipoValorIDV"
+                        } else if ((valorParametroURL)?.toLowerCase() === "entidad") {
+                            nombreColumnaIDV = "entidadIDV"
+                        } else if ((valorParametroURL)?.toLowerCase() === "estado") {
+                            nombreColumnaIDV = "estadoIDV"
+                        } else if (valorParametroURL) {
+                            nombreColumnaIDV = casaVitini.utilidades.cadenas.snakeToCamel(valorParametroURL)
+                        }
+                        parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
+                    })
+
+                    casaVitini.administracion.impuestos.mostrarImpuestosResueltos(parametrosFormatoIDV)
                 } else if (soloDigitos.test(comandoInicial)) {
                     main.setAttribute("zonaCSS", "administracion/impuestos/detalles")
                     const transaccion = {
@@ -24992,7 +24711,7 @@ const casaVitini = {
                         impuestoUID: String(comandoInicial)
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                    const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                    const seccionRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                     if (!seccionRenderizada) { return }
                     if (respuestaServidor.error) {
                         const titulo = document.querySelector(".titulo")
@@ -25015,29 +24734,34 @@ const casaVitini = {
                 const instanciaUID = main.getAttribute("instanciaUID")
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const transaccion = {
-                    zona: "administracion/impuestos/listaImpuestosPaginados",
                     origen: "url",
                     tipoConstruccionGrid: "total",
                     ...listasImpuestos
                 }
-
+                const paginaTipo = transaccion.paginaTipo
+                let nombreColumnaURL
+                const nombreColumna = transaccion.nombreColumna
                 transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
-                if ((transaccion.nombre_columna)?.toLowerCase() === "impuesto_uid") {
-                    transaccion.nombreColumna = "impuestoUID"
-                    delete transaccion.nombre_columna
-                } else if (transaccion.nombre_columna) {
-                    transaccion.nombreColumna = transaccion.nombre_columna.replace(/_([a-z])/g, (match, group) => group.toUpperCase());
-                    delete transaccion.nombre_columna
+                if ((nombreColumna)?.toLowerCase() === "impuestouid") {
+                    nombreColumnaURL = "impuesto_uid"
+                } else if ((nombreColumna)?.toLowerCase() === "tipovaloridv") {
+                    nombreColumnaURL = "tipo_valor"
+                } else if ((nombreColumna)?.toLowerCase() === "entidadidv") {
+                    nombreColumnaURL = "entidad"
+                } else if ((nombreColumna)?.toLowerCase() === "estadoidv") {
+                    nombreColumnaURL = "estado"
+                } else if (nombreColumna) {
+                    nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
                 }
-                if (transaccion.sentido_columna) {
-                    transaccion.sentidoColumna = transaccion.sentido_columna
-                    delete transaccion.sentido_columna
-                }
+
                 const origen = transaccion.origen
                 delete transaccion.origen
-                const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
-                delete transaccion.tipoConstruccionGrid
-                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                const respuestaServidor = await casaVitini.shell.servidor({
+                    zona: "administracion/impuestos/listaImpuestosPaginados",
+                    pagina: transaccion.pagina,
+                    nombreColumna: nombreColumna,
+                    sentidoColumna: transaccion.sentidoColumna
+                })
 
                 const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!seccionRenderizada) { return }
@@ -25072,7 +24796,6 @@ const casaVitini = {
                         reserva: "Reserva",
                         servicio: "Servicio",
                         global: "Global"
-
                     },
                 }
 
@@ -25085,48 +24808,42 @@ const casaVitini = {
                     detallesDelImpuesto.entidadIDV = dicccionario.entidades[entidadIDV]
                 }
                 const sentidoColumna = respuestaServidor.sentidoColumna
-                const nombreColumna = respuestaServidor.nombreColumna
+
                 const pagina = respuestaServidor.pagina
                 const paginasTotales = respuestaServidor.paginasTotales
                 const columnasGrid = [
                     {
                         columnaUI: "UID",
                         columnaIDV: "impuestoUID",
-                        columnaClase: "idColumna"
                     },
                     {
                         columnaUI: "Impuesto",
                         columnaIDV: "nombre",
-                        columnaClase: "entradaColumna"
                     },
                     {
                         columnaUI: "Tipo Impositivo",
                         columnaIDV: "tipoImpositivo",
-                        columnaClase: "salidaColuma"
                     },
                     {
                         columnaUI: "Tipo Valor",
-                        columnaIDV: "tipoValor",
-                        columnaClase: "estadoColumna"
+                        columnaIDV: "tipoValorIDV",
                     },
                     {
                         columnaUI: "Entidad",
-                        columnaIDV: "entidad",
-                        columnaClase: "pagoColumna"
+                        columnaIDV: "entidadIDV",
                     },
                     {
                         columnaUI: "Estado",
-                        columnaIDV: "estado",
-                        columnaClase: "pagoColumna"
+                        columnaIDV: "estadoIDV",
                     }
                 ]
                 const parametrosFinales = {}
                 if (pagina > 1 && paginasTotales > 1) {
                     parametrosFinales.pagina = pagina
                 }
-                if (nombreColumna) {
+                if (transaccion.nombreColumna) {
                     parametrosFinales.pagina = pagina
-                    parametrosFinales.nombre_columna = nombreColumna.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+                    parametrosFinales.nombre_columna = nombreColumnaURL
                     parametrosFinales.sentido_columna = sentidoColumna
                 }
                 const estructuraParametrosFinales = []
@@ -25139,56 +24856,34 @@ const casaVitini = {
                     parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                 }
 
-                this.selectorFiltro.ui({
-                    columnas: columnasGrid,
-                    columnaSeleccioanda: nombreColumna,
-                    sentidoSeleccionado: sentidoColumna,
-                    destino: "[contenedor=resultados]"
-                })
-
-                this.constructorTarjetas({
-                    tarjetas: impuestos,
-                    destino: "[contenedor=resultados]"
-
-                })
-
-
-
                 const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-                const metadatosGrid = {
-                    filas: impuestos,
-                    sentidoColumna: sentidoColumna,
-                    nombreColumna: nombreColumna,
-                    tipoConstruccionGrid: tipoConstruccionGrid,
-                    pagina: pagina,
-                    destino: "[contenedor=resultados]",
-                    columnasGrid: columnasGrid,
-                    gridUID: "gridImpuestos",
-                    numeroColumnas: 6,
-                    metodoColumna: "casaVitini.administracion.impuestos.ordenarPorColumna",
-                    metodoFila: "casaVitini.administracion.impuestos.resolverFila",
-                    mascaraHref: {
-                        urlStatica: "/administracion/impuestos/",
-                        parametro: "impuestoUID"
+
+                casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                    metodoSalida: "administracion.impuestos.mostrarImpuestosResueltos",
+                    configuracionGrid: {
+                        filas: impuestos,
+                        sentidoColumna: sentidoColumna,
+                        nombreColumna: nombreColumna,
+                        tipoConstruccionGrid: tipoConstruccionGrid,
+                        pagina: pagina,
+                        destino: "[componente=espacioImpuestos]",
+                        columnasGrid: columnasGrid,
+                        gridUID: "gridImpuestos",
+                        mascaraURL: {
+                            mascara: "/administracion/impuestos/",
+                            parametro: "impuestoUID"
+                        },
                     },
-                    //mascaraURL: constructorURLFinal
-                }
-                casaVitini.ui.componentes.grid(metadatosGrid)
-                const metadatosPaginador = {
-                    paginaActual: pagina,
-                    paginasTotales: paginasTotales,
-                    destino: "[componente=espacioImpuestos]",
-                    metodoBoton: "casaVitini.administracion.impuestos.cambiarPagina",
-                    prefijoHref: "/administracion/impuestos/",
-                    gridUID: "gridImpuestos",
-                    granuladoURL: {
-                        parametros: parametrosFinales,
-                        directoriosFusion: granuladoURL.directoriosFusion
+                    configuracionPaginador: {
+                        paginasTotales: paginasTotales,
+                        granuladoURL: {
+                            parametros: parametrosFinales,
+                            directoriosFusion: granuladoURL.directoriosFusion
+                        },
                     }
-                }
-                casaVitini.ui.componentes.paginador(metadatosPaginador)
-                transaccion.tipoConstruccionGrid = "soloLista"
-                const titulo = "ADminstar reservas"
+                })
+
+                const titulo = "Casa Vitini"
                 const estado = {
                     zona: constructorURLFinal,
                     EstadoInternoZona: "estado",
@@ -25197,11 +24892,19 @@ const casaVitini = {
                     funcionPersonalizada: "casaVitini.administracion.impuestos.mostrarImpuestosResueltos",
                     datosPaginacion: transaccion
                 }
+                // if (origen === "url" || origen === "botonMostrarClientes") {
+                //     window.history.replaceState(estado, titulo, constructorURLFinal);
+                // }
+                // if (origen === "botonNumeroPagina" || origen === "tituloColumna") {
+                //     window.history.pushState(estado, titulo, constructorURLFinal);
+                // }
+
                 if (origen === "url" || origen === "botonMostrarClientes") {
                     window.history.replaceState(estado, titulo, constructorURLFinal);
-                }
-                if (origen === "botonNumeroPagina" || origen === "tituloColumna") {
+                } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
                     window.history.pushState(estado, titulo, constructorURLFinal);
+                } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
+                    window.history.replaceState(estado, titulo, constructorURLFinal);
                 }
             },
             resolverFila: (transaccion) => {
@@ -34822,37 +34525,29 @@ const casaVitini = {
                     if (!granuladoURL.parametros.buscar) {
                         return
                     }
-                    const transaccion = {
-                        zona: "administracion/usuarios/buscarUsuarios",
-                        tipoBusqueda: "rapido",
-                        tipoConstruccionGrid: "total",
-                        origen: "url",
-                        instanciaUID: instanciaUID,
-                        ...granuladoURL.parametros,
-                    }
-                    transaccion.pagina = transaccion.pagina ? Number(transaccion.pagina) : 1
-                    transaccion.buscar = decodeURI(transaccion.buscar)
-                    if (transaccion.nombre_columna) {
-                        transaccion.nombreColumna = transaccion.nombre_columna.replace(/_([a-z])/g, (match, group) => group.toUpperCase());
-                        delete transaccion.nombre_columna
-                    }
-                    if (transaccion.sentido_columna) {
-                        transaccion.sentidoColumna = transaccion.sentido_columna
-                        delete transaccion.sentido_columna
-                    }
                     const campoBuscador = document.querySelector("[componente=zonaNavegacionPaginadaUsuarios]")
-                    campoBuscador.value = transaccion.buscar
+                    campoBuscador.value = decodeURI(parametroBuscar)
 
-                    casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(transaccion)
+                    const parametrosFormatoURL = granuladoURL.parametros
+                    const parametrosFormatoIDV = {}
+                    Object.entries(parametrosFormatoURL).forEach(([nombreParametroURL, valorParametroURL]) => {
+                        const nombreParametroIDV = casaVitini.utilidades.cadenas.snakeToCamel(nombreParametroURL)
+                        let nombreColumnaIDV
+                        if ((valorParametroURL)?.toLowerCase() === "cliente_uid") {
+                            nombreColumnaIDV = "clienteUID"
+                        } else if (valorParametroURL) {
+                            nombreColumnaIDV = casaVitini.utilidades.cadenas.snakeToCamel(valorParametroURL)
+                        } else if ((nombreParametroIDV)?.toLowerCase() === "buscar") {
+                            valorParametroURL = decodeURI(valorParametroURL)
+                        }
+                        parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
+                    })
+
+                    casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(parametrosFormatoIDV)
                 } else if (rawArray.length > 2) {
 
                     casaVitini.administracion.usuarios.detallesUsuario.arranque()
                 }
-
-                //if (comandoInicial === "crear") {
-                //    main.setAttribute("zonaCSS", "administracion/usuarios/nuevo")
-                //    casaVitini.administracion.usuarios.crearCuenta.UI()
-                //}
             },
             portada: {
                 buscadorUI: () => {
@@ -34876,12 +34571,7 @@ const casaVitini = {
                     campoBuscador.setAttribute("placeholder", "Busque un usuario por nombre de usuario, por nombre, por pasaporte, por correo o por teléfono. También puedes hacer búsquedas combinadas.")
                     campoBuscador.addEventListener("input", casaVitini.administracion.usuarios.portada.buscadorUsuariosPorCampo)
                     espacioClientes.appendChild(campoBuscador)
-                    const contenedorResultados = document.createElement("div")
-                    contenedorResultados.setAttribute("contenedor", "resultados")
-                    contenedorResultados.classList.add(
-                        "flexVertical"
-                    )
-                    espacioClientes.appendChild(contenedorResultados)
+
                 },
                 resolverUsuarios: async (transaccion) => {
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
@@ -35091,16 +34781,30 @@ const casaVitini = {
                     const origen = transaccion.origen
                     delete transaccion.origen
                     const granuladoURL = casaVitini.utilidades.granuladorURL()
-                    const tipoConstruccionGrid = transaccion.tipoConstruccionGrid
-                    delete transaccion.tipoConstruccionGrid
+
                     const paginaTipo = transaccion.paginaTipo
                     delete transaccion.paginaTipo
-                    const resolverUsuarios = await casaVitini.administracion.usuarios.portada.resolverUsuarios(transaccion)
 
-                    const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                    if (!instanciaRenderizada || !resolverUsuarios) {
-                        return
+                    const selectorAlmacen = document.querySelector("[areaGrid=gridClientes]")?.getAttribute("almacen") || "{}"
+                    const almacen = JSON.parse(selectorAlmacen)
+                    const busquedaInicial = transaccion.buscar || almacen?.buscar
+
+                    let nombreColumnaURL
+                    const nombreColumna = transaccion.nombreColumna
+                    if (nombreColumna) {
+                        nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
                     }
+
+                    const resolverUsuarios = await casaVitini.administracion.usuarios.portada.resolverUsuarios({
+                        zona: "administracion/usuarios/buscarUsuarios",
+                        tipoBusqueda: "rapido",
+                        buscar: busquedaInicial,
+                        nombreColumna: transaccion.nombreColumna,
+                        sentidoColumna: transaccion.sentidoColumna,
+                        pagina: Number(transaccion?.pagina || 1)
+
+                    })
+
                     //document.querySelector("[gridUID=gridUsuarios]")?.remove()
                     if (resolverUsuarios?.error) {
                         document.querySelector("[componente=estadoBusqueda]").innerText = resolverUsuarios?.error
@@ -35115,55 +34819,47 @@ const casaVitini = {
                     const usuarios = resolverUsuarios.usuarios
                     const buscar = resolverUsuarios.buscar
                     const paginasTotales = resolverUsuarios.paginasTotales
-                    const paginaActual = resolverUsuarios.pagina
-                    const nombreColumna = resolverUsuarios.nombreColumna
+                    const pagina = resolverUsuarios.pagina
                     const sentidoColumna = resolverUsuarios.sentidoColumna
                     const columnasGrid = [
                         {
-                            columnaUI: "IDX",
+                            columnaUI: "Usuario",
                             columnaIDV: "usuario",
-                            columnaClase: "idColumna"
                         },
                         {
                             columnaUI: "Correo",
                             columnaIDV: "mail",
-                            columnaClase: "entradaColumna"
                         },
                         {
                             columnaUI: "Nombre",
                             columnaIDV: "nombre",
-                            columnaClase: "salidaColuma"
                         },
                         {
                             columnaUI: "Primer apellido",
                             columnaIDV: "primerApellido",
-                            columnaClase: "estadoColumna"
                         },
                         {
                             columnaUI: "Segundo Apellido",
                             columnaIDV: "segundoApellido",
-                            columnaClase: "pagoColumna"
                         },
                         {
                             columnaUI: "Pasaporte",
                             columnaIDV: "pasaporte",
-                            columnaClase: "pagoColumna"
                         },
                         {
                             columnaUI: "Teléfono",
                             columnaIDV: "telefono",
-                            columnaClase: "pagoColumna"
                         },
                     ]
                     const parametrosFinales = {
                         buscar: buscar
                     }
-                    if (paginaActual > 1 && paginasTotales > 1) {
-                        parametrosFinales.pagina = paginaActual
+                    if (pagina > 1 && paginasTotales > 1) {
+                        parametrosFinales.pagina = pagina
                     }
                     if (nombreColumna) {
-                        parametrosFinales.pagina = paginaActual
-                        parametrosFinales.nombre_columna = nombreColumna.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+                        parametrosFinales.pagina = pagina
+                        parametrosFinales.nombre_columna = nombreColumnaURL
                         parametrosFinales.sentido_columna = sentidoColumna
                     }
                     const estructuraParametrosFinales = []
@@ -35175,52 +34871,71 @@ const casaVitini = {
                     if (estructuraParametrosFinales.length > 0) {
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
-                    this.selectorFiltro.ui({
-                        columnas: columnasGrid,
-                        columnaSeleccioanda: nombreColumna,
-                        sentidoSeleccionado: sentidoColumna,
-                        destino: "[contenedor=resultados]"
-                    })
 
-                    this.constructorTarjetas({
-                        tarjetas: usuarios,
-                        destino: "[contenedor=resultados]"
-
-                    })
 
                     const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-                    const metadatosGrid = {
-                        filas: usuarios,
-                        sentidoColumna: sentidoColumna,
-                        nombreColumna: nombreColumna,
-                        tipoConstruccionGrid: tipoConstruccionGrid,
-                        buscar: buscar,
-                        pagina: paginaActual,
-                        destino: "[contenedor=resultados]",
-                        columnasGrid: columnasGrid,
-                        gridUID: "gridUsuarios",
-                        numeroColumnas: 7,
-                        metodoColumna: "casaVitini.administracion.usuarios.portada.ordenarPorColumna",
-                        metodoFila: "casaVitini.administracion.usuarios.portada.resolverFila",
-                        mascaraHref: {
-                            urlStatica: "/administracion/usuarios/",
-                            parametro: "usuario"
+                    // const metadatosGrid = {
+                    //     filas: usuarios,
+                    //     sentidoColumna: sentidoColumna,
+                    //     nombreColumna: nombreColumna,
+                    //     tipoConstruccionGrid: tipoConstruccionGrid,
+                    //     buscar: buscar,
+                    //     pagina: paginaActual,
+                    //     destino: "[contenedor=resultados]",
+                    //     columnasGrid: columnasGrid,
+                    //     gridUID: "gridUsuarios",
+                    //     numeroColumnas: 7,
+                    //     metodoColumna: "casaVitini.administracion.usuarios.portada.ordenarPorColumna",
+                    //     metodoFila: "casaVitini.administracion.usuarios.portada.resolverFila",
+                    //     mascaraHref: {
+                    //         urlStatica: "/administracion/usuarios/",
+                    //         parametro: "usuario"
+                    //     },
+                    //     //mascaraURL: constructorURLFinal
+                    // }
+                    // casaVitini.ui.componentes.grid(metadatosGrid)
+                    // const metadatosPaginador = {
+                    //     paginaActual: paginaActual,
+                    //     paginasTotales: paginasTotales,
+                    //     destino: "[componente=espacioUsuarios]",
+                    //     metodoBoton: "casaVitini.administracion.usuarios.portada.cambiarPagina",
+                    //     gridUID: "gridUsuarios",
+                    //     granuladoURL: {
+                    //         parametros: parametrosFinales,
+                    //         directoriosFusion: granuladoURL.directoriosFusion
+                    //     }
+                    // }
+                    // casaVitini.ui.componentes.paginador(metadatosPaginador)
+
+
+
+                    casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                        metodoSalida: "administracion.usuarios.portada.mostrarUsuariosResueltos",
+                        configuracionGrid: {
+                            filas: usuarios,
+                            almacen: {
+                                buscar: buscar,
+                            },
+                            sentidoColumna: sentidoColumna,
+                            nombreColumna: nombreColumna,
+                            pagina: pagina,
+                            destino: "[componente=espacioUsuarios]",
+                            columnasGrid: columnasGrid,
+                            gridUID: "gridClientes",
+                            mascaraURL: {
+                                mascara: "/administracion/usuarios/",
+                                parametro: "usuario"
+                            },
                         },
-                        //mascaraURL: constructorURLFinal
-                    }
-                    casaVitini.ui.componentes.grid(metadatosGrid)
-                    const metadatosPaginador = {
-                        paginaActual: paginaActual,
-                        paginasTotales: paginasTotales,
-                        destino: "[componente=espacioUsuarios]",
-                        metodoBoton: "casaVitini.administracion.usuarios.portada.cambiarPagina",
-                        gridUID: "gridUsuarios",
-                        granuladoURL: {
-                            parametros: parametrosFinales,
-                            directoriosFusion: granuladoURL.directoriosFusion
+                        configuracionPaginador: {
+                            paginasTotales: paginasTotales,
+                            granuladoURL: {
+                                parametros: parametrosFinales,
+                                directoriosFusion: granuladoURL.directoriosFusion
+                            },
                         }
-                    }
-                    casaVitini.ui.componentes.paginador(metadatosPaginador)
+                    })
+
                     transaccion.tipoConstruccionGrid = "soloLista"
                     const titulo = "ADminstar reservas"
                     const estado = {
@@ -35282,12 +34997,17 @@ const casaVitini = {
                     const paginaActual = Number(gridEnlazado.getAttribute("numeroPagina"))
                     const paginaTipo = cambiarPagina.paginaTipo
                     const transacccion = {
-                        nombreColumna: nombreColumna,
-                        sentidoColumna: sentidoColumna,
                         buscar: terminoBusqueda,
                         paginaTipo: paginaTipo,
                         tipoBusqueda: "rapido",
                         instanciaUID: instanciaUID,
+                    }
+
+                    if (nombreColumna) {
+                        transacccion.nombreColumna = nombreColumna
+                    }
+                    if (sentidoColumna) {
+                        transacccion.sentidoColumna = sentidoColumna
                     }
                     if (tipoBoton === "numeroPagina") {
                         const numeroPagina = cambiarPagina.numeroPagina
@@ -37514,9 +37234,9 @@ const casaVitini = {
                 const marcoMes = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
                 marcoMes.setAttribute("instanciaUID", instanciaUIDMes)
                 marcoMes.style.flex = "0"
-                const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia], [componente=diaVacio]")
-                selectorDiasRenderizados.forEach((diaRenderizado) => {
-                    diaRenderizado.remove()
+                const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia], [componente=eventoUI], [componente=diaVacio]")
+                selectorDiasRenderizados.forEach((e) => {
+                    e?.remove()
                 })
                 const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
                 const spinner = casaVitini.ui.componentes.spinnerSimple()
@@ -37561,7 +37281,9 @@ const casaVitini = {
                     instanciaUID: instanciaUID,
                     instanciaUIDMes: instanciaUIDMes
                 }
-                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
+                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
+                    tipo: "actual"
+                })
                 const anoPresente = calendarioResuelto.ano
                 const mesPresente = calendarioResuelto.mes
                 calendario.url = `fecha:${mesPresente}-${anoPresente}/${soloCapasURL.join("/")}`
@@ -37583,12 +37305,11 @@ const casaVitini = {
             },
             configuraMes: async (calendario) => {
                 const instanciaUID = calendario.instanciaUID
-                delete calendario.instanciaUID
                 const instanciaUIDMes = calendario.instanciaUIDMes
                 const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia], [componente=eventoUI], [componente=diaVacio]")
-                selectorDiasRenderizados.forEach((diaRenderizado) => {
-                    diaRenderizado.remove()
+                selectorDiasRenderizados.forEach((e) => {
+                    e.remove()
                 })
                 const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
                 const contenedorMes = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
@@ -37603,7 +37324,15 @@ const casaVitini = {
                 contenedorCarga.appendChild(spinner)
                 const construyendoCalendarioRenderizado = calendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")
                 if (!construyendoCalendarioRenderizado) contenedorCalendario.appendChild(contenedorCarga)
-                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendario)
+                // se debderia volver a contruir un objecto aqui para resolver calendario
+
+                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
+                    mes: calendario.mes,
+                    ano: calendario.ano,
+                    tipo: calendario.tipo
+                })
+
+
                 calendarioResuelto.instanciaUID = instanciaUID
                 calendarioResuelto.instanciaUIDMes = instanciaUIDMes
                 await casaVitini.administracion.calendario.constructorMesNuevo(calendarioResuelto)

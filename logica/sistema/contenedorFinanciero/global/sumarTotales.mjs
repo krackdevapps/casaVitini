@@ -5,6 +5,8 @@ export const sumarTotales = (data) => {
         const estructura = data.estructura
         const totalesGlobal = estructura.global.totales
 
+
+
         if (estructura.entidades.hasOwnProperty("reserva")) {
             const reserva = estructura.entidades.reserva
             const totales = reserva.global.totales
@@ -12,15 +14,15 @@ export const sumarTotales = (data) => {
 
             const totalDescuentos = totales?.totalDescuento || "0.00"
             const impuestosAplicados = totales?.impuestosAplicados || "0.00"
-            const totalNetoConDescuentos = totales?.totalNetoConDescuentos || totalNeto || "0.00"
+            //const totalNetoConDescuentos = totales?.totalNetoConDescuentos /*|| totalNeto*/ || "0.00"
 
             totalesGlobal.totalNeto = new Decimal(totalNeto).plus(totalesGlobal.totalNeto)
 
             if (!totalesGlobal.hasOwnProperty("totalNetoConDescuentos")) {
-                totalesGlobal.totalNetoConDescuentos = "0.00"
+                //totalesGlobal.totalNetoConDescuentos = "0.00"
             }
 
-            totalesGlobal.totalNetoConDescuentos = new Decimal(totalNetoConDescuentos).plus(totalesGlobal.totalNetoConDescuentos)
+            //totalesGlobal.totalNetoConDescuentos = new Decimal(totalNetoConDescuentos).plus(totalesGlobal.totalNetoConDescuentos)
 
             if (!totalesGlobal.hasOwnProperty("impuestosAplicados")) {
                 totalesGlobal.impuestosAplicados = "0.00"
@@ -39,14 +41,14 @@ export const sumarTotales = (data) => {
 
             const totalDescuentos = totales?.totalDescuento || "0.00"
             const impuestosAplicados = totales?.impuestosAplicados || "0.00"
-            const totalNetoConDescuentos = totales?.totalNetoConDescuentos || totalNeto || "0.00"
+            //const totalNetoConDescuentos = totales?.totalNetoConDescuentos || totalNeto || "0.00"
 
             totalesGlobal.totalNeto = new Decimal(totalNeto).plus(totalesGlobal.totalNeto)
 
             if (!totalesGlobal.hasOwnProperty("totalNetoConDescuentos")) {
-                totalesGlobal.totalNetoConDescuentos = "0.00"
+                //   totalesGlobal.totalNetoConDescuentos = "0.00"
             }
-            totalesGlobal.totalNetoConDescuentos = new Decimal(totalNetoConDescuentos).plus(totalesGlobal.totalNetoConDescuentos)
+            //    totalesGlobal.totalNetoConDescuentos = new Decimal(totalNetoConDescuentos).plus(totalesGlobal.totalNetoConDescuentos)
 
             if (!totalesGlobal.hasOwnProperty("impuestosAplicados")) {
                 totalesGlobal.impuestosAplicados = "0.00"
@@ -65,9 +67,16 @@ export const sumarTotales = (data) => {
         delete totalesGlobal.totalDescuentos
         totalesGlobal.totalDescuentos = totalDescuentos
 
-        const totalNetoConDescuentos = new Decimal(totalesGlobal.totalNetoConDescuentos).toFixed(2)
-        delete totalesGlobal.totalNetoConDescuentos
-        totalesGlobal.totalNetoConDescuentos = totalNetoConDescuentos
+        if (!totalesGlobal.hasOwnProperty("totalNetoConDescuentos")) {
+            totalesGlobal.totalNetoConDescuentos = "0.00"
+        }
+
+        const totalNetoConDescuentos = new Decimal(totalesGlobal.totalNeto).minus(totalesGlobal.totalDescuentos)
+        if (totalNetoConDescuentos.isNegative()) {
+            totalesGlobal.totalNetoConDescuentos = "0.00"
+        } else {
+            totalesGlobal.totalNetoConDescuentos = totalNetoConDescuentos.toFixed(2)
+        }
 
         const impuestosAplicados = new Decimal(totalesGlobal.impuestosAplicados).toFixed(2)
         delete totalesGlobal.impuestosAplicados
@@ -79,7 +88,7 @@ export const sumarTotales = (data) => {
         delete totalesGlobal.totalFinal
         totalesGlobal.totalFinal = totalFinal
 
-        
+
 
     } catch (error) {
         throw error

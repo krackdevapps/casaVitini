@@ -460,7 +460,7 @@ export const generadorPDF = async (reserva) => {
                 ]
             }
         }
-        console.log("totales", totales)
+
         for (const [nombreTotal, valorTotal] of Object.entries(totales)) {
             const nombreTotalUI = objetoTraductor[nombreTotal]
             const fila = [
@@ -504,7 +504,7 @@ export const generadorPDF = async (reserva) => {
         }
         docDefinition.content.push(mensaje4)
         const mensaje5 = {
-            text: 'Puede usar el codigo qr para ir a los detalles de esta reserva de una manera fácil y comoda. Si necesitas otra copia de este pdf, tambien puedes obtenerla mediante el qr.',
+            text: 'Puede usar el código QR para ir a los detalles de esta reserva de una manera fácil y cómoda.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje5)

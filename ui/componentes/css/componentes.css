@@ -370,10 +370,11 @@ summary:hover {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    padding: 0px;
+    padding: 16px;
     margin: 0px;
     flex: 1;
     grid-template-rows: 0.01fr auto;
+    grid-gap: 6px;
 }
 
 
@@ -1331,7 +1332,7 @@ summary:hover {
     padding: 14px;
     border-radius: 15px;
     width: 100%;
-    
+
 }
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoBotonIreAResumenReserva {
@@ -11319,6 +11320,7 @@ grid-template-columns: 0.5fr 1.5fr;
     font-weight: bold;
     padding: 10px;
 }
+
 .fondoTransparente {
     background-image: url("/componentes/imagenes/transparente.png");
     flex: 1;
@@ -11329,6 +11331,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background-position: center center;
     border-radius: 12px;
 }
+
 .parpadea {
     animation-name: parpadeo;
     animation-duration: 1250ms;
@@ -12420,13 +12423,12 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 12px;
     /* Ajusta este valor para cambiar la cantidad de redondeo */
     z-index: -1;
-    margin: 2px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaParcial::before {
-    background-color: rgb(255 214 0 / 72%);
+    background: rgb(255 214 0 / 72%);
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaCompleto::before {
@@ -14538,6 +14540,7 @@ grid-template-columns: 0.5fr 1.5fr;
     pointer-events: none;
     transition: opacity 2s linear;
     opacity: 1;
+
     @starting-style {
         opacity: 0;
     }
@@ -14947,6 +14950,9 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .flexApiladoI {
     justify-content: flex-start;
+}
+.flexAlineacionI {
+    align-items: flex-start;
 }
 
 

@@ -7,6 +7,7 @@ import { obtenerReservaPorReservaUID } from "../../../repositorio/reservas/reser
 import { obtenerTitularPoolReservaPorReservaUID } from "../../../repositorio/reservas/titulares/obtenerTitularPoolReservaPorReservaUID.mjs";
 import { obtenerTitularReservaPorReservaUID } from "../../../repositorio/reservas/titulares/obtenerTitularReservaPorReservaUID.mjs";
 import { obtenerDetallesCliente } from "../../../repositorio/clientes/obtenerDetallesCliente.mjs";
+import { limpiarContenedorFinacieroInformacionPrivada } from "../../../sistema/miCasa/misReservas/limpiarContenedorFinancieroInformacionPrivada.mjs";
 
 export const detallesReserva = async (entrada) => {
     try {
@@ -16,7 +17,10 @@ export const detallesReserva = async (entrada) => {
 
         const usuario = entrada.session.usuario;
 
-        validadoresCompartidos.filtros.numeroDeLLavesEsperadas(1)
+        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+            objeto: entrada.body,
+            numeroDeLLavesMaximo: 1
+        })
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
@@ -73,6 +77,9 @@ export const detallesReserva = async (entrada) => {
                 "detallesPagos"
             ]
         });
+
+        limpiarContenedorFinacieroInformacionPrivada(resuelveDetallesReserva)
+
         delete resuelveDetallesReserva.global.origenIDV;
         const ok = {
             ok: "Aquí están los detalles de su reserva",

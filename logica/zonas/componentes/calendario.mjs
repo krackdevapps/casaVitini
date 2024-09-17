@@ -2,9 +2,31 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../sistema/configuracion/codigoZonaHoraria.mjs";
 import { obtenerParametroConfiguracion } from "../../sistema/configuracion/obtenerParametroConfiguracion.mjs";
 import { validadoresCompartidos } from "../../sistema/validadores/validadoresCompartidos.mjs";
+import { controlEstructuraPorJoi } from "../../sistema/validadores/controlEstructuraPorJoi.mjs";
+import Joi from "joi";
 
 export const calendario = async (entrada) => {
     try {
+
+        const schema = Joi.object({
+            tipo: Joi.string().messages({
+                'string.base': '{{#label}} debe ser una cadena'
+            }),
+            ano: Joi.number().messages({
+                'number.base': '{{#label}} debe ser un numero'
+            }),
+            mes: Joi.number().messages({
+                'number.base': '{{#label}} debe ser un numero'
+            }),
+        }).required().messages({
+            'any.required': '{{#label}} es una llave obligatoria'
+        })
+
+        controlEstructuraPorJoi({
+            schema: schema,
+            objeto: entrada.body
+        })
+
         const tipo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipo,
             nombreCampo: "El campo del tipo de calenadrio",
@@ -17,7 +39,7 @@ export const calendario = async (entrada) => {
             const error = "El campo de tipo solo puede ser actual o personalizado"
             throw new Error(error)
         }
-        console.log("entrada", entrada.body)
+
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const diaHoyTZ = tiempoZH.day;

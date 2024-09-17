@@ -1,7 +1,6 @@
 import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../../repositorio/globales/campoDeTransaccion.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { VitiniIDX } from "../../../../../sistema/VitiniIDX/control.mjs"
 import { procesador } from "../../../../../sistema/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../sistema/validadores/validadoresCompartidos.mjs"
@@ -11,6 +10,7 @@ import { obtenerServiciosPorReservaUID } from "../../../../../repositorio/servic
 import { obtenerServicioPorServicioUID } from "../../../../../repositorio/servicios/obtenerServicioPorServicioUID.mjs"
 import { eliminarServicioEnReservaPorServicioUID } from "../../../../../repositorio/reservas/servicios/eliminarServicioEnReservaPorServicioUID.mjs"
 import { insertarServicioPorReservaUID } from "../../../../../repositorio/reservas/servicios/insertarServicioPorReservaUID.mjs"
+import { actualizarDesgloseFinacieroDesdeHubsPorReservaUID } from "../../../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroDesdeHubsPorReservaUID.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -89,13 +89,11 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             const contenedorServicio = servicioDelHub.contenedor
             contenedorServicio.servicioUID = servicioDelHub.servicioUID
             await insertarServicioPorReservaUID({
-                simulacionUID,
+                reservaUID,
                 nombre: nombreServicico,
                 contenedor: contenedorServicio
             })
         }
-
-
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
@@ -117,7 +115,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 }
             }
         })
-        await actualizarDesgloseFinacieroPorReservaUID({
+
+        await actualizarDesgloseFinacieroDesdeHubsPorReservaUID({
             desgloseFinanciero,
             reservaUID
         })
