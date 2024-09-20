@@ -577,8 +577,9 @@ summary:hover {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    padding: 0px;
-    margin: 8px;
+    gap: 10px;
+
+
 }
 
 .dia {
@@ -588,12 +589,19 @@ summary:hover {
     font-weight: bold;
     border-radius: 10px;
     border: 3px solid transparent;
-    margin: 4px;
+    /* margin: 4px; */
     transition: all 250ms;
     display: flex;
     align-content: center;
     justify-content: flex-end;
     align-items: center;
+
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 .administracion_calendario_ccomponenteCalendario_dia {
@@ -616,6 +624,7 @@ summary:hover {
 .dia:hover {
     background-color: rgba(255, 255, 255, 0.4);
 }
+
 
 .reservaInformacion {
     font-weight: bold;
@@ -746,6 +755,16 @@ summary:hover {
     margin: 0px;
 }
 
+.selectorRojo {
+    background: rgb(255 166 166 / 50%);
+    transition: all 250ms linear;
+}
+
+.selectorRojo:hover {
+    background: red;
+    color: white;
+}
+
 .bloquePasosReserva {
     display: flex;
     flex-direction: column;
@@ -837,7 +856,6 @@ summary:hover {
 }
 
 .calendarioNuevo {
-    overflow: hidden;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -854,15 +872,73 @@ summary:hover {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    /* padding: 10px; */
+    padding: 10px;
+    gap: 10px;
     max-width: 1280px;
     scale: 1;
-    transition: scale 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
 
     @starting-style {
         scale: 0;
     }
 
+}
+
+.bloqueCalendarioNuevo {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    z-index: 1000;
+    /* pointer-events: none; */
+    overflow: auto;
+    padding: 30px;
+    /* 
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    } */
+}
+
+@media (max-width: 720px) {
+    .bloqueCalendarioNuevo {
+        padding: 0px;
+        position: fixed;
+        height: 100%;
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+    }
+
+    .calendarioNuevo {
+        border-radius: 0px;
+        flex: 1;
+        background: transparent;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    }
+
+    .calendarioFlotante {
+        padding: 0px;
+    }
+
+
+
+    .marcoMes {
+        flex: 1;
+        gap: 4px;
+    }
+
+}
+
+.calendarioFlotante {
+    transition: all 250ms linear;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI {
@@ -911,7 +987,6 @@ summary:hover {
     justify-content: space-between;
     align-items: center;
     /* background: rgba(255, 255, 255, 0.5);*/
-    padding: 10px;
 }
 
 [zonaCSS="administracion/calendario"] .adminitracion_calendario_selectorCapa {
@@ -994,12 +1069,19 @@ summary:hover {
 
 .navegacionMesReferencia {
 
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 10px;
-    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.mostrarSoloEnResponsivo {
+    display: none;
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+    @starting-style {
+        scale: 0;
+    }
+   
 }
 
 @media (max-width: 720px) {
@@ -1008,6 +1090,11 @@ summary:hover {
     .marcoaAlojamiento {
         width: 90%;
     }
+
+    .mostrarSoloEnResponsivo {
+        display: flex;
+    }
+
 }
 
 .iconoCheck {
@@ -1097,7 +1184,7 @@ summary:hover {
 
 .plaza_alojamiento_contenedor {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 0.3fr;
     grid-gap: 0px;
     grid-auto-rows: minmax(auto, auto);
     gap: 6px;
@@ -1107,6 +1194,13 @@ summary:hover {
     padding: 0px;
     border-radius: 16px;
 }
+@media (max-width: 720px) {
+    .plaza_alojamiento_contenedor {
+        grid-template-columns: 1fr 1fr auto;
+
+    }
+}
+
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_superBloque {
     display: flex;
@@ -1200,10 +1294,10 @@ summary:hover {
 
 .cartelInfoCalendarioEstado {
     background-color: rgb(255 255 255 / 50%);
-    margin-right: 10px;
     padding: 10px;
     border-radius: 10px;
-    margin-left: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 [ui="reservaUI"] .reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces {
@@ -1220,25 +1314,7 @@ summary:hover {
 }
 
 
-.bloqueCalendarioNuevo {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: center;
-    align-items: stretch;
-    justify-content: flex-start;
-    width: 100%;
-    z-index: 1000;
-    pointer-events: none;
-    /* 
-    scale: 1;
-    transition: scale 500ms ease-in-out;
 
-    @starting-style {
-        scale: 0;
-    } */
-}
 
 [zonaCSS="administracion/calendario"] .adminsitracion_calendario_bloqueCalendario {
     display: flex;
@@ -7487,6 +7563,9 @@ summary:hover {
     padding: 10px;
 }
 
+.margin6 {
+    margin: 6px;
+}
 
 .margin10 {
     margin: 10px;
@@ -14951,6 +15030,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .flexApiladoI {
     justify-content: flex-start;
 }
+
 .flexAlineacionI {
     align-items: flex-start;
 }
@@ -15424,4 +15504,13 @@ select {
 
 .breakWordkAll {
     word-break: break-all;
+}
+
+.efectoAparicion {
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }

@@ -95,7 +95,7 @@ window.createPayment = async function (token, verificationToken) {
       if (data.ok) {
         console.info("Pago Existoso !!!!")
         const detalles = data.detalles
-        const x = eval(data.x)
+        //const x = eval(data.x)
         window.showSuccess('Pago realizado correctmente y reserva confirmada!');
         console.info("data", data)
         // Verificar si la función existe

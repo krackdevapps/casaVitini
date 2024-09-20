@@ -24,18 +24,22 @@
 .uiPanelGlobal {
     background-color: rgba(161, 161, 161, 0);
     padding: 10px;
-    display: flex;
-    margin: 0px;
-    align-items: stretch;
-    justify-content: space-between;
-    align-content: center;
+    display: grid;
+    gap: 10px;
     flex-wrap: nowrap;
-    flex-direction: row;
-    text-align: center;
     user-select: none;
     -webkit-user-select: none;
     /* position: fixed; */
-    width: 100%;
+    grid-template-columns: 1fr max-content auto;
+    align-items: center;
+    flex: 1;
+}
+
+[componente=iconos] {
+    display: flex;
+    align-content: center;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .fondo {
@@ -86,53 +90,24 @@
     }
 }
 
-.uiNavegacion {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 30px;
-    width: fit-content;
-    height: fit-content;
-    margin: 8px;
-    padding: 0px;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    -webkit-backdrop-filter: blur(50px);
-    backdrop-filter: blur(50px);
+.contenedorTest {
+    background: blue;
+    overflow: hidden;
+    width: 100%;
+    transition: all 5s linear;
+
+
 }
 
-.uiCategoria {
-    border: 0px none;
-    padding-left: 24px;
-    padding-right: 24px;
-    margin: 0px;
-    border-radius: 20px;
-    transition: all 500ms;
-    cursor: default;
-    -webkit-tap-highlight-color: transparent;
-    text-decoration: none;
-    color: black;
-    user-select: none;
-    cursor: default;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    height: 33px;
-}
 .elipsisIDX {
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 180px;
     display: block;
     white-space: nowrap;
-  
+
 }
 
-@media (max-width: 920px) {
-    .uiCategoria {
-        border-radius: 11px;
-    }
-}
 
 
 .uiCategoriaMenu {
@@ -189,6 +164,68 @@ header {
     z-index: 10;
 }
 
+header .simulador {
+    pointer-events: none;
+    overflow: hidden;
+    /* opacity: 0;
+    z-index: -100; */
+    position: absolute;
+}
+
+header .estructura {
+    display: flex;
+    padding: 6px;
+    gap: 6px;
+    transition: all 250ms linear;
+    border-radius: 30px;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    gap: 6px;
+    background-color: rgba(255, 255, 255, 0.3);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.estructuraVertical {
+    display: flex;
+    gap: 6px;
+    transition: all 250ms linear;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+
+header .contenedorIntermedio {
+    display: grid;
+    grid-template-columns: 1fr;
+    transition: grid-template-columns 250ms linear;
+    overflow: hidden;
+    justify-items: center;
+}
+
+
+header .contenedorIntermedio>div {
+    overflow: hidden;
+}
+
+
+header .zonas {
+    display: flex;
+    grid-template-columns: repeat(auto);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+}
+
 @keyframes AnimacionSueave {
     0% {
         transform: scale(0)
@@ -219,11 +256,10 @@ header {
     width: 16px;
     border-radius: 100%;
     background: rgba(0, 0, 0, 0.317);
+    padding: 10px;
 }
 
-.esferaUI_flotante {
-    display: none;
-}
+
 
 .tintadoVinculo {
     color: black;
@@ -258,7 +294,7 @@ header {
     width: 100%;
     z-index: 200;
     background: transparent;
-    transition: all 250ms linear;
+    transition: all 2s linear;
 }
 
 @media (max-width: 720px) {
@@ -269,13 +305,11 @@ header {
     }
 }
 
-.uiMenuResponsivo {
-    transition: all 250ms;
+.uiMenu {
     background-color: rgba(255, 255, 255, 0.4);
     border-radius: 30px;
-    overflow: hidden;
-    width: fit-content;
-    height: fit-content;
+    height: 100%;
+    width: 100%;
     /* margin-right: 12px; */
     padding: 6px;
     align-content: center;
@@ -287,108 +321,207 @@ header {
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 8px;
-    /* opacity: 0; */
-    transition: all 1000ms;
-    scale: 1;
-    transition: scale 500ms ease-in-out;
+    transition: all 1s linear;
+    /* transition-behavior: allow-discrete; */
 
-    @starting-style {
-        scale: 0;
-
-    }
 }
 
 .ocultoInicial {
     display: none;
 }
 
-.uiMenuResponsivoDesplegado {
+.contenedorMenus {
+    display: grid;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    /* flex-wrap: nowrap; */
+    flex-direction: row;
+    pointer-events: all;
+    /* gap: 6px; */
+    grid-template-areas: ". .";
+    transition: all 250ms linear;
+    overflow: hidden;
+    padding: 6px;
+    gap: 6px;
+    scale: 1;
+    /* transition: scale 250ms ease-in-out; */
+
+    @starting-style {
+        scale: 0;
+    }
+
+}
+
+.menuDesplegado {
+    /* background-color: rgba(255, 255, 255, 0.2); */
+    border-radius: 30px;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    gap: 6px;
+    /* width: 590px; */
+    overflow: hidden;
+    padding: 6px;
+    transition: all 250ms linear;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.3);
+
+
+}
+
+
+
+.uiCategoria {
+    border: 0px none;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin: 0px;
+    border-radius: 20px;
+    /* transition: all 500ms; */
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    cursor: default;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 33px;
+    width: 100%;
+    transition: background 250ms linear, color 250ms linear,  scale 250ms ease-in-out;
+    justify-content: flex-start;
+
+    scale: 1;
+    @starting-style {
+        scale: 0;
+    }
+
+}
+
+.uiCategoria:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
+.botonMenuResponsivo {
     transition: all 250ms;
     background-color: rgba(255, 255, 255, 0.5);
     text-align: center;
     /* font-size: 14px; */
     border-radius: 10px;
-    width: 10px;
-    /* height: 0px; */
-    margin-right: 12px;
-    padding: 24px;
-    transition: background 250ms, color 250ms;
+    height: 40px;
+    width: 0px;
+    margin-right: 0px;
+    /* padding: 23px; */
     cursor: default;
-    display: none;
+    display: flex;
     justify-content: center;
     -webkit-tap-highlight-color: transparent;
     background-position: center center;
     background-image: url(/componentes/iconos/menu5.svg);
     background-size: cover;
-    zoom: 80%;
+    /* zoom: 80%; */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(50px);
-    padding-left: 30px;
-    padding-right: 30px;
+    /* padding-left: 30px; */
 }
 
-.uiMenuResponsivoDesplegado:hover {
+.esferaUI_flotante {
+    display: flex;
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+    background: rgb(0 0 0 / 50%);
+    padding: 10px;
+    transition: scale 250ms ease-in-out;
+
+    scale: 1;
+    @starting-style {
+        scale: 0;
+    }
+}
+.botonMenuResponsivo:hover {
     color: white;
 }
 
+
 @media (max-width: 1080px) {
-    .uiMenuResponsivo {
-        display: none;
+
+
+    header .contenedorIntermedio {
+        grid-template-columns: 0fr;
     }
 
-    .uiMenuResponsivoDesplegado {
-        display: block;
-        scale: 1;
-        transition: scale 500ms ease-in-out;
+    header .estructura {
+        padding: 0px;
+    }
 
-        @starting-style {
-            scale: 0;
-        }
+    .botonMenuResponsivo {
+        width: 50px;
+        margin-right: 12px;
+
+    }
+
+    .contenedorTest {
+        background: red;
+    }
+
+    .contenedorMenu {
+        grid-template-columns: 0% 100%;
     }
 
     #imgLogo {
         width: 140px;
-
     }
 
     .uiPanelGlobal {
         align-items: center;
+        /* grid-template-columns: 1fr max-content auto; */
     }
 
-    .uiCategoria {
-        justify-content: flex-start;
+  
+  
+}
+
+@keyframes desaparecMenu {
+    from {
+        /* opacity: 1;
+      transform: scale(1); */
+        zoom: 100%;
     }
 
-    .esferaUI {
+    to {
+        /* opacity: 0;
+      transform: scale(0);*/
+        zoom: .01%;
         display: none;
+
+    }
+}
+
+@keyframes apareceMenu {
+    from {
+        opacity: 0;
+        transform: scale(0);
     }
 
-    .esferaUI_flotante {
-        display: flex;
-        position: absolute;
-        top: -46px;
-        left: 0px;
-        height: 40px;
-        width: 40px;
-        border-radius: 10px;
-        background: rgb(230 230 230);
-        z-index: 10;
-        box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
 }
 
 .uiMenuGlobalResponsivo {
     display: flex;
-    background-color: aqua;
     transition: all 250ms;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 17px;
-    /* overflow: hidden; */
-    width: fit-content;
-    height: fit-content;
-    margin: 14px;
+    border-radius: 17px;   
+   
     align-content: center;
     justify-content: center;
     align-items: stretch;
@@ -396,12 +529,17 @@ header {
     flex-wrap: nowrap;
     position: absolute;
     gap: 6px;
-    top: 60px;
-    right: 4px;
+    top: 70px;
+    right: 25px;
     position: fixed;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
     padding: 6px;
     z-index: 1000;
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+    @starting-style {
+        scale: 0;
+    }
 }
 
 .enlaceInvisibleMenu {
@@ -417,16 +555,7 @@ header {
     text-decoration-color: white;
 }
 
-.contenedorMenu {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    pointer-events: all;
-    right: 2px;
-}
+
 
 #errorVista {
     margin-top: 100px;
