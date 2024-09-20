@@ -46,7 +46,7 @@ const casaVitini = {
                 const main = document.querySelector("main")
                 const objetoOrigen = entrada.objetoOrigen?.target
                 const selectorMenuRenderizado = document.querySelector("header [estructura=menu]")
-
+                console.log(objetoOrigen?.getAttribute("tipoMenu") === "volatil")
                 if (objetoOrigen?.getAttribute("tipoMenu") === "volatil") {
                     const zonaUI = objetoOrigen.getAttribute("zona")
                     console.log("zona", zonaUI)
@@ -175,6 +175,12 @@ const casaVitini = {
                     contenedorVista.innerHTML = null
                     contenedorVista.setAttribute("rama", zona)
 
+                    const menu_renderizado = document.querySelector("[componente=contenedorMenu]")
+                    if (menu_renderizado.querySelector("[zona=" + zona + "]")) {
+                        menu_renderizado.querySelector("[zona=" + zona + "]").style.background = "rgba(0, 0, 0, 0.6)"
+                        menu_renderizado.querySelector("[zona=" + zona + "]").style.color = "white"
+                    }
+
                     limpiezaUI()
                     await casaVitini.shell.controladoresUI.controladorEstadoIDX()
                     casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
@@ -260,41 +266,61 @@ const casaVitini = {
                     return casaVitini.shell.navegacion.controladorVista(entrada)
                 }
             },
-            sobreControlMenuGlobal: () => {
+            sobreControlMenuGlobal: (e) => {
+                console.log(e)
+                const menu_renderizado = document.querySelector("[componente=contenedorMenu]")
 
-                const menu = document.querySelector("header").querySelector("[componente=contenedorMenu]")
+                const usuarioActual = menu_renderizado.querySelector("[data=vitiniIDX]").innerText
+                const menuActual = menu_renderizado.getAttribute("menuID")
 
-                const usuarioActual = menu.querySelector("[bloqueID=usuario]").innerHTML.slice(1)
-                const menuActual = menu.querySelector("[menuID]")?.getAttribute("menuID")
                 const menuFinal = (menuID) => {
                     if (menuID === "panelControl") {
-                        menu.setAttribute("sobreControl", "activado")
+                        menu_renderizado.setAttribute("sobreControl", "activo")
                         return "publico"
                     } else if (menuID === "publico") {
-                        menu.removeAttribute("sobreControl")
+                        menu_renderizado.removeAttribute("sobreControl")
                         return "panelControl"
                     }
                 }
 
-                casaVitini.shell.navegacion.controladorNavegacion({
-                    tipo: menuFinal(menuActual),
+                casaVitini.shell.navegacion.constructorMenuUI({
+                    tipoMenu: menuFinal(menuActual),
+                    destino: "header [contenedor=intermedio]",
                     usuario: usuarioActual,
-                    estadoIDV: "conectado",
                     origen: "sobreControl"
                 })
+                const zonaActual = document.querySelector("main").getAttribute("rama")
+                menu_renderizado.querySelectorAll("[zona]").forEach(zonaObsoleta => {
+                    zonaObsoleta.removeAttribute("style")
+                })
+                if (menu_renderizado.querySelector("[zona=" + zonaActual + "]")) {
+                    menu_renderizado.querySelector("[zona=" + zonaActual + "]").style.background = "rgba(0, 0, 0, 0.6)"
+                    menu_renderizado.querySelector("[zona=" + zonaActual + "]").style.color = "white"
+                }
+                const menuResponsivoRenderizado = document.querySelector("[componente=menuGlobalFlotante]")
+                if (menuResponsivoRenderizado) {
+                    casaVitini.shell.controladoresUI.menuResponsivo.renderizaMenuResponsivo()
+                }
+
+
+
             },
             controladorNavegacion: async function (navegacion) {
 
                 const estadoIDV = navegacion.estadoIDV
                 const usuario = navegacion.usuario
                 const tipoBarraNavegacion = navegacion.tipo
-
+                const origen = navegacion.origen
 
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const panelNavegacion = document.querySelector("header [componente=contenedorMenu]")
                 const menuRenderizado = panelNavegacion.getAttribute("menuID")
 
                 const zonaActual = document.querySelector("main").getAttribute("rama")
+                const estadoSobreControl = panelNavegacion.getAttribute("sobreControl")
+                if (estadoIDV === "conectado" && estadoSobreControl === "activo") {
+                    return
+                }
 
                 if (tipoBarraNavegacion === "panelControl" && menuRenderizado !== tipoBarraNavegacion) {
                     panelNavegacion.setAttribute("menuID", tipoBarraNavegacion)
@@ -317,8 +343,9 @@ const casaVitini = {
 
                 const selectorMenuRenderizado = document.querySelector("header [estructura=menu]")
                 const menuID = selectorMenuRenderizado.querySelector("[data=vitiniIDX]")
+                console.log("menuID", menuID)
                 if (estadoIDV === "conectado") {
-                    menuID.innerText = "@" + usuario
+                    menuID.innerText = usuario
                 }
                 if (estadoIDV === "desconectado") {
                     menuID.innerText = "MiCasa"
@@ -337,6 +364,9 @@ const casaVitini = {
                 const tipoMenu = data.tipoMenu
                 const destino = data.destino
                 const usuario = data.usuario
+                const origen = data.origen
+                console.log("origen", origen)
+
                 const menuAdminData = [{
                     href: "/administracion",
                     nombre: "Adminsitración",
@@ -362,7 +392,6 @@ const casaVitini = {
                     zona: "clientes"
 
                 }, {
-                    metodo: "this.sobreControlMenuGlobal",
                     tipo: "sobreControlMenu"
                 }]
 
@@ -387,7 +416,12 @@ const casaVitini = {
                     nombre: "Contacto",
                     zona: "contacto"
 
+                }, {
+                    tipo: "sobreControlMenu"
                 }]
+
+                document.querySelector("[componente=contenedorMenu]").setAttribute("menuID", tipoMenu)
+
                 const selectorDestino = document.querySelector(destino)
 
                 const estructura_selector = selectorDestino.querySelector("[estructura=menu]")
@@ -418,11 +452,11 @@ const casaVitini = {
                     const textoIDV = document.createElement("div")
                     textoIDV.classList.add("elipsisIDX")
                     textoIDV.setAttribute("data", "vitiniIDX")
-                    textoIDV.innerText = !usuario ? "Mi Casa" : "@" + usuario
+                    textoIDV.innerText = !usuario ? "Mi Casa" : usuario
                     contenedorIDX.appendChild(textoIDV)
                 }
                 const estructura_renderizada = selectorDestino.querySelector("[estructura=menu]")
-                //const contenedorZonas_renderizado = estructura_renderizada.querySelector("[contenedor=zonas]")
+
                 estructura_renderizada.querySelectorAll("[tipoMenu=volatil]").forEach((zonaObsoleta) => {
                     const zona = zonaObsoleta.getAttribute("zona")
                     if (zona !== "micasa") {
@@ -432,26 +466,55 @@ const casaVitini = {
 
                 const zonaMiCasaRenderizada = estructura_renderizada.querySelector("[zona=micasa]")
 
-                let posicion = 0
+                const zonaUI = (data) => {
+                    const href = data.href
+                    const nombre = data.nombre
+                    const zonaIDV = data.zonaIDV
+
+                    const zona = document.createElement("a")
+                    zona.setAttribute("href", href)
+                    zona.setAttribute("class", "uiCategoria")
+                    zona.setAttribute("tipoMenu", "volatil")
+                    zona.setAttribute("vista", href)
+                    zona.setAttribute("zona", zonaIDV)
+                    zona.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                    zona.innerText = nombre
+                    return zona
+                }
+
+                const sobreControlUI = () => {
+                    const sobreControl = document.createElement("a")
+                    sobreControl.setAttribute("class", "esferaUI_flotante")
+                    sobreControl.setAttribute("tipoMenu", "volatil")
+                    sobreControl.setAttribute("elemento", "esfera")
+                    sobreControl.setAttribute("controlFlotante", "cancelar")
+                    sobreControl.addEventListener("click", casaVitini.shell.navegacion.sobreControlMenuGlobal)
+                    return sobreControl
+                }
+
                 if (tipoMenu === "publico") {
                     menuPublicoData.forEach((menu) => {
                         const href = menu.href
                         const nombre = menu.nombre
                         const zonaIDV = menu.zona
+                        const tipo = menu?.tipo
+                        console.log (tipo , "sobreControlMenu" ,origen , "sobreControl")
+                        console.log (tipo === "sobreControlMenu" && origen === "sobreControl")
 
-                        const zona = document.createElement("a")
-                        zona.setAttribute("href", href)
-                        zona.setAttribute("class", "uiCategoria")
-                        zona.setAttribute("tipoMenu", "volatil")
-                        zona.setAttribute("vista", href)
-                        zona.setAttribute("zona", zonaIDV)
-                        zona.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-                        zona.innerText = nombre
-                        // estructura_renderizada.appendChild(zona)
+                        if (!tipo) {
+                            const zona = zonaUI({
+                                href,
+                                nombre,
+                                zonaIDV,
+                            })
+                            estructura_renderizada.insertBefore(zona, zonaMiCasaRenderizada);
 
-                        estructura_renderizada.insertBefore(zona, zonaMiCasaRenderizada);
-
-                        posicion++
+                        } else if (tipo === "sobreControlMenu" && origen === "sobreControl") {
+                            console.log("hohla")
+                            const sobreControl = sobreControlUI()
+                            console.log("sobreCtronl", sobreControl)
+                            estructura_renderizada.insertBefore(sobreControl, zonaMiCasaRenderizada);
+                        }
                     })
                 } else if (tipoMenu === "panelControl") {
 
@@ -461,30 +524,21 @@ const casaVitini = {
                         const tipo = menu?.tipo
                         const zonaIDV = menu.zona
 
-
                         if (!tipo) {
-                            const zona = document.createElement("a")
-                            zona.setAttribute("href", href)
-                            zona.setAttribute("class", "uiCategoria")
-                            zona.setAttribute("tipoMenu", "volatil")
-                            zona.setAttribute("vista", href)
-                            zona.setAttribute("zona", zonaIDV)
-                            zona.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-                            zona.innerText = nombre
+                            const zona = zonaUI({
+                                href,
+                                nombre,
+                                zonaIDV,
+                            })
                             estructura_renderizada.insertBefore(zona, zonaMiCasaRenderizada);
 
                         } else if (tipo === "sobreControlMenu") {
-                            const zona = document.createElement("a")
-                            zona.setAttribute("class", "esferaUI_flotante")
-                            zona.setAttribute("tipoMenu", "volatil")
-                            zona.addEventListener("click", this.sobreControlMenuGlobal)
-                            estructura_renderizada.insertBefore(zona, zonaMiCasaRenderizada);
+                            const sobreControl = sobreControlUI()
+                            estructura_renderizada.insertBefore(sobreControl, zonaMiCasaRenderizada);
                         }
-                        posicion++
 
                     })
                 }
-
             },
 
         },
@@ -493,7 +547,7 @@ const casaVitini = {
             window.addEventListener("popstate", casaVitini.shell.navegacion.navegacionInversa)
             await casaVitini.shell.controladoresUI.controladorEstadoIDX()
             document.querySelector("[componente=botonMenuResponsivo]").addEventListener("click", () => {
-                casaVitini.shell.controladoresUI.menuResponsivo()
+                casaVitini.shell.controladoresUI.menuResponsivo.despliege()
             })
             const vistas = document.querySelectorAll("[vista]")
 
@@ -633,49 +687,70 @@ const casaVitini = {
 
                 }
             },
-            menuResponsivo: function () {
-                const selectorMenuFlotanteRenderizado = document.querySelector("[componente=menuGlobalFlotante]")
-                if (selectorMenuFlotanteRenderizado) {
-                    selectorMenuFlotanteRenderizado.remove()
-                } else {
-                    this.tranformaMenuARespontivo()
-                    window.addEventListener("click", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
-                    window.addEventListener("resize", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
-                    window.addEventListener("scroll", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
+
+            menuResponsivo: {
+                despliege: function () {
+                    selectorMenuFlotanteRenderizado = document.querySelector("[componente=menuGlobalFlotante]")
+                    if (selectorMenuFlotanteRenderizado) {
+                        selectorMenuFlotanteRenderizado.remove()
+                    } else {
+                        this.tranformaMenuARespontivo()
+                        window.addEventListener("click", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
+                        window.addEventListener("resize", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
+                        window.addEventListener("scroll", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
+                    }
+                },
+                tranformaMenuARespontivo: function () {
+                    const menu_selector = document.querySelector("[componente=menuGlobalFlotante]")
+                    if (menu_selector) {
+                        menu_selector.innerHTML = null
+                    } else {
+                        const menuFlotante = document.createElement("div")
+                        menuFlotante.setAttribute("componente", "menuGlobalFlotante")
+                        menuFlotante.classList.add("uiMenuGlobalResponsivo")
+                        document.body.appendChild(menuFlotante)
+                    }
+                    this.renderizaMenuResponsivo()
+
+                },
+
+                renderizaMenuResponsivo: () => {
+                    const menu_renderizado = document.querySelector("[componente=menuGlobalFlotante]")
+
+                    const contenedorMenu = document.querySelector("[componente=contenedorMenu]")
+                    const menuID = contenedorMenu.getAttribute("menuID")
+                    const usuario = contenedorMenu.querySelector("[data=vitiniIDX]").innerText
+                    const sobreControl = contenedorMenu?.getAttribute("sobreControl") === "activo" ? "sobreControl" : null
+                    console.log("sobreControl", sobreControl)
+                    casaVitini.shell.navegacion.constructorMenuUI({
+                        tipoMenu: menuID,
+                        destino: "body [componente=menuGlobalFlotante]",
+                        usuario: usuario,
+                        origen: sobreControl
+                    })
+                    const menuRenderizado = menu_renderizado.querySelector("[estructura=menu]")
+                    menuRenderizado.classList.add("estructuraVertical")
+                    const zonasRenderizadas = menuRenderizado.querySelectorAll("[zona]")
+                    zonasRenderizadas.forEach((zona) => zona.style.borderRadius = "12px")
+
+                    const selectorEsfera = menu_renderizado.querySelector("[elemento=esfera]")
+                    if (selectorEsfera) {
+                        selectorEsfera.classList.remove("esferaUI_flotante")
+                        selectorEsfera.classList.add("esferaUI_flotante_responsiva")
+                    }
+
+
+                    const zonaActual = document.querySelector("main").getAttribute("rama")
+                    if (menu_renderizado.querySelector("[zona=" + zonaActual + "]")) {
+                        menu_renderizado.querySelector("[zona=" + zonaActual + "]").style.background = "rgba(0, 0, 0, 0.6)"
+                        menu_renderizado.querySelector("[zona=" + zonaActual + "]").style.color = "white"
+                    }
                 }
             },
 
 
-            tranformaMenuARespontivo: function () {
-                const menu_selector = document.querySelector("[componente=menuGlobalFlotante]")
-                if (menu_selector) {
-                    menu_selector.innerHTML = null
-                } else {
-                    const menuFlotante = document.createElement("div")
-                    menuFlotante.setAttribute("componente", "menuGlobalFlotante")
-                    menuFlotante.classList.add("uiMenuGlobalResponsivo")
-                    document.body.appendChild(menuFlotante)
-                }
-                const menu_renderizado = document.querySelector("[componente=menuGlobalFlotante]")
 
-                const contenedorMenu = document.querySelector("[componente=contenedorMenu]")
-                const menuID = contenedorMenu.getAttribute("menuID")
-                const usuario = contenedorMenu.querySelector("[data=vitiniIDX]").innerText
-
-                casaVitini.shell.navegacion.constructorMenuUI({
-                    tipoMenu: menuID,
-                    destino: "body [componente=menuGlobalFlotante]",
-                    usuario: usuario
-                })
-                const menuRenderizado = menu_renderizado.querySelector("[estructura=menu]")
-                menuRenderizado.classList.add("estructuraVertical")
-                const zonasRenderizadas = menuRenderizado.querySelectorAll("[zona]")
-                zonasRenderizadas.forEach((zona) => zona.style.borderRadius = "12px")
-
-
-            },
             controladorEstadoIDX: async () => {
-
 
                 const IDX = await casaVitini.shell.IDX.estadoSession()
                 const estadoIDV = IDX?.estadoIDV || null
@@ -748,7 +823,7 @@ const casaVitini = {
                 }
             },
             ocultarMenusVolatiles: (menuVolatil) => {
-
+                console.log(" menuVolatil?.target?.", menuVolatil?.target)
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
