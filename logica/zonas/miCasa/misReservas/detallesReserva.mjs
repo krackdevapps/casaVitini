@@ -74,16 +74,16 @@ export const detallesReserva = async (entrada) => {
                 "alojamiento",
                 "pernoctantes",
                 "desgloseFinanciero",
-                "detallesPagos"
+                "detallesPagos",
+                "servicios"
             ]
         });
 
         limpiarContenedorFinacieroInformacionPrivada(resuelveDetallesReserva)
 
-        delete resuelveDetallesReserva.global.origenIDV;
+        //delete resuelveDetallesReserva.global.origenIDV;
         const ok = {
-            ok: "Aquí están los detalles de su reserva",
-            reserva: resuelveDetallesReserva
+            ok: resuelveDetallesReserva
         }
         return ok
 

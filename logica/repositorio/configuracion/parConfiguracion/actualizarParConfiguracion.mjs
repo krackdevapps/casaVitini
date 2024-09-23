@@ -20,7 +20,7 @@ export const actualizarParConfiguracion = async (data) => {
             ]
             const resuelve = await conexion.query(consulta, parametros);
             if (resuelve.rowCount === 0) {
-                const error = "No se ha podido actualizar la configruacion con el configuracionUID: " + configuracionUID;
+                const error = `No se ha podido actualizar la configruacion con el configuracionUID: ${configuracionUID}, verifica que exista esta identificacion en la tabla`;
                 throw new Error(error)
             }
             const objeto = resuelve.rows[0]

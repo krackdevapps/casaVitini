@@ -18,6 +18,7 @@ export const crearTitular = async (entrada, salida) => {
             objeto: entrada.body,
             numeroDeLLavesMaximo: 8
         })
+
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",

@@ -206,7 +206,9 @@ header .estructura {
 header .contenedorIntermedio {
     display: grid;
     grid-template-columns: 1fr;
-    transition: grid-template-columns 250ms linear;
+    /* transition: grid-template-columns 250ms linear, border-radius 250ms linear; */
+    transition: all 250ms linear;
+
     overflow: hidden;
     justify-items: center;
 }
@@ -407,7 +409,7 @@ header .zonas {
 
 
 .botonMenuResponsivo {
-    transition: all 250ms;
+    transition: all 250ms linear;
     background-color: rgba(255, 255, 255, 0.5);
     text-align: center;
     /* font-size: 14px; */
@@ -427,6 +429,7 @@ header .zonas {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     /* padding-left: 30px; */
+    scale: 0;
 }
 
 .esferaUI_flotante {
@@ -469,6 +472,8 @@ header .zonas {
 
     header .contenedorIntermedio {
         grid-template-columns: 0fr;
+        border-radius: 30px;
+        opacity: 0;
     }
 
     header .estructura {
@@ -478,6 +483,7 @@ header .zonas {
     .botonMenuResponsivo {
         width: 50px;
         margin-right: 12px;
+        scale: 1;
 
     }
 

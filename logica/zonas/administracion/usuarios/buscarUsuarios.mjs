@@ -12,7 +12,7 @@ export const buscarUsuarios = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        console.log(" entrada.body",  entrada.body)
+
         const esquemaBusqueda = Joi.object({
             buscar: Joi.string().required(),
             pagina: Joi.number(),

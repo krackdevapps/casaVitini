@@ -1,15 +1,3 @@
-.titulo {
-    font-size: 13px;
-    /* font-weight: bold; */
-    color: rgba(0, 0, 0, 0.585);
-    /* margin: 20px; */
-    /* top: 30px; */
-    text-align: center;
-    transition: all 1s;
-    /* margin-bottom: 10px; */
-    font-weight: bold;
-}
-
 [zonaCSS="/"] .tituloPortada {
     display: flex;
     place-content: center;
@@ -30,6 +18,20 @@ main[zonaCSS="/"] {
     gap: 6px;
     z-Index: -1;
     position: absolute;
+}
+
+.administracionReservasFila {
+    display: contents;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    cursor: default;
+}
+
+.administracionReservasFila:hover>div {
+    background-color: #0040ff;
+    color: white;
+    /*transition: all 250ms linear;*/
 }
 
 
@@ -90,7 +92,7 @@ main[zonaCSS="/"] {
     padding: 4px;
 }
 
-.adminitracion_reservas_crearReserva_infoSinAlojamiento {
+.administracion_reservas_crearReserva_infoSinAlojamiento {
     padding: 10px;
     display: flex;
     justify-content: center;
@@ -976,6 +978,8 @@ summary:hover {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
+    padding: 10px;
+    gap: 10px;
 
 }
 
@@ -989,7 +993,7 @@ summary:hover {
     /* background: rgba(255, 255, 255, 0.5);*/
 }
 
-[zonaCSS="administracion/calendario"] .adminitracion_calendario_selectorCapa {
+[zonaCSS="administracion/calendario"] .administracion_calendario_selectorCapa {
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     padding: 10px;
@@ -1002,13 +1006,13 @@ summary:hover {
     width: fit-content;
 }
 
-[zonaCSS="administracion/calendario"] .adminitracion_calendario_contenedorHerramientasCalendario {
+[zonaCSS="administracion/calendario"] .administracion_calendario_contenedorHerramientasCalendario {
     display: flex;
     gap: 6px;
     align-items: center;
 }
 
-[zonaCSS="administracion/calendario"] .adminitracion_calendario_contenedorCentralCalendario {
+[zonaCSS="administracion/calendario"] .administracion_calendario_contenedorCentralCalendario {
     display: grid;
     grid-template-columns: 3fr 1fr 3fr;
     grid-template-rows: 1fr;
@@ -1016,7 +1020,7 @@ summary:hover {
     grid-row-gap: 0px;
 }
 
-[zonaCSS="administracion/calendario"] .adminitracion_calendario_navegacionMes {
+[zonaCSS="administracion/calendario"] .administracion_calendario_navegacionMes {
     display: grid;
     grid-template-columns: 1fr 10fr 1fr;
     grid-template-rows: 1fr;
@@ -1078,10 +1082,11 @@ summary:hover {
     display: none;
     scale: 1;
     transition: scale 500ms ease-in-out;
+
     @starting-style {
         scale: 0;
     }
-   
+
 }
 
 @media (max-width: 720px) {
@@ -1194,6 +1199,7 @@ summary:hover {
     padding: 0px;
     border-radius: 16px;
 }
+
 @media (max-width: 720px) {
     .plaza_alojamiento_contenedor {
         grid-template-columns: 1fr 1fr auto;
@@ -1265,6 +1271,8 @@ summary:hover {
     display: flex;
     flex-direction: row;
     align-items: center;
+    align-content: center;
+    justify-content: center;
 }
 
 [zonaCSS="administracion/reservas/buscador"] .botonMostrarDisponibilidad:hover {
@@ -2144,7 +2152,7 @@ summary:hover {
     align-content: center;
 }
 
-.tituloAdminitracionContexto {
+.tituloadministracionContexto {
     margin: 1px;
     font-weight: bold;
     padding-left: 12px;
@@ -2245,14 +2253,14 @@ summary:hover {
 
 [zonaCSS="administracion/reservas/buscador"] .adminsitracionReservasBuscador {
     /* background-color: #505254; */
-    display: flex;
+    display: grid;
     flex-direction: row;
-    align-content: center;
-    justify-content: space-between;
     align-items: stretch;
     /* padding: 6px; */
     gap: 6px;
     border-radius: 10px;
+    grid-template-areas: ". . .";
+    align-content: center;
 }
 
 .botonSimple {
@@ -2288,7 +2296,7 @@ summary:hover {
     align-items: center;
 }
 
-[ui="reservaUI"] .adminitracion_reservas_DetallesReserva_botonCategoria {
+[ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria {
     text-decoration: none;
     color: black;
     background-color: rgba(255, 255, 255, 0.3);
@@ -2311,7 +2319,7 @@ summary:hover {
 }
 
 @media (max-width: 720px) {
-    [ui="reservaUI"] .adminitracion_reservas_DetallesReserva_botonCategoria {
+    [ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria {
         padding-top: 18px;
         padding-bottom: 18px;
     }
@@ -2322,7 +2330,7 @@ summary:hover {
     color: white;
 }
 
-[ui="reservaUI"] .adminitracion_reservas_DetallesReserva_botonCategoria:hover {
+[ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
@@ -2332,7 +2340,7 @@ summary:hover {
 
 [zonaCSS="administracion/reservas/buscador"] .selectorRango {
     border-radius: 12px;
-    background-color: #696969;
+    /* background-color: #696969; */
     user-select: none;
     -webkit-user-select: none;
     padding: 4px;
@@ -2341,6 +2349,7 @@ summary:hover {
     grid-template-rows: 1fr;
     grid-column-gap: 4px;
     grid-row-gap: 4px;
+    border: 1px solid rgb(0 0 0 / 0.34);
 }
 
 [zonaCSS="administracion/reservas/buscador"] .selectorRangoOpcion {
@@ -2389,12 +2398,12 @@ summary:hover {
 }
 
 [zonaCSS="administracion/reservas/buscador"] .adminsitracionBloqueSelecionDias {
-    display: flex;
+    display: grid;
     flex-direction: row;
-    align-content: center;
-    justify-content: center;
     align-items: stretch;
     gap: 4px;
+    grid-template-areas: ". .";
+    align-content: center;
 }
 
 [zonaCSS="/alojamiento"] .adminsitracionBloqueSelecionDias {
@@ -2408,7 +2417,9 @@ summary:hover {
 
 @media screen and (max-width: 1000px) {
     [zonaCSS="administracion/reservas/buscador"] .adminsitracionReservasBuscador {
-        flex-direction: column;
+        grid-template-areas:
+            "."
+            "f";
     }
 
     [zonaCSS="administracion/reservas/buscador"] .adminsitracionBloqueSelecionDias {
@@ -2417,34 +2428,6 @@ summary:hover {
         grid-template-rows: 1fr;
         grid-gap: 6px;
     }
-}
-
-.gridColumnas8 {
-    grid-template-columns: auto auto auto auto auto auto auto auto;
-}
-
-.gridColumnas7 {
-    grid-template-columns: auto auto auto auto auto auto auto;
-}
-
-.gridColumnas6 {
-    grid-template-columns: auto auto auto auto auto auto;
-}
-
-.gridColumnas5 {
-    grid-template-columns: auto auto auto auto auto;
-}
-
-.gridColumnas4 {
-    grid-template-columns: auto auto auto auto;
-}
-
-.gridColumnas3 {
-    grid-template-columns: auto auto auto;
-}
-
-.gridColumnas2 {
-    grid-template-columns: auto auto;
 }
 
 .administracionGridReservas {
@@ -2460,20 +2443,32 @@ summary:hover {
     cursor: default;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-
     overflow: hidden;
 }
 
 
 [contenedor="filtrosOrden"] {
-    display: none;
-    flex-direction: row;
-
+    display: grid;
+    justify-items: end;
+    grid-template-rows: 0fr;
+    transition: all 250ms linear;
+    overflow: hidden;
 }
 
+[contenedor="filtrosOrden"]>div {
+    overflow: hidden;
+}
+
+[contenedor="tarjetas"] {
+    display: none;
+}
+
+
 @media (max-width: 1300px) {
-    [gridUID="gridReservas"] {
-        grid-template-columns: auto auto auto auto auto;
+
+
+    [zonaCSS="administracion/reservas/buscador"] [gridUID="gridBuscadorReservas"] {
+        grid-template-columns: auto auto auto auto auto !important;
     }
 
     [zonaCSS="administracion/reservas/buscador"] [nombreColumna="nombreCompleto"],
@@ -2486,56 +2481,204 @@ summary:hover {
     }
 
     [zonaCSS="administracion/reservas/buscador"] [contenedor="filtrosOrden"] {
-        display: flex
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
     }
 
-    [zonaCSS="administracion/reservas/buscador"] [contenedor="resultados"] {
-        gap: 6px;
+
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] {
+        grid-template-columns: auto auto auto auto !important;
     }
 
-    [gridUID="gridClientes"] {
-        grid-template-columns: auto auto auto auto auto;
-    }
-
-    [zonaCSS="administracion/clientes/buscador"] [nombreColumna="mail"],
-    [zonaCSS="administracion/clientes/buscador"] [celdaIDV="mail"],
-    [zonaCSS="administracion/clientes/buscador"] [nombreColumna="telefono"],
-    [zonaCSS="administracion/clientes/buscador"] [celdaIDV="telefono"] {
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="pasaporte"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="pasaporte"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="telefono"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="telefono"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="mail"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="mail"] {
         display: none
     }
 
-
-    [gridUID="gridUsuarios"] {
-        grid-template-columns: auto auto auto auto auto;
+    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
     }
 
-    [zonaCSS="administracion/usuarios/buscador"] [nombreColumna="mail"],
-    [zonaCSS="administracion/usuarios/buscador"] [celdaIDV="mail"],
-    [zonaCSS="administracion/usuarios/buscador"] [nombreColumna="telefono"],
-    [zonaCSS="administracion/usuarios/buscador"] [celdaIDV="telefono"] {
+
+    [zonaCSS="administracion/impuestos"] [gridUID="gridImpuestos"] {
+        grid-template-columns: auto auto auto !important;
+    }
+
+    [zonaCSS="administracion/impuestos"] [gridUID="gridImpuestos"] [nombreColumna="impuestoUID"],
+    [zonaCSS="administracion/impuestos"] [gridUID="gridImpuestos"] [celdaIDV="impuestoUID"],
+    [zonaCSS="administracion/impuestos"] [gridUID="gridImpuestos"] [nombreColumna="entidadIDV"],
+    [zonaCSS="administracion/impuestos"] [gridUID="gridImpuestos"] [celdaIDV="entidadIDV"],
+    [zonaCSS="administracion/impuestos"] [gridUID="gridImpuestos"] [nombreColumna="estadoIDV"],
+    [zonaCSS="administracion/impuestos"] [gridUID="gridImpuestos"] [celdaIDV="estadoIDV"] {
         display: none
     }
 
-
-    [gridUID="gridMisReservas"] {
-        grid-template-columns: auto auto auto auto;
+    [zonaCSS="administracion/impuestos"] [areaGrid="gridImpuestos"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
     }
 
-    [zonaCSS="/micasa"] [nombreColumna="fechaCreacion"],
-    [zonaCSS="/micasa"] [celdaIDV="fechaCreacion"],
-    [zonaCSS="/micasa"] [nombreColumna="estadoPago"],
-    [zonaCSS="/micasa"] [celdaIDV="estadoPagoIDV"] {
+
+
+    [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] {
+        grid-template-columns: auto auto auto auto !important;
+    }
+
+    [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] [nombreColumna="pasaporte"],
+    [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] [celdaIDV="pasaporte"],
+    [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] [nombreColumna="telefono"],
+    [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] [celdaIDV="telefono"],
+    [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] [nombreColumna="mail"],
+    [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] [celdaIDV="mail"] {
         display: none
     }
 
-    [zonaCSS="/micasa"] [contenedor="filtrosOrden"] {
-        display: flex
+    [zonaCSS="administracion/usuarios/buscador"] [areaGrid="gridUsuarios"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
     }
 
-    [zonaCSS="/micasa"] [contenedor="resultados"] {
-        gap: 3px;
+
+
+
+
+    [zonaCSS="/micasa/reservas"] [gridUID="miCasas_reservasDelCliente"] {
+        grid-template-columns: auto auto auto !important;
     }
 
+    [zonaCSS="/micasa/reservas"] [nombreColumna="estadoPagoIDV"],
+    [zonaCSS="/micasa/reservas"] [celdaIDV="estadoPagoIDV"],
+    [zonaCSS="/micasa/reservas"] [nombreColumna="fechaCreacion"],
+    [zonaCSS="/micasa/reservas"] [celdaIDV="fechaCreacion"],
+    [zonaCSS="/micasa/reservas"] [nombreColumna="estadoReservaIDV"],
+    [zonaCSS="/micasa/reservas"] [celdaIDV="estadoReservaIDV"] {
+        display: none
+    }
+
+    [zonaCSS="/micasa/reservas"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+}
+
+
+
+@media (max-width: 720px) {
+    [areaGrid="gridBuscadorReservas"] [gridUID="gridBuscadorReservas"] {
+        display: none;
+    }
+
+    [areaGrid="gridBuscadorReservas"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [gridUID="gridClientes"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [gridUID="gridServicios"] {
+        display: none;
+    }
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
+    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [gridUID="grisReservasDelCliente"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+    [zonaCSS="administracion/impuestos"] [areaGrid="gridImpuestos"] [gridUID="gridImpuestos"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/impuestos"] [areaGrid="gridImpuestos"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [gridUID="gridServicios"] {
+        display: none;
+    }
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
+    [zonaCSS="administracion/simulador_de_precios"] [areaGrid="gridSimuladorDePrecios"] [gridUID="gridSimuladorDePrecios"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/simulador_de_precios"] [areaGrid="gridSimuladorDePrecios"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="administracion/simulador_de_precios"] [areaGrid="gridSimuladorDePrecios"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
+
+
+    [zonaCSS="administracion/usuarios/buscador"] [areaGrid="gridUsuarios"] [gridUID="gridUsuarios"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/usuarios/buscador"] [areaGrid="gridUsuarios"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+
+    [zonaCSS="/micasa/reservas"] [areaGrid="miCasas_reservasDelCliente"] [gridUID="miCasas_reservasDelCliente"] {
+        display: none;
+    }
+
+    [zonaCSS="/micasa/reservas"] [areaGrid="miCasas_reservasDelCliente"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 [zonaCSS="administracion/simuladorDePrecios/detalles"] .selectorZonas {
@@ -2545,92 +2688,6 @@ summary:hover {
     height: 100%;
 }
 
-@media (max-width: 720px) {
-    [gridUID="gridClientes"] {
-        display: none;
-    }
-
-    [gridUID="gridReservas"] {
-        display: none;
-    }
-
-    [gridUID="gridSimulaciones"] {
-        display: none;
-    }
-
-    [gridUID="gridServicios"] {
-        display: none;
-    }
-
-    [zonaCSS="/administracion/servicios"] [contenedor="filtrosOrden"] {
-        display: flex
-    }
-
-    [zonaCSS="/administracion/servicios"] [contenedor="resultados"] {
-        gap: 6px;
-    }
-
-
-    [zonaCSS="administracion/clientes/buscador"] [contenedor="resultados"] {
-        gap: 6px;
-    }
-
-    [zonaCSS="administracion/clientes/buscador"] [contenedor="filtrosOrden"] {
-        display: flex
-    }
-
-    [zonaCSS="administracion/usuarios/buscador"] [contenedor="filtrosOrden"] {
-        display: flex
-    }
-
-    [zonaCSS="administracion/usuarios/buscador"] [contenedor="resultados"] {
-        gap: 6px;
-    }
-
-    [gridUID="gridUsuarios"] {
-        display: none;
-    }
-
-    [gridUID="gridReservaDelCliente"] {
-        display: none;
-    }
-
-    [zonaCSS="administracion/clientes/detalles"] [contenedor="resultados"] {
-        gap: 6px;
-    }
-
-    [zonaCSS="administracion/clientes/detalles"] [contenedor="filtrosOrden"] {
-        display: flex
-    }
-
-    [gridUID="gridImpuestos"] {
-        display: none;
-    }
-
-    [zonaCSS="administracion/impuestos"] [contenedor="resultados"] {
-        gap: 6px;
-    }
-
-    [zonaCSS="administracion/impuestos"] [contenedor="filtrosOrden"] {
-        display: flex
-    }
-
-
-    [gridUID="gridMisReservas"] {
-        display: none;
-    }
-
-    [zonaCSS="/micasa"] [contenedor="resultados"] {
-        gap: 6px;
-    }
-
-
-}
-
-/*
-.administracionGridReservas:nth-of-type(2) {
-}
-*/
 .administracionGridUsuarios {
     background-color: rgba(255, 255, 255, 0.3);
     display: grid;
@@ -2808,7 +2865,7 @@ summary:hover {
     overflow: hidden;
 }
 
-.adminitracionReservasFila {
+.administracionReservasFila {
     display: contents;
     text-decoration: none;
     color: black;
@@ -2816,7 +2873,7 @@ summary:hover {
     cursor: default;
 }
 
-.adminitracionReservasFila:hover>div {
+.administracionReservasFila:hover>div {
     background-color: #0040ff;
     color: white;
     /*transition: all 250ms linear;*/
@@ -2831,14 +2888,11 @@ summary:hover {
     cursor: default;
     border-radius: 12px;
     -webkit-user-select: none;
-    margin: 0px;
-    padding: 4px;
-    padding-right: 4px;
     justify-content: center;
     flex-wrap: nowrap;
     flex-direction: row;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
 }
 
 .numeroPaginaElemento {
@@ -2981,6 +3035,13 @@ summary:hover {
     flex-wrap: nowrap;
     align-items: center;
 }
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 0.4fr;
+   gap: 6px;
+}
+
 
 @media screen and (max-width: 920px) {
     [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
@@ -3234,7 +3295,7 @@ summary:hover {
     padding: 8px;
 }
 
-[zonaCSS="/micasa"] .adminitracionReservasDetallesBloqueApartamento {
+[zonaCSS="/micasa"] .administracionReservasDetallesBloqueApartamento {
     /*   background: rgb(255 255 255 / 0.5); */
     margin: 0px;
     display: block;
@@ -3253,7 +3314,7 @@ summary:hover {
     gap: 4px;
 }
 
-[ui="reservaUI"] .adminitracionReservasDetallesBloqueApartamento {
+[ui="reservaUI"] .administracionReservasDetallesBloqueApartamento {
     /*   background: rgb(255 255 255 / 0.5); */
     margin: 0px;
     display: block;
@@ -3272,16 +3333,6 @@ summary:hover {
     gap: 6px;
 }
 
-[zonaCSS="/micasa"] .administracionReservasDetallesTituloApartamento {
-    margin: 0px;
-    padding-left: 10px;
-    font-weight: bold;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    /* margin-bottom: 4px; */
-    border-radius: 7px;
-    cursor: default;
-}
 
 
 [zonaCSS="/micasa"] .apartamentoTituloUIInerte {
@@ -3295,11 +3346,11 @@ summary:hover {
     cursor: default;
 }
 
-[ui="reservaUI"] .administracionReservasDetallesTituloApartamento:hover {
+[ui="reservaUI"] .tituloApartamento:hover {
     background: rgba(0, 0, 0, 0.1);
 }
 
-[ui="reservaUI"] .administracionReservasDetallesTituloApartamento {
+[ui="reservaUI"] .tituloApartamento, .tituloApartamento_noSel {
     padding: 10px;
     font-weight: bold;
     /* margin-bottom: 4px; */
@@ -3307,7 +3358,7 @@ summary:hover {
     cursor: default;
 }
 
-[zonaCSS="/micasa"] .adminitracionReservasDetallesBloqueHabitacion {
+[zonaCSS="/micasa"] .administracionReservasDetallesBloqueHabitacion {
     overflow: hidden;
     background: #00000014;
     /* margin: 4px; */
@@ -3322,7 +3373,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[ui="reservaUI"] .adminitracionReservasDetallesBloqueHabitacion {
+[ui="reservaUI"] .administracionReservasDetallesBloqueHabitacion {
     overflow: hidden;
     background: #00000014;
     /* margin: 4px; */
@@ -3336,16 +3387,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[zonaCSS="/micasa"] .adminitracionReservasDetallesTituloHabitacion {
-    /* background: yellowgreen;*/
-    padding: 6px;
-    border-radius: 7px;
-    font-weight: bold;
-    padding-left: 10px;
-    user-select: none;
-    cursor: default;
-    color: rgb(62, 62, 62);
-}
+
 
 [zonaCSS="/micasa"] .habitacionUIInerte {
     /* background: yellowgreen;*/
@@ -3358,22 +3400,21 @@ summary:hover {
     color: rgb(62, 62, 62);
 }
 
-[ui="reservaUI"] .adminitracionReservasDetallesTituloHabitacion {
+[ui="reservaUI"] .tituloHabitacion, [ui="reservaUI"] .tituloHabitacion_noSel {
     /* background: yellowgreen;*/
     padding: 10px;
     border-radius: 7px;
     font-weight: bold;
-    user-select: none;
     cursor: default;
     color: rgb(62, 62, 62);
 }
 
-[ui="reservaUI"] .adminitracionReservasDetallesTituloHabitacion:hover {
+[ui="reservaUI"] .tituloHabitacion:hover {
     background: rgba(0, 0, 0, 0.1);
     color: black;
 }
 
-[zonaCSS="/micasa"] .adminitracionReservasDetallesTituloTipoCama {
+[zonaCSS="/micasa"] .administracionReservasDetallesTituloTipoCama {
     background: rgba(0, 0, 0, 0.2);
     margin: 0px;
     padding: 4px;
@@ -3382,7 +3423,7 @@ summary:hover {
     cursor: default;
 }
 
-[ui="reservaUI"] .adminitracionReservasDetallesTituloTipoCama {
+[ui="reservaUI"] .administfcomportamientoBotonracionReservasDetallesTituloTipoCama {
     background: rgba(0, 0, 0, 0.2);
     user-select: none;
     cursor: default;
@@ -3390,7 +3431,7 @@ summary:hover {
 
 
 
-[ui="reservaUI"] .adminitracionReservasDetallesBloquePernoctantes {
+[ui="reservaUI"] .administracionReservasDetallesBloquePernoctantes {
     user-select: none;
     -webkit-user-select: none;
     padding: 10px;
@@ -3412,7 +3453,7 @@ summary:hover {
 }
 
 
-[ui="reservaUI"] .adminitracionReservasDetallesBloquePernoctantesNoAlojado {
+[ui="reservaUI"] .administracionReservasDetallesBloquePernoctantesNoAlojado {
     background: rgba(0, 0, 0, 0.139);
     user-select: none;
     padding: 10px;
@@ -3441,7 +3482,7 @@ summary:hover {
     gap: 4px
 }
 
-[ui="reservaUI"] .adminitracionReservasDetallesBloquePernoctantesNoAlojado:hover {
+[ui="reservaUI"] .administracionReservasDetallesBloquePernoctantesNoAlojado:hover {
     background-color: rgba(1, 1, 1, 0.3);
 }
 
@@ -3470,7 +3511,7 @@ summary:hover {
     background: #0026f0;
 }
 
-[ui="reservaUI"] .adminitracionReservasDetallesNombrePernoctante {
+[ui="reservaUI"] .administracionReservasDetallesNombrePernoctante {
     font-weight: bold;
 }
 
@@ -3655,10 +3696,11 @@ summary:hover {
     display: grid;
     grid-template-columns: 1fr 7fr;
     grid-auto-rows: minmax(auto, auto);
-    padding: 8px;
     justify-items: stretch;
     justify-content: center;
     align-content: center;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 [zonaCSS="/micasa"] .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
@@ -3686,7 +3728,7 @@ summary:hover {
     }
 }
 
-.adminitracionReservasDetallesBloquePernoctantes:hover {
+.administracionReservasDetallesBloquePernoctantes:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
@@ -3905,7 +3947,7 @@ summary:hover {
 
 .reservaDetallesCambioPernoctante {
     background: #4700ff;
-    padding: 4px;
+    padding: 14px;
     text-align: center;
     font-weight: bold;
     border-radius: 7px;
@@ -10744,12 +10786,6 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 6px;
 }
 
-[ui="reservaUI"] .administracion_reservas_detallesReserva_servicios_contenedor {
-    display: flex;
-    gap: 6px;
-    flex-direction: column;
-    padding: 6px;
-}
 
 [zonaCSS="administracion/simuladorDePrecios/detalles"] .contenedorServicios {
     display: flex;
@@ -10757,12 +10793,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
 }
 
-[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorListaEnlacesDePago {
-    display: flex;
-    gap: 6px;
-    flex-direction: column;
-    align-items: stretch;
-}
+
 
 [zonaCSS="administracion/simuladorDePrecios/detalles"] .listaServicios {
     display: flex;
@@ -11102,7 +11133,7 @@ grid-template-columns: 0.5fr 1.5fr;
     gap: 4px;
 }
 
-.adminitracion_reservas_detallesReserva_contenedorInfo {
+.administracion_reservas_detallesReserva_contenedorInfo {
     display: flex;
     padding: 0px;
     gap: 4px;
@@ -11583,7 +11614,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoIngreso {
-    text-align: center;
+    text-align: justify;
     display: flex;
     padding: 16px;
     background: rgba(255, 255, 255, 0.3);
@@ -12247,7 +12278,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-wrap: wrap;
 }
 
-[zonaCSS="administracion/situacion"] .adminitracion_situacion_portada_contenedorFecha {
+[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorFecha {
     display: flex;
     justify-content: center;
     font-weight: bold;
@@ -12344,12 +12375,12 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS="administracion/reservas/buscador"] .administracion_reservas_contenedorBotonesGlobales {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
     gap: 6px;
+    grid-template-areas: ". . .";
 }
 
-[zonaCSS="administracion/reservas/buscador"] .adminitracion_reservas_contenedorBotonesGlobales {
+[zonaCSS="administracion/reservas/buscador"] .administracion_reservas_contenedorBotonesGlobales {
     color: black;
     text-decoration: none;
     outline: none;
@@ -12357,16 +12388,21 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 10px;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.3);
-    width: fit-content;
+    /* width: fit-content; */
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     transition: all 500ms;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
 }
 
-.adminitracion_reservas_contenedorBotonesGlobales:hover {
+.administracion_reservas_contenedorBotonesGlobales:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
@@ -14997,6 +15033,8 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 }
 
+
+
 .flexVertical {
     display: flex;
     flex-direction: column;
@@ -15035,6 +15073,10 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: flex-start;
 }
 
+.flexInteriorExprandido {
+    align-items: stretch;
+}
+
 
 .contenidoAdvertenciaInmersiva {
     max-width: 1280px;
@@ -15047,7 +15089,6 @@ grid-template-columns: 0.5fr 1.5fr;
     padding-top: 80px;
     align-items: stretch;
 }
-
 
 .width100 .borderRadius6 {
     border-radius: 6px;
@@ -15077,6 +15118,23 @@ grid-template-columns: 0.5fr 1.5fr;
     border-radius: 16px;
 }
 
+.borderRadius18 {
+    border-radius: 18px;
+}
+
+.borderRadius20 {
+    border-radius: 20px;
+}
+
+
+.borderRadius22 {
+    border-radius: 22px;
+}
+
+
+.borderRadius24 {
+    border-radius: 24px;
+}
 .backgroundGrey1 {
     background: rgba(0, 0, 0, 0.1);
 }
@@ -15088,11 +15146,16 @@ grid-template-columns: 0.5fr 1.5fr;
     border: none;
     appearance: none;
     background: rgb(255 255 255 / 0.4);
-
 }
+
+
 
 .backgroundWhite5 {
     background: rgba(255, 255, 255, 0.5);
+}
+
+.backgroundWhite3 {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .maxWidth1280px {
@@ -15121,10 +15184,12 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgba(0, 0, 0, 0.2);
 }
 
+
 [contenedor=financiero] .comportamientoBotonApartamento:hover {
     transition: all 500ms;
     background: rgba(0, 0, 0, 0.1);
 }
+
 
 .padding6 {
     padding: 6px;
@@ -15175,9 +15240,9 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 .botonV1 {
-    padding: 8px;
+    padding: 14px;
+    border-radius: 16px;
     background: rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -15190,6 +15255,20 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
+.botonV4 {
+    padding: 8px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.1);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
 
 .botonV2 {
     padding: 8px;
@@ -15203,6 +15282,56 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
     justify-content: center;
     align-items: center;
+}
+.botonV3 {
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.1);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+.botonV1BlancoIzquierda,
+.botonV1BlancoIzquierda_noSeleccionable {
+    padding: 14px;
+    border-radius: 16px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    background: rgb(255 255 255 / 0.3);
+}
+
+.areaTexto {
+    padding: 14px;
+    border-radius: 16px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    display: flex;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: rgb(255 255 255 / 0.3);
+    resize: vertical;
+    field-sizing: content;
+    min-height: 350px;
+}
+
+
+
+.botonV1BlancoIzquierda:hover {
+    background: rgb(255 255 255 / 0.8);
 }
 
 
@@ -15219,7 +15348,6 @@ grid-template-columns: 0.5fr 1.5fr;
 .noSelecionable {
     user-select: none;
     -webkit-user-select: none;
-
 }
 
 .ratonDefault {
@@ -15269,6 +15397,23 @@ grid-template-columns: 0.5fr 1.5fr;
 
 .contenedorOculto {
     display: none;
+}
+
+
+.tarjetaGris, .tarjetaGris_seleccioanble {
+    background: rgb(255 255 255 / 0.5);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+
+.tarjetaGris_seleccioanble:hover {
+    background: rgb(0 0 0 / 0.1);
+    transition: background 250ms linear;
+  
 }
 
 [ui="reservaUI"] .contenedorPendiente {
@@ -15401,13 +15546,20 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
 }
 
-.areaSinDecoracionPredeterminada {
+.areaSinDecoracionPredeterminada,
+a {
     text-decoration: none;
     color: black;
 }
 
 .textDerecha {
     text-align: right;
+}
+
+.tituloGris {
+    font-size: 13px;
+    font-weight: bold;
+    color: grey
 }
 
 
@@ -15507,10 +15659,26 @@ select {
 }
 
 .efectoAparicion {
-    scale: 1;
-    transition: scale 250ms ease-in-out;
-
+    transition: all 500ms ease-in-out;
+    display: grid;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+    opacity: 1;
     @starting-style {
-        scale: 0;
+        grid-template-rows: 0fr;
+        padding: 0px;
+        opacity: 0;
     }
+}
+
+.efectoAparicion>div {
+    overflow: hidden;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid3Columnas {
+    grid-template-areas: ". . . ";
 }

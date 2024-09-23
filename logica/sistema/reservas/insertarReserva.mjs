@@ -158,6 +158,7 @@ export const insertarReserva = async (reserva) => {
             const servicio = await obtenerServicioPorServicioUID(servicioUID)
             const nombreServicico = servicio.nombre
             const contenedorServicio = servicio.contenedor
+            contenedorServicio.servicioUID = servicioUID
             await insertarServicioPorReservaUID({
                 reservaUID,
                 nombre: nombreServicico,

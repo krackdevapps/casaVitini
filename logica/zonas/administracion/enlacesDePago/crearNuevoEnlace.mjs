@@ -78,7 +78,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             throw new Error(error);
         }
         if (estadoReserva !== "confirmada") {
-            const error = "No se puede generar un enlace de pago de una reserva que no está confirmada, porque entonces el cliente podría pagar una reserva cuyo alojamiento no está garantizado. Reservado sin pagar.";
+            const error = "No se puede generar un enlace de pago de una reserva que no está confirmada, porque entonces el cliente podría pagar una reserva cuyo alojamiento no está garantizado.";
             throw new Error(error);
         }
         const generarCadenaAleatoria = (longitud) => {

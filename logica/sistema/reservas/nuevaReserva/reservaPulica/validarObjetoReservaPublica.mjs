@@ -82,7 +82,11 @@ export const validarObjetoReservaPublica = async (data) => {
                     'string.empty': '{{#label}} no puede estar vacío',
                     'any.required': '{{#label}} es una llave obligatoria'
                 }),
-            camaSeleccionada: camaSeleccionada.required()
+            camaSeleccionada: camaSeleccionada.optional().messages({
+                'string.base': '{{#label}} debe ser una cadena de texto',
+                'string.empty': '{{#label}} no puede estar vacío',
+                'any.required': '{{#key}} es una llave obligatoria 111'
+            }),
         })
 
         const apartamentoSchemaConHabitacion = Joi.object({
@@ -487,7 +491,11 @@ export const validarObjetoReservaPublica = async (data) => {
                     const habitacionUID = habitacionesEstructura[habitacionIDV]
                     const habitacionUI = habitacionComoEntidad.habitacionUI
 
-                    const camaUI_entrada = contenedor.camaSeleccionada.camaUI
+                    if (!contenedor?.camaSeleccionada?.camaIDV) {
+                        const m = `Por favor selecciona el tipo de cama que deseas en la ${habitacionUI} del ${apartamentoUI}`
+                        throw new Error(m)
+                        
+                    }
 
                     const camaIDV = validadoresCompartidos.tipos.cadena({
                         string: contenedor?.camaSeleccionada?.camaIDV,
@@ -500,7 +508,9 @@ export const validarObjetoReservaPublica = async (data) => {
                         habitacionUID: habitacionUID,
                         camaIDV: camaIDV,
                     })
+
                     if (!camaPorHabitacion) {
+                        const camaUI_entrada = contenedor.camaSeleccionada.camaUI
                         const error = `No existe la ${camaUI_entrada}, dentro de ${habitacionUI} del ${apartamentoUI} por que no se puede encontrar su identificador visual: ${camaIDV}`
                         throw new Error(error)
                     }

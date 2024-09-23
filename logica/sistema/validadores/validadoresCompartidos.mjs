@@ -500,9 +500,7 @@ export const validadoresCompartidos = {
                 throw new Error(mensaje)
             }
             if (limpiezaEspaciosAlrededor === "si") {
-                string = string
-                    .replace(/\s+/g, ' ')
-                    .trim()
+                string = string.trim()
             }
             if (sePermiteVacio === "si" && string === "") {
                 return string
@@ -541,6 +539,18 @@ export const validadoresCompartidos = {
             } else if (filtro === "strictoConEspacios") {
                 try {
                     const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA]+$/g;
+
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /`
+                        throw new Error(mensaje)
+                    }
+
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
+            }else if (filtro === "strictoConEspaciosConSaltosDeLinea") {
+                try {
+                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA\r\n]+$/g;
 
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /`
