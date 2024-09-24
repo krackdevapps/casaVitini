@@ -169,7 +169,9 @@ const casaVitini = {
                             contenedorOrigenIDV: "[calendario=entrada]",
                             instanciaUID_contenedorFechas,
                             rangoIDV: "inicioRango",
-                            metodoSelectorDia: null
+                            metodoSelectorDia: null,
+                            tituloCalendario: "Seleciona una fecha de inicio de rango para la búsqueda"
+
                         })
                     })
 
@@ -196,7 +198,8 @@ const casaVitini = {
                             contenedorOrigenIDV: "[calendario=salida]",
                             instanciaUID_contenedorFechas,
                             rangoIDV: "finalRango",
-                            metodoSelectorDia: null
+                            metodoSelectorDia: null,
+                            tituloCalendario: "Seleciona una fecha de fin de rango para la búsqueda"
                         })
                     })
                     bloqueFechaSalida.setAttribute("paralizadorevento", "ocultadorCalendarios")
@@ -1718,7 +1721,6 @@ const casaVitini = {
                         return respuestaServidor
                     }
                 },
-
             },
             detallesApartamento: {
                 arranque: async function (apartamentoIDV) {
@@ -1750,8 +1752,14 @@ const casaVitini = {
                         const horaSalida = detallesApartamento.horaSalida
                         detallesApartamento.apartamentoIDV = apartamentoIDV
                         const calendariosSincronizados = detallesApartamento?.calendariosSincronizados || {}
-                        const apartamentoUI_ = casaVitini.administracion.situacion.componentesUI.tarjetaApartamentoUI(detallesApartamento)
-                        marcoElastico.appendChild(apartamentoUI_)
+                        const apartamentoUI = casaVitini.administracion.situacion.componentesUI.tarjetaApartamentoUI(detallesApartamento)
+                        const selectorTituloApartamentoUI = apartamentoUI.querySelector("[componente=titulo]")
+                        selectorTituloApartamentoUI.classList.remove("comportamientoBoton")
+                        selectorTituloApartamentoUI.removeEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                        selectorTituloApartamentoUI.removeAttribute("vista")
+                        selectorTituloApartamentoUI.removeAttribute("href")
+
+                        marcoElastico.appendChild(apartamentoUI)
 
                         const espacioEventosAirbnb = document.createElement("div")
                         espacioEventosAirbnb.classList.add("espacioEventosAirbnb")
@@ -1799,157 +1807,11 @@ const casaVitini = {
                         }
                         const eventosAirbnb = calendariosSincronizados.airbnb.eventos
                         for (const detallesDelEvento of eventosAirbnb) {
-                            const fechaInicio_ISO = detallesDelEvento.fechaInicio
-                            const fechaFinal_ISO = detallesDelEvento.fechaFinal
-                            const uid = detallesDelEvento.uid
-                            const descripcion = detallesDelEvento?.descripcion || null
-                            const nombreEvento = detallesDelEvento.nombreEvento
-                            const fechaInicioArray = fechaInicio_ISO.split("-")
-                            const fechaInicio_Humano = `${fechaInicioArray[2]}/${fechaInicioArray[1]}/${fechaInicioArray[0]}`
-                            const fechaFinalArray = fechaFinal_ISO.split("-")
-                            const fechaFinal_Humano = `${fechaFinalArray[2]}/${fechaFinalArray[1]}/${fechaFinalArray[0]}`
-                            let urlEvento
-                            if (descripcion) {
-                                const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
-                                const match = descripcion.match(regex);
-                                urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
-                            }
-                            const contenedorEvento = document.createElement("div")
-                            contenedorEvento.classList.add("contenedorEvento")
-                            const contenedorTitulo = document.createElement("div")
-                            contenedorTitulo.classList.add("contenedorTitulo")
-                            const tituloPlataformaOrigen = document.createElement("p")
-                            tituloPlataformaOrigen.classList.add("tituloPlataformaOrigen")
-                            tituloPlataformaOrigen.innerText = "Evento de Airbnb"
-                            contenedorTitulo.appendChild(tituloPlataformaOrigen)
-                            const descripcionEvento = document.createElement("p")
-                            descripcionEvento.classList.add("descripcionEvento")
-                            descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb.Para ver los detalles de este evento pulsa en el botón inferior que le permitirá ir directamente a los detalles del evento en la web de Airbnb."
-                            contenedorTitulo.appendChild(descripcionEvento)
-                            contenedorEvento.appendChild(contenedorTitulo)
-                            const contenedorFechas = document.createElement("div")
-                            contenedorFechas.classList.add("contenedorFechas")
-                            const contenedorFechaInicio = document.createElement("div")
-                            contenedorFechaInicio.classList.add("contenedorFecha_")
-                            const tituloFechaInicio = document.createElement("p")
-                            tituloFechaInicio.classList.add("tituloFecha")
-                            tituloFechaInicio.innerText = "Fecha de inicio"
-                            const fechaInicioUI = document.createElement("p")
-                            fechaInicioUI.classList.add("fechaDatoUI")
-                            fechaInicioUI.innerText = fechaInicio_Humano
-                            contenedorFechaInicio.appendChild(tituloFechaInicio)
-                            contenedorFechaInicio.appendChild(fechaInicioUI)
-                            contenedorFechas.appendChild(contenedorFechaInicio)
-                            const contenedorFechaFin = document.createElement("div")
-                            contenedorFechaFin.classList.add("contenedorFecha_")
-                            const tituloFechaFin = document.createElement("p")
-                            tituloFechaFin.classList.add("tituloFecha")
-                            tituloFechaFin.innerText = "Fecha fin"
-                            const fechaFinUI = document.createElement("p")
-                            fechaFinUI.classList.add("fechaDatoUI")
-                            fechaFinUI.innerText = fechaFinal_Humano
-                            contenedorFechaFin.appendChild(tituloFechaFin)
-                            contenedorFechaFin.appendChild(fechaFinUI)
-                            contenedorFechas.appendChild(contenedorFechaFin)
-                            contenedorEvento.appendChild(contenedorFechas)
-                            if (descripcion) {
-                                const botonIrAlEvento = document.createElement("a")
-                                botonIrAlEvento.classList.add("botonIrAlEvento")
-                                botonIrAlEvento.href = urlEvento
-                                botonIrAlEvento.innerText = "Abrir evento. (Se irá a la web de Airbnb)"
-                                contenedorEvento.appendChild(botonIrAlEvento)
-                            } else {
-                                const botonIrAlEvento = document.createElement("div")
-                                botonIrAlEvento.classList.add("sinInfo")
-                                botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento.Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma.Para ver más información de este evento por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
-                                contenedorEvento.appendChild(botonIrAlEvento)
-                            }
+                            const contenedorEvento = casaVitini.administracion.situacion.componentesUI.tarjetaEventoUI(detallesDelEvento)
                             espacioEventosAirbnb.appendChild(contenedorEvento)
                         }
                         marcoElastico.appendChild(espacioEventosAirbnb)
-                        /*
-                                            for (const [habitacionIDV, detallesHabitacion] of Object.entries(habitaciones)) {
-                         
-                                                let habitacionUI = detallesHabitacion.habitacionUI
-                                                let pernoctantes = detallesHabitacion.pernoctantes
-                         
-                                                let habitacionBloque = document.createElement("div")
-                                                habitacionBloque.classList.add("situacionDetallesHabitacionBloque")
-                         
-                         
-                                                let tituloHabitacion = document.createElement("p")
-                                                tituloHabitacion.classList.add("situacionDetallestituloHabitacion")
-                                                tituloHabitacion.innerText = habitacionUI
-                                                habitacionBloque.appendChild(tituloHabitacion)
-                         
-                                                if (pernoctantes) {
-                                                    for (const pernoctante of pernoctantes) {
-                                                        let nombreCompleto = pernoctante.nombreCompleto
-                                                        let tipoCliente = pernoctante.tipoPernoctante
-                                                        let uidCliente = pernoctante.uidCliente
-                         
-                                                        let marcoPernoctante = document.createElement("div")
-                                                        marcoPernoctante.classList.add("situacionDetallesMarcoPernoctante")
-                                                        marcoPernoctante.setAttribute("clienteUID", uidCliente)
-                                                        habitacionBloque.appendChild(marcoPernoctante)
-                         
-                         
-                                                        let nombreCompletoPernoctante = document.createElement("p")
-                                                        nombreCompletoPernoctante.classList.add("situacionDetallesNombreCompletoPernoctante")
-                                                        nombreCompletoPernoctante.innerText = nombreCompleto
-                                                        habitacionBloque.appendChild(nombreCompletoPernoctante)
-                         
-                         
-                                                        let tipoClientePernoctante = document.createElement("p")
-                                                        tipoClientePernoctante.classList.add("situacionDetallesTipoClientePernoctante")
-                                                        tipoClientePernoctante.innerText = tipoCliente
-                                                        habitacionBloque.appendChild(tipoClientePernoctante)
-                         
-                                                    }
-                                                }
-                         
-                         
-                         
-                         
-                         
-                                                espacioHabitaciones.appendChild(habitacionBloque)
-                         
-                         
-                         
-                         
-                         
-                         
-                         
-                                            }
-                                            detallesReserva.appendChild(espacioHabitaciones)*/
-                        // marcoElastico.appendChild(detallesReserva)
-                        const calenadariosSincronizados = detallesApartamento.calendariosSincronizados
-                        const eventosAirbnb_ = calenadariosSincronizados.airbnb.eventos
-                        for (const detallesDelEvento of eventosAirbnb_) {
-                            /*
-                                {
-                            "fechaFinal": "2024-05-05",
-                            "fechaInicio": "2024-03-31",
-                            "uid": "1418fb94e984-26727370fa33ec474081b9bde4f2d585@airbnb.com",
-                            "descripcion": "Reservation URL: https://www.airbnb.com/hosting/reservations/details/HMRS2MPY3K\nPhone Number (Last 4 Digits): 4118",
-                            "nombreEvento": "Reserved"
-                                }
-                            */
-                            const fechaInicio_ISO = detallesDelEvento.fechaInicio
-                            const fechaFinal_ISO = detallesDelEvento.fechaFinal
-                            const uid = detallesDelEvento.uid
-                            const descripcion = detallesDelEvento?.descripcion || null
-                            const nombreEvento = detallesDelEvento.nombreEvento
-                            const fechaInicioArray = fechaInicio_ISO.split("-")
-                            const fechaInicio_Humano = `${fechaInicioArray[2]}/${fechaInicioArray[1]}/${fechaInicioArray[0]}`
-                            const fechaFinalArray = fechaFinal_ISO.split("-")
-                            const fechaFinal_Humano = `${fechaFinalArray[2]}/${fechaFinalArray[1]}/${fechaFinalArray[0]}`
-                            if (descripcion) {
-                                const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
-                                const match = descripcion.match(regex);
-                                const urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
-                            }
-                        }
+
                     }
                 }
             },
@@ -1960,7 +1822,7 @@ const casaVitini = {
                     const estadoApartamento = data.estadoApartamento
                     const apartamentoUI = data.apartamentoUI
                     const zonaIDV = data.zonaIDV
-                    console.log("estadoApartamtno", estadoApartamento)
+
                     const dic = {
                         estadoApartamento: {
                             disponible: "Disponible",
@@ -1975,15 +1837,30 @@ const casaVitini = {
                             privada: "Privada (Solo administración)",
                             global: "Global (Todo)",
                             publica: "Pública (Solo reserva pública)"
-
                         }
                     }
 
-
                     const apartamentoGUI = document.createElement("div")
-                    apartamentoGUI.classList.add("situacionApartamentoUI")
+                    apartamentoGUI.classList.add(
+                        "flexVertical",
+                        "padding6",
+                        "gap6",
+                        "backgroundWhite3",
+                        "borderRadius20"
+                    )
+
                     const apartamentoTitulo = document.createElement("a")
-                    apartamentoTitulo.classList.add("situacionApartamentoTitutlo")
+                    apartamentoTitulo.setAttribute("componente", "titulo")
+                    apartamentoTitulo.classList.add(
+                        "flexVertical",
+                        "padding",
+                        "borderRadius16",
+                        "padding14",
+                        "comportamientoBoton",
+                        "negrita",
+                        "ratonDefault"
+                    )
+
                     apartamentoTitulo.innerText = apartamentoUI
                     apartamentoTitulo.setAttribute("vista", `/administracion/situacion/alojamiento:${apartamentoIDV}`)
                     apartamentoTitulo.setAttribute("href", `/administracion/situacion/alojamiento:${apartamentoIDV}`)
@@ -2021,88 +1898,6 @@ const casaVitini = {
                     })
                     contenedorZonaPublicacion.querySelector("[data=dataUI]").style.fontWeight = "bold"
                     contenedorInfoGlobal.appendChild(contenedorZonaPublicacion)
-
-
-                    // for (const detallesReservas of reservas) {
-                    //     detallesReservas.horaEntrada = horaEntrada
-                    //     detallesReservas.horaSalida = horaSalida
-                    //     const contenedorReserva = this.portada.contenedoReservaUI(detallesReservas)
-                    //     apartamentoGUI.appendChild(contenedorReserva)
-
-                    // }
-                    // if (calendariosSincronizados.airbnb) {
-                    //     const eventosAirbnb = calendariosSincronizados.airbnb.eventos
-                    //     for (const detallesDelEvento of eventosAirbnb) {
-                    //         const fechaInicio_ISO = detallesDelEvento.fechaInicio
-                    //         const fechaFinal_ISO = detallesDelEvento.fechaFinal
-                    //         const uid = detallesDelEvento.uid
-                    //         const descripcion = detallesDelEvento?.descripcion || null
-                    //         const nombreEvento = detallesDelEvento.nombreEvento
-                    //         const fechaInicioArray = fechaInicio_ISO.split("-")
-                    //         const fechaInicio_Humano = `${fechaInicioArray[2]}/${fechaInicioArray[1]}/${fechaInicioArray[0]}`
-                    //         const fechaFinalArray = fechaFinal_ISO.split("-")
-                    //         const fechaFinal_Humano = `${fechaFinalArray[2]}/${fechaFinalArray[1]}/${fechaFinalArray[0]}`
-                    //         let urlEvento
-                    //         if (descripcion) {
-                    //             const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
-                    //             const match = descripcion.match(regex);
-                    //             urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
-                    //         }
-
-                    //         // const contenedorEvento = document.createElement("div")
-                    //         // contenedorEvento.classList.add("contenedorEvento")
-                    //         // const contenedorTitulo = document.createElement("div")
-                    //         // contenedorTitulo.classList.add("contenedorTitulo")
-                    //         // const tituloPlataformaOrigen = document.createElement("p")
-                    //         // tituloPlataformaOrigen.classList.add("tituloPlataformaOrigen")
-                    //         // tituloPlataformaOrigen.innerText = "Evento de Airbnb"
-                    //         // contenedorTitulo.appendChild(tituloPlataformaOrigen)
-                    //         // const descripcionEvento = document.createElement("p")
-                    //         // descripcionEvento.classList.add("descripcionEvento")
-                    //         // descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb.Para ver los detalles de este evento, pulsa en el botón inferior que le permitirá ir directamente a los detalles del evento en la web de Airbnb."
-                    //         // contenedorTitulo.appendChild(descripcionEvento)
-                    //         // contenedorEvento.appendChild(contenedorTitulo)
-                    //         // const contenedorFechas = document.createElement("div")
-                    //         // contenedorFechas.classList.add("contenedorFechas")
-                    //         // const contenedorFechaInicio = document.createElement("div")
-                    //         // contenedorFechaInicio.classList.add("contenedorFecha_")
-                    //         // const tituloFechaInicio = document.createElement("p")
-                    //         // tituloFechaInicio.classList.add("tituloFecha")
-                    //         // tituloFechaInicio.innerText = "Fecha de inicio"
-                    //         // const fechaInicioUI = document.createElement("p")
-                    //         // fechaInicioUI.classList.add("fechaDatoUI")
-                    //         // fechaInicioUI.innerText = fechaInicio_Humano
-                    //         // contenedorFechaInicio.appendChild(tituloFechaInicio)
-                    //         // contenedorFechaInicio.appendChild(fechaInicioUI)
-                    //         // contenedorFechas.appendChild(contenedorFechaInicio)
-                    //         // const contenedorFechaFin = document.createElement("div")
-                    //         // contenedorFechaFin.classList.add("contenedorFecha_")
-                    //         // const tituloFechaFin = document.createElement("p")
-                    //         // tituloFechaFin.classList.add("tituloFecha")
-                    //         // tituloFechaFin.innerText = "Fecha fin"
-                    //         // const fechaFinUI = document.createElement("p")
-                    //         // fechaFinUI.classList.add("fechaDatoUI")
-                    //         // fechaFinUI.innerText = fechaFinal_Humano
-                    //         // contenedorFechaFin.appendChild(tituloFechaFin)
-                    //         // contenedorFechaFin.appendChild(fechaFinUI)
-                    //         // contenedorFechas.appendChild(contenedorFechaFin)
-                    //         // contenedorEvento.appendChild(contenedorFechas)
-                    //         // if (descripcion) {
-                    //         //     const botonIrAlEvento = document.createElement("a")
-                    //         //     botonIrAlEvento.classList.add("botonIrAlEvento")
-                    //         //     botonIrAlEvento.href = urlEvento
-                    //         //     botonIrAlEvento.innerText = "Abrir evento. (Se ira a la web de Airbnb)"
-                    //         //     contenedorEvento.appendChild(botonIrAlEvento)
-                    //         // } else {
-                    //         //     const botonIrAlEvento = document.createElement("div")
-                    //         //     botonIrAlEvento.classList.add("sinInfo")
-                    //         //     botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento.Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma.Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
-                    //         //     contenedorEvento.appendChild(botonIrAlEvento)
-                    //         // }
-                    //         const contenedorEvento = this
-                    //         apartamentoUI.appendChild(contenedorEvento)
-                    //     }
-                    // }
                     return apartamentoGUI
                 },
                 tarjetaReservaUI: (data) => {
@@ -2276,12 +2071,12 @@ const casaVitini = {
 
 
                     const tituloPlataformaOrigen = document.createElement("p")
-                    tituloPlataformaOrigen.classList.add("tituloPlataformaOrigen")
+                    //tituloPlataformaOrigen.classList.add("tituloPlataformaOrigen")
                     tituloPlataformaOrigen.innerText = "Evento de Airbnb"
                     contenedorEvento.appendChild(tituloPlataformaOrigen)
 
                     const descripcionEvento = document.createElement("p")
-                    descripcionEvento.classList.add("descripcionEvento")
+                    //descripcionEvento.classList.add("descripcionEvento")
                     descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb."
                     contenedorEvento.appendChild(descripcionEvento)
 
@@ -2344,7 +2139,7 @@ const casaVitini = {
                         contenedorEvento.appendChild(botonIrAlEvento)
                     } else {
                         const botonIrAlEvento = document.createElement("div")
-                        botonIrAlEvento.classList.add("sinInfo")
+                        // botonIrAlEvento.classList.add("sinInfo")
                         botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento.Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma.Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
                         contenedorEvento.appendChild(botonIrAlEvento)
                     }
@@ -2400,7 +2195,7 @@ const casaVitini = {
                         marcoPernoctante.setAttribute("vista", `/administracion/clientes/cliente:${clienteUID}`)
                         marcoPernoctante.setAttribute("href", `/administracion/clientes/cliente:${clienteUID}`)
                         marcoPernoctante.setAttribute("clienteUID", clienteUID)
-                        marcoPernoctante.addEventListener("click",  casaVitini.shell.navegacion.cambiarVista)
+                        marcoPernoctante.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     }
                     if (!fechaCheckIn) {
                         const tipoPernoctanteUI = document.createElement("div")
@@ -3091,7 +2886,8 @@ const casaVitini = {
                             contenedorOrigenIDV: "[calendario=entrada]",
                             instanciaUID_contenedorFechas,
                             rangoIDV: "inicioRango",
-                            metodoSelectorDia: null
+                            metodoSelectorDia: null,
+                            tituloCalendario: "Seleciona una fehca de inicio de vigencia del servicio"
                         })
                     })
 
@@ -3120,7 +2916,9 @@ const casaVitini = {
                             contenedorOrigenIDV: "[calendario=salida]",
                             instanciaUID_contenedorFechas,
                             rangoIDV: "finalRango",
-                            metodoSelectorDia: null
+                            metodoSelectorDia: null,
+                            tituloCalendario: "Seleciona una fehca de fin de vigencia del servicio"
+
                         })
                     })
 
@@ -9519,6 +9317,7 @@ const casaVitini = {
                             instanciaUID_contenedorFechas,
                             rangoIDV: "unico",
                             metodoSelectorDia: "administracion.simuladorDePrecios.componentes.metodoSelectorDias",
+                            tituloCalendario: "Selecciona la fecha de creación simulada de la reserva"
                         })
                     })
 
@@ -9632,7 +9431,15 @@ const casaVitini = {
                         metodoSelectorDia: "administracion.simuladorDePrecios.componentes.metodoSelectorDias",
                         nombreContenedor: "rangoDeSimulacion",
                         modo: "administracion",
-                        seleccionableDiaLimite: "no"
+                        seleccionableDiaLimite: "no",
+                        sobreControlConfiguracion: {
+                            configuracionInicio: {
+                                tituloCalendario: "Seleciona una fecha de entrada simulada de la reserva"
+                            },
+                            configuracionFin: {
+                                tituloCalendario: "Seleciona una fecha de salida simulada de la reserva"
+                            }
+                        }
                     })
                     contenedor.appendChild(selectorRangoSimulado)
 
@@ -12700,7 +12507,8 @@ const casaVitini = {
                         contenedorOrigenIDV: "[calendario=entrada]",
                         instanciaUID_contenedorFechas,
                         rangoIDV: "inicioRango",
-                        metodoSelectorDia: null
+                        metodoSelectorDia: null,
+                        tituloCalendario: "Selecciona la fecha de inicio del rango de vigencia de la oferta"
                     })
                 })
 
@@ -12729,7 +12537,9 @@ const casaVitini = {
                         contenedorOrigenIDV: "[calendario=salida]",
                         instanciaUID_contenedorFechas,
                         rangoIDV: "finalRango",
-                        metodoSelectorDia: null
+                        metodoSelectorDia: null,
+                        tituloCalendario: "Selecciona la fecha del fin del rango de vigencia de la oferta"
+
                     })
                 })
                 const contenedorZonaOferta = document.createElement("div")
@@ -13472,6 +13282,14 @@ const casaVitini = {
 
                         const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
                             modo: "administracion",
+                            sobreControlConfiguracion: {
+                                configuracionInicio: {
+                                    tituloCalendario: "Seleciona una fecha de inicio del rango"
+                                },
+                                configuracionFin: {
+                                    tituloCalendario: "Seleciona una fecha de fin del rango"
+                                }
+                            }
 
                         })
                         contenedor.appendChild(contenedorFechasUI)
@@ -15876,14 +15694,23 @@ const casaVitini = {
                         const fechasRangoAplicacion = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
                             nombreContenedor: "rangoComportamiento",
                             modo: "administracion",
-
+                            sobreControlConfiguracion: {
+                                configuracionInicio: {
+                                    tituloCalendario: "Seleciona una fecha de inicio del comportamiento"
+                                }
+                            }
                         })
                         contenedorTipoPorRango.appendChild(fechasRangoAplicacion);
                         //   const contenedorApartamentos = casaVitini.administracion.comportamiento_de_precios.compomentesUI.contenedorSelectorApartamento()
                         const contenedorApartamentos = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
                             textoContenedorVacio: "Añade apartamentos para determinar el comportamiento de precio.",
                             tipoDespliegue: "total",
-                            metodoPersonalizado: "comportamientoDePrecios"
+                            metodoPersonalizado: "comportamientoDePrecios",
+                            sobreControlConfiguracion: {
+                                configuracionFin: {
+                                    tituloCalendario: "Seleciona una fecha de de fin del comportamiento"
+                                }
+                            }
                         })
 
                         contenedorTipoPorRango.appendChild(contenedorApartamentos);
@@ -15909,7 +15736,14 @@ const casaVitini = {
                             //metodoSelectorDia: "null"
                             nombreContenedor: "rangoComportamiento",
                             modo: "administracion",
-
+                            sobreControlConfiguracion: {
+                                configuracionInicio: {
+                                    tituloCalendario: "Seleciona una fecha de inicio del comportamiento"
+                                },
+                                configuracionFin: {
+                                    tituloCalendario: "Seleciona una fecha de de fin del comportamiento"
+                                }
+                            }
                         })
                         contenedorTipoPorCreacion.appendChild(fechasRangoAplicacion);
                         await casaVitini.utilidades.ralentizador(1)
@@ -15924,6 +15758,14 @@ const casaVitini = {
                             //metodoSelectorDia: "null"
                             nombreContenedor: "rangoReservaCreacion",
                             modo: "administracion",
+                            sobreControlConfiguracion: {
+                                configuracionInicio: {
+                                    tituloCalendario: "Seleciona la fecha de inicio del rango donde debe de estar la fecha de creación de la reserva"
+                                },
+                                configuracionFin: {
+                                    tituloCalendario: "Seleciona una fecha de de fin del rango donde debe de estar la fecha de creación de la reserva"
+                                }
+                            }
 
                         })
                         contenedorTipoPorCreacion.appendChild(fechasRangoCreacion);
@@ -16854,7 +16696,7 @@ const casaVitini = {
                                 const tipoEntradaUITituloUI = document.createElement("div")
                                 tipoEntradaUITituloUI.classList.add("administracion_bloqueos_detallesBloqueo_contenedorFechaIndividual_titulo")
                                 tipoEntradaUITituloUI.classList.add("negrita")
-                                tipoEntradaUITituloUI.innerText = "Fecha de inicio del bloqueo"
+                                tipoEntradaUITituloUI.innerText = "Fecha de inicio del bloqueo 1"
                                 contenedorFechaInicio.appendChild(tipoEntradaUITituloUI)
                                 const entradaUI = document.createElement("div")
                                 entradaUI.classList.add("administracion_bloqueos_detallesBloqueo_contenedorFechaIndividual_fecha")
@@ -17124,115 +16966,8 @@ const casaVitini = {
                     const componente = calendario.target.closest("[calendario]")
                     casaVitini.administracion.bloqueos_temporales.detallesDelBloqueo.constructorCalendario(componente)
                 },
-                //constructorCalendario: async (boton) => {
-                //    let botonID = boton.getAttribute("componente")
-                //    const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(boton) + 20
-                //    const bloqueCalendario = document.querySelector("[componente=bloqueCalendario]")
-                //    const calendario = document.querySelector("[contenedor=calendario]")
-                //    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                //    if (botonID === "fechaEntrada") {
-                //        if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                //            bloqueCalendario.remove()
-                //            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
+              
 
-                //        }
-                //        if (calendario?.getAttribute("calendarioIO") === "salida") {
-                //            bloqueCalendario.remove()
-                //            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                //            //
-                //        }
-                //        let fechaEntrada = document.querySelector("[calendario=entrada][componente=fechaEntrada]").getAttribute("memoriaVolatil")
-                //        let resolucionCalendario
-                //        if (fechaEntrada) {
-                //            fechaEntrada = fechaEntrada.split("/")
-                //            let diaEntrada = fechaEntrada[0]
-                //            diaEntrada = Number(diaEntrada)
-                //            let mesEntrada = fechaEntrada[1]
-                //            mesEntrada = Number(mesEntrada)
-                //            let anoEntrada = fechaEntrada[2]
-                //            anoEntrada = Number(anoEntrada)
-                //            resolucionCalendario = {
-                //                tipo: "personalizado",
-                //               
-                //                ano: anoEntrada,
-                //                mes: mesEntrada
-                //            }
-                //        }
-                //        if (!fechaEntrada) {
-                //            resolucionCalendario = {
-                //                tipo: "actual",
-                //                comando: "construyeObjeto"
-                //            }
-                //        }
-                //        let metadatosCalendario = {
-                //            tipoFecha: "entrada",
-                //            almacenamientoCalendarioID: "administracionCalendario",
-                //            perfilMes: "calendario_entrada_perfilSimple",
-                //            calendarioIO: "entrada",
-                //            mensajeInfo: "Selecciona la fecha de inicio del bloqueo",
-                //            alturaDinamica: alturaDinamicaArriba,
-                //            instanciaUID: instanciaUID,
-                //            metodoSelectorDia: "ui.componentes.calendario.calendarioCompartido.seleccionarDia",
-                //            seleccionableDiaLimite: "si"
-                //        }
-                //        casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(metadatosCalendario)
-                //        document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                //        const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolucionCalendario)
-                //        calendarioResuelto.instanciaUID = instanciaUID
-                //        await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
-                //    }
-                //    if (botonID === "fechaSalida") {
-                //        if (calendario?.getAttribute("calendarioIO") === "salida") {
-                //            bloqueCalendario.remove()
-                //            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-
-                //        }
-                //        if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                //            bloqueCalendario.remove()
-                //            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                //            //
-                //        }
-                //        let fechaSalida = document.querySelector("[calendario=salida][componente=fechaSalida]").getAttribute("memoriaVolatil")
-                //        let resolucionCalendario
-                //        if (fechaSalida) {
-                //            fechaSalida = fechaSalida.split("/")
-                //            let diaSalida = fechaSalida[0]
-                //            diaSalida = Number(diaSalida)
-                //            let mesSalida = fechaSalida[1]
-                //            mesSalida = Number(mesSalida)
-                //            let anoSalida = fechaSalida[2]
-                //            anoSalida = Number(anoSalida)
-                //            resolucionCalendario = {
-                //               
-                //                tipo: "personalizado",
-                //                ano: anoSalida,
-                //                mes: mesSalida
-                //            }
-                //        }
-                //        if (!fechaSalida) {
-                //            resolucionCalendario = {
-                //               
-                //                tipo: "actual"
-                //            }
-                //        }
-                //        let metadatosCalendario = {
-                //            tipoFecha: "salida",
-                //            almacenamientoCalendarioID: "administracionCalendario",
-                //            perfilMes: "calendario_salida_perfilSimple",
-                //            calendarioIO: "salida",
-                //            mensajeInfo: "Selecciona la fecha de final del bloqueo.",
-                //            alturaDinamica: alturaDinamicaArriba,
-                //            instanciaUID: instanciaUID,
-                //            metodoSelectorDia: "ui.componentes.calendario.calendarioCompartido.seleccionarDia",
-                //            seleccionableDiaLimite: "si"
-                //        }
-                //        casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(metadatosCalendario)
-                //        document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                //        const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolucionCalendario)
-                //        calendarioResuelto.instanciaUID = instanciaUID
-                //        casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
-                //    }
-                //},
                 selectorRangoTemporalUI: (rango) => {
                     const fechaInicio = rango.fechaInicio
                     const fechaFin = rango.fechaFin
@@ -17280,14 +17015,16 @@ const casaVitini = {
                             contenedorOrigenIDV: "[calendario=entrada]",
                             instanciaUID_contenedorFechas,
                             rangoIDV: "inicioRango",
-                            metodoSelectorDia: null
+                            metodoSelectorDia: null,
+                            tituloCalendario: "Selecciona la fecha de inicio del rango de bloqueo"
+
                         })
                     })
 
                     const tipoEntradaUITituloUI = document.createElement("div")
                     tipoEntradaUITituloUI.classList.add("listaBloqueos_titulo")
                     tipoEntradaUITituloUI.classList.add("negrita")
-                    tipoEntradaUITituloUI.innerText = "Fecha de inicio del bloqueo"
+                    tipoEntradaUITituloUI.innerText = "Fecha de inicio del bloqueo 2"
                     contenedorFechaEntrada.appendChild(tipoEntradaUITituloUI)
                     const entradaUI = document.createElement("div")
                     entradaUI.classList.add("listaBloqueos_fecha")
@@ -17311,7 +17048,8 @@ const casaVitini = {
                             contenedorOrigenIDV: "[calendario=salida]",
                             instanciaUID_contenedorFechas,
                             rangoIDV: "finalRango",
-                            metodoSelectorDia: null
+                            metodoSelectorDia: null,
+                            tituloCalendario: "Selecciona la fecha del fin del rango de bloqueo"
                         })
                     })
                     const tipoSalidaUITituloUI = document.createElement("div")

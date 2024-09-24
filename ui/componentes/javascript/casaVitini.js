@@ -153,14 +153,14 @@ const casaVitini = {
                         })
                     main.removeAttribute("zonaCSS")
                     main.removeAttribute("ui")
-                    console.log("zonaDestino", zonaDestino)
+
                     const iconosGlobalesRenderizados = document.querySelectorAll("header [componente=iconos] [iconoGlobal]")
                     iconosGlobalesRenderizados.forEach((icono) => {
                         const zonaDelIcono = icono.getAttribute("zona")
-                        console.log("zonaDelIcono", zonaDelIcono, "zonaDestino", zonaDestino)
+
 
                         if (zonaDelIcono !== zonaDestino) {
-                            console.log("e")
+
                             icono?.remove()
                         }
                     })
@@ -981,7 +981,7 @@ const casaVitini = {
                     })
 
                     if (respuestaServidor?.error) {
-                        console.log("iconoWhatsApp", respuestaServidor.error)
+
                     } else if (respuestaServidor.ok) {
                         const telefonoPublicoWhatsApp = respuestaServidor.ok.telefonoPublicoWhatsApp
                         const selectorIconosGlobales = document.querySelector("header [componente=iconos]")
@@ -8291,7 +8291,7 @@ const casaVitini = {
                         seleccionableDiaLimite
                     }
                     if (rangoIDV === "inicioRango") {
-                        const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha de entrada para buscar reservas por un rango"
+                        const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha"
                         if (selectorCalendario?.getAttribute("calendarioIO") === "entrada") {
                             return
                         }
@@ -8329,7 +8329,7 @@ const casaVitini = {
                             //configuracionCalendario.seleccionableDiaLimite = "si"
                         }
                     } else if (rangoIDV === "finalRango") {
-                        const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha de salida para buscar reservas por un rango"
+                        const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha"
 
                         if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {
                             return
@@ -15345,7 +15345,7 @@ const casaVitini = {
                         const m = "contneedorFechaUI necesita un moodo."
                         return casaVitini.ui.componentes.advertenciaInmersiva(m)
                     }
-
+                    const sobreControlConfiguracion = data.sobreControlConfiguracion || {}
 
                     const configuracionCalendarioInicio = data?.configuracionCalendarioInicio || {
                         rangoIDV: "inicioRango",
@@ -15353,6 +15353,7 @@ const casaVitini = {
                         perfilMes: "calendario_entrada_perfilSimple",
                         metodoSelectorDia,
                         seleccionableDiaLimite,
+                        ...sobreControlConfiguracion.configuracionInicio
                     }
                     configuracionCalendarioInicio.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
 
@@ -15362,6 +15363,8 @@ const casaVitini = {
                         perfilMes: "calendario_salida_perfilSimple",
                         metodoSelectorDia,
                         seleccionableDiaLimite,
+                        ...sobreControlConfiguracion.configuracionFin
+
                     }
                     configuracionCalendarioFinal.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
 
@@ -16961,7 +16964,7 @@ const casaVitini = {
                                                 return detallesTitular.clienteUID
                                             }
                                         }
-                                        console.log("origen", origenIDV)
+
                                         const configuracionGlobal = [{
                                             titulo: "Titular de la reserva",
                                             valor: nombreCompletoTitular || "Reserva sin titular",
@@ -17541,27 +17544,30 @@ const casaVitini = {
                                         "gap6"
                                     )
                                     const tituloPropuesta = document.createElement("p")
-                                    tituloPropuesta.classList.add("tituloGris")
+                                    tituloPropuesta.classList.add(
+                                        "tituloGris",
+                                        "padding14"
+                                    )
                                     tituloPropuesta.innerText = "Propuesta de cambio de la fecha de entrada de la reserva " + reservaUID
                                     tituloPropuesta.style.color = "black"
                                     contenedorPropuesta.appendChild(tituloPropuesta)
                                     const botonCancelar = document.createElement("div")
-                                    botonCancelar.classList.add("detallesReservaCancelarBoton")
+                                    botonCancelar.classList.add("botonV1")
                                     botonCancelar.innerText = "Cerrar propuesta y volver atrás"
                                     botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                                     contenedorPropuesta.appendChild(botonCancelar)
                                     const infoPropuesta = document.createElement("div")
-                                    infoPropuesta.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                    infoPropuesta.classList.add("padding14")
                                     infoPropuesta.innerText = `Has propuesto cambiar la fecha de entrada de esta reserva a ${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}. Si quieres confirmar la propuesta y cambiar la reserva, pulsa en el botón de confirmar de abajo. Si deseas cancelar, pulsa en el botón cancelar de arriba. Cuando puedes el botón confirmar, se realizará una última verificación para comprobar que los días siguen disponibles.`
                                     contenedorPropuesta.appendChild(infoPropuesta)
 
                                     const informacionImplicacion = document.createElement("div")
-                                    informacionImplicacion.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                    informacionImplicacion.classList.add("padding14")
                                     informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
                                     contenedorPropuesta.appendChild(informacionImplicacion)
 
                                     const botonAceptarPropuesta = document.createElement("div")
-                                    botonAceptarPropuesta.classList.add("detallesReservaCancelarBoton")
+                                    botonAceptarPropuesta.classList.add("botonV1BlancoIzquierda")
                                     botonAceptarPropuesta.setAttribute("componente", "botonConfirmarCancelarReserva")
                                     botonAceptarPropuesta.innerText = "Confirmar propuesta y aplicar nueva fecha de entrada a la reserva"
                                     botonAceptarPropuesta.addEventListener("click", () => {
@@ -17588,28 +17594,32 @@ const casaVitini = {
                                         "gap6"
                                     )
                                     const tituloPropuesta = document.createElement("p")
-                                    tituloPropuesta.classList.add("tituloGris")
+                                    tituloPropuesta.classList.add(
+                                        "tituloGris",
+                                        "padding14"
+                                    )
+
                                     tituloPropuesta.innerText = "Propuesta de cambio de la fecha de salida de la reserva " + reservaUID
                                     tituloPropuesta.style.color = "black"
                                     contenedorPropuesta.appendChild(tituloPropuesta)
                                     const botonCancelar = document.createElement("div")
-                                    botonCancelar.classList.add("detallesReservaCancelarBoton")
+                                    botonCancelar.classList.add("botonV1")
                                     botonCancelar.innerText = "Cerrar propuesta y volver atrás"
                                     botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                                     contenedorPropuesta.appendChild(botonCancelar)
                                     const infoPropuesta = document.createElement("div")
-                                    infoPropuesta.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                    infoPropuesta.classList.add("padding14")
                                     infoPropuesta.innerText = `Has propuesto cambiar la fecha de salida de la reserva a ${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}. Si quieres confirmar la propuesta y cambiar la reserva, pulsa en el botón de confirmar de abajo. Si deseas cancelar, pulsa en el botón cancelar de arriba. Cuando puedes el botón confirmar, se realizará una última verificación para comprobar que los días siguen disponibles.`
                                     contenedorPropuesta.appendChild(infoPropuesta)
 
                                     const informacionImplicacion = document.createElement("div")
-                                    informacionImplicacion.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                    informacionImplicacion.classList.add("padding14")
                                     informacionImplicacion.innerText = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
                                     contenedorPropuesta.appendChild(informacionImplicacion)
 
 
                                     const botonAceptarPropuesta = document.createElement("div")
-                                    botonAceptarPropuesta.classList.add("detallesReservaCancelarBoton")
+                                    botonAceptarPropuesta.classList.add("botonV1BlancoIzquierda")
                                     botonAceptarPropuesta.setAttribute("componente", "botonConfirmarCancelarReserva")
                                     botonAceptarPropuesta.innerText = "Confirmar propuesta y aplicar nueva fecha de salida a la reserva"
                                     botonAceptarPropuesta.addEventListener("click", () => {
