@@ -56,10 +56,11 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const objetoFinal = {
             apartamentoUI: apartamento.apartamentoUI,
             zonaIDV: configuracionApartamento.zonaIDV,
+            estadoApartamento: configuracionApartamento.estadoConfiguracionIDV,
             apartamentoIDV: apartamentoIDV,
             zonaHoraria: zonaHoraria,
-            horaSalidaTZ: horaSalidaTZ,
-            horaEntradaTZ: horaEntradaTZ,
+            horaSalida: horaSalidaTZ,
+            horaEntrada: horaEntradaTZ,
             estadoPernoctacion: "libre",
             reservas: {}
         };
@@ -90,10 +91,13 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 reservaUID: reservaUID,
                 apartamentoIDV: apartamentoIDV
             })
+
+ 
+
             if (apartamentoDeLaReserva?.componenteUID) {
                 identificadoresReservasValidas.push(reservaUID)
                 const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalida_ISO_ZH, fechaActualCompletaTZ);
-                const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaEntrada, fechaSalida);
+                const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaConHoraEntrada_ISO_ZH, fechaConHoraSalida_ISO_ZH);
                 const porcentajeTranscurrido = utilidades.calcularPorcentajeTranscurridoUTC(fechaConHoraEntrada_ISO_ZH, fechaConHoraSalida_ISO_ZH, fechaActualCompletaTZ);
                 let porcentajeFinal = porcentajeTranscurrido;
                 if (porcentajeTranscurrido >= 100) {
@@ -111,6 +115,26 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 } else if (diaSalida) {
                     identificadoDiaLimite = "diaDeSalida";
                 }
+
+                let numeroDiaReservaUI;
+                if (cantidadDias.diasDiferencia > 1) {
+                    numeroDiaReservaUI = cantidadDias.diasDiferencia.toFixed(0) + " días";
+                }
+                if (cantidadDias.diasDiferencia === 1) {
+                    numeroDiaReservaUI = cantidadDias.diasDiferencia.toFixed(0) + " día y " + cantidadDias.horasDiferencia.toFixed(0) + " horas";
+                }
+                if (cantidadDias.diasDiferencia === 0) {
+                    if (cantidadDias.horasDiferencia > 1) {
+                        numeroDiaReservaUI = cantidadDias.horasDiferencia.toFixed(0) + " horas";
+                    }
+                    if (cantidadDias.horasDiferencia === 1) {
+                        numeroDiaReservaUI = cantidadDias.horasDiferencia.toFixed(0) + " hora";
+                    }
+                    if (cantidadDias.horasDiferencia === 0) {
+                        numeroDiaReservaUI = "menos de una hora";
+                    }
+                }
+
                 const estructuraReserva = {
                     reservaUID: reservaUID,
                     fechaEntrada: fechaEntrada,
@@ -118,6 +142,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                     diaLimite: identificadoDiaLimite,
                     tiempoRestante: tiempoRestante,
                     cantidadDias: cantidadDias,
+                    numeroDiasReserva: numeroDiaReservaUI,
                     porcentajeTranscurrido: porcentajeFinal + '%',
                     habitaciones: [],
                     pernoctantes: []

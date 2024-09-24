@@ -357,11 +357,11 @@ const casaVitini = {
 
                 const menuAdminData = [{
                     href: "/administracion",
-                    nombre: "Adminsitración",
+                    nombre: "Administración",
                     zona: "administracion"
                 }, {
                     href: "/administracion/situacion",
-                    nombre: "Situiación",
+                    nombre: "Situación",
                     zona: "situacion"
 
                 }, {
@@ -7405,8 +7405,6 @@ const casaVitini = {
                     casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado.message)
                 }
             },
-
-
             totales: (desgloseFinanciero) => {
                 const totalesPorApartamento = desgloseFinanciero.totalesPorApartamento
                 const totalesPorNoche = desgloseFinanciero.totalesPorNoche
@@ -8048,7 +8046,6 @@ const casaVitini = {
                 }
                 return iconoProcesoDiv;
             },
-
             calendario: {
                 constructorCalendarioNuevo: (metadatos) => {
                     try {
@@ -17156,8 +17153,8 @@ const casaVitini = {
                                         contenedorBotonesExpandidos.classList.add("administracion_reservas_detallesReserva_contenedorMenuExpandido")
                                         contenedorBotonesExpandidos.setAttribute("contenedor", "botonesExpandidos")
                                         if (configuracionVista === "publica") {
-                                          //  contenedorBotonesExpandidos.style.gridTemplateAreas = ". . . ."
-                                           // contenedorBotonesExpandidos.style.gridTemplateColumns = "1fr 1fr 1fr 0.4fr"
+                                            //  contenedorBotonesExpandidos.style.gridTemplateAreas = ". . . ."
+                                            // contenedorBotonesExpandidos.style.gridTemplateColumns = "1fr 1fr 1fr 0.4fr"
                                         } else {
 
                                         }
@@ -17343,9 +17340,9 @@ const casaVitini = {
                                         contenedorBotonesEspandidos.style.gap = '6px'
 
                                         if (configuracionVista === "publica") {
-                                           // contenedorBotonesEspandidos.style.gridTemplateAreas = '". ."'
+                                            // contenedorBotonesEspandidos.style.gridTemplateAreas = '". ."'
                                         } else {
-                                           // contenedorBotonesEspandidos.style.gridTemplateAreas = '". ."". ." ". ."'
+                                            // contenedorBotonesEspandidos.style.gridTemplateAreas = '". ."". ." ". ."'
                                         }
 
 
@@ -27215,40 +27212,61 @@ const casaVitini = {
                                 contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
                                 contenidoAdvertenciaInmersiva.setAttribute("contenedor", "contenidoAdvertenciaInmersiva")
                                 const contenedorCancelacion = document.createElement("div")
-                                contenedorCancelacion.classList.add("administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion")
+                                contenedorCancelacion.classList.add(
+                                    "flexVertical",
+                                    "gap6"
+                                )
                                 const tituloCancelarReserva = document.createElement("p")
-                                tituloCancelarReserva.classList.add("tituloGris")
+                                tituloCancelarReserva.classList.add("tituloGris", "padding12")
                                 tituloCancelarReserva.innerText = "Cancelar reserva"
                                 contenedorCancelacion.appendChild(tituloCancelarReserva)
                                 const botonCancelarProcesoCancelacion = document.createElement("div")
-                                botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
+                                botonCancelarProcesoCancelacion.classList.add("botonV1")
                                 botonCancelarProcesoCancelacion.innerText = "Cerrar y volver atras"
                                 botonCancelarProcesoCancelacion.addEventListener("click", () => {
                                     casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.cancelarReserva.salirDelProceso(reservaUID)
                                 })
                                 contenedorCancelacion.appendChild(botonCancelarProcesoCancelacion)
                                 const bloqueBloqueoApartamentos = document.createElement("div")
-                                bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
+                                bloqueBloqueoApartamentos.classList.add(
+                                    "flexVertical",
+                                    "borderRadius22",
+                                    "borderGrey1",
+                                    "padding6",
+                                    "gap6"
+                                )
                                 const tituloBloquoApartamentos = document.createElement("div")
-                                tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                tituloBloquoApartamentos.classList.add(
+                                    "padding12"
+                                )
                                 tituloBloquoApartamentos.innerText = "Selecciona qué tipo de bloqueo quieres aplicar a los apartamentos de esta reserva tras la cancelación."
                                 bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
                                 let opcionBloqueoApartamento = document.createElement("p")
-                                opcionBloqueoApartamento.classList.add("detallesReservaCancelarOcionBloqueoApartamentos")
+                                opcionBloqueoApartamento.classList.add("botonV1BlancoIzquierda")
                                 opcionBloqueoApartamento.setAttribute("componente", "cancelarReservaOpcionBloqueo")
                                 opcionBloqueoApartamento.setAttribute("cancelarReservatipoBloqueo", "rangoTemporal")
                                 opcionBloqueoApartamento.addEventListener("click", casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.cancelarReserva.seleccionarOpcionBloqueoApartametos)
                                 opcionBloqueoApartamento.innerText = "Bloquear los apartamentos de esta reserva tras la cancelación durante el mismo rango que tiene esta reserva."
                                 bloqueBloqueoApartamentos.appendChild(opcionBloqueoApartamento)
                                 opcionBloqueoApartamento = document.createElement("p")
-                                opcionBloqueoApartamento.classList.add("detallesReservaCancelarOcionBloqueoApartamentos")
+                                opcionBloqueoApartamento.classList.add("botonV1BlancoIzquierda")
                                 opcionBloqueoApartamento.setAttribute("componente", "cancelarReservaOpcionBloqueo")
                                 opcionBloqueoApartamento.setAttribute("cancelarReservatipoBloqueo", "permanente")
                                 opcionBloqueoApartamento.addEventListener("click", casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.cancelarReserva.seleccionarOpcionBloqueoApartametos)
-                                opcionBloqueoApartamento.innerText = "Bloquear los apartamentos de esta reserva tras la cancelación con un bloqueo permanente.Deberá liberarlos manualmente."
+                                opcionBloqueoApartamento.innerText = "Bloquear los apartamentos de esta reserva tras la cancelación con un bloqueo permanente. Deberá liberarlos manualmente."
                                 bloqueBloqueoApartamentos.appendChild(opcionBloqueoApartamento)
+
+
+                                const tituloSinBloquoApartamentos = document.createElement("div")
+                                tituloSinBloquoApartamentos.classList.add(
+                                    "padding12"
+                                )
+                                tituloSinBloquoApartamentos.innerText = "Cancela la reserva sin bloquear los apartamentos y liberarlos para que esten disponibles inmediatament despues de cancelar la reserva."
+                                bloqueBloqueoApartamentos.appendChild(tituloSinBloquoApartamentos)
+
+
                                 opcionBloqueoApartamento = document.createElement("p")
-                                opcionBloqueoApartamento.classList.add("detallesReservaCancelarOcionBloqueoApartamentos")
+                                opcionBloqueoApartamento.classList.add("botonV1BlancoIzquierda")
                                 opcionBloqueoApartamento.setAttribute("componente", "cancelarReservaOpcionBloqueo")
                                 opcionBloqueoApartamento.setAttribute("cancelarReservatipoBloqueo", "sinBloqueo")
                                 opcionBloqueoApartamento.addEventListener("click", casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.cancelarReserva.seleccionarOpcionBloqueoApartametos)
@@ -27262,11 +27280,11 @@ const casaVitini = {
                                 entradaPalabraCancelar.placeholder = "Escriba la palabra cancelar"
                                 // advertenciaInmersivaIU.appendChild(entradaPalabraCancelar)
                                 const infoBotonCancelar = document.createElement("div")
-                                infoBotonCancelar.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                infoBotonCancelar.classList.add("padding12")
                                 infoBotonCancelar.innerText = "Para que se habilite el botón, tienes que seleccionar una de las tres opciones de arriba.Confirmar y cancelar la reserva."
                                 bloqueBloqueoApartamentos.appendChild(infoBotonCancelar)
                                 const botonCancelar = document.createElement("div")
-                                botonCancelar.classList.add("detallesReservaCancelarBoton")
+                                botonCancelar.classList.add("botonV1BlancoIzquierda")
                                 botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
                                 botonCancelar.style.pointerEvents = "none"
                                 botonCancelar.style.color = "#313131"
@@ -27279,7 +27297,7 @@ const casaVitini = {
                                 })
                                 bloqueBloqueoApartamentos.appendChild(botonCancelar)
                                 const infoEliminarReserva = document.createElement("div")
-                                infoEliminarReserva.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                infoEliminarReserva.classList.add("padding12")
                                 //infoEliminarReserva.style.marginTop = "50px"
                                 infoEliminarReserva.innerText = "También puedes eliminar irreversiblemente una reserva.La eliminación irreversible de una reserva borra la información de la reserva, así como los pagos asociados a la reserva y toda la información relacionada con la reserva, menos los datos de los clientes y titulares que permanecen disponibles para otras reservas.A diferencia de la cancelación, los datos de la reserva dejarán de estar disponibles."
                                 bloqueBotones.appendChild(infoEliminarReserva)
@@ -27362,31 +27380,35 @@ const casaVitini = {
                                     const selectorContenido = selectorContenedorOpcionesCancelacion.querySelector("[contenedor=contenidoAdvertenciaInmersiva]")
                                     selectorContenido.innerHTML = null
                                     const contenedorCancelacion = document.createElement("div")
-                                    contenedorCancelacion.classList.add("administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion")
+                                    contenedorCancelacion.classList.add(
+                                        "flexVertical",
+                                        "padding6",
+                                        "gap6"
+                                    )
                                     const tituloCancelarReserva = document.createElement("p")
-                                    tituloCancelarReserva.classList.add("tituloGris")
+                                    tituloCancelarReserva.classList.add("tituloGris", "padding12")
                                     tituloCancelarReserva.innerText = "Eliminar irreversiblemente una reserva"
                                     tituloCancelarReserva.style.color = "red"
                                     contenedorCancelacion.appendChild(tituloCancelarReserva)
                                     const botonCancelarProcesoCancelacion = document.createElement("div")
-                                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
+                                    botonCancelarProcesoCancelacion.classList.add("botonV1")
                                     botonCancelarProcesoCancelacion.innerText = "Cerrar y volver atras"
                                     botonCancelarProcesoCancelacion.addEventListener("click", () => {
                                         casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.cancelarReserva.salirDelProceso(reservaUID)
                                     })
                                     contenedorCancelacion.appendChild(botonCancelarProcesoCancelacion)
                                     const bloqueBloqueoApartamentos = document.createElement("div")
-                                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
+                                    bloqueBloqueoApartamentos.classList.add("flexVertical", "gap6")
                                     const tituloBloquoApartamentos = document.createElement("div")
-                                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                                    tituloBloquoApartamentos.innerText = "Eliminar irreversiblemente una reserva, elimina de la base de datos la información de la reserva, los alojamientos asociados, los pernoctantes y el titular de la reserva(pero no sus datos como cliente), los pagos y los reembolsos.Esta eliminación es irreversible.Los datos desaparecerán de la base de datos y si no existen en una copia de seguridad, no serán recuperables.Si solo desea cancelar una reserva para liberar los apartamentos y hacer que deje de tener vigencia, cancélela y podrá seguir teniendo acceso a los datos de esta sin que tenga vigencia pernoctativa y ocupacional."
+                                    tituloBloquoApartamentos.classList.add("padding12")
+                                    tituloBloquoApartamentos.innerText = "Eliminar irreversiblemente una reserva, elimina de la base de datos la información de la reserva, los alojamientos asociados, los pernoctantes y el titular de la reserva (pero no sus datos como cliente), los pagos y los reembolsos.Esta eliminación es irreversible.Los datos desaparecerán de la base de datos y si no existen en una copia de seguridad, no serán recuperables.Si solo desea cancelar una reserva para liberar los apartamentos y hacer que deje de tener vigencia, cancélela y podrá seguir teniendo acceso a los datos de esta sin que tenga vigencia pernoctativa y ocupacional."
                                     bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
                                     const infoSeguridad = document.createElement("div")
-                                    infoSeguridad.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                    infoSeguridad.classList.add("padding12")
                                     infoSeguridad.innerText = "Para eliminar una reserva irreversiblemente junto con toda su información relacionada, debe escribir su contraseña de usuario y su cuenta debe tener autorización administrativa."
                                     bloqueBloqueoApartamentos.appendChild(infoSeguridad)
                                     const campo = document.createElement("input")
-                                    campo.classList.add("administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo")
+                                    campo.classList.add("botonV1BlancoIzquierda_noSeleccionable")
                                     campo.setAttribute("campo", "clave")
                                     campo.type = "password"
                                     campo.placeholder = "Escriba la contraseña de su VitiniID"
@@ -27395,7 +27417,7 @@ const casaVitini = {
                                     const bloqueBotones = document.createElement("div")
                                     bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
                                     const botonCancelar = document.createElement("div")
-                                    botonCancelar.classList.add("administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_botonV1")
+                                    botonCancelar.classList.add("botonV1BlancoIzquierda")
                                     botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
                                     botonCancelar.innerText = "Eliminar reseva irreversiblemente"
                                     botonCancelar.addEventListener("click", () => {
@@ -27601,6 +27623,29 @@ const casaVitini = {
                 },
 
             },
+            widgetsUI: {
+                contenedorTituloDescripcionSimple: (data) => {
+
+                    const titulo = data.titulo
+                    const dato = data.dato
+                    const contenedor = document.createElement("div")
+                    contenedor.classList.add(
+                        "flexVertical"
+                    )
+                    const tituloUI = document.createElement("p")
+                    tituloUI.setAttribute("data", "tituloUI")
+                    tituloUI.innerText = titulo
+                    contenedor.appendChild(tituloUI)
+
+                    const dataUI = document.createElement("p")
+                    dataUI.setAttribute("data", "dataUI")
+                    dataUI.innerText = dato
+
+                    contenedor.appendChild(dataUI)
+                    return contenedor
+
+                }
+            }
         }
     },
     componentes: {

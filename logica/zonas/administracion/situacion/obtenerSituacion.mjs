@@ -122,7 +122,7 @@ export const obtenerSituacion = async (entrada, salida) => {
                             }
                         }
                         const detalleReservaApartamento = {
-                            reserva: reservaUID,
+                            reservaUID,
                             diaLimite: identificadoDiaLimite,
                             fechaEntrada: fechaEntradaReservaISO,
                             fechaSalida: fechaSalidaReservaISO,

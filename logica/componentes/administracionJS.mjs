@@ -4,8 +4,6 @@ const casaVitini = {
             arranque: async () => {
                 const main = document.querySelector("main")
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
-                const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
-                const directorios = granuladoURL.directorios
                 const parametros = granuladoURL.parametros
 
                 main.setAttribute("zonaCSS", "/administracion/reservas")
@@ -1632,52 +1630,44 @@ const casaVitini = {
             },
         },
         situacion: {
-            arranque: async () => {
+            arranque: async function () {
                 const main = document.querySelector("main")
                 main.setAttribute("zonaCSS", "administracion/situacion")
-                const seccionRenderizadaOrigen = document.querySelector("main")
-                const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
-                const directorioUltimo = granuladoURL.directorios[granuladoURL.directorios.length - 1]
-                const marcoElastico = document.querySelector("[componente=marcoElastico]")
-                const horaLocalPeticion = {
-                    zona: "componentes/fechaLocal"
+                const parametros = granuladoURL.parametros
+                const fechaHoyTZ = await this.portada.obtenerFecha()
+                const dia = fechaHoyTZ.dia
+                const mes = fechaHoyTZ.mes
+                const ano = fechaHoyTZ.ano
+                const hora = fechaHoyTZ.hora
+                const minuto = String(fechaHoyTZ.minuto).padStart(2, "0")
+                const fechaUI = `Hoy son las ${hora}:${minuto}, ${dia} del ${mes} del ${ano}`
+
+                const contenedorFecha = document.createElement("div")
+                contenedorFecha.classList.add("administracion_situacion_portada_contenedorFecha")
+                contenedorFecha.innerText = fechaUI
+                if (Object.keys(parametros).length === 0) {
+                    return this.portada.arranque()
+                } else if (parametros.alojamiento) {
+                    const apartamentoIDV = parametros.alojamiento
+                    return this.detallesApartamento.arranque(apartamentoIDV)
                 }
-                const respuestaServidor = await casaVitini.shell.servidor(horaLocalPeticion)
-                if (respuestaServidor?.error) {
-                    casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
-                    return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-                }
-                if (respuestaServidor.fechaISO) {
-                    const zonaHoraria = respuestaServidor.zonaHoraria
-                    const dia = respuestaServidor.dia
-                    const mes = respuestaServidor.mes
-                    const ano = respuestaServidor.ano
-                    const hora = respuestaServidor.hora
-                    const minuto = String(respuestaServidor.minuto).padStart(2, "0")
-                    const fechaISO = respuestaServidor.fechaISO
-                    const fechaUI = `Hoy son las ${hora}:${minuto}, ${dia} del ${mes} del ${ano}`
-                    const contenedorFecha = document.createElement("div")
-                    contenedorFecha.classList.add("administracion_situacion_portada_contenedorFecha")
-                    contenedorFecha.innerText = fechaUI
-                    marcoElastico.appendChild(contenedorFecha)
-                }
-                if (directorioUltimo === "situacion") {
-                    const mensajeSpinner = "Obteniendo situación..."
-                    const spinner = casaVitini.ui.componentes.spinnerSimple(mensajeSpinner)
-                    const contenedorCarga = document.createElement("div")
-                    contenedorCarga.classList.add("administracion_calendario_componente_calendario_contenedoCarga")
-                    contenedorCarga.setAttribute("contenedor", "obteniendoSituacion")
-                    //contenedorCarga.setAttribute("elemento", "flotante")
-                    contenedorCarga.appendChild(spinner)
-                    marcoElastico.appendChild(contenedorCarga)
-                    const transaccion = {
+            },
+            portada: {
+                arranque: async function () {
+
+                    const marcoElastico = document.querySelector("[componente=marcoElastico]")
+
+                    const spinner = casaVitini.ui.componentes.spinnerSimple()
+                    marcoElastico.appendChild(spinner)
+                    const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+                    const respuestaServidor = await casaVitini.shell.servidor({
                         zona: "administracion/situacion/obtenerSituacion"
-                    }
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                    })
                     const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { return }
-                    instanciaRenderizada.querySelector("[contenedor=obteniendoSituacion]").remove()
+                    spinner.remove()
                     if (respuestaServidor?.error) {
                         casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
                         const titulo = document.querySelector(".titulo")
@@ -1686,8 +1676,7 @@ const casaVitini = {
                     }
                     if (respuestaServidor?.ok) {
                         const situacion = respuestaServidor?.ok
-                        const fechaTZ = respuestaServidor.fechaTZ
-                        const horaTZ = respuestaServidor.horaTZ
+
                         const horaEntrada = respuestaServidor.horaEntrada
                         const horaSalida = respuestaServidor.horaSalida
                         const espacioSituacion = document.createElement("div")
@@ -1695,257 +1684,20 @@ const casaVitini = {
                         espacioSituacion.setAttribute("componente", "espacioSituacion")
                         for (const [apartamentoIDV, detallesApartamento] of Object.entries(situacion)) {
                             const reservas = detallesApartamento.reservas
-                            let estadoApartamento = detallesApartamento.estadoApartamento
-                            let estadoPernoctacion = detallesApartamento.estadoPernoctacion
-                            const zonaIDV = detallesApartamento.zonaIDV
-
+                            detallesApartamento.apartamentoIDV = apartamentoIDV
                             const calendariosSincronizados = detallesApartamento?.calendariosSincronizados || {}
-                            if (estadoApartamento === "disponible") {
-                                estadoApartamento = "Disponible"
-                            }
-                            if (estadoApartamento === "nodisponible") {
-                                estadoApartamento = "No disponible"
-                            }
-                            if (estadoPernoctacion === "ocupado") {
-                                estadoPernoctacion = "Ocupado"
-                            }
-                            if (estadoPernoctacion === "libre") {
-                                estadoPernoctacion = "Libre"
-                            }
 
-                            const zonaUI = {
-                                privada: "Zona privada",
-                                global: "Zona global",
-                                publica: "Zona pública"
-                            }
-                            const apartamentoUI = document.createElement("div")
-                            apartamentoUI.classList.add("situacionApartamentoUI")
-                            const apartamentoTitulo = document.createElement("a")
-                            apartamentoTitulo.classList.add("situacionApartamentoTitutlo")
-                            apartamentoTitulo.innerText = detallesApartamento.apartamentoUI
-                            apartamentoTitulo.setAttribute("vista", `/administracion/situacion/${apartamentoIDV}`)
-                            apartamentoTitulo.setAttribute("href", `/administracion/situacion/${apartamentoIDV}`)
-                            apartamentoTitulo.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-                            apartamentoUI.appendChild(apartamentoTitulo)
-                            const apartamentoEstado = document.createElement("p")
-                            apartamentoEstado.classList.add("situacionApartamentoEstado")
-                            apartamentoEstado.innerText = estadoApartamento
-                            apartamentoUI.appendChild(apartamentoEstado)
-                            const apartamentoZona = document.createElement("p")
-                            apartamentoZona.classList.add("situacionApartamentoEstado")
-                            apartamentoZona.innerText = zonaUI[zonaIDV]
-                            apartamentoUI.appendChild(apartamentoZona)
-                            const apartamentoEstadoPernoctacion = document.createElement("p")
-                            apartamentoEstadoPernoctacion.classList.add("situacionApartamentoEstadoPernoctacion")
-                            apartamentoEstadoPernoctacion.innerText = estadoPernoctacion
-                            apartamentoUI.appendChild(apartamentoEstadoPernoctacion)
+                            const apartamentoUI = casaVitini.administracion.situacion.componentesUI.tarjetaApartamentoUI(detallesApartamento)
                             for (const detallesReservas of reservas) {
-                                const reservaUID = detallesReservas.reserva
-                                const diaLimite = detallesReservas.diaLimite
-                                const fechaEntrada = detallesReservas.fechaEntrada
-                                const fechaSalida = detallesReservas.fechaSalida
-                                const porcentajeTranscurrido = detallesReservas.porcentajeTranscurrido
-                                const tiempoRestante = detallesReservas.tiempoRestante
-                                const numeroDiasReserva = detallesReservas.numeroDiasReserva
-                                const contenedorReserva = document.createElement("div")
-                                contenedorReserva.classList.add("administracion_situacion_portada_contenedorReserva")
-                                let bloqueEntidad = document.createElement("a")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                bloqueEntidad.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}`)
-                                bloqueEntidad.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}`)
-                                bloqueEntidad.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-
-                                bloqueEntidad.classList.add("administracion_situacion_portada_contenedorSelecccionable")
-                                let tituloEntidad = document.createElement("div")
-                                tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                tituloEntidad.innerText = "Reserva"
-                                bloqueEntidad.appendChild(tituloEntidad)
-                                let apartamentoReserva = document.createElement("a")
-                                apartamentoReserva.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                apartamentoReserva.innerText = reservaUID
-                                bloqueEntidad.appendChild(apartamentoReserva)
-                                contenedorReserva.appendChild(bloqueEntidad)
-                                if (diaLimite === "diaDeSalida") {
-                                    let bloqueEntidad = document.createElement("div")
-                                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                    const aviso = document.createElement("div")
-                                    aviso.classList.add("administracion_situacion_portada_tituloEntidad")
-                                    aviso.classList.add("negrita")
-                                    aviso.innerText = "<<< Dia de salida"
-                                    bloqueEntidad.appendChild(aviso)
-                                    const tituloEntidad = document.createElement("div")
-                                    tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                    tituloEntidad.innerText = "Hoy es el día final de la reserva y los pernoctantes deben de abandonar el alojamiento antes de las " + horaSalida
-                                    bloqueEntidad.appendChild(tituloEntidad)
-                                    const datoEntidad = document.createElement("div")
-                                    datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                    datoEntidad.innerText = tiempoRestante
-                                    //bloqueEntidad.appendChild(datoEntidad)
-                                    contenedorReserva.appendChild(bloqueEntidad)
-                                }
-                                if (diaLimite === "diaDeEntrada") {
-                                    let bloqueEntidad = document.createElement("div")
-                                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                    const aviso = document.createElement("div")
-                                    aviso.classList.add("administracion_situacion_portada_tituloEntidad")
-                                    aviso.classList.add("negrita")
-                                    aviso.innerText = ">>> Dia de entrada"
-                                    bloqueEntidad.appendChild(aviso)
-                                    const tituloEntidad = document.createElement("div")
-                                    tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                    tituloEntidad.innerText = "Hoy es el día de entrada de la reserva y el alojamiento debe de estar preparado antes de las " + horaEntrada + " para la llegada de los nuevos pernoctantes"
-                                    bloqueEntidad.appendChild(tituloEntidad)
-                                    const datoEntidad = document.createElement("div")
-                                    datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                    datoEntidad.innerText = tiempoRestante
-                                    //bloqueEntidad.appendChild(datoEntidad)
-                                    contenedorReserva.appendChild(bloqueEntidad)
-                                }
-                                const contenedorFechas = document.createElement("div")
-                                contenedorFechas.classList.add("administracion_situacion_portada_contenedorFechas")
-                                bloqueEntidad = document.createElement("div")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                tituloEntidad = document.createElement("div")
-                                tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                tituloEntidad.innerText = "Fecha de entrada"
-                                bloqueEntidad.appendChild(tituloEntidad)
-                                let apartamentoFechaEntrada = document.createElement("div")
-                                apartamentoFechaEntrada.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                apartamentoFechaEntrada.innerText = fechaEntrada
-                                bloqueEntidad.appendChild(apartamentoFechaEntrada)
-                                contenedorFechas.appendChild(bloqueEntidad)
-                                bloqueEntidad = document.createElement("div")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_fechaDeSalida")
-                                tituloEntidad = document.createElement("div")
-                                tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                tituloEntidad.innerText = "Fecha de salida"
-                                bloqueEntidad.appendChild(tituloEntidad)
-                                let apartamentoFechaSalida = document.createElement("div")
-                                apartamentoFechaSalida.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                apartamentoFechaSalida.innerText = fechaSalida
-                                bloqueEntidad.appendChild(apartamentoFechaSalida)
-                                contenedorFechas.appendChild(bloqueEntidad)
-                                contenedorReserva.appendChild(contenedorFechas)
-                                bloqueEntidad = document.createElement("div")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                let apartamentoEstadoReserva = document.createElement("div")
-                                apartamentoEstadoReserva.classList.add("situacionApartamentoEstadoReserva")
-
-
-
-                                const nombreClaseDinamica = `barraProgresso-anchoDinamico-${reservaUID}`;
-                                if (!document.querySelector(`.${nombreClaseDinamica}`)) {
-                                    // Si no existe, crea un nuevo estilo
-                                    const style = document.createElement('style');
-                                    style.innerHTML = `
-                                        .${nombreClaseDinamica} {
-                                            width: ${porcentajeTranscurrido}
-                                    `;
-                                    document.querySelector("main").appendChild(style);
-                                }
-
-                                let barraProgresso = document.createElement("div")
-                                barraProgresso.classList.add(
-                                    "situacionBarraProgressoReserva",
-                                    nombreClaseDinamica
-                                )
-                                //barraProgresso.style.width = porcentajeTranscurrido
-                                apartamentoEstadoReserva.appendChild(barraProgresso)
-                                bloqueEntidad.appendChild(apartamentoEstadoReserva)
-                                contenedorReserva.appendChild(bloqueEntidad)
-                                bloqueEntidad = document.createElement("div")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                tituloEntidad = document.createElement("div")
-                                tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                tituloEntidad.innerText = "Duración de la reserva"
-                                bloqueEntidad.appendChild(tituloEntidad)
-                                let datoEntidad = document.createElement("div")
-                                datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                datoEntidad.innerText = numeroDiasReserva
-                                bloqueEntidad.appendChild(datoEntidad)
-                                contenedorReserva.appendChild(bloqueEntidad)
-                                bloqueEntidad = document.createElement("div")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                tituloEntidad = document.createElement("div")
-                                tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                tituloEntidad.innerText = "Tiempo restante de la reserva"
-                                bloqueEntidad.appendChild(tituloEntidad)
-                                datoEntidad = document.createElement("div")
-                                datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                datoEntidad.innerText = tiempoRestante
-                                bloqueEntidad.appendChild(datoEntidad)
-                                contenedorReserva.appendChild(bloqueEntidad)
+                                detallesReservas.horaEntrada = horaEntrada
+                                detallesReservas.horaSalida = horaSalida
+                                const contenedorReserva = casaVitini.administracion.situacion.componentesUI.tarjetaReservaUI(detallesReservas)
                                 apartamentoUI.appendChild(contenedorReserva)
                             }
                             if (calendariosSincronizados.airbnb) {
                                 const eventosAirbnb = calendariosSincronizados.airbnb.eventos
                                 for (const detallesDelEvento of eventosAirbnb) {
-                                    const fechaInicio_ISO = detallesDelEvento.fechaInicio
-                                    const fechaFinal_ISO = detallesDelEvento.fechaFinal
-                                    const uid = detallesDelEvento.uid
-                                    const descripcion = detallesDelEvento?.descripcion || null
-                                    const nombreEvento = detallesDelEvento.nombreEvento
-                                    const fechaInicioArray = fechaInicio_ISO.split("-")
-                                    const fechaInicio_Humano = `${fechaInicioArray[2]}/${fechaInicioArray[1]}/${fechaInicioArray[0]}`
-                                    const fechaFinalArray = fechaFinal_ISO.split("-")
-                                    const fechaFinal_Humano = `${fechaFinalArray[2]}/${fechaFinalArray[1]}/${fechaFinalArray[0]}`
-                                    let urlEvento
-                                    if (descripcion) {
-                                        const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
-                                        const match = descripcion.match(regex);
-                                        urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
-                                    }
-                                    const contenedorEvento = document.createElement("div")
-                                    contenedorEvento.classList.add("contenedorEvento")
-                                    const contenedorTitulo = document.createElement("div")
-                                    contenedorTitulo.classList.add("contenedorTitulo")
-                                    const tituloPlataformaOrigen = document.createElement("p")
-                                    tituloPlataformaOrigen.classList.add("tituloPlataformaOrigen")
-                                    tituloPlataformaOrigen.innerText = "Evento de Airbnb"
-                                    contenedorTitulo.appendChild(tituloPlataformaOrigen)
-                                    const descripcionEvento = document.createElement("p")
-                                    descripcionEvento.classList.add("descripcionEvento")
-                                    descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb.Para ver los detalles de este evento, pulsa en el botón inferior que le permitirá ir directamente a los detalles del evento en la web de Airbnb."
-                                    contenedorTitulo.appendChild(descripcionEvento)
-                                    contenedorEvento.appendChild(contenedorTitulo)
-                                    const contenedorFechas = document.createElement("div")
-                                    contenedorFechas.classList.add("contenedorFechas")
-                                    const contenedorFechaInicio = document.createElement("div")
-                                    contenedorFechaInicio.classList.add("contenedorFecha_")
-                                    const tituloFechaInicio = document.createElement("p")
-                                    tituloFechaInicio.classList.add("tituloFecha")
-                                    tituloFechaInicio.innerText = "Fecha de inicio"
-                                    const fechaInicioUI = document.createElement("p")
-                                    fechaInicioUI.classList.add("fechaDatoUI")
-                                    fechaInicioUI.innerText = fechaInicio_Humano
-                                    contenedorFechaInicio.appendChild(tituloFechaInicio)
-                                    contenedorFechaInicio.appendChild(fechaInicioUI)
-                                    contenedorFechas.appendChild(contenedorFechaInicio)
-                                    const contenedorFechaFin = document.createElement("div")
-                                    contenedorFechaFin.classList.add("contenedorFecha_")
-                                    const tituloFechaFin = document.createElement("p")
-                                    tituloFechaFin.classList.add("tituloFecha")
-                                    tituloFechaFin.innerText = "Fecha fin"
-                                    const fechaFinUI = document.createElement("p")
-                                    fechaFinUI.classList.add("fechaDatoUI")
-                                    fechaFinUI.innerText = fechaFinal_Humano
-                                    contenedorFechaFin.appendChild(tituloFechaFin)
-                                    contenedorFechaFin.appendChild(fechaFinUI)
-                                    contenedorFechas.appendChild(contenedorFechaFin)
-                                    contenedorEvento.appendChild(contenedorFechas)
-                                    if (descripcion) {
-                                        const botonIrAlEvento = document.createElement("a")
-                                        botonIrAlEvento.classList.add("botonIrAlEvento")
-                                        botonIrAlEvento.href = urlEvento
-                                        botonIrAlEvento.innerText = "Abrir evento. (Se ira a la web de Airbnb)"
-                                        contenedorEvento.appendChild(botonIrAlEvento)
-                                    } else {
-                                        const botonIrAlEvento = document.createElement("div")
-                                        botonIrAlEvento.classList.add("sinInfo")
-                                        botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento.Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma.Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
-                                        contenedorEvento.appendChild(botonIrAlEvento)
-                                    }
+                                    const contenedorEvento = casaVitini.administracion.situacion.componentesUI.tarjetaEventoUI(detallesDelEvento)
                                     apartamentoUI.appendChild(contenedorEvento)
                                 }
                             }
@@ -1953,23 +1705,36 @@ const casaVitini = {
                         }
                         marcoElastico.appendChild(espacioSituacion)
                     }
-                } else {
-                    const mensajeSpinner = "Obteniendo situación..."
-                    const spinner = casaVitini.ui.componentes.spinnerSimple(mensajeSpinner)
-                    const contenedorCarga = document.createElement("div")
-                    contenedorCarga.classList.add("administracion_calendario_componente_calendario_contenedoCarga")
-                    contenedorCarga.setAttribute("contenedor", "obteniendoSituacion")
-                    //contenedorCarga.setAttribute("elemento", "flotante")
-                    contenedorCarga.appendChild(spinner)
-                    marcoElastico.appendChild(contenedorCarga)
-                    const transaccion = {
-                        zona: "administracion/situacion/detallesSituacionApartamento",
-                        apartamentoIDV: directorioUltimo
+                },
+                obtenerFecha: async () => {
+                    const respuestaServidor = await casaVitini.shell.servidor({
+                        zona: "componentes/fechaLocal"
+                    })
+                    if (respuestaServidor?.error) {
+                        casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
+                        return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                    if (respuestaServidor.fechaISO) {
+                        return respuestaServidor
+                    }
+                },
+
+            },
+            detallesApartamento: {
+                arranque: async function (apartamentoIDV) {
+
+                    const marcoElastico = document.querySelector("[componente=marcoElastico]")
+                    const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
+                    const spinner = casaVitini.ui.componentes.spinnerSimple()
+                    marcoElastico.appendChild(spinner)
+
+                    const respuestaServidor = await casaVitini.shell.servidor({
+                        zona: "administracion/situacion/detallesSituacionApartamento",
+                        apartamentoIDV: apartamentoIDV
+                    })
                     const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                     if (!instanciaRenderizada) { return }
-                    instanciaRenderizada.querySelector("[contenedor=obteniendoSituacion]").remove()
+                    spinner.remove()
                     if (respuestaServidor?.error) {
                         const info = {
                             titulo: "No existe el identificador del apartamento",
@@ -1979,264 +1744,56 @@ const casaVitini = {
                     }
                     if (respuestaServidor?.ok) {
                         const detallesApartamento = respuestaServidor?.ok
-                        const apartamentoUI = detallesApartamento.apartamentoUI
                         const apartamentoIDV = detallesApartamento.apartamentoIDV
-                        const zonaHoraria = detallesApartamento.zonaHoraria
-                        const horaEntradaTZ = detallesApartamento.horaEntradaTZ
-                        const zonaIDV = detallesApartamento.zonaIDV
-                        const horaSalidaTZ = detallesApartamento.horaSalidaTZ
-                        let estadoPernoctacion = detallesApartamento.estadoPernoctacion
                         const reservas = detallesApartamento.reservas
-                        const calendariosSincronizados = detallesApartamento.calendariosSincronizados
+                        const horaEntrada = detallesApartamento.horaEntrada
+                        const horaSalida = detallesApartamento.horaSalida
+                        detallesApartamento.apartamentoIDV = apartamentoIDV
+                        const calendariosSincronizados = detallesApartamento?.calendariosSincronizados || {}
+                        const apartamentoUI_ = casaVitini.administracion.situacion.componentesUI.tarjetaApartamentoUI(detallesApartamento)
+                        marcoElastico.appendChild(apartamentoUI_)
+
                         const espacioEventosAirbnb = document.createElement("div")
                         espacioEventosAirbnb.classList.add("espacioEventosAirbnb")
                         espacioEventosAirbnb.setAttribute("componente", "espacioEventosAirbnb")
-                        if (estadoPernoctacion === "ocupado") {
-                            estadoPernoctacion = "Ocupado"
-                        }
-                        if (estadoPernoctacion === "libre") {
-                            estadoPernoctacion = "Libre"
-                        }
 
-                        const zonaUI = {
-                            privada: "Zona privada",
-                            global: "Zona global",
-                            publica: "Zona pública"
-                        }
-                        let espacioSituacionDetallesApartamento = document.createElement("div")
-                        espacioSituacionDetallesApartamento.classList.add("espacioSituacionDetallesApartamento")
-                        espacioSituacionDetallesApartamento.setAttribute("componente", "espacioSituacionDetallesApartamento")
-                        let detallesGenerales = document.createElement("div")
-                        detallesGenerales.classList.add("situacionDetallesGenerales")
-                        let detallesReserva = document.createElement("div")
-                        detallesReserva.classList.add("situacionDetallesReserva")
-                        let bloqueApartamentoUI = document.createElement("div")
-                        bloqueApartamentoUI.classList.add("situacionDetallesbloqueApartamentoUI")
-                        let tituloApartamentoUI = document.createElement("div")
-                        tituloApartamentoUI.classList.add("situacionDetallesApartmentoTitulo")
-                        tituloApartamentoUI.innerText = apartamentoUI
-                        bloqueApartamentoUI.appendChild(tituloApartamentoUI)
-                        let bloqueEstado = document.createElement("div")
-                        bloqueEstado.classList.add("situacionDetalleBloqueSimpleInterno")
-                        let titutloEstadoApartamentoUI = document.createElement("div")
-                        titutloEstadoApartamentoUI.classList.add("situacionDetalleTituloBloqueSimple")
-                        titutloEstadoApartamentoUI.innerText = "Estado"
-                        bloqueEstado.appendChild(titutloEstadoApartamentoUI)
-                        let estadoApartamentoUI = document.createElement("div")
-                        estadoApartamentoUI.classList.add("situacionDetallesEstadoApartamento")
-                        estadoApartamentoUI.innerText = "estadoApartamento"
-                        bloqueEstado.appendChild(estadoApartamentoUI)
-                        //bloqueApartamentoUI.appendChild(bloqueEstado)
-                        let estadoPernoctacionUI = document.createElement("div")
-                        estadoPernoctacionUI.classList.add("situacionDetallesEstadoPernoctacion")
-                        estadoPernoctacionUI.innerText = estadoPernoctacion
-                        bloqueApartamentoUI.appendChild(estadoPernoctacionUI)
-                        let zona = document.createElement("div")
-                        zona.classList.add("situacionDetallesEstadoPernoctacion")
-                        zona.innerText = zonaUI[zonaIDV]
-                        bloqueApartamentoUI.appendChild(zona)
-                        detallesGenerales.appendChild(bloqueApartamentoUI)
-                        marcoElastico.appendChild(detallesGenerales)
                         for (const [reservaUID, detallesReservas] of Object.entries(reservas)) {
-                            const reservaUID = detallesReservas.reservaUID
-                            const fechaEntrada = detallesReservas.fechaEntrada
-                            const fechaSalida = detallesReservas.fechaSalida
-                            const diaLimite = detallesReservas.diaLimite
-                            const tiempoRestante = detallesReservas.tiempoRestante
-                            const cantidadDias = detallesReservas.cantidadDias
+
                             const pernoctantes = detallesReservas.pernoctantes
-                            const porcentajeTranscurrido = detallesReservas.porcentajeTranscurrido
                             const habitaciones = detallesReservas.habitaciones
-                            const bloqueReservaUI = document.createElement("div")
-                            bloqueReservaUI.classList.add("administracion_situracion_detallesApartamento_bloqueReserva")
-                            const reservaUI = document.createElement("a")
-                            reservaUI.classList.add(
-                                "administracion_situracion_detallesApartamento_reservaUI",
-                                "textoElipsis"
-                            )
-                            reservaUI.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}`)
-                            reservaUI.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}`)
-                            reservaUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                            detallesReservas.reservaUID = reservaUID
+                            detallesReservas.horaEntrada = horaEntrada
+                            detallesReservas.horaSalida = horaSalida
+                            const contenedorReserva = casaVitini.administracion.situacion.componentesUI.tarjetaReservaUI(detallesReservas)
+                            marcoElastico.appendChild(contenedorReserva)
 
-                            reservaUI.innerText = "Reserva " + reservaUID
-                            bloqueReservaUI.appendChild(reservaUI)
-                            if (diaLimite === "diaDeSalida") {
-                                const bloqueEntidad = document.createElement("div")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                const aviso = document.createElement("div")
-                                aviso.classList.add("administracion_situacion_portada_tituloEntidad")
-                                aviso.classList.add("negrita")
-                                aviso.innerText = "<<< Dia de salida"
-                                bloqueEntidad.appendChild(aviso)
-                                const tituloEntidad = document.createElement("div")
-                                tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                tituloEntidad.innerText = "Hoy es el día final de la reserva y los pernoctantes deben de abandonar el alojamiento antes de las  " + horaSalidaTZ
-                                bloqueEntidad.appendChild(tituloEntidad)
-                                const datoEntidad = document.createElement("div")
-                                datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                datoEntidad.innerText = tiempoRestante
-                                //bloqueEntidad.appendChild(datoEntidad)
-                                bloqueReservaUI.appendChild(bloqueEntidad)
-                            }
-                            if (diaLimite === "diaDeEntrada") {
-                                const bloqueEntidad = document.createElement("div")
-                                bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-                                const aviso = document.createElement("div")
-                                aviso.classList.add("administracion_situacion_portada_tituloEntidad")
-                                aviso.classList.add("negrita")
-                                aviso.innerText = ">>> Dia de entrada"
-                                bloqueEntidad.appendChild(aviso)
-                                const tituloEntidad = document.createElement("div")
-                                tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
-                                tituloEntidad.innerText = "Hoy es el día de entrada de la reserva y el alojamiento debe de estar preparado antes de las " + horaEntradaTZ + " para la llegada de los nuevos pernoctantes"
-                                bloqueEntidad.appendChild(tituloEntidad)
-                                const datoEntidad = document.createElement("div")
-                                datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
-                                datoEntidad.innerText = tiempoRestante
-                                //bloqueEntidad.appendChild(datoEntidad)
-                                bloqueReservaUI.appendChild(bloqueEntidad)
-                            }
-                            const apartamentoEstadoReserva = document.createElement("div")
-                            apartamentoEstadoReserva.classList.add("situacionApartamentoEstadoReserva")
-
-
-
-
-                            const nombreClaseDinamica = `barraProgresso-anchoDinamico-${reservaUID}`;
-                            if (!document.querySelector(`.${nombreClaseDinamica}`)) {
-                                // Si no existe, crea un nuevo estilo
-                                const style = document.createElement('style');
-                                style.innerHTML = `
-                                    .${nombreClaseDinamica} {
-                                        width: ${porcentajeTranscurrido}
-                                `;
-                                document.querySelector("main").appendChild(style);
-                            }
-
-                            const barraProgresso = document.createElement("div")
-                            barraProgresso.classList.add("situacionBarraProgressoReserva")
-                            barraProgresso.classList.add(
-                                "situacionBarraProgressoReserva",
-                                nombreClaseDinamica
-                            )
-                            apartamentoEstadoReserva.appendChild(barraProgresso)
-                            bloqueReservaUI.appendChild(apartamentoEstadoReserva)
-                            const contenedorFechas = document.createElement("div")
-                            contenedorFechas.classList.add("administracion_situacion_detallesApartamento_contenedorFechas")
-                            const bloqueFechaEntrada = document.createElement("div")
-                            bloqueFechaEntrada.classList.add("situacionDetalleBloqueSimpleExterno")
-                            const fechaEntradaTitulo = document.createElement("div")
-                            fechaEntradaTitulo.classList.add("situacionDetalleTituloBloqueSimple")
-                            fechaEntradaTitulo.innerText = "Fecha de entrada"
-                            bloqueFechaEntrada.appendChild(fechaEntradaTitulo)
-                            const fechaEntradaUI = document.createElement("div")
-                            fechaEntradaUI.classList.add("situacionDetallesfechaUI")
-                            fechaEntradaUI.innerText = fechaEntrada
-                            bloqueFechaEntrada.appendChild(fechaEntradaUI)
-                            contenedorFechas.appendChild(bloqueFechaEntrada)
-                            bloqueReservaUI.appendChild(contenedorFechas)
-                            const bloqueFechaSalida = document.createElement("div")
-                            bloqueFechaSalida.classList.add("situacionDetalleBloqueSimpleExterno")
-                            const fechaSalidaTitulo = document.createElement("div")
-                            fechaSalidaTitulo.classList.add("situacionDetalleTituloBloqueSimple")
-                            fechaSalidaTitulo.innerText = "Fecha de salida"
-                            bloqueFechaSalida.appendChild(fechaSalidaTitulo)
-                            const fechaSalidaUI = document.createElement("di")
-                            fechaSalidaUI.classList.add("situacionDetallesfechaUI")
-                            fechaSalidaUI.innerText = fechaSalida
-                            bloqueFechaSalida.appendChild(fechaSalidaUI)
-                            contenedorFechas.appendChild(bloqueFechaSalida)
-                            bloqueReservaUI.appendChild(contenedorFechas)
                             if (habitaciones.length > 0) {
                                 const espacioHabitaciones = document.createElement("div")
-                                espacioHabitaciones.classList.add("sitaucionDetallesEspacioHabitaciones")
+                                espacioHabitaciones.classList.add(
+                                    "gridHorizotnal2C",
+                                    "gap6"
+                                )
                                 for (const detallesHabitacion of habitaciones) {
                                     const habitacionUI = detallesHabitacion.habitacionUI
                                     const habitacionUID = detallesHabitacion.componenteUID
-                                    //const pernoctantes = detallesHabitacion.pernoctantes
-                                    const habitacionBloque = document.createElement("div")
-                                    habitacionBloque.setAttribute("habitacionUID", habitacionUID)
-                                    habitacionBloque.classList.add("administracion_situacion_detallesApartamento_contenedorHabitacion")
-                                    const tituloHabitacion = document.createElement("p")
-                                    tituloHabitacion.classList.add("situacionDetallestituloHabitacion")
-                                    tituloHabitacion.innerText = habitacionUI
-                                    habitacionBloque.appendChild(tituloHabitacion)
-
+                                    const habitacionBloque = casaVitini.administracion.situacion.componentesUI.tarjetaHabitacionUI({
+                                        habitacionUI,
+                                        habitacionUID
+                                    })
                                     espacioHabitaciones.appendChild(habitacionBloque)
                                 }
-                                bloqueReservaUI.appendChild(espacioHabitaciones)
+                                contenedorReserva.appendChild(espacioHabitaciones)
                             }
-                            marcoElastico.appendChild(bloqueReservaUI)
                             if (pernoctantes.length > 0) {
                                 for (const pernoctante of pernoctantes) {
 
-                                    const nombreCompleto = pernoctante.nombreCompleto
-                                    const tipoPernoctante = pernoctante.tipoPernoctante
-                                    const clienteUID = pernoctante.clienteUID
                                     const habitacionUID = pernoctante.habitacionUID
-                                    const fechaCheckIn = pernoctante.fechaCheckIn
-                                    const fechaCheckOut = pernoctante.fechaCheckOut
-
                                     const habitacionDestino = document.querySelector(`[habitacionUID="${habitacionUID}"]`)
                                     if (!habitacionDestino) {
                                         continue
                                     }
-
-                                    let tipoClienteUI
-                                    if (tipoPernoctante === "cliente") {
-                                        tipoClienteUI = "Cliente de Casa Vitini"
-                                    }
-                                    if (tipoPernoctante === "clientePool") {
-                                        tipoClienteUI = "Cliente por validar"
-                                    }
-                                    const marcoPernoctante = document.createElement("a")
-                                    marcoPernoctante.classList.add("administracion_situacion_detallesApartamento_contenedorCliente")
-                                    if (tipoPernoctante === "cliente") {
-                                        marcoPernoctante.setAttribute("vista", `/administracion/clientes/${clienteUID}`)
-                                        marcoPernoctante.setAttribute("href", `/administracion/clientes/${clienteUID}`)
-                                        marcoPernoctante.addEventListener("click", casaVitini.administracion.situacion.resolutorEnlacesCliente)
-                                    }
-                                    marcoPernoctante.setAttribute("clienteUID", clienteUID)
-                                    if (!fechaCheckIn) {
-                                        const tipoPernoctanteUI = document.createElement("div")
-                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
-                                        //tipoPernoctanteUI.classList.add("parpadea")
-                                        tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
-                                        tipoPernoctanteUI.innerText = "Pendiente de checkin"
-                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                    } else {
-                                        const tipoPernoctanteUI = document.createElement("div")
-                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
-                                        //tipoPernoctanteUI.classList.add("parpadea")
-                                        tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
-                                        tipoPernoctanteUI.innerText = "> " + fechaCheckIn
-                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                    }
-                                    if (fechaCheckOut) {
-                                        const tipoPernoctanteUI = document.createElement("div")
-                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
-                                        tipoPernoctanteUI.classList.add("letraRoja")
-                                        tipoPernoctanteUI.setAttribute("componente", "checkOutInfo")
-                                        tipoPernoctanteUI.innerText = "< " + fechaCheckOut
-                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                    }
-                                    if (tipoPernoctante === "clientePool") {
-                                        const tipoPernoctanteUI = document.createElement("div")
-                                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloPendienteComprobacion")
-                                        tipoPernoctanteUI.classList.add("parpadea")
-                                        tipoPernoctanteUI.setAttribute("componente", "pendienteComprobacion")
-                                        tipoPernoctanteUI.innerText = "Pendiente de comprobación documental"
-                                        marcoPernoctante.appendChild(tipoPernoctanteUI)
-                                    }
-                                    const nombreCompletoPernoctante = document.createElement("div")
-                                    nombreCompletoPernoctante.classList.add("administracion_situacion_detallesApartamento_nombrePernoctante")
-                                    nombreCompletoPernoctante.innerText = nombreCompleto
-                                    marcoPernoctante.appendChild(nombreCompletoPernoctante)
-                                    const tipoClientePernoctante = document.createElement("div")
-                                    tipoClientePernoctante.classList.add("administracion_situacion_detallesApartamento_tipoCliente")
-                                    tipoClientePernoctante.innerText = tipoClienteUI
-                                    marcoPernoctante.appendChild(tipoClientePernoctante)
-                                    habitacionDestino.appendChild(marcoPernoctante)
+                                    const pernoctanteUI = casaVitini.administracion.situacion.componentesUI.tarjetaPernotanteUI(pernoctante)
+                                    habitacionDestino.appendChild(pernoctanteUI)
                                 }
                             }
                         }
@@ -2396,16 +1953,496 @@ const casaVitini = {
                     }
                 }
             },
-            resolutorEnlacesCliente: (cliente) => {
-                cliente.preventDefault()
-                cliente.stopPropagation()
-                const clienteUID = cliente.target.closest("[clienteUID]").getAttribute("clienteUID")
-                const vista = "/administracion/clientes/" + clienteUID
-                const navegacion = {
-                    "vista": vista,
-                    "tipoOrigen": "menuNavegador"
+            componentesUI: {
+                tarjetaApartamentoUI: (data) => {
+                    const apartamentoIDV = data.apartamentoIDV
+                    const estadoPernoctacion = data.estadoPernoctacion
+                    const estadoApartamento = data.estadoApartamento
+                    const apartamentoUI = data.apartamentoUI
+                    const zonaIDV = data.zonaIDV
+                    console.log("estadoApartamtno", estadoApartamento)
+                    const dic = {
+                        estadoApartamento: {
+                            disponible: "Disponible",
+                            nodisponible: "No dispobile",
+
+                        },
+                        estadoPernoctacion: {
+                            ocupado: "Ocupado",
+                            libre: "Libre"
+                        },
+                        zona: {
+                            privada: "Privada (Solo administración)",
+                            global: "Global (Todo)",
+                            publica: "Pública (Solo reserva pública)"
+
+                        }
+                    }
+
+
+                    const apartamentoGUI = document.createElement("div")
+                    apartamentoGUI.classList.add("situacionApartamentoUI")
+                    const apartamentoTitulo = document.createElement("a")
+                    apartamentoTitulo.classList.add("situacionApartamentoTitutlo")
+                    apartamentoTitulo.innerText = apartamentoUI
+                    apartamentoTitulo.setAttribute("vista", `/administracion/situacion/alojamiento:${apartamentoIDV}`)
+                    apartamentoTitulo.setAttribute("href", `/administracion/situacion/alojamiento:${apartamentoIDV}`)
+                    apartamentoTitulo.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                    apartamentoGUI.appendChild(apartamentoTitulo)
+
+                    const contenedorInfoGlobal = document.createElement("div")
+                    contenedorInfoGlobal.classList.add(
+                        "flexVertical",
+                        "gap10",
+                        "padding14",
+                        "backgroundGrey1",
+                        "borderRadius16"
+                    )
+                    apartamentoGUI.appendChild(contenedorInfoGlobal)
+
+                    const contenedorEstadoPernoctacion = casaVitini.ui.componentes.widgetsUI.contenedorTituloDescripcionSimple({
+                        titulo: "Estado pernoctativo",
+                        dato: dic.estadoPernoctacion[estadoPernoctacion]
+                    })
+                    contenedorEstadoPernoctacion.querySelector("[data=dataUI]").style.fontWeight = "bold"
+                    contenedorInfoGlobal.appendChild(contenedorEstadoPernoctacion)
+
+                    const contenedorEstadoConfiguracionAlojamiento = casaVitini.ui.componentes.widgetsUI.contenedorTituloDescripcionSimple({
+                        titulo: "Estado configuracíon de la alojamiento",
+                        dato: dic.estadoApartamento[estadoApartamento]
+                    })
+                    contenedorEstadoConfiguracionAlojamiento.querySelector("[data=dataUI]").style.fontWeight = "bold"
+
+                    contenedorInfoGlobal.appendChild(contenedorEstadoConfiguracionAlojamiento)
+
+                    const contenedorZonaPublicacion = casaVitini.ui.componentes.widgetsUI.contenedorTituloDescripcionSimple({
+                        titulo: "Zona de publicación",
+                        dato: dic.zona[zonaIDV]
+                    })
+                    contenedorZonaPublicacion.querySelector("[data=dataUI]").style.fontWeight = "bold"
+                    contenedorInfoGlobal.appendChild(contenedorZonaPublicacion)
+
+
+                    // for (const detallesReservas of reservas) {
+                    //     detallesReservas.horaEntrada = horaEntrada
+                    //     detallesReservas.horaSalida = horaSalida
+                    //     const contenedorReserva = this.portada.contenedoReservaUI(detallesReservas)
+                    //     apartamentoGUI.appendChild(contenedorReserva)
+
+                    // }
+                    // if (calendariosSincronizados.airbnb) {
+                    //     const eventosAirbnb = calendariosSincronizados.airbnb.eventos
+                    //     for (const detallesDelEvento of eventosAirbnb) {
+                    //         const fechaInicio_ISO = detallesDelEvento.fechaInicio
+                    //         const fechaFinal_ISO = detallesDelEvento.fechaFinal
+                    //         const uid = detallesDelEvento.uid
+                    //         const descripcion = detallesDelEvento?.descripcion || null
+                    //         const nombreEvento = detallesDelEvento.nombreEvento
+                    //         const fechaInicioArray = fechaInicio_ISO.split("-")
+                    //         const fechaInicio_Humano = `${fechaInicioArray[2]}/${fechaInicioArray[1]}/${fechaInicioArray[0]}`
+                    //         const fechaFinalArray = fechaFinal_ISO.split("-")
+                    //         const fechaFinal_Humano = `${fechaFinalArray[2]}/${fechaFinalArray[1]}/${fechaFinalArray[0]}`
+                    //         let urlEvento
+                    //         if (descripcion) {
+                    //             const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
+                    //             const match = descripcion.match(regex);
+                    //             urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
+                    //         }
+
+                    //         // const contenedorEvento = document.createElement("div")
+                    //         // contenedorEvento.classList.add("contenedorEvento")
+                    //         // const contenedorTitulo = document.createElement("div")
+                    //         // contenedorTitulo.classList.add("contenedorTitulo")
+                    //         // const tituloPlataformaOrigen = document.createElement("p")
+                    //         // tituloPlataformaOrigen.classList.add("tituloPlataformaOrigen")
+                    //         // tituloPlataformaOrigen.innerText = "Evento de Airbnb"
+                    //         // contenedorTitulo.appendChild(tituloPlataformaOrigen)
+                    //         // const descripcionEvento = document.createElement("p")
+                    //         // descripcionEvento.classList.add("descripcionEvento")
+                    //         // descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb.Para ver los detalles de este evento, pulsa en el botón inferior que le permitirá ir directamente a los detalles del evento en la web de Airbnb."
+                    //         // contenedorTitulo.appendChild(descripcionEvento)
+                    //         // contenedorEvento.appendChild(contenedorTitulo)
+                    //         // const contenedorFechas = document.createElement("div")
+                    //         // contenedorFechas.classList.add("contenedorFechas")
+                    //         // const contenedorFechaInicio = document.createElement("div")
+                    //         // contenedorFechaInicio.classList.add("contenedorFecha_")
+                    //         // const tituloFechaInicio = document.createElement("p")
+                    //         // tituloFechaInicio.classList.add("tituloFecha")
+                    //         // tituloFechaInicio.innerText = "Fecha de inicio"
+                    //         // const fechaInicioUI = document.createElement("p")
+                    //         // fechaInicioUI.classList.add("fechaDatoUI")
+                    //         // fechaInicioUI.innerText = fechaInicio_Humano
+                    //         // contenedorFechaInicio.appendChild(tituloFechaInicio)
+                    //         // contenedorFechaInicio.appendChild(fechaInicioUI)
+                    //         // contenedorFechas.appendChild(contenedorFechaInicio)
+                    //         // const contenedorFechaFin = document.createElement("div")
+                    //         // contenedorFechaFin.classList.add("contenedorFecha_")
+                    //         // const tituloFechaFin = document.createElement("p")
+                    //         // tituloFechaFin.classList.add("tituloFecha")
+                    //         // tituloFechaFin.innerText = "Fecha fin"
+                    //         // const fechaFinUI = document.createElement("p")
+                    //         // fechaFinUI.classList.add("fechaDatoUI")
+                    //         // fechaFinUI.innerText = fechaFinal_Humano
+                    //         // contenedorFechaFin.appendChild(tituloFechaFin)
+                    //         // contenedorFechaFin.appendChild(fechaFinUI)
+                    //         // contenedorFechas.appendChild(contenedorFechaFin)
+                    //         // contenedorEvento.appendChild(contenedorFechas)
+                    //         // if (descripcion) {
+                    //         //     const botonIrAlEvento = document.createElement("a")
+                    //         //     botonIrAlEvento.classList.add("botonIrAlEvento")
+                    //         //     botonIrAlEvento.href = urlEvento
+                    //         //     botonIrAlEvento.innerText = "Abrir evento. (Se ira a la web de Airbnb)"
+                    //         //     contenedorEvento.appendChild(botonIrAlEvento)
+                    //         // } else {
+                    //         //     const botonIrAlEvento = document.createElement("div")
+                    //         //     botonIrAlEvento.classList.add("sinInfo")
+                    //         //     botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento.Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma.Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
+                    //         //     contenedorEvento.appendChild(botonIrAlEvento)
+                    //         // }
+                    //         const contenedorEvento = this
+                    //         apartamentoUI.appendChild(contenedorEvento)
+                    //     }
+                    // }
+                    return apartamentoGUI
+                },
+                tarjetaReservaUI: (data) => {
+                    const reservaUID = data.reservaUID
+                    const diaLimite = data.diaLimite
+                    const fechaEntrada = data.fechaEntrada
+                    const fechaSalida = data.fechaSalida
+                    const porcentajeTranscurrido = data.porcentajeTranscurrido
+                    const tiempoRestante = data.tiempoRestante
+                    const numeroDiasReserva = data.numeroDiasReserva
+                    const horaEntrada = data.horaEntrada
+                    const horaSalida = data.horaSalida
+
+                    const contenedorReserva = document.createElement("div")
+                    contenedorReserva.classList.add("administracion_situacion_portada_contenedorReserva")
+                    let bloqueEntidad = document.createElement("a")
+                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                    bloqueEntidad.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}/zona:alojamiento`)
+                    bloqueEntidad.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}/zona:alojamiento`)
+                    bloqueEntidad.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+
+                    bloqueEntidad.classList.add("administracion_situacion_portada_contenedorSelecccionable")
+                    let tituloEntidad = document.createElement("div")
+                    tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
+                    tituloEntidad.innerText = "Reserva"
+                    bloqueEntidad.appendChild(tituloEntidad)
+                    let apartamentoReserva = document.createElement("a")
+                    apartamentoReserva.classList.add("adminsitracion_situacion_portada_datoEntidad")
+                    apartamentoReserva.innerText = reservaUID
+                    bloqueEntidad.appendChild(apartamentoReserva)
+                    contenedorReserva.appendChild(bloqueEntidad)
+                    if (diaLimite === "diaDeSalida") {
+                        let bloqueEntidad = document.createElement("div")
+                        bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                        const aviso = document.createElement("div")
+                        aviso.classList.add("administracion_situacion_portada_tituloEntidad")
+                        aviso.classList.add("negrita")
+                        aviso.innerText = "<<< Dia de salida"
+                        bloqueEntidad.appendChild(aviso)
+                        const tituloEntidad = document.createElement("div")
+                        tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
+                        tituloEntidad.innerText = "Hoy es el día final de la reserva y los pernoctantes deben de abandonar el alojamiento antes de las " + horaSalida
+                        bloqueEntidad.appendChild(tituloEntidad)
+                        const datoEntidad = document.createElement("div")
+                        datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
+                        datoEntidad.innerText = tiempoRestante
+                        //bloqueEntidad.appendChild(datoEntidad)
+                        contenedorReserva.appendChild(bloqueEntidad)
+                    }
+                    if (diaLimite === "diaDeEntrada") {
+                        let bloqueEntidad = document.createElement("div")
+                        bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                        const aviso = document.createElement("div")
+                        aviso.classList.add("administracion_situacion_portada_tituloEntidad")
+                        aviso.classList.add("negrita")
+                        aviso.innerText = ">>> Dia de entrada"
+                        bloqueEntidad.appendChild(aviso)
+                        const tituloEntidad = document.createElement("div")
+                        tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
+                        tituloEntidad.innerText = "Hoy es el día de entrada de la reserva y el alojamiento debe de estar preparado antes de las " + horaEntrada + " para la llegada de los nuevos pernoctantes"
+                        bloqueEntidad.appendChild(tituloEntidad)
+                        const datoEntidad = document.createElement("div")
+                        datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
+                        datoEntidad.innerText = tiempoRestante
+                        //bloqueEntidad.appendChild(datoEntidad)
+                        contenedorReserva.appendChild(bloqueEntidad)
+                    }
+                    const contenedorFechas = document.createElement("div")
+                    contenedorFechas.classList.add("administracion_situacion_portada_contenedorFechas")
+                    bloqueEntidad = document.createElement("div")
+                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                    tituloEntidad = document.createElement("div")
+                    tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
+                    tituloEntidad.innerText = "Fecha de entrada"
+                    bloqueEntidad.appendChild(tituloEntidad)
+                    let apartamentoFechaEntrada = document.createElement("div")
+                    apartamentoFechaEntrada.classList.add("adminsitracion_situacion_portada_datoEntidad")
+                    apartamentoFechaEntrada.innerText = fechaEntrada
+                    bloqueEntidad.appendChild(apartamentoFechaEntrada)
+                    contenedorFechas.appendChild(bloqueEntidad)
+                    bloqueEntidad = document.createElement("div")
+                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                    bloqueEntidad.classList.add("administracion_situacion_portada_fechaDeSalida")
+                    tituloEntidad = document.createElement("div")
+                    tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
+                    tituloEntidad.innerText = "Fecha de salida"
+                    bloqueEntidad.appendChild(tituloEntidad)
+                    let apartamentoFechaSalida = document.createElement("div")
+                    apartamentoFechaSalida.classList.add("adminsitracion_situacion_portada_datoEntidad")
+                    apartamentoFechaSalida.innerText = fechaSalida
+                    bloqueEntidad.appendChild(apartamentoFechaSalida)
+                    contenedorFechas.appendChild(bloqueEntidad)
+                    contenedorReserva.appendChild(contenedorFechas)
+                    bloqueEntidad = document.createElement("div")
+                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                    let apartamentoEstadoReserva = document.createElement("div")
+                    apartamentoEstadoReserva.classList.add("situacionApartamentoEstadoReserva")
+
+
+
+                    const nombreClaseDinamica = `barraProgresso-anchoDinamico-${reservaUID}`;
+                    if (!document.querySelector(`.${nombreClaseDinamica}`)) {
+                        // Si no existe, crea un nuevo estilo
+                        const style = document.createElement('style');
+                        style.innerHTML = `
+                            .${nombreClaseDinamica} {
+                                width: ${porcentajeTranscurrido}
+                        `;
+                        document.querySelector("main").appendChild(style);
+                    }
+
+                    let barraProgresso = document.createElement("div")
+                    barraProgresso.classList.add(
+                        "situacionBarraProgressoReserva",
+                        nombreClaseDinamica
+                    )
+                    //barraProgresso.style.width = porcentajeTranscurrido
+                    apartamentoEstadoReserva.appendChild(barraProgresso)
+                    bloqueEntidad.appendChild(apartamentoEstadoReserva)
+                    contenedorReserva.appendChild(bloqueEntidad)
+                    bloqueEntidad = document.createElement("div")
+                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                    tituloEntidad = document.createElement("div")
+                    tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
+                    tituloEntidad.innerText = "Duración de la reserva"
+                    bloqueEntidad.appendChild(tituloEntidad)
+                    let datoEntidad = document.createElement("div")
+                    datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
+                    datoEntidad.innerText = numeroDiasReserva
+                    bloqueEntidad.appendChild(datoEntidad)
+                    contenedorReserva.appendChild(bloqueEntidad)
+                    bloqueEntidad = document.createElement("div")
+                    bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
+                    tituloEntidad = document.createElement("div")
+                    tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
+                    tituloEntidad.innerText = "Tiempo restante de la reserva"
+                    bloqueEntidad.appendChild(tituloEntidad)
+                    datoEntidad = document.createElement("div")
+                    datoEntidad.classList.add("adminsitracion_situacion_portada_datoEntidad")
+                    datoEntidad.innerText = tiempoRestante
+                    bloqueEntidad.appendChild(datoEntidad)
+                    contenedorReserva.appendChild(bloqueEntidad)
+                    return contenedorReserva
+                },
+                tarjetaEventoUI: (data) => {
+
+                    const fechaInicio_ISO = data.fechaInicio
+                    const fechaFinal_ISO = data.fechaFinal
+                    const uid = data.uid
+                    const descripcion = data?.descripcion || null
+                    const nombreEvento = data.nombreEvento
+                    const fechaInicioArray = fechaInicio_ISO.split("-")
+                    const fechaInicio_Humano = `${fechaInicioArray[2]}/${fechaInicioArray[1]}/${fechaInicioArray[0]}`
+                    const fechaFinalArray = fechaFinal_ISO.split("-")
+                    const fechaFinal_Humano = `${fechaFinalArray[2]}/${fechaFinalArray[1]}/${fechaFinalArray[0]}`
+                    let urlEvento
+                    if (descripcion) {
+                        const regex = /Reservation URL: (https:\/\/www\.airbnb\.com\/hosting\/reservations\/details\/[A-Za-z0-9]+)/;
+                        const match = descripcion.match(regex);
+                        urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
+                    }
+
+                    const contenedorEvento = document.createElement("div")
+                    contenedorEvento.classList.add(
+                        "flexVertical",
+                        "padding14",
+                        "gap10",
+                        "backgroundGrey1",
+                        "borderRadius16"
+                    )
+
+
+                    const tituloPlataformaOrigen = document.createElement("p")
+                    tituloPlataformaOrigen.classList.add("tituloPlataformaOrigen")
+                    tituloPlataformaOrigen.innerText = "Evento de Airbnb"
+                    contenedorEvento.appendChild(tituloPlataformaOrigen)
+
+                    const descripcionEvento = document.createElement("p")
+                    descripcionEvento.classList.add("descripcionEvento")
+                    descripcionEvento.innerText = "Este evento proviene de un calendario sincronizado con Airbnb."
+                    contenedorEvento.appendChild(descripcionEvento)
+
+                    const contenedorFechas = document.createElement("div")
+                    contenedorFechas.classList.add(
+                        "gridHorizotnal2C",
+                        "gap6",
+
+                    )
+                    contenedorEvento.appendChild(contenedorFechas)
+
+                    const contenedorFechaInicio = document.createElement("div")
+                    contenedorFechaInicio.classList.add(
+                        "flexVertical",
+                        "borderRadius16",
+                        "backgroundWhite3",
+                        "flextJustificacion_center",
+                        "flexAHCentrad",
+                        "padding10"
+                    )
+                    contenedorFechas.appendChild(contenedorFechaInicio)
+
+                    const tituloFechaInicio = document.createElement("p")
+                    tituloFechaInicio.classList.add("tituloFecha")
+                    tituloFechaInicio.innerText = "Fecha de inicio"
+                    contenedorFechaInicio.appendChild(tituloFechaInicio)
+
+                    const fechaInicioUI = document.createElement("p")
+                    fechaInicioUI.classList.add("fechaDatoUI")
+                    fechaInicioUI.innerText = fechaInicio_Humano
+                    contenedorFechaInicio.appendChild(fechaInicioUI)
+
+                    const contenedorFechaFin = document.createElement("div")
+                    contenedorFechaFin.classList.add(
+                        "flexVertical",
+                        "borderRadius16",
+                        "backgroundWhite3",
+                        "flextJustificacion_center",
+                        "flexAHCentrad",
+                        "padding10"
+                    )
+                    contenedorFechas.appendChild(contenedorFechaFin)
+
+                    const tituloFechaFin = document.createElement("p")
+                    tituloFechaFin.classList.add("tituloFecha")
+                    tituloFechaFin.innerText = "Fecha fin"
+                    contenedorFechaFin.appendChild(tituloFechaFin)
+
+                    const fechaFinUI = document.createElement("p")
+                    fechaFinUI.classList.add("fechaDatoUI")
+                    fechaFinUI.innerText = fechaFinal_Humano
+                    contenedorFechaFin.appendChild(fechaFinUI)
+
+
+                    if (descripcion) {
+                        const botonIrAlEvento = document.createElement("a")
+                        botonIrAlEvento.classList.add("botonIrAlEvento")
+                        botonIrAlEvento.href = urlEvento
+                        botonIrAlEvento.innerText = "Abrir evento. (Se ira a la web de Airbnb)"
+                        contenedorEvento.appendChild(botonIrAlEvento)
+                    } else {
+                        const botonIrAlEvento = document.createElement("div")
+                        botonIrAlEvento.classList.add("sinInfo")
+                        botonIrAlEvento.innerText = "Airbnb no proporciona ninguna información sobre este evento.Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma.Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
+                        contenedorEvento.appendChild(botonIrAlEvento)
+                    }
+                    return contenedorEvento
+                },
+                tarjetaHabitacionUI: (data) => {
+                    const habitacionUI = data.habitacionUI
+                    const habitacionUID = data.habitacionUID
+
+                    const contenedor = document.createElement("div")
+                    contenedor.setAttribute("habitacionUID", habitacionUID)
+                    contenedor.classList.add(
+                        "flexVertical",
+                        "gap6",
+                        "borderGrey1",
+                        "borderRadius12",
+                        "padding6"
+                    )
+                    const tituloHabitacion = document.createElement("p")
+                    tituloHabitacion.classList.add(
+                        "negrita",
+                        "padding10"
+                    )
+                    tituloHabitacion.innerText = habitacionUI
+                    contenedor.appendChild(tituloHabitacion)
+                    return contenedor
+                },
+                tarjetaPernotanteUI: (data) => {
+
+
+                    const nombreCompleto = data.nombreCompleto
+                    const tipoPernoctante = data.tipoPernoctante
+                    const clienteUID = data.clienteUID
+                    const habitacionUID = data.habitacionUID
+                    const fechaCheckIn = data.fechaCheckIn
+                    const fechaCheckOut = data.fechaCheckOut
+
+                    const dic = {
+                        cliente: "Cliente de Casa Vitini",
+                        clientePool: "Cliente por veriricar"
+                    }
+
+                    const marcoPernoctante = document.createElement("a")
+                    marcoPernoctante.classList.add(
+                        "flexVertical",
+                        "gap4",
+                        "padding10",
+                        "comportamientoBoton",
+                        "borderRadius8",
+                        "ratonDefault"
+                    )
+                    if (tipoPernoctante === "cliente") {
+                        marcoPernoctante.setAttribute("vista", `/administracion/clientes/cliente:${clienteUID}`)
+                        marcoPernoctante.setAttribute("href", `/administracion/clientes/cliente:${clienteUID}`)
+                        marcoPernoctante.setAttribute("clienteUID", clienteUID)
+                        marcoPernoctante.addEventListener("click",  casaVitini.shell.navegacion.cambiarVista)
+                    }
+                    if (!fechaCheckIn) {
+                        const tipoPernoctanteUI = document.createElement("div")
+                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
+                        //tipoPernoctanteUI.classList.add("parpadea")
+                        tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
+                        tipoPernoctanteUI.innerText = "Pendiente de checkin"
+                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                    } else {
+                        const tipoPernoctanteUI = document.createElement("div")
+                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
+                        //tipoPernoctanteUI.classList.add("parpadea")
+                        tipoPernoctanteUI.setAttribute("componente", "checkInInfo")
+                        tipoPernoctanteUI.innerText = "> " + fechaCheckIn
+                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                    }
+                    if (fechaCheckOut) {
+                        const tipoPernoctanteUI = document.createElement("div")
+                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloCheckIn")
+                        tipoPernoctanteUI.classList.add("letraRoja")
+                        tipoPernoctanteUI.setAttribute("componente", "checkOutInfo")
+                        tipoPernoctanteUI.innerText = "< " + fechaCheckOut
+                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                    }
+                    if (tipoPernoctante === "clientePool") {
+                        const tipoPernoctanteUI = document.createElement("div")
+                        tipoPernoctanteUI.classList.add("administracion_reservas_detallesReserva_tituloPendienteComprobacion")
+                        tipoPernoctanteUI.classList.add("parpadea")
+                        tipoPernoctanteUI.setAttribute("componente", "pendienteComprobacion")
+                        tipoPernoctanteUI.innerText = "Pendiente de comprobación documental"
+                        marcoPernoctante.appendChild(tipoPernoctanteUI)
+                    }
+                    const nombreCompletoPernoctante = document.createElement("div")
+                    nombreCompletoPernoctante.classList.add("administracion_situacion_detallesApartamento_nombrePernoctante")
+                    nombreCompletoPernoctante.innerText = nombreCompleto
+                    marcoPernoctante.appendChild(nombreCompletoPernoctante)
+                    const tipoClientePernoctante = document.createElement("div")
+                    tipoClientePernoctante.classList.add("administracion_situacion_detallesApartamento_tipoCliente")
+                    tipoClientePernoctante.innerText = dic[tipoPernoctante]
+                    marcoPernoctante.appendChild(tipoClientePernoctante)
+                    return marcoPernoctante
                 }
-                casaVitini.shell.navegacion.controladorVista(navegacion)
             }
         },
         servicios: {
@@ -5367,7 +5404,7 @@ const casaVitini = {
                     const mensaje = "Actualizando número de telefono público..."
 
 
-                   
+
 
 
                     casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({

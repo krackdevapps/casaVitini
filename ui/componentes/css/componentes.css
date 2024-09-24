@@ -3087,7 +3087,7 @@ summary:hover {
 [zonaCSS="/micasa"] .reservaDetallesBloqueFecha {
     background-color: rgba(255, 255, 255, 0.3);
     display: flex;
-    border-radius: 12px;
+    border-radius: 20px;
     padding: 4px;
     justify-content: space-around;
     backdrop-filter: blur(50px);
@@ -3101,7 +3101,7 @@ summary:hover {
     grid-template-rows: 1fr;
     gap: 6px;
     grid-template-areas: ". . .";
-    border-radius: 12px;
+    border-radius: 20px;
     padding: 6px;
     justify-content: space-around;
     backdrop-filter: blur(50px);
@@ -3825,7 +3825,7 @@ summary:hover {
 
 [zonaCSS="administracion/reservas/nueva"] .fechaEntradaElemento,
 [zonaCSS="administracion/reservas/nueva"] .fechaSalidaElemento {
-    border-radius: 7px;
+    border-radius: 16px;
     padding: 8px;
 }
 
@@ -5553,8 +5553,8 @@ summary:hover {
 [zonaCSS="administracion/reservas/nueva"] .botonBuscarAlojamiento {
     background: rgba(255, 255, 255, 0.3);
     margin: 0px;
-    padding: 10px;
-    border-radius: 7px;
+    padding: 20px;
+    border-radius: 16px;
     user-select: none;
     -webkit-user-select: none;
     cursor: default;
@@ -5689,7 +5689,7 @@ summary:hover {
 
 [zonaCSS="administracion/situacion"] .situacionApartamentoUI {
     background: rgb(255 255 255 / 0.4);
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 6px;
     display: flex;
     flex-direction: column;
@@ -5723,11 +5723,11 @@ summary:hover {
 }
 
 [zonaCSS="administracion/situacion"] .situacionApartamentoTitutlo {
-    padding-right: 10px;
+    padding-right: 14px;
     margin: 0px;
-    border-radius: 6px;
+    border-radius: 15px;
     font-weight: bold;
-    padding: 10px;
+    padding: 14px;
     text-decoration: none;
     color: black;
     cursor: default;
@@ -5747,11 +5747,10 @@ summary:hover {
 [zonaCSS="administracion/situacion"] .situacionApartamentoEstadoPernoctacion {
     background: #b8b8b88f;
     margin: 0;
-    padding: 5px;
-    border-radius: 6px;
+    padding: 15px;
+    border-radius: 15px;
     /* border: 1px solid rgb(0 0 0 / 0.4); */
-    padding-right: 10px;
-    padding-left: 10px;
+
 }
 
 .situacionApartamentoFecha {
@@ -5763,7 +5762,7 @@ summary:hover {
 
 [zonaCSS="administracion/situacion"] .situacionApartamentoEstadoReserva {
     background: rgb(0 0 0 / 20%);
-    height: 8px;
+    height: 10px;
     border-radius: 10px;
     display: flex;
     flex-direction: row;
@@ -10907,16 +10906,16 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: stretch;
     background: rgb(255 255 255 / 45%);
-    padding: 4px;
-    border-radius: 6px;
+    padding: 6px;
+    border-radius: 16px;
 }
 
 [zonaCSS="administracion/situacion"] .administracion_situacion_portada_bloqueEntidad {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    border-radius: 6px;
-    padding: 4px;
+    border-radius: 12px;
+    padding: 10px;
     text-decoration: none;
     color: black;
 }
@@ -13457,8 +13456,8 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: stretch;
     background: rgb(255 255 255 / 45%);
-    padding: 4px;
-    border-radius: 6px;
+    padding: 10px;
+    border-radius: 16px;
     gap: 4px;
 }
 
@@ -13522,8 +13521,8 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-items: stretch;
     background: rgb(255 255 255 / 45%);
-    padding: 4px;
-    border-radius: 6px;
+    padding: 6px;
+    border-radius: 20px;
     gap: 4px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -13531,13 +13530,13 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/situacion"] .espacioEventosAirbnb .tituloPlataformaOrigen {
     margin: 0px;
-    padding: 0px;
+    padding: 12px;
     font-weight: bold;
 }
 
 [zonaCSS="administracion/situacion"] .espacioEventosAirbnb .descripcionEvento {
     margin: 0px;
-    padding: 0px;
+    padding: 12px;
 }
 
 [zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorFechas {
@@ -13546,7 +13545,9 @@ grid-template-columns: 0.5fr 1.5fr;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    gap: 4px;
+    gap: 8px;
+    padding: 12px;
+
 }
 
 [zonaCSS="administracion/situacion"] .espacioEventosAirbnb .fechaDatoUI {
@@ -13569,7 +13570,7 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorFecha_ {
     background: #80808042;
     padding: 10px;
-    border-radius: 4px;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13686,7 +13687,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 .espacioEventosAirbnb .sinInfo {
-    padding: 4px;
+    padding:     16px;
 }
 
 [zonaCSS="/alojamiento"] .bloqueResumenReservaGlobal .formaDePago {
@@ -15077,6 +15078,9 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: stretch;
 }
 
+.flexAHCentrad {
+    align-items: center;
+}
 
 .contenidoAdvertenciaInmersiva {
     max-width: 1280px;
