@@ -75,7 +75,7 @@ export const procesadorReserva = async (data) => {
             apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
                 return detallesApartamento.apartamentoIDV
             })
- 
+
             const desgloseFinancieroReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
             instantaneaNoches = desgloseFinancieroReserva.instantaneaNoches
             instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []

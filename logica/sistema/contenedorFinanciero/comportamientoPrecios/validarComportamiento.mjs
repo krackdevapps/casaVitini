@@ -6,6 +6,7 @@ export const validarComportamiento = async (comportamiento) => {
     try {
 
         const schema = Joi.object({
+            comportamientoUID: Joi.optional(),
             nombreComportamiento: Joi.required(),
             testingVI: Joi.string(),
             estadoInicalDesactivado: Joi.string(),
@@ -27,7 +28,9 @@ export const validarComportamiento = async (comportamiento) => {
                 'array.base': '{{#label}} debe ser un array'
             }),
         }).required().messages({
-            'any.required': '{{#label}} es una llave obligatoria'
+            'any.required': '{{#label}} es una llave obligatoria',
+            'string.base': '{{#label}} debe de ser una cadena'
+
         })
 
         controlEstructuraPorJoi({

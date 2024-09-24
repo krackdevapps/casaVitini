@@ -62,30 +62,13 @@ export const generarSimulacion = async (entrada) => {
         }
 
         await eliminarBloqueoCaducado();
-        // const desgloseFinanciero = await procesador({
-        //     entidades: {
-        //         reserva: {
-        //             tipoOperacion: "crearDesglose",
-        //             fechaEntrada: fechaEntrada,
-        //             fechaSalida: fechaSalida,
-        //             fechaCreacion: fechaCreacion,
-        //             apartamentosArray: apartamentosIDVARRAY,
-        //             capaOfertas: "si",
-        //             zonasArray: ["global", "publica", "privada"],
-        //             descuentosParaRechazar: [],
-        //             capaDescuentosPersonalizados: "no",
-        //             descuentosArray: [],
-        //             capaImpuestos: "si",
-        //         }
-        //     },
-        // })
-
+    
         const serviciosSiReconocidos = []
         const codigosDescuentosSiReconocidos = []
 
         const desgloseFinanciero = await procesador({
             entidades: {
-                simulacion: {
+                reserva: {
                     origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,

@@ -12354,7 +12354,7 @@ const casaVitini = {
 
                                     const botonInsertarDescuento = document.createElement("div")
                                     botonInsertarDescuento.classList.add(
-                                        "botonV1",
+                                        "botonV3",
                                         "comportamientoBoton"
                                     )
                                     botonInsertarDescuento.innerText = "Insertar descuento"
@@ -12368,7 +12368,7 @@ const casaVitini = {
 
                                     const botonDescuentosCompatibles = document.createElement("div")
                                     botonDescuentosCompatibles.classList.add(
-                                        "botonV1",
+                                        "botonV3",
                                         "comportamientoBoton"
                                     )
                                     botonDescuentosCompatibles.innerText = "Descuentos compatibles"
@@ -12389,7 +12389,7 @@ const casaVitini = {
 
                                     const botonInsertarDescuento = document.createElement("div")
                                     botonInsertarDescuento.classList.add(
-                                        "botonV1",
+                                        "botonV3",
                                         "comportamientoBoton"
                                     )
                                     botonInsertarDescuento.innerText = "Insertar descuento"
@@ -12403,7 +12403,7 @@ const casaVitini = {
 
                                     const botonDescuentosCompatibles = document.createElement("div")
                                     botonDescuentosCompatibles.classList.add(
-                                        "botonV1",
+                                        "botonV3",
                                         "comportamientoBoton"
                                     )
                                     botonDescuentosCompatibles.innerText = "Descuentos compatibles"
@@ -12731,7 +12731,7 @@ const casaVitini = {
                                             botonRechazar.setAttribute("boton", "autorizacionOferta")
                                             botonRechazar.setAttribute("estadoActual", autorizacion)
                                             botonRechazar.classList.add(
-                                                "botonV1",
+                                                "botonV3",
                                                 "comportamientoBoton"
                                             )
                                             if (autorizacion === "aceptada") {
@@ -12751,7 +12751,7 @@ const casaVitini = {
 
                                         const botonEliminar = document.createElement("div")
                                         botonEliminar.classList.add(
-                                            "botonV1",
+                                            "botonV3",
                                             "comportamientoBoton"
                                         )
                                         botonEliminar.innerText = "Eliminar oferta de la reserva " + posicion
@@ -12781,7 +12781,7 @@ const casaVitini = {
                                             botonRechazar.setAttribute("boton", "autorizacionOferta")
                                             botonRechazar.setAttribute("estadoActual", autorizacion)
                                             botonRechazar.classList.add(
-                                                "botonV1",
+                                                "botonV3",
                                                 "comportamientoBoton"
                                             )
                                             if (autorizacion === "aceptada") {
@@ -12801,7 +12801,7 @@ const casaVitini = {
 
                                         const botonEliminar = document.createElement("div")
                                         botonEliminar.classList.add(
-                                            "botonV1",
+                                            "botonV3",
                                             "comportamientoBoton"
                                         )
                                         botonEliminar.innerText = "Eliminar oferta de la reserva " + posicion
@@ -14027,7 +14027,7 @@ const casaVitini = {
 
                                 const botonInsertarImpuesto = document.createElement("div")
                                 botonInsertarImpuesto.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonInsertarImpuesto.innerText = "Insertar impuesto"
@@ -14042,7 +14042,7 @@ const casaVitini = {
 
                                 const botonInsertarImpuestoAdHoc = document.createElement("div")
                                 botonInsertarImpuestoAdHoc.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonInsertarImpuestoAdHoc.innerText = "Crear e insertar impuesto ad hoc"
@@ -14065,7 +14065,7 @@ const casaVitini = {
 
                                 const botonInsertarImpuesto = document.createElement("div")
                                 botonInsertarImpuesto.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonInsertarImpuesto.innerText = "Insertar impuesto"
@@ -14080,7 +14080,7 @@ const casaVitini = {
 
                                 const botonInsertarImpuestoAdHoc = document.createElement("div")
                                 botonInsertarImpuestoAdHoc.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonInsertarImpuestoAdHoc.innerText = "Crear e insertar impuesto ad hoc"
@@ -14233,7 +14233,7 @@ const casaVitini = {
 
                                 const botonEliminarImpuesto = document.createElement("div")
                                 botonEliminarImpuesto.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonEliminarImpuesto.innerText = "Eliminar impuesto de la reserva"
@@ -14257,7 +14257,7 @@ const casaVitini = {
 
                                 const botonEliminarImpuesto = document.createElement("div")
                                 botonEliminarImpuesto.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonEliminarImpuesto.innerText = "Eliminar impuesto de la reserva"
@@ -14331,7 +14331,7 @@ const casaVitini = {
 
                                 const botonInsertarDescuento = document.createElement("div")
                                 botonInsertarDescuento.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonInsertarDescuento.innerText = "Reconstruir desglose financerio"
@@ -14353,7 +14353,7 @@ const casaVitini = {
 
                                 const botonInsertarDescuento = document.createElement("div")
                                 botonInsertarDescuento.classList.add(
-                                    "botonV1",
+                                    "botonV3",
                                     "comportamientoBoton"
                                 )
                                 botonInsertarDescuento.innerText = "Reconstruir desglose financerio"
@@ -25651,7 +25651,7 @@ const casaVitini = {
                                     const botonInsertarDescuento = document.createElement("div")
                                     botonInsertarDescuento.classList.add(
                                         "comportamientoBoton",
-                                        "botonV1",
+                                        "botonV3",
                                         "width100"
                                     )
                                     botonInsertarDescuento.innerText = "Insertar descuento"
@@ -25665,7 +25665,7 @@ const casaVitini = {
                                     const botonDescuentosCompatibles = document.createElement("div")
                                     botonDescuentosCompatibles.classList.add(
                                         "comportamientoBoton",
-                                        "botonV1",
+                                        "botonV3",
                                         "width100"
                                     )
                                     botonDescuentosCompatibles.innerText = "Descuentos compatibles"

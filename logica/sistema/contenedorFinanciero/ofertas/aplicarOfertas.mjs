@@ -15,6 +15,9 @@ export const aplicarOfertas = async (data) => {
         const pipe = data.pipe
         const instantaneaOfertasPorCondicion = pipe.instantaneaOfertasPorCondicion
         const instantaneaOfertasPorAdministrador = pipe.instantaneaOfertasPorAdministrador
+
+
+
         const fechaActual = pipe.fechaActual
 
         const reserva = estructura.entidades?.reserva
@@ -80,6 +83,7 @@ export const aplicarOfertas = async (data) => {
             const ofertasSelecionadasPorAdminstrador = await aplicarDescuentosPersonalizados({
                 descuentosArray: [ofertaUID]
             })
+
             instantaneaOfertasPorAdministrador.push(...ofertasSelecionadasPorAdminstrador)
 
         } else if (operacion?.tipo === "insertarDescuentoCompatibleConReserva") {

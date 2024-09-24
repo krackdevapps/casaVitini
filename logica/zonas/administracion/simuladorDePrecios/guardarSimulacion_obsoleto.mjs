@@ -83,23 +83,7 @@ export const guardarSimulacion_obsoleto = async (entrada) => {
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
-        // const desgloseFinanciero = await procesador({
-        //     entidades: {
-        //         reserva: {
-        //             tipoOperacion: "crearDesglose",
-        //             fechaEntrada: fechaEntrada,
-        //             fechaSalida: fechaSalida,
-        //             fechaCreacion: fechaCreacion,
-        //             apartamentosArray: apartamentosIDVARRAY,
-        //             capaOfertas: "si",
-        //             zonasArray: ["global", "publica", "privada"],
-        //             descuentosParaRechazar: [],
-        //             capaDescuentosPersonalizados: "no",
-        //             descuentosArray: [],
-        //             capaImpuestos: "si",
-        //         }
-        //     },
-        // })
+ 
         const serviciosSiReconocidos = []
         const codigosDescuentosSiReconocidos = []
 

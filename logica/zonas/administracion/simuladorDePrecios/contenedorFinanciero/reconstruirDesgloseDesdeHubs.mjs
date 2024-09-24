@@ -5,12 +5,12 @@ import { procesador } from "../../../../sistema/contenedorFinanciero/procesador.
 import { validadoresCompartidos } from "../../../../sistema/validadores/validadoresCompartidos.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { validarDataGlobalDeSimulacion } from "../../../../sistema/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
 import { obtenerServiciosPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs"
 import { insertarServicioPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/servicios/insertarServicioPorSimulacionUID.mjs"
 import { obtenerServicioPorServicioUID } from "../../../../repositorio/servicios/obtenerServicioPorServicioUID.mjs"
 import { eliminarServicioEnSimulacionPorServicioUID } from "../../../../repositorio/simulacionDePrecios/servicios/eliminarServicioEnSimulacionPorServicioUID.mjs"
+import { actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID } from "../../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -111,9 +111,9 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 }
             }
         })
+        console.log("desglose", desgloseFinanciero)
 
-
-        await actualizarDesgloseFinacieroPorSimulacionUID({
+        await actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID({
             desgloseFinanciero,
             simulacionUID
         })

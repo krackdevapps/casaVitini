@@ -46,7 +46,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
 
         const desgloseFinanciero = await procesador({
             entidades: {
-                simulacion: {
+                reserva: {
                     origen: "hubSimulaciones",
                     simulacionUID: simulacionUID
                 },

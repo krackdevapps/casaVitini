@@ -7227,6 +7227,7 @@ summary:hover {
     gap: 6px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+    display: none;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportameintoContendorFechas {
@@ -15288,6 +15289,21 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
 }
 .botonV3 {
+    padding: 10px;
+    border-radius: 9px;
+    background: rgba(0, 0, 0, 0.1);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.botonV5 {
     padding: 14px;
     border-radius: 16px;
     background: rgba(0, 0, 0, 0.1);
@@ -15301,6 +15317,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-items: center;
 }
+
 .botonV1BlancoIzquierda,
 .botonV1BlancoIzquierda_noSeleccionable {
     padding: 14px;

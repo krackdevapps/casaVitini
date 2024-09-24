@@ -70,7 +70,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
       
         const desgloseFinanciero = await procesador({
             entidades: {
-                simulacion: {
+                reserva: {
                     origen: "hubSimulaciones",
                     simulacionUID: simulacionUID
                 },
