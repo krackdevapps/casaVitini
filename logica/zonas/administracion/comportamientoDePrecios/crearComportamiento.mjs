@@ -23,7 +23,7 @@ export const crearComportamiento = async (entrada) => {
         if (testingVI) {
             comportamiento.testingVI = testingVI
         }
-
+        console.log(" entrada.body",  entrada.body)
         await validarComportamiento(comportamiento)
         await campoDeTransaccion("iniciar")
 

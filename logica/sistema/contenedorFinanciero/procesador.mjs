@@ -1,7 +1,6 @@
 
 
 import { estructuraDesgloseFinanciero } from "./estructuraDesgloseFinanciero.mjs"
-import { procesadorSimulacion } from "./entidades/simulacion/procesadorSimulacion.mjs"
 import { procesadorReserva } from "./entidades/reserva/procesadorReserva.mjs"
 import { procesadorServicios } from "./entidades/servicios/procesadorServicios.mjs"
 import { aplicarImpuestos } from "./entidades/reserva/aplicarImpuestos.mjs"
@@ -20,6 +19,22 @@ export const procesador = async (data) => {
             throw new Error(error)
         }
 
+        const entidadesIDV = [
+            "reserva",
+            "servicios"
+        ]
+        const llavesEnEntidades = Object.keys(entidades)
+        if (llavesEnEntidades.length === 0) {
+                const m = "El procesador del contenedor financiero necesita tener definida al menos una entidad"
+                throw new Error(m)            
+        }
+        llavesEnEntidades.forEach((entidadIDV) => {
+            if (!entidadesIDV.includes(entidadIDV)) {
+                const m = "El procesador del contenedor financiero no reconoce la entidad"
+                throw new Error(m)
+            }
+        })
+
         if (entidades.hasOwnProperty("reserva")) {
             controlError = false
             const reserva = entidades.reserva
@@ -29,17 +44,6 @@ export const procesador = async (data) => {
                 pipe
             })
         }
-        // Refactorizar
-        // if (entidades.hasOwnProperty("simulacion")) {
-        //     controlError = false
-        //     const simulacion = entidades.simulacion
-        //     await procesadorSimulacion({
-        //         estructura,
-        //         ...simulacion,
-        //         pipe
-        //     })
-        // }
-
         if (entidades.hasOwnProperty("servicios")) {
             controlError = false
             const servicios = entidades.servicios

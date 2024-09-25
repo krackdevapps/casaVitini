@@ -7910,7 +7910,7 @@ const casaVitini = {
             pantallaInmersivaPersonalizadaMoldeada: () => {
                 document.body.style.overflow = 'hidden';
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const pantallaInmersivaPersonalizadaUI = document.createElement("dialog")
+                const pantallaInmersivaPersonalizadaUI = document.createElement("div")
                 pantallaInmersivaPersonalizadaUI.setAttribute("class", "advertenciaInmersiva")
                 pantallaInmersivaPersonalizadaUI.setAttribute("componente", "advertenciaInmersiva")
                 pantallaInmersivaPersonalizadaUI.setAttribute("instanciaUID", instanciaUID)
@@ -15217,10 +15217,9 @@ const casaVitini = {
                         const metodoPersonalizado = data.metodoPersonalizado
 
                         document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=infoSinApartamento]`).style.display = "none"
-
-                        let apartamentoSeleccionadoUI
+                        
                         if (metodoPersonalizado === "comportamientoDePrecios") {
-                            apartamentoSeleccionadoUI = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento({
+                            const apartamentoSeleccionadoUI = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento({
                                 apartamentoIDV,
                                 apartamentoUI,
                                 instanciaUID,
@@ -15229,7 +15228,7 @@ const casaVitini = {
                             const zonaApartamentos = document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=zonaAnadirApartamento]`)
                             zonaApartamentos.appendChild(apartamentoSeleccionadoUI)
                         } else if (metodoPersonalizado === "simulador") {
-                            apartamentoSeleccionadoUI = casaVitini.administracion.simuladorDePrecios.componentes.apartamentoUI({
+                            const apartamentoSeleccionadoUI = casaVitini.administracion.simuladorDePrecios.componentes.apartamentoUI({
                                 apartamentoIDV,
                                 apartamentoUI,
                                 instanciaUID,
@@ -15239,7 +15238,7 @@ const casaVitini = {
                             zonaApartamentos.appendChild(apartamentoSeleccionadoUI)
                             casaVitini.administracion.simuladorDePrecios.componentes.actualizaSimulacion()
                         } else {
-                            apartamentoSeleccionadoUI = this.apartamentoUI({
+                            const apartamentoSeleccionadoUI = this.apartamentoUI({
                                 apartamentoIDV,
                                 apartamentoUI,
                                 instanciaUID,

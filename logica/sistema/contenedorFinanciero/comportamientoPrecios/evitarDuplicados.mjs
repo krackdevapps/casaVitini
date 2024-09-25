@@ -60,6 +60,16 @@ export const evitarDuplicados = async (data) => {
                     preContenedorApartamentos[apartamentoIDV] = new Decimal(0)
                 }
             }
+
+
+            const contenedorApartamentosIDV = []
+
+            apartamentos.forEach((detallesApartmento) => {
+                const apartamentoIDV = detallesApartmento.apartamentoIDV
+                contenedorApartamentosIDV.push(apartamentoIDV)
+            })
+
+
             const arrayApartamentos = Object.keys(preContenedorApartamentos)
             const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
                 fechaInicio: fechaInicio_ISO,
@@ -91,6 +101,25 @@ export const evitarDuplicados = async (data) => {
                 }
             }
             if (comportamientosEnConflicto.length > 0) {
+                for (const comportamiento of comportamientosEnConflicto) {
+                    const apartamentos = comportamiento.contenedor.apartamentos
+                    for (const [i, detallesApartmento] of apartamentos.entries()) {
+
+                        const apartamentoIDV = detallesApartmento.apartamentoIDV
+                        console.log(apartamentoIDV, i)
+
+                        if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
+                            const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                                apartamentoIDV: apartamentoIDV,
+                                errorSi: "noExiste"
+                            })).apartamentoUI
+                            detallesApartmento.apartamentoUI = apartamento
+                        } else {
+                            apartamentos.splice(i, 1);
+
+                        }
+                    }
+                }
                 const error = {
                     error: "No se puede crear este comportamiento porque entra en conflicto con los apartamentos en otros comportamientos.",
                     comportamientosEnConflicto: comportamientosEnConflicto,
@@ -124,41 +153,60 @@ export const evitarDuplicados = async (data) => {
                 contenedorApartamentosIDV.push(apartamentoIDV)
             })
 
-            const arbolComportamientoCoincidentes = {}
+            const comportamientosEnConflicto = []
 
             for (const detallesComportamiento of comportamientosPorTipoPorDiasEnElRango) {
                 const comportamientoUID = detallesComportamiento.comportamientoUID
                 const nombreComportamiento = detallesComportamiento.nombreComportamiento
                 const apartamentos = detallesComportamiento.contenedor.apartamentos
-                const apartamentosEnConflicto = []
 
-                for (const detallesApartmento of apartamentos) {
+
+                let interruptorInsercion = false
+                for (const [i, detallesApartmento] of apartamentos.entries()) {
                     const apartamentoIDV = detallesApartmento.apartamentoIDV
                     if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
-
-                        const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                            apartamentoIDV,
+                        const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV: apartamentoIDV,
                             errorSi: "noExiste"
-                        }).apartamentoUI
-                        const apartamentosEnClicto = {
-                            apartamentoIDV,
-                            apartamentoUI
-                        }
-                        apartamentosEnConflicto.push(apartamentosEnClicto)
+                        })).apartamentoUI
+                        detallesApartmento.apartamentoUI = apartamento
+                        interruptorInsercion = true
+                    } else {
+                        apartamentos.splice(i, 1);
                     }
                 }
-                if (apartamentosEnConflicto.length > 0) {
-                    arbolComportamientoCoincidentes[comportamientoUID] = {
-                        nombreComportamiento: nombreComportamiento,
-                        comportamientoUID: comportamientoUID,
-                        apartamentos: apartamentosEnConflicto
-                    }
+                if (interruptorInsercion) {
+                    comportamientosEnConflicto.push(detallesComportamiento)
                 }
+
+                // for (const detallesApartmento of apartamentos) {
+                //     const apartamentoIDV = detallesApartmento.apartamentoIDV
+                //     if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
+
+                //         const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                //             apartamentoIDV,
+                //             errorSi: "noExiste"
+                //         })).apartamentoUI
+                //         const apartamentosEnClicto = {
+                //             apartamentoIDV,
+                //             apartamentoUI
+                //         }
+                //         apartamentosEnConflicto.push(apartamentosEnClicto)
+                //     }
+                // }
+                // if (apartamentosEnConflicto.length > 0) {
+                //     arbolComportamientoCoincidentes[comportamientoUID] = {
+                //         nombreComportamiento: nombreComportamiento,
+                //         comportamientoUID: comportamientoUID,
+                //         apartamentos: apartamentosEnConflicto
+                //     }
+                // }
             }
-            if (Object.keys(arbolComportamientoCoincidentes).length > 0) {
+
+            if (comportamientosEnConflicto.length > 0) {
                 const errorCompuesto = {
                     error: `No se puede crear este comportamiento de porDias porque hay apartamentos en este comportamiento que existen en otros comportamientos por días que coinciden en el día y el apartamento. Es decir, hay comportamientos que tienen el mismo día y el mismo apartamento coincidiendo.`,
-                    comportamientosCoincidentes: arbolComportamientoCoincidentes
+                    comportamientosEnConflicto: comportamientosEnConflicto
                 }
                 throw errorCompuesto
             }

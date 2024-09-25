@@ -15,6 +15,7 @@ export const validarComportamiento = async (comportamiento) => {
                 tipo: Joi.required(),
                 fechaInicio: Joi.date(),
                 fechaFinal: Joi.date(),
+                dias:  Joi.array(),
                 fechaInicio_creacionReserva: Joi.date(),
                 fechaFinal_creacionReserva: Joi.date(),
                 apartamentos: Joi.array().items(Joi.object({
