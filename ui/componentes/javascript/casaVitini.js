@@ -11927,15 +11927,15 @@ const casaVitini = {
 
                                 const numeroServiciosPorRenderizad = desglosePorServicios.length
                                 if (numeroServiciosPorRenderizad === 0) {
-                                    const info = document.createElement("p")
-                                    info.innerText = "No hay servicios seleccionados"
-                                    info.classList.add(
-                                        "textoCentrado"
-                                    )
-                                    porServicio_renderizado.appendChild(info)
-
+                                    const info_selector = porServicio_renderizado.querySelector("[componente=titulo]")
+                                    if (!info_selector) {
+                                        const info = document.createElement("p")
+                                        info.setAttribute("componente", "titulo")
+                                        info.innerText = "No hay servicios seleccionados"
+                                        info.classList.add("textoCentrado")
+                                        porServicio_renderizado.appendChild(info)
+                                    }
                                 }
-
 
                                 let posicion = 0
                                 for (const servicio of desglosePorServicios) {
@@ -15217,7 +15217,7 @@ const casaVitini = {
                         const metodoPersonalizado = data.metodoPersonalizado
 
                         document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=infoSinApartamento]`).style.display = "none"
-                        
+
                         if (metodoPersonalizado === "comportamientoDePrecios") {
                             const apartamentoSeleccionadoUI = casaVitini.administracion.comportamiento_de_precios.crearComportamiento.insertarOpcionesApartamento({
                                 apartamentoIDV,
@@ -27098,7 +27098,7 @@ const casaVitini = {
 
 
                                             const titulo = constructor.querySelector("[componente=titulo]")
-                                            titulo.innerText = `Confirmar reconstruir el desglose de la reserva ${reservaUID} desde el hub (Oeracion irreversible)`
+                                            titulo.innerText = `Confirmar reconstruir el desglose de la reserva ${reservaUID} desde el hub (Operación irreversible)`
                                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
                                             mensaje.innerText = "Esta operación reconstruye el desglose financiero.Sí ha ocurrido un algún tipo de error en algún cálculo durante la construcción del desglose financiero, esta opción podría recuperar la integridad del desglose financiero."
 
@@ -27141,7 +27141,7 @@ const casaVitini = {
                                             const transaccion = {
                                                 zona: "administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeHubs",
                                                 reservaUID,
-                                                palabra
+                                                palabra,
                                             }
 
                                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)

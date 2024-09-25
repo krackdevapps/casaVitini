@@ -7602,7 +7602,13 @@ const casaVitini = {
                             servicios,
                             simulacionUID
                         })
-
+                        const selectorBotonReconstrucion = simulacionUI.querySelector("[boton=reconstruccionHubSinConfirmacion]")
+                        selectorBotonReconstrucion.addEventListener("click", () => {
+                            this.componentesUI.reconstruirDesgloseFinanciero.desdeHub.confirmarReconstrucion({
+                                simulacionUID: String(simulacionUID),
+                                sobreControl: "activado"
+                            })
+                        })
 
                         if (contenedorFinanciero.desgloseFinanciero) {
                             casaVitini.ui.componentes.contenedorFinanciero.constructor({
@@ -8955,7 +8961,7 @@ const casaVitini = {
 
 
                                 const titulo = constructor.querySelector("[componente=titulo]")
-                                titulo.innerText = `Confirmar reconstruir el desglose de la reserva ${simulacionUID} desde el hub (Oeracion irreversible)`
+                                titulo.innerText = `Confirmar reconstruir el desglose de la reserva ${simulacionUID} desde el hub (Operación irreversible)`
                                 const mensaje = constructor.querySelector("[componente=mensajeUI]")
                                 mensaje.innerText = "Esta operación reconstruye el desglose financiero, actualizando las instantáneas desde el hub de precios base, comportamientos de precio, ofertas e impuestos.Esta operación es irreversible porque sobrescribe los datos actuales de las instantáneas y reconstruye todo el contenedor financiero de la reserva.Para evitar falsos clics, por favor, escribe la palabra, reconstruir, en el campo de texto."
 
@@ -8985,7 +8991,7 @@ const casaVitini = {
                             confirmarReconstrucion: async function (data) {
                                 const simulacionUID = data.simulacionUID
                                 const palabra = data.palabra
-                                const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
+                                const sobreControl = data.sobreControl
 
                                 const instanciaUID_pantallaDeCargaSuperPuesta = casaVitini.utilidades.codigoFechaInstancia()
 
@@ -8998,19 +9004,19 @@ const casaVitini = {
                                 const transaccion = {
                                     zona: "administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeHubs",
                                     simulacionUID,
-                                    palabra
+                                    palabra,
+                                    sobreControl
                                 }
 
                                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                                 const pantallaDeCarga_renderizda = document.querySelector(`[instanciaUID="${instanciaUID_pantallaDeCargaSuperPuesta}"]`)
                                 pantallaDeCarga_renderizda?.remove()
-
+                                console.log("test", simulacionUID)
                                 const uiRenderizada = document.querySelector(`[simulacionUID="${simulacionUID}"]`)
                                 if (!uiRenderizada) { return }
-
+                                console.log("rs", respuestaServidor)
                                 if (respuestaServidor?.error) {
                                     return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
-
                                 }
                                 if (respuestaServidor?.ok) {
                                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -9464,7 +9470,11 @@ const casaVitini = {
                     const serviciosUI = casaVitini.administracion.simuladorDePrecios.componentes.servicios.arranque()
                     contenedorServicios.appendChild(serviciosUI)
 
-
+                    const botonReconstrucionHub = document.createElement("div")
+                    botonReconstrucionHub.setAttribute("boton", "reconstruccionHubSinConfirmacion")
+                    botonReconstrucionHub.classList.add("botonV1")
+                    botonReconstrucionHub.innerText = "Reconstruir desglose desde los hubs"
+                    contenedor.appendChild(botonReconstrucionHub)
 
 
                     const contenedorSimulacion = document.createElement("div")
@@ -9517,11 +9527,8 @@ const casaVitini = {
                         zonaIDV
                     }
 
-
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     this.controladorUIPorFaltaDeLLaves(respuestaServidor)
-
-                    console.log("r",respuestaServidor)
 
                     if (respuestaServidor?.error) {
                         selectorContendorSimulacion.removeAttribute("style")
@@ -9538,7 +9545,6 @@ const casaVitini = {
                             selectorContenedorFecha.setAttribute("memoriaVolatil", fechaRecovery_ISO)
                             selectorContenedorFecha.querySelector("[fechaUI]").innerText = fechaRecovery_humana
                         }
-
                     }
                     if (respuestaServidor?.ok) {
                         selectorContendorSimulacion.innerHTML = null
@@ -9550,7 +9556,6 @@ const casaVitini = {
                             simulacionUID
                         })
                     }
-
                 },
                 controladorUIPorFaltaDeLLaves: (data) => {
                     const llavesIDV = [
@@ -9561,7 +9566,7 @@ const casaVitini = {
                         "[selector=zonaIDV]"
                     ]
                     if (data.llavesFaltantes) {
-              
+
                         const llavesFaltantes = data.llavesFaltantes
                         const llaves = [
                             "fechaEntrada",
@@ -9603,7 +9608,6 @@ const casaVitini = {
                             document.querySelector(llaveIDV).classList.remove("parpadeoFondoAzul")
                         })
                     }
-
                 },
                 apartamentoUI: function (data) {
 
@@ -10161,14 +10165,18 @@ const casaVitini = {
 
                         if (servicios.length === 0) {
                             const contenedorServicios = simulacionUI.querySelector(`[contenedor=servicios]`)
-                            const infoSinEnlaces = casaVitini
-                                .administracion
-                                .simuladorDePrecios
-                                .componentes
-                                .servicios
-                                .componentesUI
-                                .infoSinServiciosUI()
-                            contenedorServicios.appendChild(infoSinEnlaces)
+                            const infoSinEnlaces_selector = contenedorServicios.querySelector("[componente=contenedorInfoSinServicios]")
+                            if (!infoSinEnlaces_selector) {
+                                const infoSinEnlaces = casaVitini
+                                    .administracion
+                                    .simuladorDePrecios
+                                    .componentes
+                                    .servicios
+                                    .componentesUI
+                                    .infoSinServiciosUI()
+                                contenedorServicios.appendChild(infoSinEnlaces)
+                            }
+
                         } else {
                             for (const servicioEnReserva of servicios) {
                                 const servicioUI = casaVitini

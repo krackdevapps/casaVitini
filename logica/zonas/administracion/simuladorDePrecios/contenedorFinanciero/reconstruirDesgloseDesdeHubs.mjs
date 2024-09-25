@@ -22,7 +22,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 2
+            numeroDeLLavesMaximo: 3
         })
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.simulacionUID,
@@ -33,18 +33,33 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const palabra = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.palabra,
-            nombreCampo: "El campo de la palabra reconstruir",
+        const sobreControl = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.sobreControl || "",
+            nombreCampo: "El campo sobreControl",
             filtro: "strictoSinEspacios",
-            sePermiteVacio: "no",
+            sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
-        if (palabra !== "reconstruir") {
-            const error = "Por favor, escribe correctamente la palabra, reconstruir en el campo de texto. Escribe la palabra, reconstruir en minúsculas y sin espacios internos. Esto está así para evitar falsos clics."
+        if (sobreControl !== "" && sobreControl !== "activado") {
+            const error = "El campo sobreControl si esta definido solo puede ser activado o un string vacío"
             throw new Error(error)
         }
+        if (sobreControl === "") {
+            const palabra = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.palabra,
+                nombreCampo: "El campo de la palabra reconstruir",
+                filtro: "strictoSinEspacios",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                devuelveUnTipoNumber: "si"
+            })
+            if (palabra !== "reconstruir") {
+                const error = "Por favor, escribe correctamente la palabra, reconstruir en el campo de texto. Escribe la palabra, reconstruir en minúsculas y sin espacios internos. Esto está así para evitar falsos clics."
+                throw new Error(error)
+            }
+        }
+
 
         mutex.acquire()
         await campoDeTransaccion("iniciar")
@@ -52,8 +67,6 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         await validarDataGlobalDeSimulacion(simulacionUID)
         const zonaIDV = simulacion.zonaIDV
 
-
-        const nombre = simulacion.nombre
         const fechaCreacion = simulacion.fechaCreacion
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
