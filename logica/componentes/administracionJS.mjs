@@ -9015,6 +9015,9 @@ const casaVitini = {
                                 const uiRenderizada = document.querySelector(`[simulacionUID="${simulacionUID}"]`)
                                 if (!uiRenderizada) { return }
                                 console.log("rs", respuestaServidor)
+
+                                casaVitini.administracion.simuladorDePrecios.componentes.controladorUIPorFaltaDeLLaves(respuestaServidor)
+
                                 if (respuestaServidor?.error) {
                                     return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                                 }
