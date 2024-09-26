@@ -106,7 +106,7 @@ export const evitarDuplicados = async (data) => {
                     for (const [i, detallesApartmento] of apartamentos.entries()) {
 
                         const apartamentoIDV = detallesApartmento.apartamentoIDV
-                        console.log(apartamentoIDV, i)
+
 
                         if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
                             const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({

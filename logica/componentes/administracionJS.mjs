@@ -7595,7 +7595,7 @@ const casaVitini = {
                         }
 
                         const selectorZonaIDV = simulacionUI.querySelector("[selector=zonaIDV]")
-                        console.log("zonaIDV", zonaIDV)
+
                         selectorZonaIDV.value = zonaIDV || ""
 
                         casaVitini.administracion.simuladorDePrecios.componentes.servicios.actualizarContenedor({
@@ -7838,14 +7838,7 @@ const casaVitini = {
 
 
                                 const ofertas = respuestaServidor.ofertasCompatibles
-                                const contenedorOfertas = document.createElement("div")
-                                contenedorOfertas.classList.add(
-                                    "maxWidth1280px",
-                                    "width100",
-                                    "flexVertical",
-                                    "gap6",
-                                )
-                                constructor.appendChild(contenedorOfertas)
+                     
 
                                 spinner.remove()
                                 if (ofertas.length > 0) {
@@ -7860,6 +7853,14 @@ const casaVitini = {
                                     constructor.appendChild(info)
 
                                 }
+                                const contenedorOfertas = document.createElement("div")
+                                contenedorOfertas.classList.add(
+                                    "maxWidth1280px",
+                                    "width100",
+                                    "flexVertical",
+                                    "gap6",
+                                )
+                                constructor.appendChild(contenedorOfertas)
 
                                 const estadoUI_ = (estadoIDV) => {
 
@@ -8352,6 +8353,7 @@ const casaVitini = {
                                 return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
+                                console.log("testtest")
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                 return casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.desplegarContenedorFinanciero({
                                     simulacionUID
@@ -9011,10 +9013,10 @@ const casaVitini = {
                                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                                 const pantallaDeCarga_renderizda = document.querySelector(`[instanciaUID="${instanciaUID_pantallaDeCargaSuperPuesta}"]`)
                                 pantallaDeCarga_renderizda?.remove()
-                                console.log("test", simulacionUID)
+
                                 const uiRenderizada = document.querySelector(`[simulacionUID="${simulacionUID}"]`)
                                 if (!uiRenderizada) { return }
-                                console.log("rs", respuestaServidor)
+
 
                                 casaVitini.administracion.simuladorDePrecios.componentes.controladorUIPorFaltaDeLLaves(respuestaServidor)
 
@@ -9051,6 +9053,7 @@ const casaVitini = {
                             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
+                            console.log("respuestaServidor", respuestaServidor)
                             const contenedorFinanciero = respuestaServidor.contenedorFinanciero
                             casaVitini.ui.componentes.contenedorFinanciero.constructor({
                                 destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
@@ -9844,7 +9847,7 @@ const casaVitini = {
 
                                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                                 const uiRenderizada = document.querySelector(`[simulacionUID="${simulacionUID}"] [contenedor=servicios]`)
-                                console.log("respuestaServidor", respuestaServidor)
+
                                 if (!uiRenderizada) { return }
                                 casaVitini.administracion.simuladorDePrecios.componentes.controladorUIPorFaltaDeLLaves(respuestaServidor)
                                 if (respuestaServidor?.error) {
@@ -10644,8 +10647,10 @@ const casaVitini = {
 
                                     }
                                     const uiSimulacion = document.querySelector(`[simulacionUID="${simulacionUID}"]`)
+                                    console.log("uiSimulacion", uiSimulacion)
                                     if (uiSimulacion) {
                                         const desgloseFinanciero = respuestaServidor?.desgloseFinanciero
+                                        console.log("desglose", desgloseFinanciero)
                                         if (desgloseFinanciero) {
                                             casaVitini.ui.componentes.contenedorFinanciero.constructor({
                                                 destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
@@ -12963,10 +12968,10 @@ const casaVitini = {
                         optionO2.value = "numeroExacto";
                         optionO2.textContent = "Con un número exacto de apartamentos.";
                         const opcion03 = document.createElement("option");
-                        opcion03.value = "aPartirDe";
+                        opcion03.value = "hastaUnNumeroExacto";
                         opcion03.textContent = "Hasta un número exacto de apartamentos.";
                         const opcion04 = document.createElement("option");
-                        opcion04.value = "hastaUnNumeroExacto";
+                        opcion04.value = "aPartirDe";
                         opcion04.textContent = "A partir de un número exacto de apartamentos.";
                         seleccionaTipoNumero.appendChild(optionO1);
                         seleccionaTipoNumero.appendChild(optionO2);
@@ -14349,7 +14354,7 @@ const casaVitini = {
                     if (!instanciaRenderizada) { return }
                     instanciaRenderizada.remove()
                     if (respuestaServidor?.error) {
-                        console.log("respuestaServidor", respuestaServidor)
+
                         if (respuestaServidor.comportamientosEnConflicto) {
                             const comportamientosEnConflictoUI = casaVitini.administracion.comportamiento_de_precios.compomentesUI.comportamientosEnClonfictoUI(respuestaServidor)
 
@@ -15536,7 +15541,7 @@ const casaVitini = {
                         const tituloAC = document.createElement("p")
                         tituloAC.innerText = "Dentro de este comportamiento de precio, los apartamentos siguientes entran en conflicto con este comportameinto:"
                         contenedorApartamentosEnConflicto.appendChild(tituloAC)
-                        console.log("apartam", apartamentos)
+
                         apartamentos.forEach((apartamento) => {
                             const apartamentoIDV = apartamento.apartamentoIDV
                             const apartamentoUI = apartamento.apartamentoUI

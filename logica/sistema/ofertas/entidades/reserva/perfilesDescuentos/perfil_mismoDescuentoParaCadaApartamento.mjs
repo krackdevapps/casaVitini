@@ -26,7 +26,7 @@ export const perfil_mismoDescuentoParaCadaApartamento = (data) => {
                     descuentosAplicados: []
                 }
             } else {
-                contenedorPorApartamento[apartamentoIDV].totalDescuentosAplicados = controlInstanciaDecimal(contenedorPorApartamento[apartamentoIDV].totalDescuentosAplicados);
+                contenedorPorApartamento[apartamentoIDV].totalDescuentosAplicados = new Decimal(contenedorPorApartamento[apartamentoIDV].totalDescuentosAplicados);
             }
             const contenedorDelApartamento = contenedorPorApartamento[apartamentoIDV]
             const totalCalculado = calcularTotal({

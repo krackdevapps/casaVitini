@@ -29,7 +29,9 @@ export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
         const fechaCreacion = simulacion.fechaCreacion
-        const apartamentosArray = simulacion.apartamentosArray
+        const apartamentosArray = simulacion.apartamentosIDVARRAY
+        console.log("simulacion", simulacion)
+
 
         const zonasArray = ["global", "privada"]
         const ofertasSelecionadasPorCondicion = await selecionarOfertasPorCondicion({

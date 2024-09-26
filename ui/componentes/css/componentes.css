@@ -4689,7 +4689,7 @@ summary:hover {
 }
 
 
-[ui="reservaUI"] .contenedorTotalesNocheDescuentos {
+[contenedor="financiero"] .contenedorTotalesNocheDescuentos {
     border-radius: 12px;
     gap: 6px;
     display: flex;
@@ -4700,7 +4700,7 @@ summary:hover {
 
 }
 
-[ui="reservaUI"] .contenedorDescuentosPorApartamento {
+[contenedor="financiero"] .contenedorDescuentosPorApartamento {
     border-radius: 6px;
     gap: 6px;
     display: flex;
@@ -4717,7 +4717,7 @@ summary:hover {
 }
 
 
-[ui="reservaUI"] .contenedorDescuentoPorApartamento {
+[contenedor="financiero"] .contenedorDescuentoPorApartamento {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
@@ -4850,7 +4850,7 @@ summary:hover {
 
 
 
-[ui="reservaUI"] .contenedorDescuentosAlTotalNetoNoche {
+[contenedor="financiero"] .contenedorDescuentosAlTotalNetoNoche {
     background-color: #746c6c29;
     padding: 10px;
     border-radius: 6px;

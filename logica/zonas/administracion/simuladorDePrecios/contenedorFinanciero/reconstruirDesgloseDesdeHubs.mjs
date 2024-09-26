@@ -71,7 +71,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
         const apartamentosArray = simulacion.apartamentosIDVARRAY
-
+console.log("FechaCreacion", fechaCreacion)
         try {
             for (const apartamentoIDV of apartamentosArray) {
                 await obtenerConfiguracionPorApartamentoIDV({
@@ -103,12 +103,13 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    origen: "externo",
-                    fechaEntrada: fechaEntrada,
-                    fechaSalida: fechaSalida,
-                    fechaCreacion: fechaCreacion,
-                    apartamentosArray: apartamentosArray,
-                    origenSobreControl: "simulacion"
+                    origen: "hubSimulaciones",
+                    simulacionUID:simulacionUID,
+                    // fechaEntrada: fechaEntrada,
+                    // fechaSalida: fechaSalida,
+                    // fechaCreacion: fechaCreacion,
+                    // apartamentosArray: apartamentosArray,
+                    // origenSobreControl: "simulacion"
                 },
                 servicios: {
                     origen: "instantaneaServiciosEnSimulacion",
@@ -117,14 +118,18 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             },
             capas: {
                 ofertas: {
+                    operacion: {
+                        tipo: "insertarDescuentosPorCondicionPorCodigo"
+                    },
                     zonasArray: [zonaIDV],
+                    ignorarCodigosDescuentos: "no"
                 },
                 impuestos: {
                     origen: "hubImuestos",
                 }
             }
         })
-        console.log("desglose", desgloseFinanciero)
+
 
         await actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID({
             desgloseFinanciero,

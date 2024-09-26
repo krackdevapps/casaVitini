@@ -101,7 +101,8 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
                 fechaActual_reserva: fechaCreacion,
                 fechaEntrada_reserva: fechaEntrada,
                 fechaSalida_reserva: fechaSalida,
-                codigoDescuentosArrayBASE64: codigosDescuentoArray
+                codigoDescuentosArrayBASE64: codigosDescuentoArray,
+                ignorarCodigosDescuentos: "no"
             })
             resultadoSelector.autorizacion = "aceptada"
             const condicionesQueNoSeCumple = resultadoSelector.condicionesQueNoSeCumple

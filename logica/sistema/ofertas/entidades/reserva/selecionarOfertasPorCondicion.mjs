@@ -6,7 +6,7 @@ export const selecionarOfertasPorCondicion = async (data) => {
         const fechaActual = data.fechaActual
         const fechaEntrada = data.fechaEntrada
         const fechaSalida = data.fechaSalida
-        const apartamentosArray = data.apartamentosArray
+        const apartamentosArray = data.apartamentosArray || []
         const zonasArray = data.zonasArray
         const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
         const ignorarCodigosDescuentos = data.ignorarCodigosDescuentos

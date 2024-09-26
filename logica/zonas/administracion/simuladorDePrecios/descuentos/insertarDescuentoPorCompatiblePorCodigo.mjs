@@ -123,7 +123,7 @@ export const insertarDescuentoPorCompatiblePorCodigo = async (entrada) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
-            contenedorFinanciero: desgloseFinanciero
+            desgloseFinanciero
         }
         return ok
     } catch (errorCapturado) {

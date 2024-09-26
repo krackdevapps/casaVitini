@@ -183,9 +183,19 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                         tipo: "",
                         ignorarCodigosDescuentos: "no"
                     }
+                } else {
+                    const m = "en configuracionOfertasInicial no se reconoce el identificador"
+                    throw new Error(m)
                 }
             }
-
+            console.log(
+                "configuracionOfertasInicial(estadoIniciarOfertasIDV)",
+                configuracionOfertasInicial(estadoIniciarOfertasIDV),
+                "configuracionOfertasInicial(estadoIniciarOfertasIDV)",
+                configuracionOfertasInicial(estadoIniciarOfertasIDV)
+            
+            
+            )
             const desgloseFinanciero = await procesador({
                 entidades: {
                     reserva: {
@@ -204,9 +214,9 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     ofertas: {
                         zonasArray: ["global", "privada"],
                         operacion: {
-                            tipo: configuracionOfertasInicial(estadoIniciarOfertasIDV)
+                            tipo: configuracionOfertasInicial(estadoIniciarOfertasIDV).tipo
                         },
-                        ignorarCodigosDescuentos: configuracionOfertasInicial(estadoIniciarOfertasIDV)
+                        ignorarCodigosDescuentos: configuracionOfertasInicial(estadoIniciarOfertasIDV).ignorarCodigosDescuentos
                     },
                     impuestos: {
                         origen: "hubImuestos"
