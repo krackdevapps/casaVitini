@@ -11,13 +11,13 @@ export const selecionarOfertasPorCondicion = async (data) => {
         const codigoDescuentosArrayBASE64 = data.codigoDescuentosArrayBASE64 || []
         const ignorarCodigosDescuentos = data.ignorarCodigosDescuentos
 
-
         const ofertasSeleccionadasPorRango = await obtenerOfertasPorRangoActualPorEstado({
             fechaActual: fechaActual,
             estadoIDV: "activado",
             zonasArray,
             entidadIDV: "reserva"
         })
+
         const ofertaAnalizadasPorCondiciones = []
         for (const oferta of ofertasSeleccionadasPorRango) {
             const resultadoSelector = await selectorPorCondicion({
@@ -31,6 +31,7 @@ export const selecionarOfertasPorCondicion = async (data) => {
             })
             resultadoSelector.autorizacion = "aceptada"
             const condicionesQueNoSeCumple = resultadoSelector.condicionesQueNoSeCumple
+
 
             if (condicionesQueNoSeCumple.length === 0) {
                 ofertaAnalizadasPorCondiciones.push(resultadoSelector)

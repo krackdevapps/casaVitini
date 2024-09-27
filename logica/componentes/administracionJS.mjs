@@ -7309,111 +7309,111 @@ const casaVitini = {
                         casaVitini.shell.navegacion.controladorVista(entrada)
                     }
                 },
-                generarDesglose: async function () {
-                    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                // generarDesglose: async function () {
+                //     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
 
-                    const info = document.createElement("div")
-                    info.setAttribute("contenedor", "info")
-                    info.classList.add(
-                        "textoCentrado",
-                        "flexVertical"
-                    )
-                    info.innerText = "Generando simulación..."
+                //     const info = document.createElement("div")
+                //     info.setAttribute("contenedor", "info")
+                //     info.classList.add(
+                //         "textoCentrado",
+                //         "flexVertical"
+                //     )
+                //     info.innerText = "Generando simulación..."
 
-                    const contenedorSimulacion = document.querySelector("[contenedor=simulacion]")
-                    contenedorSimulacion.appendChild(info)
-                    contenedorSimulacion.setAttribute("instanciaUID", instanciaUID)
+                //     const contenedorSimulacion = document.querySelector("[contenedor=simulacion]")
+                //     contenedorSimulacion.appendChild(info)
+                //     contenedorSimulacion.setAttribute("instanciaUID", instanciaUID)
 
-                    const fechaCreacion = document.querySelector("[calendario=unico]").getAttribute("memoriaVolatil")
-                    const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                    const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                    const selectorApartamentos = document.querySelectorAll("[apartamentoSeleccionado]")
-                    const apartamentosIDVARRAY = []
-                    selectorApartamentos.forEach((apartamento) => {
-                        const apartamentoIDV = apartamento.getAttribute("apartamentoSeleccionado")
-                        apartamentosIDVARRAY.push(apartamentoIDV)
-                    })
+                //     const fechaCreacion = document.querySelector("[calendario=unico]").getAttribute("memoriaVolatil")
+                //     const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                //     const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                //     const selectorApartamentos = document.querySelectorAll("[apartamentoSeleccionado]")
+                //     const apartamentosIDVARRAY = []
+                //     selectorApartamentos.forEach((apartamento) => {
+                //         const apartamentoIDV = apartamento.getAttribute("apartamentoSeleccionado")
+                //         apartamentosIDVARRAY.push(apartamentoIDV)
+                //     })
 
-                    const transaccion = {
-                        zona: "administracion/simuladorDePrecios/generarSimulacion",
-                        fechaCreacion,
-                        fechaEntrada,
-                        fechaSalida,
-                        apartamentosIDVARRAY
-                    }
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    if (!instanciaRenderizada) { return }
-                    instanciaRenderizada.innerHTML = null
-                    if (respuestaServidor?.error) {
-                        contenedorSimulacion.innerHTML = null
-                        const infoEr = document.createElement("div")
-                        infoEr.classList.add(
-                            "textoCentrado",
-                            "flexVertical"
-                        )
-                        infoEr.innerText = respuestaServidor?.error
-                        instanciaRenderizada.appendChild(infoEr)
-                    }
-                    if (respuestaServidor?.ok) {
+                //     const transaccion = {
+                //         zona: "administracion/simuladorDePrecios/generarSimulacion",
+                //         fechaCreacion,
+                //         fechaEntrada,
+                //         fechaSalida,
+                //         apartamentosIDVARRAY
+                //     }
+                //     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                //     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                //     if (!instanciaRenderizada) { return }
+                //     instanciaRenderizada.innerHTML = null
+                //     if (respuestaServidor?.error) {
+                //         contenedorSimulacion.innerHTML = null
+                //         const infoEr = document.createElement("div")
+                //         infoEr.classList.add(
+                //             "textoCentrado",
+                //             "flexVertical"
+                //         )
+                //         infoEr.innerText = respuestaServidor?.error
+                //         instanciaRenderizada.appendChild(infoEr)
+                //     }
+                //     if (respuestaServidor?.ok) {
 
-                        const contenedorFinanciero = respuestaServidor
+                //         const contenedorFinanciero = respuestaServidor
 
-                        const contenedorNoGuardado = document.createElement("div")
-                        contenedorNoGuardado.classList.add(
-                            "flexVertical",
-                            "gap6"
-                        )
-                        contenedorSimulacion.appendChild(contenedorNoGuardado)
+                //         const contenedorNoGuardado = document.createElement("div")
+                //         contenedorNoGuardado.classList.add(
+                //             "flexVertical",
+                //             "gap6"
+                //         )
+                //         contenedorSimulacion.appendChild(contenedorNoGuardado)
 
 
-                        const infoEstadoNoGuardado = document.createElement("div")
-                        infoEstadoNoGuardado.classList.add(
-                            "flexVertical",
-                            //"padding10",
-                            "textoCentrado"
-                        )
-                        infoEstadoNoGuardado.innerText = "Simulación sin guardar.Guarde la simulación para acceder a las funciones avanzadas."
-                        contenedorNoGuardado.appendChild(infoEstadoNoGuardado)
+                //         const infoEstadoNoGuardado = document.createElement("div")
+                //         infoEstadoNoGuardado.classList.add(
+                //             "flexVertical",
+                //             //"padding10",
+                //             "textoCentrado"
+                //         )
+                //         infoEstadoNoGuardado.innerText = "Simulación sin guardar.Guarde la simulación para acceder a las funciones avanzadas."
+                //         contenedorNoGuardado.appendChild(infoEstadoNoGuardado)
 
-                        const campoNombre = document.createElement("input")
-                        campoNombre.setAttribute("campo", "nombre")
-                        campoNombre.classList.add(
-                            "padding6",
-                            "backgroundGrey1",
-                            "borderRadius8",
-                            "padding10",
-                            "simplificadorCampo",
-                            "noSelecionable"
-                        )
-                        campoNombre.placeholder = "Escriba un nombre para la simulación"
-                        //botonCancelar.addEventListener("click", null)
-                        contenedorNoGuardado.appendChild(campoNombre)
+                //         const campoNombre = document.createElement("input")
+                //         campoNombre.setAttribute("campo", "nombre")
+                //         campoNombre.classList.add(
+                //             "padding6",
+                //             "backgroundGrey1",
+                //             "borderRadius8",
+                //             "padding10",
+                //             "simplificadorCampo",
+                //             "noSelecionable"
+                //         )
+                //         campoNombre.placeholder = "Escriba un nombre para la simulación"
+                //         //botonCancelar.addEventListener("click", null)
+                //         contenedorNoGuardado.appendChild(campoNombre)
 
-                        const botonGuardar = document.createElement("div")
-                        botonGuardar.classList.add(
-                            "botonV1",
-                            "comportamientoBoton",
-                            "padding6",
-                            "textoCentrado",
-                            "backgroundGrey1",
-                            "borderRadius8",
-                            "noSelecionable"
-                        )
-                        botonGuardar.innerText = "Guardar simulación"
-                        botonGuardar.addEventListener("click", this.guardarNuevaSimulacion)
-                        //botonCancelar.addEventListener("click", null)
-                        contenedorNoGuardado.appendChild(botonGuardar)
+                //         const botonGuardar = document.createElement("div")
+                //         botonGuardar.classList.add(
+                //             "botonV1",
+                //             "comportamientoBoton",
+                //             "padding6",
+                //             "textoCentrado",
+                //             "backgroundGrey1",
+                //             "borderRadius8",
+                //             "noSelecionable"
+                //         )
+                //         botonGuardar.innerText = "Guardar simulación"
+                //         botonGuardar.addEventListener("click", this.guardarNuevaSimulacion)
+                //         //botonCancelar.addEventListener("click", null)
+                //         contenedorNoGuardado.appendChild(botonGuardar)
 
-                        casaVitini.ui.componentes.contenedorFinanciero.constructor({
-                            destino: `[contenedor=simulacion]`,
-                            contenedorFinanciero,
-                            modoUI: "plaza"
-                        })
+                //         casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                //             destino: `[contenedor=simulacion]`,
+                //             contenedorFinanciero,
+                //             modoUI: "plaza"
+                //         })
 
-                    }
+                //     }
 
-                },
+                // },
             },
             detallesSimulacion: {
                 detalleSimulacion: async function (respuestaServidor) {
@@ -7838,7 +7838,7 @@ const casaVitini = {
 
 
                                 const ofertas = respuestaServidor.ofertasCompatibles
-                     
+
 
                                 spinner.remove()
                                 if (ofertas.length > 0) {
@@ -8353,7 +8353,7 @@ const casaVitini = {
                                 return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
-                                console.log("testtest")
+
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                 return casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.desplegarContenedorFinanciero({
                                     simulacionUID
@@ -9053,7 +9053,7 @@ const casaVitini = {
                             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
-                            console.log("respuestaServidor", respuestaServidor)
+
                             const contenedorFinanciero = respuestaServidor.contenedorFinanciero
                             casaVitini.ui.componentes.contenedorFinanciero.constructor({
                                 destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
@@ -10647,10 +10647,10 @@ const casaVitini = {
 
                                     }
                                     const uiSimulacion = document.querySelector(`[simulacionUID="${simulacionUID}"]`)
-                                    console.log("uiSimulacion", uiSimulacion)
+
                                     if (uiSimulacion) {
                                         const desgloseFinanciero = respuestaServidor?.desgloseFinanciero
-                                        console.log("desglose", desgloseFinanciero)
+
                                         if (desgloseFinanciero) {
                                             casaVitini.ui.componentes.contenedorFinanciero.constructor({
                                                 destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,

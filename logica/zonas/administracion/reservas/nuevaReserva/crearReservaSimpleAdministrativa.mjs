@@ -141,6 +141,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             }
             const origen = "administracion";
             const fechaCreacion = DateTime.utc().toISO();
+            const fechaCreacion_simple = DateTime.utc().toISODate();
+
             const estadoPago = "noPagado";
             await campoDeTransaccion("iniciar")
             const reservaUID = await generadorReservaUID()
@@ -188,20 +190,15 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     throw new Error(m)
                 }
             }
-            console.log(
-                "configuracionOfertasInicial(estadoIniciarOfertasIDV)",
-                configuracionOfertasInicial(estadoIniciarOfertasIDV),
-                "configuracionOfertasInicial(estadoIniciarOfertasIDV)",
-                configuracionOfertasInicial(estadoIniciarOfertasIDV)
-            
-            
-            )
+     
+
             const desgloseFinanciero = await procesador({
                 entidades: {
                     reserva: {
                         origen: "externo",
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
+                        fechaActual: fechaCreacion_simple,
                         apartamentosArray: apartamentos,
                         origenSobreControl: "reserva"
                     },

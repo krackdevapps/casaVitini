@@ -2735,6 +2735,7 @@ const casaVitini = {
 
                         const botonDesplegarDesglose = document.createElement("p")
                         botonDesplegarDesglose.setAttribute("boton", "desplegarDesglose")
+                        botonDesplegarDesglose.style.display = "none"
                         botonDesplegarDesglose.classList.add(
                             "textoCentrado",
                             "botonV1",
@@ -3103,7 +3104,6 @@ const casaVitini = {
                         selectorBotonDesplegarDesglose.style.opacity = "0"
                         selectorBotonDesplegarDesglose.style.pointerEvents = "none"
 
-
                         const selectorTotalFinal = document.querySelector("[data=totalFinal]")
                         const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                         selectorTotalFinal.setAttribute("instanciaUID", instanciaUID)
@@ -3113,6 +3113,7 @@ const casaVitini = {
                         const contenedorFinanciero = await casaVitini.ui.vistas.alojamiento.resumen.obtenerContenedorFinanciero({
                             aplicarUIData: aplicarUIData
                         })
+
 
                         if (contenedorFinanciero?.error) {
                             return casaVitini.ui.componentes.advertenciaInmersiva(contenedorFinanciero?.error)
@@ -3169,7 +3170,7 @@ const casaVitini = {
                             })
 
                             const totalFinal = contenedorFinanciero.desgloseFinanciero.global.totales.totalFinal
-                            selectorTotalDestino.innerText = totalFinal
+                            selectorTotalDestino.innerText = totalFinal + "$"
                             selectorTotalDestino.setAttribute("contenedorFinanciero", JSON.stringify(contenedorFinanciero.desgloseFinanciero))
                             selectorBotonDesplegarDesglose.removeAttribute("style")
                         }
@@ -3271,6 +3272,7 @@ const casaVitini = {
                         })
                         contenedor.appendChild(botonCerrar)
                         const desgloseFinanciero = JSON.parse(document.querySelector("[contenedorFinanciero]").getAttribute("contenedorFinanciero"))
+
                         casaVitini.ui.componentes.contenedorFinanciero.constructor({
                             destino: `[instanciaUID="${instanciaUID}"] [componente=contenedor]`,
                             contenedorFinanciero: { desgloseFinanciero },
@@ -11273,8 +11275,6 @@ const casaVitini = {
                                         totales
                                     })
                                 }
-
-
                             }
                         },
                         reserva: {
@@ -12443,9 +12443,6 @@ const casaVitini = {
                                 contenedorOfertasRenderizado.appendChild(contenedorListaOfertas)
 
                             }
-
-
-
 
                             const contenedorListaOfertas_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]")
                                 .querySelector("[contenedor=ofertas]")
@@ -13652,7 +13649,7 @@ const casaVitini = {
                                 const selectorApartamentos = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[contenedor=porNoche]").querySelectorAll(`[apartamentoIDV]`)
                                 selectorApartamentos.forEach((apartamentoRenderizado) => {
                                     const apartamentoObosoleto = apartamentoRenderizado.getAttribute("apartamentoIDV")
-                                    // console.log("apartamentoObosoleto", apartamentoObosoleto)
+                                    // 
                                     if (!apartamentosIDVArray.includes(apartamentoObosoleto)) {
                                         apartamentoRenderizado.querySelector("[contenedor=descuentosDelApartamento]")?.remove()
                                     }
@@ -13796,7 +13793,7 @@ const casaVitini = {
                                         const totalConDescuentosUI = document.createElement("p")
                                         totalConDescuentosUI.setAttribute("dato", "totalConDescuentos")
                                         contenedorGlobal.appendChild(totalConDescuentosUI)
-                                        descuentosGlobales.appendChild(contenedorGlobal)                              
+                                        descuentosGlobales.appendChild(contenedorGlobal)
 
                                         contendorNoche.insertBefore(descuentosGlobales, contendorTotalesNoche.nextSibling);
                                     }
@@ -13808,13 +13805,13 @@ const casaVitini = {
                                     const totalConDescuentosUI = descuentosGlobales_renderizado.querySelector("[dato=totalConDescuentos]")
                                     totalConDescuentosUI.innerText = totalConDescuentos + "$ Total neto noche con descuentos aplicados"
 
-                                        if (porTotalNetoDia.length > 0) {
+                                    if (porTotalNetoDia.length > 0) {
                                         const descuentosDelTotalNetoNoche_selector = contendorNoche.querySelector("[contenedor=descuentosNoche]")
                                         if (!descuentosDelTotalNetoNoche_selector) {
                                             const contenedorDescuentosDelTotalNetoNoche = document.createElement("div")
                                             contenedorDescuentosDelTotalNetoNoche.setAttribute("contenedor", "descuentosNoche")
                                             contenedorDescuentosDelTotalNetoNoche.classList.add("contenedorTotalesNocheDescuentos")
-                                         
+
                                             contendorNoche.insertBefore(contenedorDescuentosDelTotalNetoNoche, descuentosGlobales_renderizado.nextSibling);
 
                                             const titulo = document.createElement("div")
@@ -13824,7 +13821,7 @@ const casaVitini = {
                                             )
                                             titulo.innerText = "Descuentos aplicados al total neto de la noche."
                                             contenedorDescuentosDelTotalNetoNoche.appendChild(titulo)
-       
+
                                         }
                                         const descuentosDelTotalNetoNoche_renderizado = contendorNoche.querySelector("[contenedor=descuentosNoche]")
                                         const selectorDescuentosObsoletos = descuentosDelTotalNetoNoche_renderizado.querySelectorAll("[contenedor=descuento]")
@@ -13833,7 +13830,7 @@ const casaVitini = {
                                         })
 
                                     } else {
-                                        console.log("deberia borrarse",      contendorNoche.querySelector("[contenedor=descuentosNoche]"))
+
                                         contendorNoche.querySelector("[contenedor=descuentosNoche]")?.remove()
                                     }
 

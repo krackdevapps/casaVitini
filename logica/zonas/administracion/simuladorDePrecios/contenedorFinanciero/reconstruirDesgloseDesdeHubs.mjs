@@ -66,12 +66,10 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
         await validarDataGlobalDeSimulacion(simulacionUID)
         const zonaIDV = simulacion.zonaIDV
-
-        const fechaCreacion = simulacion.fechaCreacion
+        const fechaCreacion_simple = simulacion.fechaCreacion_simple
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
         const apartamentosArray = simulacion.apartamentosIDVARRAY
-console.log("FechaCreacion", fechaCreacion)
         try {
             for (const apartamentoIDV of apartamentosArray) {
                 await obtenerConfiguracionPorApartamentoIDV({
@@ -103,13 +101,12 @@ console.log("FechaCreacion", fechaCreacion)
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
-                    origen: "hubSimulaciones",
-                    simulacionUID:simulacionUID,
-                    // fechaEntrada: fechaEntrada,
-                    // fechaSalida: fechaSalida,
-                    // fechaCreacion: fechaCreacion,
-                    // apartamentosArray: apartamentosArray,
-                    // origenSobreControl: "simulacion"
+                    origen: "externo",
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
+                    fechaCreacion: fechaCreacion_simple,
+                    apartamentosArray: apartamentosArray,
+                    origenSobreControl: "simulacion"
                 },
                 servicios: {
                     origen: "instantaneaServiciosEnSimulacion",
@@ -129,7 +126,6 @@ console.log("FechaCreacion", fechaCreacion)
                 }
             }
         })
-
 
         await actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID({
             desgloseFinanciero,

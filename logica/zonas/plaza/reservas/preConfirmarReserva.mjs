@@ -15,6 +15,7 @@ import { validarObjetoReservaPublica } from "../../../sistema/reservas/nuevaRese
 import { limitesReservaPublica } from "../../../sistema/reservas/limitesReservaPublica.mjs";
 import { validarServiciosPubicos } from "../../../sistema/servicios/validarServiciosPublicos.mjs";
 import { validarDescuentosPorCodigo } from "../../../sistema/reservas/nuevaReserva/reservaPulica/validarDescuentosPorCodigo.mjs";
+import { limpiarContenedorFinacieroInformacionPrivada } from "../../../sistema/miCasa/misReservas/limpiarContenedorFinancieroInformacionPrivada.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -118,6 +119,8 @@ export const preConfirmarReserva = async (entrada) => {
                 "desgloseFinanciero"
             ]
         })
+        limpiarContenedorFinacieroInformacionPrivada(resolverDetallesReserva)
+
         const pdf = await generadorPDF(resolverDetallesReserva);
         if (!testingVI) {
             //   enviarMailReservaConfirmada(reservaUID);

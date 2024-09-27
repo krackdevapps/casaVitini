@@ -471,7 +471,7 @@ export const validarObjetoOferta = async (data) => {
             await validadoresCompartidos.fechas.validacionVectorial({
                 fechaEntrada: fechaInicioRango_ISO,
                 fechaSalida: fechaFinalRango_ISO,
-                tipoVector: "diferente"
+                tipoVector: "igual"
             })
 
             const subTipoDescuento = descuentosJSON.subTipoDescuento

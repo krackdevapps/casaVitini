@@ -19,7 +19,6 @@ export const aplicarOfertas = async (data) => {
 
 
         const fechaActual = pipe.fechaActual
-        console.log("fechaActual por pipe", fechaActual)
         const reserva = estructura.entidades?.reserva
         const global = reserva?.global
         const fechaEntrada = global?.rango?.fechaEntrada

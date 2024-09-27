@@ -50,6 +50,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         mutex.acquire()
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
+        const fechaCreacion_simple= reserva.fechaCreacion_simple
         if (estadoReserva === "cancelada") {
             const error = "La reserva está cancelada, no se pueden alterar los descuentos."
             throw new Error(error)
@@ -100,6 +101,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                     origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
+                    fechaActual: fechaCreacion_simple,
                     apartamentosArray: apartamentosArray,
                     origenSobreControl: "reserva"
                 },

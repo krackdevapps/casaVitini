@@ -30,7 +30,7 @@ export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
         const fechaSalida = simulacion.fechaSalida
         const fechaCreacion = simulacion.fechaCreacion
         const apartamentosArray = simulacion.apartamentosIDVARRAY
-        console.log("simulacion", simulacion)
+
 
 
         const zonasArray = ["global", "privada"]
@@ -41,7 +41,7 @@ export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
             apartamentosArray,
             zonasArray,
             ignorarCodigosDescuentos: "si"
-            
+
         })
 
         const ok = {

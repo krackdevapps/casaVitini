@@ -40,6 +40,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
+        const fechaCreacion_simple = DateTime.utc().toISODate();
         if (fechaEntrada_objeto < tiempoZH.startOf('day')) {
             const error = "La fecha de entrada no puede ser inferior a la fecha actual. Solo se pueden hacer reservas a partir de hoy";
             throw new Error(error);
@@ -77,6 +78,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                             origen: "externo",
                             fechaEntrada: fechaEntrada,
                             fechaSalida: fechaSalida,
+                            fechaActual: fechaCreacion_simple,
                             apartamentosArray: [apartamentoIDV],
                             origenSobreControl: "reserva"
                         },

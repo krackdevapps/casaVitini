@@ -11,7 +11,6 @@ import { procesador } from '../contenedorFinanciero/procesador.mjs';
 import { insertarDesgloseFinacieroPorReservaUID } from '../../repositorio/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs';
 import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../repositorio/arquitectura/entidades/cama/obtenerCamaComoEntidadPorCamaIDVPorTipoIDV.mjs';
 import { generadorReservaUID } from '../../componentes/generadorReservaUID.mjs';
-import { validarServiciosPubicos } from '../servicios/validarServiciosPublicos.mjs';
 import { obtenerServicioPorServicioUID } from '../../repositorio/servicios/obtenerServicioPorServicioUID.mjs';
 import { insertarServicioPorReservaUID } from '../../repositorio/reservas/servicios/insertarServicioPorReservaUID.mjs';
 
@@ -29,6 +28,7 @@ export const insertarReserva = async (reserva) => {
         const estadoPago = "noPagado"
         const origen = "cliente"
         const fechaCreacion = DateTime.utc().toISO()
+        const fechaCreacion_simple = DateTime.utc().toISODate();
         const alojamiento = reserva.alojamiento
         const titular = reserva.titular
         const testingVI = reserva.testingVI
@@ -128,6 +128,7 @@ export const insertarReserva = async (reserva) => {
                     origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
+                    fechaActual: fechaCreacion_simple,
                     apartamentosArray: apartamentosArray,
                     origenSobreControl: "reserva"
                 },

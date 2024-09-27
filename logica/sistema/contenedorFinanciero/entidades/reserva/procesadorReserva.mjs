@@ -41,14 +41,20 @@ export const procesadorReserva = async (data) => {
                 nombreCampo: "La fecha de salida del procesador de precios"
             })
 
+
+            fechaActual = await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: data.fechaActual,
+                nombreCampo: "La fecha de creacion del procesador de precios"
+            })
+
             await validadoresCompartidos.fechas.validacionVectorial({
                 fechaEntrada: data.fechaEntrada,
                 fechaSalida: data.fechaSalida,
                 tipoVector: "diferente"
             })
 
-            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-            fechaActual = DateTime.now().setZone(zonaHoraria).toISODate()
+          //  const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+           // fechaActual = DateTime.now().setZone(zonaHoraria).toISODate()
 
             apartamentosArray = validadoresCompartidos.tipos.array({
                 array: data.apartamentosArray,

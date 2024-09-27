@@ -95,6 +95,18 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
             incompatible: []
         }
         for (const oferta of ofertasPreSeleccionadas) {
+            
+            const condicionesArray = oferta.condicionesArray
+            let interruptor = false
+            condicionesArray.forEach((contenedor) => {
+                const tipoCondicion = contenedor.tipoCondicion
+                if (tipoCondicion === "porCodigoDescuento") {
+                    interruptor = true
+                }   
+            })
+            if (interruptor === false) {
+                continue
+            }
             const resultadoSelector = await selectorPorCondicion({
                 oferta: oferta,
                 apartamentosArray: apartamentosArray,
@@ -106,7 +118,6 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
             })
             resultadoSelector.autorizacion = "aceptada"
             const condicionesQueNoSeCumple = resultadoSelector.condicionesQueNoSeCumple
-
             if (condicionesQueNoSeCumple.length === 0) {
                 ofertasProcesadas.compatible.push(resultadoSelector)
             } else {

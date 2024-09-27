@@ -1,9 +1,11 @@
+import { DateTime } from "luxon"
 import { procesador } from "../../sistema/contenedorFinanciero/procesador.mjs"
 import { limitesReservaPublica } from "../../sistema/reservas/limitesReservaPublica.mjs"
 import { disponibilidadApartamentos } from "../../sistema/reservas/nuevaReserva/reservaPulica/disponibilidadApartamentos.mjs"
 import { validarDescuentosPorCodigo } from "../../sistema/reservas/nuevaReserva/reservaPulica/validarDescuentosPorCodigo.mjs"
 import { validarObjetoReservaPublica } from "../../sistema/reservas/nuevaReserva/reservaPulica/validarObjetoReservaPublica.mjs"
 import { validarServiciosPubicos } from "../../sistema/servicios/validarServiciosPublicos.mjs"
+import { limpiarContenedorFinacieroInformacionPrivada } from "../../sistema/miCasa/misReservas/limpiarContenedorFinancieroInformacionPrivada.mjs"
 
 export const precioReservaPublica = async (entrada) => {
     try {
@@ -17,7 +19,8 @@ export const precioReservaPublica = async (entrada) => {
         const fechaEntrada = reservaPublica.fechaEntrada
         const fechaSalida = reservaPublica.fechaSalida
         const apartamentosIDVArray = Object.keys(reservaPublica.alojamiento)
-   
+        const fechaCreacion_simple = DateTime.utc().toISODate();
+
         await limitesReservaPublica({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida
@@ -74,7 +77,7 @@ export const precioReservaPublica = async (entrada) => {
                 codigosUID.forEach((codigo, i) => {
                     const buffer = Buffer.from(codigo, 'base64');
                     codigo = buffer.toString('utf-8');
-                    codigosUID[i] =  buffer.toString('utf-8');
+                    codigosUID[i] = buffer.toString('utf-8');
                 })
             })
             const cNoReconocidos = controlCodigosDescuentos.codigosDescuentosNoReconocidos
@@ -83,7 +86,7 @@ export const precioReservaPublica = async (entrada) => {
                 codigosUID.forEach((codigo, i) => {
                     const buffer = Buffer.from(codigo, 'base64');
                     codigo = buffer.toString('utf-8');
-                    codigosUID[i] =  buffer.toString('utf-8');
+                    codigosUID[i] = buffer.toString('utf-8');
                 })
             })
 
@@ -91,16 +94,22 @@ export const precioReservaPublica = async (entrada) => {
 
         }
 
-        const soloCodigosBase64Descunetos = codigosDescuentosSiReconocidos.map((contenedor) => {
-            return contenedor.codigoUID
+        const soloCodigosBase64Descunetos = []
+        codigosDescuentosSiReconocidos.forEach((contenedor) => {
+            const grupoCodigos = contenedor.codigosUID
+            grupoCodigos.forEach((codigoUTF8) => {
+                const bufferFromUTF = Buffer.from(codigoUTF8, "utf8")
+                const codigoB64 = bufferFromUTF.toString("base64")
+                soloCodigosBase64Descunetos.push(codigoB64)
+            })
         })
-
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
                     origen: "externo",
                     fechaEntrada: fechaEntradaReserva,
                     fechaSalida: fechaSalidaReserva,
+                    fechaActual: fechaCreacion_simple,
                     apartamentosArray: apartamentosIDV,
                     origenSobreControl: "reserva"
                 },
@@ -122,6 +131,11 @@ export const precioReservaPublica = async (entrada) => {
                 impuestos: {
                     origen: "hubImuestos"
                 }
+            }
+        })
+        limpiarContenedorFinacieroInformacionPrivada({
+            contenedorFinanciero: {
+                desgloseFinanciero
             }
         })
 
