@@ -70,6 +70,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
+            
             const caracteristicas = validadoresCompartidos.tipos.array({
                 array: entrada.body.caracteristicas,
                 nombreCampo: "El campo de caracteristicas",

@@ -132,7 +132,7 @@
 body {
     background: rgb(206 206 206);
     background-image: url(/componentes/imagenes/transparente.png);
-    transition: background 500ms linear;
+    transition: background 700ms linear;
     flex-wrap: nowrap;
     background-size: cover;
     background-repeat: no-repeat;

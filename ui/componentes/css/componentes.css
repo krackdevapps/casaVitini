@@ -1,3 +1,26 @@
+select {
+    appearance: none;
+    outline: none;
+    border: none;
+}
+
+input,
+select {
+    padding: 14px;
+    border-radius: 16px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    background: rgb(255 255 255 / 0.3);
+    appearance: none;
+    outline: none;
+}
+
 [zonaCSS="/"] .tituloPortada {
     display: flex;
     place-content: center;
@@ -1961,8 +1984,17 @@ summary:hover {
     padding-right: 20px;
 }
 
+.paddingLateral50 {
+    padding-left: 50px !important;
+    padding-right: 50px !important;
+}
+
 [zonaCSS="/micasa"] .botonID:hover {
     background-color: rgba(0, 0, 0, 0.6);
+}
+
+.invisibleInicial {
+    visibility: hidden;
 }
 
 [zonaCSS="/micasa"] .botonID:active {
@@ -2004,7 +2036,7 @@ summary:hover {
     color: black;
     border-radius: 10px;
     margin: 0px;
-    transition: background 500ms linear;
+    transition: background 250ms linear;
 }
 
 [zonaCSS="/micasa"] .campoID::placeholder {
@@ -2015,16 +2047,17 @@ summary:hover {
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
+    color: transparent;
+    padding: 14px;
+    border-radius: 16px;
     display: flex;
-    visibility: hidden;
+    opacity: 0;
     pointer-events: none;
     align-items: center;
     justify-content: flex-start;
     align-content: center;
     gap: 12px;
+    transition: opacity 250ms linear;
 }
 
 .bloqueVertical {
@@ -3037,9 +3070,9 @@ summary:hover {
 }
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
-   display: grid;
-   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 0.4fr;
-   gap: 6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 0.4fr;
+    gap: 6px;
 }
 
 
@@ -3350,7 +3383,8 @@ summary:hover {
     background: rgba(0, 0, 0, 0.1);
 }
 
-[ui="reservaUI"] .tituloApartamento, .tituloApartamento_noSel {
+[ui="reservaUI"] .tituloApartamento,
+.tituloApartamento_noSel {
     padding: 10px;
     font-weight: bold;
     /* margin-bottom: 4px; */
@@ -3400,7 +3434,8 @@ summary:hover {
     color: rgb(62, 62, 62);
 }
 
-[ui="reservaUI"] .tituloHabitacion, [ui="reservaUI"] .tituloHabitacion_noSel {
+[ui="reservaUI"] .tituloHabitacion,
+[ui="reservaUI"] .tituloHabitacion_noSel {
     /* background: yellowgreen;*/
     padding: 10px;
     border-radius: 7px;
@@ -3543,7 +3578,7 @@ summary:hover {
     justify-items: stretch;
     justify-content: center;
     align-content: center;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     align-items: start;
 }
 
@@ -3554,7 +3589,7 @@ summary:hover {
     justify-items: stretch;
     justify-content: center;
     align-content: center;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     align-items: start;
 }
 
@@ -4623,7 +4658,7 @@ summary:hover {
     align-content: stretch;
     justify-content: center;
     gap: 6px;
-    max-width: 720px;
+
 }
 
 [zonaCSS="/micasa"] .vitiniID_contenedor_opciones {
@@ -7593,6 +7628,14 @@ summary:hover {
 
 .padding14 {
     padding: 14px;
+}
+
+.padding16 {
+    padding: 16px;
+}
+
+.padding18 {
+    padding: 18px;
 }
 
 
@@ -10825,10 +10868,9 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/configuracion"] .administracion_configuracion_bloqueConfiguracion {
     border-radius: 16px;
-    padding: 6px;
-    background: rgba(255, 255, 255, 0.3);
+    /* background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px); */
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -10840,9 +10882,10 @@ grid-template-columns: 0.5fr 1.5fr;
     transition: background 250ms linear;
 }
 
+/* 
 .administracion_configuracion_bloqueConfiguracion:hover {
     background: rgba(255, 255, 255, 0.6);
-}
+} */
 
 .administracion_configuracion_bloqueConfiguracion_portada {
     border-radius: 12px;
@@ -11165,9 +11208,6 @@ grid-template-columns: 0.5fr 1.5fr;
     padding: 8px;
 }
 
-.miCasa_portal_mensajeIniciandoSession {
-    display: flex;
-}
 
 .circuloAnimado {
     width: 16px;
@@ -12625,7 +12665,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 }
 
-.plaza_servicios_bloqueCaracteristica {
+[zonaCSS=instalaciones] .bloqueCaracteristicas {
     padding: 0px;
     border-radius: 30px;
     overflow: hidden;
@@ -12634,6 +12674,11 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: flex-end;
     height: 400px;
     -webkit-overflow-scrolling: touch;
+}
+
+[zonaCSS=instalaciones] .imagenPortada {
+    margin: 26px;
+    height: 80vh;
 }
 
 [zonaCSS=instalaciones] .plaza_servicios_superBloque {
@@ -12711,6 +12756,7 @@ grid-template-columns: 0.5fr 1.5fr;
     margin-left: 30px;
     margin-right: 30px;
     height: 1025px;
+
 }
 
 @media (max-width: 850px) {
@@ -12719,16 +12765,20 @@ grid-template-columns: 0.5fr 1.5fr;
     }
 }
 
+/* 
 [contenedor="instalaciones"] .contenedorImagen {
-    transition: all 250ms linear;
-}
-
-@media (min-width: 850px) {
-    [contenedor="instalaciones"] .contenedorImagen:hover {
-        /* transform: scale(1.05);*/
-        box-shadow: 0px 0px 20px 0px #0000007a;
+    transition: all 700ms linear;
+    scale: 1;
+    @starting-style {
+        scale: 0;
     }
-}
+} */
+
+/* @media (min-width: 850px) {
+     [contenedor="instalaciones"] .contenedorImagen:hover {
+        box-shadow: 0px 0px 20px 0px #0000007a;
+    } 
+} */
 
 .bloqueNuevo1 {
     display: flex;
@@ -12781,12 +12831,16 @@ grid-template-columns: 0.5fr 1.5fr;
     background-image: url("/componentes/imagenes/fotos/image00014.jpeg");
 }
 
-.plaza_servicio_porcheDelantero {
+[zonaCSS=instalaciones] .posicionImagen {
     background-size: cover;
     background-repeat: no-repeat;
-    /* background-attachment: fixed;*/
-    /* background-attachment: scroll;*/
     background-position: center center;
+    transition: all 150ms linear;
+}
+
+[zonaCSS=instalaciones] .apliarImagen:hover {
+    /* transform: scale(1.05); */
+    box-shadow: 0px 0px 20px 0px #0000007a;
 }
 
 .imagenEspacioCentral {
@@ -13688,7 +13742,7 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 .espacioEventosAirbnb .sinInfo {
-    padding:     16px;
+    padding: 16px;
 }
 
 [zonaCSS="/alojamiento"] .bloqueResumenReservaGlobal .formaDePago {
@@ -14006,7 +14060,7 @@ grid-template-columns: 0.5fr 1.5fr;
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/zonas_comunes/image00009.jpeg");
+    background-image: url("/componentes/imagenes/zonas_comunes/image00009.png");
 
 }
 
@@ -14251,7 +14305,7 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 [zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .descripcion {
-    margin: 10px;
+    padding: 30px;
     text-align: center;
 }
 
@@ -14263,6 +14317,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
     align-content: center;
     justify-items: stretch;
+
 }
 
 [zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .imagenContenedor {
@@ -14370,24 +14425,40 @@ grid-template-columns: 0.5fr 1.5fr;
 
 /* Fin Apartametno 7 */
 [zonaCSS=instalaciones] .contenedorImagenAmpliada {
-    background: #a5a5a500;
-    position: fixed;
-    height: 100vh;
+    background: black;
+    /* position: fixed; */
     width: 100vw;
-    transition: opacity 250ms linear;
-    opacity: 0;
+    /* Ocupa todo el ancho de la pantalla */
+    height: 100vh;
+    /* Ocupa todo el alto de la pantalla */
+    margin: 0;
+    top: 0px;
+    /* Elimina el margen por defecto */
+    padding: 0;
+    /* Elimina el padding por defecto */
+    border: none;
+    /* Elimina el borde */
+    transition: all 250ms linear;
+    /* opacity: 0; */
     gap: 10px;
     touch-action: manipulation;
     cursor: default;
-    top: 0vh;
-    left: 0vw;
-    z-index: 99;
     display: grid;
     grid-template-columns: 1fr;
+    position: fixed;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+    outline: none;
+    opacity: 1;
+    z-index: 100;
+
+    @starting-style {
+        opacity: 0;
+    }
 }
+
+
 
 [zonaCSS=instalaciones] .contenedorImagenVolatil {
     background-size: contain;
@@ -14419,7 +14490,7 @@ grid-template-columns: 0.5fr 1.5fr;
 [zonaCSS=instalaciones] .contenedorImagenAmpliada .marcoEspaciadoContenedorBotones {
     display: flex;
     /* padding: 6px; */
-    top: 50px;
+    top: 0px;
     width: 100vw;
     position: absolute;
     z-index: 100;
@@ -14921,9 +14992,7 @@ grid-template-columns: 0.5fr 1.5fr;
     display: flex;
     width: 100%;
     gap: 10px;
-    padding: 10px;
     align-content: center;
-    max-width: 720px;
 }
 
 [zonaCSS="privacidad"] .contenedorRevocar {
@@ -14961,7 +15030,7 @@ grid-template-columns: 0.5fr 1.5fr;
     font-size: 16px;
 }
 
-.botonV1:hover {
+.botonV1:hover, .botonV1Blanco:hover {
     background: rgba(255, 255, 255, 0.7);
 
 }
@@ -15140,9 +15209,12 @@ grid-template-columns: 0.5fr 1.5fr;
 .borderRadius24 {
     border-radius: 24px;
 }
+
 .backgroundGrey1 {
     background: rgba(0, 0, 0, 0.1);
 }
+
+
 
 .selectorLista {
     padding: 10px;
@@ -15257,6 +15329,28 @@ grid-template-columns: 0.5fr 1.5fr;
     align-content: center;
     justify-content: center;
     align-items: center;
+    outline: none;
+}
+.botonV1Blanco {
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+}
+
+.blur50 {
+
+    -webkit-backdrop-filter: blur(50px) !important;
+    backdrop-filter: blur(50px) !important;
 }
 
 
@@ -15288,6 +15382,7 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-items: center;
 }
+
 .botonV3 {
     padding: 10px;
     border-radius: 9px;
@@ -15333,6 +15428,34 @@ grid-template-columns: 0.5fr 1.5fr;
     background: rgb(255 255 255 / 0.3);
 }
 
+.botonTransparenteSeleccionable {
+    padding: 14px;
+    border-radius: 16px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.botonV1BlancoIzquierda_sinRadius,
+.botonV1BlancoIzquierda_noSeleccionable_sinRadius {
+    padding: 14px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    background: rgb(255 255 255 / 0.3);
+}
+
 .areaTexto {
     padding: 14px;
     border-radius: 16px;
@@ -15351,7 +15474,9 @@ grid-template-columns: 0.5fr 1.5fr;
 
 
 
-.botonV1BlancoIzquierda:hover {
+.botonV1BlancoIzquierda:hover,
+.botonV1BlancoIzquierda_sinRadius:hover,
+.botonTransparenteSeleccionable:hover {
     background: rgb(255 255 255 / 0.8);
 }
 
@@ -15421,7 +15546,8 @@ grid-template-columns: 0.5fr 1.5fr;
 }
 
 
-.tarjetaGris, .tarjetaGris_seleccioanble {
+.tarjetaGris,
+.tarjetaGris_seleccioanble {
     background: rgb(255 255 255 / 0.5);
     border-radius: 14px;
     padding: 14px;
@@ -15434,7 +15560,7 @@ grid-template-columns: 0.5fr 1.5fr;
 .tarjetaGris_seleccioanble:hover {
     background: rgb(0 0 0 / 0.1);
     transition: background 250ms linear;
-  
+
 }
 
 [ui="reservaUI"] .contenedorPendiente {
@@ -15685,6 +15811,7 @@ select {
     grid-template-rows: 1fr;
     overflow: hidden;
     opacity: 1;
+
     @starting-style {
         grid-template-rows: 0fr;
         padding: 0px;
@@ -15702,4 +15829,8 @@ select {
 
 .grid3Columnas {
     grid-template-areas: ". . . ";
+}
+
+.fondoNaranja {
+    background: rgb(214, 192, 157);
 }

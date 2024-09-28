@@ -6,6 +6,8 @@ import { insertarReembolso } from "../../../../../repositorio/reservas/transacci
 import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../../repositorio/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID_ordenados.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../repositorio/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerPagoPorPagoUIDYReservaUID } from "../../../../../repositorio/reservas/transacciones/pagos/obtenerPagoPorPagoUIDYReservaUID.mjs";
+import { controlEstructuraPorJoi } from "../../../../../sistema/validadores/controlEstructuraPorJoi.mjs";
+import Joi from "joi";
 
 export const realizarReembolso = async (entrada, salida) => {
     try {
@@ -13,11 +15,6 @@ export const realizarReembolso = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
-
-        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
-            objeto: entrada.body,
-            numeroDeLLavesMaximo: 6
-        })
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
@@ -46,25 +43,30 @@ export const realizarReembolso = async (entrada, salida) => {
 
         })
 
-        const palabra = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.palabra,
-            nombreCampo: "El campo de la palabra",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
-        })
-        if (palabra !== "reembolso") {
-            const error = "Escriba la palabra reembolso en el campo de confirmación";
-            throw new Error(error);
-        }
-
         const tipoReembolso = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoReembolso,
             nombreCampo: "El tipoReembolso",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+        })
+
+        const schema = Joi.object({
+            reservaUID: Joi.required(),
+            cantidad: Joi.string(),
+            pagoUID: Joi.string(),
+            plataformaDePagoEntrada: Joi.string(),
+            palabra: Joi.string().optional(),
+            tipoReembolso: Joi.string()
+        }).required().messages({
+            'any.required': '{{#label}} es una llave obligatoria',
+            'string.base': '{{#label}} debe de ser una cadena'
+
+        })
+
+        controlEstructuraPorJoi({
+            schema: schema,
+            objeto: entrada.body
         })
 
         if (tipoReembolso !== "porPorcentaje" && tipoReembolso !== "porCantidad") {
@@ -130,6 +132,21 @@ export const realizarReembolso = async (entrada, salida) => {
         if (plataformaDePago === "pasarela" && plataformaDePagoEntrada === "pasarela") {
             const error = `La opción de enviar un reembolso a la pasarela está deshabilitada.`;
             throw new Error(error);
+
+            const palabra = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.palabra,
+                nombreCampo: "El campo de la palabra",
+                filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
+            })
+    
+  
+            if (palabra !== "reembolso") {
+                const error = "Escriba la palabra reembolso en el campo de confirmación";
+                throw new Error(error);
+            }
 
             const totalFormatoSquare = Number(cantidad.replace(".", ""));
             const reembolsoDetalles = {

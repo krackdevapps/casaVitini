@@ -16,6 +16,7 @@ export const validarHoraLimitePublica = async () => {
         const horaComparar = DateTime.fromFormat(horaLimiteDelMismoDia, "HH:mm", { zone: zonaHoraria });
         const mismoDiaAceptable = diasAntelacionReserva === "0" ? "si" : "no"
 
+        console.log("hora actual", tiempoZH, "Hora Limiste>>>" ,horaComparar)
         if (mismoDiaAceptable === "si") {
             if (tiempoZH > horaComparar) {
                 const m = `Sentimos informarle que ya no aceptamos reservas con fecha de entrada para el día de hoy. La hora límite para aceptar reservas con fecha de entrada para el día de hoy es ${horaLimiteDelMismoDia}. Esta hora límite está formato 24H en zona hora local de ${zonaHoraria}`

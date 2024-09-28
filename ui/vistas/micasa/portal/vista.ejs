@@ -1,38 +1,34 @@
 <arranque publico="miCasa.portal.arranque"></arranque>
-<p class="titulo">Mi Casa Vitini</p>
-<div class="marcoElasticoRelativo">
-    <div class="marcoElastico">
-        <div componente="marcoVitiniIDX" class="miCasa_marcoVitiniIDX">
-            <div class="marcoIDX">
-                <div class="vitiniIdLogin">
-                    <div class="bloqueRespuesta" id="bloqueRespuesta">
-                        bloqueRespuesta
-                    </div>
-                    <form action="" class="vitiniIdLogin">
-                        <input type="mail" class="campoID" componente="campoID" IDX="usuario" value=""
-                            placeholder="Vitini ID" autocomplete="on">
-                        <input type="password" class="campoID" componente="campoID" IDX="clave" value=""
-                            placeholder="Contraseña" autocomplete="on">
-                    </form>
-                    <div class="bloqueBotonesID" componente="contenedorBotones">
-                        <p class="botonID" componente="botonID" boton="iniciarSession">Inciar Session</p>
-                    </div>
+<p class="tituloGris">Mi Casa Vitini</p>
+<div class="marcoElasticoRelativo" style="max-width: 920px ; gap: 10px;">
+    <div componente="marcoVitiniIDX" class="flexVertical" style="gap: 20px;" >
+        <div class="flexVertical">
+            <div class="vitiniIdLogin">
+                <div class="bloqueRespuesta" componente="bloqueRespuesta">-</div>
+                <form action="" class="vitiniIdLogin">
+                    <input type="mail" class="botonV1BlancoIzquierda_noSeleccionable" componente="campoID" IDX="usuario"
+                        value="" placeholder="Vitini ID" autocomplete="on">
+                    <input type="password" class="botonV1BlancoIzquierda_noSeleccionable" componente="campoID"
+                        IDX="clave" value="" placeholder="Contraseña" autocomplete="on">
+                </form>
+                <div class="bloqueBotonesID" componente="contenedorBotones">
+                    <p class="botonID" componente="botonID" boton="iniciarSession">Inciar Session</p>
                 </div>
             </div>
-            <div class="vitiniID_contenedor_opciones">
-                <a class="opcionMicasa" componente="opcionMicasa" opcion="registraCuentaNueva"
-                    href="/micasa/crear_nueva_cuenta" vista="/micasa/crear_nueva_cuenta">Registrar una cuenta nueva</a>
-                <a class="opcionMicasa" componente="opcionMicasa" opcion="recuperarCuenta"
-                    href="/micasa/recuperar_cuenta" vista="/micasa/recuperar_cuenta">Recuperar mi cuenta</a>
-                <a class="opcionMicasa" componente="opcionMicasa" opcion="privacidad" href="/politicas/privacidad"
-                    vista="/politicas/privacidad">Politicas de privacidad, uso de cookies y condiciones de uso</a>
-                <a class="opcionMicasa" componente="opcionMicasa" opcion="privacidad" href="/politicas"
-                    vista="/politicas">Politicas de Casa Vitini</a>
-            </div>
-
         </div>
+        <div class="flexVertical gap6 borderRadius20 backgroundGrey1 padding6">
+            <a class="botonTransparenteSeleccionable" componente="opcionMicasa" opcion="registraCuentaNueva"
+                href="/micasa/crear_nueva_cuenta" vista="/micasa/crear_nueva_cuenta">Registrar una cuenta nueva</a>
+            <a class="botonTransparenteSeleccionable" componente="opcionMicasa" opcion="recuperarCuenta" href="/micasa/recuperar_cuenta"
+                vista="/micasa/recuperar_cuenta">Recuperar mi cuenta</a>
+            <a class="botonTransparenteSeleccionable" componente="opcionMicasa" opcion="privacidad" href="/politicas/privacidad"
+                vista="/politicas/privacidad">Politicas de privacidad, uso de cookies y condiciones de uso</a>
+            <a class="botonTransparenteSeleccionable" componente="opcionMicasa" opcion="privacidad" href="/politicas"
+                vista="/politicas">Politicas de Casa Vitini</a>
+        </div>
+
     </div>
 
-</div>   
- <!-- <video componente="video" src="/componentes/videos/video4_s.mp4" loop muted autoplay playsinline
+</div>
+<!-- <video componente="video" src="/componentes/videos/video4_s.mp4" loop muted autoplay playsinline
 class="videoPresentacion" type="video/mp4"></video> -->
