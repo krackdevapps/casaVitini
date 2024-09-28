@@ -17725,7 +17725,7 @@ const casaVitini = {
                             const datoCampo = campo.value
                             transaccion[nombreCampo] = datoCampo
                         })
-                        console.log("transaccion", transaccion)
+                            ("transaccion", transaccion)
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
 
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -18206,7 +18206,7 @@ const casaVitini = {
 
                             })
                         }
-                        console.log("metadatos", metadatos)
+                        ("metadatos", metadatos)
                         const respuestaServidor = await casaVitini.shell.servidor(metadatos)
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         if (!instanciaRenderizada) { return }

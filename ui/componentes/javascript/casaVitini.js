@@ -8197,7 +8197,7 @@ const casaVitini = {
                         const marcoMes = document.createElement("ol")
                         marcoMes.setAttribute("id", "marcoMes")
                         marcoMes.setAttribute("class", "marcoMes")
-                        
+
                         marcoMes.setAttribute("componente", "marcoMes")
                         marcoMes.style.gridTemplateRows = "min-content min-content"
                         marcoMes.style.flex = "0"
@@ -8253,7 +8253,7 @@ const casaVitini = {
                         calendario.appendChild(contenedorCarga)
                         bloqueCalendario.appendChild(calendario)
                         document.querySelector("main").appendChild(bloqueCalendario)
-                        
+
 
                     } catch (errorCapturado) {
                         throw errorCapturado
@@ -8432,11 +8432,10 @@ const casaVitini = {
                         return casaVitini.ui.componentes.advertenciaInmersiva(m)
                     }
                     casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(configuracionCalendario)
-                    
+
                     document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
                     const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolverCalendario)
-                    await casaVitini.utilidades.ralentizador(4000)
-                    
+
                     calendarioResuelto.instanciaUID = instanciaUID
                     calendarioResuelto.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
                     await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
@@ -10639,7 +10638,7 @@ const casaVitini = {
                     }
 
                     const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-               
+
                     const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
                     const selectorMarcoMesRenderizado = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
                     selectorMarcoMesRenderizado.removeAttribute("style")
@@ -10660,13 +10659,12 @@ const casaVitini = {
                     contenedorCarga.setAttribute("elemento", "flotante")
                     contenedorCarga.appendChild(spinner)
                     contenedorCalendario.appendChild(contenedorCarga)
-                    
-                    await casaVitini.utilidades.ralentizador(4000)
+
                     const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendarioconstruir)
                     calendarioResuelto.instanciaUID = instanciaUID
                     calendarioResuelto.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
                     calendarioResuelto.instanciaUID_procesoCambioMes = instanciaUID_procesoCambioMes
-         
+
                     selectorMarcoMesRenderizado.setAttribute("inctanciaUID_procesoCambioMes", instanciaUID_procesoCambioMes)
 
                     casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
@@ -24380,7 +24378,7 @@ const casaVitini = {
                                     const selectorTipoReembolso = document.createElement("select")
                                     selectorTipoReembolso.addEventListener("change", (e) => {
                                         const tipoReembolso = e.target.value
-                                        console.log("tipoReemvbol", tipoReembolso)
+                                            ("tipoReemvbol", tipoReembolso)
                                         const contenedorEmitirReembolso = e.target.closest("[contenedor=emitirReembolso]")
                                         const contenedorPalabra = contenedorEmitirReembolso.querySelector("[contenedor=palabraReembolso]")
                                         if (tipoReembolso === "pasarela") {
@@ -46061,7 +46059,7 @@ const casaVitini = {
                             const datoCampo = campo.value
                             transaccion[nombreCampo] = datoCampo
                         })
-                        console.log("transaccion", transaccion)
+                            ("transaccion", transaccion)
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
 
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -46542,7 +46540,7 @@ const casaVitini = {
 
                             })
                         }
-                        console.log("metadatos", metadatos)
+                        ("metadatos", metadatos)
                         const respuestaServidor = await casaVitini.shell.servidor(metadatos)
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         if (!instanciaRenderizada) { return }

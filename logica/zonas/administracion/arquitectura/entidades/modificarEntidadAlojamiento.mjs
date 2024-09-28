@@ -48,7 +48,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         })
 
         if (tipoEntidad === "apartamento") {
-            console.log("entrad", entrada.body)
+            ("entrad", entrada.body)
 
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
@@ -70,7 +70,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
-            
+
             const caracteristicas = validadoresCompartidos.tipos.array({
                 array: entrada.body.caracteristicas,
                 nombreCampo: "El campo de caracteristicas",
@@ -299,8 +299,8 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         throw errorCapturado
     } finally {
         if (mutex) {
-            mutex.release();    
+            mutex.release();
         }
-        
+
     }
 }

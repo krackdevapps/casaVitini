@@ -410,13 +410,13 @@ export const validarObjetoReservaPublica = async (data) => {
             fecha_ISO: reservaPublica?.fechaSalida,
             nombreCampo: "El campo fechaSalida del objetoReserva"
         })
-        console.log("fechaEbntrad", fechaEntrada)
+            ("fechaEbntrad", fechaEntrada)
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const fechaPresenteTZ = DateTime.now().setZone(zonaHoraria).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
         const fechaActualTZ = fechaPresenteTZ.toISODate()
         const fechaEntradaReserva_ISO = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
         const fechaSalidaReserva_ISO = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
-        console.log("fechaEntradaReserva_ISO", fechaEntradaReserva_ISO, "fechaPresenteTZ", fechaPresenteTZ)
+        ("fechaEntradaReserva_ISO", fechaEntradaReserva_ISO, "fechaPresenteTZ", fechaPresenteTZ)
         await validadoresCompartidos.fechas.validacionVectorial({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
@@ -495,7 +495,7 @@ export const validarObjetoReservaPublica = async (data) => {
                     if (!contenedor?.camaSeleccionada?.camaIDV) {
                         const m = `Por favor selecciona el tipo de cama que deseas en la ${habitacionUI} del ${apartamentoUI}`
                         throw new Error(m)
-                        
+
                     }
 
                     const camaIDV = validadoresCompartidos.tipos.cadena({
