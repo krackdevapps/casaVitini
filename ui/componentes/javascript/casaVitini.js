@@ -24378,7 +24378,7 @@ const casaVitini = {
                                     const selectorTipoReembolso = document.createElement("select")
                                     selectorTipoReembolso.addEventListener("change", (e) => {
                                         const tipoReembolso = e.target.value
-                                            ("tipoReemvbol", tipoReembolso)
+                                       
                                         const contenedorEmitirReembolso = e.target.closest("[contenedor=emitirReembolso]")
                                         const contenedorPalabra = contenedorEmitirReembolso.querySelector("[contenedor=palabraReembolso]")
                                         if (tipoReembolso === "pasarela") {
@@ -46059,7 +46059,7 @@ const casaVitini = {
                             const datoCampo = campo.value
                             transaccion[nombreCampo] = datoCampo
                         })
-                            ("transaccion", transaccion)
+                       
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
 
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -46540,7 +46540,7 @@ const casaVitini = {
 
                             })
                         }
-                        ("metadatos", metadatos)
+                  
                         const respuestaServidor = await casaVitini.shell.servidor(metadatos)
                         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         if (!instanciaRenderizada) { return }

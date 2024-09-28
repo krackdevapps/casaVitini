@@ -48,7 +48,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         })
 
         if (tipoEntidad === "apartamento") {
-            ("entrad", entrada.body)
+          
 
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
