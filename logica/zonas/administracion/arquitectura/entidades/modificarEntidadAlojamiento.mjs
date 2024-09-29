@@ -48,8 +48,6 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         })
 
         if (tipoEntidad === "apartamento") {
-          
-
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
                 numeroDeLLavesMaximo: 5
@@ -110,11 +108,11 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     apartamentoIDV: apartamentoIDV
                 })
             }
-
             const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV: apartamentoIDV,
                 errorSi: "desactivado"
             })
+
             if (configuracionAlojamiento) {
                 // Hay que detectar si la entidad de alojamiento, existe en una configuracion de alojamiento para hcaer lo sigueinte
 

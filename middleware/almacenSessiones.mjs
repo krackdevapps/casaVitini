@@ -3,7 +3,6 @@ import pgSession from 'connect-pg-simple';
 import { conexion } from '../logica/componentes/db.mjs';
 
 // Duración de la sesión en el servidor en segundos (una semana)
-
 //const duracionSessionServidor = 7 * 24 * 60 * 60;
 const duracionSessionServidor = 900;
 

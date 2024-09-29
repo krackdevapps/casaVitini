@@ -3,7 +3,7 @@ import { enviarMail } from "./enviarMail.mjs"
 import { generadorPDF } from "../pdf/generadorPDF.mjs"
 import dotenv from "dotenv";
 dotenv.config();
-export const enviarMailReservaConfirmada = async (reservaUID) => {
+export const enviarMailReservaConfirmadaAlCliente = async (reservaUID) => {
     try {
         const reserva = await detallesReserva({
             reservaUID: reservaUID,
@@ -31,7 +31,7 @@ export const enviarMailReservaConfirmada = async (reservaUID) => {
         <br>
         Cree su VitiniID para poder tener acceso persistente a la copia de su reserva.
         <br>
-        <a href="https://casavitini.com/micasa/reservas/${reservaUID}">Ir a mi reserva (Necesita un VitiniID)</a>
+        <a href="https://casavitini.com/micasa/reservas/reserva:${reservaUID}">Ir a mi reserva (Necesita un VitiniID)</a>
         <a href="https://casavitini.com/micasa/crear_nueva_cuenta">Crear mi VitiniID (Es rápido y gratuito)</a>
         </html>`
         const pdf = await generadorPDF(reserva)

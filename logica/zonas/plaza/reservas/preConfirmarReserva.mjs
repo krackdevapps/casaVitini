@@ -3,7 +3,6 @@ import { interruptor } from "../../../sistema/configuracion/interruptor.mjs";
 import { eliminarBloqueoCaducado } from "../../../sistema/bloqueos/eliminarBloqueoCaducado.mjs";
 import { insertarReserva } from "../../../sistema/reservas/insertarReserva.mjs";
 import { detallesReserva } from "../../../sistema/reservas/detallesReserva.mjs";
-import { enviarMailReservaConfirmada } from "../../../sistema/mail/enviarMailReservaConfirmada.mjs";
 import { actualizarEstadoPago } from "../../../sistema/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../componentes/mensajesUI.mjs";
 import { campoDeTransaccion } from "../../../repositorio/globales/campoDeTransaccion.mjs";
@@ -16,6 +15,7 @@ import { limitesReservaPublica } from "../../../sistema/reservas/limitesReservaP
 import { validarServiciosPubicos } from "../../../sistema/servicios/validarServiciosPublicos.mjs";
 import { validarDescuentosPorCodigo } from "../../../sistema/reservas/nuevaReserva/reservaPulica/validarDescuentosPorCodigo.mjs";
 import { limpiarContenedorFinacieroInformacionPrivada } from "../../../sistema/miCasa/misReservas/limpiarContenedorFinancieroInformacionPrivada.mjs";
+import { enviarMailReservaConfirmadaAlCliente } from "../../../sistema/mail/enviarMailReservaConfirmadaAlCliente.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -123,7 +123,12 @@ export const preConfirmarReserva = async (entrada) => {
 
         const pdf = await generadorPDF(resolverDetallesReserva);
         if (!testingVI) {
-            //   enviarMailReservaConfirmada(reservaUID);
+            enviarMailReservaConfirmadaAlCliente(reservaUID);
+
+            
+
+
+
         }
         const ok = {
             ok: "Reserva confirmada",

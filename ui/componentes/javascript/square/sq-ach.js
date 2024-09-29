@@ -10,7 +10,7 @@ async function ACHPay(buttonEl) {
     // If the ACH payment method is not supported by your account then
     // do not enable the #ach-account-holder-name input field
     if (e.name === 'PaymentMethodUnsupportedError') {
-      achMessageEl.innerText = 'ACH payment is not supported by your account';
+      achMessageEl.textContent = 'ACH payment is not supported by your account';
       accountHolderNameEl.disabled = true;
     }
     // if we can't load ACH, we shouldn't bind events for the button
@@ -19,11 +19,11 @@ async function ACHPay(buttonEl) {
   async function eventHandler(event) {
     const accountHolderName = accountHolderNameEl.value.trim()
     if (accountHolderName === '') {
-      achMessageEl.innerText = 'Please input full name';
+      achMessageEl.textContent = 'Please input full name';
       return;
     }
     // Clear any existing messages
-    window.paymentFlowMessageEl.innerText = '';
+    window.paymentFlowMessageEl.textContent = '';
     try {
       const result = await ach.tokenize({
         accountHolderName,

@@ -22,7 +22,7 @@ export const actualizaApartamentoIDVEnObjetoOfertas = (data) => {
             if (subTipoDescuento === "porDiasDelRango") {
                 const contenedorDias = contenedorDescuentos.descuentoPorDias
                 for (const dia of contenedorDias) {
-                    const apartamentos = dia.apartamentos
+                    const apartamentos = dia.apartamentos || []
                     for (const apartamento of apartamentos) {
                         const apartamentoIDV = apartamento.apartamentoIDV
                         if (apartamentoIDV === origenIDV) {

@@ -7,7 +7,7 @@ async function GooglePay(buttonEl) {
   await googlePay.attach(buttonEl);
   async function eventHandler(event) {
     // Clear any existing messages
-    window.paymentFlowMessageEl.innerText = '';
+    window.paymentFlowMessageEl.textContent = '';
     try {
       const result = await googlePay.tokenize();
       if (result.status === 'OK') {

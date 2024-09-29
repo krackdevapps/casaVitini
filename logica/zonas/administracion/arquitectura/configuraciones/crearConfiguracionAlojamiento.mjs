@@ -17,7 +17,7 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 1
+            numeroDeLLavesMaximo: 2
         })
         mutex.acquire()
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({

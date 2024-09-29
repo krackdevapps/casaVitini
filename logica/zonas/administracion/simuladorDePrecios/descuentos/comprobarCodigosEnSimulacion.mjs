@@ -50,6 +50,7 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
                 filtro: "transformaABase64",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
             })
             codigosDescuentoArray.push(codigoDescuentoB64)
         })
@@ -95,14 +96,14 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
             incompatible: []
         }
         for (const oferta of ofertasPreSeleccionadas) {
-            
+
             const condicionesArray = oferta.condicionesArray
             let interruptor = false
             condicionesArray.forEach((contenedor) => {
                 const tipoCondicion = contenedor.tipoCondicion
                 if (tipoCondicion === "porCodigoDescuento") {
                     interruptor = true
-                }   
+                }
             })
             if (interruptor === false) {
                 continue

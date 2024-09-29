@@ -13,12 +13,12 @@ window.paymentFlowMessageEl = document.getElementById('payment-flow-message');
 window.showSuccess = function (message) {
   window.paymentFlowMessageEl.classList.add('success');
   window.paymentFlowMessageEl.classList.remove('error');
-  window.paymentFlowMessageEl.innerText = message;
+  window.paymentFlowMessageEl.textContent = message;
 }
 window.showError = function (message) {
   window.paymentFlowMessageEl.classList.add('error');
   window.paymentFlowMessageEl.classList.remove('success');
-  window.paymentFlowMessageEl.innerText = message;
+  window.paymentFlowMessageEl.textContent = message;
 }
 window.createPayment = async function (token, verificationToken) {
   casaVitini.componentes.flujoPagoUI.infoDuranteFlujo()

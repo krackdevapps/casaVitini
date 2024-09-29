@@ -50,6 +50,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
                 filtro: "transformaABase64",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
+                soloMinusculas: "si"
             })
             codigosDescuentoArray.push(codigoDescuentoB64)
         })

@@ -3,7 +3,6 @@ import { describe, expect, test } from '@jest/globals';
 import { campoDeTransaccion } from '../../../../../logica/repositorio/globales/campoDeTransaccion.mjs';
 import { crearConfiguracionAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs';
 import { crearEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
-import { eliminarEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/eliminarEntidadAlojamiento.mjs';
 import { eliminarConfiguracionDeAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/eliminarConfiguracionDeAlojamiento.mjs';
 import { eliminarApartamentoComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
 import { actualizarZonaDeLaConfiguracionApartamento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/actualizarZonaDeLaConfiguracionApartamento.mjs';

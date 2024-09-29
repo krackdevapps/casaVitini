@@ -277,6 +277,7 @@ summary:hover {
     flex-direction: row;
     border-radius: 10px;
     z-index: 10;
+    white-space: pre-wrap;
 }
 
 .espacioElastico {
@@ -11664,6 +11665,7 @@ grid-template-columns: 0.5fr 1.5fr;
     flex-direction: column;
     align-content: center;
     align-items: center;
+    white-space: pre-wrap;
 }
 
 [zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedor {
@@ -15705,6 +15707,12 @@ a {
 
 .tituloGris {
     font-size: 13px;
+    font-weight: bold;
+    color: grey
+}
+
+.tituloGrande {
+    font-size: 23px;
     font-weight: bold;
     color: grey
 }

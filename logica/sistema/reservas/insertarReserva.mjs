@@ -36,6 +36,7 @@ export const insertarReserva = async (reserva) => {
         const pasaporteTitularPool = titular.pasaporteTitular
         const correoTitular = titular.correoTitular
         const telefonoTitular = titular.telefonoTitular
+        const codigoInternacional = titular.codigoInternacional
         const codigosDescuento = reserva.codigosDescuento || []
         const contendorServicios = reserva?.servicios || []
 
@@ -54,7 +55,7 @@ export const insertarReserva = async (reserva) => {
             titularReservaPool: titularReservaPool,
             pasaporteTitularPool: pasaporteTitularPool,
             correoTitular: correoTitular,
-            telefonoTitular: telefonoTitular,
+            telefonoTitular: codigoInternacional + telefonoTitular,
             reservaUID: reservaUID
         })
         for (const apartamentoConfiguracion in alojamiento) {

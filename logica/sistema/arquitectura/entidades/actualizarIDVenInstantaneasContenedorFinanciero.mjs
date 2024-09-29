@@ -2,6 +2,7 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../reposit
 import { actualizarDesgloseFinacieroPorModoSimplePorReservaUID } from "../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorModoSimplePorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../repositorio/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { obtenerDesglosesFinancierosPorReservaUIDARRAY } from "../../../repositorio/reservas/transacciones/desgloseFinanciero/obtenerDesglosesFinancierosPorReservaUIDARRAY.mjs"
+import { actualizadorIntegradoDesdeInstantaneas } from "../../contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../contenedorFinanciero/procesador.mjs"
 import { actualizaApartamentoIDVEnObjetoOfertas } from "./actualizaApartamentoIDVEnObjetoOfertas.mjs"
 
@@ -82,19 +83,7 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
             })
             // Faltaria reconstruir el desglose financiero desde instantaneas una vez estan las instantaneas actualizadas
 
-
-            const desgloseFinanciero = await procesador({
-                entidades: {
-                    reserva: {
-                        tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                        reservaUID: reservaUID
-                    }
-                },
-            })
-            await actualizarDesgloseFinacieroPorReservaUID({
-                desgloseFinanciero,
-                reservaUID
-            })
+            await actualizadorIntegradoDesdeInstantaneas(reservaUID)
         }
     } catch (error) {
         throw error

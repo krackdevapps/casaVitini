@@ -3,6 +3,7 @@ import { actualizarDesgloseFinacieroPorModoSimplePorSimulacionUID } from "../../
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../repositorio/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerTodasLasSimulaciones } from "../../../repositorio/simulacionDePrecios/obtenerTodasLasSimulaciones.mjs"
 import { procesador } from "../../contenedorFinanciero/procesador.mjs"
+import { generarDesgloseSimpleGuardarlo } from "../../simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 import { actualizaApartamentoIDVEnObjetoOfertas } from "./actualizaApartamentoIDVEnObjetoOfertas.mjs"
 
 export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async (data) => {
@@ -77,18 +78,7 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
                 instantaneaOfertasPorAdministrador,
                 apartamentosIDVARRAY
             })
-            const desgloseFinanciero = await procesador({
-                entidades: {
-                    simulacion: {
-                        tipoOperacion: "actualizarDesgloseFinancieroDesdeInstantaneas",
-                        simulacionUID
-                    } 
-                },
-            })
-            await actualizarDesgloseFinacieroPorSimulacionUID({
-                desgloseFinanciero,
-                simulacionUID
-            })
+            await generarDesgloseSimpleGuardarlo(simulacionUID)
         }
     } catch (error) {
         throw error

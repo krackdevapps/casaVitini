@@ -53,8 +53,8 @@ export const procesadorReserva = async (data) => {
                 tipoVector: "diferente"
             })
 
-          //  const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-           // fechaActual = DateTime.now().setZone(zonaHoraria).toISODate()
+            //  const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            // fechaActual = DateTime.now().setZone(zonaHoraria).toISODate()
 
             apartamentosArray = validadoresCompartidos.tipos.array({
                 array: data.apartamentosArray,
@@ -114,7 +114,7 @@ export const procesadorReserva = async (data) => {
             instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []
             instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador || []
         } else {
-            const m = "El procesador de precios esta mal configurado, se necesita determinal origen en externo o hubReservas dentro de la llave reserva"
+            const m = "El procesador de precios esta mal configurado, se necesita determinar origen en externo o hubReservas dentro de la llave reserva"
             throw new Error(m)
         }
 

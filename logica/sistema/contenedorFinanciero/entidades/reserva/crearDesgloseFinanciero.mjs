@@ -74,7 +74,7 @@ export const crearDesgloseFinanciero = async (data) => {
             instantaneaOfertasPorCondicion = desgloseFinancieroReserva.instantaneaOfertasPorCondicion || []
             instantaneaOfertasPorAdministrador = desgloseFinancieroReserva.instantaneaOfertasPorAdministrador || []
         } else {
-            const m = "El procesador de precios esta mal configurado, se necesita determinal origen en externo o hubReservas dentro de la llave reserva"
+            const m = "El procesador de precios esta mal configurado, se necesita determinar origen en externo o hubReservas dentro de la llave reserva"
             throw new Error(m)
         }
 

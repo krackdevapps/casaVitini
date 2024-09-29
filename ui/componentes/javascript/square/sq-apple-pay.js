@@ -12,7 +12,7 @@ async function ApplePay(buttonEl) {
   }
   async function eventHandler(event) {
     // Clear any existing messages
-    window.paymentFlowMessageEl.innerText = '';
+    window.paymentFlowMessageEl.textContent = '';
     try {
       const result = await applePay.tokenize();
       if (result.status === 'OK') {

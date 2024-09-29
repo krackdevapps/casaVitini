@@ -88,7 +88,7 @@ export const resolverQR = async (entrada) => {
                         throw new Error(error);
                     }
                 }
-                ok.url = "/micasa/reservas/" + reservaUID
+                ok.url = "/micasa/reservas/reserva:" + reservaUID
 
 
             }

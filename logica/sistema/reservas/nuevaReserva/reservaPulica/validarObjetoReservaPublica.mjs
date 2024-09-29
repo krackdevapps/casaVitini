@@ -57,8 +57,7 @@ export const validarObjetoReservaPublica = async (data) => {
                     'string.empty': '{{#label}} no puede estar vacío',
                     'any.required': '{{#label}} es una llave obligatoria'
                 }),
-        });
-
+        })
 
         const habitacionSchema = Joi.object({
             habitacionUI: Joi.string().required()
@@ -130,7 +129,6 @@ export const validarObjetoReservaPublica = async (data) => {
             'string.empty': '{{#label}} no puede estar vacío',
             'any.required': '{{#label}} es una llave obligatoria'
         })
-
 
         const esquemaBase = {
             fechaEntrada: Joi.string()
@@ -282,6 +280,28 @@ export const validarObjetoReservaPublica = async (data) => {
                     'string.empty': 'El telefono no puede estar vacío',
                     'any.required': 'El telefono es una llave obligatoria'
                 }),
+            codigoInternacional: Joi
+                .string()
+                .custom((value, helpers) => {
+                    try {
+
+                        return validadoresCompartidos.tipos.codigosInternacionalesTel({
+                            codigo: value,
+                            nombreCampo: "El código internacional instroducido",
+                            sePermiteVacio: "no"
+                        })
+                    } catch (error) {
+                        const path = helpers.state.path.join('.');
+                        const mensajeError = `Error en ${path}: ${error.message}`;
+                        return helpers.message(mensajeError);
+                    }
+                })
+                .required()
+                .messages({
+                    'string.base': 'El codigosInternacionales debe ser una cadena de texto',
+                    'string.empty': 'Por favor seleciona el código internacional del numero de telefono.',
+                    'any.required': 'El codigosInternacionales es una llave obligatoria'
+                }),
             correoTitular: Joi
                 .string()
                 .custom((value, helpers) => {
@@ -300,7 +320,7 @@ export const validarObjetoReservaPublica = async (data) => {
                 .required()
                 .messages({
                     'string.base': 'El correo debe ser una cadena de texto',
-                    'string.empty': 'El correo no puede estar vacío',
+                    'string.empty': 'El correo electrónico no puede estar vacío cuando se realiza la reserva mediante el método online.',
                     'any.required': 'El correo es una llave obligatoria'
                 }),
         }).required()
@@ -334,7 +354,6 @@ export const validarObjetoReservaPublica = async (data) => {
             throw new Error(m)
         }
 
-
         if (filtroTitular === "activado") {
             esquemaBase.titular = esquemaTitular
         } else if (filtroTitular !== "activado" && filtroTitular !== "desactivado") {
@@ -343,7 +362,6 @@ export const validarObjetoReservaPublica = async (data) => {
         }
 
         const esquemaReservaPublica = Joi.object(esquemaBase).unknown(false);
-
         const { error, value } = esquemaReservaPublica.validate(reservaPublica);
         const errorTipo = error?.details[0].type
 
@@ -363,12 +381,6 @@ export const validarObjetoReservaPublica = async (data) => {
         const codigosDescuento = reservaPublica.codigosDescuento || []
         const codigosUIDUnicos = {}
         codigosDescuento.forEach((contenedor) => {
-
-            // const ofertaUID = contenedor.ofertaUID
-            // if (ofertaUID) {
-            //     throw new Error("ofertaUID detectado", ofertaUID)
-            // }
-
             const codigosASCI = contenedor.codigosUID
 
             codigosASCI.forEach((codigoASCI, i) => {
@@ -384,6 +396,7 @@ export const validarObjetoReservaPublica = async (data) => {
                     filtro: "transformaABase64",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
+                    soloMinusculas: "si"
                 })
                 codigosASCI[i] = codigoB64
             })
@@ -410,7 +423,7 @@ export const validarObjetoReservaPublica = async (data) => {
             fecha_ISO: reservaPublica?.fechaSalida,
             nombreCampo: "El campo fechaSalida del objetoReserva"
         })
-          
+
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
         const fechaPresenteTZ = DateTime.now().setZone(zonaHoraria).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
         const fechaActualTZ = fechaPresenteTZ.toISODate()
@@ -440,9 +453,6 @@ export const validarObjetoReservaPublica = async (data) => {
             throw new Error(error)
         }
 
-
-
-        // Comprobar apartamentoIDV
         for (const [apartamentoIDV, contenedor] of Object.entries(alojamiento)) {
             const apartamentoUI_entrada = contenedor.apartamentoUI
             try {

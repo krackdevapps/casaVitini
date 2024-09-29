@@ -36,7 +36,7 @@ async function CardPay(fieldEl, buttonEl) {
   async function eventHandler(event) {
     // Clear any existing messages
     console.info(">>> Se inicia el procesod de pago")
-    window.paymentFlowMessageEl.innerText = '';
+    window.paymentFlowMessageEl.textContent = '';
     const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
     if (!destinoDinamico) {
       const error = "sq-cardpay necesita un elmeneto pasarela=zonaDePago donde se defina el objeto"

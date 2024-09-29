@@ -325,6 +325,7 @@ export const validarObjetoOferta = async (data) => {
                     filtro: "transformaABase64",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
+                    soloMinusculas: "si"
                 })
                 condicion.codigoDescuento = codigoDescuentoBase64
                 codigosDescuentosBase64DeLaMismaOferta.push(codigoDescuentoBase64)
