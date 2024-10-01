@@ -11,15 +11,12 @@ import { controlTipoVerbo } from './middleware/controlTipoVerbo.mjs';
 import { manejador404 } from './middleware/manejador404.mjs';
 import dotenv from 'dotenv'
 import { configuracionSession } from './middleware/almacenSessiones.mjs';
-import { controlInputRaw } from './middleware/controlInputRaw.mjs';
 import { jsonHeader } from './middleware/jsonHeader.mjs';
 import { antiPrototypePollution } from './middleware/antiPrototypePollution.mjs';
 dotenv.config()
-
 process.on('uncaughtException', (error) => {
   console.error('Alerta! ->>:', error.message);
   console.error('Alerta! ->>:', error);
-
 });
 
 const app = express()
@@ -46,7 +43,6 @@ app.use(controlBaseDeDatos)
 app.use(configuracionSession)
 app.use(router)
 app.use(manejador404)
-
 
 const puerto = process.env.PORT_HTTP
 const puertoSec = process.env.PORT_HTTPS

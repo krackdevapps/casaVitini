@@ -1,28 +1,31 @@
 export const antiPrototypePollution = (req, res, next) => {
-    const obj = req.body
-    let toogleSec = false
+    const obj = req.body;
+    let toggleSec = false;
+
     const eliminarPropiedadesPrototipo = (o) => {
         const propiedadesPrototipo = ['__proto__', 'prototype', 'constructor'];
         for (const clave in o) {
             if (o.hasOwnProperty(clave)) {
-                if (typeof o[clave] === 'object' && o[clave] !== null) {
+                if (propiedadesPrototipo.includes(clave)) {
+                    delete o[clave];
+                    toggleSec = true;
+                } else if (typeof o[clave] === 'object' && o[clave] !== null) {
                     eliminarPropiedadesPrototipo(o[clave]);
                 }
-            } else {
-                delete o[clave];
-            }
-            if (propiedadesPrototipo.includes(clave)) {
-                delete o[clave];
-                toogleSec = true
-
             }
         }
-    }
+    };
     eliminarPropiedadesPrototipo(obj);
-    if (toogleSec) {
-        res.status(400).json({
-            secAlert: "Prototype poluttion detected"
-        })
+    if (toggleSec) {
+        const secAlert = {
+            code: "prototypePollution",
+            dataReq: req
+        }
+        console.error("secAlert", secAlert)
+        return res.status(400).json({
+            error: "Formato JSON inválido",
+            details: "0"
+        });
     } else {
         next();
     }

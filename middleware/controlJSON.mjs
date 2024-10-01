@@ -1,11 +1,12 @@
 export const controlJSON = (err, req, res, next) => {
   try {
- JSON.parse(req.body);
+    JSON.parse(req.body);
+
     next();
   } catch (error) {
-    const errorMensaje = {
+  
+    res.status(400).json({
       error: "Formato JSON invalido"
-    }
-    res.status(400).json(errorMensaje);
+    });
   }
 }

@@ -112,132 +112,101 @@ const casaVitini = {
                     transaccion.vista = "politicas/privacidad"
                 }
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-
-
                 const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-                if (!contenedorVista) {
-                    return
-                }
+                if (contenedorVista) {
+                    const selectorPantallaCargaRenderizdaPostPeticion = document.querySelector("[ui=pantallaDeCarga]")
+                    main.removeAttribute("rama")
 
-                const selectorPantallaCargaRenderizdaPostPeticion = document.querySelector("[ui=pantallaDeCarga]")
-                main.removeAttribute("rama")
+                    if (respuestaServidor?.error) {
+                        casaVitini.shell.controladoresUI.limpiarMain()
+                        contenedorVista.removeAttribute("rama")
+                        await casaVitini.shell.controladoresUI.controladorEstadoIDX()
+                        contenedorVista.innerHTML = null
+                        casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
 
-                const limpiezaUI = (data = {}) => {
-                    const zonaDestino = data?.zonaDestino
-                    casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.destroy()
-                    window.removeEventListener("resize", casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.resizeIsDone);
-                    window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
-                    window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
-                    window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
-                    screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
-                    document.querySelectorAll("html, #uiLogo, body, header, [componente=contenedorMenu], [componente=botonMenuResponsivo]")
-                        .forEach((e) => {
-                            e.removeAttribute("style")
+                        casaVitini.shell.controladoresUI.limpiezaUI()
+
+                        const marcoError = document.createElement("div")
+                        marcoError.classList.add("plaza_marcoError_seccion")
+                        marcoError.textContent = respuestaServidor.error
+                        contenedorVista.appendChild(marcoError)
+                        main.removeAttribute("style")
+
+                    } else if (respuestaServidor?.ok) {
+                        const zona = respuestaServidor?.zona
+
+                        document.documentElement.scrollTop = 0;
+                        const codigo = respuestaServidor.ok
+                        contenedorVista.innerHTML = null
+                        contenedorVista.setAttribute("rama", zona)
+
+                        const menu_renderizado = document.querySelector("[componente=contenedorMenu]")
+                        menu_renderizado.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
+                            menu.removeAttribute("style")
                         })
-                    main.removeAttribute("zonaCSS")
-                    main.removeAttribute("ui")
 
-                    const iconosGlobalesRenderizados = document.querySelectorAll("header [componente=iconos] [iconoGlobal]")
-                    iconosGlobalesRenderizados.forEach((icono) => {
-                        const zonaDelIcono = icono.getAttribute("zona")
-                        if (zonaDelIcono !== zonaDestino) {
-                            icono?.remove()
+                        casaVitini.shell.controladoresUI.limpiezaUI({ zonaDestino: zona })
+                        if (menu_renderizado.querySelector("[zona=" + zona + "]")) {
+                            menu_renderizado.querySelector("[zona=" + zona + "]").style.background = "rgba(0, 0, 0, 0.6)"
+                            menu_renderizado.querySelector("[zona=" + zona + "]").style.color = "white"
                         }
-                    })
-                    const menu_renderizado = document.querySelector("[componente=contenedorMenu]")
-                    menu_renderizado.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
-                        menu.removeAttribute("style")
-                    })
+
+                        await casaVitini.shell.controladoresUI.controladorEstadoIDX()
+                        casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
+                        let urlVista = respuestaServidor.url
+                        if (privacidad) {
+                            urlVista = vista === "portada" ? "/" : vista;
+                        }
+                        urlVista = urlVista === "/portada" ? "/" : urlVista;
+                        urlVista = decodeURIComponent(urlVista);
+
+                        let controladorUrl;
+                        if (vistaActual?.toLowerCase() === vista?.toLowerCase()) {
+                            controladorUrl = "soloActualiza"
+                        }
+                        selectorMenuRenderizado.setAttribute("vistaActual", vista)
+                        const titulo = 'Casa Vitini';
+                        const estado = {
+                            zona: vista === "portada" ? "" : vista,
+                            tipoCambio: "total"
+                        }
+                        if (tipoOrigen === "menuNavegador" && !controladorUrl) {
+                            window.history.pushState(estado, titulo, urlVista);
+                        } else if (controladorUrl === "soloActualiza") {
+                            window.history.replaceState(estado, titulo, urlVista);
+                        } else if (!tipoOrigen && !controladorUrl) {
+                            window.history.replaceState(estado, titulo, urlVista);
+                        }
+
+                        const granuladorURL = casaVitini.utilidades.granuladorURL()
+                        const directoriosFusion = granuladorURL.directoriosFusion
+                        contenedorVista.setAttribute("zonaCSS", directoriosFusion)
+
+                        contenedorVista.innerHTML = codigo
+                        const arranqueVistaPublica = contenedorVista?.querySelector("arranque")?.getAttribute("publico")
+                        const arranqueVistaAdministrativa = contenedorVista?.querySelector("arranque")?.getAttribute("administracion")
+                        if (arranqueVistaPublica) {
+
+                            const ruta = "ui.vistas." + arranqueVistaPublica
+                            casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
+                                ruta: ruta,
+                                args: null
+                            })
+                        } else if (arranqueVistaAdministrativa) {
+
+                            const ruta = "administracion." + arranqueVistaAdministrativa
+                            casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
+                                ruta: ruta,
+                                args: null
+                            })
+                        }
+                        selectorPantallaCargaRenderizdaPostPeticion?.remove()
+
+                        main.style.transition = "opacity 250ms linear"
+                        main.style.opacity = "1"
+                    }
                 }
 
-                if (respuestaServidor?.error) {
-                    casaVitini.shell.controladoresUI.limpiarMain()
-                    contenedorVista.removeAttribute("rama")
-                    await casaVitini.shell.controladoresUI.controladorEstadoIDX()
-                    contenedorVista.innerHTML = null
-                    casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
-
-                    limpiezaUI()
-
-                    const marcoError = document.createElement("div")
-                    marcoError.classList.add("plaza_marcoError_seccion")
-                    marcoError.textContent = respuestaServidor.error
-                    contenedorVista.appendChild(marcoError)
-                    main.removeAttribute("style")
-
-                } else if (respuestaServidor?.ok) {
-                    const zona = respuestaServidor?.zona
-
-                    document.documentElement.scrollTop = 0;
-                    const codigo = respuestaServidor.ok
-                    contenedorVista.innerHTML = null
-                    contenedorVista.setAttribute("rama", zona)
-
-                    const menu_renderizado = document.querySelector("[componente=contenedorMenu]")
-                    menu_renderizado.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
-                        menu.removeAttribute("style")
-                    })
-
-                    limpiezaUI({ zonaDestino: zona })
-                    if (menu_renderizado.querySelector("[zona=" + zona + "]")) {
-                        menu_renderizado.querySelector("[zona=" + zona + "]").style.background = "rgba(0, 0, 0, 0.6)"
-                        menu_renderizado.querySelector("[zona=" + zona + "]").style.color = "white"
-                    }
-
-                    await casaVitini.shell.controladoresUI.controladorEstadoIDX()
-                    casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
-                    let urlVista = respuestaServidor.url
-                    if (privacidad) {
-                        urlVista = vista === "portada" ? "/" : vista;
-                    }
-                    urlVista = urlVista === "/portada" ? "/" : urlVista;
-                    urlVista = decodeURIComponent(urlVista);
-
-                    let controladorUrl;
-                    if (vistaActual?.toLowerCase() === vista?.toLowerCase()) {
-                        controladorUrl = "soloActualiza"
-                    }
-                    selectorMenuRenderizado.setAttribute("vistaActual", vista)
-                    const titulo = 'Casa Vitini';
-                    const estado = {
-                        zona: vista === "portada" ? "" : vista,
-                        tipoCambio: "total"
-                    }
-                    if (tipoOrigen === "menuNavegador" && !controladorUrl) {
-                        window.history.pushState(estado, titulo, urlVista);
-                    } else if (controladorUrl === "soloActualiza") {
-                        window.history.replaceState(estado, titulo, urlVista);
-                    } else if (!tipoOrigen && !controladorUrl) {
-                        window.history.replaceState(estado, titulo, urlVista);
-                    }
-
-                    const granuladorURL = casaVitini.utilidades.granuladorURL()
-                    const directoriosFusion = granuladorURL.directoriosFusion
-                    contenedorVista.setAttribute("zonaCSS", directoriosFusion)
-
-                    contenedorVista.innerHTML = codigo
-                    const arranqueVistaPublica = contenedorVista?.querySelector("arranque")?.getAttribute("publico")
-                    const arranqueVistaAdministrativa = contenedorVista?.querySelector("arranque")?.getAttribute("administracion")
-                    if (arranqueVistaPublica) {
-
-                        const ruta = "ui.vistas." + arranqueVistaPublica
-                        casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
-                            ruta: ruta,
-                            args: null
-                        })
-                    } else if (arranqueVistaAdministrativa) {
-
-                        const ruta = "administracion." + arranqueVistaAdministrativa
-                        casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
-                            ruta: ruta,
-                            args: null
-                        })
-                    }
-                    selectorPantallaCargaRenderizdaPostPeticion?.remove()
-
-                    main.style.transition = "opacity 250ms linear"
-                    main.style.opacity = "1"
-                }
             },
             sobreControlMenuGlobal: (e) => {
 
@@ -986,6 +955,34 @@ const casaVitini = {
                         }
                     }
                 }
+            },
+            limpiezaUI: (data = {}) => {
+                const main = document.querySelector("main")
+                const zonaDestino = data?.zonaDestino
+                casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.destroy()
+                window.removeEventListener("resize", casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.resizeIsDone);
+                window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
+                window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.controladorIconoMouse);
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
+                document.querySelectorAll("html, #uiLogo, body, header, [componente=contenedorMenu], [componente=botonMenuResponsivo]")
+                    .forEach((e) => {
+                        e.removeAttribute("style")
+                    })
+                main.removeAttribute("zonaCSS")
+                main.removeAttribute("ui")
+
+                const iconosGlobalesRenderizados = document.querySelectorAll("header [componente=iconos] [iconoGlobal]")
+                iconosGlobalesRenderizados.forEach((icono) => {
+                    const zonaDelIcono = icono.getAttribute("zona")
+                    if (zonaDelIcono !== zonaDestino) {
+                        icono?.remove()
+                    }
+                })
+                const menu_renderizado = document.querySelector("[componente=contenedorMenu]")
+                menu_renderizado.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
+                    menu.removeAttribute("style")
+                })
             }
         },
         servidor: async function (transaccion) {
@@ -2349,7 +2346,6 @@ const casaVitini = {
                                 const selectorOfertasComprobadas = document.querySelector("[contenedor=ofertasComprobadas]")
                                 const spinner = casaVitini.ui.componentes.spinnerSimple()
                                 selectorOfertasComprobadas.appendChild(spinner)
-                                //await casaVitini.utilidades.ralentizador(3000)
                                 await this.descuentos.contenedorCodigoDescuentos.recuperarOfertasPorArrayDeCodigos()
                             }
                             await this.actualizarPrecioEnUI({
@@ -22878,7 +22874,7 @@ const casaVitini = {
                                         const contenedorEnlacesDePago = instanciaDestino.querySelector(`[componente=contenedorListaEnlacesDePago]`)
 
                                         for (const detallesDelEnlace of enlacesDePagoGenerados) {
-                        
+
                                             const metadatos = {
                                                 enlaceUID: detallesDelEnlace.enlaceUID,
                                                 nombreEnlace: detallesDelEnlace.nombreEnlace,
@@ -24334,7 +24330,7 @@ const casaVitini = {
                                             const error = errorCapturado.message
                                             casaVitini.ui.componentes.advertenciaInmersiva(error)
                                         }
-                                
+
                                     };
                                     const contenedorEmitirReembolso = document.createElement("div")
                                     contenedorEmitirReembolso.classList.add("flexVertical", "padding6", "gap6", "borderGrey1", "borderRadius20")
@@ -30078,7 +30074,6 @@ const casaVitini = {
                 arranque: async function () {
 
                     const marcoElastico = document.querySelector("[componente=marcoElastico]")
-
                     const spinner = casaVitini.ui.componentes.spinnerSimple()
                     marcoElastico.appendChild(spinner)
                     const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
@@ -43802,7 +43797,6 @@ const casaVitini = {
                             }
                         })
                         contenedorTipoPorCreacion.appendChild(fechasRangoAplicacion);
-                        await casaVitini.utilidades.ralentizador(1)
                         const info1 = document.createElement("p")
                         info1.classList.add(
                             "padding6",
@@ -48980,7 +48974,7 @@ const casaVitini = {
                             infoModificarIDX.classList.add("detallesUsuario_infoModificarIDX")
                             infoModificarIDX.textContent = `Escriba la nueva clave que quiera establecer`
                             contenedorCampos.appendChild(infoModificarIDX)
-             
+
                             const campoNuevaClave = document.createElement("input")
                             campoNuevaClave.classList.add("detallesUsuario_campoNuevoIDX")
                             campoNuevaClave.setAttribute("campo", "claveNueva")
