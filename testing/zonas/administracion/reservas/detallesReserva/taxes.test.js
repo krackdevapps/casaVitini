@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { eliminarImpuestoPorTestingVI } from '../../../../../logica/repositorio/impuestos/eliminarImpuestoPorTestingVI.mjs';
-import { crearNuevoImpuesto } from '../../../../../logica/zonas/administracion/impuestos/crearNuevoImpuesto.mjs';
-import { insertarImpuestoEnReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/impuestos/insertarImpuestoEnReserva.mjs';
-import { insertarImpuestoDedicadoEnReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/impuestos/insertarImpuestoDedicadoEnReserva.mjs';
-import { eliminarImpuestoEnReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/impuestos/eliminarImpuestoEnReserva.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { eliminarImpuestoPorTestingVI } from '../../../../../src/infraestructure/repository/impuestos/eliminarImpuestoPorTestingVI.mjs';
+import { crearNuevoImpuesto } from '../../../../../src/application/administracion/impuestos/crearNuevoImpuesto.mjs';
+import { insertarImpuestoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/impuestos/insertarImpuestoEnReserva.mjs';
+import { insertarImpuestoDedicadoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/impuestos/insertarImpuestoDedicadoEnReserva.mjs';
+import { eliminarImpuestoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/impuestos/eliminarImpuestoEnReserva.mjs';
 
 describe('taxes in bookins', () => {
     const fakeAdminSession = {
@@ -24,7 +24,7 @@ describe('taxes in bookins', () => {
     const camaIDV = "bedtestingholder"
     const camaUI = "Cama temporal para testing holder"
 
-    
+
 
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI

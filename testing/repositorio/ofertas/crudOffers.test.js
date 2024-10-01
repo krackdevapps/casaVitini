@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { insertarOferta } from '../../../logica/repositorio/ofertas/insertarOferta.mjs';
-import { eliminarOfertaPorTestingVI } from '../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
+import { insertarOferta } from '../../../src/infraestructure/repository/ofertas/insertarOferta.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
 
 const contenedoOferta = {
     "nombreOferta": "testing_all_conditions",

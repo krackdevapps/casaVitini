@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { obtenerConfiguracion } from '../../../../logica/zonas/administracion/configuracion/zonaHoraria/obtenerConfiguracion.mjs';
-import { guardarConfiguracion } from '../../../../logica/zonas/administracion/configuracion/zonaHoraria/guardarConfiguracion.mjs';
+import { obtenerConfiguracion } from '../../../../src/application/administracion/configuracion/zonaHoraria/obtenerConfiguracion.mjs';
+import { guardarConfiguracion } from '../../../../src/application/administracion/configuracion/zonaHoraria/guardarConfiguracion.mjs';
 
 describe('Global time zona conf', () => {
     const fakeAdminSession = {

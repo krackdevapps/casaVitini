@@ -1,8 +1,8 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { obtenerInterruptorPorInterruptorIDV } from '../../../../logica/repositorio/configuracion/interruptores/obtenerInterruptorPorInterruptorIDV.mjs';
-import { actualizarEstadoDelInterruptor } from '../../../../logica/repositorio/configuracion/interruptores/actualizarEstadoDelInterruptor.mjs';
-import { obtenerTodosLosInterruptores } from '../../../../logica/repositorio/configuracion/interruptores/obtenerTodosLosInterruptores.mjs';
+import { obtenerInterruptorPorInterruptorIDV } from '../../../../src/infraestructure/repository/configuracion/interruptores/obtenerInterruptorPorInterruptorIDV.mjs';
+import { actualizarEstadoDelInterruptor } from '../../../../src/infraestructure/repository/configuracion/interruptores/actualizarEstadoDelInterruptor.mjs';
+import { obtenerTodosLosInterruptores } from '../../../../src/infraestructure/repository/configuracion/interruptores/obtenerTodosLosInterruptores.mjs';
 
 describe('handler configruacion', () => {
 

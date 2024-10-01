@@ -1,17 +1,17 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarReservaPorTestingVI } from '../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { eliminarReservaPorTestingVI } from '../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 import { makeHostArquitecture } from '../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarClientePorTestingVI } from '../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { apartamentosDisponiblesPublico } from '../../../logica/zonas/plaza/reservas/apartamentosDisponiblesPublico.mjs';
+import { eliminarClientePorTestingVI } from '../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { apartamentosDisponiblesPublico } from '../../../src/application/plaza/reservas/apartamentosDisponiblesPublico.mjs';
 import { DateTime } from 'luxon';
-import { preciosPorSeleccion } from '../../../logica/zonas/plaza/reservas/preciosPorSeleccion.mjs';
-import { establecerNuevoPrecioApartamento } from '../../../logica/zonas/administracion/precios/establecerNuevoPrecioApartamento.mjs';
-import { preComprobarCodigoDescuento } from '../../../logica/zonas/plaza/reservas/preComprobarCodigoDescuento.mjs';
-import { crearOferta } from '../../../logica/zonas/administracion/ofertas/crearOferta.mjs';
-import { actualizarEstadoOferta } from '../../../logica/zonas/administracion/ofertas/actualizarEstadoOferta.mjs';
-import { eliminarOfertaPorTestingVI } from '../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
-import { preConfirmarReserva } from '../../../logica/zonas/plaza/reservas/preConfirmarReserva.mjs';
+import { preciosPorSeleccion } from '../../../src/application/plaza/reservas/preciosPorSeleccion.mjs';
+import { establecerNuevoPrecioApartamento } from '../../../src/application/administracion/precios/establecerNuevoPrecioApartamento.mjs';
+import { preComprobarCodigoDescuento } from '../../../src/application/plaza/reservas/preComprobarCodigoDescuento.mjs';
+import { crearOferta } from '../../../src/application/administracion/ofertas/crearOferta.mjs';
+import { actualizarEstadoOferta } from '../../../src/application/administracion/ofertas/actualizarEstadoOferta.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
+import { preConfirmarReserva } from '../../../src/application/plaza/reservas/preConfirmarReserva.mjs';
 
 describe('miCasa bookins', () => {
     // Cambiar un momento la variable de aceptar reserva y vovler a activar y mirar si tiene algo que ver el hecho de entorno de pruebas.

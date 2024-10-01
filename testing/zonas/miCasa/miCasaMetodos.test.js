@@ -1,18 +1,18 @@
 
 import { describe, expect, test, jest } from '@jest/globals';
-import { eliminarUsuarioPorTestingVI } from '../../../logica/repositorio/usuarios/eliminarUsuarioPorTestingVI.mjs';
-import { crearCuentaDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
-import { actualizarClaveUsuarioDesdeMicasa } from '../../../logica/zonas/miCasa/actualizarClaveUsuarioDesdeMicasa.mjs';
-import { actualizarDatosUsuarioDesdeMiCasa } from '../../../logica/zonas/miCasa/actualizarDatosUsuarioDesdeMiCasa.mjs';
-import { actualizarIDX } from '../../../logica/zonas/miCasa/actualizarIDX.mjs';
-import { cerrarSessionSelectivamenteDesdeMiCasa } from '../../../logica/zonas/miCasa/cerrarSessionSelectivamenteDesdeMiCasa.mjs';
-import { datosPersonalesDesdeMiCasa } from '../../../logica/zonas/miCasa/datosPersonalesDesdeMiCasa.mjs';
-import { obtenerSessionesActivasDesdeMiCasa } from '../../../logica/zonas/miCasa/obtenerSessionesActivasDesdeMiCasa.mjs';
-import { conectar } from '../../../logica/zonas/IDX/conectar.mjs';
-import { actualizarEstadoCuentaDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/actualizarEstadoCuentaDesdeAdministracion.mjs';
-import { verificarCuenta } from '../../../logica/zonas/miCasa/verificarCuenta.mjs';
-import { obtenerUsuario } from '../../../logica/repositorio/usuarios/obtenerUsuario.mjs';
-import { eliminarCuentaDesdeMiCasa } from '../../../logica/zonas/miCasa/eliminarCuentaDesdeMiCasa.mjs';
+import { eliminarUsuarioPorTestingVI } from '../../../src/infraestructure/repository/usuarios/eliminarUsuarioPorTestingVI.mjs';
+import { crearCuentaDesdeAdministracion } from '../../../src/application/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
+import { actualizarClaveUsuarioDesdeMicasa } from '../../../src/application/miCasa/actualizarClaveUsuarioDesdeMicasa.mjs';
+import { actualizarDatosUsuarioDesdeMiCasa } from '../../../src/application/miCasa/actualizarDatosUsuarioDesdeMiCasa.mjs';
+import { actualizarIDX } from '../../../src/application/miCasa/actualizarIDX.mjs';
+import { cerrarSessionSelectivamenteDesdeMiCasa } from '../../../src/application/miCasa/cerrarSessionSelectivamenteDesdeMiCasa.mjs';
+import { datosPersonalesDesdeMiCasa } from '../../../src/application/miCasa/datosPersonalesDesdeMiCasa.mjs';
+import { obtenerSessionesActivasDesdeMiCasa } from '../../../src/application/miCasa/obtenerSessionesActivasDesdeMiCasa.mjs';
+import { conectar } from '../../../src/application/IDX/conectar.mjs';
+import { actualizarEstadoCuentaDesdeAdministracion } from '../../../src/application/administracion/usuarios/actualizarEstadoCuentaDesdeAdministracion.mjs';
+import { verificarCuenta } from '../../../src/application/miCasa/verificarCuenta.mjs';
+import { obtenerUsuario } from '../../../src/infraestructure/repository/usuarios/obtenerUsuario.mjs';
+import { eliminarCuentaDesdeMiCasa } from '../../../src/application/miCasa/eliminarCuentaDesdeMiCasa.mjs';
 
 describe('miCasa Metodos', () => {
     const testingVI = "testingmicasatodos"

@@ -1,9 +1,9 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { resolverQR } from '../../../logica/zonas/componentes/resolverQR.mjs';
-import { eliminarReservaPorTestingVI } from '../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { resolverQR } from '../../../src/application/componentes/resolverQR.mjs';
+import { eliminarReservaPorTestingVI } from '../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 import { makeHostArquitecture } from '../../sharedUsesCases/makeHostArquitecture.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
 
 describe('qr resolver', () => {
     const fakeAdminSession = {

@@ -1,13 +1,13 @@
-import { eliminarApartamentoComoEntidad } from "../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs"
-import { eliminarCamaComoEntidad } from "../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs"
-import { eliminarHabitacionComoEntidad } from "../../logica/repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs"
-import { actualizarZonaDeLaConfiguracionApartamento } from "../../logica/zonas/administracion/arquitectura/configuraciones/actualizarZonaDeLaConfiguracionApartamento.mjs"
-import { addCamaToConfiguracionApartamentoHabitacion } from "../../logica/zonas/administracion/arquitectura/configuraciones/addCamaToConfiguracionApartamentoHabitacion.mjs"
-import { addHabitacionToConfiguracionApartamento } from "../../logica/zonas/administracion/arquitectura/configuraciones/addHabitacionToConfiguracionApartamento.mjs"
-import { cambiarEstadoConfiguracionAlojamiento } from "../../logica/zonas/administracion/arquitectura/configuraciones/cambiarEstadoConfiguracionAlojamiento.mjs"
-import { crearConfiguracionAlojamiento } from "../../logica/zonas/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs"
-import { crearEntidadAlojamiento } from "../../logica/zonas/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs"
-import { establecerNuevoPrecioApartamento } from "../../logica/zonas/administracion/precios/establecerNuevoPrecioApartamento.mjs"
+import { eliminarApartamentoComoEntidad } from "../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs"
+import { eliminarCamaComoEntidad } from "../../src/infraestructure/repository/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs"
+import { eliminarHabitacionComoEntidad } from "../../src/infraestructure/repository/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs"
+import { actualizarZonaDeLaConfiguracionApartamento } from "../../src/application/administracion/arquitectura/configuraciones/actualizarZonaDeLaConfiguracionApartamento.mjs"
+import { addCamaToConfiguracionApartamentoHabitacion } from "../../src/application/administracion/arquitectura/configuraciones/addCamaToConfiguracionApartamentoHabitacion.mjs"
+import { addHabitacionToConfiguracionApartamento } from "../../src/application/administracion/arquitectura/configuraciones/addHabitacionToConfiguracionApartamento.mjs"
+import { cambiarEstadoConfiguracionAlojamiento } from "../../src/application/administracion/arquitectura/configuraciones/cambiarEstadoConfiguracionAlojamiento.mjs"
+import { crearConfiguracionAlojamiento } from "../../src/application/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs"
+import { crearEntidadAlojamiento } from "../../src/application/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs"
+import { establecerNuevoPrecioApartamento } from "../../src/application/administracion/precios/establecerNuevoPrecioApartamento.mjs"
 
 export const makeHostArquitecture = async (data) => {
     try {

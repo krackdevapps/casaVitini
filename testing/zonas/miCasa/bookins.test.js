@@ -1,19 +1,19 @@
 
 import { describe, expect, test, jest } from '@jest/globals';
-import { eliminarUsuarioPorTestingVI } from '../../../logica/repositorio/usuarios/eliminarUsuarioPorTestingVI.mjs';
-import { eliminarReservaPorTestingVI } from '../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { eliminarUsuarioPorTestingVI } from '../../../src/infraestructure/repository/usuarios/eliminarUsuarioPorTestingVI.mjs';
+import { eliminarReservaPorTestingVI } from '../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 import { makeHostArquitecture } from '../../sharedUsesCases/makeHostArquitecture.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { detallesReserva } from '../../../logica/zonas/miCasa/misReservas/detallesReserva.mjs';
-import { crearCuentaDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
-import { actualizarDatosUsuarioDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/actualizarDatosUsuarioDesdeAdministracion.mjs';
-import { crearCliente } from '../../../logica/zonas/administracion/clientes/crearCliente.mjs';
-import { asociarTitular } from '../../../logica/zonas/administracion/reservas/detallesReserva/gestionTitular/asociarTitular.mjs';
-import { eliminarClientePorTestingVI } from '../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { obtenerUsuario } from '../../../logica/repositorio/usuarios/obtenerUsuario.mjs';
-import { verificarCuenta } from '../../../logica/zonas/miCasa/verificarCuenta.mjs';
-import { listarMisReservas } from '../../../logica/zonas/miCasa/misReservas/listarMisReservas.mjs';
-import { obtenerPDF } from '../../../logica/zonas/miCasa/misReservas/obtenerPDF.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { detallesReserva } from '../../../src/application/miCasa/misReservas/detallesReserva.mjs';
+import { crearCuentaDesdeAdministracion } from '../../../src/application/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
+import { actualizarDatosUsuarioDesdeAdministracion } from '../../../src/application/administracion/usuarios/actualizarDatosUsuarioDesdeAdministracion.mjs';
+import { crearCliente } from '../../../src/application/administracion/clientes/crearCliente.mjs';
+import { asociarTitular } from '../../../src/application/administracion/reservas/detallesReserva/gestionTitular/asociarTitular.mjs';
+import { eliminarClientePorTestingVI } from '../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { obtenerUsuario } from '../../../src/infraestructure/repository/usuarios/obtenerUsuario.mjs';
+import { verificarCuenta } from '../../../src/application/miCasa/verificarCuenta.mjs';
+import { listarMisReservas } from '../../../src/application/miCasa/misReservas/listarMisReservas.mjs';
+import { obtenerPDF } from '../../../src/application/miCasa/misReservas/obtenerPDF.mjs';
 
 describe('miCasa bookins', () => {
     const testingVI = "testingbmicasa"

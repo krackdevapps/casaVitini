@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { eliminarReservaPorTestingVI } from '../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
 import { DateTime } from 'luxon';
-import { eliminarConfiguracionDeAlojamiento } from '../../logica/zonas/administracion/arquitectura/configuraciones/eliminarConfiguracionDeAlojamiento.mjs';
-import { reconstruirDesgloseDesdeInstantaneas as rcddi_reservas } from '../../logica/zonas/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
-import { reconstruirDesgloseDesdeInstantaneas as rcddi_simulacion } from '../../logica/zonas/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
-import { guardarSimulacion } from '../../logica/zonas/administracion/simuladorDePrecios/guardarSimulacion.mjs';
-import { eliminarSimulacionPorTestingVI } from '../../logica/repositorio/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { eliminarConfiguracionDeAlojamiento } from '../../src/application/administracion/arquitectura/configuraciones/eliminarConfiguracionDeAlojamiento.mjs';
+import { reconstruirDesgloseDesdeInstantaneas as rcddi_reservas } from '../../src/application/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
+import { reconstruirDesgloseDesdeInstantaneas as rcddi_simulacion } from '../../src/application/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
+import { guardarSimulacion } from '../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
 
 describe('critical: entityAndConfigHostingValidation', () => {
     const testingVI = "testingcriticalavaibleapartmentwhencreatinbookins"

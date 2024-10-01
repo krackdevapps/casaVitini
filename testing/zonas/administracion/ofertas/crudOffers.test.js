@@ -1,12 +1,12 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearOferta } from '../../../../logica/zonas/administracion/ofertas/crearOferta.mjs';
-import { eliminarOfertaPorTestingVI } from '../../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
-import { actualizarOferta } from '../../../../logica/zonas/administracion/ofertas/actualizarOferta.mjs';
-import { actualizarEstadoOferta } from '../../../../logica/zonas/administracion/ofertas/actualizarEstadoOferta.mjs';
-import { detallesOferta } from '../../../../logica/zonas/administracion/ofertas/detallesOferta.mjs';
-import { listasOfertasAdministracion } from '../../../../logica/zonas/administracion/ofertas/listasOfertasAdministracion.mjs';
-import { eliminarOferta } from '../../../../logica/zonas/administracion/ofertas/eliminarOferta.mjs';
+import { crearOferta } from '../../../../src/application/administracion/ofertas/crearOferta.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
+import { actualizarOferta } from '../../../../src/application/administracion/ofertas/actualizarOferta.mjs';
+import { actualizarEstadoOferta } from '../../../../src/application/administracion/ofertas/actualizarEstadoOferta.mjs';
+import { detallesOferta } from '../../../../src/application/administracion/ofertas/detallesOferta.mjs';
+import { listasOfertasAdministracion } from '../../../../src/application/administracion/ofertas/listasOfertasAdministracion.mjs';
+import { eliminarOferta } from '../../../../src/application/administracion/ofertas/eliminarOferta.mjs';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
 
 describe('crud offers system', () => {
@@ -49,8 +49,8 @@ describe('crud offers system', () => {
                     {
                         "apartamentoIDV": apartamentoIDV
                     },
-        
-             
+
+
                 ]
             },
             {

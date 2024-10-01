@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarEnlacesDeRecuperacionPorUsuario } from '../../../logica/repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorUsuario.mjs';
-import { eliminarUsuario } from '../../../logica/repositorio/usuarios/eliminarUsuario.mjs';
-import { insertarUsuario } from '../../../logica/repositorio/usuarios/insertarUsuario.mjs';
-import { insertarEnlaceDeRecuperacion } from '../../../logica/repositorio/enlacesDeRecuperacion/insertarEnlaceDeRecuperacion.mjs';
-import { actualizarEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs';
-import { actualizarEnlaceDeRecuperacionPorUsuario } from '../../../logica/repositorio/enlacesDeRecuperacion/actualizarEnlaceDeRecuperacionPorUsuario.mjs';
-import { obtenerEnlacesRecuperacionPorCodigoUPID } from '../../../logica/repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs';
-import { eliminarEnlacesDeRecuperacionPorFechaCaducidad } from '../../../logica/repositorio/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorFechaCaducidad.mjs';
+import { eliminarEnlacesDeRecuperacionPorUsuario } from '../../../src/infraestructure/repository/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorUsuario.mjs';
+import { eliminarUsuario } from '../../../src/infraestructure/repository/usuarios/eliminarUsuario.mjs';
+import { insertarUsuario } from '../../../src/infraestructure/repository/usuarios/insertarUsuario.mjs';
+import { insertarEnlaceDeRecuperacion } from '../../../src/infraestructure/repository/enlacesDeRecuperacion/insertarEnlaceDeRecuperacion.mjs';
+import { actualizarEnlaceDePagoPorEnlaceUID } from '../../../src/infraestructure/repository/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs';
+import { actualizarEnlaceDeRecuperacionPorUsuario } from '../../../src/infraestructure/repository/enlacesDeRecuperacion/actualizarEnlaceDeRecuperacionPorUsuario.mjs';
+import { obtenerEnlacesRecuperacionPorCodigoUPID } from '../../../src/infraestructure/repository/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorCodigoUPID.mjs';
+import { eliminarEnlacesDeRecuperacionPorFechaCaducidad } from '../../../src/infraestructure/repository/enlacesDeRecuperacion/eliminarEnlacesDeRecuperacionPorFechaCaducidad.mjs';
 
 describe('crud recovery links', () => {
     const enlaceTVI = "enlaceTest"

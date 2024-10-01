@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { diasOcupadosTotalmentePorMes } from '../../../logica/zonas/componentes/diasOcupadosTotalmentePorMes.mjs';
+import { diasOcupadosTotalmentePorMes } from '../../../src/application/componentes/diasOcupadosTotalmentePorMes.mjs';
 
 describe('daysFullByMonth', () => {
 

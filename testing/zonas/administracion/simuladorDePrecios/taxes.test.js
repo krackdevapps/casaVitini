@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { guardarSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/guardarSimulacion.mjs';
-import { eliminarSimulacionPorTestingVI } from '../../../../logica/repositorio/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
-import { eliminarOfertaPorTestingVI } from '../../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
-import { crearNuevoImpuesto } from '../../../../logica/zonas/administracion/impuestos/crearNuevoImpuesto.mjs';
-import { eliminarImpuestoPorTestingVI } from '../../../../logica/repositorio/impuestos/eliminarImpuestoPorTestingVI.mjs';
-import { insertarImpuestoEnSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/impuestos/insertarImpuestoEnSimulacion.mjs';
-import { insertarImpuestoDedicadoEnSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/impuestos/insertarImpuestoDedicadoEnSimulacion.mjs';
-import { eliminarImpuestoEnSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/impuestos/eliminarImpuestoEnSimulacion.mjs';
+import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
+import { crearNuevoImpuesto } from '../../../../src/application/administracion/impuestos/crearNuevoImpuesto.mjs';
+import { eliminarImpuestoPorTestingVI } from '../../../../src/infraestructure/repository/impuestos/eliminarImpuestoPorTestingVI.mjs';
+import { insertarImpuestoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/insertarImpuestoEnSimulacion.mjs';
+import { insertarImpuestoDedicadoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/insertarImpuestoDedicadoEnSimulacion.mjs';
+import { eliminarImpuestoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/eliminarImpuestoEnSimulacion.mjs';
 
 describe('taxes of simulation', () => {
     const fakeAdminSession = {

@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { obtenerReservasComoLista } from '../../../../logica/repositorio/miCasa/reservas/obtenerReservasComoLista.mjs';
+import { obtenerReservasComoLista } from '../../../../src/infraestructure/repository/miCasa/reservas/obtenerReservasComoLista.mjs';
 
 describe('bookings by user', () => {
 

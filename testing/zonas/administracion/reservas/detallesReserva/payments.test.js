@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { crearPagoManual } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/transacciones/crearPagoManual.mjs';
-import { obtenerDetallesDelPago } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/transacciones/obtenerDetallesDelPago.mjs';
-import { realizarReembolso } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/transacciones/realizarReembolso.mjs';
-import { detallesDelReembolso } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/transacciones/detallesDelReembolso.mjs';
-import { eliminarReembolsoManual } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/transacciones/eliminarReembolsoManual.mjs';
-import { eliminarPagoManual } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/transacciones/eliminarPagoManual.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { crearPagoManual } from '../../../../../src/application/administracion/reservas/detallesReserva/transacciones/crearPagoManual.mjs';
+import { obtenerDetallesDelPago } from '../../../../../src/application/administracion/reservas/detallesReserva/transacciones/obtenerDetallesDelPago.mjs';
+import { realizarReembolso } from '../../../../../src/application/administracion/reservas/detallesReserva/transacciones/realizarReembolso.mjs';
+import { detallesDelReembolso } from '../../../../../src/application/administracion/reservas/detallesReserva/transacciones/detallesDelReembolso.mjs';
+import { eliminarReembolsoManual } from '../../../../../src/application/administracion/reservas/detallesReserva/transacciones/eliminarReembolsoManual.mjs';
+import { eliminarPagoManual } from '../../../../../src/application/administracion/reservas/detallesReserva/transacciones/eliminarPagoManual.mjs';
 
 describe('payment in bookin', () => {
     const fakeAdminSession = {

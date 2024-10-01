@@ -25,12 +25,9 @@ const casaVitini = {
 
                 }
                 if (tipoCambio === "total" || !componente) {
-                    const entrada = {
+                    return casaVitini.shell.navegacion.controladorVista({
                         vista: zona,
-                        tipoOrigen: "historial",
-                        controladorHistorial: "origen"
-                    }
-                    return casaVitini.shell.navegacion.controladorVista(entrada)
+                    })
                 }
             },
             cambiarVista: (vistaMenu) => {
@@ -45,12 +42,14 @@ const casaVitini = {
                     })
                 }
             },
-            controladorVista: async (entrada) => {
+            controladorVista: async (data) => {
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                const objetoOrigen = data.objetoOrigen?.target
+                const selectorMenuRenderizado = document.querySelector("header [estructura=menu]")
+                const tipoOrigen = data.tipoOrigen
+                const vista = data.vista || "portada"
                 const main = document.querySelector("main")
                 main.setAttribute("instanciaUID", instanciaUID)
-                const objetoOrigen = entrada.objetoOrigen?.target
-                const selectorMenuRenderizado = document.querySelector("header [estructura=menu]")
 
                 if (objetoOrigen?.getAttribute("tipoMenu") === "volatil") {
                     const zonaUI = objetoOrigen.getAttribute("zona")
@@ -66,7 +65,7 @@ const casaVitini = {
                         selectorMenuGlobalFlotanteRenderizado.remove()
                     }
                 }
-                casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante(entrada)
+                casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante(data)
 
                 main.style.transition = "opacity 0s linear"
                 main.style.opacity = "0"
@@ -80,7 +79,6 @@ const casaVitini = {
                     pantallaCarga.appendChild(spinnerSimple)
                     document.body.appendChild(pantallaCarga)
                 }
-                //await casaVitini.utilidades.ralentizador(500)
                 const selectorAdvertenciasInmersivas = document.querySelectorAll("[componente=errorUI], [componente=menuVolatil]")
                 selectorAdvertenciasInmersivas.forEach((advertenciaInmersivaRenderizada) => {
                     advertenciaInmersivaRenderizada.remove()
@@ -89,19 +87,7 @@ const casaVitini = {
                 selectorCalendarioRenderizados.forEach((calendarioRenderizado) => {
                     calendarioRenderizado.remove()
                 })
-                let tipoEntrada = typeof entrada
-                let vista
-                if (tipoEntrada === "string") {
-                    vista = entrada
-                }
-                let tipoOrigen;
-                if (tipoEntrada === "object") {
-                    vista = entrada.vista === "/" ? "portada" : entrada.vista
-                    tipoOrigen = entrada.tipoOrigen
-                    controladorHistorial = entrada.controladorHistorial
-                    etapa = entrada.etapa
-                    // Zona = Entrada.Zona
-                }
+
                 const vistaActual = selectorMenuRenderizado.getAttribute("vistaActual")
                 let url = window.location.pathname.split("/");
                 delete url[0]
@@ -131,10 +117,8 @@ const casaVitini = {
                 const selectorPantallaCargaRenderizdaPostPeticion = document.querySelector("[ui=pantallaDeCarga]")
                 main.removeAttribute("rama")
 
-
                 const limpiezaUI = (data = {}) => {
                     const zonaDestino = data?.zonaDestino
-
                     casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.destroy()
                     window.removeEventListener("resize", casaVitini.ui.vistas.conozcanos.instanciasTemporales.parallaxControlador?.resizeIsDone);
                     window.removeEventListener('scroll', casaVitini.ui.vistas.conozcanos.scrollHandler);
@@ -159,9 +143,7 @@ const casaVitini = {
                     menu_renderizado.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
                         menu.removeAttribute("style")
                     })
-
                 }
-
 
                 if (respuestaServidor?.error) {
                     casaVitini.shell.controladoresUI.limpiarMain()
@@ -191,7 +173,6 @@ const casaVitini = {
                         menu.removeAttribute("style")
                     })
 
-
                     limpiezaUI({ zonaDestino: zona })
                     if (menu_renderizado.querySelector("[zona=" + zona + "]")) {
                         menu_renderizado.querySelector("[zona=" + zona + "]").style.background = "rgba(0, 0, 0, 0.6)"
@@ -206,15 +187,15 @@ const casaVitini = {
                     }
                     urlVista = urlVista === "/portada" ? "/" : urlVista;
                     urlVista = decodeURIComponent(urlVista);
-                    const titulo = 'Casa Vitini';
+
                     let controladorUrl;
                     if (vistaActual?.toLowerCase() === vista?.toLowerCase()) {
                         controladorUrl = "soloActualiza"
                     }
                     selectorMenuRenderizado.setAttribute("vistaActual", vista)
+                    const titulo = 'Casa Vitini';
                     const estado = {
                         zona: vista === "portada" ? "" : vista,
-                        estadoInternoZona: "estado",
                         tipoCambio: "total"
                     }
                     if (tipoOrigen === "menuNavegador" && !controladorUrl) {
@@ -223,10 +204,8 @@ const casaVitini = {
                         window.history.replaceState(estado, titulo, urlVista);
                     } else if (!tipoOrigen && !controladorUrl) {
                         window.history.replaceState(estado, titulo, urlVista);
-                    } else if (tipoOrigen === "historial" && !controladorUrl) {
-                        //  window.history.replaceState(Estado, Titulo, URLVista);
-                        //  
                     }
+
                     const granuladorURL = casaVitini.utilidades.granuladorURL()
                     const directoriosFusion = granuladorURL.directoriosFusion
                     contenedorVista.setAttribute("zonaCSS", directoriosFusion)
@@ -1657,7 +1636,7 @@ const casaVitini = {
                                 bloqueVerticalTitulo.setAttribute("class", "bloqueVerticalTitulo")
                                 const elementoTituloNombre = document.createElement("div")
                                 elementoTituloNombre.setAttribute("class", "elementoTituloPrincipal")
-                                elementoTituloNombre.textContent = apartamentoUI + "test_nuevoSistema"
+                                elementoTituloNombre.textContent = apartamentoUI
                                 bloqueVerticalTitulo.appendChild(elementoTituloNombre)
                                 const bloqueTituloApartamentoComponenteUI = document.createElement("div")
                                 bloqueTituloApartamentoComponenteUI.setAttribute("class", "tituloApartamentoComponenteUI")
@@ -3002,6 +2981,13 @@ const casaVitini = {
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             sessionStorage.removeItem("reservaNoConfirmada");
                             localStorage.setItem("reservaConfirmada", JSON.stringify(reservaConfirmada))
+
+                            return casaVitini.shell.navegacion.controladorVista({
+                                vista: "/alojamiento/reserva_confirmada",
+                                //  tipoOrigen: "historial"
+                            })
+
+
                             document.documentElement.scrollTop = 0;
                             document.body.scrollTop = 0;
                             const url = "/alojamiento/reserva_confirmada"
@@ -4484,76 +4470,7 @@ const casaVitini = {
                             document.body.style.background = "rgb(214 192 157)"
                             const main = document.querySelector("main")
                             main.setAttribute("zonaCSS", "/alojamiento/reserva_confirmada")
-                            // const obtenerPDF = async (enlaceUID) => {
-                            //     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                            //     const advertenciaInmersivaIU = document.createElement("div")
-                            //     advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                            //     advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                            //     advertenciaInmersivaIU.setAttribute("instanciaUID", instanciaUID)
-                            //     const contenedorAdvertenciaInmersiva = document.createElement("div")
-                            //     contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                            //     const contenidoAdvertenciaInmersiva = document.createElement("div")
-                            //     contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
-                            //     contenidoAdvertenciaInmersiva.setAttribute("espacio", "gestionPDF")
-                            //     const mensajeSpinner = "Generando PDF...."
-                            //     const spinner = casaVitini.ui.componentes.spinner(mensajeSpinner)
-                            //     contenidoAdvertenciaInmersiva.appendChild(spinner)
-                            //     contenedorAdvertenciaInmersiva.appendChild(contenidoAdvertenciaInmersiva)
-                            //     advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                            //     document.querySelector("main").appendChild(advertenciaInmersivaIU)
-                            //     const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                            //     try {
-                            //         const metadatospdf = {
-                            //             zona: "componentes/pdf",
-                            //             enlace: enlaceUID
-                            //         }
-                            //         const puerto = '/puerto';
-                            //         const peticion = {
-                            //             method: 'POST',
-                            //             headers: {
-                            //                 'Content-Type': 'application/json'
-                            //             },
-                            //             body: JSON.stringify(metadatospdf)
-                            //         };
-                            //         const respuestaServidor = await fetch(puerto, peticion);
-                            //         const contentType = respuestaServidor.headers.get('content-type');
-                            //         if (contentType === "application/json; charset=utf-8") {
-                            //             const respuestaServidorJSON = await respuestaServidor.json() || {};
-                            //             advertenciaInmersivaRenderizada?.remove()
-                            //             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidorJSON.error)
-                            //         }
-                            //         if (contentType === "application/pdf" && advertenciaInmersivaRenderizada) {
-                            //             const BLOB = await respuestaServidor.blob();
-                            //             const selectorZonaGestion = advertenciaInmersivaRenderizada.querySelector("[espacio=gestionPDF]");
-                            //             selectorZonaGestion.innerHTML = null;
-                            //             selectorZonaGestion.style.alignItems = "center"
-                            //             selectorZonaGestion.textContent = "Se ha generado el archivo PDF con el resumen de su reserva. Para descargar el pdf pulse en el boton desde mi reserva en PDF, el enlace de descarga estara vigente durante 48 horas";
-                            //             const PDFGenerado = new Blob([BLOB], { type: 'application/pdf' });
-                            //             const pdfGenerado = document.createElement('a');
-                            //             pdfGenerado.href = window.URL.createObjectURL(PDFGenerado);
-                            //             pdfGenerado.classList.add("plaza_alojamiento_reservaConfirmada_botoDescargaPDF")
-                            //             pdfGenerado.download = 'Reserva.pdf';
-                            //             pdfGenerado.textContent = "Descargar mi reserva en PDF";
-                            //             selectorZonaGestion.appendChild(pdfGenerado)
-                            //             const botonCancelarProcesoCancelacion = document.createElement("div")
-                            //             botonCancelarProcesoCancelacion.classList.add("plaza_alojamiento_reservaConfirmada_botoDescargaPDF")
-                            //             botonCancelarProcesoCancelacion.textContent = "Cancelar y volver al resumen de mi reserva"
-                            //             botonCancelarProcesoCancelacion.addEventListener("click", (e) => {
-                            //                 return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                            //             })
-                            //             selectorZonaGestion.appendChild(botonCancelarProcesoCancelacion)
-                            //         }
-                            //     } catch (errorCapturado) {
-                            //         advertenciaInmersivaRenderizada?.remove()
-                            //         if (errorCapturado instanceof TypeError && errorCapturado.message === 'Failed to fetch') {
-                            //             const mensaje = "No se ha podido contactar con el servidor, revisa tu conexión y reintentalo."
-                            //             casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
-                            //         } else {
-                            //             casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado.message)
-                            //         }
-                            //     }
-                            // }
-                            // Codigo enlaces PDF
+
                             const pdfCodificado = reservaConfirmada.pdf
                             // Datos globales
                             const reservaUID = reservaConfirmada.global.reservaUID
@@ -4750,7 +4667,7 @@ const casaVitini = {
                             marcoElastico.appendChild(botonBorrarReserva)
                             marcoElasticoRelatico.appendChild(marcoElastico)
                             const seccion = document.querySelector("main")
-                            seccion.removeAttribute("instanciaUID")
+                            //  seccion.removeAttribute("instanciaUID")
                             seccion.innerHTML = null
                             seccion.appendChild(marcoElasticoRelatico)
                             // const desgloseTotales = {
@@ -10768,10 +10685,11 @@ const casaVitini = {
                     }
                 },
                 resolverCalendarioNuevo: async (data) => {
-                    const calendario = data
-                    calendario.zona = "componentes/calendario"
 
-                    const respuestaServidor = await casaVitini.shell.servidor(calendario)
+                    const respuestaServidor = await casaVitini.shell.servidor({
+                        zona: "componentes/calendario",
+                        ...data
+                    })
                     if (respuestaServidor?.error) {
                         const selectorContenedorCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
                         selectorContenedorCalendario.forEach((bloqueCalendario) => {
@@ -28213,6 +28131,7 @@ const casaVitini = {
                 });
             },
             camelToSnake: (camel) => {
+
                 return camel.replace(/[A-Z]/g, (match) => {
                     return '_' + match.toLowerCase();
                 });
@@ -49585,167 +49504,93 @@ const casaVitini = {
             }
         },
         calendario: {
-            arranque: async () => {
-                const html = document.querySelector("html")
-                html.style.height = "100%"
+            arranque: async function () {
+                try {
+                    const html = document.querySelector("html")
+                    html.style.height = "100%"
 
-                const main = document.querySelector("main")
-                main.setAttribute("zonaCSS", "administracion/calendario")
-                //main.style.background = "pink"
-                const granuladoURL = casaVitini.utilidades.granuladorURL()
-                const parametros = granuladoURL.parametros
-                const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
-                const calendario = {}
-                const configuracionCalendario = {}
-                const ultimoDirectorio = granuladoURL.directorios[granuladoURL.directorios.length - 1]
-                // document.body.style.backgroundImage = "url("/componentes/imagenes/f5.jpeg")";
-                //document.body.classList.add("fondoConDesenfoque")
-                //Llama a la función al cargar la página y en eventos que puedan cambiar la altura del div
-                //window.removeEventListener("resize", casaVitini.administracion.calendario.controlVertical);
-                //window.addEventListener("resize", casaVitini.administracion.calendario.controlVertical);
-                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const sectionRenderizada = document.querySelector("main")
-                sectionRenderizada.style.maxWidth = "100%"
-                const instanciaUID_seccion = sectionRenderizada.getAttribute("instanciaUID")
-                const metadatosControaldorLogo = {
-                    sectionUID: instanciaUID_seccion,
-                    elementoScroll: ""
-                }
-                //casaVitini.shell.controladoresUI.controlLogoScroll(metadatosControaldorLogo)
-                calendario.instanciaUID = instanciaUID
-                // este 1
-                calendario.instanciaUIDMes = "uidInicialMes"
-                const contenedorCapas = {
-                    capas: [],
-                    capasCompuestas: {}
-                }
-                if (parametros.fecha) {
-                    const fecha = parametros.fecha.split("-")
-                    const mes = Number(fecha[0])
-                    const ano = Number(fecha[1])
-                    calendario.tipo = "personalizado"
-                    //calendario.comando = "construyeObjeto"
-                    calendario.ano = ano
-                    calendario.mes = mes
-                    let parametrosURL = []
-                    for (const conjunto of contenedorSeguroParaParametros) {
-                        const par = conjunto.split(":")
-                        const parametro = par[0]
-                        const valor = par[1]
-                        const estructuraURLParametro = `${parametro}:${valor}`
-                        parametrosURL.push(estructuraURLParametro)
-                        if (parametro === "capa") {
-                            const capaEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(valor)
-                            contenedorCapas.capas.push(capaEnCamel)
+                    const main = document.querySelector("main")
+                    main.setAttribute("zonaCSS", "administracion/calendario")
+
+                    const granuladoURL = casaVitini.utilidades.granuladorURL()
+                    const parametros = granuladoURL.parametros
+                    const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
+                    const ultimoDirectorio = granuladoURL.directorios[granuladoURL.directorios.length - 1]
+                    const sectionRenderizada = document.querySelector("main")
+                    const instanciaUID_main = sectionRenderizada.getAttribute("instanciaUID")
+                    sectionRenderizada.style.maxWidth = "100%"
+
+                    const configuracionCalendario = {}
+                    const configuracionControladorRegistros = {}
+
+                    const contenedorCapas = {
+                        capas: [],
+                        capasCompuestas: {}
+                    }
+                    if (parametros.fecha) {
+                        const fecha = parametros.fecha.split("-")
+                        const mes = Number(fecha[0])
+                        const ano = Number(fecha[1])
+                        configuracionCalendario.tipoResolucion = "personalizado"
+                        //calendario.comando = "construyeObjeto"
+                        configuracionCalendario.ano = ano
+                        configuracionCalendario.mes = mes
+                        let parametrosURL = []
+                        for (const conjunto of contenedorSeguroParaParametros) {
+                            const par = conjunto.split(":")
+                            const parametro = par[0]
+                            const valor = par[1]
+                            const estructuraURLParametro = `${parametro}:${valor}`
+                            parametrosURL.push(estructuraURLParametro)
+                            if (parametro === "capa") {
+                                const capaEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(valor)
+                                contenedorCapas.capas.push(capaEnCamel)
+                            }
+                            if (parametro !== "fecha" && parametro !== "capa") {
+                                const parametroEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(parametro)
+                                const composicionCapa = valor.split("=")
+                                contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
+                            }
                         }
-                        if (parametro !== "fecha" && parametro !== "capa") {
-                            const parametroEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(parametro)
-                            const composicionCapa = valor.split("=")
-                            contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
+                        if (parametrosURL.length === 0) {
+                            configuracionControladorRegistros.url = ""
+                        } else {
+                            configuracionControladorRegistros.url = parametrosURL.join("/")
                         }
+                    } else if (ultimoDirectorio === "calendario") {
+                        configuracionCalendario.tipoResolucion = "actual"
+                        contenedorCapas.capas = ["global"]
                     }
-                    if (parametrosURL.length === 0) {
-                        // el url tambien 2
-                        calendario.url = ""
-                    } else {
-                        calendario.url = parametrosURL.join("/")
-                    }
-                } else if (parametros.dia) {
-                    casaVitini.administracion.calendario.detallesDelDia()
-                } else if (ultimoDirectorio === "calendario") {
-                    const calendarioActual = {
-                        tipo: "actual",
-                        //comando: "construyeObjeto"
-                    }
-                    calendario.tipo = "actual"
-                    //calendario.comando = "construyeObjeto"
-                    const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(calendarioActual)
-                    calendario.tipo = "personalizado"
-                    //calendario.comando = "construyeObjeto"
-                    calendario.ano = calendarioResuelto.ano
-                    calendario.mes = calendarioResuelto.mes
-                    /*
-                   
-                                                   {
-                                       "calendario": "ok",
-                                       "ano": 2024,
-                                       "mes": 1,
-                                       "dia": 31,
-                                       "tiempo": "presente",
-                                       "posicionDia1": 1,
-                                       "numeroDiasPorMes": 31
-                                   }               
-                                   */
-                    contenedorCapas.capas = ["global"]
-                    // url tambien
-                    calendario.url = `fecha:${calendarioResuelto.mes}-${calendarioResuelto.ano}/capa:global`
-                }
-                calendario.tipoRegistro = "actualizar"
-                casaVitini.administracion.calendario.controladorRegistros(calendario)
-                const tipoFecha = {
-                    almacenamientoCalendarioID: "calendarioGlobal",
-                    instanciaUID: instanciaUID
-                }
+                    casaVitini.administracion.calendario.constructorCalendarioNuevo({
+                        almacenamientoCalendarioID: "calendarioGlobal",
+                        instanciaUID_main: instanciaUID_main
+                    })
+                    const mesRenderizado = await this.irAFecha({
+                        ...configuracionCalendario,
+                        instanciaUID_main: instanciaUID_main,
+                        contenedorCapas: contenedorCapas,
 
-                casaVitini.administracion.calendario.constructorCalendarioNuevo(tipoFecha)
-                const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                //const selectorCapas = calendarioRenderizado.querySelector("[componente=selectorCapas]")
-                const apartamentosLista = await casaVitini.administracion.calendario.obtenerConfiguracionesApartamento()
+                    })
+                    const calendarioResuelto = mesRenderizado?.calendarioResuelto
 
-                if (apartamentosLista.length > 0) {
-                    const tituloApartamentos = document.createElement("option");
-                    tituloApartamentos.value = "";
-                    tituloApartamentos.disabled = "true"
-                    tituloApartamentos.text = "Apartamentos";
-                    //selectorCapas.add(tituloApartamentos);
-                    for (const detallesApartamento of apartamentosLista) {
-                        const apartamentoIDV = detallesApartamento.apartamentoIDV
-                        const apartamentoUI = detallesApartamento.apartamentoUI
-                        const selectorApartamento = document.createElement("option");
-                        selectorApartamento.value = apartamentoIDV;
-                        selectorApartamento.setAttribute("tipoCapa", "porApartamento")
-                        selectorApartamento.text = apartamentoUI;
-                        //selectorCapas.add(selectorApartamento);
-                    }
-                }
+                    casaVitini.administracion.calendario.controladorRegistros({
+                        tipoRegistro: "actualizar",
+                        ano: calendarioResuelto?.ano,
+                        mes: calendarioResuelto?.mes,
+                        contenedorCapas: contenedorCapas
+                    })
+                } catch (error) {
 
-                const calendariosListaAirnbnb = await casaVitini.administracion.calendario.obtenerCalendariosSincronizados.airbnb()
-                if (calendariosListaAirnbnb.length > 0) {
-                    const tituloApartamentos = document.createElement("option");
-                    tituloApartamentos.value = "";
-                    tituloApartamentos.disabled = "true"
-                    tituloApartamentos.text = "Airbnb";
-                    //selectorCapas.add(tituloApartamentos);
-                    for (const detallesCalendario of calendariosListaAirnbnb) {
-                        const apartamentoIDV = detallesCalendario.apartamentoIDV
-                        const apartamentoUI = detallesCalendario.apartamentoUI
-                        const calendarioUID = detallesCalendario.calendarioUID
-                        const nombre = detallesCalendario.nombre
-                        const selectorApartamento = document.createElement("option");
-                        selectorApartamento.value = calendarioUID;
-                        selectorApartamento.setAttribute("tipoCapa", "calendarioSincronizadoAirbnb")
-                        selectorApartamento.text = `${nombre} (${apartamentoUI})`;
-                        //selectorCapas.add(selectorApartamento);
-                    }
                 }
-                await casaVitini.administracion.calendario.configuraMes(calendario)
-                const metadatos = {
-                    instanciaUID: instanciaUID,
-                    contenedorCapas: contenedorCapas
-                }
-                casaVitini.administracion.calendario.capas(metadatos)
             },
             constructorCalendarioNuevo: (metadatos) => {
                 const almacenamientoVolatilUID = metadatos.almacenamientoCalendarioID
+                const instanciaUID_main = metadatos.instanciaUID_main
                 if (!almacenamientoVolatilUID) {
                     let error = "El constructor del calendario, necesita un nombre para el almacenamiento volátil"
                     casaVitini.ui.componentes.advertenciaInmersiva(error)
                 }
-                const instanciaUID = metadatos.instanciaUID
-                if (!instanciaUID) {
-                    const error = "El constructor del calendario necesita una instanciaUID para el contenedor del calendario"
-                    casaVitini.ui.componentes.advertenciaInmersiva(error)
-                }
+                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const calendario = document.createElement("div")
                 calendario.setAttribute("class", "administracion_calendario_calendarioUI")
                 calendario.setAttribute("campo", "calendario")
@@ -49757,7 +49602,6 @@ const casaVitini = {
                 calendario.setAttribute("elemento", "flotante")
                 //calendario.setAttribute("perfilMes", perfilMes)
                 //calendario.setAttribute("IO", calendarioIO)
-                calendario.style.display = "none"
                 const cartelInfoCalendarioEstado = document.createElement("div")
                 cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
                 cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
@@ -49769,404 +49613,7 @@ const casaVitini = {
                 botonSelectorMultiCapa.classList.add("botonSelectorMulticapa")
                 botonSelectorMultiCapa.textContent = "Capas del calendario"
                 botonSelectorMultiCapa.addEventListener("click", async () => {
-                    const granuladoURL = casaVitini.utilidades.granuladorURL()
-                    const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
-                    const contenedorCapas = {
-                        capas: [],
-                        capasCompuestas: {}
-                    }
-                    for (const conjunto of contenedorSeguroParaParametros) {
-                        const par = conjunto.split(":")
-                        const parametro = par[0]
-                        const valor = par[1]
-                        if (parametro === "capa") {
-                            const capaEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(valor)
-                            contenedorCapas.capas.push(capaEnCamel)
-                        }
-                        if (parametro !== "fecha" && parametro !== "capa") {
-                            const parametroEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(parametro)
-                            const composicionCapa = valor.split("=")
-                            contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
-                        }
-                    }
-                    const contenedorMenuCapas = document.createElement("div")
-                    contenedorMenuCapas.classList.add("contenedorMenuCapas")
-                    contenedorMenuCapas.setAttribute("componente", "contenedorMenuCapas")
-                    const titulo = document.createElement("div")
-                    titulo.classList.add("tituloGris")
-                    titulo.textContent = "Capas del calendario"
-                    contenedorMenuCapas.appendChild(titulo)
-                    //Falta la ccapa global
-                    const botonAplicar = document.createElement("div")
-                    botonAplicar.classList.add("boton")
-                    botonAplicar.textContent = "Aplicar y cerrar"
-                    botonAplicar.addEventListener("click", () => {
-                        const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
-                        document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=marcoMes]`)
-                            .setAttribute("instanciaUID", instanciaUIDMes)
-                        const capasSelecionadas = []
-                        const estructura = {
-                            capas: [],
-                            capasCompuestas: {}
-                        }
-                        const elementosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [estado=seleccionado]")
-                        for (const elementoSeleccionado of elementosSeleccionados) {
-                            const capaUID = elementoSeleccionado.getAttribute("capaUID")
-                            capasSelecionadas.push(capaUID)
-                        }
-                        if (capasSelecionadas.includes("global")) {
-                            estructura.capas.push("global")
-                        } else {
-                            const capasSimples = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID][tipo=capaSimple][estado=seleccionado]")
-                            capasSimples.forEach((capa) => {
-                                const capaUID = capa.getAttribute("capaUID")
-                                estructura.capas.push(capaUID)
-                            })
-                            if (!capasSelecionadas.includes("todosLosApartamentos")) {
-                                const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=porApartamento][estado=seleccionado]")
-                                const porApartamento = []
-                                apartametnosSeleccionados.forEach((apartamento) => {
-                                    const apartamentoIDV = apartamento.getAttribute("porApartamento")
-                                    porApartamento.push(apartamentoIDV)
-                                })
-                                if (apartametnosSeleccionados.length > 0) {
-                                    estructura.capasCompuestas.porApartamento = porApartamento
-                                    estructura.capas.push("porApartamento")
-                                }
-                            } else {
-                                estructura.capas.push("todosLosApartamentos")
-                            }
-                            if (!capasSelecionadas.includes("todoAirbnb")) {
-                                const calendariosAirBnbSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=calendariosAirbnb][estado=seleccionado]")
-                                const calendariosAirbnb = []
-                                calendariosAirBnbSeleccionados.forEach((calendario) => {
-                                    const calendarioUID = calendario.getAttribute("calendariosAirbnb")
-                                    calendariosAirbnb.push(calendarioUID)
-                                })
-                                if (calendariosAirBnbSeleccionados.length > 0) {
-                                    estructura.capasCompuestas.calendariosAirbnb = calendariosAirbnb
-                                    estructura.capas.push("calendariosAirbnb")
-                                }
-                            } else {
-                                estructura.capas.push("todoAirbnb")
-                            }
-                        }
-                        if (estructura.capas.length === 0) {
-                            const mensaje = "Selecciona alguna capa para aplicarla en el calendario. No has seleccionado ninguna capa. Sí, por el contrario, lo que quieres es cerrar la pantalla de capas. Pulsa en el botón cerrar"
-                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(mensaje)
-                        }
-                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                        const metadatos = {
-                            contenedorCapas: estructura,
-                            instanciaUID: instanciaUID,
-                            origen: "menuDesplegable",
-                            instanciaUIDMes: instanciaUIDMes
-                        }
-                        casaVitini.administracion.calendario.capas(metadatos)
-                    })
-                    contenedorMenuCapas.appendChild(botonAplicar)
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("boton")
-                    botonCancelar.textContent = "Cerrar"
-                    botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
-                    contenedorMenuCapas.appendChild(botonCancelar)
-                    const grupoGlobalCapas = document.createElement("div")
-                    grupoGlobalCapas.classList.add("contenedorGrupoSinFondo")
-                    const contenedorCapaGlobal = document.createElement("div")
-                    contenedorCapaGlobal.classList.add("contenedorCapa")
-                    contenedorCapaGlobal.setAttribute("capaUID", "global")
-                    let filaIconoTitulo = document.createElement("div")
-                    filaIconoTitulo.classList.add("filaIconoTexto")
-                    const iconoGlobal = document.createElement("div")
-                    iconoGlobal.classList.add("icono")
-                    let estadoSelector = document.createElement("div")
-                    estadoSelector.classList.add("estadoSelector")
-                    estadoSelector.setAttribute("componente", "icono")
-                    iconoGlobal.appendChild(estadoSelector)
-                    filaIconoTitulo.appendChild(iconoGlobal)
-                    const tituloGlobal = document.createElement("div")
-                    tituloGlobal.classList.add("tituloCapa")
-                    tituloGlobal.classList.add("negrita")
-                    tituloGlobal.textContent = "Global"
-                    filaIconoTitulo.appendChild(tituloGlobal)
-                    contenedorCapaGlobal.appendChild(filaIconoTitulo)
-                    grupoGlobalCapas.appendChild(contenedorCapaGlobal)
-                    const contenedorCapaReservas = document.createElement("div")
-                    contenedorCapaReservas.classList.add("contenedorCapa")
-                    contenedorCapaReservas.setAttribute("capaUID", "reservas")
-                    contenedorCapaReservas.setAttribute("tipo", "capaSimple")
-                    filaIconoTitulo = document.createElement("div")
-                    filaIconoTitulo.classList.add("filaIconoTexto")
-                    const iconoReservas = document.createElement("div")
-                    iconoReservas.classList.add("icono")
-                    estadoSelector = document.createElement("div")
-                    estadoSelector.classList.add("estadoSelector")
-                    estadoSelector.setAttribute("componente", "icono")
-                    iconoReservas.appendChild(estadoSelector)
-                    filaIconoTitulo.appendChild(iconoReservas)
-                    const tituloReservas = document.createElement("div")
-                    tituloReservas.classList.add("tituloCapa")
-                    tituloReservas.classList.add("negrita")
-                    tituloReservas.textContent = "Reservas"
-                    filaIconoTitulo.appendChild(tituloReservas)
-                    contenedorCapaReservas.appendChild(filaIconoTitulo)
-                    grupoGlobalCapas.appendChild(contenedorCapaReservas)
-                    const contenedorTodosLosBloqueos = document.createElement("div")
-                    contenedorTodosLosBloqueos.classList.add("contenedorCapa")
-                    contenedorTodosLosBloqueos.setAttribute("capaUID", "todosLosBloqueos")
-                    contenedorTodosLosBloqueos.setAttribute("tipo", "capaSimple")
-                    filaIconoTitulo = document.createElement("div")
-                    filaIconoTitulo.classList.add("filaIconoTexto")
-                    const iconoTodosLosBloqueos = document.createElement("div")
-                    iconoTodosLosBloqueos.classList.add("icono")
-                    estadoSelector = document.createElement("div")
-                    estadoSelector.classList.add("estadoSelector")
-                    estadoSelector.setAttribute("componente", "icono")
-                    iconoTodosLosBloqueos.appendChild(estadoSelector)
-                    filaIconoTitulo.appendChild(iconoTodosLosBloqueos)
-                    const tituloTodosLosBloqueos = document.createElement("div")
-                    tituloTodosLosBloqueos.classList.add("tituloCapa")
-                    tituloTodosLosBloqueos.classList.add("negrita")
-                    tituloTodosLosBloqueos.textContent = "Todos los bloqueos"
-                    filaIconoTitulo.appendChild(tituloTodosLosBloqueos)
-                    contenedorTodosLosBloqueos.appendChild(filaIconoTitulo)
-                    grupoGlobalCapas.appendChild(contenedorTodosLosBloqueos)
-                    contenedorMenuCapas.appendChild(grupoGlobalCapas)
-                    const apartamentosLista = await casaVitini.administracion.calendario.obtenerConfiguracionesApartamento()
-
-                    if (apartamentosLista.length > 0) {
-                        const contenedorTodosLosApartamentos = document.createElement("div")
-                        contenedorTodosLosApartamentos.classList.add("contenedorGrupoFondo")
-                        contenedorTodosLosApartamentos.setAttribute("grupo", "campo")
-                        filaIconoTitulo = document.createElement("div")
-                        filaIconoTitulo.classList.add("filaIconoTexto")
-                        filaIconoTitulo.setAttribute("capaUID", "todosLosApartamentos")
-                        filaIconoTitulo.setAttribute("tipo", "global")
-                        filaIconoTitulo.setAttribute("grupo", "cabeza")
-                        const iconoTodosLosApartamentos = document.createElement("div")
-                        iconoTodosLosApartamentos.classList.add("icono")
-                        estadoSelector = document.createElement("div")
-                        estadoSelector.classList.add("estadoSelector")
-                        estadoSelector.setAttribute("componente", "icono")
-                        iconoTodosLosApartamentos.appendChild(estadoSelector)
-                        filaIconoTitulo.appendChild(iconoTodosLosApartamentos)
-                        const tituloTodosLosApartamentos = document.createElement("div")
-                        tituloTodosLosApartamentos.classList.add("tituloCapa")
-                        tituloTodosLosApartamentos.textContent = "Todos los apartamentos"
-                        tituloTodosLosApartamentos.classList.add("negrita")
-                        filaIconoTitulo.appendChild(tituloTodosLosApartamentos)
-                        contenedorTodosLosApartamentos.appendChild(filaIconoTitulo)
-                        const contenedorListaPorApartamento = document.createElement("div")
-                        contenedorListaPorApartamento.classList.add("contenedorListaApartamentos")
-                        for (const detallesApartamento of apartamentosLista) {
-                            const apartamentoIDV = detallesApartamento.apartamentoIDV
-                            const apartamentoUI = detallesApartamento.apartamentoUI
-                            const contenedorApartamento = document.createElement("div")
-                            contenedorApartamento.classList.add("contenedorCapa")
-                            contenedorApartamento.setAttribute("porApartamento", apartamentoIDV)
-                            contenedorApartamento.setAttribute("capaUID", "porApartamento")
-                            contenedorApartamento.setAttribute("grupo", "elemento")
-                            filaIconoTitulo = document.createElement("div")
-                            filaIconoTitulo.classList.add("filaIconoTexto")
-                            const iconoApartamento = document.createElement("div")
-                            iconoApartamento.classList.add("icono")
-                            estadoSelector = document.createElement("div")
-                            estadoSelector.classList.add("estadoSelector")
-                            estadoSelector.setAttribute("componente", "icono")
-                            iconoApartamento.appendChild(estadoSelector)
-                            filaIconoTitulo.appendChild(iconoApartamento)
-                            const tituloApartamento = document.createElement("div")
-                            tituloApartamento.classList.add("tituloCapa")
-                            tituloApartamento.textContent = apartamentoUI
-                            filaIconoTitulo.appendChild(tituloApartamento)
-                            contenedorApartamento.appendChild(filaIconoTitulo)
-                            contenedorListaPorApartamento.appendChild(contenedorApartamento)
-                        }
-                        contenedorTodosLosApartamentos.appendChild(contenedorListaPorApartamento)
-                        contenedorMenuCapas.appendChild(contenedorTodosLosApartamentos)
-                    }
-                    const calendariosListaAirnbnb = await casaVitini.administracion.calendario.obtenerCalendariosSincronizados.airbnb()
-                    if (calendariosListaAirnbnb.length > 0) {
-                        const grupoAirbnb = document.createElement("div")
-                        grupoAirbnb.classList.add("contenedorGrupoFondo")
-                        grupoAirbnb.setAttribute("grupo", "campo")
-                        filaIconoTitulo = document.createElement("div")
-                        filaIconoTitulo.classList.add("filaIconoTexto")
-                        filaIconoTitulo.setAttribute("capaUID", "todoAirbnb")
-                        filaIconoTitulo.setAttribute("tipo", "global")
-                        filaIconoTitulo.setAttribute("grupo", "cabeza")
-                        const iconoTodosAirbnb = document.createElement("div")
-                        iconoTodosAirbnb.classList.add("icono")
-                        estadoSelector = document.createElement("div")
-                        estadoSelector.classList.add("estadoSelector")
-                        estadoSelector.setAttribute("componente", "icono")
-                        iconoTodosAirbnb.appendChild(estadoSelector)
-                        filaIconoTitulo.appendChild(iconoTodosAirbnb)
-                        const tituloTodoAirbnb = document.createElement("div")
-                        tituloTodoAirbnb.classList.add("tituloCapa")
-                        tituloTodoAirbnb.classList.add("negrita")
-                        tituloTodoAirbnb.textContent = "Todos los calendarios de Airbnb"
-                        filaIconoTitulo.appendChild(tituloTodoAirbnb)
-                        grupoAirbnb.appendChild(filaIconoTitulo)
-                        const contenedorListaPorApartamento = document.createElement("div")
-                        contenedorListaPorApartamento.classList.add("contenedorListaApartamentos")
-                        for (const detallesCalendario of calendariosListaAirnbnb) {
-                            const apartamentoIDV = detallesCalendario.apartamentoIDV
-                            const apartamentoUI = detallesCalendario.apartamentoUI
-                            const calendarioUID = detallesCalendario.calendarioUID
-                            const nombre = detallesCalendario.nombre
-                            const contenedorCalendarioAirbnb = document.createElement("div")
-                            contenedorCalendarioAirbnb.classList.add("contenedorCapa")
-                            contenedorCalendarioAirbnb.setAttribute("capaUID", "calendariosAirbnb")
-                            contenedorCalendarioAirbnb.setAttribute("calendariosAirbnb", calendarioUID)
-                            contenedorCalendarioAirbnb.setAttribute("grupo", "elemento")
-                            filaIconoTitulo = document.createElement("div")
-                            filaIconoTitulo.classList.add("filaIconoTexto")
-                            const iconoCalendarioAirbnb = document.createElement("div")
-                            iconoCalendarioAirbnb.classList.add("icono")
-                            estadoSelector = document.createElement("div")
-                            estadoSelector.classList.add("estadoSelector")
-                            estadoSelector.setAttribute("componente", "icono")
-                            iconoCalendarioAirbnb.appendChild(estadoSelector)
-                            filaIconoTitulo.appendChild(iconoCalendarioAirbnb)
-                            const tituloCalendarioAirbnb = document.createElement("div")
-                            tituloCalendarioAirbnb.classList.add("tituloCapa")
-                            tituloCalendarioAirbnb.textContent = nombre
-                            filaIconoTitulo.appendChild(tituloCalendarioAirbnb)
-                            contenedorCalendarioAirbnb.appendChild(filaIconoTitulo)
-                            contenedorListaPorApartamento.appendChild(contenedorCalendarioAirbnb)
-                        }
-                        grupoAirbnb.appendChild(contenedorListaPorApartamento)
-                        contenedorMenuCapas.appendChild(grupoAirbnb)
-                    }
-                    const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
-                    const destino = pantallaInmersiva.querySelector("[destino=inyector]")
-                    destino.appendChild(contenedorMenuCapas)
-                    document.querySelector("main").appendChild(pantallaInmersiva)
-                    const controladorSelectoresCapas = (selector) => {
-                        const contenedorCapa = selector.target.closest("[capaUID]")
-                        const todasLasCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")
-                        const capaUID = contenedorCapa.getAttribute("capaUID")
-                        const todoLosIconos = document.querySelectorAll("[componente=contenedorMenuCapas] [componente=icono]")
-                        const todasLasCapasGlobales = document.querySelectorAll("[componente=contenedorMenuCapas] [tipo=global]")
-                        const grupo = contenedorCapa.getAttribute("grupo")
-                        const iconoSelecionado = contenedorCapa.querySelector("[componente=icono]")
-                        const estadoCapa = contenedorCapa.getAttribute("estado")
-                        const controlBotonGlobal = () => {
-                            const capasGlobales = document.querySelectorAll("[componente=contenedorMenuCapas] [tipo=global], [componente=contenedorMenuCapas] [tipo=capaSimple]")
-                            const capaGlobal = document.querySelector("[componente=contenedorMenuCapas] [capaUID=global]")
-                            const iconoCapa = capaGlobal.querySelector("[componente=icono]")
-                            let estadoFinal = "seleccionado"
-                            for (const capa of capasGlobales) {
-                                const estado = capa.getAttribute("estado")
-                                if (estado !== "seleccionado") {
-                                    estadoFinal = "noSeleccionado"
-                                    break
-                                }
-                            }
-                            if (estadoFinal === "seleccionado") {
-                                iconoCapa.style.background = "blue"
-                                capaGlobal.setAttribute("estado", "seleccionado")
-                            } else {
-                                iconoCapa.removeAttribute("style")
-                                capaGlobal.removeAttribute("estado")
-                            }
-                        }
-                        if (estadoCapa === "seleccionado") {
-                            iconoSelecionado.removeAttribute("style")
-                            contenedorCapa.removeAttribute("estado")
-                        } else {
-                            iconoSelecionado.style.background = "blue"
-                            contenedorCapa.setAttribute("estado", "seleccionado")
-                        }
-                        if (capaUID === "global") {
-                            if (estadoCapa === "seleccionado") {
-                                todasLasCapas.forEach((capa) => {
-                                    capa.removeAttribute("estado")
-                                    capa.querySelector("[componente=icono]").removeAttribute("style")
-                                })
-                            } else {
-                                todasLasCapas.forEach((capa) => {
-                                    capa.setAttribute("estado", "seleccionado")
-                                    capa.querySelector("[componente=icono]").style.background = "blue"
-                                })
-                            }
-                        }
-                        if (grupo === "cabeza") {
-                            const elementosDelGrupo = contenedorCapa.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]")
-                            if (estadoCapa === "seleccionado") {
-                                elementosDelGrupo.forEach((capa) => {
-                                    capa.removeAttribute("estado")
-                                    capa.querySelectorAll("[componente=icono]").forEach((icono) => {
-                                        icono.removeAttribute("style")
-                                    })
-                                })
-                            } else {
-                                elementosDelGrupo.forEach((capa) => {
-                                    capa.setAttribute("estado", "seleccionado")
-                                    capa.querySelectorAll("[componente=icono]").forEach((icono) => {
-                                        icono.style.background = "blue"
-                                    })
-                                })
-                            }
-                        }
-                        if (grupo === "elemento") {
-                            const elementosDelGrupo = contenedorCapa.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]")
-                            const cabezaGrupo = contenedorCapa.closest("[grupo=campo]").querySelector("[grupo=cabeza]")
-                            let estadoFinal = "seleccionado"
-                            for (const elemento of elementosDelGrupo) {
-                                const estado = elemento.getAttribute("estado")
-                                if (estado !== "seleccionado") {
-                                    estadoFinal = "noSeleccionado"
-                                    cabezaGrupo.removeAttribute("estado")
-                                    cabezaGrupo.querySelector("[componente=icono]").removeAttribute("style")
-                                    break
-                                }
-                            }
-                            if (estadoFinal === "seleccionado") {
-                                cabezaGrupo.setAttribute("estado", "seleccionado")
-                                cabezaGrupo.querySelector("[componente=icono]").style.background = "blue"
-                            }
-                        }
-                        controlBotonGlobal()
-                    }
-                    const capasPorVerificar = contenedorCapas.capas
-                    const composicionCapaCompuesta = contenedorCapas.capasCompuestas
-                    const contenedorMenuCapasRenderizado = document.querySelector("[componente=contenedorMenuCapas]")
-                    if (capasPorVerificar.includes("global")) {
-                        contenedorMenuCapasRenderizado.querySelectorAll("[capaUID]").forEach((capa) => {
-                            capa.setAttribute("estado", "seleccionado")
-                            capa.querySelector("[componente=icono]").style.background = "blue"
-                        })
-                    } else {
-                        for (const capaPorVeriticar of capasPorVerificar) {
-                            if (composicionCapaCompuesta[capaPorVeriticar]) {
-                                const capasSimplesEnCapaCompuesta = composicionCapaCompuesta[capaPorVeriticar]
-                                for (const capaSimpleEnCapaCompuesta of capasSimplesEnCapaCompuesta) {
-                                    const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"][${capaPorVeriticar}="${capaSimpleEnCapaCompuesta}"]`
-                                    const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
-                                    selectorCapaRenderizada.setAttribute("estado", "seleccionado")
-                                    selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
-                                }
-                            } else {
-                                const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"]`
-                                const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
-                                selectorCapaRenderizada.setAttribute("estado", "seleccionado")
-                                selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
-                                const tipoRolGrupo = selectorCapaRenderizada.getAttribute("grupo")
-                                if (tipoRolGrupo === "cabeza") {
-                                    selectorCapaRenderizada.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]").forEach((elemento) => {
-                                        elemento.setAttribute("estado", "seleccionado")
-                                        elemento.querySelector("[componente=icono]").style.background = "blue"
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    const selectorCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")
-                    selectorCapas.forEach((selector) => {
-                        selector.addEventListener("click", controladorSelectoresCapas)
-                    })
+                    casaVitini.administracion.calendario.componentesUI.capas()
                 })
                 marcoBotonesGlobales.appendChild(botonSelectorMultiCapa)
                 calendario.appendChild(marcoBotonesGlobales)
@@ -50179,7 +49626,12 @@ const casaVitini = {
                 botonNavegacionMesAtras.setAttribute("id", "botonAtras")
                 botonNavegacionMesAtras.setAttribute("sentido", "atras")
                 botonNavegacionMesAtras.textContent = "Atras"
-                botonNavegacionMesAtras.addEventListener("click", casaVitini.administracion.calendario.navegacionCalendarioNuevo)
+                botonNavegacionMesAtras.addEventListener("click", () => {
+                    casaVitini.administracion.calendario.navegacionCalendarioNuevo({
+                        sentido: "atras",
+                        instanciaUID_main
+                    })
+                })
                 navegacionMes.appendChild(botonNavegacionMesAtras)
                 const contenedorCentralCalendario = document.createElement("div")
                 contenedorCentralCalendario.classList.add("administracion_calendario_contenedorCentralCalendario")
@@ -50190,44 +49642,6 @@ const casaVitini = {
                 botonHoy.textContent = "Hoy"
                 botonHoy.addEventListener("click", casaVitini.administracion.calendario.verHoy)
                 contenedorHerramientasCalendario.appendChild(botonHoy)
-                const selectorCapa = document.createElement("select")
-                selectorCapa.classList.add("administracion_calendario_selectorCapa")
-                selectorCapa.setAttribute("componente", "selectorCapas")
-                selectorCapa.addEventListener("change", (e) => {
-                    const capaIDV = e.target.value
-                    const instanciaUID = e.target.closest("[instanciaUID]").getAttribute("instanciaUID")
-                    const opcionSeleccionada = e.target.options[e.target.selectedIndex];
-                    const tipoCapa = opcionSeleccionada.getAttribute("tipoCapa")
-                    const metadatos = {
-                        capaContenido: capaIDV,
-                        capaUID: tipoCapa,
-                        instanciaUID: instanciaUID,
-                        origen: "menuDesplegable"
-                    }
-                    casaVitini.administracion.calendario.capas(metadatos)
-                })
-                const opcionPreterminada = document.createElement("option");
-                opcionPreterminada.value = "";
-                opcionPreterminada.selected = "true"
-                opcionPreterminada.disabled = "true"
-                opcionPreterminada.text = "Capa";
-                selectorCapa.add(opcionPreterminada);
-                const capaReservas = document.createElement("option");
-                capaReservas.value = "reservas";
-                capaReservas.setAttribute("tipoCapa", "reservas")
-                capaReservas.text = "Reservas";
-                selectorCapa.add(capaReservas);
-                const capaTodosLosApartamentos = document.createElement("option");
-                capaTodosLosApartamentos.value = "todosLosApartamentos";
-                capaTodosLosApartamentos.setAttribute("tipoCapa", "todosLosApartamentos")
-                capaTodosLosApartamentos.text = "Todos los apartamentos";
-                selectorCapa.add(capaTodosLosApartamentos);
-                const capaTodosLosBloqueos = document.createElement("option");
-                capaTodosLosBloqueos.value = "todosLosBloqueos";
-                capaTodosLosBloqueos.setAttribute("tipoCapa", "todosLosBloqueos")
-                capaTodosLosBloqueos.text = "Todos los bloqueos";
-                selectorCapa.add(capaTodosLosBloqueos);
-                //contenedorHerramientasCalendario.appendChild(selectorCapa)
                 contenedorCentralCalendario.appendChild(contenedorHerramientasCalendario)
                 const navegacionMesReferencia = document.createElement("div")
                 navegacionMesReferencia.setAttribute("id", "navegacionMesReferencia")
@@ -50240,7 +49654,12 @@ const casaVitini = {
                 botonNavegacionMesAdelante.setAttribute("id", "botonAdelante")
                 botonNavegacionMesAdelante.textContent = "Adelante"
                 botonNavegacionMesAdelante.setAttribute("sentido", "adelante")
-                botonNavegacionMesAdelante.addEventListener("click", casaVitini.administracion.calendario.navegacionCalendarioNuevo)
+                botonNavegacionMesAdelante.addEventListener("click", () => {
+                    casaVitini.administracion.calendario.navegacionCalendarioNuevo({
+                        sentido: "adelante",
+                        instanciaUID_main
+                    })
+                })
                 navegacionMes.appendChild(botonNavegacionMesAdelante)
                 const marcoMes = document.createElement("ol")
                 marcoMes.setAttribute("id", "marcoMes")
@@ -50284,59 +49703,74 @@ const casaVitini = {
                 contenedoCalendarioIntermedio.appendChild(calendario)
                 contenedoCalendarioIntermedio.appendChild(contenedorCarga)
                 bloqueCalendario.appendChild(contenedoCalendarioIntermedio)
-                document.querySelector("main").appendChild(bloqueCalendario)
+                contenedorCarga?.remove()
+                contenedoCalendarioIntermedio.style.flex = "1"
+                document.querySelector(`main[instanciaUID="${instanciaUID_main}"]`)?.appendChild(bloqueCalendario)
             },
-            constructorMesNuevo: async (calendario) => {
-                const instanciaUID = calendario.instanciaUID
+            constructorMesNuevo: (calendario) => {
                 const instanciaUIDMes = calendario.instanciaUIDMes
-                const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                if (!selectorCalendarioRenderizado) {
+                const selectorMes_enEspera = document.querySelector(`[instanciaUID="${instanciaUIDMes}"]`)
+                if (!selectorMes_enEspera) {
                     return
                 }
+                const selectorCalendarioRenderizado = selectorMes_enEspera.closest("[contenedor=calendario]")
+                selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                const contenedorMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
+                if (contenedorMes) {
+                    selectorCalendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")?.remove()
+                }
+                contenedorMes?.removeAttribute("style")
+                selectorCalendarioRenderizado.removeAttribute("style")
+
                 const nombreMes = ["Enero", "Febrero", "Marzo", "Abrir", "Mayo", "Junio", "Julio", "Agost", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
                 const nombreMesFinal = nombreMes[calendario.mes - 1]
                 const indicadorMesAno = nombreMesFinal + " " + calendario.ano
+
+
+
                 const navegacionMesReferencia = selectorCalendarioRenderizado.querySelector("[componente=mesReferencia]")
+                if (!navegacionMesReferencia) {
+                    return
+                }
+
                 navegacionMesReferencia.textContent = indicadorMesAno
                 navegacionMesReferencia.setAttribute("ano", calendario.ano)
                 navegacionMesReferencia.setAttribute("mes", calendario.mes)
                 const posicionDia1 = calendario.posicionDia1
                 const numeroDiasPorMes = calendario.numeroDiasPorMes;
                 const diaActual = calendario.dia
-                selectorCalendarioRenderizado.querySelectorAll("[dia]").forEach(diaObsoleto => {
-                    diaObsoleto.remove()
-                });
-                selectorCalendarioRenderizado.querySelectorAll("[componente=diaVacio]").forEach(diaObsoleto => {
-                    diaObsoleto.remove()
-                });
-                const marcoCalendario = selectorCalendarioRenderizado.querySelector("[componente=marcoCalendarioGlobal]")
-                const perfilMes = marcoCalendario?.getAttribute("perfilMes")
+                // selectorCalendarioRenderizado.querySelectorAll("[dia]").forEach(diaObsoleto => {
+                //     diaObsoleto.remove()
+                // });
+                // selectorCalendarioRenderizado.querySelectorAll("[componente=diaVacio]").forEach(diaObsoleto => {
+                //     diaObsoleto.remove()
+                // });
+                // const marcoCalendario = selectorCalendarioRenderizado.querySelector("[componente=marcoCalendarioGlobal]")
+                const perfilMes = selectorCalendarioRenderizado?.getAttribute("perfilMes")
                 //await new Promise(resolve => setTimeout(resolve, 1000));
-                const controlDiasCompletos = {
-                    zona: "componentes/diasOcupadosTotalmentePorMes",
-                    mes: Number(calendario.mes),
-                    ano: Number(calendario.ano)
-                }
-                const resuelveDiasCompletos = await casaVitini.shell.servidor(controlDiasCompletos)
-                if (resuelveDiasCompletos?.error) {
-                    casaVitini.shell.controladoresUI.limpiarMain()
-                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                    return casaVitini.ui.componentes.mensajeSimple({
-                        titulo: resuelveDiasCompletos.error
-                    })
-                }
-                const selectorCalendarioRenderizado_control = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                if (!selectorCalendarioRenderizado_control) {
-                    return
-                }
 
-                const detallesDiasOcupacion = resuelveDiasCompletos.ok.dias
+                // const resuelveDiasCompletos = await casaVitini.shell.servidor({
+                //     zona: "componentes/diasOcupadosTotalmentePorMes",
+                //     mes: Number(calendario.mes),
+                //     ano: Number(calendario.ano)
+                // })
+                // if (resuelveDiasCompletos?.error) {
+                //     casaVitini.shell.controladoresUI.limpiarMain()
+                //     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                //     return casaVitini.ui.componentes.mensajeSimple({
+                //         titulo: resuelveDiasCompletos.error
+                //     })
+                // }
+                // const detallesDiasOcupacion = resuelveDiasCompletos.ok.dias
                 let mesActual = calendario.mes
                 let anoActual = calendario.ano
                 mesActual = String(mesActual).padStart(2, "0");
                 mesActual = Number(mesActual)
                 anoActual = Number(anoActual)
-                const marcoMes = marcoCalendario.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
+                const marcoMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
                 for (let index = 1; index < posicionDia1; index++) {
                     const bloqueDia = document.createElement("li")
                     bloqueDia.setAttribute("componente", "diaVacio")
@@ -50346,7 +49780,7 @@ const casaVitini = {
                     bloqueDia.appendChild(numeroDiaUI)
                     marcoMes?.appendChild(bloqueDia)
                 }
-                marcoCalendario?.setAttribute("perfilMes", perfilMes)
+                selectorCalendarioRenderizado?.setAttribute("perfilMes", perfilMes)
                 for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
                     let diaFinal = numeroDia + 1;
                     diaFinal = Number(diaFinal)
@@ -50375,37 +49809,26 @@ const casaVitini = {
                             bloqueDia.classList.add("diaDeHoy")
                         }
                     }
-                    if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
-                        bloqueDia.classList.add("diaParcial")
-                    } else if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
-                        bloqueDia.classList.add("diaCompleto")
-                    } else {
-                        bloqueDia.classList.add("diaDisponible")
-                    }
+                    // if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaParcial") {
+                    //     bloqueDia.classList.add("diaParcial")
+                    // } else if (detallesDiasOcupacion[diaFinal]?.estadoDia === "diaCompleto") {
+                    //     bloqueDia.classList.add("diaCompleto")
+                    // } else {
+                    //     bloqueDia.classList.add("diaDisponible")
+                    // }
                     bloqueDia.appendChild(contenedorDia)
                     marcoMes?.appendChild(bloqueDia)
                 }
-                if (selectorCalendarioRenderizado) {
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
-                    selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
-                    const contenedorMes = selectorCalendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
-                    if (contenedorMes) {
-                        selectorCalendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")?.remove()
-                    }
-                    contenedorMes?.removeAttribute("style")
-                    selectorCalendarioRenderizado.querySelector("[contenedor=calendario]").removeAttribute("style")
-                }
+
             },
-            navegacionCalendarioNuevo: async (calendarioRenderizado) => {
-                const boton = calendarioRenderizado.target.getAttribute("sentido")
+            navegacionCalendarioNuevo: async function (data) {
+                const boton = data.sentido
+                const instanciaUID_main = data.instanciaUID_main
+
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
-                const parametros = granuladoURL.parametros
                 const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
                 const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
-                const instanciaUID = calendarioRenderizado.target.closest("[instanciaUID]").getAttribute("instanciaUID")
-                document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=marcoMes]`)
+                document.querySelector(`[instanciaUID="${instanciaUID_main}"] [componente=marcoMes]`)
                     .setAttribute("instanciaUID", instanciaUIDMes)
                 let mesActual = Number(document.querySelector("[componente=mesReferencia]").getAttribute("mes"))
                 let anoActual = Number(document.querySelector("[componente=mesReferencia]").getAttribute("ano"))
@@ -50425,14 +49848,7 @@ const casaVitini = {
                         anoActual = anoActual - 1
                     }
                 }
-                const calendario = {
-                    tipo: "personalizado",
-                    //
-                    ano: anoActual,
-                    mes: mesActual,
-                    instanciaUID: instanciaUID,
-                    tipoRegistro: "crear",
-                }
+
                 let parametrosURL = []
                 const contenedorCapas = {
                     capas: [],
@@ -50456,17 +49872,22 @@ const casaVitini = {
                         contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
                     }
                 }
-                calendario.url = `fecha:${mesActual}-${anoActual}/` + parametrosURL.join("/")
-                casaVitini.administracion.calendario.controladorRegistros(calendario)
-                calendario.instanciaUIDMes = instanciaUIDMes
-                await casaVitini.administracion.calendario.configuraMes(calendario)
-                const metadatos = {
-                    instanciaUID: instanciaUID,
-                    origen: "navegacionEntreMeses",
-                    contenedorCapas: contenedorCapas,
-                    instanciaUIDMes: instanciaUIDMes
-                }
-                casaVitini.administracion.calendario.capas(metadatos)
+                casaVitini.administracion.calendario.controladorRegistros({
+                    tipoRegistro: "crear",
+                    ano: anoActual,
+                    mes: mesActual,
+                    contenedorCapas: contenedorCapas
+                })
+
+                await this.irAFecha({
+                    tipoRegistro: "crear",
+                    tipoResolucion: "personalizado",
+                    ano: anoActual,
+                    mes: mesActual,
+                    instanciaUID_main: instanciaUID_main,
+                    contenedorCapas: contenedorCapas
+                })
+
             },
             verHoy: async (calendarioActual) => {
                 const instanciaUID = calendarioActual.target.closest("[instanciaUID]").getAttribute("instanciaUID")
@@ -50551,40 +49972,54 @@ const casaVitini = {
                 casaVitini.administracion.calendario.capas(metadatos)
             },
             configuraMes: async (calendario) => {
-                const instanciaUID = calendario.instanciaUID
-                const instanciaUIDMes = calendario.instanciaUIDMes
-                const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                const ano = calendario.ano
+                const mes = calendario.mes
+                const tipo = calendario.tipo
+
+                const instanciaUID_main = calendario.instanciaUID_main
+                const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
+
+                const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID_main}"] [contenedor=calendario]`)
+
                 const selectorDiasRenderizados = calendarioRenderizado.querySelectorAll("[dia], [componente=eventoUI], [componente=diaVacio]")
                 selectorDiasRenderizados.forEach((e) => {
                     e.remove()
                 })
-                const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
                 const contenedorMes = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
-                marcoMes.style.flex = "0"
-                //contenedorMes.setAttribute("instanciaUID", instanciaUIDMes)
-                const mensajeSpinner = "Construyendo mes..."
-                const spinner = casaVitini.ui.componentes.spinnerSimple(mensajeSpinner)
+                contenedorMes.style.flex = "0"
+                contenedorMes.setAttribute("instanciaUID", instanciaUIDMes)
+
                 const contenedorCarga = document.createElement("div")
                 contenedorCarga.classList.add("componente_calendario_contenedoCarga_Mes")
                 contenedorCarga.setAttribute("contenedor", "construyendoCalendario")
                 contenedorCarga.setAttribute("elemento", "flotante")
-                contenedorCarga.appendChild(spinner)
+                contenedorCarga.appendChild(casaVitini.ui.componentes.spinnerSimple())
+
                 const construyendoCalendarioRenderizado = calendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")
-                if (!construyendoCalendarioRenderizado) contenedorCalendario.appendChild(contenedorCarga)
-                // se debderia volver a contruir un objecto aqui para resolver calendario
 
-                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
-                    mes: calendario.mes,
-                    ano: calendario.ano,
-                    tipo: calendario.tipo
-                })
+                if (!construyendoCalendarioRenderizado) {
+                    calendarioRenderizado.appendChild(contenedorCarga)
+                }
 
 
-                calendarioResuelto.instanciaUID = instanciaUID
+                const configuracionCalendario = {
+                    tipo: tipo
+                }
+                if (tipo === "personalizado") {
+                    configuracionCalendario.mes = mes
+                    configuracionCalendario.ano = ano
+                }
+
+                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(configuracionCalendario)
+                const contenedorMes_enEspera = calendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
+                if (!contenedorMes_enEspera) { return }
+
                 calendarioResuelto.instanciaUIDMes = instanciaUIDMes
-
-                await casaVitini.administracion.calendario.constructorMesNuevo(calendarioResuelto)
-                //casaVitini.administracion.calendario.controlVertical();
+                casaVitini.administracion.calendario.constructorMesNuevo(calendarioResuelto)
+                return {
+                    instanciaUIDMes,
+                    calendarioResuelto
+                }
 
             },
             controlVertical: () => {
@@ -50606,98 +50041,96 @@ const casaVitini = {
                 }
             },
             controladorRegistros: (metadatos) => {
-                const titulo = "Administracion"
-                const granuladoURL = casaVitini.utilidades.granuladorURL()
-                const parametros = granuladoURL.parametros
                 const tipoRegistro = metadatos.tipoRegistro
-                //investigar por que cuando el calendario se arranca no hay ninguna url en el objeto, eso puede ser
-                const urlActual = metadatos.url || ""
-                const configuracion = { ...metadatos }
-                delete configuracion.url
-                delete configuracion.tipoRegistro
-                delete configuracion.instanciaUID
-                const estructuraParametrosFinales = []
-                for (const [parametroFinal, valorFinal] of Object.entries(parametros)) {
-                    const estructura = `${parametroFinal}:${valorFinal}`
-                    estructuraParametrosFinales.push(estructura)
-                }
-                let parametrosURLFInal = ""
-                if (estructuraParametrosFinales.length > 0) {
-                    parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
-                }
-                let constructorURLFinal
-                if (urlActual === "") {
-                    constructorURLFinal = ""
-                } else {
-                    constructorURLFinal = granuladoURL.directoriosFusion + "/" + urlActual
+                const contenedorCapas = metadatos.contenedorCapas
+                const ano = metadatos.ano
+                const mes = metadatos.mes
+                const capasSimples = contenedorCapas.capas || []
+                const capasCompuestas = contenedorCapas.capasCompuestas || {}
+
+                const constructoCapasSimples = capasSimples.map((capa) => {
+                    const capaSnake = casaVitini.utilidades.cadenas.camelToSnake(capa)
+                    return `capa:${capaSnake}`
+                })
+                const constructoFinalCS = constructoCapasSimples.length > 0 ? `/${constructoCapasSimples.join("/")}` : ""
+
+                const constructoCapasCompuestas = Object.entries(capasCompuestas).map(capaCompuesta => {
+                    const [nombreCapa, arrayValoresCapaCompuesta] = capaCompuesta
+                    const nombreCapaSnake = casaVitini.utilidades.cadenas.camelToSnake(nombreCapa)
+                    const valoresSnake = arrayValoresCapaCompuesta.map((valorCapa) => {
+                        const valorCapaSnake = casaVitini.utilidades.cadenas.camelToSnake(valorCapa)
+                        return valorCapaSnake
+                    })
+                    return `${nombreCapaSnake}:${valoresSnake.join("=")}`
+                })
+                const constructoFinalCC = constructoCapasCompuestas.length > 0 ? `/${constructoCapasCompuestas.join("/")}` : ""
+
+                const constructoURL = "/administracion/calendario" + `/fecha:${mes}-${ano}` + constructoFinalCS + constructoFinalCC
+                const configuracion = {
+                    tipoResolucion: "personalizado",
+                    ano: ano,
+                    mes: mes,
+                    origen: "historial",
+                    contenedorCapas: contenedorCapas
                 }
                 const estado = {
-                    zona: constructorURLFinal,
+                    zona: constructoURL,
                     EstadoInternoZona: "estado",
                     tipoCambio: "parcial",
                     componenteExistente: "marcoCalendarioGlobal",
                     funcionPersonalizada: "administracion.calendario.irAFecha",
                     args: configuracion
                 }
+                const titulo = "Administracion"
                 if (tipoRegistro === "crear") {
-                    window.history.pushState(estado, titulo, constructorURLFinal);
-                }
-                if (tipoRegistro === "actualizar") {
-                    window.history.replaceState(estado, titulo, constructorURLFinal);
+                    window.history.pushState(estado, titulo, constructoURL);
+                } else if (tipoRegistro === "actualizar") {
+                    window.history.replaceState(estado, titulo, constructoURL);
                 }
             },
-            irAFecha: async (calendario) => {
-                const instanciaUID = document.querySelector("[instanciaUID]").getAttribute("instanciaUID")
-                const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
-                document.querySelector(`[instanciaUID="${instanciaUID}"] [componente=marcoMes]`)
-                    .setAttribute("instanciaUID", instanciaUIDMes)
-                calendario.instanciaUIDMes = instanciaUIDMes
-                calendario.instanciaUID = instanciaUID
-                await casaVitini.administracion.calendario.configuraMes(calendario)
-                const granuladoURL = casaVitini.utilidades.granuladorURL()
-                const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
-                const contenedorCapas = {
-                    capas: [],
-                    capasCompuestas: {}
-                }
-                for (const conjunto of contenedorSeguroParaParametros) {
-                    const par = conjunto.split(":")
-                    const parametro = par[0]
-                    const valor = par[1]
-                    const estructuraURLParametro = `${parametro}:${valor}`
-                    if (parametro.toLowerCase() !== "fecha") {
-                        //parametrosURL.push(estructuraURLParametro)
-                    }
-                    if (parametro === "capa") {
-                        const capaEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(valor)
-                        contenedorCapas.capas.push(capaEnCamel)
-                    }
-                    if (parametro !== "fecha" && parametro !== "capa") {
-                        const parametroEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(parametro)
-                        const composicionCapa = valor.split("=")
-                        contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
-                    }
-                }
-                const metadatos = {
-                    instanciaUID: instanciaUID,
+            irAFecha: async (data) => {
+
+                const instanciaUID_main_selector = document.querySelector("main").getAttribute("instanciaUID")
+                const mes = data?.mes
+                const ano = data?.ano
+                const origen = data?.origen
+                const instanciaUID_main = origen === "historial" ? instanciaUID_main_selector : data.instanciaUID_main
+                const contenedorCapas = data.contenedorCapas
+                const tipoResolucion = data.tipoResolucion
+
+                const mesRenderizado = await casaVitini.administracion.calendario.configuraMes({
+                    ano: ano,
+                    mes: mes,
+                    tipo: tipoResolucion,
+                    instanciaUID_main: instanciaUID_main
+                })
+                const calendarioResuelto = mesRenderizado?.calendarioResuelto
+
+                await casaVitini.administracion.calendario.coloreoDias({
+                    ano: calendarioResuelto?.ano,
+                    mes: calendarioResuelto?.mes,
+                    instanciaUIDMes: calendarioResuelto?.instanciaUIDMes,
+                })
+
+                await casaVitini.administracion.calendario.capas({
+                    instanciaUID_main: instanciaUID_main,
+                    origen: "historial",
                     contenedorCapas: contenedorCapas,
-                    instanciaUIDMes: instanciaUIDMes,
-                    origen: "historial"
-                }
-                casaVitini.administracion.calendario.capas(metadatos)
+                    instanciaUIDMes: calendarioResuelto?.instanciaUIDMes
+                })
+
+                return mesRenderizado
             },
             capas: async (metadatos) => {
+
+
                 const contenedorCapas = metadatos.contenedorCapas
-                const instanciaUID = metadatos.instanciaUID
+                const instanciaUID_main = metadatos.instanciaUID_main
+                const instanciaUIDMes = metadatos.instanciaUIDMes
                 const origen = metadatos.origen
-                const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) { return }
-                let instanciaUIDMes
-                if (origen === "navegacionEntreMeses" || origen === "menuDesplegable" || origen === "historial") {
-                    instanciaUIDMes = metadatos.instanciaUIDMes
-                } else {
-                    instanciaUIDMes = calendarioRenderizado.querySelector("[componente=marcoMes]").getAttribute("instanciaUID")
-                }
+                const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID_main}"]`)
+                const mesRenderizado_enEspera = document.querySelector(`[instanciaUID="${instanciaUIDMes}"]`)
+                if (!mesRenderizado_enEspera) { return }
                 const mesRenderizado = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("mes"))
                 const anoRenderizado = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("ano"))
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
@@ -50712,14 +50145,14 @@ const casaVitini = {
                     tipoRegistroFinal = "crear"
                 }
                 //casaVitini.administracion.calendario.controlVertical()
-                const calendario = {
-                    tipo: "personalizado",
-                    //
-                    ano: anoRenderizado,
-                    mes: mesRenderizado,
-                    instanciaUID: instanciaUID,
-                    tipoRegistro: tipoRegistroFinal,
-                }
+                // const calendario = {
+                //     tipo: "personalizado",
+                //     //
+                //     ano: anoRenderizado,
+                //     mes: mesRenderizado,
+                //     instanciaUID: instanciaUID,
+                //     tipoRegistro: tipoRegistroFinal,
+                // }
                 const ventanaDetallesDelEventoTruncado = (data) => {
 
                     const urlUI = data.urlUI
@@ -51247,17 +50680,18 @@ const casaVitini = {
                     }
                     primerFormatoURL.push(final)
                 }
-                const segundoFormatoURL = primerFormatoURL.join("/")
-                if (origen === "menuDesplegable") {
-                    calendario.url = `fecha:${mesRenderizado}-${anoRenderizado}/` + segundoFormatoURL
-                    casaVitini.administracion.calendario.controladorRegistros(calendario)
-                }
+                //const segundoFormatoURL = primerFormatoURL.join("/")
+                // if (origen === "menuDesplegable") {
+                //     calendario.url = `fecha:${mesRenderizado}-${anoRenderizado}/` + segundoFormatoURL
+                //     casaVitini.administracion.calendario.controladorRegistros(calendario)
+                // }
                 const transaccion = {
                     zona: "administracion/calendario/capas/multiCapa",
                     fecha: `${mesRenderizado}-${anoRenderizado}`,
                     contenedorCapas: contenedorCapas
                 }
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
                 if (respuestaServidor?.error) {
                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                 }
@@ -51267,9 +50701,50 @@ const casaVitini = {
                         eventosEnDetalle: respuestaServidor.eventosEnDetalle,
                         instanciaUIDMes: instanciaUIDMes
                     }
-                    renderizadorEventos(contenedorEventos)
+
+                    renderizadorEventos({
+                        eventosMes: respuestaServidor.eventosMes,
+                        eventosEnDetalle: respuestaServidor.eventosEnDetalle,
+                        instanciaUIDMes: instanciaUIDMes
+                    })
                 }
+
                 //casaVitini.administracion.calendario.controlVertical()
+            },
+            coloreoDias: async (data) => {
+                const mes = data.mes
+                const ano = data.ano
+                const instanciaUIDMes = data.instanciaUIDMes
+
+                const resuelveDiasCompletos = await casaVitini.shell.servidor({
+                    zona: "componentes/diasOcupadosTotalmentePorMes",
+                    mes: Number(mes),
+                    ano: Number(ano)
+                })
+                const marcoMes = document.querySelector(`[instanciaUID="${instanciaUIDMes}"]`)
+                if (!marcoMes) { return }
+                if (resuelveDiasCompletos?.error) {
+                    casaVitini.shell.controladoresUI.limpiarMain()
+                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                    return casaVitini.ui.componentes.mensajeSimple({
+                        titulo: resuelveDiasCompletos.error
+                    })
+
+                }
+                const detallesDiasOcupacion = resuelveDiasCompletos.ok.dias
+
+                const diasRenderizados = marcoMes.querySelectorAll("[dia]")
+                diasRenderizados.forEach((diaRenderizado) => {
+                    const numeroDia = diaRenderizado.getAttribute("dia")
+
+                    if (detallesDiasOcupacion[numeroDia]?.estadoDia === "diaParcial") {
+                        diaRenderizado.classList.add("diaParcial")
+                    } else if (detallesDiasOcupacion[numeroDia]?.estadoDia === "diaCompleto") {
+                        diaRenderizado.classList.add("diaCompleto")
+                    } else {
+                        diaRenderizado.classList.add("diaDisponible")
+                    }
+                })
             },
             obtenerConfiguracionesApartamento: async () => {
                 const transaccion = {
@@ -51328,6 +50803,422 @@ const casaVitini = {
                         }
                         return estructuraFinal
                     }
+                }
+            },
+            componentesUI: {
+                capas: async function () {
+
+                    const granuladoURL = casaVitini.utilidades.granuladorURL()
+                    const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
+                    const contenedorCapas = {
+                        capas: [],
+                        capasCompuestas: {}
+                    }
+                    for (const conjunto of contenedorSeguroParaParametros) {
+                        const par = conjunto.split(":")
+                        const parametro = par[0]
+                        const valor = par[1]
+                        if (parametro === "capa") {
+                            const capaEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(valor)
+                            contenedorCapas.capas.push(capaEnCamel)
+                        }
+                        if (parametro !== "fecha" && parametro !== "capa") {
+                            const parametroEnCamel = casaVitini.utilidades.cadenas.snakeToCamel(parametro)
+                            const composicionCapa = valor.split("=")
+                            contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
+                        }
+                    }
+                    const contenedorMenuCapas = document.createElement("div")
+                    contenedorMenuCapas.classList.add("contenedorMenuCapas")
+                    contenedorMenuCapas.setAttribute("componente", "contenedorMenuCapas")
+                    const titulo = document.createElement("div")
+                    titulo.classList.add("tituloGris")
+                    titulo.textContent = "Capas del calendario"
+                    contenedorMenuCapas.appendChild(titulo)
+                    //Falta la ccapa global
+                    const botonAplicar = document.createElement("div")
+                    botonAplicar.classList.add("boton")
+                    botonAplicar.textContent = "Aplicar y cerrar"
+                    botonAplicar.addEventListener("click", () => {
+                        const instanciaUID_main = document.querySelector("main").getAttribute("instanciaUID")
+                        const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
+                        document.querySelector(`[instanciaUID="${instanciaUID_main}"] [componente=marcoMes]`)
+                            .setAttribute("instanciaUID", instanciaUIDMes)
+                        const calendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID_main}"]`)
+                        const mesActual = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("mes"))
+                        const anoActual = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("ano"))
+                        const capasSelecionadas = []
+                        const estructura = {
+                            capas: [],
+                            capasCompuestas: {}
+                        }
+                        const elementosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [estado=seleccionado]")
+                        for (const elementoSeleccionado of elementosSeleccionados) {
+                            const capaUID = elementoSeleccionado.getAttribute("capaUID")
+                            capasSelecionadas.push(capaUID)
+                        }
+                        if (capasSelecionadas.includes("global")) {
+                            estructura.capas.push("global")
+                        } else {
+                            const capasSimples = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID][tipo=capaSimple][estado=seleccionado]")
+                            capasSimples.forEach((capa) => {
+                                const capaUID = capa.getAttribute("capaUID")
+                                estructura.capas.push(capaUID)
+                            })
+                            if (!capasSelecionadas.includes("todosLosApartamentos")) {
+                                const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=porApartamento][estado=seleccionado]")
+                                const porApartamento = []
+                                apartametnosSeleccionados.forEach((apartamento) => {
+                                    const apartamentoIDV = apartamento.getAttribute("porApartamento")
+                                    porApartamento.push(apartamentoIDV)
+                                })
+                                if (apartametnosSeleccionados.length > 0) {
+                                    estructura.capasCompuestas.porApartamento = porApartamento
+                                    estructura.capas.push("porApartamento")
+                                }
+                            } else {
+                                estructura.capas.push("todosLosApartamentos")
+                            }
+                            if (!capasSelecionadas.includes("todoAirbnb")) {
+                                const calendariosAirBnbSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=calendariosAirbnb][estado=seleccionado]")
+                                const calendariosAirbnb = []
+                                calendariosAirBnbSeleccionados.forEach((calendario) => {
+                                    const calendarioUID = calendario.getAttribute("calendariosAirbnb")
+                                    calendariosAirbnb.push(calendarioUID)
+                                })
+                                if (calendariosAirBnbSeleccionados.length > 0) {
+                                    estructura.capasCompuestas.calendariosAirbnb = calendariosAirbnb
+                                    estructura.capas.push("calendariosAirbnb")
+                                }
+                            } else {
+                                estructura.capas.push("todoAirbnb")
+                            }
+                        }
+                        if (estructura.capas.length === 0) {
+                            const mensaje = "Selecciona alguna capa para aplicarla en el calendario. No has seleccionado ninguna capa. Sí, por el contrario, lo que quieres es cerrar la pantalla de capas. Pulsa en el botón cerrar"
+                            return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(mensaje)
+                        }
+                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                        casaVitini.administracion.calendario.capas({
+                            contenedorCapas: estructura,
+                            instanciaUID_main: instanciaUID_main,
+                            origen: "menuDesplegable",
+                            instanciaUIDMes: instanciaUIDMes
+                        })
+
+                        casaVitini.administracion.calendario.controladorRegistros({
+                            tipoRegistro: "crear",
+                            ano: anoActual,
+                            mes: mesActual,
+                            contenedorCapas: estructura
+                        })
+
+
+                    })
+                    contenedorMenuCapas.appendChild(botonAplicar)
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("boton")
+                    botonCancelar.textContent = "Cerrar"
+                    botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
+                    contenedorMenuCapas.appendChild(botonCancelar)
+                    const grupoGlobalCapas = document.createElement("div")
+                    grupoGlobalCapas.classList.add("contenedorGrupoSinFondo")
+                    const contenedorCapaGlobal = document.createElement("div")
+                    contenedorCapaGlobal.classList.add("contenedorCapa")
+                    contenedorCapaGlobal.setAttribute("capaUID", "global")
+                    let filaIconoTitulo = document.createElement("div")
+                    filaIconoTitulo.classList.add("filaIconoTexto")
+                    const iconoGlobal = document.createElement("div")
+                    iconoGlobal.classList.add("icono")
+                    let estadoSelector = document.createElement("div")
+                    estadoSelector.classList.add("estadoSelector")
+                    estadoSelector.setAttribute("componente", "icono")
+                    iconoGlobal.appendChild(estadoSelector)
+                    filaIconoTitulo.appendChild(iconoGlobal)
+                    const tituloGlobal = document.createElement("div")
+                    tituloGlobal.classList.add("tituloCapa")
+                    tituloGlobal.classList.add("negrita")
+                    tituloGlobal.textContent = "Global"
+                    filaIconoTitulo.appendChild(tituloGlobal)
+                    contenedorCapaGlobal.appendChild(filaIconoTitulo)
+                    grupoGlobalCapas.appendChild(contenedorCapaGlobal)
+                    const contenedorCapaReservas = document.createElement("div")
+                    contenedorCapaReservas.classList.add("contenedorCapa")
+                    contenedorCapaReservas.setAttribute("capaUID", "reservas")
+                    contenedorCapaReservas.setAttribute("tipo", "capaSimple")
+                    filaIconoTitulo = document.createElement("div")
+                    filaIconoTitulo.classList.add("filaIconoTexto")
+                    const iconoReservas = document.createElement("div")
+                    iconoReservas.classList.add("icono")
+                    estadoSelector = document.createElement("div")
+                    estadoSelector.classList.add("estadoSelector")
+                    estadoSelector.setAttribute("componente", "icono")
+                    iconoReservas.appendChild(estadoSelector)
+                    filaIconoTitulo.appendChild(iconoReservas)
+                    const tituloReservas = document.createElement("div")
+                    tituloReservas.classList.add("tituloCapa")
+                    tituloReservas.classList.add("negrita")
+                    tituloReservas.textContent = "Reservas"
+                    filaIconoTitulo.appendChild(tituloReservas)
+                    contenedorCapaReservas.appendChild(filaIconoTitulo)
+                    grupoGlobalCapas.appendChild(contenedorCapaReservas)
+                    const contenedorTodosLosBloqueos = document.createElement("div")
+                    contenedorTodosLosBloqueos.classList.add("contenedorCapa")
+                    contenedorTodosLosBloqueos.setAttribute("capaUID", "todosLosBloqueos")
+                    contenedorTodosLosBloqueos.setAttribute("tipo", "capaSimple")
+                    filaIconoTitulo = document.createElement("div")
+                    filaIconoTitulo.classList.add("filaIconoTexto")
+                    const iconoTodosLosBloqueos = document.createElement("div")
+                    iconoTodosLosBloqueos.classList.add("icono")
+                    estadoSelector = document.createElement("div")
+                    estadoSelector.classList.add("estadoSelector")
+                    estadoSelector.setAttribute("componente", "icono")
+                    iconoTodosLosBloqueos.appendChild(estadoSelector)
+                    filaIconoTitulo.appendChild(iconoTodosLosBloqueos)
+                    const tituloTodosLosBloqueos = document.createElement("div")
+                    tituloTodosLosBloqueos.classList.add("tituloCapa")
+                    tituloTodosLosBloqueos.classList.add("negrita")
+                    tituloTodosLosBloqueos.textContent = "Todos los bloqueos"
+                    filaIconoTitulo.appendChild(tituloTodosLosBloqueos)
+                    contenedorTodosLosBloqueos.appendChild(filaIconoTitulo)
+                    grupoGlobalCapas.appendChild(contenedorTodosLosBloqueos)
+                    contenedorMenuCapas.appendChild(grupoGlobalCapas)
+                    const apartamentosLista = await casaVitini.administracion.calendario.obtenerConfiguracionesApartamento()
+
+                    if (apartamentosLista.length > 0) {
+                        const contenedorTodosLosApartamentos = document.createElement("div")
+                        contenedorTodosLosApartamentos.classList.add("contenedorGrupoFondo")
+                        contenedorTodosLosApartamentos.setAttribute("grupo", "campo")
+                        filaIconoTitulo = document.createElement("div")
+                        filaIconoTitulo.classList.add("filaIconoTexto")
+                        filaIconoTitulo.setAttribute("capaUID", "todosLosApartamentos")
+                        filaIconoTitulo.setAttribute("tipo", "global")
+                        filaIconoTitulo.setAttribute("grupo", "cabeza")
+                        const iconoTodosLosApartamentos = document.createElement("div")
+                        iconoTodosLosApartamentos.classList.add("icono")
+                        estadoSelector = document.createElement("div")
+                        estadoSelector.classList.add("estadoSelector")
+                        estadoSelector.setAttribute("componente", "icono")
+                        iconoTodosLosApartamentos.appendChild(estadoSelector)
+                        filaIconoTitulo.appendChild(iconoTodosLosApartamentos)
+                        const tituloTodosLosApartamentos = document.createElement("div")
+                        tituloTodosLosApartamentos.classList.add("tituloCapa")
+                        tituloTodosLosApartamentos.textContent = "Todos los apartamentos"
+                        tituloTodosLosApartamentos.classList.add("negrita")
+                        filaIconoTitulo.appendChild(tituloTodosLosApartamentos)
+                        contenedorTodosLosApartamentos.appendChild(filaIconoTitulo)
+                        const contenedorListaPorApartamento = document.createElement("div")
+                        contenedorListaPorApartamento.classList.add("contenedorListaApartamentos")
+                        for (const detallesApartamento of apartamentosLista) {
+                            const apartamentoIDV = detallesApartamento.apartamentoIDV
+                            const apartamentoUI = detallesApartamento.apartamentoUI
+                            const contenedorApartamento = document.createElement("div")
+                            contenedorApartamento.classList.add("contenedorCapa")
+                            contenedorApartamento.setAttribute("porApartamento", apartamentoIDV)
+                            contenedorApartamento.setAttribute("capaUID", "porApartamento")
+                            contenedorApartamento.setAttribute("grupo", "elemento")
+                            filaIconoTitulo = document.createElement("div")
+                            filaIconoTitulo.classList.add("filaIconoTexto")
+                            const iconoApartamento = document.createElement("div")
+                            iconoApartamento.classList.add("icono")
+                            estadoSelector = document.createElement("div")
+                            estadoSelector.classList.add("estadoSelector")
+                            estadoSelector.setAttribute("componente", "icono")
+                            iconoApartamento.appendChild(estadoSelector)
+                            filaIconoTitulo.appendChild(iconoApartamento)
+                            const tituloApartamento = document.createElement("div")
+                            tituloApartamento.classList.add("tituloCapa")
+                            tituloApartamento.textContent = apartamentoUI
+                            filaIconoTitulo.appendChild(tituloApartamento)
+                            contenedorApartamento.appendChild(filaIconoTitulo)
+                            contenedorListaPorApartamento.appendChild(contenedorApartamento)
+                        }
+                        contenedorTodosLosApartamentos.appendChild(contenedorListaPorApartamento)
+                        contenedorMenuCapas.appendChild(contenedorTodosLosApartamentos)
+                    }
+                    const calendariosListaAirnbnb = await casaVitini.administracion.calendario.obtenerCalendariosSincronizados.airbnb()
+                    if (calendariosListaAirnbnb.length > 0) {
+                        const grupoAirbnb = document.createElement("div")
+                        grupoAirbnb.classList.add("contenedorGrupoFondo")
+                        grupoAirbnb.setAttribute("grupo", "campo")
+                        filaIconoTitulo = document.createElement("div")
+                        filaIconoTitulo.classList.add("filaIconoTexto")
+                        filaIconoTitulo.setAttribute("capaUID", "todoAirbnb")
+                        filaIconoTitulo.setAttribute("tipo", "global")
+                        filaIconoTitulo.setAttribute("grupo", "cabeza")
+                        const iconoTodosAirbnb = document.createElement("div")
+                        iconoTodosAirbnb.classList.add("icono")
+                        estadoSelector = document.createElement("div")
+                        estadoSelector.classList.add("estadoSelector")
+                        estadoSelector.setAttribute("componente", "icono")
+                        iconoTodosAirbnb.appendChild(estadoSelector)
+                        filaIconoTitulo.appendChild(iconoTodosAirbnb)
+                        const tituloTodoAirbnb = document.createElement("div")
+                        tituloTodoAirbnb.classList.add("tituloCapa")
+                        tituloTodoAirbnb.classList.add("negrita")
+                        tituloTodoAirbnb.textContent = "Todos los calendarios de Airbnb"
+                        filaIconoTitulo.appendChild(tituloTodoAirbnb)
+                        grupoAirbnb.appendChild(filaIconoTitulo)
+                        const contenedorListaPorApartamento = document.createElement("div")
+                        contenedorListaPorApartamento.classList.add("contenedorListaApartamentos")
+                        for (const detallesCalendario of calendariosListaAirnbnb) {
+                            const apartamentoIDV = detallesCalendario.apartamentoIDV
+                            const apartamentoUI = detallesCalendario.apartamentoUI
+                            const calendarioUID = detallesCalendario.calendarioUID
+                            const nombre = detallesCalendario.nombre
+                            const contenedorCalendarioAirbnb = document.createElement("div")
+                            contenedorCalendarioAirbnb.classList.add("contenedorCapa")
+                            contenedorCalendarioAirbnb.setAttribute("capaUID", "calendariosAirbnb")
+                            contenedorCalendarioAirbnb.setAttribute("calendariosAirbnb", calendarioUID)
+                            contenedorCalendarioAirbnb.setAttribute("grupo", "elemento")
+                            filaIconoTitulo = document.createElement("div")
+                            filaIconoTitulo.classList.add("filaIconoTexto")
+                            const iconoCalendarioAirbnb = document.createElement("div")
+                            iconoCalendarioAirbnb.classList.add("icono")
+                            estadoSelector = document.createElement("div")
+                            estadoSelector.classList.add("estadoSelector")
+                            estadoSelector.setAttribute("componente", "icono")
+                            iconoCalendarioAirbnb.appendChild(estadoSelector)
+                            filaIconoTitulo.appendChild(iconoCalendarioAirbnb)
+                            const tituloCalendarioAirbnb = document.createElement("div")
+                            tituloCalendarioAirbnb.classList.add("tituloCapa")
+                            tituloCalendarioAirbnb.textContent = nombre
+                            filaIconoTitulo.appendChild(tituloCalendarioAirbnb)
+                            contenedorCalendarioAirbnb.appendChild(filaIconoTitulo)
+                            contenedorListaPorApartamento.appendChild(contenedorCalendarioAirbnb)
+                        }
+                        grupoAirbnb.appendChild(contenedorListaPorApartamento)
+                        contenedorMenuCapas.appendChild(grupoAirbnb)
+                    }
+                    const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                    const destino = pantallaInmersiva.querySelector("[destino=inyector]")
+                    destino.appendChild(contenedorMenuCapas)
+                    document.querySelector("main").appendChild(pantallaInmersiva)
+                    const controladorSelectoresCapas = (selector) => {
+                        const contenedorCapa = selector.target.closest("[capaUID]")
+                        const todasLasCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")
+                        const capaUID = contenedorCapa.getAttribute("capaUID")
+                        const todoLosIconos = document.querySelectorAll("[componente=contenedorMenuCapas] [componente=icono]")
+                        const todasLasCapasGlobales = document.querySelectorAll("[componente=contenedorMenuCapas] [tipo=global]")
+                        const grupo = contenedorCapa.getAttribute("grupo")
+                        const iconoSelecionado = contenedorCapa.querySelector("[componente=icono]")
+                        const estadoCapa = contenedorCapa.getAttribute("estado")
+                        const controlBotonGlobal = () => {
+                            const capasGlobales = document.querySelectorAll("[componente=contenedorMenuCapas] [tipo=global], [componente=contenedorMenuCapas] [tipo=capaSimple]")
+                            const capaGlobal = document.querySelector("[componente=contenedorMenuCapas] [capaUID=global]")
+                            const iconoCapa = capaGlobal.querySelector("[componente=icono]")
+                            let estadoFinal = "seleccionado"
+                            for (const capa of capasGlobales) {
+                                const estado = capa.getAttribute("estado")
+                                if (estado !== "seleccionado") {
+                                    estadoFinal = "noSeleccionado"
+                                    break
+                                }
+                            }
+                            if (estadoFinal === "seleccionado") {
+                                iconoCapa.style.background = "blue"
+                                capaGlobal.setAttribute("estado", "seleccionado")
+                            } else {
+                                iconoCapa.removeAttribute("style")
+                                capaGlobal.removeAttribute("estado")
+                            }
+                        }
+                        if (estadoCapa === "seleccionado") {
+                            iconoSelecionado.removeAttribute("style")
+                            contenedorCapa.removeAttribute("estado")
+                        } else {
+                            iconoSelecionado.style.background = "blue"
+                            contenedorCapa.setAttribute("estado", "seleccionado")
+                        }
+                        if (capaUID === "global") {
+                            if (estadoCapa === "seleccionado") {
+                                todasLasCapas.forEach((capa) => {
+                                    capa.removeAttribute("estado")
+                                    capa.querySelector("[componente=icono]").removeAttribute("style")
+                                })
+                            } else {
+                                todasLasCapas.forEach((capa) => {
+                                    capa.setAttribute("estado", "seleccionado")
+                                    capa.querySelector("[componente=icono]").style.background = "blue"
+                                })
+                            }
+                        }
+                        if (grupo === "cabeza") {
+                            const elementosDelGrupo = contenedorCapa.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]")
+                            if (estadoCapa === "seleccionado") {
+                                elementosDelGrupo.forEach((capa) => {
+                                    capa.removeAttribute("estado")
+                                    capa.querySelectorAll("[componente=icono]").forEach((icono) => {
+                                        icono.removeAttribute("style")
+                                    })
+                                })
+                            } else {
+                                elementosDelGrupo.forEach((capa) => {
+                                    capa.setAttribute("estado", "seleccionado")
+                                    capa.querySelectorAll("[componente=icono]").forEach((icono) => {
+                                        icono.style.background = "blue"
+                                    })
+                                })
+                            }
+                        }
+                        if (grupo === "elemento") {
+                            const elementosDelGrupo = contenedorCapa.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]")
+                            const cabezaGrupo = contenedorCapa.closest("[grupo=campo]").querySelector("[grupo=cabeza]")
+                            let estadoFinal = "seleccionado"
+                            for (const elemento of elementosDelGrupo) {
+                                const estado = elemento.getAttribute("estado")
+                                if (estado !== "seleccionado") {
+                                    estadoFinal = "noSeleccionado"
+                                    cabezaGrupo.removeAttribute("estado")
+                                    cabezaGrupo.querySelector("[componente=icono]").removeAttribute("style")
+                                    break
+                                }
+                            }
+                            if (estadoFinal === "seleccionado") {
+                                cabezaGrupo.setAttribute("estado", "seleccionado")
+                                cabezaGrupo.querySelector("[componente=icono]").style.background = "blue"
+                            }
+                        }
+                        controlBotonGlobal()
+                    }
+                    const capasPorVerificar = contenedorCapas.capas
+                    const composicionCapaCompuesta = contenedorCapas.capasCompuestas
+                    const contenedorMenuCapasRenderizado = document.querySelector("[componente=contenedorMenuCapas]")
+                    if (capasPorVerificar.includes("global")) {
+                        contenedorMenuCapasRenderizado.querySelectorAll("[capaUID]").forEach((capa) => {
+                            capa.setAttribute("estado", "seleccionado")
+                            capa.querySelector("[componente=icono]").style.background = "blue"
+                        })
+                    } else {
+                        for (const capaPorVeriticar of capasPorVerificar) {
+                            if (composicionCapaCompuesta[capaPorVeriticar]) {
+                                const capasSimplesEnCapaCompuesta = composicionCapaCompuesta[capaPorVeriticar]
+                                for (const capaSimpleEnCapaCompuesta of capasSimplesEnCapaCompuesta) {
+                                    const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"][${capaPorVeriticar}="${capaSimpleEnCapaCompuesta}"]`
+                                    const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
+                                    selectorCapaRenderizada.setAttribute("estado", "seleccionado")
+                                    selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
+                                }
+                            } else {
+                                const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"]`
+                                const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
+                                selectorCapaRenderizada.setAttribute("estado", "seleccionado")
+                                selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
+                                const tipoRolGrupo = selectorCapaRenderizada.getAttribute("grupo")
+                                if (tipoRolGrupo === "cabeza") {
+                                    selectorCapaRenderizada.closest("[grupo=campo]").querySelectorAll("[grupo=elemento]").forEach((elemento) => {
+                                        elemento.setAttribute("estado", "seleccionado")
+                                        elemento.querySelector("[componente=icono]").style.background = "blue"
+                                    })
+                                }
+                            }
+                        }
+                    }
+                    const selectorCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")
+                    selectorCapas.forEach((selector) => {
+                        selector.addEventListener("click", controladorSelectoresCapas)
+                    })
+
                 }
             }
         },

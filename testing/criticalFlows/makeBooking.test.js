@@ -1,8 +1,8 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { eliminarReservaPorTestingVI } from '../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
 
 describe('critical: control avaible apartments when creating bookins', () => {
     const testingVI = "testingcriticalavaibleapartmentwhencreatinbookins"

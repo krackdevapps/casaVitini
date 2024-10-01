@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { calendario } from '../../../logica/zonas/componentes/calendario.mjs';
+import { calendario } from '../../../src/application/componentes/calendario.mjs';
 
 describe('calendario', () => {
 
@@ -28,5 +28,5 @@ describe('calendario', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-   
+
 })

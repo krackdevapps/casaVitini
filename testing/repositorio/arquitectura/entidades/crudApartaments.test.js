@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { insertarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
-import { insertarCaracteristicaDelApartamento } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarCaracteristicaDelApartamento.mjs';
-import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs';
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
-import { obtenerApartamentoComoEntidadPorApartamentoUI } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoUI.mjs';
-import { obtenerTodasLasCaracteristicasDelApartamento } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs';
-import { obtenerTodasLosApartamentos } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/obtenerTodasLosApartamentos.mjs';
-import { actualizarApartamentoComoEntidadPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { insertarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
+import { insertarCaracteristicaDelApartamento } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/insertarCaracteristicaDelApartamento.mjs';
+import { eliminarCaracteristicasDelApartamentoPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarCaracteristicasDelApartamentoPorApartamentoIDV.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
+import { obtenerApartamentoComoEntidadPorApartamentoUI } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoUI.mjs';
+import { obtenerTodasLasCaracteristicasDelApartamento } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs';
+import { obtenerTodasLosApartamentos } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/obtenerTodasLosApartamentos.mjs';
+import { actualizarApartamentoComoEntidadPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs';
 
 describe('crud apartament as entity', () => {
     const IDVStart = "apartamentoTestInicial"

@@ -1,19 +1,19 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { insertarConfiguracionApartamento } from '../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
-import { eliminarConfiguracionPorApartamentoIDV } from '../../../logica/repositorio/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { insertarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
-import { insertarCalendarioSincronizado } from '../../../logica/repositorio/calendario/insertarCalendarioSincronizado.mjs';
-import { actualizarEventosCalendarioPorCalendarioUID } from '../../../logica/repositorio/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
-import { actualizarCalendarioSincronizado } from '../../../logica/repositorio/calendario/actualizarCalendarioSincronizado.mjs';
-import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../logica/repositorio/calendario/obtenerCalendarioPorCalendarioUIDPublico.mjs';
-import { obtenerCalendariosPorPlataformaIDV } from '../../../logica/repositorio/calendario/obtenerCalendariosPorPlataformaIDV.mjs';
-import { obtenerCalendariosPorPlataformaIDVPorCalendarioUID } from '../../../logica/repositorio/calendario/obtenerCalendariosPorPlataformaIDVPorCalendarioUID.mjs';
-import { eliminarCalendarioSincronizadoPorTestingIV } from '../../../logica/repositorio/calendario/eliminarCalendarioSincronizadoPorTestingIV.mjs';
-import { eliminarCalendarioSincronizadoPorCalendarioUID } from '../../../logica/repositorio/calendario/eliminarCalendarioSincronizadoPorCalendarioUID.mjs';
-import { obtenerCalendarioPorCalendarioUID } from '../../../logica/repositorio/calendario/obtenerCalendarioPorCalendarioUID.mjs';
-import { eliminarBloqueoPorTestingVI } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorTestingVI.mjs';
+import { insertarConfiguracionApartamento } from '../../../src/infraestructure/repository/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
+import { eliminarConfiguracionPorApartamentoIDV } from '../../../src/infraestructure/repository/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { insertarApartamentoComoEntidad } from '../../../src/infraestructure/repository/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
+import { insertarCalendarioSincronizado } from '../../../src/infraestructure/repository/calendario/insertarCalendarioSincronizado.mjs';
+import { actualizarEventosCalendarioPorCalendarioUID } from '../../../src/infraestructure/repository/calendario/actualizarEventosCalendarioPorCalendarioUID.mjs';
+import { actualizarCalendarioSincronizado } from '../../../src/infraestructure/repository/calendario/actualizarCalendarioSincronizado.mjs';
+import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../src/infraestructure/repository/calendario/obtenerCalendarioPorCalendarioUIDPublico.mjs';
+import { obtenerCalendariosPorPlataformaIDV } from '../../../src/infraestructure/repository/calendario/obtenerCalendariosPorPlataformaIDV.mjs';
+import { obtenerCalendariosPorPlataformaIDVPorCalendarioUID } from '../../../src/infraestructure/repository/calendario/obtenerCalendariosPorPlataformaIDVPorCalendarioUID.mjs';
+import { eliminarCalendarioSincronizadoPorTestingIV } from '../../../src/infraestructure/repository/calendario/eliminarCalendarioSincronizadoPorTestingIV.mjs';
+import { eliminarCalendarioSincronizadoPorCalendarioUID } from '../../../src/infraestructure/repository/calendario/eliminarCalendarioSincronizadoPorCalendarioUID.mjs';
+import { obtenerCalendarioPorCalendarioUID } from '../../../src/infraestructure/repository/calendario/obtenerCalendarioPorCalendarioUID.mjs';
+import { eliminarBloqueoPorTestingVI } from '../../../src/infraestructure/repository/bloqueos/eliminarBloqueoPorTestingVI.mjs';
 
 describe('select and update calendars', () => {
     const apartamentoIDVInicial = "apartamento1TESTInicial"

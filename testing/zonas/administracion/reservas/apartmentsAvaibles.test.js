@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { apartamentosDisponiblesAdministracion } from '../../../../logica/zonas/administracion/reservas/nuevaReserva/apartamentosDisponiblesAdministracion.mjs';
+import { apartamentosDisponiblesAdministracion } from '../../../../src/application/administracion/reservas/nuevaReserva/apartamentosDisponiblesAdministracion.mjs';
 
 describe('apartments avaibles for bookins in bookin', () => {
     const fakeAdminSession = {

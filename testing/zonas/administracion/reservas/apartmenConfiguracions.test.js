@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { configuracionApartamento } from '../../../../logica/zonas/administracion/reservas/configuracionApartamento.mjs';
+import { configuracionApartamento } from '../../../../src/application/administracion/reservas/configuracionApartamento.mjs';
 
 describe('apartment configurations in bookin', () => {
     const fakeAdminSession = {

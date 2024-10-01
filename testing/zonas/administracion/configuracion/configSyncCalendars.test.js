@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearCalendario } from '../../../../logica/zonas/administracion/configuracion/calendariosSincronizados/airbnb/crearCalendario.mjs';
-import { crearEntidadAlojamiento } from '../../../../logica/zonas/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
-import { crearConfiguracionAlojamiento } from '../../../../logica/zonas/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { actualizarCalendario } from '../../../../logica/zonas/administracion/configuracion/calendariosSincronizados/airbnb/actualizarCalendario.mjs';
-import { eliminarCalendario } from '../../../../logica/zonas/administracion/configuracion/calendariosSincronizados/airbnb/eliminarCalendario.mjs';
+import { crearCalendario } from '../../../../src/application/administracion/configuracion/calendariosSincronizados/airbnb/crearCalendario.mjs';
+import { crearEntidadAlojamiento } from '../../../../src/application/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
+import { crearConfiguracionAlojamiento } from '../../../../src/application/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { actualizarCalendario } from '../../../../src/application/administracion/configuracion/calendariosSincronizados/airbnb/actualizarCalendario.mjs';
+import { eliminarCalendario } from '../../../../src/application/administracion/configuracion/calendariosSincronizados/airbnb/eliminarCalendario.mjs';
 import nock from 'nock';
-import { detallesDelCalendario } from '../../../../logica/zonas/administracion/configuracion/calendariosSincronizados/detallesDelCalendario.mjs';
-import { obtenerCalendarios } from '../../../../logica/zonas/administracion/configuracion/calendariosSincronizados/obtenerCalendarios.mjs';
+import { detallesDelCalendario } from '../../../../src/application/administracion/configuracion/calendariosSincronizados/detallesDelCalendario.mjs';
+import { obtenerCalendarios } from '../../../../src/application/administracion/configuracion/calendariosSincronizados/obtenerCalendarios.mjs';
 
 
 describe('Config Sync Calendars', () => {

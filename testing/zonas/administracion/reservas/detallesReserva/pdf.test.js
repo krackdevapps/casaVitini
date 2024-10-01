@@ -1,11 +1,11 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { pdfReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/miscelanea/pdfReserva.mjs';
-import { crearTitular } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/gestionTitular/crearTitular.mjs';
-import { eliminarClientePorTestingVI } from '../../../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { pdfReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/miscelanea/pdfReserva.mjs';
+import { crearTitular } from '../../../../../src/application/administracion/reservas/detallesReserva/gestionTitular/crearTitular.mjs';
+import { eliminarClientePorTestingVI } from '../../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
 
 describe('pdf in bookins', () => {
     const fakeAdminSession = {
@@ -29,7 +29,7 @@ describe('pdf in bookins', () => {
         correoElectronico: "holder@holdertesting.com",
         notas: "",
     }
-    
+
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
         await makeHostArquitecture({

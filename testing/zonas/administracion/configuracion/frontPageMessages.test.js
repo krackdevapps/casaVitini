@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearMensaje } from '../../../../logica/zonas/administracion/configuracion/mensajesEnPortada/crearMensaje.mjs';
-import { elminarMensajeEnPortadaPorTestingVI } from '../../../../logica/repositorio/configuracion/mensajesPortada/elminarMensajeEnPortadaPorTestingVI.mjs';
-import { actualizarEstado } from '../../../../logica/zonas/administracion/configuracion/mensajesEnPortada/actualizarEstado.mjs';
-import { actualizarMensaje } from '../../../../logica/zonas/administracion/configuracion/mensajesEnPortada/actualizarMensaje.mjs';
-import { detallesDelMensaje } from '../../../../logica/zonas/administracion/configuracion/mensajesEnPortada/detallesDelMensaje.mjs';
-import { moverPosicion } from '../../../../logica/zonas/administracion/configuracion/mensajesEnPortada/moverPosicion.mjs';
-import { obtenerMensajes } from '../../../../logica/zonas/administracion/configuracion/mensajesEnPortada/obtenerMensajes.mjs';
-import { eliminarMensaje } from '../../../../logica/zonas/administracion/configuracion/mensajesEnPortada/eliminarMensaje.mjs';
+import { crearMensaje } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/crearMensaje.mjs';
+import { elminarMensajeEnPortadaPorTestingVI } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/elminarMensajeEnPortadaPorTestingVI.mjs';
+import { actualizarEstado } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/actualizarEstado.mjs';
+import { actualizarMensaje } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/actualizarMensaje.mjs';
+import { detallesDelMensaje } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/detallesDelMensaje.mjs';
+import { moverPosicion } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/moverPosicion.mjs';
+import { obtenerMensajes } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/obtenerMensajes.mjs';
+import { eliminarMensaje } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/eliminarMensaje.mjs';
 
 describe('Frontpage messages system', () => {
     const fakeAdminSession = {
@@ -102,7 +102,7 @@ describe('Frontpage messages system', () => {
 
     test('get all messages with ok', async () => {
         const m = {
-            body: {            },
+            body: {},
             session: fakeAdminSession
         }
         const response = await obtenerMensajes(m)
@@ -113,9 +113,9 @@ describe('Frontpage messages system', () => {
 
     test('delete message by mensajeUID with ok', async () => {
         const m = {
-            body: {           
+            body: {
                 mensajeUID
-             },
+            },
             session: fakeAdminSession
         }
         const response = await eliminarMensaje(m)

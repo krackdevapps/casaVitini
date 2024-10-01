@@ -1,11 +1,11 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarUsuarioPorTestingVI } from '../../../logica/repositorio/usuarios/eliminarUsuarioPorTestingVI.mjs';
-import { conectar } from '../../../logica/zonas/IDX/conectar.mjs';
-import { crearCuentaDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
-import { actualizarEstadoCuentaDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/actualizarEstadoCuentaDesdeAdministracion.mjs';
-import { estado } from '../../../logica/zonas/IDX/estado.mjs';
-import { desconectar } from '../../../logica/zonas/IDX/desconectar.mjs';
+import { eliminarUsuarioPorTestingVI } from '../../../src/infraestructure/repository/usuarios/eliminarUsuarioPorTestingVI.mjs';
+import { conectar } from '../../../src/application/IDX/conectar.mjs';
+import { crearCuentaDesdeAdministracion } from '../../../src/application/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
+import { actualizarEstadoCuentaDesdeAdministracion } from '../../../src/application/administracion/usuarios/actualizarEstadoCuentaDesdeAdministracion.mjs';
+import { estado } from '../../../src/application/IDX/estado.mjs';
+import { desconectar } from '../../../src/application/IDX/desconectar.mjs';
 
 describe('testingIDXSystem', () => {
 

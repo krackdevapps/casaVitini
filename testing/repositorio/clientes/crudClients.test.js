@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { actualizarCliente } from '../../../logica/repositorio/clientes/actualizarCliente.mjs';
-import { obtenerClientesPorMail } from '../../../logica/repositorio/clientes/obtenerClientesPorMail.mjs';
-import { obtenerClientesPorPasaporte } from '../../../logica/repositorio/clientes/obtenerClientesPorPasaporte.mjs';
-import { obtenerReservasDelCliente } from '../../../logica/repositorio/clientes/obtenerReservasDelCliente.mjs';
-import { obtenerReservasDelClienteComoPernoctante } from '../../../logica/repositorio/clientes/obtenerReservasDelClienteComoPernoctante.mjs';
-import { obtenerReservasDelClienteComoTitular } from '../../../logica/repositorio/clientes/obtenerReservasDelClienteComoTitular.mjs';
-import { insertarCliente } from '../../../logica/repositorio/clientes/insertarCliente.mjs';
-import { obtenerResultadosBusqueda } from '../../../logica/repositorio/clientes/obtenerResultadosBusqueda.mjs';
-import { eliminarClientePorTestingVI } from '../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
+import { actualizarCliente } from '../../../src/infraestructure/repository/clientes/actualizarCliente.mjs';
+import { obtenerClientesPorMail } from '../../../src/infraestructure/repository/clientes/obtenerClientesPorMail.mjs';
+import { obtenerClientesPorPasaporte } from '../../../src/infraestructure/repository/clientes/obtenerClientesPorPasaporte.mjs';
+import { obtenerReservasDelCliente } from '../../../src/infraestructure/repository/clientes/obtenerReservasDelCliente.mjs';
+import { obtenerReservasDelClienteComoPernoctante } from '../../../src/infraestructure/repository/clientes/obtenerReservasDelClienteComoPernoctante.mjs';
+import { obtenerReservasDelClienteComoTitular } from '../../../src/infraestructure/repository/clientes/obtenerReservasDelClienteComoTitular.mjs';
+import { insertarCliente } from '../../../src/infraestructure/repository/clientes/insertarCliente.mjs';
+import { obtenerResultadosBusqueda } from '../../../src/infraestructure/repository/clientes/obtenerResultadosBusqueda.mjs';
+import { eliminarClientePorTestingVI } from '../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
 
 describe('crud clients', () => {
     const testingVI = "clienteTest"

@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { obtenerConfiguracion } from '../../../../logica/zonas/administracion/configuracion/horaDeEntradaSalida/obtenerConfiguracion.mjs';
-import { guardarConfiguracion } from '../../../../logica/zonas/administracion/configuracion/horaDeEntradaSalida/guardarConfiguracion.mjs';
+import { obtenerConfiguracion } from '../../../../src/application/administracion/configuracion/horaDeEntradaSalida/obtenerConfiguracion.mjs';
+import { guardarConfiguracion } from '../../../../src/application/administracion/configuracion/horaDeEntradaSalida/guardarConfiguracion.mjs';
 
 describe('Check-In and check-out time', () => {
     const fakeAdminSession = {

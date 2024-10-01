@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { guardarSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/guardarSimulacion.mjs';
-import { eliminarSimulacionPorTestingVI } from '../../../../logica/repositorio/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
-import { detallesSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/detallesSimulacion.mjs';
-import { actualizarNombreSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/actualizarNombreSimulacion.mjs';
-import { actualizarSimulacionPorFechasPorApartamentos } from '../../../../logica/zonas/administracion/simuladorDePrecios/actualizarSimulacionPorFechasPorApartamentos.mjs';
-import { listaSimulacionesPaginados } from '../../../../logica/zonas/administracion/simuladorDePrecios/listaSimulacionesPaginados.mjs';
-import { eliminarSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/eliminarSimulacion.mjs';
+import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { detallesSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/detallesSimulacion.mjs';
+import { actualizarNombreSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/actualizarNombreSimulacion.mjs';
+import { actualizarSimulacionPorFechasPorApartamentos } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorFechasPorApartamentos.mjs';
+import { listaSimulacionesPaginados } from '../../../../src/application/administracion/simuladorDePrecios/listaSimulacionesPaginados.mjs';
+import { eliminarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/eliminarSimulacion.mjs';
 
 describe('Global Operations Simulation', () => {
     const fakeAdminSession = {

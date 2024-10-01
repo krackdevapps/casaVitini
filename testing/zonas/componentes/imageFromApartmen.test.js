@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { imagenDelApartamento } from '../../../logica/zonas/componentes/imagenDelApartamento.mjs';
+import { imagenDelApartamento } from '../../../src/application/componentes/imagenDelApartamento.mjs';
 import { makeHostArquitecture } from '../../sharedUsesCases/makeHostArquitecture.mjs';
 
 describe('Image from apartmen', () => {

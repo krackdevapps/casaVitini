@@ -1,28 +1,28 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarHabitacionComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
-import { eliminarCamaComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
-import { eliminarConfiguracionPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { insertarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
-import { insertarHabitacionComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/insertarHabitacionComoEntidad.mjs';
-import { insertarCamaComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/cama/insertarCamaComoEntidad.mjs';
-import { insertarConfiguracionApartamento } from '../../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
-import { insertarHabitacionEnApartamento } from '../../../../logica/repositorio/arquitectura/configuraciones/insertarHabitacionEnApartamento.mjs';
-import { insertarCamaEnHabitacion } from '../../../../logica/repositorio/arquitectura/configuraciones/insertarCamasEnHabitacion.mjs';
-import { obtenerConfiguracionPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
-import { obtenerConfiguracionPorArrayDeApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerConfiguracionPorArrayDeApartamentoIDV.mjs';
-import { obtenerImagenApartamentoPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerImagenApartamentoPorApartamentoIDV.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamento } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs';
-import { obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles.mjs';
-import { obtenerHabitacionDelApartamentoPorHabitacionIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionIDV.mjs';
-import { obtenerHabitacionDelApartamentoPorHabitacionUID } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs';
-import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
-import { actualizarEstadoPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/actualizarEstadoPorApartamentoIDV.mjs';
-import { actualizarImagenDelApartamentoPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/actualizarImagenDelApartamentoPorApartamentoIDV.mjs';
-import { eliminarCamaDeLaHabitacionPorCamaUID } from '../../../../logica/repositorio/arquitectura/configuraciones/eliminarCamaDeLaHabitacionPorCamaUID.mjs';
-import { eliminarHabitacionDelApartamentoPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/eliminarHabitacionDelApartamentoPorApartamentoIDV.mjs';
+import { eliminarHabitacionComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
+import { eliminarCamaComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
+import { eliminarConfiguracionPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { insertarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
+import { insertarHabitacionComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/insertarHabitacionComoEntidad.mjs';
+import { insertarCamaComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/cama/insertarCamaComoEntidad.mjs';
+import { insertarConfiguracionApartamento } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
+import { insertarHabitacionEnApartamento } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/insertarHabitacionEnApartamento.mjs';
+import { insertarCamaEnHabitacion } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/insertarCamasEnHabitacion.mjs';
+import { obtenerConfiguracionPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
+import { obtenerConfiguracionPorArrayDeApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorArrayDeApartamentoIDV.mjs';
+import { obtenerImagenApartamentoPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerImagenApartamentoPorApartamentoIDV.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamento } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs';
+import { obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles.mjs';
+import { obtenerHabitacionDelApartamentoPorHabitacionIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionIDV.mjs';
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs';
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
+import { actualizarEstadoPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/actualizarEstadoPorApartamentoIDV.mjs';
+import { actualizarImagenDelApartamentoPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/actualizarImagenDelApartamentoPorApartamentoIDV.mjs';
+import { eliminarCamaDeLaHabitacionPorCamaUID } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/eliminarCamaDeLaHabitacionPorCamaUID.mjs';
+import { eliminarHabitacionDelApartamentoPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/eliminarHabitacionDelApartamentoPorApartamentoIDV.mjs';
 
 
 describe('crud hosting configuracion', () => {

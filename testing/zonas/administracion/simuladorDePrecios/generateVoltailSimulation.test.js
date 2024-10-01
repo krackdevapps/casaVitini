@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { generarSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/generarSimulacion.mjs';
+import { generarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/generarSimulacion.mjs';
 
 describe('Generate Voltail Simulation', () => {
     const fakeAdminSession = {

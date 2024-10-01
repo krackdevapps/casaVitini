@@ -1,23 +1,23 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { insertarNuevoBloqueo } from '../../../logica/repositorio/bloqueos/insertarNuevoBloqueo.mjs';
-import { actualizarBloqueoPorBloqueoUID } from '../../../logica/repositorio/bloqueos/actualizarBloqueoPorBloqueoUID.mjs';
-import { obtenerBloqueosPorTipoIDVPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorTipoIDVPorApartamentoIDV.mjs';
-import { obtenerBloqueoPorBloqueoUIDPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueoPorBloqueoUIDPorApartamentoIDV.mjs';
-import { obtenerBloqueoPorBloqueoUID } from '../../../logica/repositorio/bloqueos/obtenerBloqueoPorBloqueoUID.mjs';
-import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs';
-import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorRangoPorApartamentoIDV.mjs';
-import { obtenerObtenerBloqueosPorRangoPorTipo } from '../../../logica/repositorio/bloqueos/obtenerObtenerBloqueosPorRangoPorTipo.mjs';
-import { obtenerTodosLosBloqueos } from '../../../logica/repositorio/bloqueos/obtenerTodosLosBloqueos.mjs';
-import { eliminarBloqueoPorBloqueoUID } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorBloqueoUID.mjs';
-import { insertarConfiguracionApartamento } from '../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
-import { eliminarConfiguracionPorApartamentoIDV } from '../../../logica/repositorio/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { insertarApartamentoComoEntidad } from '../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
-import { obtenerBloqueosPorMes } from '../../../logica/repositorio/bloqueos/obtenerBloqueosPorMes.mjs';
-import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from '../../../logica/repositorio/bloqueos/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs';
-import { eliminarBloqueoPorFechaActual } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorFechaActual.mjs';
-import { eliminarBloqueoPorTestingVI } from '../../../logica/repositorio/bloqueos/eliminarBloqueoPorTestingVI.mjs';
+import { insertarNuevoBloqueo } from '../../../src/infraestructure/repository/bloqueos/insertarNuevoBloqueo.mjs';
+import { actualizarBloqueoPorBloqueoUID } from '../../../src/infraestructure/repository/bloqueos/actualizarBloqueoPorBloqueoUID.mjs';
+import { obtenerBloqueosPorTipoIDVPorApartamentoIDV } from '../../../src/infraestructure/repository/bloqueos/obtenerBloqueosPorTipoIDVPorApartamentoIDV.mjs';
+import { obtenerBloqueoPorBloqueoUIDPorApartamentoIDV } from '../../../src/infraestructure/repository/bloqueos/obtenerBloqueoPorBloqueoUIDPorApartamentoIDV.mjs';
+import { obtenerBloqueoPorBloqueoUID } from '../../../src/infraestructure/repository/bloqueos/obtenerBloqueoPorBloqueoUID.mjs';
+import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from '../../../src/infraestructure/repository/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs';
+import { obtenerBloqueosPorRangoPorApartamentoIDV } from '../../../src/infraestructure/repository/bloqueos/obtenerBloqueosPorRangoPorApartamentoIDV.mjs';
+import { obtenerObtenerBloqueosPorRangoPorTipo } from '../../../src/infraestructure/repository/bloqueos/obtenerObtenerBloqueosPorRangoPorTipo.mjs';
+import { obtenerTodosLosBloqueos } from '../../../src/infraestructure/repository/bloqueos/obtenerTodosLosBloqueos.mjs';
+import { eliminarBloqueoPorBloqueoUID } from '../../../src/infraestructure/repository/bloqueos/eliminarBloqueoPorBloqueoUID.mjs';
+import { insertarConfiguracionApartamento } from '../../../src/infraestructure/repository/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
+import { eliminarConfiguracionPorApartamentoIDV } from '../../../src/infraestructure/repository/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { insertarApartamentoComoEntidad } from '../../../src/infraestructure/repository/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
+import { obtenerBloqueosPorMes } from '../../../src/infraestructure/repository/bloqueos/obtenerBloqueosPorMes.mjs';
+import { obtenerTodosLosbloqueosPorMesPorAnoPorTipo } from '../../../src/infraestructure/repository/bloqueos/obtenerTodosLosbloqueosPorMesPorAnoPorTipo.mjs';
+import { eliminarBloqueoPorFechaActual } from '../../../src/infraestructure/repository/bloqueos/eliminarBloqueoPorFechaActual.mjs';
+import { eliminarBloqueoPorTestingVI } from '../../../src/infraestructure/repository/bloqueos/eliminarBloqueoPorTestingVI.mjs';
 
 describe('crud locks for apartments', () => {
     const apartamentoIDVInicial = "apartamento1TESTInicialtesting"
@@ -61,7 +61,7 @@ describe('crud locks for apartments', () => {
         nuevoBloqueoUID = response.bloqueoUID
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
-        
+
     })
     test('update lock', async () => {
         const response = await actualizarBloqueoPorBloqueoUID({

@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { obtenerConfiguracion } from '../../../../logica/zonas/administracion/configuracion/limitesReservaPublica/obtenerConfiguracion.mjs';
-import { guardarConfiguracion } from '../../../../logica/zonas/administracion/configuracion/limitesReservaPublica/guardarConfiguracion.mjs';
+import { obtenerConfiguracion } from '../../../../src/application/administracion/configuracion/limitesReservaPublica/obtenerConfiguracion.mjs';
+import { guardarConfiguracion } from '../../../../src/application/administracion/configuracion/limitesReservaPublica/guardarConfiguracion.mjs';
 
 describe('Global limits of public bookins', () => {
     const fakeAdminSession = {

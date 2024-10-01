@@ -396,11 +396,15 @@ summary:hover {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    padding: 16px;
-    margin: 0px;
     flex: 1;
     grid-template-rows: 0.01fr auto;
     grid-gap: 6px;
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 
@@ -983,6 +987,8 @@ summary:hover {
     width: 100%;
     /* padding: 10px; */
     /* height: 100%; */
+    gap: 6px;
+    padding: 20px;
     flex: 1;
 }
 
@@ -1050,7 +1056,6 @@ summary:hover {
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    padding: 6px;
     align-items: center;
     gap: 6px;
 }
@@ -2218,11 +2223,14 @@ summary:hover {
     transition: all 250ms linear;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
-    padding-top: 40px;
+    /* padding-top: 40px; */
     font-weight: bold;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    height: 70px;
+    align-items: flex-start;
+    flex-wrap: nowrap;
 }
 
 
@@ -12160,11 +12168,12 @@ grid-template-columns: 0.5fr 1.5fr;
     /* width: 100%; */
     /* max-width: 720px; */
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-content: center;
     align-items: stretch;
     /* height: 100%; */
-    flex: 1;
+    flex: 0;
+    /* flex 1 es lo que rellena*/
 }
 
 .componente_calendario_contenedoCarga_calendarioIncrustado {
@@ -12566,7 +12575,12 @@ grid-template-columns: 0.5fr 1.5fr;
     position: relative;
     min-height: 46px;
     min-width: 20px;
-    transition: all 500ms linear;
+    transition: all 250ms linear;
+    opacity: 1;
+
+    @starting-style {
+        opacity: 0;
+    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia::before {
@@ -12576,7 +12590,7 @@ grid-template-columns: 0.5fr 1.5fr;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: #3498db;
+    background-color: rgb(37 37 37 / 0.2);
     border-radius: 12px;
     /* Ajusta este valor para cambiar la cantidad de redondeo */
     z-index: -1;
@@ -12586,14 +12600,17 @@ grid-template-columns: 0.5fr 1.5fr;
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaParcial::before {
     background: rgb(255 214 0 / 72%);
+    transition: background 250ms linear
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaCompleto::before {
     background-color: rgba(255, 0, 0, 0.5);
+    transition: background 250ms linear
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaDisponible::before {
     background-color: rgba(87 197 78 / 86%);
+    transition: background 250ms linear
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaDeHoy::before {
@@ -13642,7 +13659,6 @@ grid-template-columns: 0.5fr 1.5fr;
     justify-content: center;
     align-items: stretch;
     flex-direction: column;
-    padding: 6px;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI .botonSelectorMulticapa {
@@ -15032,7 +15048,8 @@ grid-template-columns: 0.5fr 1.5fr;
     font-size: 16px;
 }
 
-.botonV1:hover, .botonV1Blanco:hover {
+.botonV1:hover,
+.botonV1Blanco:hover {
     background: rgba(255, 255, 255, 0.7);
 
 }
@@ -15333,6 +15350,7 @@ grid-template-columns: 0.5fr 1.5fr;
     align-items: center;
     outline: none;
 }
+
 .botonV1Blanco {
     padding: 14px;
     border-radius: 16px;

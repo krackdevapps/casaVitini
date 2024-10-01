@@ -1,12 +1,12 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { eliminarClientePorTestingVI } from '../../../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { actualizarSobreControlNoche } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/sobreControlPrecios/actualizarSobreControlNoche.mjs';
-import { obtenerDetallesSobreControlNoche } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/sobreControlPrecios/obtenerDetallesSobreControlNoche.mjs';
-import { eliminarSobreControlNoche } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/sobreControlPrecios/eliminarSobreControlNoche.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { eliminarClientePorTestingVI } from '../../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { actualizarSobreControlNoche } from '../../../../../src/application/administracion/reservas/detallesReserva/sobreControlPrecios/actualizarSobreControlNoche.mjs';
+import { obtenerDetallesSobreControlNoche } from '../../../../../src/application/administracion/reservas/detallesReserva/sobreControlPrecios/obtenerDetallesSobreControlNoche.mjs';
+import { eliminarSobreControlNoche } from '../../../../../src/application/administracion/reservas/detallesReserva/sobreControlPrecios/eliminarSobreControlNoche.mjs';
 
 describe('overridePrices in bookins', () => {
     const fakeAdminSession = {
@@ -45,7 +45,7 @@ describe('overridePrices in bookins', () => {
             camaUI: camaUI,
         })
 
-    
+
         // Crear reserva
         const reserva = await crearReservaSimpleAdministrativa({
             body: {

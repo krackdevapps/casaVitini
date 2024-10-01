@@ -1,4 +1,4 @@
-import { estadoDeAcceso } from '../logica/repositorio/globales/estadoDeAcceso.mjs';
+import { estadoDeAcceso } from '../src/infraestructure/repository/globales/estadoDeAcceso.mjs';
 
 export const controlBaseDeDatos = async (entrada, salida, next) => {
   try {

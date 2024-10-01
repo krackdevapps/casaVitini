@@ -1,8 +1,8 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { campoDeTransaccion } from '../../../../../logica/repositorio/globales/campoDeTransaccion.mjs';
-import { listarApartamentosComoEntidades } from '../../../../../logica/zonas/administracion/arquitectura/entidades/listarApartamentosComoEntidades.mjs';
-import { listarEntidadesAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/listarEntidadesAlojamiento.mjs';
+import { campoDeTransaccion } from '../../../../../src/infraestructure/repository/globales/campoDeTransaccion.mjs';
+import { listarApartamentosComoEntidades } from '../../../../../src/application/administracion/arquitectura/entidades/listarApartamentosComoEntidades.mjs';
+import { listarEntidadesAlojamiento } from '../../../../../src/application/administracion/arquitectura/entidades/listarEntidadesAlojamiento.mjs';
 
 describe('entitysListin', () => {
     const fakeAdminSession = {

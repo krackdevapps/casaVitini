@@ -1,11 +1,11 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { multiCapa } from '../../../../logica/zonas/administracion/calendario/capas/multiCapa.mjs';
-import { insertarCalendarioSincronizado } from '../../../../logica/repositorio/calendario/insertarCalendarioSincronizado.mjs';
-import { insertarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
-import { insertarConfiguracionApartamento } from '../../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
-import { eliminarConfiguracionPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { multiCapa } from '../../../../src/application/administracion/calendario/capas/multiCapa.mjs';
+import { insertarCalendarioSincronizado } from '../../../../src/infraestructure/repository/calendario/insertarCalendarioSincronizado.mjs';
+import { insertarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
+import { insertarConfiguracionApartamento } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
+import { eliminarConfiguracionPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
 
 describe('calendars selectors', () => {
     const fakeAdminSession = {

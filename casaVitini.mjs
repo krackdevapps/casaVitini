@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { router } from './routes/rutas.mjs'
+import { router } from './router/router.mjs'
 import fs from 'fs';
 import https from 'https';
 import { controlHTTPS } from './middleware/controlHttps.mjs'

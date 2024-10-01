@@ -1,17 +1,17 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarUsuarioPorTestingVI } from '../../../../logica/repositorio/usuarios/eliminarUsuarioPorTestingVI.mjs';
-import { crearCuentaDesdeAdministracion } from '../../../../logica/zonas/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
-import { actualizarClaveUsuarioAdministracion } from '../../../../logica/zonas/administracion/usuarios/actualizarClaveUsuarioAdministracion.mjs';
-import { actualizarDatosUsuarioDesdeAdministracion } from '../../../../logica/zonas/administracion/usuarios/actualizarDatosUsuarioDesdeAdministracion.mjs';
-import { actualizarEstadoCuentaDesdeAdministracion } from '../../../../logica/zonas/administracion/usuarios/actualizarEstadoCuentaDesdeAdministracion.mjs';
-import { actualizarIDXAdministracion } from '../../../../logica/zonas/administracion/usuarios/actualizarIDXAdministracion.mjs';
-import { actualizarRolCuenta } from '../../../../logica/zonas/administracion/usuarios/actualizarRolCuenta.mjs';
-import { buscarUsuarios } from '../../../../logica/zonas/administracion/usuarios/buscarUsuarios.mjs';
-import { datosCuentaIDX } from '../../../../logica/zonas/administracion/usuarios/datosCuentaIDX.mjs';
-import { detallesUsuario } from '../../../../logica/zonas/administracion/usuarios/detallesUsuario.mjs';
-import { obtenerRoles } from '../../../../logica/zonas/administracion/usuarios/obtenerRoles.mjs';
-import { eliminarCuentaDesdeAdministracion } from '../../../../logica/zonas/administracion/usuarios/eliminarCuentaDesdeAdministracion.mjs';
+import { eliminarUsuarioPorTestingVI } from '../../../../src/infraestructure/repository/usuarios/eliminarUsuarioPorTestingVI.mjs';
+import { crearCuentaDesdeAdministracion } from '../../../../src/application/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
+import { actualizarClaveUsuarioAdministracion } from '../../../../src/application/administracion/usuarios/actualizarClaveUsuarioAdministracion.mjs';
+import { actualizarDatosUsuarioDesdeAdministracion } from '../../../../src/application/administracion/usuarios/actualizarDatosUsuarioDesdeAdministracion.mjs';
+import { actualizarEstadoCuentaDesdeAdministracion } from '../../../../src/application/administracion/usuarios/actualizarEstadoCuentaDesdeAdministracion.mjs';
+import { actualizarIDXAdministracion } from '../../../../src/application/administracion/usuarios/actualizarIDXAdministracion.mjs';
+import { actualizarRolCuenta } from '../../../../src/application/administracion/usuarios/actualizarRolCuenta.mjs';
+import { buscarUsuarios } from '../../../../src/application/administracion/usuarios/buscarUsuarios.mjs';
+import { datosCuentaIDX } from '../../../../src/application/administracion/usuarios/datosCuentaIDX.mjs';
+import { detallesUsuario } from '../../../../src/application/administracion/usuarios/detallesUsuario.mjs';
+import { obtenerRoles } from '../../../../src/application/administracion/usuarios/obtenerRoles.mjs';
+import { eliminarCuentaDesdeAdministracion } from '../../../../src/application/administracion/usuarios/eliminarCuentaDesdeAdministracion.mjs';
 
 describe('managin users', () => {
     const fakeAdminSession = {

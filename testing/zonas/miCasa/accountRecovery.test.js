@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarUsuarioPorTestingVI } from '../../../logica/repositorio/usuarios/eliminarUsuarioPorTestingVI.mjs';
-import { enviarCorreo } from '../../../logica/zonas/miCasa/recuperarCuenta/enviarCorreo.mjs';
-import { validarCodigo } from '../../../logica/zonas/miCasa/recuperarCuenta/validarCodigo.mjs';
-import { crearCuentaDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
-import { actualizarDatosUsuarioDesdeAdministracion } from '../../../logica/zonas/administracion/usuarios/actualizarDatosUsuarioDesdeAdministracion.mjs';
-import { obtenerEnlacesRecuperacionPorUsuario } from '../../../logica/repositorio/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorUsuario.mjs';
-import { obtenerUsuario } from '../../../logica/repositorio/usuarios/obtenerUsuario.mjs';
-import { verificarCuenta } from '../../../logica/zonas/miCasa/verificarCuenta.mjs';
-import { restablecerClave } from '../../../logica/zonas/miCasa/recuperarCuenta/restablecerClave.mjs';
+import { eliminarUsuarioPorTestingVI } from '../../../src/infraestructure/repository/usuarios/eliminarUsuarioPorTestingVI.mjs';
+import { enviarCorreo } from '../../../src/application/miCasa/recuperarCuenta/enviarCorreo.mjs';
+import { validarCodigo } from '../../../src/application/miCasa/recuperarCuenta/validarCodigo.mjs';
+import { crearCuentaDesdeAdministracion } from '../../../src/application/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
+import { actualizarDatosUsuarioDesdeAdministracion } from '../../../src/application/administracion/usuarios/actualizarDatosUsuarioDesdeAdministracion.mjs';
+import { obtenerEnlacesRecuperacionPorUsuario } from '../../../src/infraestructure/repository/enlacesDeRecuperacion/obtenerEnlacesRecuperacionPorUsuario.mjs';
+import { obtenerUsuario } from '../../../src/infraestructure/repository/usuarios/obtenerUsuario.mjs';
+import { verificarCuenta } from '../../../src/application/miCasa/verificarCuenta.mjs';
+import { restablecerClave } from '../../../src/application/miCasa/recuperarCuenta/restablecerClave.mjs';
 
 describe('account recovery', () => {
     const testingVI = "testingbooki"

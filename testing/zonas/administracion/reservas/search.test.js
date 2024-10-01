@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { listarReservas } from '../../../../logica/zonas/administracion/reservas/buscador/listarReservas.mjs';
+import { listarReservas } from '../../../../src/application/administracion/reservas/buscador/listarReservas.mjs';
 
 describe('search of reserves', () => {
     const fakeAdminSession = {

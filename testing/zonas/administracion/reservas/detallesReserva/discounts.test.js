@@ -1,16 +1,16 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { obtenerDescuentosCompatiblesConLaReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/descuentos/obtenerDescuentosCompatiblesConLaReserva.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { obtenerDescuentosCompatiblesConLaReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/descuentos/obtenerDescuentosCompatiblesConLaReserva.mjs';
 import { DateTime } from 'luxon';
-import { eliminarOfertaPorTestingVI } from '../../../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
-import { crearOferta } from '../../../../../logica/zonas/administracion/ofertas/crearOferta.mjs';
-import { insertarDescuentoPorAdministrador } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/descuentos/insertarDescuentoPorAdministrador.mjs';
-import { actualizarAutorizacionDescuentoCompatible } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/descuentos/actualizarAutorizacionDescuentoCompatible.mjs';
-import { insertarDescuentoPorCompatible } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/descuentos/insertarDescuentoPorCompatible.mjs';
-import { eliminarDescuentoEnReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/descuentos/eliminarDescuentoEnReserva.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
+import { crearOferta } from '../../../../../src/application/administracion/ofertas/crearOferta.mjs';
+import { insertarDescuentoPorAdministrador } from '../../../../../src/application/administracion/reservas/detallesReserva/descuentos/insertarDescuentoPorAdministrador.mjs';
+import { actualizarAutorizacionDescuentoCompatible } from '../../../../../src/application/administracion/reservas/detallesReserva/descuentos/actualizarAutorizacionDescuentoCompatible.mjs';
+import { insertarDescuentoPorCompatible } from '../../../../../src/application/administracion/reservas/detallesReserva/descuentos/insertarDescuentoPorCompatible.mjs';
+import { eliminarDescuentoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/descuentos/eliminarDescuentoEnReserva.mjs';
 
 describe('discounts in bookins', () => {
     const fakeAdminSession = {

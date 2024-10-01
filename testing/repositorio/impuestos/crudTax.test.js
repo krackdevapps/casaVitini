@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { insertarImpuesto } from '../../../logica/repositorio/impuestos/insertarImpuesto.mjs';
-import { actualizarImpuesto } from '../../../logica/repositorio/impuestos/actualizarImpuesto.mjs';
-import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../../logica/repositorio/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
-import { obtenerImpuestosPorImppuestoUID } from '../../../logica/repositorio/impuestos/obtenerImpuestosPorImpuestoUID.mjs';
-import { obtenerImpuestosPorNombreDelImpuesto } from '../../../logica/repositorio/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs';
-import { obtenerTipoValorPorTipoValorIDV } from '../../../logica/repositorio/impuestos/obtenerTipoValorPorTipoValorIDV.mjs';
-import { obtenerTodosImpuestosConOrdenamiento } from '../../../logica/repositorio/impuestos/obtenerTodosImpuestosConOrdenamiento.mjs';
-import { eliminarImpuestoPorTestingVI } from '../../../logica/repositorio/impuestos/eliminarImpuestoPorTestingVI.mjs';
+import { insertarImpuesto } from '../../../src/infraestructure/repository/impuestos/insertarImpuesto.mjs';
+import { actualizarImpuesto } from '../../../src/infraestructure/repository/impuestos/actualizarImpuesto.mjs';
+import { obtenerImpuestosPorAplicacionIDVPorEstado } from '../../../src/infraestructure/repository/impuestos/obtenerImpuestosPorAplicacionIDVPorEstado.mjs';
+import { obtenerImpuestosPorImppuestoUID } from '../../../src/infraestructure/repository/impuestos/obtenerImpuestosPorImpuestoUID.mjs';
+import { obtenerImpuestosPorNombreDelImpuesto } from '../../../src/infraestructure/repository/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs';
+import { obtenerTipoValorPorTipoValorIDV } from '../../../src/infraestructure/repository/impuestos/obtenerTipoValorPorTipoValorIDV.mjs';
+import { obtenerTodosImpuestosConOrdenamiento } from '../../../src/infraestructure/repository/impuestos/obtenerTodosImpuestosConOrdenamiento.mjs';
+import { eliminarImpuestoPorTestingVI } from '../../../src/infraestructure/repository/impuestos/eliminarImpuestoPorTestingVI.mjs';
 
 describe('crud tax', () => {
     const testingVI = "impuestoTest"

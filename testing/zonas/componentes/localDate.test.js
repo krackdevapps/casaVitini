@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { fechaLocal } from '../../../logica/zonas/componentes/fechaLocal.mjs';
+import { fechaLocal } from '../../../src/application/componentes/fechaLocal.mjs';
 
 describe('local date', () => {
 

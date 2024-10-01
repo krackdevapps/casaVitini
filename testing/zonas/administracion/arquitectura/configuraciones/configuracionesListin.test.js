@@ -1,15 +1,15 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { campoDeTransaccion } from '../../../../../logica/repositorio/globales/campoDeTransaccion.mjs';
-import { crearConfiguracionAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs';
-import { crearEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
-import { eliminarConfiguracionDeAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/eliminarConfiguracionDeAlojamiento.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { actualizarZonaDeLaConfiguracionApartamento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/actualizarZonaDeLaConfiguracionApartamento.mjs';
-import { addCamaToConfiguracionApartamentoHabitacion } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/addCamaToConfiguracionApartamentoHabitacion.mjs';
-import { eliminarCamaComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
-import { eliminarHabitacionComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
-import { addHabitacionToConfiguracionApartamento } from '../../../../../logica/zonas/administracion/arquitectura/configuraciones/addHabitacionToConfiguracionApartamento.mjs';
+import { campoDeTransaccion } from '../../../../../src/infraestructure/repository/globales/campoDeTransaccion.mjs';
+import { crearConfiguracionAlojamiento } from '../../../../../src/application/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs';
+import { crearEntidadAlojamiento } from '../../../../../src/application/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
+import { eliminarConfiguracionDeAlojamiento } from '../../../../../src/application/administracion/arquitectura/configuraciones/eliminarConfiguracionDeAlojamiento.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { actualizarZonaDeLaConfiguracionApartamento } from '../../../../../src/application/administracion/arquitectura/configuraciones/actualizarZonaDeLaConfiguracionApartamento.mjs';
+import { addCamaToConfiguracionApartamentoHabitacion } from '../../../../../src/application/administracion/arquitectura/configuraciones/addCamaToConfiguracionApartamentoHabitacion.mjs';
+import { eliminarCamaComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
+import { eliminarHabitacionComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
+import { addHabitacionToConfiguracionApartamento } from '../../../../../src/application/administracion/arquitectura/configuraciones/addHabitacionToConfiguracionApartamento.mjs';
 
 describe('configuration of hosting', () => {
     const apartamentoIDV = "testingapartmentforconfigurationshostings"
@@ -126,9 +126,9 @@ describe('configuration of hosting', () => {
     test('add room in configuracion hosting base with ok', async () => {
         const makeEntity = {
             body: {
-                habitacionIDV:habitacionIDV,
+                habitacionIDV: habitacionIDV,
                 apartamentoIDV: apartamentoIDV,
-             },
+            },
             session: fakeAdminSession
         }
         const response = await addHabitacionToConfiguracionApartamento(makeEntity)
@@ -145,7 +145,7 @@ describe('configuration of hosting', () => {
         const makeEntity = {
             body: {
                 camaIDV: camaIDV,
-                habitacionUID:habitacionUID
+                habitacionUID: habitacionUID
             },
             session: fakeAdminSession
         }
@@ -156,19 +156,19 @@ describe('configuration of hosting', () => {
     })
 
 
-        //delete host configuration
-        test('add bed in room in configuracion hosting with ok', async () => {
-            const makeEntity = {
-                body: {
-                    apartamentoIDV
-                },
-                session: fakeAdminSession
-            }
-            const response = await eliminarConfiguracionDeAlojamiento(makeEntity)
-            expect(response).not.toBeUndefined();
-            expect(typeof response).toBe('object');
-            expect(response).toHaveProperty('ok');
-        })
+    //delete host configuration
+    test('add bed in room in configuracion hosting with ok', async () => {
+        const makeEntity = {
+            body: {
+                apartamentoIDV
+            },
+            session: fakeAdminSession
+        }
+        const response = await eliminarConfiguracionDeAlojamiento(makeEntity)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
     afterAll(async () => {
         await campoDeTransaccion("cancelar")
         await eliminarCamaComoEntidad(camaIDV)

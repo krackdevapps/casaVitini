@@ -1,8 +1,8 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearCliente } from '../../../../logica/zonas/administracion/clientes/crearCliente.mjs';
-import { eliminarClientePorTestingVI } from '../../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { fusion } from '../../../../logica/zonas/administracion/clientes/fusion.mjs';
+import { crearCliente } from '../../../../src/application/administracion/clientes/crearCliente.mjs';
+import { eliminarClientePorTestingVI } from '../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { fusion } from '../../../../src/application/administracion/clientes/fusion.mjs';
 
 describe('fusion clients', () => {
     const fakeAdminSession = {
@@ -51,7 +51,7 @@ describe('fusion clients', () => {
         expect(response).toHaveProperty('ok');
         clienteUID_origen = response.nuevoUIDCliente
     })
-    
+
     test('create new client destiny with ok', async () => {
         const newClient = {
             body: {

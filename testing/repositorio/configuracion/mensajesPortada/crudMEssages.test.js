@@ -1,15 +1,15 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { insertarMensajeEnPortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/insertarMensajeEnPortada.mjs';
-import { actualizarContenidoMensajeDePortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/actualizarContenidoMensajeDePortada.mjs';
-import { actualizarEstadoMensajeDePortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/actualizarEstadoMensajeDePortada.mjs';
-import { actualizaOrdenDePosiciones } from '../../../../logica/repositorio/configuracion/mensajesPortada/actualizarOrdenDePosiciones.mjs';
-import { actualizarPosicionDelMensajeDePortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/actualizarPosicionMensajeDePortada.mjs';
-import { obtenerMensajePorMensajeUID } from '../../../../logica/repositorio/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs';
-import { obtenerMensajePorPosicion } from '../../../../logica/repositorio/configuracion/mensajesPortada/obtenerMensajePorPosicion.mjs';
-import { obtenerTodosLosMensjaes } from '../../../../logica/repositorio/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs';
-import { eliminarMensajeEnPortada } from '../../../../logica/repositorio/configuracion/mensajesPortada/elminarMensajeEnPortada.mjs';
-import { elminarMensajeEnPortadaPorTestingVI } from '../../../../logica/repositorio/configuracion/mensajesPortada/elminarMensajeEnPortadaPorTestingVI.mjs';
+import { insertarMensajeEnPortada } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/insertarMensajeEnPortada.mjs';
+import { actualizarContenidoMensajeDePortada } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/actualizarContenidoMensajeDePortada.mjs';
+import { actualizarEstadoMensajeDePortada } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/actualizarEstadoMensajeDePortada.mjs';
+import { actualizaOrdenDePosiciones } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/actualizarOrdenDePosiciones.mjs';
+import { actualizarPosicionDelMensajeDePortada } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/actualizarPosicionMensajeDePortada.mjs';
+import { obtenerMensajePorMensajeUID } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs';
+import { obtenerMensajePorPosicion } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/obtenerMensajePorPosicion.mjs';
+import { obtenerTodosLosMensjaes } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs';
+import { eliminarMensajeEnPortada } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/elminarMensajeEnPortada.mjs';
+import { elminarMensajeEnPortadaPorTestingVI } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/elminarMensajeEnPortadaPorTestingVI.mjs';
 
 describe('crud messages of front page', () => {
     const testingVI = "mensajeTEST"

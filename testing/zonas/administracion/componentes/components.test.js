@@ -1,8 +1,8 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { administracionUI } from '../../../../logica/zonas/administracion/componentes/administracionUI.mjs';
-import { apartamentosDisponiblesConfigurados } from '../../../../logica/zonas/administracion/componentes/apartamentosDisponiblesConfigurados.mjs';
-import { calculadora } from '../../../../logica/zonas/administracion/componentes/calculadora.mjs';
+import { administracionUI } from '../../../../src/application/administracion/componentes/administracionUI.mjs';
+import { apartamentosDisponiblesConfigurados } from '../../../../src/application/administracion/componentes/apartamentosDisponiblesConfigurados.mjs';
+import { calculadora } from '../../../../src/application/administracion/componentes/calculadora.mjs';
 
 describe('components', () => {
     const fakeAdminSession = {

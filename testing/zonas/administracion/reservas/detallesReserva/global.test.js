@@ -1,17 +1,17 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { obtenerReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/global/obtenerReserva.mjs';
-import { estadoReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/global/estadoReserva.mjs';
-import { actualizarEstadoReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/global/actualizarEstadoReserva.mjs';
-import { obtenerElasticidadDelRango } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/global/obtenerElasticidadDelRango.mjs';
-import { confirmarModificarFechaReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/global/confirmarModificarFechaReserva.mjs';
-import { cancelarReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/global/cancelarReserva.mjs';
-import { eliminarIrreversiblementeReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/global/eliminarIrreversiblementeReserva.mjs';
-import { crearCuentaDesdeAdministracion } from '../../../../../logica/zonas/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
-import { eliminarUsuarioPorTestingVI } from '../../../../../logica/repositorio/usuarios/eliminarUsuarioPorTestingVI.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { obtenerReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/global/obtenerReserva.mjs';
+import { estadoReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/global/estadoReserva.mjs';
+import { actualizarEstadoReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/global/actualizarEstadoReserva.mjs';
+import { obtenerElasticidadDelRango } from '../../../../../src/application/administracion/reservas/detallesReserva/global/obtenerElasticidadDelRango.mjs';
+import { confirmarModificarFechaReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/global/confirmarModificarFechaReserva.mjs';
+import { cancelarReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/global/cancelarReserva.mjs';
+import { eliminarIrreversiblementeReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/global/eliminarIrreversiblementeReserva.mjs';
+import { crearCuentaDesdeAdministracion } from '../../../../../src/application/administracion/usuarios/crearCuentaDesdeAdministracion.mjs';
+import { eliminarUsuarioPorTestingVI } from '../../../../../src/infraestructure/repository/usuarios/eliminarUsuarioPorTestingVI.mjs';
 
 describe('global operations in bookins', () => {
     const fakeAdminSession = {

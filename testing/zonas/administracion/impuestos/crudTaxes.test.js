@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarEnlaceDePagoPorTestingVI } from '../../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorTestingVI.mjs';
-import { crearNuevoImpuesto } from '../../../../logica/zonas/administracion/impuestos/crearNuevoImpuesto.mjs';
-import { eliminarImpuestoPorTestingVI } from '../../../../logica/repositorio/impuestos/eliminarImpuestoPorTestingVI.mjs';
-import { detalleImpuesto } from '../../../../logica/zonas/administracion/impuestos/detalleImpuesto.mjs';
-import { listarTodosLosImpuestos } from '../../../../logica/zonas/administracion/impuestos/listarTodosLosImpuestos.mjs';
-import { listaImpuestosPaginados } from '../../../../logica/zonas/administracion/impuestos/listaImpuestosPaginados.mjs';
-import { eliminarPerfilImpuesto } from '../../../../logica/zonas/administracion/impuestos/eliminarPerfilImpuesto.mjs';
-import { guardarModificacionImpuesto } from '../../../../logica/zonas/administracion/impuestos/guardarModificacionImpuesto.mjs';
+import { eliminarEnlaceDePagoPorTestingVI } from '../../../../src/infraestructure/repository/enlacesDePago/eliminarEnlaceDePagoPorTestingVI.mjs';
+import { crearNuevoImpuesto } from '../../../../src/application/administracion/impuestos/crearNuevoImpuesto.mjs';
+import { eliminarImpuestoPorTestingVI } from '../../../../src/infraestructure/repository/impuestos/eliminarImpuestoPorTestingVI.mjs';
+import { detalleImpuesto } from '../../../../src/application/administracion/impuestos/detalleImpuesto.mjs';
+import { listarTodosLosImpuestos } from '../../../../src/application/administracion/impuestos/listarTodosLosImpuestos.mjs';
+import { listaImpuestosPaginados } from '../../../../src/application/administracion/impuestos/listaImpuestosPaginados.mjs';
+import { eliminarPerfilImpuesto } from '../../../../src/application/administracion/impuestos/eliminarPerfilImpuesto.mjs';
+import { guardarModificacionImpuesto } from '../../../../src/application/administracion/impuestos/guardarModificacionImpuesto.mjs';
 
 describe('crudTaxes system', () => {
     const fakeAdminSession = {

@@ -1,9 +1,9 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { obtenerReserva } from '../../logica/zonas/administracion/reservas/detallesReserva/global/obtenerReserva.mjs';
+import { eliminarReservaPorTestingVI } from '../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { obtenerReserva } from '../../src/application/administracion/reservas/detallesReserva/global/obtenerReserva.mjs';
 
 describe('critical: financiarContianer', () => {
     const testingVI = "testingfinanciarcontainer"
@@ -70,7 +70,7 @@ describe('critical: financiarContianer', () => {
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
-        const totalNeto =  response.ok.contenedorFinanciero.desgloseFinanciero.global.totales.totalNeto
+        const totalNeto = response.ok.contenedorFinanciero.desgloseFinanciero.global.totales.totalNeto
         expect(totalNeto).toBe("1000.00")
     })
 

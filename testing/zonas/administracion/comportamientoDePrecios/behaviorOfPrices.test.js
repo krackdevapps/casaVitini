@@ -1,11 +1,11 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/crearComportamiento.mjs';
-import { eliminarComportamientoPorTestingVI } from '../../../../logica/repositorio/comportamientoDePrecios/eliminarComportamientoPorTestingVI.mjs';
-import { actualizarEstadoComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/actualizarEstadoComportamiento.mjs';
-import { detallesComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/detallesComportamiento.mjs';
-import { listaComportamientosPrecios } from '../../../../logica/zonas/administracion/comportamientoDePrecios/listaComportamientosPrecios.mjs';
-import { eliminarComportamiento } from '../../../../logica/zonas/administracion/comportamientoDePrecios/eliminarComportamiento.mjs';
+import { crearComportamiento } from '../../../../src/application/administracion/comportamientoDePrecios/crearComportamiento.mjs';
+import { eliminarComportamientoPorTestingVI } from '../../../../src/infraestructure/repository/comportamientoDePrecios/eliminarComportamientoPorTestingVI.mjs';
+import { actualizarEstadoComportamiento } from '../../../../src/application/administracion/comportamientoDePrecios/actualizarEstadoComportamiento.mjs';
+import { detallesComportamiento } from '../../../../src/application/administracion/comportamientoDePrecios/detallesComportamiento.mjs';
+import { listaComportamientosPrecios } from '../../../../src/application/administracion/comportamientoDePrecios/listaComportamientosPrecios.mjs';
+import { eliminarComportamiento } from '../../../../src/application/administracion/comportamientoDePrecios/eliminarComportamiento.mjs';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
 
 describe('behavior of prices clients', () => {
@@ -25,7 +25,7 @@ describe('behavior of prices clients', () => {
         await eliminarComportamientoPorTestingVI(testingVI)
         process.env.TESTINGVI = testingVI
 
-    
+
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV,
@@ -41,7 +41,7 @@ describe('behavior of prices clients', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
-  
+
     })
 
     test('make behavior type by range of price with ok', async () => {

@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { estadoDeAcceso } from '../../../logica/repositorio/globales/estadoDeAcceso.mjs';
-import { campoDeTransaccion } from '../../../logica/repositorio/globales/campoDeTransaccion.mjs';
+import { estadoDeAcceso } from '../../../src/infraestructure/repository/globales/estadoDeAcceso.mjs';
+import { campoDeTransaccion } from '../../../src/infraestructure/repository/globales/campoDeTransaccion.mjs';
 
 describe('check and transaccion', () => {
     test('flow transaccion', async () => {

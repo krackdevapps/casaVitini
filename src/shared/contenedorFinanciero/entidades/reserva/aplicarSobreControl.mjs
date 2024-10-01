@@ -1,0 +1,88 @@
+import Decimal from 'decimal.js';
+import { obtenerSobreControlDeLaNocheDesdeReserva } from '../../../../infraestructure/repository/reservas/transacciones/sobreControl/obtenerSobreControlDeLaNocheDesdeReserva.mjs';
+import { obtenerSobreControlDeLaNocheDesdeSimulacion } from '../../../../infraestructure/repository/simulacionDePrecios/sobreControlDePrecios/obtenerSobreControlDeLaNocheDesdeSimulacion.mjs';
+const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
+
+Decimal.set({ precision: precisionDecimal });
+export const aplicarSobreControl = async (data) => {
+    try {
+        const netoApartamento = new Decimal(data.netoApartamento)
+        const fechaNoche = data.fechaNoche
+        const apartamentoIDV = data.apartamentoIDV
+
+
+        const origenSobreControl = data.origenSobreControl
+        let sobreControl
+        if (origenSobreControl === "reserva") {
+            const reservaUID = data.reservaUID
+
+            sobreControl = await obtenerSobreControlDeLaNocheDesdeReserva({
+                reservaUID,
+                fechaNoche,
+                apartamentoIDV
+            })
+
+        } else if (origenSobreControl === "simulacion") {
+            const simulacionUID = data.simulacionUID
+
+            sobreControl = await obtenerSobreControlDeLaNocheDesdeSimulacion({
+                simulacionUID,
+                fechaNoche,
+                apartamentoIDV
+            })
+        } else {
+            const m = "origenSobreControl debe estar en reserva o simulacion"
+            throw new Error(m)
+        }
+        const respuesta = {}
+        const detallesSobreControl = sobreControl?.detallesSobreControl
+        const operacion = detallesSobreControl?.operacion
+        const valor = detallesSobreControl?.valor
+
+        if (!sobreControl) {
+            respuesta.encontrado = "no"
+        } else if (operacion === "aumentarPorPorcentaje") {
+            const calculo = netoApartamento.times(valor).dividedBy(100)
+            const netoSobreControlado = netoApartamento.plus(calculo)
+
+            respuesta.encontrado = "si"
+            respuesta.detallesSobreControl = detallesSobreControl
+            respuesta.valorFinal = netoSobreControlado
+        } else if (operacion === "reducirPorPorcentaje") {
+            const calculo = netoApartamento.times(valor).dividedBy(100)
+            const netoSobreControlado = netoApartamento.minus(calculo)
+            respuesta.encontrado = "si"
+            respuesta.detallesSobreControl = detallesSobreControl
+
+            if (netoSobreControlado.isNegative()) {
+                respuesta.valorFinal = new Decimal("0.00")
+            } else {
+                respuesta.valorFinal = netoSobreControlado
+            }
+        } else if (operacion === "aumentarPorCantidadFija") {
+            const netoSobreControlado = netoApartamento.plus(valor)
+            respuesta.encontrado = "si"
+            respuesta.detallesSobreControl = detallesSobreControl
+            respuesta.valorFinal = netoSobreControlado
+        } else if (operacion === "reducirPorCantidadFila") {
+            const netoSobreControlado = netoApartamento.minus(valor)
+            respuesta.encontrado = "si"
+            respuesta.detallesSobreControl = detallesSobreControl
+            if (netoSobreControlado.isNegative()) {
+                respuesta.valorFinal = new Decimal("0.00")
+            } else {
+                respuesta.valorFinal = netoSobreControlado
+            }
+        } else if (operacion === "establecerCantidad") {
+            respuesta.encontrado = "si"
+            respuesta.detallesSobreControl = detallesSobreControl
+            respuesta.valorFinal = new Decimal(valor)
+        } else {
+            const error = "En aplicarSobreControl no reconoce la operación"
+            throw new Error(error)
+        }
+        return respuesta
+    } catch (errorCapturado) {
+        throw errorCapturado
+    }
+}

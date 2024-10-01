@@ -1,18 +1,18 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { insertarEnlaceDePago } from '../../../logica/repositorio/enlacesDePago/insertarEnlaceDePago.mjs';
-import { insertarReservaAdministrativa } from '../../../logica/repositorio/reservas/reserva/insertarReservaAdministrativa.mjs';
-import { actualizarEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs';
-import { actualizarEnlaceDePagoPorReservaUID } from '../../../logica/repositorio/enlacesDePago/actualizarEnlaceDePagoPorReservaUID.mjs';
-import { actualizarEstadoEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/actualizarEstadoEnlaceDePagoPorEnlaceUID.mjs';
-import { obtenerEnlaceDePagoPorCodigoUPID } from '../../../logica/repositorio/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs';
-import { obtenerEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs';
-import { obtenerTodosEnlaceDePago } from '../../../logica/repositorio/enlacesDePago/obtenerTodosLosEnlaceDePago.mjs';
-import { eliminarEnlaceDePagoPorEnlaceUID } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorEnlaceUID.mjs';
-import { eliminarEnlaceDePagoPorReservaUID } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorReservaUID.mjs';
-import { generadorReservaUID } from '../../../logica/componentes/generadorReservaUID.mjs';
-import { eliminarEnlaceDePagoPorTestingVI } from '../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorTestingVI.mjs';
-import { eliminarReservaPorTestingVI } from '../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { insertarEnlaceDePago } from '../../../src/infraestructure/repository/enlacesDePago/insertarEnlaceDePago.mjs';
+import { insertarReservaAdministrativa } from '../../../src/infraestructure/repository/reservas/reserva/insertarReservaAdministrativa.mjs';
+import { actualizarEnlaceDePagoPorEnlaceUID } from '../../../src/infraestructure/repository/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs';
+import { actualizarEnlaceDePagoPorReservaUID } from '../../../src/infraestructure/repository/enlacesDePago/actualizarEnlaceDePagoPorReservaUID.mjs';
+import { actualizarEstadoEnlaceDePagoPorEnlaceUID } from '../../../src/infraestructure/repository/enlacesDePago/actualizarEstadoEnlaceDePagoPorEnlaceUID.mjs';
+import { obtenerEnlaceDePagoPorCodigoUPID } from '../../../src/infraestructure/repository/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs';
+import { obtenerEnlaceDePagoPorEnlaceUID } from '../../../src/infraestructure/repository/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs';
+import { obtenerTodosEnlaceDePago } from '../../../src/infraestructure/repository/enlacesDePago/obtenerTodosLosEnlaceDePago.mjs';
+import { eliminarEnlaceDePagoPorEnlaceUID } from '../../../src/infraestructure/repository/enlacesDePago/eliminarEnlaceDePagoPorEnlaceUID.mjs';
+import { eliminarEnlaceDePagoPorReservaUID } from '../../../src/infraestructure/repository/enlacesDePago/eliminarEnlaceDePagoPorReservaUID.mjs';
+import { generadorReservaUID } from '../../../src/shared/reservas/utilidades/generadorReservaUID.mjs';
+import { eliminarEnlaceDePagoPorTestingVI } from '../../../src/infraestructure/repository/enlacesDePago/eliminarEnlaceDePagoPorTestingVI.mjs';
+import { eliminarReservaPorTestingVI } from '../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 
 describe('crud pay links', () => {
     const testingVI = "testingpaylinkgadapters"

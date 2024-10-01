@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { guardarSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/guardarSimulacion.mjs';
-import { eliminarSimulacionPorTestingVI } from '../../../../logica/repositorio/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
-import { eliminarOfertaPorTestingVI } from '../../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
-import { eliminarImpuestoPorTestingVI } from '../../../../logica/repositorio/impuestos/eliminarImpuestoPorTestingVI.mjs';
-import { actualizarSobreControlNoche } from '../../../../logica/zonas/administracion/simuladorDePrecios/sobreControlPrecios/actualizarSobreControlNoche.mjs';
-import { obtenerDetallesSobreControlNoche } from '../../../../logica/zonas/administracion/simuladorDePrecios/sobreControlPrecios/obtenerDetallesSobreControlNoche.mjs';
-import { eliminarSobreControlNoche } from '../../../../logica/zonas/administracion/simuladorDePrecios/sobreControlPrecios/eliminarSobreControlNoche.mjs';
+import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
+import { eliminarImpuestoPorTestingVI } from '../../../../src/infraestructure/repository/impuestos/eliminarImpuestoPorTestingVI.mjs';
+import { actualizarSobreControlNoche } from '../../../../src/application/administracion/simuladorDePrecios/sobreControlPrecios/actualizarSobreControlNoche.mjs';
+import { obtenerDetallesSobreControlNoche } from '../../../../src/application/administracion/simuladorDePrecios/sobreControlPrecios/obtenerDetallesSobreControlNoche.mjs';
+import { eliminarSobreControlNoche } from '../../../../src/application/administracion/simuladorDePrecios/sobreControlPrecios/eliminarSobreControlNoche.mjs';
 
 describe('price overrride of simulation', () => {
     const fakeAdminSession = {

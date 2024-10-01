@@ -1,16 +1,16 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { guardarSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/guardarSimulacion.mjs';
-import { eliminarSimulacionPorTestingVI } from '../../../../logica/repositorio/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
-import { eliminarOfertaPorTestingVI } from '../../../../logica/repositorio/ofertas/eliminarOfertaPorTestingVI.mjs';
-import { crearOferta } from '../../../../logica/zonas/administracion/ofertas/crearOferta.mjs';
-import { insertarDescuentoPorAdministrador } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/insertarDescuentoPorAdministrador.mjs';
+import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { eliminarOfertaPorTestingVI } from '../../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
+import { crearOferta } from '../../../../src/application/administracion/ofertas/crearOferta.mjs';
+import { insertarDescuentoPorAdministrador } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/insertarDescuentoPorAdministrador.mjs';
 import { DateTime } from 'luxon';
-import { insertarDescuentoPorCompatible } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/insertarDescuentoPorCompatible.mjs';
-import { actualizarAutorizacionDescuentoCompatible } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/actualizarAutorizacionDescuentoCompatible.mjs';
-import { obtenerDescuentosCompatiblesConLaSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaSimulacion.mjs';
-import { eliminarDescuentoEnReserva } from '../../../../logica/zonas/administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnReserva.mjs';
+import { insertarDescuentoPorCompatible } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/insertarDescuentoPorCompatible.mjs';
+import { actualizarAutorizacionDescuentoCompatible } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/actualizarAutorizacionDescuentoCompatible.mjs';
+import { obtenerDescuentosCompatiblesConLaSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaSimulacion.mjs';
+import { eliminarDescuentoEnReserva } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnReserva.mjs';
 
 describe('discounts of simulation', () => {
     const fakeAdminSession = {

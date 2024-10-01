@@ -1,12 +1,12 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearCliente } from '../../../../logica/zonas/administracion/clientes/crearCliente.mjs';
-import { eliminarClientePorTestingVI } from '../../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { modificarCliente } from '../../../../logica/zonas/administracion/clientes/modificarCliente.mjs';
-import { reservasDelCliente } from '../../../../logica/zonas/administracion/clientes/reservasDelCliente.mjs';
-import { detallesCliente } from '../../../../logica/zonas/administracion/clientes/detallesCliente.mjs';
-import { buscar } from '../../../../logica/zonas/administracion/clientes/buscar.mjs';
-import { eliminar } from '../../../../logica/zonas/administracion/clientes/eliminar.mjs';
+import { crearCliente } from '../../../../src/application/administracion/clientes/crearCliente.mjs';
+import { eliminarClientePorTestingVI } from '../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { modificarCliente } from '../../../../src/application/administracion/clientes/modificarCliente.mjs';
+import { reservasDelCliente } from '../../../../src/application/administracion/clientes/reservasDelCliente.mjs';
+import { detallesCliente } from '../../../../src/application/administracion/clientes/detallesCliente.mjs';
+import { buscar } from '../../../../src/application/administracion/clientes/buscar.mjs';
+import { eliminar } from '../../../../src/application/administracion/clientes/eliminar.mjs';
 
 describe('crud clients', () => {
     const fakeAdminSession = {

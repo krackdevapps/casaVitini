@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { actualizarEstado } from '../../../../logica/zonas/administracion/configuracion/interruptores/actualizarEstado.mjs';
-import { obtenerInterruptores } from '../../../../logica/zonas/administracion/configuracion/interruptores/obtenerInterruptores.mjs';
+import { actualizarEstado } from '../../../../src/application/administracion/configuracion/interruptores/actualizarEstado.mjs';
+import { obtenerInterruptores } from '../../../../src/application/administracion/configuracion/interruptores/obtenerInterruptores.mjs';
 
 describe('global swtiches', () => {
     const fakeAdminSession = {

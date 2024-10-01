@@ -1,8 +1,8 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { obtenerSituacion } from '../../../../logica/zonas/administracion/situacion/obtenerSituacion.mjs';
-import { detallesSituacionApartamento } from '../../../../logica/zonas/administracion/situacion/detallesSituacionApartamento.mjs';
+import { obtenerSituacion } from '../../../../src/application/administracion/situacion/obtenerSituacion.mjs';
+import { detallesSituacionApartamento } from '../../../../src/application/administracion/situacion/detallesSituacionApartamento.mjs';
 
 describe('situation', () => {
     const fakeAdminSession = {

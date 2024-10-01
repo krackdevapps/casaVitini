@@ -1,12 +1,12 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
-import { detallesDeEntidadDeAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/detallesDeEntidadDeAlojamiento.mjs';
-import { eliminarEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/eliminarEntidadAlojamiento.mjs';
-import { modificarEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/modificarEntidadAlojamiento.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { eliminarCamaComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
-import { eliminarHabitacionComoEntidad } from '../../../../../logica/repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
+import { crearEntidadAlojamiento } from '../../../../../src/application/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
+import { detallesDeEntidadDeAlojamiento } from '../../../../../src/application/administracion/arquitectura/entidades/detallesDeEntidadDeAlojamiento.mjs';
+import { eliminarEntidadAlojamiento } from '../../../../../src/application/administracion/arquitectura/entidades/eliminarEntidadAlojamiento.mjs';
+import { modificarEntidadAlojamiento } from '../../../../../src/application/administracion/arquitectura/entidades/modificarEntidadAlojamiento.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { eliminarCamaComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
+import { eliminarHabitacionComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
 
 describe('crudEntitiys', () => {
     const apartamentoUI = "Apartamento para testing de entidades"
@@ -277,7 +277,7 @@ describe('crudEntitiys', () => {
         const response = await modificarEntidadAlojamiento(makeEntity)
         expect(response).not.toBeUndefined();
     })
-    
+
     test('update entity apartamento with error', async () => {
         try {
             const makeEntity = {

@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../sharedUsesCases/makeHostArquitecture.mjs';
-import { precioReservaPublica } from '../../../logica/zonas/componentes/precioReservaPublica.mjs';
+import { precioReservaPublica } from '../../../src/application/componentes/precioReservaPublica.mjs';
 
 describe('Prices of public booking', () => {
     const apartamentoIDV = "apartmentpriceofpublicbooking"
@@ -55,7 +55,7 @@ describe('Prices of public booking', () => {
     test('get price for publick booking', async () => {
         const m = {
             body: {
-                reserva:fakeBooking
+                reserva: fakeBooking
             }
         }
         const response = await precioReservaPublica(m)

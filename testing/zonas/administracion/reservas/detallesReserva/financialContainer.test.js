@@ -1,10 +1,10 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { reconstruirDesgloseDesdeHubs } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeHubs.mjs';
-import { reconstruirDesgloseDesdeInstantaneas } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { reconstruirDesgloseDesdeHubs } from '../../../../../src/application/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeHubs.mjs';
+import { reconstruirDesgloseDesdeInstantaneas } from '../../../../../src/application/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
 
 describe('financial contaniner', () => {
     const fakeAdminSession = {

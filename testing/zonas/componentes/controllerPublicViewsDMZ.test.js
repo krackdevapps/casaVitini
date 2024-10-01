@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { cambiarVista } from '../../../logica/zonas/componentes/cambiarVista.mjs';
+import { cambiarVista } from '../../../src/application/componentes/cambiarVista.mjs';
 
 describe('controles public view in DMZ', () => {
 

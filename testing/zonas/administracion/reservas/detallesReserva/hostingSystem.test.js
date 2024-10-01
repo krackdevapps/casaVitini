@@ -1,23 +1,23 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { anadirApartamentoReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/anadirApartamentoReserva.mjs';
-import { anadirHabitacionAlApartamentoEnReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/anadirHabitacionAlApartamentoEnReserva.mjs';
-import { crearCliente } from '../../../../../logica/zonas/administracion/clientes/crearCliente.mjs';
-import { anadirPernoctanteHabitacion } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/anadirPernoctanteHabitacion.mjs';
-import { apartamentosDisponiblesParaAnadirAReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/apartamentosDisponiblesParaAnadirAReserva.mjs';
-import { eliminarClientePorTestingVI } from '../../../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { cambiarPernoctanteDeHabitacion } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/cambiarPernoctanteDeHabitacion.mjs';
-import { crearEntidadAlojamiento } from '../../../../../logica/zonas/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
-import { eliminarCamaComoEntidadPorTestingVI } from '../../../../../logica/repositorio/arquitectura/entidades/cama/eliminarCamaComoEntidadPorTestingVI.mjs';
-import { estadoHabitacionesApartamento } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/estadoHabitacionesApartamento.mjs';
-import { gestionarCamasDeHabitacion } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/gestionarCamasDeHabitacion.mjs';
-import { listarTipoCamasHabitacion } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/listarTipoCamasHabitacion.mjs';
-import { eliminarCamaFisicaDeHabitacion } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/eliminarCamaFisicaDeHabitacion.mjs';
-import { eliminarHabitacionReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/eliminarHabitacionReserva.mjs';
-import { eliminarApartamentoReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/eliminarApartamentoReserva.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { anadirApartamentoReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/anadirApartamentoReserva.mjs';
+import { anadirHabitacionAlApartamentoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/anadirHabitacionAlApartamentoEnReserva.mjs';
+import { crearCliente } from '../../../../../src/application/administracion/clientes/crearCliente.mjs';
+import { anadirPernoctanteHabitacion } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/anadirPernoctanteHabitacion.mjs';
+import { apartamentosDisponiblesParaAnadirAReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/apartamentosDisponiblesParaAnadirAReserva.mjs';
+import { eliminarClientePorTestingVI } from '../../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { cambiarPernoctanteDeHabitacion } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/cambiarPernoctanteDeHabitacion.mjs';
+import { crearEntidadAlojamiento } from '../../../../../src/application/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs';
+import { eliminarCamaComoEntidadPorTestingVI } from '../../../../../src/infraestructure/repository/arquitectura/entidades/cama/eliminarCamaComoEntidadPorTestingVI.mjs';
+import { estadoHabitacionesApartamento } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/estadoHabitacionesApartamento.mjs';
+import { gestionarCamasDeHabitacion } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/gestionarCamasDeHabitacion.mjs';
+import { listarTipoCamasHabitacion } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/listarTipoCamasHabitacion.mjs';
+import { eliminarCamaFisicaDeHabitacion } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/eliminarCamaFisicaDeHabitacion.mjs';
+import { eliminarHabitacionReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/eliminarHabitacionReserva.mjs';
+import { eliminarApartamentoReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/eliminarApartamentoReserva.mjs';
 
 describe('detailsReserver', () => {
     const fakeAdminSession = {

@@ -1,11 +1,11 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { eliminarHabitacionComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
-import { insertarHabitacionComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/insertarHabitacionComoEntidad.mjs';
-import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
-import { obtenerHabitacionComoEntidadPorHabitacionUI } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionUI.mjs';
-import { obtenerTodasLasHabitaciones } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs';
-import { actualizarHabitacionComoEntidadPorHabitacionIDV } from '../../../../logica/repositorio/arquitectura/entidades/habitacion/actualizarHabitacionComoEntidadPorHabitacionIDV.mjs';
+import { eliminarHabitacionComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
+import { insertarHabitacionComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/insertarHabitacionComoEntidad.mjs';
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
+import { obtenerHabitacionComoEntidadPorHabitacionUI } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionUI.mjs';
+import { obtenerTodasLasHabitaciones } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs';
+import { actualizarHabitacionComoEntidadPorHabitacionIDV } from '../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/actualizarHabitacionComoEntidadPorHabitacionIDV.mjs';
 
 describe('crud room as entity', () => {
     const IDVStart = "habitacionTestInicial"

@@ -1,13 +1,13 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { crearTitular } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/gestionTitular/crearTitular.mjs';
-import { eliminarClientePorTestingVI } from '../../../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { crearCliente } from '../../../../../logica/zonas/administracion/clientes/crearCliente.mjs';
-import { asociarTitular } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/gestionTitular/asociarTitular.mjs';
-import { desasociarClienteComoTitular } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/gestionTitular/desasociarClienteComoTitular.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { crearTitular } from '../../../../../src/application/administracion/reservas/detallesReserva/gestionTitular/crearTitular.mjs';
+import { eliminarClientePorTestingVI } from '../../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { crearCliente } from '../../../../../src/application/administracion/clientes/crearCliente.mjs';
+import { asociarTitular } from '../../../../../src/application/administracion/reservas/detallesReserva/gestionTitular/asociarTitular.mjs';
+import { desasociarClienteComoTitular } from '../../../../../src/application/administracion/reservas/detallesReserva/gestionTitular/desasociarClienteComoTitular.mjs';
 
 describe('holder in bookins', () => {
     const fakeAdminSession = {

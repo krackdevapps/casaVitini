@@ -1,10 +1,10 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { guardarSimulacion } from '../../../../logica/zonas/administracion/simuladorDePrecios/guardarSimulacion.mjs';
-import { eliminarSimulacionPorTestingVI } from '../../../../logica/repositorio/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
-import { reconstruirDesgloseDesdeHubs } from '../../../../logica/zonas/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeHubs.mjs';
-import { reconstruirDesgloseDesdeInstantaneas } from '../../../../logica/zonas/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
+import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { reconstruirDesgloseDesdeHubs } from '../../../../src/application/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeHubs.mjs';
+import { reconstruirDesgloseDesdeInstantaneas } from '../../../../src/application/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
 
 describe('rebuild snapshots of simulation', () => {
     const fakeAdminSession = {

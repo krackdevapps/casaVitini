@@ -1,18 +1,18 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { eliminarClientePorTestingVI } from '../../../../../logica/repositorio/clientes/eliminarClientePorTestingVI.mjs';
-import { crearClienteDesdeReservaYAnadirloAreserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/pernoctantes/crearClienteDesdeReservaYAnadirloAreserva.mjs';
-import { anadirApartamentoReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/anadirApartamentoReserva.mjs';
-import { anadirHabitacionAlApartamentoEnReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/alojamiento/anadirHabitacionAlApartamentoEnReserva.mjs';
-import { confirmarFechaCheckIn } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/pernoctantes/confirmarFechaCheckIn.mjs';
-import { confirmarFechaCheckOutAdelantado } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/pernoctantes/confirmarFechaCheckOutAdelantado.mjs';
-import { detallesDelPernoctantePorPernoctaneUID } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/pernoctantes/detallesDelPernoctantePorPernoctaneUID.mjs';
-import { eliminarCheckOutAdelantado } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/pernoctantes/eliminarCheckOutAdelantado.mjs';
-import { eliminarCheckIN } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/pernoctantes/eliminarCheckIN.mjs';
-import { eliminarPernoctanteReserva } from '../../../../../logica/zonas/administracion/reservas/detallesReserva/pernoctantes/eliminarPernoctanteReserva.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { eliminarClientePorTestingVI } from '../../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { crearClienteDesdeReservaYAnadirloAreserva } from '../../../../../src/application/administracion/reservas/detallesReserva/pernoctantes/crearClienteDesdeReservaYAnadirloAreserva.mjs';
+import { anadirApartamentoReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/anadirApartamentoReserva.mjs';
+import { anadirHabitacionAlApartamentoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/alojamiento/anadirHabitacionAlApartamentoEnReserva.mjs';
+import { confirmarFechaCheckIn } from '../../../../../src/application/administracion/reservas/detallesReserva/pernoctantes/confirmarFechaCheckIn.mjs';
+import { confirmarFechaCheckOutAdelantado } from '../../../../../src/application/administracion/reservas/detallesReserva/pernoctantes/confirmarFechaCheckOutAdelantado.mjs';
+import { detallesDelPernoctantePorPernoctaneUID } from '../../../../../src/application/administracion/reservas/detallesReserva/pernoctantes/detallesDelPernoctantePorPernoctaneUID.mjs';
+import { eliminarCheckOutAdelantado } from '../../../../../src/application/administracion/reservas/detallesReserva/pernoctantes/eliminarCheckOutAdelantado.mjs';
+import { eliminarCheckIN } from '../../../../../src/application/administracion/reservas/detallesReserva/pernoctantes/eliminarCheckIN.mjs';
+import { eliminarPernoctanteReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/pernoctantes/eliminarPernoctanteReserva.mjs';
 
 describe('pernoctantes in bookins', () => {
     const fakeAdminSession = {

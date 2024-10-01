@@ -1,16 +1,16 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { insertarConfiguracionApartamento } from '../../../../logica/repositorio/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
-import { eliminarConfiguracionPorApartamentoIDV } from '../../../../logica/repositorio/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
-import { eliminarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
-import { insertarApartamentoComoEntidad } from '../../../../logica/repositorio/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
-import { eliminarBloqueoPorTestingVI } from '../../../../logica/repositorio/bloqueos/eliminarBloqueoPorTestingVI.mjs';
-import { crearNuevoBloqueo } from '../../../../logica/zonas/administracion/bloqueos/crearNuevoBloqueo.mjs';
-import { detallesDelBloqueo } from '../../../../logica/zonas/administracion/bloqueos/detallesDelBloqueo.mjs';
-import { listaBloquoeosDelApartamento } from '../../../../logica/zonas/administracion/bloqueos/listaBloquoeosDelApartamento.mjs';
-import { listarApartamentosConBloqueos } from '../../../../logica/zonas/administracion/bloqueos/listarApartamentosConBloqueos.mjs';
-import { modificarBloqueo } from '../../../../logica/zonas/administracion/bloqueos/modificarBloqueo.mjs';
-import { eliminarBloqueo } from '../../../../logica/zonas/administracion/bloqueos/eliminarBloqueo.mjs';
+import { insertarConfiguracionApartamento } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/insertarConfiguracionApartamento.mjs';
+import { eliminarConfiguracionPorApartamentoIDV } from '../../../../src/infraestructure/repository/arquitectura/configuraciones/eliminarConfiguracionPorApartamentoIDV.mjs';
+import { eliminarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs';
+import { insertarApartamentoComoEntidad } from '../../../../src/infraestructure/repository/arquitectura/entidades/apartamento/insertarApartamentoComoEntidad.mjs';
+import { eliminarBloqueoPorTestingVI } from '../../../../src/infraestructure/repository/bloqueos/eliminarBloqueoPorTestingVI.mjs';
+import { crearNuevoBloqueo } from '../../../../src/application/administracion/bloqueos/crearNuevoBloqueo.mjs';
+import { detallesDelBloqueo } from '../../../../src/application/administracion/bloqueos/detallesDelBloqueo.mjs';
+import { listaBloquoeosDelApartamento } from '../../../../src/application/administracion/bloqueos/listaBloquoeosDelApartamento.mjs';
+import { listarApartamentosConBloqueos } from '../../../../src/application/administracion/bloqueos/listarApartamentosConBloqueos.mjs';
+import { modificarBloqueo } from '../../../../src/application/administracion/bloqueos/modificarBloqueo.mjs';
+import { eliminarBloqueo } from '../../../../src/application/administracion/bloqueos/eliminarBloqueo.mjs';
 
 describe('crud locks for apartments', () => {
     const apartamentoIDV = "apartamento1testing"

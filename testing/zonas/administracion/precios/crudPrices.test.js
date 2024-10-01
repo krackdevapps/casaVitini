@@ -1,9 +1,9 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { establecerNuevoPrecioApartamento } from '../../../../logica/zonas/administracion/precios/establecerNuevoPrecioApartamento.mjs';
-import { detallePrecioBaseApartamento } from '../../../../logica/zonas/administracion/precios/detallePrecioBaseApartamento.mjs';
-import { listaPreciosApartamentos } from '../../../../logica/zonas/administracion/precios/listaPreciosApartamentos.mjs';
-import { previsualizarPrecioApartamento } from '../../../../logica/zonas/administracion/precios/previsualizarPrecioApartamento.mjs';
+import { establecerNuevoPrecioApartamento } from '../../../../src/application/administracion/precios/establecerNuevoPrecioApartamento.mjs';
+import { detallePrecioBaseApartamento } from '../../../../src/application/administracion/precios/detallePrecioBaseApartamento.mjs';
+import { listaPreciosApartamentos } from '../../../../src/application/administracion/precios/listaPreciosApartamentos.mjs';
+import { previsualizarPrecioApartamento } from '../../../../src/application/administracion/precios/previsualizarPrecioApartamento.mjs';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
 
 describe('crud prices system', () => {

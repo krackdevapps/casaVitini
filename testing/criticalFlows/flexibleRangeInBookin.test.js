@@ -1,10 +1,10 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { obtenerElasticidadDelRango } from '../../logica/zonas/administracion/reservas/detallesReserva/global/obtenerElasticidadDelRango.mjs';
-import { confirmarModificarFechaReserva } from '../../logica/zonas/administracion/reservas/detallesReserva/global/confirmarModificarFechaReserva.mjs';
+import { eliminarReservaPorTestingVI } from '../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { crearReservaSimpleAdministrativa } from '../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { obtenerElasticidadDelRango } from '../../src/application/administracion/reservas/detallesReserva/global/obtenerElasticidadDelRango.mjs';
+import { confirmarModificarFechaReserva } from '../../src/application/administracion/reservas/detallesReserva/global/confirmarModificarFechaReserva.mjs';
 
 describe('critical: flexible global date range bookins', () => {
     const testingVI = "testingflexibledaterangebookin"

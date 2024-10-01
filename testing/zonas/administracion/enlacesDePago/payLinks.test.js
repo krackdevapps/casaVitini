@@ -1,14 +1,14 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { crearNuevoEnlace } from '../../../../logica/zonas/administracion/enlacesDePago/crearNuevoEnlace.mjs';
+import { crearNuevoEnlace } from '../../../../src/application/administracion/enlacesDePago/crearNuevoEnlace.mjs';
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../logica/repositorio/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { eliminarEnlaceDePagoPorTestingVI } from '../../../../logica/repositorio/enlacesDePago/eliminarEnlaceDePagoPorTestingVI.mjs';
-import { modificarEnlace } from '../../../../logica/zonas/administracion/enlacesDePago/modificarEnlace.mjs';
-import { detallesDelEnlace } from '../../../../logica/zonas/administracion/enlacesDePago/detallesDelEnlace.mjs';
-import { obtenerEnlaces } from '../../../../logica/zonas/administracion/enlacesDePago/obtenerEnlaces.mjs';
-import { eliminarEnlace } from '../../../../logica/zonas/administracion/enlacesDePago/eliminarEnlace.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../logica/zonas/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { eliminarEnlaceDePagoPorTestingVI } from '../../../../src/infraestructure/repository/enlacesDePago/eliminarEnlaceDePagoPorTestingVI.mjs';
+import { modificarEnlace } from '../../../../src/application/administracion/enlacesDePago/modificarEnlace.mjs';
+import { detallesDelEnlace } from '../../../../src/application/administracion/enlacesDePago/detallesDelEnlace.mjs';
+import { obtenerEnlaces } from '../../../../src/application/administracion/enlacesDePago/obtenerEnlaces.mjs';
+import { eliminarEnlace } from '../../../../src/application/administracion/enlacesDePago/eliminarEnlace.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
 
 describe('payLinks system', () => {
     const fakeAdminSession = {
@@ -40,7 +40,7 @@ describe('payLinks system', () => {
             apartamentoIDV: apartamentoIDV,
             apartamentoUI: apartamentoUI,
             habitacionIDV: habitacionIDV,
-            habitacionUI:habitacionUI,
+            habitacionUI: habitacionUI,
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
