@@ -11,10 +11,9 @@ import { controlTipoVerbo } from './middleware/controlTipoVerbo.mjs';
 import { manejador404 } from './middleware/manejador404.mjs';
 import dotenv from 'dotenv'
 import { configuracionSession } from './middleware/almacenSessiones.mjs';
-import { detectorDeLlavesRepetidas } from './middleware/detectorDeLlavesRepetidas.mjs';
 import { controlInputRaw } from './middleware/controlInputRaw.mjs';
 import { jsonHeader } from './middleware/jsonHeader.mjs';
-import { antiPrototypePollutiion } from './middleware/antyPrototypePolluttion.mjs';
+import { antiPrototypePollution } from './middleware/antiPrototypePollution.mjs';
 dotenv.config()
 
 process.on('uncaughtException', (error) => {
@@ -29,18 +28,18 @@ app.use(controlHTTPS)
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')
 app.use(controlSizePeticion);
+app.use(antiPrototypePollution);
 app.use(jsonHeader)
 app.use(express.json({
   limit: '50MB',
   extended: true,
   strict: true
 }))
-app.use(antiPrototypePollutiion)
 app.use(controlJSON)
+app.use(antiPrototypePollution)
+
 app.use(express.urlencoded({ extended: true }))
-
 app.use(controlTipoVerbo)
-
 app.disable('x-powered-by')
 app.use('/componentes', express.static(path.join('./ui/componentes')))
 app.use(controlBaseDeDatos)
