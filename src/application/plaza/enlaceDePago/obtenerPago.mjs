@@ -40,46 +40,29 @@ export const obtenerPago = async (entrada, salida) => {
             const error = "La reserva esta cancelada";
             throw new Error(error);
         }
-        // Hay que cambiar esto para hacer un pago en base a la cantidad especifica del enlace de pago y no del total de la reserva
-        /*
-        promedioNetoPorNoche
-        totalReservaNetoSinOfertas
-        totalReservaNeto
-        totalDescuentosAplicados
-        totalImpuestos
-        totalConImpuestos
-        */
-
         const totalesDeLaReserva = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const sumaImpuestos = new Decimal(totalesDeLaReserva.totalImpuestos);
         const totalNeto = new Decimal(totalesDeLaReserva.totalReservaNeto);
         const proporcion = new Decimal(cantidadPagoParcial).times(100).dividedBy(totalNeto).times(sumaImpuestos.dividedBy(100));
         const calcularProporcionNetoImpuestosPagoParcial = (precioNetoReserva, impuestosReserva, cantidadPago) => {
-            // Convierte los valores a objetos Decimal para mayor precisión
             const precioNetoDecimal = new Decimal(precioNetoReserva);
             const impuestosDecimal = new Decimal(impuestosReserva);
             const cantidadPagoDecimal = new Decimal(cantidadPago);
-            // Calcula el precio bruto sumando el precio neto y los impuestos
             const precioBruto = precioNetoDecimal.plus(impuestosDecimal);
-            // Calcula la proporción que representa la cantidad del pago con respecto al precio bruto
             const proporcionPago = cantidadPagoDecimal.div(precioBruto);
-            // Calcula el precio neto correspondiente a la cantidad del pago
             const precioNetoPago = precioNetoDecimal.times(proporcionPago);
-            // Calcula los impuestos correspondientes a la cantidad del pago
+
             const impuestosPago = impuestosDecimal.times(proporcionPago);
-            // Devuelve los resultados como objetos Decimal
-            // Redondea los resultados a dos decimales
+
             const precioNetoRedondeado = precioNetoPago.toDecimalPlaces(2);
             const impuestosRedondeados = impuestosPago.toDecimalPlaces(2);
-            // Devuelve los resultados redondeados como strings
             return {
                 precioNetoPago: precioNetoRedondeado.toString(),
                 impuestosPago: impuestosRedondeados.toString(),
             };
         };
-        // Ejemplo de uso
         const precioNetoReserva = 122;
-        const impuestosReserva = 18; // Por ejemplo
+        const impuestosReserva = 18;
         const cantidadPago = 50;
         const resultadoCalculado = calcularProporcionNetoImpuestosPagoParcial(totalesDeLaReserva.totalReservaNeto, totalesDeLaReserva.totalImpuestos, cantidadPagoParcial);
         const estructuraEnlace = {

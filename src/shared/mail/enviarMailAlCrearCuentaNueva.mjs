@@ -25,20 +25,9 @@ export const enviarMailAlCrearCuentaNueva = async (datosConfirmacion) => {
             destino: destino,
             asunto: asunto,
             mensaje: mensaje,
-            /* 
-             attachments: [
-                  {
-                      filename: 'Reserva.pdf',
-                      content: pdf,
-                  },
-              ]
-              */
+      
         }
-        // Enviamos el mensaje
         const resultado = await enviarMail(composicionDelMensaje)
-
     } catch (errorCapturado) {
-
-        // manejar error de manera local
     }
 }

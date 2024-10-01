@@ -5,7 +5,7 @@ import { actualizarSobreControlDeLaNoche } from "../../../../infraestructure/rep
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
-//import _ from 'lodash';
+
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"

@@ -6,6 +6,7 @@ export const puerto = async (entrada, salida) => {
     try {
 
         const zonaRaw = entrada.body.zona;
+
         delete entrada.body.zona
         if (!zonaRaw) {
             const error = "zonaIndefinida";
@@ -42,8 +43,6 @@ export const puerto = async (entrada, salida) => {
                         await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
                     } else if (ramaDeLaRuta.isFile() && ramaDeLaRuta.name.endsWith('.mjs')) {
                         const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
-                        //
-
                         const rutaDeImportacion = path.relative('./application/logica', rutaEntrada)
                         arbol[nombreModulo] = await import(rutaDeImportacion)
                     }
@@ -68,7 +67,6 @@ export const puerto = async (entrada, salida) => {
             }
             return rama
         }
-
 
         const estructura = exploradorArbol(zonas, ruta)
         const X = estructura[arbol.pop()]

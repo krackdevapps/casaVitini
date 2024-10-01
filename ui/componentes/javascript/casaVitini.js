@@ -48,6 +48,8 @@ const casaVitini = {
                 const selectorMenuRenderizado = document.querySelector("header [estructura=menu]")
                 const tipoOrigen = data.tipoOrigen
                 const vista = data.vista || "portada"
+
+
                 const main = document.querySelector("main")
                 main.setAttribute("instanciaUID", instanciaUID)
 
@@ -104,11 +106,14 @@ const casaVitini = {
                     zona: "componentes/cambiarVista",
                     vista: vista
                 }
+
                 const privacidad = casaVitini.componentes.privacidad.arranque(vista)
                 if (privacidad) {
                     transaccion.vista = "politicas/privacidad"
                 }
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
+
                 const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (!contenedorVista) {
                     return
@@ -214,12 +219,14 @@ const casaVitini = {
                     const arranqueVistaPublica = contenedorVista?.querySelector("arranque")?.getAttribute("publico")
                     const arranqueVistaAdministrativa = contenedorVista?.querySelector("arranque")?.getAttribute("administracion")
                     if (arranqueVistaPublica) {
+
                         const ruta = "ui.vistas." + arranqueVistaPublica
                         casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                             ruta: ruta,
                             args: null
                         })
                     } else if (arranqueVistaAdministrativa) {
+
                         const ruta = "administracion." + arranqueVistaAdministrativa
                         casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                             ruta: ruta,
@@ -521,9 +528,13 @@ const casaVitini = {
             }
             const url = window.location.pathname;
             if (url === "/") {
-                return casaVitini.shell.navegacion.controladorVista("portada")
+                return casaVitini.shell.navegacion.controladorVista({
+                    vista: "portada"
+                })
             } else {
-                return casaVitini.shell.navegacion.controladorVista(url)
+                return casaVitini.shell.navegacion.controladorVista({
+                    vista: url
+                })
             }
         },
         IDX: {
@@ -719,7 +730,7 @@ const casaVitini = {
                     }
 
                     casaVitini.shell.navegacion.controladorNavegacion(navegacion)
-                    delete casaVitini.administracion
+                    // delete casaVitini.administracion
                 } else if (estadoIDV === "conectado" && (rolIDV === "administrador" || rolIDV === "empleado")) {
                     const navegacion = {
                         tipo: "panelControl",
@@ -730,7 +741,7 @@ const casaVitini = {
                     }
 
                     casaVitini.shell.navegacion.controladorNavegacion(navegacion)
-                    await casaVitini.shell.controladoresUI.controlCodigoAdministracion()
+                    //   await casaVitini.shell.controladoresUI.controlCodigoAdministracion()
                 } else if (estadoIDV === "conectado" && rolIDV === "cliente") {
                     const navegacion = {
                         tipo: "publico",
@@ -741,7 +752,7 @@ const casaVitini = {
                     }
 
                     casaVitini.shell.navegacion.controladorNavegacion(navegacion)
-                    delete casaVitini.administracion
+                    // delete casaVitini.administracion
                 }
             },
             controlLogoScroll: (metadatos) => {
@@ -907,7 +918,7 @@ const casaVitini = {
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.tipo === "IDX") {
-                        delete casaVitini["administracion"]
+                        // delete casaVitini["administracion"]
                     }
                     if (respuestaServidor?.ok) {
                         const JS = JSON.parse(respuestaServidor.ok)
@@ -21109,30 +21120,6 @@ const casaVitini = {
 
                                             const data = respuestaServidor.ok
 
-
-                                            /*
-                                            {
-                                                "ok": {
-                                                    "pernoctante": {
-                                                        "componenteUID": 1609,
-                                                        "reservaUID": 2587,
-                                                        "habitacionUID": 3090,
-                                                        "clienteUID": 557,
-                                                        "fechaCheckIn": null,
-                                                        "fechaCheckOutAdelantado": null
-                                                    },
-                                                    "cliente": {
-                                                        "clienteUID": 557,
-                                                        "telefono": "978789""",
-                                                        "mail": "",
-                                                        "nombreCompleto": "dfgdfg"" undefined ",
-                                                        "pasaporte": "45646"¡"",
-                                                        "tipoPernoctante": "cliente"
-                                                    }
-                                                }
-                                            }
-                                             */
-
                                             const datosCliente = data.cliente
                                             const datosPernoctante = data.pernoctante
 
@@ -22891,16 +22878,7 @@ const casaVitini = {
                                         const contenedorEnlacesDePago = instanciaDestino.querySelector(`[componente=contenedorListaEnlacesDePago]`)
 
                                         for (const detallesDelEnlace of enlacesDePagoGenerados) {
-                                            /*
-                                                {
-                                                    "enlaceUID": 386,
-                                                    "nombreEnlace": "1",
-                                                    "reservaUID": 2624,
-                                                    "descripcion": "",
-                                                    "enlace": "7radu8sb42p1tj9vmin4l8d3qjcn240oq4am0rti9puzmm4xgo20nf08cp4tdj710alyesadfq7a627tbo50tg8lewz5stmkcxf6",
-                                                    "totalReserva": "2720.00"
-                                                },
-                                            */
+                        
                                             const metadatos = {
                                                 enlaceUID: detallesDelEnlace.enlaceUID,
                                                 nombreEnlace: detallesDelEnlace.nombreEnlace,
@@ -24356,9 +24334,7 @@ const casaVitini = {
                                             const error = errorCapturado.message
                                             casaVitini.ui.componentes.advertenciaInmersiva(error)
                                         }
-                                        /*  const calculo = (Number(porcentaje)/100) * Number(maximoReembolsable());
-                                          const resultado = parseFloat(calculo.toFixed(2));
-                                           resultado*/
+                                
                                     };
                                     const contenedorEmitirReembolso = document.createElement("div")
                                     contenedorEmitirReembolso.classList.add("flexVertical", "padding6", "gap6", "borderGrey1", "borderRadius20")
@@ -28417,6 +28393,8 @@ const casaVitini = {
         ejecutarFuncionPorNombreDinamicoConContexto: async function (data) {
             const ruta = data.ruta;
             const args = data.args;
+
+
 
             const partes = ruta.split('.');
             const contexto = partes.slice(0, -1).reduce((acc, parte) => acc[parte], casaVitini);
@@ -47397,14 +47375,6 @@ const casaVitini = {
                                 mensaje.textContent = respuestaServidor?.error
 
 
-                                /*
-                                      {
-                                            "componenteUID": "2908",
-                                            "reservaUID": "8497950",
-                                            "apartamentoIDV": "test",
-                                            "apartamentoUI": "test"
-                                        }
-                                */
                                 const contenedorReservas = document.createElement("div")
                                 contenedorReservas.classList.add(
                                     "flexVertical",
@@ -49010,14 +48980,7 @@ const casaVitini = {
                             infoModificarIDX.classList.add("detallesUsuario_infoModificarIDX")
                             infoModificarIDX.textContent = `Escriba la nueva clave que quiera establecer`
                             contenedorCampos.appendChild(infoModificarIDX)
-                            /*
-                            const campoClaveActual = document.createElement("input")
-                            campoClaveActual.classList.add("detallesUsuario_campoNuevoIDX")
-                            campoClaveActual.setAttribute("campo", "nuevoIDX")
-                            campoClaveActual.setAttribute("componente", "nuevoIDX")
-                            campoClaveActual.placeholder = "Escriba su contrasena actual"
-                            contenedorCampos.appendChild(campoClaveActual)
-                            */
+             
                             const campoNuevaClave = document.createElement("input")
                             campoNuevaClave.classList.add("detallesUsuario_campoNuevoIDX")
                             campoNuevaClave.setAttribute("campo", "claveNueva")

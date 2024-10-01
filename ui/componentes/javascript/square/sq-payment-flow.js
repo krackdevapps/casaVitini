@@ -117,7 +117,7 @@ window.createPayment = async function (token, verificationToken) {
     // salida.json(error.result);
   }
 }
-// Hardcoded for testing purpose, only used for Apple Pay and Google Pay
+
 window.getPaymentRequest = function () {
   return {
     countryCode: window.country,

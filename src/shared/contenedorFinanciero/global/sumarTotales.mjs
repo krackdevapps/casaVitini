@@ -14,7 +14,7 @@ export const sumarTotales = (data) => {
 
             const totalDescuentos = totales?.totalDescuento || "0.00"
             const impuestosAplicados = totales?.impuestosAplicados || "0.00"
-            //const totalNetoConDescuentos = totales?.totalNetoConDescuentos /*|| totalNeto*/ || "0.00"
+            //const totalNetoConDescuentos = totales?.totalNetoConDescuentos  || "0.00"
 
             totalesGlobal.totalNeto = new Decimal(totalNeto).plus(totalesGlobal.totalNeto)
 

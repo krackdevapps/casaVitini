@@ -113,26 +113,26 @@ export const procesadorSimulacion = async (data) => {
 
 
 
-// export const procesadorSimulacion1 = async (data) => {
-//     try {
-//          const tipoOperacion = data?.tipoOperacion
-//         //if (tipoOperacion === "crearDesglose") {
-//            // await crearDesgloseFinanciero(data)
-//         //} else
-        
-//     if (tipoOperacion === "actualizarDesgloseFinancieroDesdeInstantaneas") {
-//             await actualizarDesgloseFinancieroDesdeInstantaneas(data)
-//         } else if (tipoOperacion === "insertarDescuentoPorAdministrador") {
-//             await insertarDescuentoPorAdministrador(data)
-//         } else if (tipoOperacion === "insertarDescuentoCompatibleConSimulacion") {
-//             await insertarDescuentoCompatibleConSimulacion(data)
-//         } else if (tipoOperacion === "eliminarDescuento") {
-//             await eliminarDescuento(data)
-//         } else {
-//             const error = "El procesadorSimulacion mal configurado, no se reconoce el tipoOperacion"
-//             throw new Error(error)
-//         }
-//     } catch (error) {
-//         throw error
-//     }
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

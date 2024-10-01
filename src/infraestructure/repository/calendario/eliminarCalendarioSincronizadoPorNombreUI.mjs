@@ -1,5 +1,5 @@
 import { conexion } from "../globales/db.mjs"
-// Este script
+
 export const eliminarCalendarioSincronizadoPorCalendarioIDV = async (calendarioIDV) => {
     try {
         const consulta = `

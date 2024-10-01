@@ -2,11 +2,11 @@ import session from 'express-session';
 import pgSession from 'connect-pg-simple';
 import { conexion } from '../src/infraestructure/repository/globales/db.mjs';
 
-// Duración de la sesión en el servidor en segundos (una semana)
-//const duracionSessionServidor = 7 * 24 * 60 * 60;
+
+
 const duracionSessionServidor = 900;
 
-// Duración de la sesión en el cliente en milisegundos (una semana)
+
 const duracionSessionCliente = 7 * 24 * 60 * 60 * 1000;
 
 

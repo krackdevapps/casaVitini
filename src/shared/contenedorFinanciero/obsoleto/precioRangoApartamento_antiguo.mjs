@@ -5,7 +5,7 @@ import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUn
 import { resolverComportamientosDePrecio } from './resolverComportamientosDePrecio.mjs';
 import { obtenerPerfilPrecioPorApartamentoUID } from '../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
 
-// Pasas una fecha de a un fecha de salida y un apartmaento y te da todos el tema
+
 const constructorObjetoEstructuraPrecioDia = (fechaEntrada, fechaSalida) => {
     const arregloFechas = [];
     let fechaEntrada_Objeto = DateTime.fromISO(fechaEntrada); // Convertir la fecha de entrada a un objeto DateTime

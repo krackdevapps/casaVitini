@@ -25,7 +25,7 @@ process.on('uncaughtException', (error) => {
 
 const app = express()
 app.use(controlHTTPS)
-//app.use(controlInputRaw)
+
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')
 app.use(controlSizePeticion);
@@ -38,16 +38,16 @@ app.use(express.json({
 app.use(antiPrototypePollutiion)
 app.use(controlJSON)
 app.use(express.urlencoded({ extended: true }))
-//app.use(express.raw({ limit: '50MB' }))
+
 app.use(controlTipoVerbo)
-//app.set('trust proxy', true)
+
 app.disable('x-powered-by')
 app.use('/componentes', express.static(path.join('./ui/componentes')))
 app.use(controlBaseDeDatos)
 app.use(configuracionSession)
 app.use(router)
 app.use(manejador404)
-//export default app
+
 
 const puerto = process.env.PORT_HTTP
 const puertoSec = process.env.PORT_HTTPS

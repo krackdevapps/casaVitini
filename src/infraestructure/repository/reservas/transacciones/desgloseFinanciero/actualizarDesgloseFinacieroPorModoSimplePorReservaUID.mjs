@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { conexion } from "../../../globales/db.mjs";
-// Mucho ojo, esto actualiza las instantaneas renderizdas por cambio de identificador visual de entidad en reservas activas
+
 export const actualizarDesgloseFinacieroPorModoSimplePorReservaUID = async (data) => {
     try {
         const instantaneaNoches = data.instantaneaNoches

@@ -1,9 +1,3 @@
-/*!
- * simpleParallax.min - simpleParallax is a simple JavaScript library that gives your website parallax animations on any images or videos, 
- * @date: 26-07-2020 15:56:23, 
- * @version: 5.6.1,
- * @link: https://simpleparallax.com/
- */
 !function (t, e) {
     "object" == typeof exports && "object" == typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define("simpleParallax", [], e) : "object" == typeof exports ? exports.simpleParallax = e() : t.simpleParallax = e()
 }

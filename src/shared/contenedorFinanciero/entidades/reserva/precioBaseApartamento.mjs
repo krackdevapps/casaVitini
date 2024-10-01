@@ -3,7 +3,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from '../../../../infraestructu
 import { obtenerPerfilPrecioPorApartamentoUID } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 import { obtenerImpuestosPorEntidadIDV } from '../../../../infraestructure/repository/impuestos/obtenerImpuestosPorEntidadIDV.mjs';
-// Los precios de los apartamentos, van asociados a fechas
+
 
 export const precioBaseApartamento = async (apartamentoIDV) => {
     try {

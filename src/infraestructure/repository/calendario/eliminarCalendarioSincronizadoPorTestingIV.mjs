@@ -1,5 +1,5 @@
 import { conexion } from "../globales/db.mjs"
-// Este script
+
 export const eliminarCalendarioSincronizadoPorTestingIV = async (testingVI) => {
     try {
         const consulta = `

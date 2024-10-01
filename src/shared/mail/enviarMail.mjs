@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-//import fs from 'fs';
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -32,7 +32,6 @@ export const enviarMail = async (entrada) => {
                 pass: process.env.CORREO_PASS_SMTP,
             },
             tls: {
-                // do not fail on invalid certs
                 rejectUnauthorized: true,
             },
         })
@@ -45,12 +44,7 @@ export const enviarMail = async (entrada) => {
         if (entrada.attachments) {
             composicionDelMensaje.attachments = entrada.attachments
         }
-        /*   composicionDelMensaje.attachments = [
-               {
-                   filename: 'reserva.pdf',
-                   content: pdf,
-               },
-           ]*/
+    
         const mensajeCompositor = await transporte.sendMail(composicionDelMensaje)
         return mensajeCompositor
     } catch (errorCapturado) {

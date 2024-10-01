@@ -29,7 +29,7 @@
     flex-wrap: nowrap;
     user-select: none;
     -webkit-user-select: none;
-    /* position: fixed; */
+
     grid-template-columns: 1fr max-content auto;
     align-items: center;
     flex: 1;
@@ -64,8 +64,8 @@
     white-space: nowrap;
     letter-spacing: 0px;
     margin: 0px;
-    /* -webkit-backdrop-filter: blur(5px); */
-    /* backdrop-filter: blur(50px); */
+
+
     cursor: default;
     transition: all 500ms;
     display: flex;
@@ -74,7 +74,7 @@
     justify-content: flex-start;
     align-items: center;
     border: 1px solid transparent;
-    /* padding: 10px; */
+
     z-index: 10;
 }
 
@@ -143,7 +143,7 @@ body {
     align-items: center;
     height: 100%;
     width: 100%;
-    /* overflow-y: scroll; */
+
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -167,8 +167,6 @@ header {
 header .simulador {
     pointer-events: none;
     overflow: hidden;
-    /* opacity: 0;
-    z-index: -100; */
     position: absolute;
 }
 
@@ -206,7 +204,7 @@ header .estructura {
 header .contenedorIntermedio {
     display: grid;
     grid-template-columns: 1fr;
-    /* transition: grid-template-columns 250ms linear, border-radius 250ms linear; */
+
     transition: all 250ms linear;
 
     overflow: hidden;
@@ -239,7 +237,7 @@ header .zonas {
 }
 
 .contenedorFondo {
-    /*background: wheat;*/
+
     background-image: url(/componentes/imagenes/fotos/2.jpeg);
     transition: all 500ms;
     z-index: -1;
@@ -250,7 +248,6 @@ header .zonas {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-attachment: scroll
-        /*  background-position: 100% 100%;*/
 }
 
 .esferaUI {
@@ -266,8 +263,8 @@ header .zonas {
 .tintadoVinculo {
     color: black;
     border-radius: 20px;
-    /* height: fit-content; */
-    /* width: fit-content; */
+
+
     padding: 0px;
     margin: 5px;
     text-decoration: none;
@@ -292,7 +289,7 @@ header .zonas {
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: stretch;
-    /* position: fixed;*/
+
     width: 100%;
     z-index: 200;
     background: transparent;
@@ -312,7 +309,7 @@ header .zonas {
     border-radius: 30px;
     height: 100%;
     width: 100%;
-    /* margin-right: 12px; */
+
     padding: 6px;
     align-content: center;
     justify-content: center;
@@ -324,7 +321,7 @@ header .zonas {
     flex-wrap: nowrap;
     gap: 8px;
     transition: all 1s linear;
-    /* transition-behavior: allow-discrete; */
+
 
 }
 
@@ -337,17 +334,17 @@ header .zonas {
     align-items: center;
     align-content: center;
     justify-content: center;
-    /* flex-wrap: nowrap; */
+
     flex-direction: row;
     pointer-events: all;
-    /* gap: 6px; */
+
     grid-template-areas: ". .";
     transition: all 250ms linear;
     overflow: hidden;
     padding: 6px;
     gap: 6px;
     scale: 1;
-    /* transition: scale 250ms ease-in-out; */
+
 
     @starting-style {
         scale: 0;
@@ -356,13 +353,13 @@ header .zonas {
 }
 
 .menuDesplegado {
-    /* background-color: rgba(255, 255, 255, 0.2); */
+
     border-radius: 30px;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     display: flex;
     gap: 6px;
-    /* width: 590px; */
+
     overflow: hidden;
     padding: 6px;
     transition: all 250ms linear;
@@ -380,7 +377,7 @@ header .zonas {
     padding-right: 24px;
     margin: 0px;
     border-radius: 20px;
-    /* transition: all 500ms; */
+
     cursor: default;
     -webkit-tap-highlight-color: transparent;
     text-decoration: none;
@@ -393,10 +390,11 @@ header .zonas {
     align-items: center;
     height: 33px;
     width: 100%;
-    transition: background 250ms linear, color 250ms linear,  scale 250ms ease-in-out;
+    transition: background 250ms linear, color 250ms linear, scale 250ms ease-in-out;
     justify-content: flex-start;
 
     scale: 1;
+
     @starting-style {
         scale: 0;
     }
@@ -412,12 +410,12 @@ header .zonas {
     transition: all 250ms linear;
     background-color: rgba(255, 255, 255, 0.5);
     text-align: center;
-    /* font-size: 14px; */
+
     border-radius: 10px;
     height: 40px;
     width: 0px;
     margin-right: 0px;
-    /* padding: 23px; */
+
     cursor: default;
     display: flex;
     justify-content: center;
@@ -425,10 +423,10 @@ header .zonas {
     background-position: center center;
     background-image: url(/componentes/iconos/menu5.svg);
     background-size: cover;
-    /* zoom: 80%; */
+
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    /* padding-left: 30px; */
+
     scale: 0;
 }
 
@@ -442,6 +440,7 @@ header .zonas {
     transition: scale 250ms ease-in-out;
 
     scale: 1;
+
     @starting-style {
         scale: 0;
     }
@@ -458,10 +457,11 @@ header .zonas {
     scale: 1;
     top: -19px;
     position: absolute;
-    left: -24px; 
-       box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+    left: -24px;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
 
 }
+
 .botonMenuResponsivo:hover {
     color: white;
 }
@@ -501,26 +501,17 @@ header .zonas {
 
     .uiPanelGlobal {
         align-items: center;
-        /* grid-template-columns: 1fr max-content auto; */
     }
-
-  
-  
 }
 
 @keyframes desaparecMenu {
     from {
-        /* opacity: 1;
-      transform: scale(1); */
         zoom: 100%;
     }
 
     to {
-        /* opacity: 0;
-      transform: scale(0);*/
         zoom: .01%;
         display: none;
-
     }
 }
 
@@ -542,8 +533,8 @@ header .zonas {
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 17px;   
-   
+    border-radius: 17px;
+
     align-content: center;
     justify-content: center;
     align-items: stretch;
@@ -559,6 +550,7 @@ header .zonas {
     z-index: 1000;
     scale: 1;
     transition: scale 250ms ease-in-out;
+
     @starting-style {
         scale: 0;
     }

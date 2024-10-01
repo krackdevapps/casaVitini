@@ -1,10 +1,10 @@
 
-//import { aplicarImpuestos } from './aplicarImpuestos.mjs';
+
 import Decimal from 'decimal.js';
-//import { sistemaDeOfertas } from '../../shared/ofertas/sistemaDeOfertas.mjs';
-// import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
-// import { calcularPrecioPorObjeto } from './calcularPrecioPorObjeto.mjs';
-// import { obtenerDesgloseFinancieroReservaPorReservaUID } from '../../infraestructure/repository/reservas/reserva/obtenerDesgloseFinancieroReservaPorReservaUID.mjs';
+
+
+
+
 const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
 Decimal.set({ precision: precisionDecimal });
 
