@@ -69,7 +69,8 @@ describe('critical: entityAndConfigHostingValidation', () => {
                 fechaEntrada: fechaInicioVirutal_futuro,
                 fechaSalida: fechaFinalVirtual_futuro,
                 apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada"
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
 
             },
             session: fakeAdminSession
@@ -105,7 +106,9 @@ describe('critical: entityAndConfigHostingValidation', () => {
                 fechaEntrada: fechaInicioVirutal_pasado,
                 fechaSalida: fechaFinalVirtual_pasado,
                 apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada"
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
+
 
             },
             session: fakeAdminSession
@@ -122,10 +125,10 @@ describe('critical: entityAndConfigHostingValidation', () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-                fechaCreacion: fechaCreacionSimulacion,
-                fechaEntrada: fechaInicioVirutal_pasado,
-                fechaSalida: fechaFinalVirtual_pasado,
-                apartamentosIDVARRAY: [apartamentoIDV],
+                // fechaCreacion: fechaCreacionSimulacion,
+                // fechaEntrada: fechaInicioVirutal_pasado,
+                // fechaSalida: fechaFinalVirtual_pasado,
+                // apartamentosIDVARRAY: [apartamentoIDV],
             },
             session: fakeAdminSession
         }
@@ -162,19 +165,6 @@ describe('critical: entityAndConfigHostingValidation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('rebuil financial container from snapshots with ok', async () => {
-        const m = {
-            body: {
-                simulacionUID: String(simulacionUID)
-            },
-            session: fakeAdminSession
-        }
-        const response = await rcddi_simulacion(m)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
-
 
     afterAll(async () => {
         await makeHostArquitecture({

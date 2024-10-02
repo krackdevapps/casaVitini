@@ -29818,7 +29818,7 @@ const casaVitini = {
                     const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
                     const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                     const estadoInicialIDV = document.querySelector("[selector=estadoInicialReserva]").value
-                    const estadoIniciarOfertasIDV = document.querySelector("[configuracionOfertaIDV][estado=s]").getAttribute("configuracionOfertaIDV")
+                    const estadoInicialOfertasIDV = document.querySelector("[configuracionOfertaIDV][estado=s]").getAttribute("configuracionOfertaIDV")
 
 
                     const apartamentos = []
@@ -29837,7 +29837,7 @@ const casaVitini = {
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
                         estadoInicialIDV: estadoInicialIDV,
-                        estadoIniciarOfertasIDV: estadoIniciarOfertasIDV,
+                        estadoInicialOfertasIDV: estadoInicialOfertasIDV,
                         apartamentos: apartamentos
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
@@ -49597,7 +49597,9 @@ const casaVitini = {
                 const botonHoy = document.createElement("div")
                 botonHoy.classList.add("administracion_calendario_selectorCapa")
                 botonHoy.textContent = "Hoy"
-                botonHoy.addEventListener("click", casaVitini.administracion.calendario.verHoy)
+                botonHoy.addEventListener("click", (e) => {
+                    casaVitini.administracion.calendario.verHoy(e)
+                })
                 contenedorHerramientasCalendario.appendChild(botonHoy)
                 contenedorCentralCalendario.appendChild(contenedorHerramientasCalendario)
                 const navegacionMesReferencia = document.createElement("div")
@@ -49846,15 +49848,14 @@ const casaVitini = {
                 })
 
             },
-            verHoy: async (calendarioActual) => {
-                const instanciaUID = calendarioActual.target.closest("[instanciaUID]").getAttribute("instanciaUID")
-                const calendarioRenderizado = document.querySelector(`[componente=calendarioGlobal][instanciaUID="${instanciaUID}"]`)
+            verHoy: async function (calendarioActual) {
+                const main = calendarioActual.target.closest("main")
+                const instanciaUID_main = main.getAttribute("instanciaUID")
+                const calendarioRenderizado = main.querySelector(`[componente=calendarioGlobal]`)
                 const mesRenderizado = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("mes"))
                 const anoRenderizado = Number(calendarioRenderizado.querySelector("[componente=mesReferencia]").getAttribute("ano"))
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const contenedorSeguroParaParametros = granuladoURL.contenedorSeguroParaParametros
-                const parametros = granuladoURL.parametros
-                //const mesRenderizado = 
                 const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
                 const marcoMes = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
                 marcoMes.setAttribute("instanciaUID", instanciaUIDMes)
@@ -49870,8 +49871,7 @@ const casaVitini = {
                 contenedorCarga.setAttribute("contenedor", "construyendoCalendario")
                 contenedorCarga.setAttribute("elemento", "flotante")
                 contenedorCarga.appendChild(spinner)
-                const construyendoCalendarioRenderizado = calendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")
-                if (!construyendoCalendarioRenderizado) contenedorCalendario.appendChild(contenedorCarga)
+                contenedorCalendario.appendChild(contenedorCarga)
                 const contenedorCapas = {
                     capas: [],
                     capasCompuestas: {}
@@ -49900,18 +49900,20 @@ const casaVitini = {
                         soloCapasURL.push(parDeParametro)
                     }
                 }
-                const calendario = {
-                    tipo: "actual",
-                    //
-                    instanciaUID: instanciaUID,
-                    instanciaUIDMes: instanciaUIDMes
-                }
-                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
-                    tipo: "actual"
+                const mesRenderizado_data = await this.irAFecha({
+                    tipoResolucion: "actual",
+                    instanciaUID_main: instanciaUID_main,
+                    contenedorCapas: contenedorCapas,
                 })
+                const calendarioResuelto = mesRenderizado_data?.calendarioResuelto
                 const anoPresente = calendarioResuelto.ano
                 const mesPresente = calendarioResuelto.mes
-                calendario.url = `fecha:${mesPresente}-${anoPresente}/${soloCapasURL.join("/")}`
+
+                const calendario = {
+                    ano: calendarioResuelto?.ano,
+                    mes: calendarioResuelto?.mes,
+                    contenedorCapas: contenedorCapas
+                }
                 if ((mesRenderizado !== mesPresente && anoRenderizado === anoPresente) || (anoRenderizado !== anoPresente)) {
                     //ADquitir la url actual, que puede ser diferente segun la capa
                     calendario.tipoRegistro = "crear"
@@ -49921,12 +49923,6 @@ const casaVitini = {
                     calendario.tipoRegistro = "actualizar"
                     casaVitini.administracion.calendario.controladorRegistros(calendario)
                 }
-                await casaVitini.administracion.calendario.configuraMes(calendario)
-                const metadatos = {
-                    instanciaUID: instanciaUID,
-                    contenedorCapas: contenedorCapas
-                }
-                casaVitini.administracion.calendario.capas(metadatos)
             },
             configuraMes: async (calendario) => {
                 const ano = calendario.ano
@@ -50063,13 +50059,13 @@ const casaVitini = {
                 })
                 const calendarioResuelto = mesRenderizado?.calendarioResuelto
 
-                await casaVitini.administracion.calendario.coloreoDias({
+                casaVitini.administracion.calendario.coloreoDias({
                     ano: calendarioResuelto?.ano,
                     mes: calendarioResuelto?.mes,
                     instanciaUIDMes: calendarioResuelto?.instanciaUIDMes,
                 })
 
-                await casaVitini.administracion.calendario.capas({
+                casaVitini.administracion.calendario.capas({
                     instanciaUID_main: instanciaUID_main,
                     origen: "historial",
                     contenedorCapas: contenedorCapas,

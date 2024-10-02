@@ -1036,7 +1036,7 @@ summary:hover {
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_contenedorCentralCalendario {
     display: grid;
-    grid-template-columns: 3fr 1fr 3fr;
+    grid-template-columns: 3fr auto 3fr;
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
@@ -1093,10 +1093,10 @@ summary:hover {
 }
 
 .navegacionMesReferencia {
-
-
     display: flex;
     justify-content: center;
+    align-content: center;
+    align-items: center;
 }
 
 .mostrarSoloEnResponsivo {

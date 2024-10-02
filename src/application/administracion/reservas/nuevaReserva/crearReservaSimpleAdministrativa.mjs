@@ -69,9 +69,9 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         }
 
 
-        const estadoIniciarOfertasIDV = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.estadoIniciarOfertasIDV,
-            nombreCampo: "El selector de estadoIniciarOfertasIDV",
+        const estadoInicialOfertasIDV = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.estadoInicialOfertasIDV,
+            nombreCampo: "El selector de estadoInicialOfertasIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -82,8 +82,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             "noAplicarOfertas"
 
         ]
-        if (!selectoresOfertas.includes(estadoIniciarOfertasIDV)) {
-            const error = "El campo de estadoIniciarOfertasIDV solo acepta aplicarTodasLasOfertas, aplicarTodasRechazandoLasQueTenganCodigosDeDescuento, noAplicarOfertas";
+        if (!selectoresOfertas.includes(estadoInicialOfertasIDV)) {
+            const error = "El campo de estadoInicialOfertasIDV solo acepta aplicarTodasLasOfertas, aplicarTodasRechazandoLasQueTenganCodigosDeDescuento, noAplicarOfertas";
             throw new Error(error);
         }
 
@@ -211,9 +211,9 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     ofertas: {
                         zonasArray: ["global", "privada"],
                         operacion: {
-                            tipo: configuracionOfertasInicial(estadoIniciarOfertasIDV).tipo
+                            tipo: configuracionOfertasInicial(estadoInicialOfertasIDV).tipo
                         },
-                        ignorarCodigosDescuentos: configuracionOfertasInicial(estadoIniciarOfertasIDV).ignorarCodigosDescuentos
+                        ignorarCodigosDescuentos: configuracionOfertasInicial(estadoInicialOfertasIDV).ignorarCodigosDescuentos
                     },
                     impuestos: {
                         origen: "hubImuestos"

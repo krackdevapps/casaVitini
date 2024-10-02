@@ -47,7 +47,8 @@ describe('critical: financiarContianer', () => {
                 fechaEntrada: "2027-10-10",
                 fechaSalida: "2027-10-20",
                 apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada"
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
 
             },
             session: fakeAdminSession
