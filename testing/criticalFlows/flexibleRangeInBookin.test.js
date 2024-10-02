@@ -66,7 +66,9 @@ describe('critical: flexible global date range bookins', () => {
                     fechaEntrada: "2026-10-02",
                     fechaSalida: "2026-10-08",
                     apartamentos: [apartamentoIDV],
-                    estadoInicialIDV: "confirmada"
+                    estadoInicialIDV: "confirmada",
+                    estadoInicialOfertasIDV: "noAplicarOfertas"
+
 
                 },
                 session: fakeAdminSession
@@ -85,7 +87,9 @@ describe('critical: flexible global date range bookins', () => {
                     fechaEntrada: "2026-10-22",
                     fechaSalida: "2026-10-28",
                     apartamentos: [apartamentoIDV],
-                    estadoInicialIDV: "confirmada"
+                    estadoInicialIDV: "confirmada",
+                    estadoInicialOfertasIDV: "noAplicarOfertas"
+
 
                 },
                 session: fakeAdminSession

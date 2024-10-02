@@ -78,7 +78,6 @@ describe('behavior of prices clients', () => {
             body: {
                 comportamientoUID: comportamientoUID,
                 estadoPropuesto: "testing",
-                estadoInicalDesactivado: "desactivado",
             },
             session: fakeAdminSession
         }
@@ -93,20 +92,20 @@ describe('behavior of prices clients', () => {
             body: {
                 comportamientoUID: comportamientoUID,
                 estadoPropuesto: "testing",
-                estadoInicalDesactivado: "desactivado",
-                transaccion: "actualizar",
-                contenedor: {
-                    tipo: "porRango",
-                    fechaInicio: "2024-08-14",
-                    fechaFinal: "2024-08-16",
-                    apartamentos: [
-                        {
-                            apartamentoIDV: apartamentoIDV,
-                            cantidad: "10.00",
-                            simboloIDV: "aumentoCantidad"
-                        }
-                    ]
-                },
+                // estadoInicalDesactivado: "desactivado",
+                // transaccion: "actualizar",
+                // contenedor: {
+                //     tipo: "porRango",
+                //     fechaInicio: "2024-08-14",
+                //     fechaFinal: "2024-08-16",
+                //     apartamentos: [
+                //         {
+                //             apartamentoIDV: apartamentoIDV,
+                //             cantidad: "10.00",
+                //             simboloIDV: "aumentoCantidad"
+                //         }
+                //     ]
+                // },
             },
             session: fakeAdminSession
         }

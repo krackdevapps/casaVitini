@@ -27,15 +27,16 @@ export const crearCliente = async (entrada, salida) => {
             notas: entrada.body.notas,
         };
 
-        const testingVI = process.env.TESTINGVI
-        if (testingVI) {
-            nuevoCliente.testingVI = testingVI
-        }
-
         const datosValidados = await validadoresCompartidos.clientes.validarCliente({
             cliente: nuevoCliente,
             operacion: "crear"
         });
+
+        const testingVI = process.env.TESTINGVI
+        if (testingVI) {
+            datosValidados.testingVI = testingVI
+        }
+
         const nuevoUIDCliente = await insertarCliente(datosValidados);
         if (nuevoUIDCliente) {
             const ok = {

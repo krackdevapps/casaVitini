@@ -18,7 +18,6 @@ describe('fusion clients', () => {
         telefono: "122333411",
         correoElectronico: "fakeorigen@mail.com",
         notas: "fakeNoteText",
-        testing: testingVI
     }
     const fakeClient_destino = {
         nombre: "fakeName_destino",
@@ -28,7 +27,6 @@ describe('fusion clients', () => {
         telefono: "122333411",
         correoElectronico: "fakedestino@mail.com",
         notas: "fakeNoteText",
-        testing: testingVI
     }
     let clienteUID_origen
     let clienteUID_destino

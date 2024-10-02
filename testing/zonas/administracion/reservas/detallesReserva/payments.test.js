@@ -53,7 +53,8 @@ describe('payment in bookin', () => {
                 fechaEntrada: "2026-10-10",
                 fechaSalida: "2026-10-20",
                 apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada"
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
 
             },
             session: fakeAdminSession
@@ -83,7 +84,7 @@ describe('payment in bookin', () => {
     test('get details payment in booking with ok', async () => {
         const m = {
             body: {
-                reservaUID: String(reservaUID),
+                //reservaUID: String(reservaUID),
                 pagoUID: pagoUID
             },
             session: fakeAdminSession

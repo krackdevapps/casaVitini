@@ -19,7 +19,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 3
+            numeroDeLLavesMaximo: 5
         })
 
         const reservaUID = validadoresCompartidos.tipos.cadena({

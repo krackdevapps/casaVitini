@@ -49,7 +49,6 @@ describe('pernoctantes in bookins', () => {
         telefono: "122333411",
         correoElectronico: "fake@mail.com",
         notas: "fakeNoteText",
-        testingVI: testingVI
     }
 
     beforeAll(async () => {
@@ -92,7 +91,8 @@ describe('pernoctantes in bookins', () => {
                 fechaEntrada: "2026-10-10",
                 fechaSalida: "2026-10-20",
                 apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada"
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
 
             },
             session: fakeAdminSession
@@ -135,7 +135,7 @@ describe('pernoctantes in bookins', () => {
             body: {
                 reservaUID: String(reservaUID),
                 habitacionUID: habitacionUID,
-                apartamentoUID,
+                //apartamentoUID,
                 ...fakeClient
             },
             session: fakeAdminSession

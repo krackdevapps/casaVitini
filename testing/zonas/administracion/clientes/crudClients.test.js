@@ -23,7 +23,6 @@ describe('crud clients', () => {
         telefono: "122333411",
         correoElectronico: "fake@mail.com",
         notas: "fakeNoteText",
-        testingVI: testingVI
     }
 
     beforeAll(async () => {

@@ -46,7 +46,8 @@ describe('critical: control avaible apartments when creating bookins', () => {
                 fechaEntrada: "2026-10-10",
                 fechaSalida: "2026-10-20",
                 apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada"
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
 
             },
             session: fakeAdminSession
@@ -65,6 +66,8 @@ describe('critical: control avaible apartments when creating bookins', () => {
                     fechaEntrada: "2026-10-10",
                     fechaSalida: "2026-10-20",
                     apartamentos: [apartamentoIDV],
+                    estadoInicialIDV: "confirmada",
+                    estadoInicialOfertasIDV: "noAplicarOfertas"
                 },
                 session: fakeAdminSession
             }
@@ -82,6 +85,8 @@ describe('critical: control avaible apartments when creating bookins', () => {
                     fechaEntrada: "2026-10-09",
                     fechaSalida: "2026-10-11",
                     apartamentos: [apartamentoIDV],
+                    estadoInicialIDV: "confirmada",
+                    estadoInicialOfertasIDV: "noAplicarOfertas"
                 },
                 session: fakeAdminSession
             }
@@ -99,6 +104,8 @@ describe('critical: control avaible apartments when creating bookins', () => {
                     fechaEntrada: "2026-10-19",
                     fechaSalida: "2026-10-21",
                     apartamentos: [apartamentoIDV],
+                    estadoInicialIDV: "confirmada",
+                    estadoInicialOfertasIDV: "noAplicarOfertas"
                 },
                 session: fakeAdminSession
             }
@@ -117,6 +124,8 @@ describe('critical: control avaible apartments when creating bookins', () => {
                     fechaEntrada: "2026-10-11",
                     fechaSalida: "2026-10-19",
                     apartamentos: [apartamentoIDV],
+                    estadoInicialIDV: "confirmada",
+                    estadoInicialOfertasIDV: "noAplicarOfertas"
                 },
                 session: fakeAdminSession
             }
