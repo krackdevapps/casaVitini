@@ -49753,13 +49753,16 @@ const casaVitini = {
                     e?.remove()
                 })
                 const contenedorCalendario = calendarioRenderizado.querySelector(`[contenedor=calendario]`)
-                const spinner = casaVitini.ui.componentes.spinnerSimple()
+
                 const contenedorCarga = document.createElement("div")
                 contenedorCarga.classList.add("componente_calendario_contenedoCarga_Mes")
                 contenedorCarga.setAttribute("contenedor", "construyendoCalendario")
                 contenedorCarga.setAttribute("elemento", "flotante")
-                contenedorCarga.appendChild(spinner)
-                contenedorCalendario.appendChild(contenedorCarga)
+                contenedorCarga.appendChild(casaVitini.ui.componentes.spinnerSimple())
+                const construyendoCalendarioRenderizado = calendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")
+                if (!construyendoCalendarioRenderizado) {
+                    contenedorCalendario.appendChild(contenedorCarga)
+                }
                 const contenedorCapas = {
                     capas: [],
                     capasCompuestas: {}
