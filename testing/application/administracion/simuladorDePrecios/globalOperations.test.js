@@ -60,6 +60,20 @@ describe('Global Operations Simulation', () => {
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
     })
+
+    test('get detail of void simulation with ok', async () => {
+        const m = {
+            body: {
+                simulacionUID: String(simulacionUID),
+            },
+            session: fakeAdminSession
+        }
+        const response = await detallesSimulacion(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
     test('insert global data in simulation created with ok', async () => {
         const m = {
             body: {
@@ -78,7 +92,7 @@ describe('Global Operations Simulation', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    test('get detail simulation with ok', async () => {
+    test('get detail simulation with global data with ok', async () => {
         const m = {
             body: {
                 simulacionUID: String(simulacionUID),
