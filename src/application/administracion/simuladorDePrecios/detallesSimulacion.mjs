@@ -32,12 +32,12 @@ export const detallesSimulacion = async (entrada) => {
         const fechaCreacion = simulacion.fechaCreacion
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
-        const contenedorOfertas = simulacion.desgloseFinanciero.contenedorOfertas
-        const contenedorOfertasPorAdmimnistrador = contenedorOfertas.ofertas.porAdministrador
+        const contenedorOfertas = simulacion?.desgloseFinanciero?.contenedorOfertas || {}
+        const contenedorOfertasPorAdmimnistrador = contenedorOfertas?.ofertas?.porAdministrador || []
         for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
             await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
         }
-        const contenedorOfertasPorCondicio = contenedorOfertas.ofertas.porCondicion
+        const contenedorOfertasPorCondicio = contenedorOfertas?.ofertas?.porCondicion || []
         for (const contenedorOferta of contenedorOfertasPorCondicio) {
             await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
         }
