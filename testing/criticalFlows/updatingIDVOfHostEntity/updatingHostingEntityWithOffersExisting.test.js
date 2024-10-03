@@ -386,6 +386,7 @@ describe('critical: updating hosting entity with offers existing', () => {
         const response = await modificarEntidadAlojamiento(makeEntity)
         expect(response).not.toBeUndefined();
     })
+    
     test('get details of offer type 1 and validate new idv of apartments with ok', async () => {
         const m = {
             body: {
