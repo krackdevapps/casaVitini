@@ -11568,6 +11568,9 @@ summary:hover {
     align-items: center;
     white-space: pre-wrap;
 }
+.whiteSpace {
+    white-space: pre-wrap;
+}
 
 [zonaCSS="/alojamiento"] .plaza_reservas_reservaConfirmada_contenedor {
     background: white;

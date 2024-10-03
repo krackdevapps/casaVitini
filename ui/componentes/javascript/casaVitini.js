@@ -4266,9 +4266,10 @@ const casaVitini = {
                                     contenedorDuracion.appendChild(info)
 
                                 }
-                                const definicionUI = document.createElement("p")
+                                const definicionUI = document.createElement("pre")
                                 definicionUI.classList.add(
-                                    "padding6"
+                                    "padding6",
+                                    "whiteSpace"
                                 )
                                 definicionUI.textContent = definicion
                                 servicioUI.appendChild(definicionUI)
