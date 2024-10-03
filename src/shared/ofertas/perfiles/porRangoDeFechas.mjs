@@ -25,7 +25,7 @@ export const porRangoDeFechas = async (reserva) => {
         arrayDeTiposDeOferta: [tipoOferta],
     })
 
-    // Creamos un array con los dias de la reserva y los apartamentos
+
     const ofertasSeleccionadas = ofertasEncontradas.rows
     let descuentoGlobal = new Decimal("0.00")
     for (const detallesOferta of ofertasEncontradas.rows) {

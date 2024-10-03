@@ -50,7 +50,7 @@ export const cancelarReserva = async (entrada, salida) => {
         await eliminarEnlaceDePagoPorReservaUID(reservaUID)
         const fechaEntrada = reserva.fechaEntrada;
         const fechaSalida = reserva.fechaSalida;
-        // extraer todos los apartamentos de la reserva
+
         const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
 
         for (const apartamento of apartamentosDeLaReserva) {

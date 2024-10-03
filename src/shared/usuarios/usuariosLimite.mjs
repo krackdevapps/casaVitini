@@ -5,8 +5,8 @@ export const usuariosLimite = (usuario) => {
             const m = "No se ha pasado ningún usuario en usuariosLimite"
             throw new Error(m)
         }
-        // Lista de usuarios limitados por el sistema   
-        const listaUsuarios  = [
+
+        const listaUsuarios = [
             "nuevo"
         ]
         if (listaUsuarios.includes(usuario)) {
@@ -14,7 +14,7 @@ export const usuariosLimite = (usuario) => {
             throw new Error(m)
         }
         return true
-       } catch (error) {
+    } catch (error) {
         throw error
     }
 }

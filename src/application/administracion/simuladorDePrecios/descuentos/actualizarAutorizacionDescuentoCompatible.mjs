@@ -19,7 +19,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        // falta esto
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3

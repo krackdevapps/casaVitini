@@ -15,28 +15,28 @@ export const utilidades = {
         const ahora = new Date(fechaActualUTC); // Fecha y hora actuales
         const fechaEntradaCompleta = new Date(fechaHoraEntradaUTC);
         const fechaSalidaCompleta = new Date(fechaHoraSalidaUTC);
-        // Calcular la diferencia total en milisegundos
+
         const diferenciaTotal = fechaSalidaCompleta - fechaEntradaCompleta;
-        // Calcular la diferencia actual en milisegundos
+
         const diferenciaActual = ahora - fechaEntradaCompleta;
-        // Calcular el porcentaje transcurrido
+
         const porcentajeTranscurrido = (diferenciaActual / diferenciaTotal) * 100;
         return porcentajeTranscurrido.toFixed(2);
     },
     calculadora: (numero1, numero2, operador) => {
         const validarNumero = (numero) => {
-            // Expresión regular para validar números enteros o con hasta dos decimales
+
             const regex = /^-?\d+(\.\d{1,2})?$/;
             return regex.test(numero);
         }
-        // Validar que num1 y num2 sean números válidos
+
         if (!validarNumero(numero1) || !validarNumero(numero2)) {
             return 'Entrada no válida. Por favor, ingrese números enteros o con hasta dos decimales.';
         }
-        // Convierte los números a objetos Decimal
+
         const decimalNum1 = new Decimal(numero1);
         const decimalNum2 = new Decimal(numero2);
-        // Realiza la operación según el operador
+
         switch (operador) {
             case '+':
                 return decimalNum1.plus(decimalNum2).toString();
@@ -47,7 +47,7 @@ export const utilidades = {
             case '%':
                 return decimalNum1.times(decimalNum2).dividedBy(100);
             case '/':
-                // Manejo de división por cero
+
                 if (decimalNum2.isZero()) {
                     return 'No se puede dividir por cero.';
                 }
@@ -88,7 +88,7 @@ export const utilidades = {
         return estructua;
     },
     comparadorFechas_ISO: (fecha1, fecha2) => {
-        // Obtener componentes de la primera fecha
+
         const partesFecha1 = fecha1.split('-');
         const dia1 = parseInt(partesFecha1[2], 10)
         const mes1 = parseInt(partesFecha1[1], 10)
@@ -110,7 +110,7 @@ export const utilidades = {
 
         if (array.length === 1) {
             return array[0];
-        } else if (articulo.length> 0) { 
+        } else if (articulo.length > 0) {
             const formattedString = array.slice(0, -1).join(', ' + articulo + " ") + ' y ' + articulo + " " + array.slice(-1);
             return formattedString;
         } else if (articulo.length === 0) {
@@ -123,12 +123,12 @@ export const utilidades = {
         const keys = Object.keys(objeto);
         const set = new Set(keys);
 
-        // Verificar si hay llaves duplicadas en el nivel actual
+
         if (keys.length !== set.size) {
             return true; // Hay llaves duplicadas en este nivel
         }
 
-        // Recorrer recursivamente los valores del objeto si son objetos anidados
+
         for (let key in objeto) {
             if (typeof objeto[key] === 'object' && objeto[key] !== null) {
                 if (evitarLlavesDuplicas(objeto[key])) {
@@ -184,7 +184,7 @@ export const utilidades = {
             const inicio_objeto = new Date(inicio);
             const fin_objeto = new Date(fin);
 
-            // Asegurarse de incluir la fecha final en el rango
+
             fin_objeto.setDate(fin_objeto.getDate() + 1);
 
             while (inicio_objeto < fin_objeto) {
@@ -204,11 +204,11 @@ export const utilidades = {
             const fechaInicio_rango_uno_objeto = DateTime.fromISO(fechaInicio_rango_uno);
             const fechaFin_rango_uno_objeto = DateTime.fromISO(fechaFin_rango_uno);
 
-            // Rango de fechas 2 (inicio y fin)
+
             const fechaInicio_rango_dos_objeto = DateTime.fromISO(fechaInicio_rango_dos);
             const fechaFin_rango_dos_objeto = DateTime.fromISO(fechaFin_rango_dos);
 
-            // Función para generar una lista de fechas entre dos fechas
+
             const generaListaDeDias = (inicio, fin) => {
                 const fechas = [];
                 let actual = inicio;
@@ -219,11 +219,11 @@ export const utilidades = {
                 return fechas;
             }
 
-            // Generar listas de fechas para ambos rangos
+
             const fechasRango1 = generaListaDeDias(fechaInicio_rango_uno_objeto, fechaFin_rango_uno_objeto);
             const fechasRango2 = generaListaDeDias(fechaInicio_rango_dos_objeto, fechaFin_rango_dos_objeto);
 
-            // Encontrar días del rango 2 que no están en el rango 1
+
             return fechasRango1.filter(fechaControl => !fechasRango2.includes(fechaControl));
         }
     },

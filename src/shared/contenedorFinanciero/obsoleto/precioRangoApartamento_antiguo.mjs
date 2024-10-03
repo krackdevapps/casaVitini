@@ -41,7 +41,7 @@ export const precioRangoApartamento = async (metadatos) => {
             const apartamentoIDV = perfilPrecio.apartamentoIDV
 
 
-            // Inyectar variacion de precio
+
             const detalleApartamento = {
                 apartamentoUI: apartamentoUI,
                 apartamentoIDV: apartamentoIDV,
@@ -59,7 +59,7 @@ export const precioRangoApartamento = async (metadatos) => {
 
         const comportamientosPorProcesarComoPerfiles = await resolverComportamientosDePrecio(fechaEntrada, fechaSalida)
 
-        // Borrar la ultima fecha por que se esta calculano noches no dias
+
         estructuraArregloDiasEnEspera.pop()
         const numeroNoches = estructuraArregloDiasEnEspera.length
         estructuraFinal.metadatos.numeroNoches = numeroNoches
@@ -71,7 +71,7 @@ export const precioRangoApartamento = async (metadatos) => {
             const mes = fechaObjeto.month;
             const ano = fechaObjeto.year;
             const fechaDiaUI = `${dia}/${mes}/${ano}`
-            //SUSTITUIDO POR FECHADIS
+
             const fechaDia_ISO = `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`
             const estructuraDia = {
                 fechaDiaConNoche: fechaDiaUI,
@@ -102,7 +102,7 @@ export const precioRangoApartamento = async (metadatos) => {
                             fechaFin_elemento_ISO: fechaDia_ISO,
                             tipoLimite: "incluido"
                         })
-                        //Aqui esta el error tipio del selector de rango unidimensional
+
 
                         if (controlRangoInterno && apartamentoIDV === apartamentoIDVComportamiento) {
                             comportamientoEncontrado = "encontrado"
@@ -131,19 +131,19 @@ export const precioRangoApartamento = async (metadatos) => {
                                 cantidad: cantidad.toFixed(2),
                             }
                             detalleApartamentoPorDia.precioNetoNoche = precioFinalPorNoche.isPositive() ? precioFinalPorNoche.toFixed(2) : "0.00";
-                            //detalleApartamentoPorDia.tipoSalida = "comportamientoEncontrado"
+
                             precioNetoNoche = new Decimal(precioNetoNoche).plus(precioFinalPorNoche)
                             break
                         }
                     }
                     if (comportamientoEncontrado !== "encontrado") {
                         detalleApartamentoPorDia.precioNetoNoche = precioBase.toFixed(2)
-                        //detalleApartamentoPorDia.tipoSalida = "comportamientoNoEncontrado"
+
                         precioNetoNoche = new Decimal(precioNetoNoche).plus(precioBase)
                     }
                 } else {
                     detalleApartamentoPorDia.precioNetoNoche = precioBase.toFixed(2)
-                    //detalleApartamentoPorDia.tipoSalida = "sinComportamiento"
+
                     precioNetoNoche = new Decimal(precioNetoNoche).plus(precioBase)
                 }
                 const totalNetoRango = estructuraFinal.totalesPorApartamento_Objeto[apartamentoIDVDia].totalNetoRango ? estructuraFinal.totalesPorApartamento_Objeto[apartamentoIDVDia].totalNetoRango : 0
@@ -154,7 +154,7 @@ export const precioRangoApartamento = async (metadatos) => {
                 estructuraDia.apartamentos.push(detalleApartamentoPorDia)
                 const totalNeto = estructuraFinal.metadatos.totalNeto ? estructuraFinal.metadatos.totalNeto : 0
                 estructuraFinal.metadatos.totalNeto = new Decimal(totalNeto).plus(detalleApartamentoPorDia.precioNetoNoche)
-                // Precio medie de la noche por apartamento
+
             }
             estructuraDia.precioNetoNoche = new Decimal(precioNetoNoche).isPositive() ? precioNetoNoche.toFixed(2) : "0.00";
             estructuraFinal.totalesPorNoche_Objeto[fechaDiaUI] = estructuraDia

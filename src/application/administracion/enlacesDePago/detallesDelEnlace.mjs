@@ -33,10 +33,10 @@ export const detallesDelEnlace = async (entrada, salida) => {
         const descripcion = enlaceDePago.descripcion;
         const reservaUID = enlaceDePago.reservaUID;
         const fechaCaducidad = enlaceDePago.fechaCaducidad;
-        // const caducidadUTC = utilidades.conversor.fecha_ISO_hacia_humana(fechaCaducidad);
-        // const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        // const caducidadMadrid = utilidades.deUTCaZonaHoraria(fechaCaducidad, "Europe/Madrid");
-        // const caducidadNicaragua = utilidades.deUTCaZonaHoraria(fechaCaducidad, zonaHoraria);
+
+
+
+
 
         const detallesReserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoPago = detallesReserva.estadoPagoIDV;
@@ -48,9 +48,9 @@ export const detallesDelEnlace = async (entrada, salida) => {
                 reservaUID: reservaUID,
                 fechaCaducidad_ISO: fechaCaducidad,
                 estadoPago: estadoPago,
-                // caducidadUTC: caducidadUTC,
-                // caducidadMadrid: caducidadMadrid,
-                // caducidadNicaragua: caducidadNicaragua
+
+
+
             }
         }
         return ok

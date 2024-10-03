@@ -60,7 +60,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
                 const error = "No se puede poner en disponible esta configuración porque no es válida. Necesitas al menos una habitación en esta configuración y este apartamento no la tiene";
                 throw new Error(error);
             }
-            // Mirar que todas las habitaciones tengan una cama asignada
+
             if (habitacionesPorApartmento.length > 0) {
                 const habitacionesSinCama = [];
                 const habitacionesEnConfiguracion = habitacionesPorApartmento;
@@ -83,7 +83,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
                     throw new Error(error);
                 }
             }
-            // Mira que tenga un perfil de precio creado y superiro 0
+
             const perfilPrecioDelApartamento = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
             if (perfilPrecioDelApartamento.length === 0) {
                 const error = "La configuración no es válida. No se puede establecer en disponible porque esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor, establece un perfil de precio para esta configuración.";
@@ -93,7 +93,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
                 const error = "El apartamento tiene una configuración correcta y también tiene un perfil de precio, pero en el perfil de precio está establecido 0.00 como precio base y no está permitido.";
                 throw new Error(error);
             }
-            // No puede haber un estado disponible con precio base en 0.00
+
         }
 
         const dataActualizarEstadoPorApartamentoIDV = {

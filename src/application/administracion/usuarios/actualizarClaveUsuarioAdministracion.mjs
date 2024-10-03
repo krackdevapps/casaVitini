@@ -27,7 +27,7 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        //validadoresCompartidos.claves.minimoRequisitos(claveNueva);
+
         if (claveNueva !== claveNuevaDos) {
             const error = "No has escrito dos veces la misma nueva contraseña";
             throw new Error(error);

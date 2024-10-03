@@ -8,7 +8,7 @@ export const insertarDesgloseFinacieroPorReservaUID = async (data) => {
         delete desgloseFinanciero.entidades.reserva.instantaneaNoches
 
         const instantaneaImpuestos = JSON.stringify(_.cloneDeep(desgloseFinanciero.impuestos));
-        //delete desgloseFinanciero.impuestos
+
 
         const instantaneaOfertasPorCondicion = JSON.stringify(desgloseFinanciero.contenedorOfertas.ofertas.porCondicion)
         const instantaneaOfertasPorAdministrador = JSON.stringify(desgloseFinanciero.contenedorOfertas.ofertas.porAdministrador)

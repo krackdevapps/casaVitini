@@ -44,12 +44,12 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         })
 
         await eliminarBloqueoCaducado();
-        // Validar que le nombre del apartamento existe como tal
+
         await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })
-        // valida reserva y obten fechas
+
 
         const detallesReserva = await obtenerReservaPorReservaUID(reservaUID)
         if (detallesReserva.estadoReservaIDV === "cancelada") {
@@ -60,8 +60,8 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
 
         const fechaEntrada = detallesReserva.fechaEntrada;
         const fechaSalida = detallesReserva.fechaSalida;
-        // ACABAR ESTA SENTENCIA DE ABAJO--
-        // validar que el apartamento no este ya en la reserva
+
+
         const apartamentoReserva = await obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID({
             reservaUID: reservaUID,
             apartamentoIDV: apartamentoIDV

@@ -63,7 +63,7 @@ export const obtenerSituacion = async (entrada, salida) => {
             const horasSalidaEntrada = await horasSalidaEntrada_();
             const horaEntradaTZ = horasSalidaEntrada.horaEntradaTZ;
             const horaSalidaTZ = horasSalidaEntrada.horaSalidaTZ;
-            //ok.fechaUTC = fechaActualUTC;
+
             ok.fechaTZ = `${diaHoyTZ}/${mesPresenteTZ}/${anoPresenteTZ}`;
             ok.horaTZ = `${horaPresenteTZ}:${minutoPresenteTZ}`;
             ok.horaEntrada = horaEntradaTZ;
@@ -71,10 +71,10 @@ export const obtenerSituacion = async (entrada, salida) => {
             for (const reservaObjetoUID of reservasUIDHoy) {
                 const reservaUID = reservaObjetoUID.reservaUID
                 const reserva = await obtenerReservaPorReservaUID(reservaUID)
-                // Fecha de la base de datos
+
                 const fechaEntradaReservaISO = reserva.fechaEntrada;
                 const fechaSalidaReservaISO = reserva.fechaSalida;
-                // Formatos fecha
+
                 const fechaConHoraEntradaFormato_ISO_ZH = DateTime.fromISO(`${fechaEntradaReservaISO}T${horaEntradaTZ}`, { zone: zonaHoraria }).toISO();
                 const fechaConHoraSalidaFormato_ISO_ZH = DateTime.fromISO(`${fechaSalidaReservaISO}T${horaSalidaTZ}`, { zone: zonaHoraria }).toISO();
 
@@ -138,7 +138,7 @@ export const obtenerSituacion = async (entrada, salida) => {
             }
             ok.ok = apartamentosObjeto;
         }
-        // buscar reservas en el dia actual
+
         const eventosCalendarios_airbnb = await apartamentosOcupadosHoy_paraSitaucion(fechaActualTZ);
         for (const calendariosSincronizadosAirbnb of eventosCalendarios_airbnb) {
             const apartamentoIDV_destino = calendariosSincronizadosAirbnb.apartamentoIDV;

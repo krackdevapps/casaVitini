@@ -14,10 +14,10 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
         const contenedoresFinancieros = await obtenerDesglosesFinancierosPorReservaUIDARRAY(reservasUIDArray)
 
 
-        // Actualizar los IDV de las instantena
+
         if (origenIDV === destinoIDV) {
             const m = "No se puede actualizar un orgienIDV y un destinoIDV siendo el mismo, podría provocar problema de integridad en el contenedor financiero."
-            //  throw new Error(m)
+
         }
         for (const contenedor of contenedoresFinancieros) {
             const componenteUID = contenedor.componenteUID

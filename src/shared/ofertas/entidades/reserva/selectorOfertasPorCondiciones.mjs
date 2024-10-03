@@ -44,7 +44,7 @@ export const selectorOfertasPorCondiciones = async (ofertasEncontradasPorFecha) 
                     tipoOferta: tipoOferta,
                     cantidad: cantidad
                 }
-                // Calcula la diferencia en milisegundos
+
                 const fechaEntrada_Objeto = DateTime.fromISO(fechaEntradaReserva_ISO, { zone: codigoZonaHoraria.zonaHoraria });
                 const diasAntelacion = Math.floor(fechaEntrada_Objeto.diff(tiempoZH, 'days').days);
                 if (simboloNumero === "aPartirDe" && numero <= diasAntelacion) {

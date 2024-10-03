@@ -5,7 +5,7 @@ import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 export const validarCodigosDescuentos = async (data) => {
     try {
 
-        // Obsoleto
+
         return
 
         const codigosDescuento = data.codigosDescuento || []

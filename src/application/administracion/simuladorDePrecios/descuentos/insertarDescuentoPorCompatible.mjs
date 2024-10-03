@@ -94,7 +94,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
                 }
             }
         })
-        // Ojo por que sobrescribe las ofertas existentes, debe de añadir en el array de ofertas por cocndicion otra mas
+
         await actualizarDesgloseFinacieroPorSimulacionUID({
             desgloseFinanciero,
             simulacionUID

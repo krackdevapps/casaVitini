@@ -82,7 +82,7 @@ describe('crud offers system', () => {
     let ofertaUID
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
-        // Añadir el eliminar impuesto por testingVI
+
         await eliminarOfertaPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "eliminar",

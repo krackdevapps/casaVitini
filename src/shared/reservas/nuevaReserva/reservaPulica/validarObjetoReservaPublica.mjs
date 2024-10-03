@@ -487,7 +487,7 @@ export const validarObjetoReservaPublica = async (data) => {
             })
 
             if (filtroHabitacionesCamas === "activado") {
-                // Comprobar haitacionIDV
+
                 for (const [habitacionIDV, contenedor] of Object.entries(habitacionesDelApartamentoPorValidar)) {
                     const habitacionUI_entrada = contenedor.habitacionUI
 

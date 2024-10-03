@@ -8,7 +8,6 @@ export const constructorObjetoEvento = (calendarioDatos) => {
     const calendarioObjeto = []
     eventosCalenario.forEach((event) => {
         const detallesEventoSinFormatear = event[1]
-        // 
         const eventoObjeto = {}
 
         detallesEventoSinFormatear.forEach((detallesEvento) => {
@@ -44,17 +43,6 @@ export const constructorObjetoEvento = (calendarioDatos) => {
 
         const fechaInicioEvento = eventoObjeto.fechaInicio
         const fechaFinalEvento = eventoObjeto.fechaFinal
-        // Corrector dia final de airbnb
-        // if (fechaInicioEvento === fechaFinalEvento) {
-        //     const fechaFinalCorregida = DateTime
-        //         .fromISO(fechaFinalEvento)
-        //         .minus({ days: 1 })
-        //         .toISODate();
-        //     eventoObjeto.fechaFinal = fechaFinalCorregida
-        //     ("fecha corregida", fechaFinalEvento, fechaFinalCorregida)
-        // }
-
-
         calendarioObjeto.push(eventoObjeto)
     });
     return calendarioObjeto

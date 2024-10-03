@@ -43,7 +43,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
-        // validar habitacion
+
         await obtenerHabitacionDelLaReserva({
             reservaUID: reservaUID,
             habitacionUID: habitacionUID

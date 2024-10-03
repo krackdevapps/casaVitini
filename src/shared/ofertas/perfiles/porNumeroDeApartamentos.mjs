@@ -15,7 +15,7 @@ export const porNumeroDeApartamentos = async (reserva) => {
             estadoOfertaActivado: estadoOfertaActivado,
             ofertaTipo: ofertaTipo
         })
-        // Filtro Ofertas
+
         for (const detallesOferta of ofertasEncontradas) {
             const tipoOferta = detallesOferta.tipoOferta
             const simboloNumero = detallesOferta.simboloNumero
@@ -38,7 +38,7 @@ export const porNumeroDeApartamentos = async (reserva) => {
                 ofertasSeleccionadas.push(estructuraOferta)
             }
         }
-        // Calculo ofertas
+
         for (const detallesOferta of ofertasSeleccionadas) {
             const tipoDescuento = detallesOferta.tipoDescuento
             const cantidad = new Decimal(detallesOferta.cantidad)

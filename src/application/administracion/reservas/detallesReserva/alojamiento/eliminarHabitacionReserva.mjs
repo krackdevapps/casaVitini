@@ -52,7 +52,7 @@ export const eliminarHabitacionReserva = async (entrada) => {
             const error = "El campo 'pernoctantes' solo puede ser 'conservar', 'mantener'";
             throw new Error(error);
         }
-        // Comprobar que la reserva exisste
+
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar porque está cancelada.";
@@ -66,7 +66,7 @@ export const eliminarHabitacionReserva = async (entrada) => {
             const error = "La reserva no se puede modificar porque está reembolsada.";
             throw new Error(error);
         }
-        // validar habitacion
+
         await obtenerHabitacionDelLaReserva({
             reservaUID: reservaUID,
             habitacionUID: habitacionUID

@@ -48,51 +48,7 @@ export const obtenerTodosLosCalendarios = async () => {
                 estructura.estadoSincronizacion = "noSincronizado"
             }
 
-
-
-            // const jcalData = ICAL.parse(calendarioDatos);
-            // const jcal = new ICAL.Component(jcalData);
-            // const eventosCalenario = jcal.jCal[2]
             const calendarioObjeto = constructorObjetoEvento(calendarioDatos)
-            // eventosCalenario.forEach((event) => {
-            //     const detallesEventoSinFormatear = event[1]
-            //     // 
-            //     const eventoObjeto = {}
-            //     detallesEventoSinFormatear.forEach((detallesEvento) => {
-            //         const idCajon = detallesEvento[0]
-            //         if (idCajon === "categories") {
-            //             eventoObjeto.categoriaEvento = detallesEvento[3]
-            //         }
-            //         if (idCajon === "summary") {
-            //             eventoObjeto.nombreEvento = detallesEvento[3]
-            //         }
-            //         if (idCajon === "dtstart") {
-            //             eventoObjeto.fechaInicio = detallesEvento[3]
-            //         }
-            //         if (idCajon === "dtend") {
-            //             const fechaEnDTEND = detallesEvento[3]
-            //             const fechaFinalCorregida = DateTime.fromISO(fechaEnDTEND)
-            //                 .minus({ days: 1 })
-            //                 .toISODate();
-            //             eventoObjeto.fechaFinal = fechaFinalCorregida                        }
-            //         if (idCajon === "uid") {
-            //             eventoObjeto.uid = detallesEvento[3]
-            //         }
-            //         if (idCajon === "last-modified") {
-            //             eventoObjeto.ultimaModificaion = detallesEvento[3]
-            //         }
-            //         if (idCajon === "dtstamp") {
-            //             eventoObjeto.creacionEvento = detallesEvento[3]
-            //         }
-            //         if (idCajon === "description") {
-            //             eventoObjeto.descripcion = detallesEvento[3]
-            //         }
-            //         if (idCajon === "url") {
-            //             eventoObjeto.url = detallesEvento[3]
-            //         }
-            //     })
-            //     calendarioObjeto.push(eventoObjeto)
-            // });
             estructura.calendarioObjeto = calendarioObjeto
             ok.calendariosSincronizados.push(estructura)
         }

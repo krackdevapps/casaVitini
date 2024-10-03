@@ -35,7 +35,7 @@ export const selectorRangoUniversal = async (metadatos) => {
         const finElemento = DateTime.fromISO(fechaFin_elemento_ISO)
 
         if (tipoLimite === "incluido") {
-            // Caso 2: Evento parcialmente dentro del rango
+
             if (finElemento <= finRango && inicioElemento >= inicioRango) {
                 return true;
 
@@ -45,7 +45,7 @@ export const selectorRangoUniversal = async (metadatos) => {
             }
         }
         if (tipoLimite === "noIncluido") {
-            // Caso 2: Evento parcialmente dentro del rango
+
             if (finElemento < finRango && inicioElemento > inicioRango) {
                 return true;
             }
@@ -53,7 +53,7 @@ export const selectorRangoUniversal = async (metadatos) => {
                 return true;
             }
         }
-        // Caso 3: Evento atraviesa el rango
+
         if (finElemento < finElemento && inicioElemento > finRango) {
             return true;
         }

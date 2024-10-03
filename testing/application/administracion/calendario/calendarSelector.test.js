@@ -28,7 +28,7 @@ describe('calendars selectors', () => {
             estadoInicial: "nodisponible",
             zonaIDV: "global"
         })
-        // Ojo con la tabulacion dentro de los template strings en calendarioRaw del objeto fakeCalendar, NO TABULAR
+
         const fakeCalendar = {
             nombre: "Calendario para testing",
             url: "fakeURL",

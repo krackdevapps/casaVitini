@@ -98,13 +98,13 @@ export const validadoresCompartidos = {
                     cliente.testingVI = testingVI
                 }
 
-                // if (clienteConMismoPasaporte?.clienteUID) {
-                //     const nombreClienteExistente = clienteConMismoPasaporte.nombre
-                //     const primerApellidoClienteExistente = clienteConMismoPasaporte.primerApellido
-                //     const segundoApellidoClienteExistente = clienteConMismoPasaporte.segundoApellido
-                //     const error = `Ya existe un cliente con ese pasaporte: ${nombreClienteExistente} ${primerApellidoClienteExistente} ${segundoApellidoClienteExistente}`
-                //     throw new Error(error)
-                // }
+
+
+
+
+
+
+
                 const datosValidados = {
                     nombre: nombre,
                     primerApellido: primerApellido,
@@ -262,7 +262,7 @@ export const validadoresCompartidos = {
                 const ano = fechaArreglo[2]
                 const fecha_ISO = `${ano}-${mes}-${dia}`
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
-                //const fechaControl = DateTime.fromISO(fecha_ISO, { zone: zonaHoraria }).isValid;
+
                 const fechaControl = DateTime.fromObject({
                     day: dia,
                     month: mes,
@@ -291,7 +291,7 @@ export const validadoresCompartidos = {
                     const error = "La fecha no cumple el formato cadena esperado"
                     throw new Error(error)
                 }
-                //Ojo por que esto es nes-ano:
+
                 const filtroFecha = /^([1-9]|1[0-2])-(\d{1,})$/;
                 if (!filtroFecha.test(fechaMesAno)) {
                     const error = "La fecha no cumple el formato específico. En este caso se espera una cadena con este formado MM-YYYY. Si el mes tiene un dígito, es un dígito, sin el cero delante. Por ejemplo, 5-2024 o 10-2024";
@@ -401,18 +401,18 @@ export const validadoresCompartidos = {
                 let tieneMayuscula = false;
                 let tieneNumero = false;
                 let tieneCaracterEspecial = false;
-                // Verifica cada carácter de la clave
+
                 for (var i = 0; i < clave.length; i++) {
                     var caracter = clave.charAt(i);
-                    // Verifica si el carácter es una mayúscula
+
                     if (caracter >= "A" && caracter <= "Z") {
                         tieneMayuscula = true;
                     }
-                    // Verifica si el carácter es un número
+
                     else if (caracter >= "0" && caracter <= "9") {
                         tieneNumero = true;
                     }
-                    // Verifica si el carácter es un carácter especial
+
                     else if ("!@#$%^&*()_+".indexOf(caracter) !== -1) {
                         tieneCaracterEspecial = true;
                     }

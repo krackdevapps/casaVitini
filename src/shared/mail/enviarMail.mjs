@@ -7,7 +7,7 @@ export const enviarMail = async (entrada) => {
     try {
         const filtroCorreo = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
         const filtroComillas = /['"]/;
-        // Vigital aqui
+
         const destino = entrada.destino;
         const origen = entrada.origen;
         const asunto = entrada.asunto;
@@ -19,10 +19,10 @@ export const enviarMail = async (entrada) => {
         }
 
 
-        // if (!filtroCorreo.test(origen)) {
-        //     const error = "La dirección de origen no tiene un formato correcto"
-        //     throw new Error(error)
-        // }
+
+
+
+
         const transporte = nodemailer.createTransport({
             host: process.env.CORREO_HOST_SERVIDOR_CORREO,
             port: process.env.CORREO_PUERTO_SMTP,
@@ -44,7 +44,7 @@ export const enviarMail = async (entrada) => {
         if (entrada.attachments) {
             composicionDelMensaje.attachments = entrada.attachments
         }
-    
+
         const mensajeCompositor = await transporte.sendMail(composicionDelMensaje)
         return mensajeCompositor
     } catch (errorCapturado) {

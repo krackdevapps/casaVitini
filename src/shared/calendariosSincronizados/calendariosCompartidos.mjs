@@ -44,8 +44,8 @@ export const calendariosCompartidos = async (data) => {
         for (const fecha of arrayFechas) {
             objetoFechas[fecha] = {};
         }
-        // Primero buscamso si hay bloqueos permanentes
-        // si no hay procedemos a buscar bloquoeos temporales y reservas
+
+
         const bloqueoPermanente = "permanente";
         const bloqueosPorTipoPorApartamentoIDV = await obtenerBloqueosPorTipoIDVPorApartamentoIDV({
             tipoBloqueoIDV: bloqueoPermanente,
@@ -76,7 +76,7 @@ export const calendariosCompartidos = async (data) => {
                 const fechaEntradaBloqueo_ISO = detalleDelBloqueo.fechaInicio;
                 const fechaSalidaBloqueo_ISO = detalleDelBloqueo.fechaFin;
                 const bloqueoUID = detalleDelBloqueo.bloqueoUID;
-                // Aqui hay que hacer que no muestre la hora
+
                 const fechaEntrada_objeto = (DateTime.fromObject({
                     year: fechaEntradaBloqueo_ISO.split("-")[0],
                     month: fechaEntradaBloqueo_ISO.split("-")[1],
@@ -165,7 +165,7 @@ export const calendariosCompartidos = async (data) => {
 
                 const fechaInicioFormatoAirbnb = fechaInicioSinHora.replaceAll("-", "")
                 const fechaFinalFormatoAirbnb = fechaFinalSinHora.replaceAll("-", "")
-                // DESCRIPTION:${description}
+
 
                 const constructorEvetno = `
                 BEGIN:VEVENT

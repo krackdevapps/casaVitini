@@ -22,10 +22,10 @@ export const exportarCalendario = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
         })
         await obtenerCalendarioPorCalendarioUID(calendarioUID)
-        // Obtener las las reservas
-        // Verificar que el apartmento este en esa reserva
-        // añadirlo a una array
-        // parsearlo en formato ical
+
+
+
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

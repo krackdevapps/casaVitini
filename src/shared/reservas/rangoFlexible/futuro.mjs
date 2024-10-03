@@ -81,7 +81,7 @@ export const validadorFuturo = async (data) => {
             }
             contenedorReservaEncontradas.push(estructura)
         }
-        // En base a los apartamentos de la reserva se importan los calendarios que funcionan por apartamento
+
         const calendariosSincronizados = []
         for (const apartamentoIDV of apartamentosReservaActual) {
             const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
@@ -89,15 +89,15 @@ export const validadorFuturo = async (data) => {
         }
 
         const contenedorEventosCalendariosSincronizados = []
-        // Iteramos el array con todos los grupos por apartamentoIDV
+
         for (const contenedorCalendariosPorIDV of calendariosSincronizados) {
-            // Dentro de cada apartamentoIDV hay un grupo de calendarios
+
             const apartamentoIDV = contenedorCalendariosPorIDV.apartamentoIDV
             const calendariosPorApartamento = contenedorCalendariosPorIDV.calendariosPorApartamento
-            // Obtenemos todos los eventos como objetos por calendario
+
             for (const eventosDelCalendario of calendariosPorApartamento) {
                 const eventosCalendario = eventosDelCalendario.calendarioObjeto
-                // Iteramos por cada evento
+
                 for (const detallesDelEvento of eventosCalendario) {
                     const fechaFinal = detallesDelEvento.fechaFinal
                     const fechaInicio = detallesDelEvento.fechaInicio
@@ -162,7 +162,7 @@ export const validadorFuturo = async (data) => {
             }
             return ok
         }
-        // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay
+
         const contenedorQueDejanRangoDisponbile = []
         for (const detallesDelEvento of contenedorGlobal) {
             const fechaInicioEvento_ISO = detallesDelEvento.fechaEntrada
@@ -202,7 +202,7 @@ export const validadorFuturo = async (data) => {
             const eventosOrdenadorPorFechaDeEntrada = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
                 const fechaEntradaA = DateTime.fromISO(evento1.fechaEntrada); // Convertir fecha de salida del evento 1 a objeto DateTime
                 const fechaEntradaB = DateTime.fromISO(evento2.fechaEntrada); // Convertir fecha de salida del evento 2 a objeto DateTime
-                // Ordenar de manera descendente según la fecha de salida
+
                 if (fechaEntradaA > fechaEntradaB) {
                     return 1; // Si la fecha de salida del evento 1 es menor, lo colocamos después en el array
                 } else if (fechaEntradaA < fechaEntradaB) {

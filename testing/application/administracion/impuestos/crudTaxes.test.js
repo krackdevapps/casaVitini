@@ -18,7 +18,7 @@ describe('crudTaxes system', () => {
     let impuestoUID
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
-        // Añadir el eliminar impuesto por testingVI
+
         await eliminarImpuestoPorTestingVI(testingVI)
         await eliminarEnlaceDePagoPorTestingVI(testingVI)
     })

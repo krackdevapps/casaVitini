@@ -39,11 +39,11 @@ export const pdfReservaBuffer = async (entrada, salida) => {
 
         const pdf = await generadorPDF(reserva);
         const pdfBuffer = Buffer.from(pdf, 'base64');
-        // Establecer los headers para que el navegador lo interprete como un PDF
+
         salida.setHeader('Content-Type', 'application/pdf');
         salida.setHeader('Content-Disposition', 'inline; filename="reserva.pdf"'); // inline para mostrar el PDF en el navegador, si quieres que lo descargue usa 'attachment'
 
-        // Enviar el buffer del PDF como respuesta
+
         return salida.send(pdfBuffer);
 
     } catch (errorCapturado) {

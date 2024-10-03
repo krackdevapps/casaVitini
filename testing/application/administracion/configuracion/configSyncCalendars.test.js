@@ -81,7 +81,7 @@ END:VCALENDAR`
             body: {
                 nombre: "Calendario para testing",
                 apartamentoIDV: apartamentoIDV,
-               // url: "https://airbnb.com/testing/calendario.ical"
+
             },
             session: fakeAdminSession
         }

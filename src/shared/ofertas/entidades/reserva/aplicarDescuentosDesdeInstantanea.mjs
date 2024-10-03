@@ -8,9 +8,9 @@ export const aplicarDescuentosDesdeInstantanea = async (data) => {
     const fechaEntradaReserva_ISO = data.fechaEntradaReserva_ISO
     const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
     const ofertasSeleccionadas = await obtenerOfertasPorArrayUID(descuentosArray)
-    // revice el reservaUID, 
-    // estrae la instantanea
-    // aplicar los Descuentos
+
+
+
 
     const ofertaAnalizadasPorCondiciones = []
     for (const oferta of ofertasSeleccionadas) {

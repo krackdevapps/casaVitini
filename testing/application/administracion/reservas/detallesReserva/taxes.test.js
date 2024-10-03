@@ -37,7 +37,7 @@ describe('taxes in bookins', () => {
         })
 
         await eliminarReservaPorTestingVI(testingVI)
-        // Crear una primera arquitectura de alojamineto para crear al reserva.
+
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV,
@@ -47,7 +47,7 @@ describe('taxes in bookins', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
-        // Crear reserva
+
         const reserva = await crearReservaSimpleAdministrativa({
             body: {
                 fechaEntrada: "2026-10-10",

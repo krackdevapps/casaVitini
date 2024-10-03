@@ -25,15 +25,15 @@ export const porApartamentosEspecificos = async (reserva) => {
         }
         const ofertasSeleccionadas = []
         let descuentoGlobal = new Decimal("0.00")
-        // Mucho ojo en las ofertas de tipo1 por que se activan revisando la fecha actual, es decir la fecha de cuando se realiza la reserva y no las fechas de inicio y fin de la reserva, eso se revisa mas adelante
-        // Acuerdate por que esta parte es un poco contraintuitiva.
+
+
         const ofertaTipo = "porApartamentosEspecificos";
         const ofertas = await obtenerOfertasPorFechaPorEstadoPorTipo({
             fechaActualTZ: fechaActualTZ,
             estadoOfertaActivado: estadoOfertaActivado,
             ofertaTipo: ofertaTipo
         })
-        // Filtro Ofertas
+
         for (const detallesOferta of ofertas) {
             const ofertaUID = detallesOferta.uid
             const tipoOferta = detallesOferta.tipoOferta
@@ -49,8 +49,8 @@ export const porApartamentosEspecificos = async (reserva) => {
                 tipoDescuento: tipoDescuento,
                 tipoOferta: tipoOferta,
                 cantidad: cantidad,
-                //simboloNumero: simboloNumero,
-                //numero: numero,
+
+
                 descuento: "0.00",
                 descuentoAplicadoA: descuentoAplicadoA,
                 apartamentosEspecificos: [],

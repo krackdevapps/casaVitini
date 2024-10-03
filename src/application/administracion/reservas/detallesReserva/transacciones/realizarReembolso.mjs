@@ -91,8 +91,8 @@ export const realizarReembolso = async (entrada, salida) => {
         const estadoReserva = detallesReserva.estadoReserva;
         const estadoPago = detallesReserva.estadoPago;
         if (estadoPago === "noPagado") {
-            // const error = "No se puede hacer un reembolso de un pago asociado a una resera no pagada"
-            // throw new Error(error)
+
+
         }
 
         const detallesDelPago = await obtenerPagoPorPagoUIDYReservaUID({
@@ -111,7 +111,7 @@ export const realizarReembolso = async (entrada, salida) => {
             const error = `El valor del reembolso ${cantidad} supera el valor total del pago ${controlTotalPago} que se quiere reembolsar.`;
             throw new Error(error);
         }
-        // controlar que el reembolso no sea superior al maximo  reembolsable teniendo en cuenta todos los reembolsos ya realizados de cualquuier tipo
+
         const reembolsoDelPago = await obtenerReembolsosPorPagoUID_ordenados(pagoUID)
         if (reembolsoDelPago.length > 0) {
             let totalReembolsado = 0;

@@ -51,13 +51,13 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         };
         const datosValidados = await validadoresCompartidos.clientes.validarCliente(nuevoCliente);
 
-        // Comprobar que la reserva exisste
+
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
-        // validar pernoctante y extraer el UID del clientePool
+
         const pernoctante = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
             reservaUID: reservaUID,
             pernoctanteUID: pernoctanteUID
@@ -73,7 +73,7 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
         }
         const nuevoClienteAdd = await insertarCliente(datosValidados);
         const nuevoUIDCliente = nuevoClienteAdd.clienteUID;
-        // Borrar clientePool       
+
         await eliminarClientePool(pernoctanteUID)
         const pernoctanteActualizado = await actualizarClienteUIDDelPernoctantePorComponenteUID({
             reservaUID: reservaUID,

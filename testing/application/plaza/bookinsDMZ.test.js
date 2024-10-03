@@ -14,7 +14,7 @@ import { eliminarOfertaPorTestingVI } from '../../../src/infraestructure/reposit
 import { preConfirmarReserva } from '../../../src/application/plaza/reservas/preConfirmarReserva.mjs';
 
 describe('miCasa bookins', () => {
-    // Cambiar un momento la variable de aceptar reserva y vovler a activar y mirar si tiene algo que ver el hecho de entorno de pruebas.
+
     const testingVI = "testingbookingmicasa"
     const usuarioIDV_inicial = "userfortestingformicasametodos"
     const fakeAdminSession = {
@@ -56,10 +56,10 @@ describe('miCasa bookins', () => {
     }
 
     beforeAll(async () => {
-        // await actualizarEstado({
-        //     interruptorIDV: "aceptarReservasPublicas",
-        //     estado: "activado"
-        // })
+
+
+
+
         process.env.TESTINGVI = testingVI
         await eliminarClientePorTestingVI(testingVI)
         await eliminarReservaPorTestingVI(testingVI)
@@ -72,7 +72,7 @@ describe('miCasa bookins', () => {
             camaIDV: camaIDV
         })
 
-        // Crear una primera arquitectura de alojamineto para crear al reserva.
+
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV,
@@ -191,7 +191,6 @@ describe('miCasa bookins', () => {
     test('confirm bookin from DMZ with ok', async () => {
         const m = {
             body: {
-                // tipoContenedorCodigo: "cadena",
                 codigoDescuento: codeOffer,
                 reserva: {
                     fechaEntrada: fechaInicioVirutal,

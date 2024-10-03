@@ -51,7 +51,7 @@ export const insertarImpuestoEnReserva = async (entrada) => {
             errorSi: "existe"
         })
 
-        // Insertar el impuesto en la instantanea
+
         const impuesto = await obtenerImpuestosPorImppuestoUID(impuestoUID)
         await campoDeTransaccion("iniciar")
         await insertarImpuestoPorReservaUID({

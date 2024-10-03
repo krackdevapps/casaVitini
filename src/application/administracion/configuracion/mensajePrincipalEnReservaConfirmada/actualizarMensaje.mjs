@@ -14,7 +14,7 @@ export const actualizarMensaje = async (entrada) => {
             numeroDeLLavesMaximo: 1
         })
 
-        // Tranformar a base 64
+
         const mensajePrincipalEnReservaConfirmada = validadoresCompartidos.tipos.cadena({
             string: entrada.body.mensajePrincipalEnReservaConfirmada,
             nombreCampo: "El campo del mensajePrincipalEnReservaConfirmada",

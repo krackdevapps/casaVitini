@@ -6,11 +6,11 @@ import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../infraestruct
 export const actualizarEstadoPago = async (reservaUID) => {
 
     try {
-        // Seleccionar el total
+
         const desgloseGlobal = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
         const totalFinal = desgloseGlobal.desgloseFinanciero.global.totales.totalFinal
 
-        // Seleccionar todos los pagos de la reserva
+
         const pagosDeLaReserva = await obtenerPagosPorReservaUID(reservaUID)
         const pagos = pagosDeLaReserva.map((pago) => {
             return pago.cantidad

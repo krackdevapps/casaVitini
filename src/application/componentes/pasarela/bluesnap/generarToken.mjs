@@ -19,7 +19,7 @@ export const generarToken = async (entrada, salida) => {
         'Host': 'sandbox.bluesnap.com'
     };
     const data = {
-        // Tu payload JSON aquí
+
     };
     try {
         const response = await axios.post(url, data, { headers });

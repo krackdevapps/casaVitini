@@ -28,7 +28,7 @@ export const makeHostArquitecture = async (data) => {
         await eliminarHabitacionComoEntidad(habitacionIDV)
         if (operacion === "construir") {
 
-            // Crear entidad apartamentos
+
             await crearEntidadAlojamiento({
                 body: {
                     tipoEntidad: "apartamento",
@@ -37,7 +37,7 @@ export const makeHostArquitecture = async (data) => {
                 },
                 session: fakeAdminSession
             })
-            // Crear entidad habitacion
+
             await crearEntidadAlojamiento({
                 body: {
                     tipoEntidad: "habitacion",
@@ -46,7 +46,7 @@ export const makeHostArquitecture = async (data) => {
                 },
                 session: fakeAdminSession
             })
-            // Crear entidad cama
+
             await crearEntidadAlojamiento({
                 body: {
                     tipoEntidad: "cama",
@@ -57,7 +57,7 @@ export const makeHostArquitecture = async (data) => {
                 },
                 session: fakeAdminSession
             })
-            // Crear configuracion de alojamiento
+
             await crearConfiguracionAlojamiento({
                 body: {
                     apartamentoIDV: apartamentoIDV,
@@ -65,7 +65,7 @@ export const makeHostArquitecture = async (data) => {
                 },
                 session: fakeAdminSession
             })
-            // Actualizar zona de la configuracion de alojamiento
+
             const makeEntity = {
                 body: {
                     apartamentoIDV: apartamentoIDV,
@@ -74,7 +74,7 @@ export const makeHostArquitecture = async (data) => {
                 session: fakeAdminSession
             }
             await actualizarZonaDeLaConfiguracionApartamento(makeEntity)
-            // Añadir habitacion a la configuracion de alojamiento
+
             const habitacionAdded = await addHabitacionToConfiguracionApartamento({
                 body: {
                     habitacionIDV: habitacionIDV,
@@ -84,7 +84,7 @@ export const makeHostArquitecture = async (data) => {
             })
             habitacionUID = habitacionAdded.habitacionUID
 
-            // Añadir cama a la habitacion
+
             await addCamaToConfiguracionApartamentoHabitacion({
                 body: {
                     camaIDV: camaIDV,
@@ -93,7 +93,7 @@ export const makeHostArquitecture = async (data) => {
                 session: fakeAdminSession
             })
 
-            // Actualizar precio de la confioguracion de alojamiento
+
             await establecerNuevoPrecioApartamento({
                 body: {
                     apartamentoIDV: apartamentoIDV,
@@ -101,7 +101,7 @@ export const makeHostArquitecture = async (data) => {
                 },
                 session: fakeAdminSession
             })
-            // Actualizar el estado de la configuracion a disponible
+
             await cambiarEstadoConfiguracionAlojamiento({
                 body: {
                     apartamentoIDV: apartamentoIDV,

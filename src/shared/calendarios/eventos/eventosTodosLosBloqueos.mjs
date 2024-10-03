@@ -66,7 +66,7 @@ export const eventosTodosLosBloqueos = async (fecha) => {
                 detallesBloqueo.fechaSalida = fechaFinalVirtual
             }
 
-            // El calenadrio espera que en detalles del evento, este el fechaEntrad y fechaSalida
+
             delete detallesBloqueo.fechaInicio
             delete detallesBloqueo.fechaFin
 

@@ -18,8 +18,8 @@ export const porDiasDeAntelacion = async (reserva) => {
         const fechaActual_objeto = DateTime.fromISO(fechaActualTZ).setZone(zonaHoraria);
         const estadoOfertaActivado = "activada"
 
-        // Mucho ojo en las ofertas de tipo1 por que se activan revisando la fecha actual, es decir la fecha de cuando se realiza la reserva y no las fechas de inicio y fin de la reserva, eso se revisa mas adelante
-        // Acuerdate por que esta parte es un poco contraintuitiva.
+
+
         const ofertasTipo = "porDiasDeAntelacion";
         const ofertasEncontradas = await obtenerOfertasPorFechaPorEstadoPorTipo({
             fechaActualTZ: fechaActualTZ,

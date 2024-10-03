@@ -1,11 +1,8 @@
 import { selectorRangoUniversal } from "../../selectoresCompartidos/selectorRangoUniversal.mjs"
 import { sincronizarCalendariosAirbnbPorIDV } from "./sincronizarCalendariosAirbnbPorIDV.mjs"
 export const eventosDelApartamento = async (datos) => {
-    // AL LORO DESCOMENTAR LO DE ABAJO CUANDO SE ACABEN LAS PRUEBAS!!!!!
     const fechaHoy_ISO = datos.fechaHoy_ISO
     const apartamentoIDV = datos.apartamentoIDV
-    //const fechaHoy_ISO = "2024-05-05"
-    // Sincronizar y obtener los dtos
     const calendarioExterno = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
     const calendariosPorApartamento = calendarioExterno.calendariosPorApartamento
     const detallesDelApartamento = {
@@ -17,8 +14,6 @@ export const eventosDelApartamento = async (datos) => {
         for (const detallesDelCalendario of calendariosObjetoDelApartamento) {
             const fechaInicioComparar = detallesDelCalendario.fechaInicio
             const fechaFinalComparar = detallesDelCalendario.fechaFinal
-            //
-
             const controlOcupacional = await selectorRangoUniversal({
                 fechaInicio_rango_ISO: fechaHoy_ISO,
                 fechaFin_rango_ISO: fechaHoy_ISO,
@@ -26,14 +21,10 @@ export const eventosDelApartamento = async (datos) => {
                 fechaFin_elemento_ISO: fechaFinalComparar,
                 tipoLimite: "incluido"
             })
-
             if (controlOcupacional) {
-                //apartamentosOcupados.push(apartamentoIDV)
                 detallesDelApartamento.eventos.push(detallesDelCalendario)
             }
         }
     }
-
-
     return detallesDelApartamento
 }

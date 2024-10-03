@@ -29,7 +29,7 @@ export const obtenerDetallesDelPago = async (entrada) => {
         })
 
         const detallesDelPago = await obtenerPagoPorPagoUID(pagoUID)
-        // Determinar tipo de pago
+
         const cantidadDelPago = detallesDelPago.cantidad;
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO;
@@ -91,7 +91,7 @@ export const obtenerDetallesDelPago = async (entrada) => {
             ok.detallesDelPago.sumaDeLoReembolsado = sumaDeLoReembolsado.toFixed(2);
             ok.detallesDelPago.reembolsado = reembolsado;
         }
-        //ok.deglosePorReembolso.push(detallesDelPago)
+
         return ok
 
     } catch (errorCapturado) {

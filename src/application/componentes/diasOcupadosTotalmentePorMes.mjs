@@ -42,9 +42,9 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
         const anoActual = tiempoZH.year;
         const mesActual = tiempoZH.month;
         const constructorMes = DateTime.fromObject({ year: ano, month: mes, day: 1 });
-        // Obtén el último día del mes
+
         const ultimoDiaDelMes = constructorMes.endOf("month");
-        // Extrae el número del último día del mes
+
         const numeroUltimoDia = ultimoDiaDelMes.day;
         const rol = entrada.session?.rolIDV;
         const rolAdministrador = "administrador";
@@ -66,7 +66,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
             estadoReservaCancelada: "cancelada",
         })
 
-        // Cuantos apartamentos disponibles existen
+
         const configuracionesDisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
             estadoIDV: "disponible",
             zonaArray: ["publica", "global", "privada"]
@@ -88,7 +88,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
             bloqueoPermanente: bloqueoPermanente,
             bloqueoTemporal: bloqueoTemporal
         })
-        // Seleccionar apartamentos bloqueados
+
         const obtenerFechasInternas = (fechaEntrada, fechaSalida) => {
             const fechasInternas = [];
             let fechaActual = DateTime.fromISO(fechaEntrada);
@@ -101,7 +101,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
                 if (mes === mesInterno && ano === anoInterno) {
                     fechasInternas.push(diaInterno);
                 }
-                // Incrementa la fecha actual en un día
+
                 fechaActual = fechaActual.plus({ days: 1 });
             }
             return fechasInternas;
@@ -155,12 +155,12 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
                         if (!arrayExistente.includes(apartamentoIDV)) {
                             arrayExistente.push(apartamentoIDV);
                         }
-                        //objetoFechasInternas[fechaInterna].apartamentos = arrayExistente
+
                     }
                 });
             }
             if (tipoBloqueo === "permanente") {
-                // EL error esta en que anoActual es el ano del presetne y no del año que se le solicita
+
                 const fechaInicioDelMes_ISO = `${ano}-${String(mes).padStart(2, "0")}-01`;
                 const fechaFinDelMes_ISO = `${ano}-${String(mes).padStart(2, "0")}-${String(numeroUltimoDia).padStart(2, "0")}`;
                 const fechasInternas = obtenerFechasInternas(fechaInicioDelMes_ISO, fechaFinDelMes_ISO);
@@ -177,12 +177,12 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
                         if (!arrayExistente.includes(apartamentoIDV)) {
                             arrayExistente.push(apartamentoIDV);
                         }
-                        //objetoFechasInternas[fechaInterna].apartamentos = arrayExistente
+
                     }
                 });
             }
         }
-        // Sacar todos los uid de los calendarios
+
         const calendariosSincronizadosAirbnb = (await obtenerTodosLosCalendarios()).calendariosSincronizados;
         for (const detallesDelCalendario of calendariosSincronizadosAirbnb) {
             const apartamentoIDV = detallesDelCalendario.apartamentoIDV;
@@ -190,7 +190,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
             const calendarioObjeto = detallesDelCalendario.calendarioObjeto;
             for (const detallesDelEvento of calendarioObjeto) {
                 const fechaInicioEvento_ISO = detallesDelEvento.fechaInicio;
-                // Por el formato de airnb, restar un dia a la fecha final
+
 
                 const fechaFinalEvento_ISO = detallesDelEvento.fechaFinal;
                 const apartamentosPorReservaArray = [apartamentoIDV];
@@ -211,9 +211,9 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
                 });
             }
         }
-        // Y  por calendario, procesar los eventos
-        // Obtener los objetos de los dias de los calendarios sincronizados
-        // Pasarlo por fechas intenras e agregar con el sistema que impide duplicados
+
+
+
         const controlEstadoDia = (apartamentosConfiguradosDisponibles, apartamentosEncontradosNoDisponibles) => {
             apartamentosConfiguradosDisponibles.sort();
             apartamentosEncontradosNoDisponibles.sort();

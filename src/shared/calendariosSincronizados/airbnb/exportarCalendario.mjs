@@ -13,7 +13,7 @@ export const exportarClendario = async (eventos) => {
             start: 'VALUE=DATE:20240824',
             end: 'VALUE=DATE:20240830',
             summary: 'Prueba del foramto',
-            //uid: '1418fb94e984-568dff80efad5b02bef48955789d6807@airbnb.com',
+
             description: 'Reserva de casavitini'
         }
     ]

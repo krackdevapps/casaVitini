@@ -86,7 +86,7 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
         await validadoresCompartidos.usuarios.unicidadCorreo(validarDatosUsuario);
         await campoDeTransaccion("iniciar")
 
-        // validar existencia de contrasena
+
         await obtenerIDX(usuarioIDX)
 
         const datosUsuario = {

@@ -25,8 +25,8 @@ export const procesador = async (data) => {
         ]
         const llavesEnEntidades = Object.keys(entidades)
         if (llavesEnEntidades.length === 0) {
-                const m = "El procesador del contenedor financiero necesita tener definida al menos una entidad"
-                throw new Error(m)            
+            const m = "El procesador del contenedor financiero necesita tener definida al menos una entidad"
+            throw new Error(m)
         }
         llavesEnEntidades.forEach((entidadIDV) => {
             if (!entidadesIDV.includes(entidadIDV)) {
@@ -69,7 +69,7 @@ export const procesador = async (data) => {
             ignorarCodigosDescuentos: capas?.ofertas?.ignorarCodigosDescuentos,
             codigoDescuentosArrayBASE64: capas?.ofertas?.codigoDescuentosArrayBASE64,
             pipe
-            //descuentosArray: capas.ofertas.descuentosArray
+
         })
         await aplicarImpuestos({
             estructura,

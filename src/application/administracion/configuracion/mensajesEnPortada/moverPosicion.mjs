@@ -88,7 +88,7 @@ export const moverPosicion = async (entrada) => {
         }
         await actualizarPosicionDelMensajeDePortada(dataActualizarPosicionDelMensajeActual)
 
-        // Posicion de final a elementoAfectado
+
         const dataActualizarPosicionDelMensajeFinal = {
             mensajeUID: mensajeUIDAfectado,
             posicion: posicionAntigua

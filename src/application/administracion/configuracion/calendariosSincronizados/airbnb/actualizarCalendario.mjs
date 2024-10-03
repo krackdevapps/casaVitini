@@ -69,7 +69,7 @@ export const actualizarCalendario = async (entrada) => {
                 const jcalData = ICAL.parse(calendarioRaw); // Intenta analizar el contenido como datos jCal
                 const jcal = new ICAL.Component(jcalData); // Crea un componente jCal
 
-                // Verifica si el componente es un calendario (VCALENDAR)
+
                 if (jcal?.name.toLowerCase() !== 'vcalendar') {
 
                     throw new Error(errorDeFormado);

@@ -46,12 +46,12 @@ describe('critical: entityAndConfigHostingValidation', () => {
             camaUI: camaUI,
         })
     })
-    // Crear entidad de alojamiento
-    // Crear configuracion de alojamiento
-    // Crear reserva e insertar la configuracion de alojmaineto
-    // Crear simulacion e insertar la configuracion de alojamiento
-    // Eliminar configuracion de alojamnineto pero mantenenr la entidad en que la que se basa
-    // Reconstruir instantanea
+
+
+
+
+
+
 
     const fechaCreacionVirtual = DateTime.utc().toISO();
     const fechaInicioVirutal_futuro = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 2 }).toISODate();
@@ -124,10 +124,10 @@ describe('critical: entityAndConfigHostingValidation', () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-                // fechaCreacion: fechaCreacionSimulacion,
-                // fechaEntrada: fechaInicioVirutal_pasado,
-                // fechaSalida: fechaFinalVirtual_pasado,
-                // apartamentosIDVARRAY: [apartamentoIDV],
+
+
+
+
             },
             session: fakeAdminSession
         }
@@ -151,7 +151,7 @@ describe('critical: entityAndConfigHostingValidation', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    // Reconstrui desde instantaneas en reserva y simulacion
+
     test('remake financiar container from snapshots with ok', async () => {
         const m = {
             body: {

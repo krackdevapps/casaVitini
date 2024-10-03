@@ -51,8 +51,8 @@ export const procesadorReserva = async (data) => {
                 tipoVector: "diferente"
             })
 
-            //  const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-            // fechaActual = DateTime.now().setZone(zonaHoraria).toISODate()
+
+
 
             apartamentosArray = validadoresCompartidos.tipos.array({
                 array: data.apartamentosArray,

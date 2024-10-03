@@ -17,7 +17,7 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             const error = "El campo 'calendarioUID' solo puede ser una cadena de letras minúsculas y números."
             throw new Error(error)
         }
-        // Validar que le nombre del calendarioUID existe como tal
+
 
         const calendario = await obtenerCalendarioPorCalendarioUID(calendarioUID)
         const apartamentoIDV = calendario.apartamentoIDV
@@ -49,18 +49,17 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             return fechasInternas;
         }
         const controlRango = (fechaMMYYYY, rangoInicioISO, rangoFinISO) => {
-            // Convertir la fecha MM-YYYY a formato ISO
+
             const fechaISO = DateTime.fromFormat(fechaMMYYYY, 'MM-yyyy').startOf('month');
-            // Convertir las fechas de inicio y fin del rango a objetos DateTime
+
             const rangoInicio = DateTime.fromISO(rangoInicioISO).startOf('month');
             const rangoFin = DateTime.fromISO(rangoFinISO).endOf('month');
-            // Verificar si el mes y el año están dentro del rango
+
             return fechaISO >= rangoInicio && fechaISO <= rangoFin;
         }
         const eventosSeleccionados = []
         let uidTemporalContador = 0
         const eventosCalendarioAirbnb = await eventosCalendarioPorUID(calendarioUID)
-        // 
         const arrayEventosAirbnb = eventosCalendarioAirbnb.calendarioDelApartamento.calendarioObjeto
         for (const detallesDelEvento of arrayEventosAirbnb) {
             const fechaEntrada = detallesDelEvento.fechaInicio
@@ -68,7 +67,7 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             delete detallesDelEvento.fechaInicio
             delete detallesDelEvento.fechaFinal
             uidTemporalContador = uidTemporalContador + 1
-            // Definir las fechas en formato ISO
+
             detallesDelEvento.eventoUID = "calendarioAirbnbUID_" + calendarioUID + "_apartamentoIDV_" + apartamentoIDV + "_uidEvento_" + uidTemporalContador
             const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada, { zone: zonaHoraria });
             const fechaSalida_objeto = DateTime.fromISO(fechaSalida, { zone: zonaHoraria });
@@ -81,7 +80,7 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             detallesDelEvento.fechaSalida = fechaSalida
             detallesDelEvento.apartamentoUI = apartamentoUI
             detallesDelEvento.apartamentoIDV = apartamentoIDV
-            // Hay un error por aqui, encontrarlo
+
             if (controlRango(fechaCalendario_ConCeros, fechaEntrada, fechaSalida)) {
                 eventosSeleccionados.push(detallesDelEvento)
             }

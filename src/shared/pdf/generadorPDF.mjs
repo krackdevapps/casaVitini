@@ -34,10 +34,10 @@ export const generadorPDF = async (reserva) => {
         const pasaporteTitular = contenedorTitular.pasaporteTitular || ""
         const telefonoTitular = contenedorTitular.telefonoTitular || ""
         const mailTitular = contenedorTitular.mailTitular || ""
-        // Definir dos fechasc
+
         const fechaEntrada_objeto = DateTime.fromISO(fechaEntrada);
         const fechaSalida_objeto = DateTime.fromISO(fechaSalida);
-        // Obtener la diferencia en días
+
 
         const opciones = {
             margin: 0
@@ -211,7 +211,7 @@ export const generadorPDF = async (reserva) => {
                 tituloReserva: {
                     fontSize: 10,
                     bold: true,
-                    //  margin: [5, 0, 14, 10],
+
                     alignment: "right"
                 },
                 textoTitular: {
@@ -519,9 +519,9 @@ export const generadorPDF = async (reserva) => {
                 });
                 pdf.on('end', () => {
                     const archivo = Buffer.concat(chunks);
-                    // Puedes hacer lo que necesites con 'archivo' antes de resolver la promesa
-                    // Por ejemplo, guardar en un archivo, enviar como respuesta HTTP, etc.
-                    // resolve(archivo);
+
+
+
                     const base64String = archivo.toString('base64');
                     resolve(base64String);
 

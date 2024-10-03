@@ -3,7 +3,7 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infr
 
 export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => {
     try {
-        // Descuentos por apartamentos
+
         const descuentosPorApartamentos = contenedorOferta?.descuentosJSON?.apartamentos || []
 
         for (const contenedorApartamento of descuentosPorApartamentos) {
@@ -22,7 +22,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
                 contenedorApartamento.apartamentoUI = `IDV no reconocido 3(${apartamentoIDV})`
             }
         }
-        // Descuentos por dias con apartamentos especificos
+
         const descuentosPorDiasConApartamentos = contenedorOferta?.descuentosJSON?.descuentoPorDias || []
         for (const contenedorDia of descuentosPorDiasConApartamentos) {
 
@@ -50,7 +50,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
             const tipoCondicion = contenedorCondicion.tipoCondicion
             if (tipoCondicion === "porCodigoDescuento") {
                 const codigoDescuento = contenedorCondicion.codigoDescuento
-                //contenedorCondicion.codigoDescuento = Buffer.from(codigoDescuento, 'base64').toString('utf-8');
+
             }
 
             if (tipoCondicion === "porApartamentosEspecificos") {

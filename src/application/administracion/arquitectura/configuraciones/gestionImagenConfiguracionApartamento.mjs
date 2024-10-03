@@ -33,9 +33,9 @@ export const gestionImagenConfiguracionApartamento = async (entrada, salida) => 
 
         const esImagenPNG = (contenidoArchivo) => {
             const binarioMagicoPNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-            // Decodifica la cadena base64 a un buffer
+
             const buffer = Buffer.from(contenidoArchivo, 'base64');
-            // Compara los primeros 8 bytes del buffer con el binario mágico
+
             return buffer.subarray(0, 8).compare(binarioMagicoPNG) === 0;
         };
         const esImagenTIFF = (contenidoArchivo) => {

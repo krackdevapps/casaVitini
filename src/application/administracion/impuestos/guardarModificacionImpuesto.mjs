@@ -29,7 +29,7 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
         const nombreImpuesto = impuestoValidado.nombre
         impuestoValidado.impuestoUID = impuestoUID
 
-        // Se debe de ignorar el impuesto actual, este adaptador no lo hace !!!!!!
+
         const impuestosPorNombre = await obtenerImpuestosPorNombreDelImpuestoIgnorandoImpuestoUID({
             nombre: nombreImpuesto,
             impuestoUID

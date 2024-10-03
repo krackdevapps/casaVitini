@@ -67,7 +67,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             throw new Error(m)
 
         }
-        // Valida reserva
+
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
 
         if (reserva.estadoReservaIDV === "cancelada") {
@@ -77,12 +77,12 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
         const fechaInicio = reserva.fechaInicio
         const fechaSalida = reserva.fechaSalida
 
-        // valida que la habitacion exista dentro de la reserva
+
         await obtenerHabitacionDelLaReserva({
             reservaUID: reservaUID,
             habitacionUID: habitacionUID
         })
-        // valida camaIDV que entra
+
         const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
             camaIDV: nuevaCamaIDV,
             tipoIDVArray: [tipoIDV],
@@ -117,7 +117,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             return ok
         } else if (tipoIDV === "fisica") {
 
-            // valida camaIDV que entra
+
             const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                 camaIDV: nuevaCamaIDV,
                 tipoIDVArray: [tipoIDV],
@@ -125,7 +125,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             })
             const camaUI = cama.camaUI
 
-            // Si ya existe al cama fisica, no hace nada
+
             await obtenerCamaFisicaPorReservaUIDPorHabitacionUIDPorCamaIDV({
                 reservaUID,
                 habitacionUID,
@@ -133,14 +133,14 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
                 errorSi: "existe"
             })
 
-            // Falta si la cama fisica existe en la misma reserva pero en otra habitacion
+
             await obtenerCamasFisicasPorReservaUID({
                 reservaUID_array: [reservaUID],
                 camaIDV: nuevaCamaIDV,
                 errorSi: "existe"
             })
 
-            // Si no existe la cama fisica se compreuba que no exista en otra reserva al mismo tiempo
+
             const reservasConflicto = await obtenerReservasPorRango({
                 fechaIncioRango_ISO: fechaInicio,
                 fechaFinRango_ISO: fechaSalida

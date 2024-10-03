@@ -50,13 +50,13 @@ export const listaImpuestosPaginados = async (entrada) => {
         })
 
         if (nombreColumna) {
-            // if (nombreColumna === "tipoValor") {
-            //     nombreColumna = "tipoValorIDV"
-            // } else if (nombreColumna === "entidad") {
-            //     nombreColumna = "entidadIDV"
-            // } else if (nombreColumna === "estado") {
-            //     nombreColumna = "estadoIDV"
-            // }
+
+
+
+
+
+
+
 
             await validadoresCompartidos.baseDeDatos.validarNombreColumna({
                 nombreColumna: nombreColumna,
@@ -87,13 +87,13 @@ export const listaImpuestosPaginados = async (entrada) => {
         }
         const ok = {};
 
-        // if (nombreColumna === "tipoValorIDV") {
-        //     nombreColumna = "tipoValor"
-        // } else if (nombreColumna === "entidadIDV") {
-        //     nombreColumna = "entidad"
-        // } else if (nombreColumna === "estadoIDV") {
-        //     nombreColumna = "estado"
-        // }
+
+
+
+
+
+
+
 
         if (nombreColumna) {
             ok.nombreColumna = nombreColumna;

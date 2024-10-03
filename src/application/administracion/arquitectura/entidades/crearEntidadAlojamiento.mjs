@@ -62,7 +62,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 do {
                     codigoExiste = await validarCodigo(codigoGenerado);
                     if (codigoExiste) {
-                        // Si el código ya existe, agrega un cero al final y vuelve a verificar
+
                         codigoGenerado = codigoGenerado + "0";
                     }
                 } while (codigoExiste);
@@ -127,7 +127,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 do {
                     codigoExiste = await validarCodigo(codigoGenerado);
                     if (codigoExiste) {
-                        // Si el código ya existe, agrega un cero al final y vuelve a verificar
+
                         codigoGenerado = codigoGenerado + "_0";
                     }
                 } while (codigoExiste);

@@ -82,7 +82,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 errorSi: "noExiste"
             })
 
-            // Comprobar que no existe el nuevo IDV
+
             if (entidadIDV !== apartamentoIDV) {
                 await obtenerApartamentoComoEntidadPorApartamentoIDV({
                     apartamentoIDV,
@@ -116,7 +116,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
 
 
             if (configuracionAlojamiento) {
-                // Hay que detectar si la entidad de alojamiento, existe en una configuracion de alojamiento para hcaer lo sigueinte
+
 
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
                 const tiempoZH = DateTime.now().setZone(zonaHoraria);
@@ -129,7 +129,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     return reserva.reservaUID
                 })
 
-                //if (apartamentoIDV !== entidadIDV) {
+
                 await actualizaApartamentoPorApartamentoIDVPorReservaUID({
                     reservasUIDArray,
                     antiguoApartamentoIDV: entidadIDV,
@@ -137,14 +137,14 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     apartamentoUI: apartamentoUI
                 })
 
-                // Actualizar en ofertas
+
                 await actualizarIDVenOfertas({
                     origenIDV: entidadIDV,
                     destinoIDV: apartamentoIDV
                 })
 
 
-                // Actualizar todos los IDV de todas las instantaneas
+
                 await actualizarIDVenInstantaneasContenedorFinanciero({
                     origenIDV: entidadIDV,
                     destinoIDV: apartamentoIDV,
@@ -194,7 +194,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 const error = "No existe la habitación, revisa el habitacionIDV";
                 throw new Error(error);
             }
-            // Comprobar que no existe el nuevo IDV
+
             if (entidadIDV !== habitacionIDV) {
 
                 const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
@@ -254,7 +254,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 tipoIDVArray: ["compartida", "fisica"],
                 errorSi: "noExiste"
             })
-            // Comprobar que no existe el nuevo IDV
+
             if (entidadIDV !== camaIDV) {
                 await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                     camaIDV: camaIDV,
@@ -272,7 +272,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
             const tiempoZH = DateTime.now().setZone(zonaHoraria);
             const fechaActual = tiempoZH.toISODate();
-            // Selecionar reservas presentes y futuras
+
             const reservasActivas = await obtenerReservasPresentesFuturas({
                 fechaActual: fechaActual,
             })

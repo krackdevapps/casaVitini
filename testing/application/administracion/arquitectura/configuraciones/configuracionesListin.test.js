@@ -67,9 +67,9 @@ describe('configuration of hosting', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
     test('update zone of configuration hosting with ok', async () => {
@@ -88,7 +88,7 @@ describe('configuration of hosting', () => {
 
     })
 
-    // Crear habitacion
+
     test('create room as entity for configuracion hosting base with ok', async () => {
         const makeEntity = {
             body: {
@@ -103,7 +103,7 @@ describe('configuration of hosting', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    // Crear cama
+
     test('create bed as entity for configuracion hosting base with ok', async () => {
         const makeEntity = {
             body: {
@@ -120,7 +120,7 @@ describe('configuration of hosting', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    // Insertar habitacion en configuracion de alojamiento base
+
     test('add room in configuracion hosting base with ok', async () => {
         const makeEntity = {
             body: {
@@ -138,7 +138,7 @@ describe('configuration of hosting', () => {
     })
 
 
-    //Insertar cama en la habitacion
+
     test('add bed in room in configuracion hosting with ok', async () => {
         const makeEntity = {
             body: {
@@ -154,7 +154,7 @@ describe('configuration of hosting', () => {
     })
 
 
-    //delete host configuration
+
     test('add bed in room in configuracion hosting with ok', async () => {
         const makeEntity = {
             body: {

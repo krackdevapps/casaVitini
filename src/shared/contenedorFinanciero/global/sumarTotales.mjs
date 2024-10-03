@@ -14,15 +14,15 @@ export const sumarTotales = (data) => {
 
             const totalDescuentos = totales?.totalDescuento || "0.00"
             const impuestosAplicados = totales?.impuestosAplicados || "0.00"
-            //const totalNetoConDescuentos = totales?.totalNetoConDescuentos  || "0.00"
+
 
             totalesGlobal.totalNeto = new Decimal(totalNeto).plus(totalesGlobal.totalNeto)
 
             if (!totalesGlobal.hasOwnProperty("totalNetoConDescuentos")) {
-                //totalesGlobal.totalNetoConDescuentos = "0.00"
+
             }
 
-            //totalesGlobal.totalNetoConDescuentos = new Decimal(totalNetoConDescuentos).plus(totalesGlobal.totalNetoConDescuentos)
+
 
             if (!totalesGlobal.hasOwnProperty("impuestosAplicados")) {
                 totalesGlobal.impuestosAplicados = "0.00"
@@ -41,14 +41,14 @@ export const sumarTotales = (data) => {
 
             const totalDescuentos = totales?.totalDescuento || "0.00"
             const impuestosAplicados = totales?.impuestosAplicados || "0.00"
-            //const totalNetoConDescuentos = totales?.totalNetoConDescuentos || totalNeto || "0.00"
+
 
             totalesGlobal.totalNeto = new Decimal(totalNeto).plus(totalesGlobal.totalNeto)
 
             if (!totalesGlobal.hasOwnProperty("totalNetoConDescuentos")) {
-                //   totalesGlobal.totalNetoConDescuentos = "0.00"
+
             }
-            //    totalesGlobal.totalNetoConDescuentos = new Decimal(totalNetoConDescuentos).plus(totalesGlobal.totalNetoConDescuentos)
+
 
             if (!totalesGlobal.hasOwnProperty("impuestosAplicados")) {
                 totalesGlobal.impuestosAplicados = "0.00"
@@ -83,7 +83,7 @@ export const sumarTotales = (data) => {
         totalesGlobal.impuestosAplicados = impuestosAplicados
 
 
-        //totalesGlobal.totalFinal = new Decimal(totalesGlobal.totalFinal).toFixed(2)       
+
         const totalFinal = new Decimal(totalesGlobal.totalNetoConDescuentos).plus(totalesGlobal.impuestosAplicados).toFixed(2)
         delete totalesGlobal.totalFinal
         totalesGlobal.totalFinal = totalFinal

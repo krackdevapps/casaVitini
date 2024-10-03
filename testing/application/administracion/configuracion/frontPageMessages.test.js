@@ -86,7 +86,7 @@ describe('Frontpage messages system', () => {
             session: fakeAdminSession
         }
         await crearMensaje(m_volatil)
-        // Aqui hay dos mensaje para poder mover de posicion.
+
         const m = {
             body: {
                 mensajeUID,

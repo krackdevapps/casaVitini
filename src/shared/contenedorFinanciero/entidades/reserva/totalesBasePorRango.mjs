@@ -23,9 +23,9 @@ export const totalesBasePorRango = async (data) => {
         const contenedorEntidades = estructura.entidades
 
         const reservaEntidad = contenedorEntidades.reserva
-        // reservaEntidad.fechaEntrada = fechaEntrada
-        // reservaEntidad.fechaSalida = fechaSalida
-        // reservaEntidad.nochesReserva = diasArray.length.toString()
+
+
+
         const instantaneaNoches = reservaEntidad.instantaneaNoches
 
 
@@ -65,8 +65,8 @@ export const totalesBasePorRango = async (data) => {
             noche.precioNetoNoche = "0.00"
             for (const apartamentoIDV of apartamentosArray) {
 
-                // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
-                // const precioBase = perfilPrecio.precio
+
+
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {

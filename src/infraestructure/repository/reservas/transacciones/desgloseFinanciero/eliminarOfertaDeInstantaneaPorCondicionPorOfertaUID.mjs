@@ -2,7 +2,7 @@ import { conexion } from "../../../globales/db.mjs";
 
 export const eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID = async (data) => {
     try {
-        // Ojo por que aqui la posicion empiza a contar desde 1
+
         const reservaUID = data.reservaUID
         const ofertaUID = data.ofertaUID
         const posicion = data.posicion

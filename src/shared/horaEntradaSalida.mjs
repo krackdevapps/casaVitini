@@ -10,11 +10,11 @@ export const horaEntradaSalida = async () => {
         const paresConfiguracion = await obtenerParConfiguracion(configuracionesSolicitadas)
 
         const estructuraFinal = {}
-        // for (const parConfirmacion of paresConfiguracion) {
-        //     const configuracionUID = parConfirmacion.configuracionUID
-        //     const valor = parConfirmacion.valor
-        //     estructuraFinal[configuracionUID] = valor
-        // }
+
+
+
+
+
         const horaEntradaArray = paresConfiguracion.horaEntradaTZ.split(":")
         const horaEntrda_HORA = horaEntradaArray[0]
         const horaEntrda_MINUTO = horaEntradaArray[1]

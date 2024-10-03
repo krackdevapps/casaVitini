@@ -37,19 +37,19 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
-        // validar que la reserva no este cancelada
+
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";
             throw new Error(error);
         }
 
         await campoDeTransaccion("iniciar")
-        // Validar pernoctanteUID
+
         await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
             reservaUID,
             pernoctanteUID
         })
-        // Validar que el pernoctatne sea cliente y no cliente pool
+
 
         await actualizarFechaCheckOutPernoctante({
             pernoctanteUID,

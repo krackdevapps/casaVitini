@@ -34,7 +34,7 @@ export const configuracionSession = session({
     secure: true,
     maxAge: duracionSessionCliente,
     sameSite: true,
-    //expires: duracionSessionCliente,
+
     httpOnly: true,
     rolling: false,
   }

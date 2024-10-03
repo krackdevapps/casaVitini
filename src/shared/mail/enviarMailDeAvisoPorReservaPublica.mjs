@@ -28,7 +28,7 @@ export const enviarMailDeAvisoPorReservaPublica = async (reservaUID) => {
         const emailDestinoTitular = reserva.titular.mailTitular
         const telefonoTitular = reserva.titular.telefonoTitular
         const hostActual = "localhost"
-        // construimos el mensaje
+
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = correoCopiaReservaPublica
         const asunto = `Aviso de reserva preconfirmada: ${reservaUID}`
@@ -49,19 +49,19 @@ export const enviarMailDeAvisoPorReservaPublica = async (reservaUID) => {
             destino: destino,
             asunto: asunto,
             mensaje: mensaje,
-            // attachments: [
-            //     {
-            //         filename: 'Reserva.pdf',
-            //         content: pdf,
-            //         encoding: 'base64',
-            //     },
-            // ]
+
+
+
+
+
+
+
         }
-        // Enviamos el mensaje
+
         const resultado = await enviarMail(composicionDelMensaje)
         console.info("envio", resultado)
     } catch (errorCapturado) {
         console.info("error en el envio", errorCapturado)
-        // manejar error de manera local
+
     }
 }

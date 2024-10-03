@@ -82,14 +82,14 @@ export const listarMisReservas = async (entrada) => {
 
         const paginaActualSQL = Number((paginaActual - 1));
         const numeroPorPagina = 10;
-        // Comprobar si la cuenta tiene un mail
+
         const datosDelUsuario = await obtenerDatosPersonales(usuario)
         const usuarioMail = datosDelUsuario.mail;
         if (!usuarioMail) {
             const error = "Se necesita que definas tu dirección de correo electrónico en mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo electrónico que usaste para confirmar la reserva. Es decir, debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electrónico y confirmarlo con el correo de confirmación que te enviaremos. Una vez hecho eso, podrás ver tus reservas.";
             throw new Error(error);
         }
-        // Comporbar si el mail esta verificado
+
 
         const cuentaUsuario = await obtenerUsuario({
             usuario,
@@ -102,7 +102,7 @@ export const listarMisReservas = async (entrada) => {
             throw new Error(error);
         }
         const reservasUIDArray = []
-        // Buscar el mail verificado, en titulares poll y titulares vitini
+
         const clientesPorMail = await obtenerClientesPorMail({
             mail: usuarioMail,
             errorSi: "desactivado"
@@ -123,7 +123,7 @@ export const listarMisReservas = async (entrada) => {
                 reservasUIDArray.push(titularPool.reservaUID);
             })
         }
-        // extraer las reservasa asociadas a esos titulares  
+
         const listaReservas = await obtenerReservasComoLista({
             reservasUIDArray: reservasUIDArray,
             numeroPorPagina: numeroPorPagina,

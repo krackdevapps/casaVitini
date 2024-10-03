@@ -25,7 +25,7 @@ export const limitesReservaPublica = async (fechas) => {
             const error = "La fecha de entrada no puede ser anterior a la fecha actual"
             throw new Error(error)
         }
-        // validacion: la fecha de entrada no puede ser superior a la fecha de salida y al mimso tiempo la fecha de salida no puede ser inferior a la fecha de entrada
+
         if (fechaEntradaReserva_ISO >= fechaSalidaReserva_ISO) {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)

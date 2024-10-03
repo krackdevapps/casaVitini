@@ -150,7 +150,7 @@ export const calendario = async (entrada) => {
             }
             const calendario = {};
 
-            // Limite del presente
+
             const anoActual = anoPresenteTZ;
             const mesActual = mesPresenteTZ;
             if (anoActual > ano) {
@@ -186,7 +186,7 @@ export const calendario = async (entrada) => {
             calendario.calendario = "ok";
             calendario.ano = ano;
             calendario.mes = mes;
-            // Calendario["Tiempo"] = Tiempo
+
             calendario.numeroDiasPorMes = numeroDeDiasPorMes;
             calendario.posicionDia1 = posicionDiaComienzoMes;
             const estructuraGlobal_DiasAntelacion = {};

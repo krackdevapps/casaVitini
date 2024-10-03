@@ -7,7 +7,7 @@ import { actualizarEstadoEnlaceDePagoPorEnlaceUID } from "../../../infraestructu
 import { insertarPago } from "../../../infraestructure/repository/reservas/transacciones/pagos/insertarPago.mjs";
 
 export const realizarPago = async (entrada, salida) => {
-    //const mutex = new Mutex()
+
     try {
         const error = "Función deshabilitada";
         throw new Error(error);
@@ -45,29 +45,29 @@ export const realizarPago = async (entrada, salida) => {
             const error = "Esta reserva no tiene totales";
             throw new Error(error);
         }
-        // const totalConImpuestosFormatoFinal = Number(totalPago.replaceAll(".", ""));
-        // const token = entrada.body.token;
-        // const idempotencyKey = entrada.body.idempotencyKey;
-        // const locationResponse = await clienteSquare.locationsApi.retrieveLocation(SQUARE_LOCATION_ID);
-        // const currency = locationResponse.result.location.currency;
-        // // Charge the customer's card
-        // const pago = {
-        //     idempotencyKey,
-        //     sourceId: token,
-        //     //buyer_mail_address: "test@test.com",
-        //     amountMoney: {
-        //         amount: totalConImpuestosFormatoFinal, // $1.00 charge
-        //         currency
-        //     }
-        // };
-        // const detallesDelPago = await componentes.pasarela.crearPago(pago);
-        // const tarjeta = detallesDelPago.cardDetails.card.cardBrand;
-        // const tarjetaDigitos = detallesDelPago.cardDetails.card.last4;
-        // const pagoUIDPasarela = detallesDelPago.id;
-        // const cantidadSinPunto = detallesDelPago.amountMoney.amount;
-        // const cantidadConPunto = utilidades.deFormatoSquareAFormatoSQL(cantidadSinPunto);
-        // const fechaDePago = detallesDelPago.createdAt;
-        // const plataformaDePago = "pasarela";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         const nuevoPago = await insertarPago({
             plataformaDePago: plataformaDePago,

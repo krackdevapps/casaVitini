@@ -11,7 +11,7 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
         const contenedoresFinancierosSimulaciones = await obtenerTodasLasSimulaciones()
         if (origenIDV === destinoIDV) {
             const m = "No se puede actualizar un orgienIDV y un destinoIDV siendo el mismo podría provocar problema de integridad en el contenedor financiero."
-            //  throw new Error(m)
+
         }
         for (const contenedor of contenedoresFinancierosSimulaciones) {
             const simulacionUID = contenedor.simulacionUID

@@ -117,7 +117,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 reservaUID: reservaUID
             })
 
-            // Si la nueva fecha de entrada esta por delatne de checkint, que borre esos checkin y esos checkouts
+
 
 
             const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)

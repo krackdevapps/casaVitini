@@ -51,7 +51,6 @@ export const eliminarSobreControlNoche = async (entrada) => {
             apartamentoIDV,
             fechaNoche
         })
-        //
         const sobreControlActualizado = await eliminarSobreControlApartamento({
             simulacionUID,
             apartamentoIDV,

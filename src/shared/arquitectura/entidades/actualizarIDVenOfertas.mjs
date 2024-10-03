@@ -4,11 +4,11 @@ import { actualizaApartamentoIDVEnObjetoOfertas } from "./actualizaApartamentoID
 
 export const actualizarIDVenOfertas = async (data) => {
 
-    // Obtener todas lsa ofertas
+
     const origenIDV = data.origenIDV
     const destinoIDV = data.destinoIDV
     const todasLasOfertas = await obtenerTodasLasOfertas()
-    // En condiciones hay que actualizar los IDV de la condicon por apartamento especificos
+
     for (const contenedorOferta of todasLasOfertas) {
         const ofertaUID = contenedorOferta.ofertaUID
         const nombreOferta = contenedorOferta.nombreOferta

@@ -1,12 +1,12 @@
 async function SquarePaymentFlow() {
-  // Create card payment object and attach to page
+
   CardPay(document.getElementById('card-container'), document.getElementById('card-button'));
-  // Create Apple pay instance
-  //ApplePay(document.getElementById('apple-pay-button'));
-  // Create Google pay instance
+
+
+
   GooglePay(document.getElementById('google-pay-button'));
-  // Create ACH payment
-  //ACHPay(document.getElementById('ach-button'));
+
+
 }
 window.payments = Square.payments(window.applicationId, window.locationId);
 window.paymentFlowMessageEl = document.getElementById('payment-flow-message');
@@ -23,7 +23,7 @@ window.showError = function (message) {
 window.createPayment = async function (token, verificationToken) {
   casaVitini.componentes.flujoPagoUI.infoDuranteFlujo()
 
-  // Aqui se deberua recoger el objeto reserva e intergrarlo en el objeto que hay dentro de dataJsonString
+
   const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
   if (!destinoDinamico) {
     const error = "windows.createPayment necesita un elmeneto pasarela=zonaDePago donde se defina el objeto"
@@ -80,7 +80,7 @@ window.createPayment = async function (token, verificationToken) {
       await casaVitini.componentes.square.crearSesionPago(instanciaUID)
       console.info("error zona 1 >>>", data.error)
       return casaVitini.componentes.flujoPagoUI.errorInfo(data.error)
-      //return window.showError(data.error);
+
     }
     if (data.errors && data.errors.length > 0) {
       console.info("error zona 2 >>>", data.error)
@@ -90,17 +90,17 @@ window.createPayment = async function (token, verificationToken) {
         window.showError(data.errors[0].detail);
       }
     } else {
-      // Pago exitoso
+
       casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
       if (data.ok) {
         console.info("Pago Existoso !!!!")
         const detalles = data.detalles
-        //const x = eval(data.x)
+
         window.showSuccess('Pago realizado correctmente y reserva confirmada!');
         console.info("data", data)
-        // Verificar si la función existe
+
         if (typeof x === 'function') {
-          // Ejecutar la función si existe
+
           return x(detalles);
         } else {
           const error = "No exista la funcion a la que se esta llamando tras confirmar la reserva"
@@ -114,7 +114,7 @@ window.createPayment = async function (token, verificationToken) {
     console.error('Error capturado:', error.message);
     console.error('Error capturado:', error.result);
     console.error('Error capturado:', error);
-    // salida.json(error.result);
+
   }
 }
 

@@ -47,7 +47,7 @@ describe('payment in bookin', () => {
         })
 
 
-        // Crear reserva
+
         const reserva = await crearReservaSimpleAdministrativa({
             body: {
                 fechaEntrada: "2026-10-10",
@@ -84,7 +84,7 @@ describe('payment in bookin', () => {
     test('get details payment in booking with ok', async () => {
         const m = {
             body: {
-                //reservaUID: String(reservaUID),
+
                 pagoUID: pagoUID
             },
             session: fakeAdminSession

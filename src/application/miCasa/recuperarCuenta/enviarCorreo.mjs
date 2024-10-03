@@ -53,7 +53,7 @@ export const enviarCorreo = async (entrada) => {
                 codigoGenerado = generarCadenaAleatoria(longitudCodigo);
                 codigoExiste = await validarQueElCodigoEsUnico(codigoGenerado);
             } while (codigoExiste);
-            // En este punto, tenemos un código único que no existe en la base de datos
+
             return codigoGenerado;
         };
         const codigoGenerado = await controlCodigo();
@@ -69,7 +69,7 @@ export const enviarCorreo = async (entrada) => {
         }
 
         const usuarioIDX = datosDelUsuario.usuario;
-        // Comporbar si es una recuperacion de contraseña o una verificacion de mail
+
         const cuentaDeUsuario = await obtenerUsuario({
             usuario: usuarioIDX,
             errorSi: "noExiste"
@@ -80,7 +80,7 @@ export const enviarCorreo = async (entrada) => {
 
 
         if (estadoVerificacion === "si") {
-            // Cuenta verificada, se busca recuperar, es decir restablecer la clave
+
 
             await eliminarEnlacesDeRecuperacionPorUsuario(usuarioIDX)
             await insertarEnlaceDeRecuperacion({
@@ -88,7 +88,7 @@ export const enviarCorreo = async (entrada) => {
                 codigoGenerado: codigoGenerado,
                 fechaCaducidadUTC: fechaCaducidadUTC
             })
-            // construimos el mensaje
+
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
             const destino = mail;
             const asunto = "Recuperar tu VitiniID";
@@ -102,7 +102,7 @@ export const enviarCorreo = async (entrada) => {
                 asunto: asunto,
                 mensaje: mensaje,
             };
-            // Enviamos el mensaje
+
             await campoDeTransaccion("confirmar")
             if (!testingVI) {
                 enviarMail(composicionDelMensaje);
@@ -113,13 +113,13 @@ export const enviarCorreo = async (entrada) => {
             return ok
 
         } else {
-            // Cuenta NO verificada, se busca verificar el correo
+
             await actualizarEnlaceDeRecuperacionPorUsuario({
                 codigoGenerado: codigoGenerado,
                 fechaActualUTC: fechaActualUTC,
                 usuario: usuario
             })
-            // construimos el mensaje
+
             const origen = process.env.CORREO_DIRRECION_DE_ORIGEN;
             const destino = mail;
             const asunto = "Verifica tu mail";
@@ -135,7 +135,7 @@ export const enviarCorreo = async (entrada) => {
                 asunto: asunto,
                 mensaje: mensaje,
             };
-            // Enviamos el mensaje
+
             await campoDeTransaccion("confirmar")
             if (!testingVI) {
                 enviarMail(composicionDelMensaje);

@@ -14,7 +14,7 @@ export const hoy = async (data) => {
         const dia = String(tiempoZH.day).padStart("2", "0");
         const mes = String(tiempoZH.month).padStart("2", "0");
         const ano = tiempoZH.year;
-        //const numeroPagina = pagina - 1
+
 
         const reservas = await selector_hoy({
             numeroPorPagina: numeroPorPagina,

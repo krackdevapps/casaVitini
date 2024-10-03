@@ -20,7 +20,7 @@ export const enviarMailReservaConfirmadaAlCliente = async (reservaUID) => {
         const nombreCompletoTitularReserva = reserva.titular.nombreTitular
         const emailDestinoTitular = reserva.titular.mailTitular
         const hostActual = "localhost"
-        // construimos el mensaje
+
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = emailDestinoTitular
         const asunto = "Reserva confirmada"
@@ -41,10 +41,10 @@ export const enviarMailReservaConfirmadaAlCliente = async (reservaUID) => {
             asunto: asunto,
             mensaje: mensaje,
             attachments: [
-                // {
-                //     filename: 'Reserva.pdf',
-                //     content: pdf,
-                // },
+
+
+
+
                 {
                     filename: 'Reserva.pdf',
                     content: pdf,
@@ -52,12 +52,12 @@ export const enviarMailReservaConfirmadaAlCliente = async (reservaUID) => {
                 },
             ]
         }
-        // Enviamos el mensaje
+
         const resultado = await enviarMail(composicionDelMensaje)
         console.info("envio", resultado)
 
     } catch (errorCapturado) {
         console.info("error en el envio", errorCapturado)
-        // manejar error de manera local
+
     }
 }

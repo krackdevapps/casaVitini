@@ -39,7 +39,7 @@ describe('global operations in bookins', () => {
         })
 
         await eliminarReservaPorTestingVI(testingVI)
-        // Crear una primera arquitectura de alojamineto para crear al reserva.
+
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV,
@@ -49,7 +49,7 @@ describe('global operations in bookins', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
-        // Crear reserva
+
         const reserva = await crearReservaSimpleAdministrativa({
             body: {
                 fechaEntrada: "2026-10-10",
@@ -149,7 +149,7 @@ describe('global operations in bookins', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    // Crear un usuario temporal--
+
 
     test('delete booking with ok', async () => {
 

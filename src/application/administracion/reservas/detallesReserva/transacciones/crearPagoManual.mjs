@@ -163,7 +163,7 @@ export const crearPagoManual = async (entrada) => {
                         throw new Error(error);
                 }
             }
-            // Detalles del pago
+
             const pagoUIDPasarelaVerificado = detallesDelPago.id;
             const cantidadVerificada = detallesDelPago.amountMoney.amount;
             const cantidadFormateada = utilidades.deFormatoSquareAFormatoSQL(cantidadVerificada);
@@ -178,8 +178,8 @@ export const crearPagoManual = async (entrada) => {
                 reservaUID: reservaUID,
                 cantidadConPunto: cantidadFormateada,
                 fechaPago: fechaPago,
-                //pagadorNombre: pagadorNombre,
-                //pagadorPasaporte: pagadorPasaporte
+
+
             };
             const pagoUID = await sql.insertarPago(nuevoPago);
             estructuraFinal.ok = "Se han insertado los datos importados de la pasarela.";

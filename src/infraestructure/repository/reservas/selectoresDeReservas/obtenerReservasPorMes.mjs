@@ -2,7 +2,7 @@ import { conexion } from "../../globales/db.mjs"
 
 export const obtenerReservasPorMes = async (data) => {
     try {
-        // Este scritp esta literalment mal
+
         const reservaUIDNuevo = data.reservaUIDNuevo
         const apartamentoIDV = data.apartamentoIDV
         const apartamentoUI = data.apartamentoUI

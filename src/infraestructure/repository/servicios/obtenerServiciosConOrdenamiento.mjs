@@ -39,10 +39,10 @@ export const obtenerServiciosConOrdenamiento = async (data) => {
             numeroPagina
         ]
         const resuelve = await conexion.query(consulta, parametros);
-        // if (resuelve.rowCount === 0) {
-        //     const error = "No hay ningun impuesto en sl sistema";
-        //     throw new Error(error);
-        // }
+
+
+
+
         const resultados = {
             totalFilas: resuelve?.rows[0]?.total_filas ? resuelve.rows[0].total_filas : 0,
             resultados: resuelve.rows

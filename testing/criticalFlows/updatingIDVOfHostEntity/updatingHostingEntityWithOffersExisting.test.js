@@ -138,10 +138,10 @@ describe('critical: updating hosting entity with offers existing', () => {
             camaUI: camaUI,
         })
     })
-    // Crear entidad de alojamiento
-    // Crear configuracion de alojamiento
-    // Crear reserva e insertar la configuracion de alojmaineto
-    // Crear oferta con entidad de alojamiento en condiciones
+
+
+
+
 
 
     const fechaCreacionVirtual = DateTime.utc().toISO();
@@ -272,10 +272,10 @@ describe('critical: updating hosting entity with offers existing', () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-                // fechaCreacion: "2026-10-10",
-                // fechaEntrada: "2026-10-11",
-                // fechaSalida: "2026-10-14",
-                // apartamentosIDVARRAY: [apartamentoIDV],
+
+
+
+
             },
             session: fakeAdminSession
         }
@@ -386,7 +386,7 @@ describe('critical: updating hosting entity with offers existing', () => {
         const response = await modificarEntidadAlojamiento(makeEntity)
         expect(response).not.toBeUndefined();
     })
-    
+
     test('get details of offer type 1 and validate new idv of apartments with ok', async () => {
         const m = {
             body: {
@@ -411,7 +411,7 @@ describe('critical: updating hosting entity with offers existing', () => {
 
                     if (aparamentoIDV_enCondicion === apartamentoIDV_actualizado) {
                         interruptorCondicionPorApartamentosEspecificos = true;
-                        // Aserción para validar que la condición es verdadera
+
                         expect(aparamentoIDV_enCondicion).toBe(apartamentoIDV_actualizado);
                     }
                 })
@@ -426,7 +426,7 @@ describe('critical: updating hosting entity with offers existing', () => {
                 const apartamentosIDV_enDescuentos = a.apartamentoIDV
                 if (apartamentosIDV_enDescuentos === apartamentoIDV_actualizado) {
                     interruptorDescuentosApartamentosEspecificos = true;
-                    // Aserción para validar que la condición es verdadera
+
                     expect(apartamentosIDV_enDescuentos).toBe(apartamentoIDV_actualizado);
                 }
             })
@@ -453,7 +453,7 @@ describe('critical: updating hosting entity with offers existing', () => {
             const apartamentosIDV_enDescuentos = contenedor.apartamentoIDV
             if (apartamentosIDV_enDescuentos === apartamentoIDV_actualizado) {
                 interruptorDescuentosApartamentosEspecificos = true;
-                // Aserción para validar que la condición es verdadera
+
                 expect(apartamentosIDV_enDescuentos).toBe(apartamentoIDV_actualizado);
             }
         })

@@ -21,7 +21,7 @@ async function verifyBuyer(payments, token) {
   return verificationResults.token;
 }
 async function CardPay(fieldEl, buttonEl) {
-  // Create a card payment object and attach to page
+
   const card = await window.payments.card({
     style: {
       '.input-container.is-focus': {
@@ -34,7 +34,7 @@ async function CardPay(fieldEl, buttonEl) {
   });
   await card.attach(fieldEl);
   async function eventHandler(event) {
-    // Clear any existing messages
+
     console.info(">>> Se inicia el procesod de pago")
     window.paymentFlowMessageEl.textContent = '';
     const destinoDinamico = document.querySelector("[pasarelaZonaDePago]")?.getAttribute("pasarelaZonaDePago")
@@ -54,7 +54,7 @@ async function CardPay(fieldEl, buttonEl) {
       const result = await card.tokenize();
       const verificationToken = await verifyBuyer(window.payments, result.token);
       if (result.status === 'OK') {
-        // Use global method from sq-payment-flow.js
+
         window.createPayment(
           result.token,
           verificationToken
@@ -65,7 +65,7 @@ async function CardPay(fieldEl, buttonEl) {
         casaVitini.componentes.flujoPagoUI.errorInfo(e.message)
         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
 
-        //window.showError(`Error: ${e.message}`);
+
       } else {
 
         const errorGenerico = "Ha ocurrido un error"

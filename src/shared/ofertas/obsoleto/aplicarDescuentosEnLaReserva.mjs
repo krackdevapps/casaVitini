@@ -76,7 +76,7 @@ export const aplicarDescuentosEnLaReserva = (ofertasSeleccionadasPorCondiciones)
                         const cantidad = new Decimal(detalleApartamento.cantidad)
                         reserva.desgloseFinanciero.totalesPorApartamento.forEach((detallesDelApartamento) => {
                             desglosePorApartamento_Objeto[detallesDelApartamento.apartamentoIDV] = detallesDelApartamento
-                            //return desglosePorApartamento_Objeto
+
                         })
 
                         const totalNetoApartamento = new Decimal(desglosePorApartamento_Objeto[apartamentoIDV].totalNetoRango)

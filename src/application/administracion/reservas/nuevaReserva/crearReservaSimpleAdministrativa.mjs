@@ -36,7 +36,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             filtro: "soloCadenasIDV",
             sePermitenDuplicados: "no"
         })
-        // Control validez fecha
+
         await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: fechaEntrada,
             nombreCampo: "La fecha de entrada de la reserva"
@@ -90,7 +90,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
 
 
         await eliminarBloqueoCaducado();
-        // validar que en el array hay un maximo de posiciones no superior al numero de filas que existen en los apartementos
+
         const configuracionesDisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
             estadoIDV: "disponible",
             zonaArray: ["privada", "global"]
@@ -104,7 +104,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             throw new Error(error);
         }
 
-        // validacion: la fecha de entrada no puede ser superior a la fecha de salida y al mimso tiempo la fecha de salida no puede ser inferior a la fecha de entrada
+
         if (fechaEntrada_objeto >= fechaSalida_objeto) {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida";
             throw new Error(error);
@@ -225,7 +225,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 desgloseFinanciero
             })
 
-            //await actualizadorIntegradoDesdeInstantaneas(reservaUIDNuevo)
+
             await campoDeTransaccion("confirmar")
             const ok = {
                 ok: "Se ha creado la reserva",

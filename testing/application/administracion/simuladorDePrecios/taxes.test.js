@@ -69,10 +69,10 @@ describe('taxes of simulation', () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-                // fechaCreacion: "2026-10-10",
-                // fechaEntrada: "2026-10-11",
-                // fechaSalida: "2026-10-14",
-                // apartamentosIDVARRAY: [apartamentoIDV],
+
+
+
+
             },
             session: fakeAdminSession
         }

@@ -36,7 +36,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-        // Validar que existe el apartamento
+
         const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
@@ -45,7 +45,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             apartamentoIDV,
             errorSi: "noExiste"
         });
-        // Ver las reservas que existen hoy
+
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActualCompletaTZ = tiempoZH.toISO();
@@ -72,12 +72,12 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
         const identificadoresReservasValidas = []
         for (const reservaEncontrada of reservasUIDHoy) {
             const reservaUID = reservaEncontrada.reservaUID;
-            // Fecha de la base de datos
+
             const reserva = await obtenerReservaPorReservaUID(reservaUID)
             const fechaEntrada = reserva.fechaEntrada;
             const fechaSalida = reserva.fechaSalida;
 
-            // Formatos fecha
+
             const fechaConHoraEntrada_ISO_ZH = DateTime.fromISO(
                 `${fechaEntrada}T${horaEntradaTZ}`,
                 { zone: zonaHoraria })
@@ -149,14 +149,14 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 };
                 objetoFinal.estadoPernoctacion = "ocupado";
                 const apartamentoUID = apartamentoDeLaReserva.componenteUID;
-                // Extraer las habitaciones
+
                 const habitacionesDelApartamento = await obtenerHabitacionesDelApartamento({
                     reservaUID: reservaUID,
                     apartamentoUID: apartamentoUID
                 })
 
                 estructuraReserva.habitaciones = habitacionesDelApartamento
-                //  habitacionesDelApartamento[apartamentoIDV] = habitacionesDelApartamento
+
                 objetoFinal.reservas[reservaUID] = estructuraReserva
 
             }
@@ -181,7 +181,7 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                 const segundoApellido = cliente.segundoApellido || "";
                 const pasaporte = cliente.pasaporte;
                 const constructorNombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
-                // const clienteUID = cliente.clienteUID;
+
                 const detallesPernoctante = {
                     nombreCompleto: constructorNombreCompleto.trim(),
                     tipoPernoctante: "cliente",
@@ -200,13 +200,13 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                     const fechaCheckOut_humano = `${fechaCheckOutAdelantado_array[2]}/${fechaCheckOutAdelantado_array[1]}/${fechaCheckOutAdelantado_array[0]}`;
                     detallesPernoctante.fechaCheckOut = fechaCheckOut_humano;
                 }
-                // pernoctantesObjetoTemporal.push(detallesPernoctante);
+
                 objetoFinal.reservas[reservaUIDDelPernoctante].pernoctantes.push(detallesPernoctante)
             } else {
                 const pernoctanteUID = pernoctante.pernoctanteUID;
                 const clientePool = await obtenerClientePoolPorPernoctanteUID(pernoctanteUID)
                 const nombreCompleto = clientePool.nombreCompleto;
-                //const clienteUID = clientePool.clienteUID;
+
                 const pasaporte = clientePool.pasaporte;
                 const detallesPernoctante = {
                     nombreCompleto: nombreCompleto,
@@ -215,11 +215,11 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
                     clienteUID: clienteUID,
                     habitacionUID: habitacionUID
                 }
-                // pernoctantesObjetoTemporal.push(detallesPernoctante);
+
                 objetoFinal.reservas[reservaUIDDelPernoctante].pernoctantes.push(detallesPernoctante)
             }
         }
-        // Calendarios sincronizados
+
         const datosAirbnb = {
             apartamentoIDV: apartamentoIDV,
             fechaHoy_ISO: fechaActualTZ

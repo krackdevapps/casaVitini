@@ -13,7 +13,7 @@ export const validarObjetoReservaSoloFormato = async (reserva) => {
             const error = "La fecha de salida no tiene un formato valido, el formato valido es DD/MM/AAAAA"
             throw new Error(error)
         }
-        // Control validez fecha
+
         const fechaEntrada_Humano = reserva.entrada
         const fechaSalida_Humano = reserva.salida
         const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_Humana(fechaEntrada_Humano)).fecha_ISO
@@ -29,7 +29,7 @@ export const validarObjetoReservaSoloFormato = async (reserva) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
-        // Comprobar que existen los datos de fecha en formato number
+
         const alojamiento = reserva?.alojamiento
         if (!alojamiento) {
             const error = "No exite la llave de 'Alojamiento' esperada dentro del objeto, por lo tante hasta aquí hemos llegado"

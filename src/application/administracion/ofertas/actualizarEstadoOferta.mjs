@@ -38,7 +38,7 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-        // Validar nombre unico oferta
+
         await obtenerOferatPorOfertaUID(ofertaUID)
         await campoDeTransaccion("iniciar")
 

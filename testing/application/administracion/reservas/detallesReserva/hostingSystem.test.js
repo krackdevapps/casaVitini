@@ -77,7 +77,7 @@ describe('detailsReserver', () => {
         await eliminarClientePorTestingVI(testingVI)
         await eliminarCamaComoEntidadPorTestingVI(testingVI)
 
-        // Crear una primera arquitectura de alojamineto para crear al reserva.
+
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV,
@@ -87,7 +87,7 @@ describe('detailsReserver', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
-        // Crear reserva
+
         const reserva = await crearReservaSimpleAdministrativa({
             body: {
                 fechaEntrada: "2026-10-10",
@@ -103,7 +103,7 @@ describe('detailsReserver', () => {
 
     test('create second hosting architecture to add reserve with ok', async () => {
 
-        // Añadir una seguna arquitectura de alojamineto para añadiral una vez creada la reserva
+
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV_2,
@@ -114,10 +114,10 @@ describe('detailsReserver', () => {
             camaUI: camaUI_2,
         })
 
-        // expect(response).not.toBeUndefined();
-        // expect(typeof response).toBe('object');
-        // expect(response).toHaveProperty('ok');
-        // apartamentoUID = response.nuevoUID
+
+
+
+
     })
 
 
@@ -335,7 +335,7 @@ describe('detailsReserver', () => {
             camaIDV: camaIDV
         })
 
-        // Añadir una seguna arquitectura de alojamineto para añadiral una vez creada la reserva
+
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV_2,

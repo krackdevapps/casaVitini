@@ -26,7 +26,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         }
 
         validadoresCompartidos.claves.minimoRequisitos(claveNueva);
-        //validadoresCompartidos.claves.minimoRequisitos(claveConfirmada);
+
 
 
         if (claveNueva === claveActual) {

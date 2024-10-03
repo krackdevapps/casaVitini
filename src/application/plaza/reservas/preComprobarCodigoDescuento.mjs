@@ -18,26 +18,26 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         })
 
 
-        // Sscript obsoletizable
-        // const tipoContenedorCodigo = validadoresCompartidos.tipos.cadena({
-        //     string: entrada.body.tipoContenedorCodigo,
-        //     nombreCampo: "El campo de tipoContenedorCodigo",
-        //     filtro: "strictoIDV",
-        //     sePermiteVacio: "no",
-        //     limpiezaEspaciosAlrededor: "si",
-        // })
+
+
+
+
+
+
+
+
         const codigosDescuentoArray = []
-        // if (tipoContenedorCodigo === "cadena") {
-        //     const codigoDescuentoB64 = validadoresCompartidos.tipos.cadena({
-        //         string: entrada.body.codigoDescuento,
-        //         nombreCampo: "No has escrito ningún código de descuento, recuerda que",
-        //         filtro: "transformaABase64",
-        //         sePermiteVacio: "no",
-        //         limpiezaEspaciosAlrededor: "si",
-        //     })
-        //     codigosDescuentoArray.push(codigoDescuentoB64)
-        // } else
-        // if (tipoContenedorCodigo === "array") {
+
+
+
+
+
+
+
+
+
+
+
         const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
             array: entrada.body?.codigoDescuento,
             nombreCampo: "El campo codigoDescuento",
@@ -54,10 +54,10 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             })
             codigosDescuentoArray.push(codigoDescuentoB64)
         })
-        // } else {
-        //     const m = "El campo tipo contenedorCodigo solo espera cadena o array"
-        //     throw new Error(m)
-        // }
+
+
+
+
 
         await utilidades.ralentizador(2000)
         mutex.acquire()
@@ -95,7 +95,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         })
         const ok = {}
 
-        //Buscar en ofertas activas, publicas o globales, que tienen este codigo
+
         if (ofertasActivas.length === 0) {
             const m = "El código introducido no se reconoce"
             throw new Error(m)
@@ -103,7 +103,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
 
         const ofertaAnalizadasPorCondiciones = []
         const ofertasExistentesPeroConCondicionesQueNoSeCumplen = []
-        // Comporbar si por condiciones la reserva entra en las ofertas encontradas
+
         for (const oferta of ofertasActivas) {
 
             const condicionesDeLaOferta = oferta.condicionesArray
@@ -119,7 +119,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             }
 
             const resultadoSelector = await selectorPorCondicion({
-                // falta pasar pora qui los datos
+
                 oferta,
                 apartamentosArray: apartamentosArray,
                 fechaActual_reserva: fechaActual,
@@ -171,7 +171,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
                     contenedorApartamento.apartamentoUI = apartamentoUI
                 }
 
-                // Descuentos por dias con apartamentos especificos
+
                 const descuentosPorDiasConApartamentos = contenedorOferta?.oferta?.descuentosJSON?.descuentoPorDias || []
                 for (const contenedorDia of descuentosPorDiasConApartamentos) {
 

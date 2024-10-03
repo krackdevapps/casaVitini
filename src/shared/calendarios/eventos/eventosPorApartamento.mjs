@@ -16,7 +16,7 @@ export const eventosPorApartamneto = async (metadatos) => {
             const error = "El campo 'apartamentoIDV' solo puede ser una cadena de letras minúsculas y números."
             throw new Error(error)
         }
-        // Validar que le nombre del apartamento existe como tal
+
 
 
         await obtenerConfiguracionPorApartamentoIDV({

@@ -55,12 +55,12 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         const fechaEntradaReserva = reserva.fechaEntrada
         const fechaSalidaReserva = reserva.fechaSalida
         const fechaCreacion_simple = reserva.fechaCreacion_simple
-        // validar aqui que la oferta por condicion no esta ya en la instantanea
+
         const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
         const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
             return detallesApartamento.apartamentoIDV
         })
-        // Desde aqui se envia esto mas el ofertaUID
+
         const desgloseFinanciero = await procesador({
 
             entidades: {
@@ -87,7 +87,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
                 }
             }
         })
-        // Ojo por que sobrescribe las ofertas existentes, debe de añadir en el array de ofertas por cocndicion otra mas
+
         await actualizarDesgloseFinacieroPorReservaUID({
             desgloseFinanciero,
             reservaUID

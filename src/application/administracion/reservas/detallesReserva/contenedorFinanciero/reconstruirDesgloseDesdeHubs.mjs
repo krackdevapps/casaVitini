@@ -56,7 +56,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             throw new Error(error)
         }
 
-        // Informar si algun apartametnoIDV no exsite por modificiaones futura para decir que, no se puede reconstruir desde los hubs y que si se quiere hacer esto se debrai de crear una reserva nueva
+
         await campoDeTransaccion("iniciar")
 
         const fechaEntrada = reserva.fechaEntrada

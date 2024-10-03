@@ -38,7 +38,7 @@ export const evitarDuplicados = async (data) => {
         if (tipoIDV === "porCreacion" || tipoIDV === "porRango") {
             const comportamientosEnConflicto = []
             const apartamentosIDVContenedor = {}
-            // const perfilesAntelacion = contenedor.perfilesAntelacion
+
             const fechaInicio_ISO = contenedor.fechaInicio
             const fechaFinal_ISO = contenedor.fechaFinal
             const fechaInicio_creacionReserva = contenedor.fechaInicio_creacionReserva
@@ -179,28 +179,28 @@ export const evitarDuplicados = async (data) => {
                     comportamientosEnConflicto.push(detallesComportamiento)
                 }
 
-                // for (const detallesApartmento of apartamentos) {
-                //     const apartamentoIDV = detallesApartmento.apartamentoIDV
-                //     if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
 
-                //         const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                //             apartamentoIDV,
-                //             errorSi: "noExiste"
-                //         })).apartamentoUI
-                //         const apartamentosEnClicto = {
-                //             apartamentoIDV,
-                //             apartamentoUI
-                //         }
-                //         apartamentosEnConflicto.push(apartamentosEnClicto)
-                //     }
-                // }
-                // if (apartamentosEnConflicto.length > 0) {
-                //     arbolComportamientoCoincidentes[comportamientoUID] = {
-                //         nombreComportamiento: nombreComportamiento,
-                //         comportamientoUID: comportamientoUID,
-                //         apartamentos: apartamentosEnConflicto
-                //     }
-                // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
 
             if (comportamientosEnConflicto.length > 0) {

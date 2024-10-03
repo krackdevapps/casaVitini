@@ -82,11 +82,11 @@ export const detallesAlojamiento = async (reservaUID) => {
                     reservaUID,
                     habitacionUID
                 })
-                //  alojamiento[apartamentoIDV].habitaciones[habitacionIDV].pernoctantes = pernoctanesEnHabitacion
+
             }
         }
         const pernoctantesSinHabitacion = await recuperarClientesSinHabitacionAsignada(reservaUID)
-        //Aqui pernoctantes sin alojamiento
+
         return alojamiento
     } catch (error) {
         throw error

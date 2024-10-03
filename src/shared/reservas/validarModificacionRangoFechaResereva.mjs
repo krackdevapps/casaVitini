@@ -19,8 +19,8 @@ export const validarModificacionRangoFechaResereva = async (data) => {
             const error = "El campo 'sentidoRango' solo puede ser pasado o futuro"
             throw new Error(error)
         }
-        // La fecha de entrada seleccionada no puede seer superior a la de la fecha de entrada de la reserva
-        // extraer el rango y los apartamentos de la reserva actual
+
+
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoPago = reserva.estadoPagoIDV

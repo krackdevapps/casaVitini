@@ -6,14 +6,14 @@ import { obtenerReservaPorReservaUID } from "../../../../infraestructure/reposit
 export const obtenerTotalReembolsado = async (reservaUID) => {
     try {
         await obtenerReservaPorReservaUID(reservaUID)
-        // Obtener todos los pagoUID de la reserva
+
         const pagosDeLaReserva = await obtenerPagosPorReservaUID(reservaUID)
         const contenedorPagosUID = pagosDeLaReserva.map((detallesPagoUID) => {
             return detallesPagoUID.pagoUID
         })
         let totalReembolsado = 0
 
-        // Obten todos los reembolsos de la reserva        
+
         for (const pagoUID of contenedorPagosUID) {
             const reembolsosDelPago = await obtenerReembolsosPorPagoUID(pagoUID)
             reembolsosDelPago.forEach(reembolso => {

@@ -35,16 +35,16 @@ export const actualizarRolCuenta = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         await campoDeTransaccion("iniciar")
-        // Validas usaurios
+
         const usuario = await obtenerUsuario({
             usuario: usuarioIDX,
             errorSi: "noExiste"
         })
-        // Validar rol
+
         const rolValidado = await obtenerRol(nuevoRol)
         const rolUI = rolValidado.rolUI;
         const rolIDV = rolValidado.rolIDV;
-        // Validar que el usuario que hace el cambio sea administrador
+
         if (IDX.rol() !== "administrador") {
             const error = "No estás autorizado a realizar un cambio de rol. Solo los administradores pueden realizar cambios de rol.";
             throw new Error(error);

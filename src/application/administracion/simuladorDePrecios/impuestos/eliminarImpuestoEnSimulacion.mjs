@@ -51,7 +51,7 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
         })
 
         await campoDeTransaccion("iniciar")
-        // Eliminar impuesto
+
         await eliminarImpuestoPorImpuestoUIDPorSimulacionUID({
             simulacionUID,
             impuestoUID

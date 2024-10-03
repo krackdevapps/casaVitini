@@ -25,9 +25,9 @@ export const totalesBasePorRango = async (data) => {
             estructura.entidades.reserva = {}
         }
         const simulacionEntidad = contenedorEntidadtes.reserva
-        // simulacionEntidad.fechaEntrada = fechaEntrada
-        // simulacionEntidad.fechaSalida = fechaSalida
-        // simulacionEntidad.nochesReserva = diasArray.length.toString()
+
+
+
         const instantaneaNoches = simulacionEntidad.instantaneaNoches
 
 
@@ -75,8 +75,8 @@ export const totalesBasePorRango = async (data) => {
 
             for (const apartamentoIDV of apartamentosArray) {
 
-                // const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
-                // const precioBase = perfilPrecio.precio
+
+
 
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
@@ -105,7 +105,7 @@ export const totalesBasePorRango = async (data) => {
                         contenedorSobreControles[fecha_ISO][apartamentoIDV] = detallesSobreControl
                     }
                 }
-                // Error aqui
+
 
                 const precioNetoApartamento = new Decimal(apartamentosPorNoche[apartamentoIDV].precioNetoApartamento)
                 const totalNetoNoche = noche.precioNetoNoche || "0.00"

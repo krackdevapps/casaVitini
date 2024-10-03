@@ -60,7 +60,7 @@ export const actualizarIDX = async (entrada) => {
             usuarioIDX: actualIDX,
             nuevoIDX: nuevoIDX
         })
-        // No ha actualizado la session
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el IDX correctamente",

@@ -7,7 +7,7 @@ const SQUARE_ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN
 const config = {
   environment: SQUARE_ENTORNO,
   accessToken: SQUARE_ACCESS_TOKEN,
-  // userAgentDetail: "sample_app_node_payment" // Remove or replace this detail when building your own app
+
 }
 
 const clienteSquare = new Client(config)

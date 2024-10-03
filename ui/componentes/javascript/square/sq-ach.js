@@ -7,13 +7,13 @@ async function ACHPay(buttonEl) {
     ach = await window.payments.ach();
     achWrapperEl.style.display = 'block';
   } catch (e) {
-    // If the ACH payment method is not supported by your account then
-    // do not enable the #ach-account-holder-name input field
+
+
     if (e.name === 'PaymentMethodUnsupportedError') {
       achMessageEl.textContent = 'ACH payment is not supported by your account';
       accountHolderNameEl.disabled = true;
     }
-    // if we can't load ACH, we shouldn't bind events for the button
+
     return;
   }
   async function eventHandler(event) {
@@ -22,14 +22,14 @@ async function ACHPay(buttonEl) {
       achMessageEl.textContent = 'Please input full name';
       return;
     }
-    // Clear any existing messages
+
     window.paymentFlowMessageEl.textContent = '';
     try {
       const result = await ach.tokenize({
         accountHolderName,
       });
       if (result.status === 'OK') {
-        // Use global method from sq-payment-flow.js
+
         window.createPayment(result.token);
       }
     } catch (e) {

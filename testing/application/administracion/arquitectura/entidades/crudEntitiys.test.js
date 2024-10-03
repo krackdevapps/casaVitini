@@ -52,9 +52,9 @@ describe('crudEntitiys', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
             expect(error.message).toBe('El apartamentoIDV solo acepta una cadena de mayúsculas, minúsculas y números.');
         }
     })
@@ -73,9 +73,9 @@ describe('crudEntitiys', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
             expect(error.message).toBe('El campo del apartamentoUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /');
         }
     })
@@ -93,9 +93,9 @@ describe('crudEntitiys', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
             expect(error.message).toBe('No se reconoce el tipo de entidad');
         }
     })
@@ -113,9 +113,9 @@ describe('crudEntitiys', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
             expect(error.message).toBe('El campo del camaUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /');
         }
     })
@@ -198,9 +198,9 @@ describe('crudEntitiys', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
             expect(error.message).toBe('No se reconoce el tipo de entidad');
         }
     })
@@ -218,9 +218,9 @@ describe('crudEntitiys', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -229,16 +229,16 @@ describe('crudEntitiys', () => {
             const makeEntity = {
                 body: {
                     tipoEntidad: "habitacion1",
-                    // entidadIDV: 5
+
                 },
                 session: fakeAdminSession
             }
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -247,7 +247,7 @@ describe('crudEntitiys', () => {
         try {
             const makeEntity = {
                 body: {
-                    // tipoEntidad: "habitacion1",
+
                     entidadIDV: 5
                 },
                 session: fakeAdminSession
@@ -255,9 +255,9 @@ describe('crudEntitiys', () => {
             const response = await crearEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
     test('update entity apartamento with ok', async () => {
@@ -290,9 +290,9 @@ describe('crudEntitiys', () => {
             const response = await modificarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -326,9 +326,9 @@ describe('crudEntitiys', () => {
             const response = await modificarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -348,9 +348,9 @@ describe('crudEntitiys', () => {
             const response = await modificarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -371,9 +371,9 @@ describe('crudEntitiys', () => {
             const response = await modificarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -392,9 +392,9 @@ describe('crudEntitiys', () => {
             const response = await modificarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -462,9 +462,9 @@ describe('crudEntitiys', () => {
             const response = await eliminarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
     test('error on tipoEntidad', async () => {
@@ -479,9 +479,9 @@ describe('crudEntitiys', () => {
             const response = await eliminarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -489,7 +489,7 @@ describe('crudEntitiys', () => {
         try {
             const makeEntity = {
                 body: {
-                    //  tipoEntidad: "apartamento1",
+
                     entidadIDV: "apartamentoparatesting22"
                 },
                 session: fakeAdminSession
@@ -497,9 +497,9 @@ describe('crudEntitiys', () => {
             const response = await eliminarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -508,16 +508,16 @@ describe('crudEntitiys', () => {
             const makeEntity = {
                 body: {
                     tipoEntidad: "apartamento1",
-                    //  entidadIDV: "apartamentoparatesting22"
+
                 },
                 session: fakeAdminSession
             }
             const response = await eliminarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -527,16 +527,16 @@ describe('crudEntitiys', () => {
             const makeEntity = {
                 body: {
                     tipoEntidad: 2,
-                    //  entidadIDV: "apartamentoparatesting22"
+
                 },
                 session: fakeAdminSession
             }
             const response = await eliminarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -552,9 +552,9 @@ describe('crudEntitiys', () => {
             const response = await eliminarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 
@@ -571,9 +571,9 @@ describe('crudEntitiys', () => {
             const response = await eliminarEntidadAlojamiento(makeEntity)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            // Verificamos que el error sea una instancia de Error
+
             expect(error).toBeInstanceOf(Error);
-            // Verificamos que el mensaje del error sea el esperado
+
         }
     })
 

@@ -59,14 +59,14 @@ export const cambiarTipoCliente = async (entrada, salida) => {
 
         await campoDeTransaccion("iniciar")
 
-        // validar cliente
+
         const cliente = await obtenerDetallesCliente(clienteUID)
         const nombre = cliente.nombre;
         const primerApellido = cliente.primerApellido || "";
         const segundoApellido = cliente.segundoApellido || "";
         const nombreCompleto = `${nombre} ${primerApellido} ${segundoApellido}`;
         const pasaporte = cliente.segundoApellido;
-        // No se puede anadir un pernoctante ya existen a la reserva, proponer moverlo de habitacion
+
         const clienteComoPernoctanteEnLaReserva = await obtenerPernoctanteDeLaReservaPorClienteUID({
             reservaUID: reservaUID,
             clienteUID: clienteUID
@@ -75,7 +75,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             const error = "Este cliente ya es un pernoctante dentro de esta reserva, mejor muévalo de habitación";
             throw new Error(error);
         }
-        // Buscar reservas que interfieren para verificar que el pernoctante no esta en otra reserva del mismo rango
+
         const selectorReservaInterfirientes = await obtenerReservasPorRango({
             fechaInicioRango_ISO: fechaEntrada,
             fechaSalidaRango_ISO: fechaSalida

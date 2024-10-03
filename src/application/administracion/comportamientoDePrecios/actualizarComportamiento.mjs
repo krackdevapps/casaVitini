@@ -56,7 +56,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
             contenedor: comportamiento.contenedor,
             comportamientoUID: comportamientoUID
         })
-        // AÑadir el apartametnoUI al objeto.
+
         const apartamentos = comportamientoActualizado.contenedor.apartamentos
         for (const apartamento of apartamentos) {
 

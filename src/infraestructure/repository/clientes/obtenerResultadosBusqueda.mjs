@@ -35,7 +35,7 @@ export const obtenerResultadosBusqueda = async (data) => {
                 sentidoColumna = "DESC";
             }
             if (nombreColumna) {
-                // OJO con la coma, OJO LA COMA ES IMPORTANTISMA!!!!!!!!
+
                 return `,"${nombreColumna}" ${sentidoColumna}`;
             } else {
                 return "DESC"

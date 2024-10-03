@@ -46,7 +46,7 @@ describe('overridePrices in bookins', () => {
         })
 
 
-        // Crear reserva
+
         const reserva = await crearReservaSimpleAdministrativa({
             body: {
                 fechaEntrada: "2026-10-10",

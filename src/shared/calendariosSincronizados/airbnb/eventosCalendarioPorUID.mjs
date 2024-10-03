@@ -21,8 +21,8 @@ export const eventosCalendarioPorUID = async (calendarioUID) => {
                 calendarioObjeto: []
             }
         }
-        // Si no toene url, devuelve un array vacio
-        // Si tiene url pero no hay datos Ical devuelve un array vacio
+
+
         if (url) {
             const errorDeFormato = "En la dirección URL que has introducido no hay un calendario iCal de Airbnb."
             try {

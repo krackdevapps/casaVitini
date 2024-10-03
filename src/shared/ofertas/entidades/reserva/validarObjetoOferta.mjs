@@ -173,8 +173,8 @@ export const validarObjetoOferta = async (data) => {
                     tipoDeEspecificidad !== "noDebeContenedorAlguno"
                     &&
                     tipoDeEspecificidad !== "noDebeContenedorExactamente"
-                    // &&
-                    // tipoDeEspecificidad !== "noDebeContenedorExactamenteEntreOtros"
+
+
                 ) {
                     const error = "El campo tipoDeEspecificidad solo admite, exactamente, alguno o exactamenteEntreOtros"
                     throw new Error(error)

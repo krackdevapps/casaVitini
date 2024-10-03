@@ -60,7 +60,7 @@ export const crearTitular = async (entrada, salida) => {
         const pasaporte_ = datosValidados.pasaporte;
         const telefono_ = datosValidados.telefono ? datosValidados.telefono : "";
         const nombreCompleto = `${nombre_} ${primerApellido_} ${segundoApellido_}`;
-        // Asociar nuevo cliente como titular
+
         const dataTitular = {
             clienteUID: clienteUID,
             reservaUID: reservaUID

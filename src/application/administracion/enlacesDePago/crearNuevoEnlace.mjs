@@ -92,7 +92,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
         };
 
         const validarCodigo = async (codigoAleatorio) => {
-            // Se esta validando que no existe ningun enlace de pago con el mismo codiog UPID. Si no existe, el adaptaador manera el error de enlace inexistente y el trycatch de aqui devuelve true
+
             try {
                 const codigoRepetidos = await obtenerEnlaceDePagoPorCodigoUPID({
                     codigoUPID: codigoAleatorio,
@@ -119,7 +119,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
                 codigoExiste = await validarCodigo(codigoGenerado);
 
             } while (codigoExiste);
-            // En este punto, tenemos un código único que no existe en la base de datos
+
             return codigoGenerado;
         };
 

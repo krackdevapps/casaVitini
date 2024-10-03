@@ -48,7 +48,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
         await eliminarBloqueoCaducado();
         const fechaActual_ISO = tiempoZH.toISODate();
 
-        //const resuelveADP = await apartamentosDisponiblesPublico(fecha)
+
         const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,

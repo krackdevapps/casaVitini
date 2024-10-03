@@ -88,7 +88,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
             operacion: tipoOperacion,
             valor: valorSobreControl
         }
-        // Actualziar con un adaptador para que guarde el sobrecontrol
+
         const sobreControlActualizado = await actualizarSobreControlDeLaNoche({
             simulacionUID,
             apartamentoIDV,

@@ -54,8 +54,8 @@ export const eliminarImpuestoEnReserva = async (entrada) => {
             errorSi: "noExiste"
         })
 
-        //   await campoDeTransaccion("iniciar")
-        // Eliminar impuesto
+
+
         await eliminarImpuestoPorImpuestoUIDPorReservaUID({
             reservaUID,
             impuestoUID
@@ -64,14 +64,14 @@ export const eliminarImpuestoEnReserva = async (entrada) => {
         const desgloseFinanciero = await actualizadorIntegradoDesdeInstantaneas(reservaUID)
 
 
-        // await campoDeTransaccion("confirmar")
+
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
             contenedorFinanciero: desgloseFinanciero
         }
         return ok
     } catch (errorCapturado) {
-        //await campoDeTransaccion("cancelar")
+
         throw errorCapturado
     } finally {
         mutex.release()

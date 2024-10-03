@@ -25,7 +25,7 @@ export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         await campoDeTransaccion("iniciar")
-        // Validar si es un usuario administrador
+
         const rolIDV = IDX.rol()
         const rolAdministrador = "administrador";
         if (rolIDV === rolAdministrador) {

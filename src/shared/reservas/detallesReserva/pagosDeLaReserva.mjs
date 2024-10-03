@@ -49,12 +49,12 @@ export const pagosDeLaReserva = async (reservaUID) => {
                     pagoResultadoFinal = cantidadDelPago.plus(pagoResultadoFinal);
                 }
                 if (reembolsosDelPago.length > 0) {
-                    // if (plataformaDePagoIDV === "pasarela") {
-                    //     const actualizarReembolsos = await componentes.administracion.reservas.transacciones.actualizarReembolsosDelPagoDesdeSquare(pagoUID, pagoUIDPasarela)
-                    //     if (actualizarReembolsos?.error) {
-                    //         ok.estadoPasarela = actualizarReembolsos.error
-                    //     }
-                    // }
+
+
+
+
+
+
                     let sumaDeLoReembolsado = 0;
                     for (const detallesDelReembolso of reembolsosDelPago) {
                         const cantidadDelReembolso = new Decimal(detallesDelReembolso.cantidad);

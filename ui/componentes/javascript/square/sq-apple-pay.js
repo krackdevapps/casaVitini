@@ -1,6 +1,6 @@
 async function ApplePay(buttonEl) {
   const paymentRequest = window.payments.paymentRequest(
-    // Use global method from sq-payment-flow.js
+
     window.getPaymentRequest()
   );
   let applePay;
@@ -11,12 +11,12 @@ async function ApplePay(buttonEl) {
     return;
   }
   async function eventHandler(event) {
-    // Clear any existing messages
+
     window.paymentFlowMessageEl.textContent = '';
     try {
       const result = await applePay.tokenize();
       if (result.status === 'OK') {
-        // Use global method from sq-payment-flow.js
+
         window.createPayment(result.token);
       }
     } catch (e) {

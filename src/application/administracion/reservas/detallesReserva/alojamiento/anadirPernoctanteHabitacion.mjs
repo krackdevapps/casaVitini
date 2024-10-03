@@ -52,20 +52,20 @@ export const anadirPernoctanteHabitacion = async (entrada) => {
         })
         await campoDeTransaccion("iniciar")
 
-        // Comprobar que la reserva exisste
+
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         if (reserva.estadoReservaIDV === "cancelada") {
             const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
-        // validar habitacion
+
         await obtenerHabitacionDelLaReserva({
             reservaUID: reservaUID,
             habitacionUID: habitacionUID,
         })
-        // validar cliente
+
         const cliente = await obtenerDetallesCliente(clienteUID)
-        // No se puede anadir un pernoctante ya existen a la reserva, proponer moverlo de habitacion
+
         const pernoctanteDeLaReserva = await obtenerPernoctanteDeLaReservaPorClienteUID({
             reservaUID,
             clienteUID

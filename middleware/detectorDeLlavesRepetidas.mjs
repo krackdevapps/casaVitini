@@ -2,7 +2,7 @@ export const detectorDeLlavesRepetidas = (req, res, next) => {
     try {
         const objeto = req.body;
 
-        // Función para detectar claves duplicadas
+
         const hasDuplicateKeys = (obj) => {
             const keys = new Set();
             const checkDuplicates = (item) => {

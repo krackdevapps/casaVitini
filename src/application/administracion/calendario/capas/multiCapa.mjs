@@ -135,7 +135,7 @@ export const multiCapa = async (entrada) => {
                 }
             },
             todoAirbnb: async () => {
-                // Obtengo todo los uids de los calendarios sincronizados en un objeto y lo itero
+
                 const plataformaAibnb = "airbnb";
                 const calendariosPorPlataforma = await obtenerCalendariosPorPlataformaIDV(plataformaAibnb)
                 if (calendariosPorPlataforma.length > 0) {
@@ -174,7 +174,7 @@ export const multiCapa = async (entrada) => {
                     filtro: "soloCadenasIDV",
                     nombreCompleto: "En el array del calendario multi capa"
                 })
-                // Validar que le nombre del apartamento existe como tal
+
                 const plataformaOrigen = "airbnb";
                 const calendariosPorPlataforma = await obtenerCalendariosPorPlataformaIDV(plataformaOrigen)
 

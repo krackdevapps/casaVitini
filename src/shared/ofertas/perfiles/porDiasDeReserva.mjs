@@ -9,8 +9,8 @@ export const porDiasDeReserva = async (reserva) => {
         const fechaActualTZ = reserva.fechas.fechaActualProcesada_ISO
         const estadoOfertaActivado = "activada"
 
-        // Mucho ojo en las ofertas de tipo1 por que se activan revisando la fecha actual, es decir la fecha de cuando se realiza la reserva y no las fechas de inicio y fin de la reserva, eso se revisa mas adelante
-        // Acuerdate por que esta parte es un poco contraintuitiva.
+
+
         const ofertasTipo = "porDiasDeReserva";
         const ofertasEncontradas = await obtenerOfertasPorFechaPorEstadoPorTipo({
             fechaActualTZ: fechaActualTZ,

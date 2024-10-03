@@ -26,7 +26,7 @@ export const validadorPasado = async (data) => {
             const error = "El mes de entrada seleccionado no puede ser igual o superior a al mes de fecha de salida de la reserva"
             throw new Error(error)
         }
-        /// No se tiene en en cuenta los apartamentos, solo busca bloqueos a saco partir de la fecha
+
         const configuracionBloqueos = {
             fechaInicioRango: fechaSeleccionadaParaPasado_ISO,
             fechaFinRango: fechaEntradaReserva_ISO,
@@ -79,23 +79,23 @@ export const validadorPasado = async (data) => {
             }
             contenedorReservaEncontradas.push(estructura)
         }
-        // En base a los apartamentos de la reserva se impoirtan los calendarios que funcionan por apartmento
+
         const calendariosSincronizados = []
         for (const apartamentoIDV of apartamentosReservaActual) {
             const eventosCalendarioPorIDV = await sincronizarCalendariosAirbnbPorIDV(apartamentoIDV)
             calendariosSincronizados.push(eventosCalendarioPorIDV)
         }
-        // Buscar solo los eventos del mismo mes
+
         const contenedorEventosCalendariosSincronizados = []
-        // Iteramos el array con todos los grupos por apartamentoIDV
+
         for (const contenedorCalendariosPorIDV of calendariosSincronizados) {
-            // Dentro de cada apartamentoIDV hay un grupo de calendarios
+
             const apartamentoIDV = contenedorCalendariosPorIDV.apartamentoIDV
             const calendariosPorApartamento = contenedorCalendariosPorIDV.calendariosPorApartamento
-            // Obtenemos todos los eventos como objetos por calendario
+
             for (const eventosDelCalendario of calendariosPorApartamento) {
                 const eventosCalendario = eventosDelCalendario.calendarioObjeto
-                // Iteramos por cada evento
+
                 for (const detallesDelEvento of eventosCalendario) {
                     const fechaFinal = detallesDelEvento.fechaFinal
                     const fechaInicio = detallesDelEvento.fechaInicio
@@ -130,7 +130,7 @@ export const validadorPasado = async (data) => {
             ...contenedorEventosCalendariosSincronizados,
         ]
         const contenedorDeEventosQueDejanSinRangoDisponible = []
-        // Ojo: lo que se es haciendo aqui en este loop no es ver cuales estan dentro del mes, eso ya esta hecho, aquí lo que se mira es si los eventos estan enganchados al a fecha de entrada de la reserva para ver en primera instancia si hay algun tipo de rango disponible
+
         for (const detallesDelEvento of contenedorGlobal) {
             const fechaInicioEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaEntrada)
             const fechaFinEvento_ISO = DateTime.fromISO(detallesDelEvento.fechaSalida)
@@ -166,7 +166,7 @@ export const validadorPasado = async (data) => {
             }
             return ok
         }
-        // Aqui se mira si habiendo algo de rango disponible. Aqui entonces se mira cuanto rango disponbile hay en el mes solicitaado
+
         const contenedorQueDejanRangoDisponbile = []
         for (const detallesDelEvento of contenedorGlobal) {
             const fechaInicioEvento_ISO = detallesDelEvento.fechaEntrada
@@ -206,7 +206,7 @@ export const validadorPasado = async (data) => {
             const eventosOrdenadorPorFechaDeSalida = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
                 const fechaSalidaA = DateTime.fromISO(evento1.fechaSalida); // Convertir fecha de salida del evento 1 a objeto DateTime
                 const fechaSalidaB = DateTime.fromISO(evento2.fechaSalida); // Convertir fecha de salida del evento 2 a objeto DateTime
-                // Ordenar de manera descendente según la fecha de salida
+
                 if (fechaSalidaA < fechaSalidaB) {
                     return 1; // Si la fecha de salida del evento 1 es menor, lo colocamos después en el array
                 } else if (fechaSalidaA > fechaSalidaB) {
@@ -215,7 +215,7 @@ export const validadorPasado = async (data) => {
                     return 0; // Si las fechas de salida son iguales, no hay cambio en el orden
                 }
             });
-            // Hay mas de un evento con la fecha mas cercana?
+
             let fechaMasCercana = eventosOrdenadorPorFechaDeSalida[0].fechaSalida
             let sePermiteElMismoDia = "si"
             for (const detallesDeLosEventosOrdenados of eventosOrdenadorPorFechaDeSalida) {

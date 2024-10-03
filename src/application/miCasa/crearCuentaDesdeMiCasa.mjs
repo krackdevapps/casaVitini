@@ -100,7 +100,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
                 codigoGenerado = generarCadenaAleatoria(longitudCodigo);
                 codigoExiste = await validarCodigo(codigoGenerado);
             } while (codigoExiste);
-            // En este punto, tenemos un código único que no existe en la base de datos
+
             return codigoGenerado;
         };
         const codigoAleatorioUnico = await controlCodigo();

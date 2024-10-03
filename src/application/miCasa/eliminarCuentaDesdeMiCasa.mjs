@@ -46,7 +46,7 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
             const error = "Revisa la contraseña actual que has escrito porque no es correcta, por lo tanto, no se puede eliminar tu cuenta";
             throw new Error(error);
         }
-        // Validar si es un usuario administrador
+
         const rol = cuentaDeUsuario.rolIDV;
         const rolAdministrador = "administrador";
         if (rol === rolAdministrador) {

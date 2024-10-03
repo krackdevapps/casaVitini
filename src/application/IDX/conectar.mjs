@@ -61,7 +61,7 @@ export const conectar = async (entrada) => {
             }
         }
 
-        // Se valida si existe el usuario
+
         try {
             await obtenerIDX(usuario)
         } catch (error) {
@@ -70,7 +70,7 @@ export const conectar = async (entrada) => {
         }
 
         const cuentaUsuario = await obtenerIDX(usuario)
-        // Se recupera el hash y la sal
+
         const rolIDV = cuentaUsuario.rolIDV;
         const sal = cuentaUsuario.sal;
         const claveHash = cuentaUsuario.clave;
@@ -110,14 +110,14 @@ export const conectar = async (entrada) => {
             fechaActualISO: fechaActualISO
         })
         entrada.session.usuario = usuario;
-        //entrada.session.IDX = usuario;
+
         entrada.session.rolIDV = rolIDV;
         entrada.session.ip = ip;
         entrada.session.userAgent = userAgent;
         const ok = {
             ok: usuario,
             rolIDV: rolIDV,
-            //controlEstado: "Objeto en IF IDX",
+
         };
         return ok
     } catch (errorCapturado) {

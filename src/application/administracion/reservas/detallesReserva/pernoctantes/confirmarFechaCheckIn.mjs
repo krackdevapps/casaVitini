@@ -45,7 +45,7 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
         const fechaCheckIn_Objeto = DateTime.fromISO(fechaCheckIn);
         await campoDeTransaccion("iniciar")
 
-        // Validar pernoctanteUID
+
         const pernoctate = await obtenerPernoctanteDeLaReservaPorPernoctaneUID({
             reservaUID: reservaUID,
             pernoctanteUID: pernoctanteUID
@@ -54,14 +54,14 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
             const error = "No existe el pernoctante en la reserva, revisa el pernoctanteUID";
             throw new Error(error);
         }
-        // Validar que el pernoctatne sea cliente y no cliente pool
+
         if (!pernoctate.clienteUID) {
             const error = "El pernoctante está pendiente de validación documental. Valide primero la documentación antes de hacer el check-in";
             throw new Error(error);
         }
         const checkoutAdelantado_ISO = pernoctate.fechaCheckOutAdelantado;
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
-        // validar que la reserva no este cancelada
+
         const estadoReserva = reserva.estadoReservaIDV;
         if (estadoReserva === "cancelada") {
             const error = "No se puede alterar una fecha de checkin de una reserva cancelada";

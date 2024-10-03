@@ -143,16 +143,16 @@ describe('crud prices behavior by range', () => {
         expect(Array.isArray(response)).toBe(true);
     })
 
-    // test('selec price behavior others by rango and tipoIDV and comportamientoIDV', async () => {
-    //     const response = await obtenerComportamientosDistintosPorRangoPorTipoIDVPorComportamientoUID({
-    //         fechaInicio_ISO: fechaInicio,
-    //         fechaFinal_ISO: fechaFinal,
-    //         tipoIDV: porRangoTVI,
-    //         comportamientoUID: nuevoComportamientoUID,
-    //     });
-    //     expect(response).not.toBeUndefined();
-    //     expect(Array.isArray(response)).toBe(true);
-    // })
+
+
+
+
+
+
+
+
+
+
 
     test('selec price behavior others by tipoIDV and diasArray', async () => {
         const response = await obtenerComportamientosDistintosPorTipoIDVPorDiasArray({
