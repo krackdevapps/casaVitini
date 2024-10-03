@@ -108,10 +108,12 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     apartamentoIDV: apartamentoIDV
                 })
             }
+
             const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV: apartamentoIDV,
                 errorSi: "desactivado"
             })
+
 
             if (configuracionAlojamiento) {
                 // Hay que detectar si la entidad de alojamiento, existe en una configuracion de alojamiento para hcaer lo sigueinte
@@ -140,6 +142,8 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                     origenIDV: entidadIDV,
                     destinoIDV: apartamentoIDV
                 })
+
+
                 // Actualizar todos los IDV de todas las instantaneas
                 await actualizarIDVenInstantaneasContenedorFinanciero({
                     origenIDV: entidadIDV,

@@ -41,9 +41,7 @@ describe('configuration of hosting', () => {
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
-
     })
-
     test('create configuration base of hosting with ok', async () => {
         const makeEntity = {
             body: {

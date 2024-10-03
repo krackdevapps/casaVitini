@@ -23,8 +23,6 @@ export const makeHostArquitecture = async (data) => {
             usuario: "test",
             rolIDV: "administrador"
         }
-
-
         await eliminarApartamentoComoEntidad(apartamentoIDV)
         await eliminarCamaComoEntidad(camaIDV)
         await eliminarHabitacionComoEntidad(habitacionIDV)

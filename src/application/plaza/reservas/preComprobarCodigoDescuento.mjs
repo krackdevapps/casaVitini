@@ -39,7 +39,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         // } else
         // if (tipoContenedorCodigo === "array") {
         const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
-            array: entrada.body.codigoDescuento,
+            array: entrada.body?.codigoDescuento,
             nombreCampo: "El campo codigoDescuento",
             sePermitenDuplicados: "no"
         })

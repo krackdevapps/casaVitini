@@ -9,6 +9,7 @@ import { eliminarImpuestoPorTestingVI } from '../../../../src/infraestructure/re
 import { insertarImpuestoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/insertarImpuestoEnSimulacion.mjs';
 import { insertarImpuestoDedicadoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/insertarImpuestoDedicadoEnSimulacion.mjs';
 import { eliminarImpuestoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/eliminarImpuestoEnSimulacion.mjs';
+import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
 
 describe('taxes of simulation', () => {
     const fakeAdminSession = {
@@ -64,15 +65,14 @@ describe('taxes of simulation', () => {
         expect(response).toHaveProperty('ok');
         impuestoUID = response.nuevoImpuestoUID
     })
-
-    test('create initial and save simulation with ok', async () => {
+    test('create initial and save void simulation with ok', async () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-                fechaCreacion: "2026-10-10",
-                fechaEntrada: "2026-10-11",
-                fechaSalida: "2026-10-14",
-                apartamentosIDVARRAY: [apartamentoIDV],
+                // fechaCreacion: "2026-10-10",
+                // fechaEntrada: "2026-10-11",
+                // fechaSalida: "2026-10-14",
+                // apartamentosIDVARRAY: [apartamentoIDV],
             },
             session: fakeAdminSession
         }
@@ -81,6 +81,23 @@ describe('taxes of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
+    })
+    test('insert global data in simulation created with ok', async () => {
+        const m = {
+            body: {
+                simulacionUID: simulacionUID,
+                fechaCreacion: "2026-10-10",
+                fechaEntrada: "2026-10-11",
+                fechaSalida: "2026-10-14",
+                zonaIDV: "global",
+                apartamentosIDVARRAY: [apartamentoIDV],
+            },
+            session: fakeAdminSession
+        }
+        const response = await actualizarSimulacionPorDataGlobal(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
     })
 
     test('insert tax in simulation with ok', async () => {

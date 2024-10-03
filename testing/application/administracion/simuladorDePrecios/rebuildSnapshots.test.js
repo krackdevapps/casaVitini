@@ -5,6 +5,7 @@ import { guardarSimulacion } from '../../../../src/application/administracion/si
 import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
 import { reconstruirDesgloseDesdeHubs } from '../../../../src/application/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeHubs.mjs';
 import { reconstruirDesgloseDesdeInstantaneas } from '../../../../src/application/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
+import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
 
 describe('rebuild snapshots of simulation', () => {
     const fakeAdminSession = {
@@ -41,14 +42,14 @@ describe('rebuild snapshots of simulation', () => {
 
     })
 
-    test('create initial and save simulation with ok', async () => {
+    test('create initial and save void simulation with ok', async () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-                fechaCreacion: "2026-10-10",
-                fechaEntrada: "2026-10-11",
-                fechaSalida: "2026-10-14",
-                apartamentosIDVARRAY: [apartamentoIDV],
+                // fechaCreacion: "2026-10-10",
+                // fechaEntrada: "2026-10-11",
+                // fechaSalida: "2026-10-14",
+                // apartamentosIDVARRAY: [apartamentoIDV],
             },
             session: fakeAdminSession
         }
@@ -57,6 +58,23 @@ describe('rebuild snapshots of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
+    })
+    test('insert global data in simulation created with ok', async () => {
+        const m = {
+            body: {
+                simulacionUID: simulacionUID,
+                fechaCreacion: "2026-10-10",
+                fechaEntrada: "2026-10-11",
+                fechaSalida: "2026-10-14",
+                zonaIDV: "global",
+                apartamentosIDVARRAY: [apartamentoIDV],
+            },
+            session: fakeAdminSession
+        }
+        const response = await actualizarSimulacionPorDataGlobal(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
     })
 
 

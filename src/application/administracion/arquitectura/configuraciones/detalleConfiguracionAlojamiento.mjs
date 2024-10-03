@@ -27,7 +27,6 @@ export const detalleConfiguracionAlojamiento = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
         })
 
-
         const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"

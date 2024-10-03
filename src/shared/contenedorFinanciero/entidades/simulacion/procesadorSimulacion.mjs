@@ -57,7 +57,6 @@ export const procesadorSimulacion = async (data) => {
                     errorSi: "noExiste"
                 })
             }
-            // El metodo actualizarSimulacionPorFechasPorApartamentos usa de entrada hub simulaciones
         } else if (origen === "hubSimulaciones") {
             const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
             fechaEntrada = simulacion.fechaEntrada

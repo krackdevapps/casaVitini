@@ -2,6 +2,8 @@ import { conexion } from "../../globales/db.mjs";
 
 export const obtenerConfiguracionPorApartamentoIDV = async (data) => {
     try {
+
+
         const apartamentoIDV = data.apartamentoIDV
         const errorSi = data.errorSi
         const consulta = `
@@ -15,8 +17,10 @@ export const obtenerConfiguracionPorApartamentoIDV = async (data) => {
         `;
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
         if (errorSi === "noExiste") {
+
+
             if (resuelve.rowCount === 0) {
-                const error = "No existe ninguna configuración de alojamiento con el identificador visual apartmentoIDV que has pasado.";
+                const error = `No existe ninguna configuración de alojamiento con el identificador visual apartmentoIDV ${apartamentoIDV} que has pasado.`
                 throw new Error(error)
             }
             return resuelve.rows[0]

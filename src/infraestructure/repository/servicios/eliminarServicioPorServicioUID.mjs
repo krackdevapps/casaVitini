@@ -10,7 +10,7 @@ export const eliminarServicioPorServicioUID = async (servicioUID) => {
             const error = "No se encuentra el servicio que quieres eliminar, revisa el servicioUID.";
             throw new Error(error);
         }
-        return resuelve.rows[0]
+        return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
     }

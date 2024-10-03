@@ -12,7 +12,7 @@ export const obtenerApartamentoComoEntidadPorApartamentoIDV = async (data) => {
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
         if (errorSi === "noExiste") {
             if (resuelve.rowCount === 0) {
-                const error = "No se encuentra ningún apartamento como entidad con ese apartamentoIDV"
+                const error = `No se encuentra ningún apartamento como entidad con ese apartamentoIDV ${apartamentoIDV}`
                 throw new Error(error)
             }
             return resuelve.rows[0]

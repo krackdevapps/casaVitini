@@ -18,9 +18,9 @@ describe('calendario', () => {
     test('data today from calendar consructor', async () => {
         const m = {
             body: {
-                tipo: "actual",
-                mes: "1",
-                ano: "2026"
+                tipo: "personalizado",
+                mes: 1,
+                ano: 2026
             }
         }
         const response = await calendario(m)

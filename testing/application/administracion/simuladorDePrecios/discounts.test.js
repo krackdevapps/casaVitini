@@ -10,7 +10,8 @@ import { DateTime } from 'luxon';
 import { insertarDescuentoPorCompatible } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/insertarDescuentoPorCompatible.mjs';
 import { actualizarAutorizacionDescuentoCompatible } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/actualizarAutorizacionDescuentoCompatible.mjs';
 import { obtenerDescuentosCompatiblesConLaSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaSimulacion.mjs';
-import { eliminarDescuentoEnReserva } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnReserva.mjs';
+import { eliminarDescuentoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnSimulacion.mjs';
+import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
 
 describe('discounts of simulation', () => {
     const fakeAdminSession = {
@@ -70,15 +71,14 @@ describe('discounts of simulation', () => {
 
 
     })
-
-    test('create initial and save simulation with ok', async () => {
+    test('create initial and save void simulation with ok', async () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-                fechaCreacion: "2026-10-10",
-                fechaEntrada: "2026-10-11",
-                fechaSalida: "2026-10-14",
-                apartamentosIDVARRAY: [apartamentoIDV],
+                // fechaCreacion: "2026-10-10",
+                // fechaEntrada: "2026-10-11",
+                // fechaSalida: "2026-10-14",
+                // apartamentosIDVARRAY: [apartamentoIDV],
             },
             session: fakeAdminSession
         }
@@ -87,6 +87,23 @@ describe('discounts of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
+    })
+    test('insert global data in simulation created with ok', async () => {
+        const m = {
+            body: {
+                simulacionUID: simulacionUID,
+                fechaCreacion: "2026-10-10",
+                fechaEntrada: "2026-10-11",
+                fechaSalida: "2026-10-14",
+                zonaIDV: "global",
+                apartamentosIDVARRAY: [apartamentoIDV],
+            },
+            session: fakeAdminSession
+        }
+        const response = await actualizarSimulacionPorDataGlobal(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
     })
     test('create offer for testing simulation with ok', async () => {
         const m = {
@@ -101,7 +118,6 @@ describe('discounts of simulation', () => {
         expect(response).toHaveProperty('ok');
         ofertaUID = response.oferta.ofertaUID
     })
-
 
     test('insert offer administrative in simulation with ok', async () => {
         const m = {
@@ -129,7 +145,6 @@ describe('discounts of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-
     test('update autorization of offer compatible in simulation with ok', async () => {
         const m = {
             body: {
@@ -144,7 +159,6 @@ describe('discounts of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-
     test('get offers compatible in simulation with ok', async () => {
         const m = {
             body: {
@@ -169,7 +183,7 @@ describe('discounts of simulation', () => {
             },
             session: fakeAdminSession
         }
-        const response = await eliminarDescuentoEnReserva(m)
+        const response = await eliminarDescuentoEnSimulacion(m)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');

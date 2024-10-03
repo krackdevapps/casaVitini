@@ -13874,7 +13874,7 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -13884,17 +13884,17 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .tituloContenedor {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal .tituloContenedor {
     color: black;
     font-weight: bold;
 }
 
-[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .totalReserva {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal .totalReserva {
     margin: 0px;
     font-weight: bold;
 }
 
-[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaConfiramda"] .contenedorTotal .info {
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal .info {
     margin: 0px;
     padding: 10px;
     border-radius: 10px;

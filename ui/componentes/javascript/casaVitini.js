@@ -4507,7 +4507,7 @@ const casaVitini = {
 
                             const marcoElastico = document.createElement("div")
                             marcoElastico.classList.add("marcoElastico")
-                            marcoElastico.setAttribute("contenedor", "reservaConfiramda")
+                            marcoElastico.setAttribute("contenedor", "reservaconfirmada")
 
                             const titulo = document.createElement("div")
                             titulo.classList.add("tituloGrande", "padding10", "textoCentrado")
@@ -28066,7 +28066,7 @@ const casaVitini = {
                         return "Pendiente"
                     }
                     if (data === "confirmada") {
-                        return "Confiramda"
+                        return "confirmada"
                     }
                     if (data === "cancelada") {
                         return "Cancelada"
@@ -35795,111 +35795,6 @@ const casaVitini = {
                         casaVitini.shell.navegacion.controladorVista(entrada)
                     }
                 },
-                // generarDesglose: async function () {
-                //     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-
-                //     const info = document.createElement("div")
-                //     info.setAttribute("contenedor", "info")
-                //     info.classList.add(
-                //         "textoCentrado",
-                //         "flexVertical"
-                //     )
-                //     info.textContent = "Generando simulación..."
-
-                //     const contenedorSimulacion = document.querySelector("[contenedor=simulacion]")
-                //     contenedorSimulacion.appendChild(info)
-                //     contenedorSimulacion.setAttribute("instanciaUID", instanciaUID)
-
-                //     const fechaCreacion = document.querySelector("[calendario=unico]").getAttribute("memoriaVolatil")
-                //     const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                //     const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                //     const selectorApartamentos = document.querySelectorAll("[apartamentoSeleccionado]")
-                //     const apartamentosIDVARRAY = []
-                //     selectorApartamentos.forEach((apartamento) => {
-                //         const apartamentoIDV = apartamento.getAttribute("apartamentoSeleccionado")
-                //         apartamentosIDVARRAY.push(apartamentoIDV)
-                //     })
-
-                //     const transaccion = {
-                //         zona: "administracion/simuladorDePrecios/generarSimulacion",
-                //         fechaCreacion,
-                //         fechaEntrada,
-                //         fechaSalida,
-                //         apartamentosIDVARRAY
-                //     }
-                //     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                //     const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                //     if (!instanciaRenderizada) { return }
-                //     instanciaRenderizada.innerHTML = null
-                //     if (respuestaServidor?.error) {
-                //         contenedorSimulacion.innerHTML = null
-                //         const infoEr = document.createElement("div")
-                //         infoEr.classList.add(
-                //             "textoCentrado",
-                //             "flexVertical"
-                //         )
-                //         infoEr.textContent = respuestaServidor?.error
-                //         instanciaRenderizada.appendChild(infoEr)
-                //     }
-                //     if (respuestaServidor?.ok) {
-
-                //         const contenedorFinanciero = respuestaServidor
-
-                //         const contenedorNoGuardado = document.createElement("div")
-                //         contenedorNoGuardado.classList.add(
-                //             "flexVertical",
-                //             "gap6"
-                //         )
-                //         contenedorSimulacion.appendChild(contenedorNoGuardado)
-
-
-                //         const infoEstadoNoGuardado = document.createElement("div")
-                //         infoEstadoNoGuardado.classList.add(
-                //             "flexVertical",
-                //             //"padding10",
-                //             "textoCentrado"
-                //         )
-                //         infoEstadoNoGuardado.textContent = "Simulación sin guardar.Guarde la simulación para acceder a las funciones avanzadas."
-                //         contenedorNoGuardado.appendChild(infoEstadoNoGuardado)
-
-                //         const campoNombre = document.createElement("input")
-                //         campoNombre.setAttribute("campo", "nombre")
-                //         campoNombre.classList.add(
-                //             "padding6",
-                //             "backgroundGrey1",
-                //             "borderRadius8",
-                //             "padding10",
-                //             "simplificadorCampo",
-                //             "noSelecionable"
-                //         )
-                //         campoNombre.placeholder = "Escriba un nombre para la simulación"
-                //         //botonCancelar.addEventListener("click", null)
-                //         contenedorNoGuardado.appendChild(campoNombre)
-
-                //         const botonGuardar = document.createElement("div")
-                //         botonGuardar.classList.add(
-                //             "botonV1",
-                //             "comportamientoBoton",
-                //             "padding6",
-                //             "textoCentrado",
-                //             "backgroundGrey1",
-                //             "borderRadius8",
-                //             "noSelecionable"
-                //         )
-                //         botonGuardar.textContent = "Guardar simulación"
-                //         botonGuardar.addEventListener("click", this.guardarNuevaSimulacion)
-                //         //botonCancelar.addEventListener("click", null)
-                //         contenedorNoGuardado.appendChild(botonGuardar)
-
-                //         casaVitini.ui.componentes.contenedorFinanciero.constructor({
-                //             destino: `[contenedor=simulacion]`,
-                //             contenedorFinanciero,
-                //             modoUI: "plaza"
-                //         })
-
-                //     }
-
-                // },
             },
             detallesSimulacion: {
                 detalleSimulacion: async function (respuestaServidor) {
@@ -36064,9 +35959,7 @@ const casaVitini = {
 
                         for (const contenedorApartamento of apartamentos) {
                             const apartamentoIDV = contenedorApartamento.apartamentoIDV
-                            const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
-                            const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                            const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
+                            const apartamentoUI = contenedorApartamento.apartamentoUI
                             const infoSinApartamento = document.querySelector("[componente=infoSinApartamento]")
                             infoSinApartamento.style.display = "none"
 
@@ -40518,9 +40411,8 @@ const casaVitini = {
 
                             for (const contenedorApartamento of apartamentos) {
                                 const apartamentoIDV = contenedorApartamento.apartamentoIDV
-                                const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
-                                const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                                const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
+                                const apartamentoUI = contenedorApartamento.apartamentoUI
+
                                 const infoSinApartamento = descuentoUI.querySelector("[componente=infoSinApartamento]")
                                 infoSinApartamento.style.display = "none"
 
@@ -40588,12 +40480,12 @@ const casaVitini = {
                         const instanciaUID = contenedorApartamentos.getAttribute("instanciaUID")
 
                         for (const apartamento of apartamentos) {
+
                             const apartamentoIDV = apartamento.apartamentoIDV
                             const descuentoTotal = apartamento.descuentoTotal
                             const tipoAplicacion = apartamento.tipoAplicacion
-                            const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
-                            const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                            const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
+                            const apartamentoUI = apartamento.apartamentoUI
+
                             const infoSinApartamento = contenedorApartamentos.querySelector("[componente=infoSinApartamento]")
                             infoSinApartamento.style.display = "none"
 
@@ -40690,12 +40582,12 @@ const casaVitini = {
                                     contenedorNetoPorApartamentoDelDia.classList.remove("estadoInicialInvisible")
 
                                     for (const apartamento of apartamentos) {
+
+
                                         const apartamentoIDV = apartamento.apartamentoIDV
                                         const descuentoTotal = apartamento.descuentoTotal
                                         const tipoAplicacion = apartamento.tipoAplicacion
-                                        const error = `Configuracíon de alojamiento inexistente (${apartamentoIDV})`
-                                        const configuracionDeAlojamiento = await casaVitini.administracion.componentes.obtenerConfiguracionAlojamiento(apartamentoIDV)
-                                        const apartamentoUI = configuracionDeAlojamiento?.apartamentoUI || error
+                                        const apartamentoUI = apartamento.apartamentoUI
                                         const infoSinApartamento = contenedorDia.querySelector("[componente=infoSinApartamento]")
                                         infoSinApartamento.style.display = "none"
 
@@ -47324,17 +47216,13 @@ const casaVitini = {
                             const titulo = constructor.querySelector("[componente=titulo]")
                             titulo.textContent = "Eliminar configuración de alojamiento"
                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                            mensaje.textContent = "Confirma la eliminación de toda la configuración del apartamento. Esto implica la configuración del apartamento, el perfil de precios y los bloqueos vigentes. Si este apartamento aparece en un comportamiento de precios, será eliminado el apartamento del comportamiento de precios, pero el resto del comportamiento seguirá vigente a no ser que sea el único apartamento en algún comportamiento de precios. Sus implicaciones serán inmediatas."
-
+                            mensaje.textContent = "Confirmar la eliminación de toda la configuración del apartamento. Esto implica la configuración del apartamento, el perfil de precios y los bloqueos vigentes. Si este apartamento aparece en un comportamiento de precios, será eliminado el apartamento del comportamiento de precios, pero el resto del comportamiento seguirá vigente a no ser que sea el único apartamento en algún comportamiento de precios. Sus implicaciones serán inmediatas. Si esta configuración de alojamiento aparece en alguna reserva activa, no se podrá eliminar por temas de integridad. Si necesita editar la configuración de alojamiento, puede hacerlo libremente. Si esta configuración de alojamiento aparece en alguna simulación u oferta, no se eliminará de estas. Tendrá que revisar las ofertas. Si elimina este apartamento y aparece en alguna oferta, no podrá insertar esa oferta en ninguna simulación o reserva hasta que no elimine la referencia en esa oferta. Si esta configuración de alojamiento aparece en alguna reserva no activa, como son las reservas canceladas o reservas del pasado, esta referencia no se eliminara porque las reservas mantiene su información en instantáneas propias."
                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
                             botonAceptar.textContent = "Comfirmar la eliminación"
                             botonAceptar.addEventListener("click", casaVitini.administracion.arquitectura_del_alojamiento.configuraciones.detallesConfiguracion.eliminarConfiguracion.confirmar)
                             const botonCancelar = constructor.querySelector("[boton=cancelar]")
                             botonCancelar.textContent = "Cancelar la eliminación"
-
                             document.querySelector("main").appendChild(pantallaInmersiva)
-
-
 
                         },
                         confirmar: async () => {

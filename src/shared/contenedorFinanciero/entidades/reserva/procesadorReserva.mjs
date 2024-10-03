@@ -1,9 +1,7 @@
-import { DateTime } from "luxon"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs"
-import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
 import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs"
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs"
@@ -62,7 +60,6 @@ export const procesadorReserva = async (data) => {
                 filtro: "soloCadenasIDV",
                 sePermitenDuplicados: "no"
             })
-
             for (const apartamentoIDV of apartamentosArray) {
                 await obtenerConfiguracionPorApartamentoIDV({
                     apartamentoIDV,

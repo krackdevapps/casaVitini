@@ -24,7 +24,6 @@ export const aplicarDescuento = async (data) => {
         const contenedorPorApartamento = estructura.contenedorOfertas.entidades.reserva.desgloses.porApartamento
         const contenedorPorDia = estructura.contenedorOfertas.entidades.reserva.desgloses.porDia
 
-
         if (!contenedorTotalesBase.hasOwnProperty("totalDescuento")) {
             contenedorTotalesBase.totalDescuento = "0.00"
         }

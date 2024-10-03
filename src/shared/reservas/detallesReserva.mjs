@@ -9,7 +9,7 @@ import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mj
 import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
 import { insertarApartamentoUIEnObjetoOfertas } from "../ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs"
 import { enlacesDePagoDeLaReserva } from "./detallesReserva/enlacesDePagoDeLaReserva.mjs"
-import { obtenerServiciosPorReservaUID } from "../../infraestructure/repository/servicios/obtenerServiciosPorReservaUID.mjs"
+import { obtenerServiciosPorReservaUID } from "../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -66,6 +66,10 @@ export const detallesReserva = async (data) => {
             reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
             const contenedorOfertasPorAdmimnistrador = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.ofertas.porAdministrador
             for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
+                await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
+            }
+            const contenedorOfertasPorCondicio = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.ofertas.porCondicion
+            for (const contenedorOferta of contenedorOfertasPorCondicio) {
                 await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
             }
         }

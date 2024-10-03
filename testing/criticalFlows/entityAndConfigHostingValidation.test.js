@@ -6,7 +6,6 @@ import { crearReservaSimpleAdministrativa } from '../../src/application/administ
 import { DateTime } from 'luxon';
 import { eliminarConfiguracionDeAlojamiento } from '../../src/application/administracion/arquitectura/configuraciones/eliminarConfiguracionDeAlojamiento.mjs';
 import { reconstruirDesgloseDesdeInstantaneas as rcddi_reservas } from '../../src/application/administracion/reservas/detallesReserva/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
-import { reconstruirDesgloseDesdeInstantaneas as rcddi_simulacion } from '../../src/application/administracion/simuladorDePrecios/contenedorFinanciero/reconstruirDesgloseDesdeInstantaneas.mjs';
 import { guardarSimulacion } from '../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
 import { eliminarSimulacionPorTestingVI } from '../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
 
@@ -121,7 +120,7 @@ describe('critical: entityAndConfigHostingValidation', () => {
     })
 
 
-    test('create  simulation with configutation added', async () => {
+    test('create simulation with configutation added', async () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",

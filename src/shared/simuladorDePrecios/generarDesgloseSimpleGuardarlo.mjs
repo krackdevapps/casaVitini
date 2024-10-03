@@ -3,11 +3,9 @@ import { obtenerSimulacionPorSimulacionUID } from "../../infraestructure/reposit
 import { procesador } from "../contenedorFinanciero/procesador.mjs"
 
 export const generarDesgloseSimpleGuardarlo = async (simulacionUID) => {
-
     try {
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const zonaIDV = simulacion.zonaIDV
-
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
@@ -29,7 +27,6 @@ export const generarDesgloseSimpleGuardarlo = async (simulacionUID) => {
                 }
             }
         })
-
         await actualizarDesgloseFinacieroPorSimulacionUID({
             desgloseFinanciero,
             simulacionUID

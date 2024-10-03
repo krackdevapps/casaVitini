@@ -12,7 +12,7 @@ export const actualizarClaveUsuarioDesdeMicasa = async (entrada, salida) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 3
+            numeroDeLLavesMaximo: 4
         })
 
         const usuarioIDX = entrada.session.usuario;

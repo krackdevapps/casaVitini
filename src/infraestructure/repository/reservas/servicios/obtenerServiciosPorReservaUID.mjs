@@ -1,4 +1,4 @@
-import { conexion } from "../globales/db.mjs";
+import { conexion } from "../../globales/db.mjs";
 export const obtenerServiciosPorReservaUID = async (reservaUID) => {
     try {
         const consulta = `

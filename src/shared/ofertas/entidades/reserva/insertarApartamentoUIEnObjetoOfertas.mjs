@@ -1,3 +1,4 @@
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => {
@@ -8,14 +9,19 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
         for (const contenedorApartamento of descuentosPorApartamentos) {
             const apartamentoIDV = contenedorApartamento.apartamentoIDV
 
-            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV,
-                errorSi: "noExiste"
-            })).apartamentoUI
-            contenedorApartamento.apartamentoUI = apartamentoUI
+                errorSi: "desactivado"
+            })
+            if (configuracionAlojamiento?.apartamentoIDV) {
+                contenedorApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "desactivado"
+                }))?.apartamentoUI
+            } else {
+                contenedorApartamento.apartamentoUI = `IDV no reconocido 3(${apartamentoIDV})`
+            }
         }
-
-
         // Descuentos por dias con apartamentos especificos
         const descuentosPorDiasConApartamentos = contenedorOferta?.descuentosJSON?.descuentoPorDias || []
         for (const contenedorDia of descuentosPorDiasConApartamentos) {
@@ -24,11 +30,18 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
             for (const contenedorApartamento of contenedorApartametnos) {
                 const apartamentoIDV = contenedorApartamento.apartamentoIDV
 
-                const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                     apartamentoIDV,
-                    errorSi: "noExiste"
-                })).apartamentoUI
-                contenedorApartamento.apartamentoUI = apartamentoUI
+                    errorSi: "desactivado"
+                })
+                if (configuracionAlojamiento?.apartamentoIDV) {
+                    contenedorApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "desactivado"
+                    }))?.apartamentoUI
+                } else {
+                    contenedorApartamento.apartamentoUI = `IDV no reconocido 2(${apartamentoIDV})`
+                }
             }
         }
         const contenedorContediciones = contenedorOferta?.condicionesArray || []
@@ -44,10 +57,18 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
                 const contenedorApartamentosIDV = contenedorCondicion.apartamentos
                 for (const contenedorApartamento of contenedorApartamentosIDV) {
                     const apartamentoIDV = contenedorApartamento.apartamentoIDV
-                    contenedorApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                         apartamentoIDV,
-                        errorSi: "noExiste"
-                    })).apartamentoUI
+                        errorSi: "desactivado"
+                    })
+                    if (configuracionAlojamiento?.apartamentoIDV) {
+                        contenedorApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "desactivado"
+                        }))?.apartamentoUI
+                    } else {
+                        contenedorApartamento.apartamentoUI = `IDV no reconocido 1(${apartamentoIDV})`
+                    }
 
                 }
 

@@ -46,7 +46,8 @@ describe('qr resolver', () => {
                 fechaEntrada: "2026-10-10",
                 fechaSalida: "2026-10-20",
                 apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada"
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
 
             },
             session: fakeAdminSession

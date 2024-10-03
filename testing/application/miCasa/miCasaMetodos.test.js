@@ -172,7 +172,6 @@ describe('miCasa Metodos', () => {
     test('update IDX of user account', async () => {
         const m = {
             body: {
-                actualIDX: usuarioIDV_inicial,
                 nuevoIDX: usuarioIDV_inicial + "1"
             },
             session: fakeAdminSession

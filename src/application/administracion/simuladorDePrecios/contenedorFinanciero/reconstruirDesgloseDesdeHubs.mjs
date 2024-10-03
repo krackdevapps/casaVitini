@@ -104,7 +104,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                     origen: "externo",
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
-                    fechaCreacion: fechaCreacion_simple,
+                    fechaActual: fechaCreacion_simple,
                     apartamentosArray: apartamentosArray,
                     origenSobreControl: "simulacion"
                 },

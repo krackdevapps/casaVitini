@@ -2,6 +2,7 @@ import Decimal from "decimal.js"
 import { calcularTotal } from "../calcularTotal.mjs"
 import { controlInstanciaDecimal } from "../controlInstanciaDecimal.mjs"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 
 export const perfil_individualPorApartamento = async (data) => {
     try {
@@ -18,10 +19,20 @@ export const perfil_individualPorApartamento = async (data) => {
             const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
             const descuentoTotal = descuentoDelApartamento.descuentoTotal
             const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
-            descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+
+            const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV,
-                errorSi: "noExiste"
-            })).apartamentoUI
+                errorSi: "desactivado"
+            })
+            if (configuracionAlojamiento?.apartamentoIDV) {
+                descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                }))?.apartamentoUI
+            } else {
+                const m = `Atención, esta oferta no puede aplicarse porque en "descuentos individuales por apartamento" dentro de esta oferta, se hace referencia al identificador visual IDV (${apartamentoIDV}) y esta configuración de alojamiento no existe. O bien cree la configuración de alojamiento o borre este apartamento de la oferta.  Antes de dar por válida una oferta se recomienda probarla en el simulador de precios para evitar esto. Si simplemente quiere añadir esta oferta ahora mismo a una reserva activa, borre la referencia al configuración de alojamiento dentro de la oferta.`
+                throw new Error(m)
+            }
 
             const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
             if (!totalPorApartametno) {

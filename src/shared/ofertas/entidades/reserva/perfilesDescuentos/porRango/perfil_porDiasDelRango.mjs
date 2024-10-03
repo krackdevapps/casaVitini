@@ -3,6 +3,7 @@ import { calcularTotal } from "../../calcularTotal.mjs"
 import { validadoresCompartidos } from "../../../../../validadores/validadoresCompartidos.mjs"
 import { controlInstanciaDecimal } from "../../controlInstanciaDecimal.mjs"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 
 export const perfil_porDiasDelRango = async (data) => {
     try {
@@ -45,11 +46,19 @@ export const perfil_porDiasDelRango = async (data) => {
                     const apartamentoIDV = apartamento.apartamentoIDV
                     const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                     const tipoAplicacion = apartamento.tipoAplicacion
-                    apartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                         apartamentoIDV,
-                        errorSi: "noExiste"
-                    })).apartamentoUI
-
+                        errorSi: "desactivado"
+                    })
+                    if (configuracionAlojamiento?.apartamentoIDV) {
+                        apartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "noExiste"
+                        }))?.apartamentoUI
+                    } else {
+                        const m = `Atención, esta oferta no puede aplicarse porque en "descuentos individuales por apartamento dentro del dia ${fechaDelDia}" dentro de esta oferta, se hace referencia al identificador visual IDV (${apartamentoIDV}) y esta configuración de alojamiento no existe. O bien cree la configuración de alojamiento o borre este apartamento de la oferta. Antes de dar por válida una oferta se recomienda probarla en el simulador de precios para evitar esto. Si simplemente quiere añadir esta oferta ahora mismo a una reserva activa, borre la referencia al configuración de alojamiento dentro de la oferta.`
+                        throw new Error(m)
+                    }
 
                     const totalPorApartamento = estructura.entidades.reserva
                         ?.desglosePorNoche

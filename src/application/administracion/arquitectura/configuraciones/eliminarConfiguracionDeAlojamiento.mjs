@@ -42,7 +42,9 @@ export const eliminarConfiguracionDeAlojamiento = async (entrada) => {
                 reservasActivas: apartamentosReserva
             }
             throw error
-        }
+        } 
+
+  
 
         await eliminarConfiguracionPorApartamentoIDV(apartamentoIDV)
         const ok = {

@@ -154,8 +154,7 @@ describe('miCasa bookins', () => {
     test('validate offer code in string in DMZ with ok', async () => {
         const m = {
             body: {
-                tipoContenedorCodigo: "cadena",
-                codigoDescuento: codeOffer,
+                codigoDescuento: [codeOffer],
                 reserva: {
                     fechaEntrada: fechaInicioVirutal,
                     fechaSalida: fechaFinalVirtual,
@@ -197,11 +196,12 @@ describe('miCasa bookins', () => {
                 reserva: {
                     fechaEntrada: fechaInicioVirutal,
                     fechaSalida: fechaFinalVirtual,
-                    datosTitular: {
-                        nombreTitular: "nombre de ejemplo",
-                        pasaporteTitular: "pasaporte de ejemplo",
-                        correoTitular: "test@test.com",
-                        telefonoTitular: "587455474"
+                    titular: {
+                        nombreTitular: "nombre titular",
+                        pasaporteTitular: "pasporte",
+                        correoTitular: "mail@maiol.com",
+                        telefonoTitular: "23453245",
+                        codigoInternacional: "+34"
                     },
                     alojamiento: {
                         [apartamentoIDV]: {
@@ -209,24 +209,20 @@ describe('miCasa bookins', () => {
                             habitaciones: {
                                 [habitacionIDV]: {
                                     habitacionUI: habitacionUI,
-                                    configuraciones: {
-                                        configuracion1: {
-                                            camaIDV: camaIDV,
-                                            camaUI: camaUI,
-                                            capacidad: 3
-                                        },
-                                    },
                                     camaSeleccionada: {
                                         camaIDV: camaIDV,
-                                        camaUI: camaUI
+                                        camaUI: camaUI,
                                     }
-                                }
+                                },
+
                             }
-                        },
+                        }
                     },
-                }
+
+                },
             }
         }
+
         const response = await preConfirmarReserva(m)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');

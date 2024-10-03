@@ -1,7 +1,7 @@
-import { obtenerServiciosPorReservaUID } from "../../../../infraestructure/repository/servicios/obtenerServiciosPorReservaUID.mjs"
 import { obtenerServicioPorServicioUID } from "../../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs"
 import { constructorInstantaneaServicios } from "./constructorInstantaneaServicios.mjs"
 import { obtenerServiciosPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs"
+import { obtenerServiciosPorReservaUID } from "../../../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs"
 
 export const procesadorServicios = async (data) => {
     try {

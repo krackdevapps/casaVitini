@@ -3,6 +3,8 @@ import { validadoresCompartidos } from "../../../shared/validadores/validadoresC
 import { obtenerSimulacionPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerServiciosPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -30,24 +32,38 @@ export const detallesSimulacion = async (entrada) => {
         const fechaCreacion = simulacion.fechaCreacion
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
+        const contenedorOfertas = simulacion.desgloseFinanciero.contenedorOfertas
+        const contenedorOfertasPorAdmimnistrador = contenedorOfertas.ofertas.porAdministrador
+        for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
+            await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
+        }
+        const contenedorOfertasPorCondicio = contenedorOfertas.ofertas.porCondicion
+        for (const contenedorOferta of contenedorOfertasPorCondicio) {
+            await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
+        }
         const apartamentosIDVARRAY = simulacion.apartamentosIDVARRAY || []
         const apartamentos = []
         for (const apartamentoIDV of apartamentosIDVARRAY) {
-            // await obtenerConfiguracionPorApartamentoIDV({
-            //     apartamentoIDV,
-            //     errorSi: "noExiste"
-            // })
-            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            let apartamentoUI
+            const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "desactivado"
             })
-
-            const estructura = {
+            if (configuracionAlojamiento?.apartamentoIDV) {
+                apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "desactivado"
+                }))?.apartamentoUI
+            } else {
+                apartamentoUI = `IDV no reconocido (${apartamentoIDV})`
+            }   
+            apartamentos.push({
                 apartamentoIDV,
-                apartamentoUI: apartamento?.apartamentoUI || "Sin informacion"
-            }
-            apartamentos.push(estructura)
+                apartamentoUI
+            })
         }
+
+        await insertarApartamentoUIEnObjetoOfertas(contenedorOfertas)
 
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
 
