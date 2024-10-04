@@ -2652,7 +2652,7 @@ const casaVitini = {
                         )
                         campoNombreTitular.placeholder = "Nombre del titular de la reserva"
                         campoNombreTitular.setAttribute("campo", "nombreTitular")
-                        campoNombreTitular.value = "nombre titular"
+                        //campoNombreTitular.value = ""
                         contenedorTitular.appendChild(campoNombreTitular)
 
                         const tituloPasaporteInfo = document.createElement("p")
@@ -2669,8 +2669,7 @@ const casaVitini = {
                         )
                         campoPasaporteTitular.placeholder = "Pasaporte del titular de la reserva"
                         campoPasaporteTitular.setAttribute("campo", "pasaporteTitular")
-                        campoPasaporteTitular.value = "pasporte"
-
+                        //campoPasaporteTitular.value = ""
                         contenedorTitular.appendChild(campoPasaporteTitular)
 
                         const tituloTelefonoInfo = document.createElement("p")
@@ -2689,7 +2688,7 @@ const casaVitini = {
                         )
                         campoTelefonoTitular.placeholder = "Teléfono del titular de la reserva"
                         campoTelefonoTitular.setAttribute("campo", "telefonoTitular")
-                        campoTelefonoTitular.value = "23453245"
+                        //campoTelefonoTitular.value = ""
                         contenedorTitular.appendChild(campoTelefonoTitular)
 
                         const tituloMailInfo = document.createElement("p")
@@ -2705,7 +2704,7 @@ const casaVitini = {
                         )
                         campoMailTitular.placeholder = "Correo del titular de la reserva"
                         campoMailTitular.setAttribute("campo", "correoTitular")
-                        campoMailTitular.value = "mail@maiol.com"
+                        //campoMailTitular.value = ""
                         contenedorTitular.appendChild(campoMailTitular)
 
                         contenedor.appendChild(this.descuentos.contenedorCodigoDescuentos.ui())

@@ -299,7 +299,7 @@ export const validarObjetoReservaPublica = async (data) => {
                 .required()
                 .messages({
                     'string.base': 'El codigosInternacionales debe ser una cadena de texto',
-                    'string.empty': 'Por favor seleciona el código internacional del numero de telefono.',
+                    'string.empty': 'Por favor, selecciona el código internacional del número de teléfono.',
                     'any.required': 'El codigosInternacionales es una llave obligatoria'
                 }),
             correoTitular: Joi
