@@ -68,7 +68,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             throw new Error(error);
         }
 
-
         const estadoInicialOfertasIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.estadoInicialOfertasIDV,
             nombreCampo: "El selector de estadoInicialOfertasIDV",
@@ -86,8 +85,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const error = "El campo de estadoInicialOfertasIDV solo acepta aplicarTodasLasOfertas, aplicarTodasRechazandoLasQueTenganCodigosDeDescuento, noAplicarOfertas";
             throw new Error(error);
         }
-
-
 
         await eliminarBloqueoCaducado();
 
@@ -191,7 +188,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 }
             }
 
-
             const desgloseFinanciero = await procesador({
                 entidades: {
                     reserva: {
@@ -224,7 +220,6 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 reservaUID: reservaUID,
                 desgloseFinanciero
             })
-
 
             await campoDeTransaccion("confirmar")
             const ok = {

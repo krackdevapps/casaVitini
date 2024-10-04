@@ -9,8 +9,6 @@ select {
     padding: 14px;
     border-radius: 16px;
     cursor: default;
-    user-select: none;
-    -webkit-user-select: none;
     transition: all 250ms linear;
     display: flex;
     align-content: center;
@@ -1513,11 +1511,15 @@ summary:hover {
 
 [zonaCSS="/alojamiento"] .elementoTitulo {
     font-weight: bold;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 [zonaCSS="/alojamiento"] .elementoTituloPrincipal {
     font-weight: bold;
-    font-size: 16px;
+    padding-right: 10px;
+    padding-left: 10px;
+
 }
 
 .bloqueImagen {
@@ -1609,8 +1611,8 @@ summary:hover {
     flex-wrap: wrap;
     align-content: stretch;
     justify-content: space-between;
-    padding: 20px;
-    gap: 2px;
+    padding: 10px;
+    gap: 10px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     background: #ffffff6e;
@@ -1619,9 +1621,11 @@ summary:hover {
 [zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas {
     display: flex;
     align-items: stretch;
-    padding-top: 6px;
     flex-direction: column;
     flex-wrap: nowrap;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 4px;
 }
 
 .plaza_alojamiento_contenedorApartmento_selectorApartmento {
@@ -1962,6 +1966,12 @@ summary:hover {
 .paddingLateral50 {
     padding-left: 50px !important;
     padding-right: 50px !important;
+}
+
+
+.paddingLateral10 {
+    padding-left: 10px ;
+    padding-right: 10px ;
 }
 
 [zonaCSS="/micasa"] .botonID:hover {
@@ -15596,7 +15606,7 @@ a {
 .tituloGris {
     font-size: 13px;
     font-weight: bold;
-    color: grey
+    color: #424242
 }
 
 .tituloGrande {
@@ -15656,22 +15666,21 @@ a {
 
 
 .ocultoInicial {
-    display: none;
+    display: none !important;
 }
 
 .area300px {
     height: 300px;
 }
 
-input,
-textarea,
-select {
+
+textarea {
     outline: none;
 }
 
 [zonaCSS="/alojamiento"] .botonOfertaEnApartamento {
     
-    padding: 12px;
+    padding: 10px;
     font-weight: bold;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -15684,6 +15693,7 @@ select {
     align-content: center;
     justify-content: flex-start;
     align-items: center;
+    text-align: left;
     transition: background 500ms linear;
 }
 

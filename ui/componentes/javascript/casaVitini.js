@@ -1667,7 +1667,7 @@ const casaVitini = {
                                 const contenedorTotalYOfertas = document.createElement("div")
                                 contenedorTotalYOfertas.classList.add(
                                     "flexVertical",
-                                    "gap6"
+                                    "gap10",
 
                                 )
                                 contenedorTotalYOfertas.setAttribute("contenedor", "totalYOfertas")
@@ -1683,7 +1683,9 @@ const casaVitini = {
                                 const contenedorOfertasUI = document.createElement("div")
                                 contenedorOfertasUI.classList.add(
                                     "flexVertical",
-                                    "gap6"
+                                    "gap10",
+                                    "efectoAparicion",
+                                    "ocultoInicial"
                                 )
                                 contenedorOfertasUI.setAttribute("contenedor", "ofertas")
                                 contenedorTotalYOfertas.appendChild(contenedorOfertasUI)
@@ -2048,6 +2050,7 @@ const casaVitini = {
                         const selectorTotalUI = selectorApartamento.querySelector(`[componente=valorTotal]`)
                         const selectorContenedorOfertas = selectorApartamento.querySelector(`[contenedor=ofertas]`)
                         selectorContenedorOfertas.innerHTML = null
+                        selectorContenedorOfertas.classList.add("ocultoInicial")
                         selectorTotalUI.textContent = `${total}$ Total`
 
                         const contenedorSimplificadoOfertas = []
@@ -2061,7 +2064,9 @@ const casaVitini = {
                             contenedorSimplificadoOfertas.push(estructura)
 
                         })
-
+                        if (contenedorSimplificadoOfertas.length > 0) {
+                            selectorContenedorOfertas.classList.remove("ocultoInicial")
+                        }
                         contenedorSimplificadoOfertas.forEach((contenedorOferta) => {
                             const nombreOferta = contenedorOferta.nombreOferta
                             const contenedorOfertaIndividual = document.createElement("a")
@@ -2082,14 +2087,13 @@ const casaVitini = {
 
 
                                 const tituloUI = document.createElement("p")
-                                tituloUI.classList.add("tituloGris")
+                                tituloUI.classList.add("tituloGris", "padding18")
                                 tituloUI.setAttribute("componente", "titulo")
                                 tituloUI.textContent = "Detalles de la oferta seleccionada"
                                 contenedor.appendChild(tituloUI)
 
                                 const botonCancelar1 = document.createElement("div")
                                 botonCancelar1.classList.add("botonV1")
-                                botonCancelar1.style.borderRadius = "100px"
                                 botonCancelar1.setAttribute("boton", "cancelar")
                                 botonCancelar1.textContent = "Volver a la selección de apartamentos"
                                 botonCancelar1.addEventListener("click", () => {
@@ -2105,7 +2109,6 @@ const casaVitini = {
                                 const botonCancelar = document.createElement("div")
                                 botonCancelar.classList.add("botonV1")
                                 botonCancelar.setAttribute("boton", "cancelar")
-                                botonCancelar.style.borderRadius = "100px"
                                 botonCancelar.textContent = "Volver a la selección de apartamentos"
                                 botonCancelar.addEventListener("click", () => {
                                     return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -39967,8 +39970,8 @@ const casaVitini = {
                                 }
                                 const zonaUI = {
                                     global: "Global",
-                                    privado: "privado",
-                                    publico: "publica"
+                                    privada: "Privada",
+                                    publica: "Pública"
                                 }
                                 const ofertaUI = document.createElement("a")
                                 ofertaUI.classList.add("ofertaUI")
