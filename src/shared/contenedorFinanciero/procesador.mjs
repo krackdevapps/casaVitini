@@ -6,6 +6,7 @@ import { procesadorServicios } from "./entidades/servicios/procesadorServicios.m
 import { aplicarImpuestos } from "./entidades/reserva/aplicarImpuestos.mjs"
 import { aplicarOfertas } from "./ofertas/aplicarOfertas.mjs"
 import { sumarTotales } from "./global/sumarTotales.mjs"
+import { procesadorComplementosAlojamiento } from "./entidades/complementosAlojamiento/procesadorComplementosAlojamiento.mjs"
 
 export const procesador = async (data) => {
     try {
@@ -21,7 +22,8 @@ export const procesador = async (data) => {
 
         const entidadesIDV = [
             "reserva",
-            "servicios"
+            "servicios",
+            "complementosAlojamiento"
         ]
         const llavesEnEntidades = Object.keys(entidades)
         if (llavesEnEntidades.length === 0) {
@@ -41,6 +43,16 @@ export const procesador = async (data) => {
             await procesadorReserva({
                 estructura,
                 ...reserva,
+                pipe
+            })
+        }
+        if (entidades.hasOwnProperty("complementosAlojamiento")) {
+            controlError = false
+            const complementosAlojamiento = entidades.complementosAlojamiento
+
+            await procesadorComplementosAlojamiento({
+                estructura,
+                ...complementosAlojamiento,
                 pipe
             })
         }

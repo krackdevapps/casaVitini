@@ -17,26 +17,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             numeroDeLLavesMaximo: 2
         })
 
-
-
-
-
-
-
-
-
-
         const codigosDescuentoArray = []
-
-
-
-
-
-
-
-
-
-
 
         const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
             array: entrada.body?.codigoDescuento,
@@ -54,10 +35,6 @@ export const preComprobarCodigoDescuento = async (entrada) => {
             })
             codigosDescuentoArray.push(codigoDescuentoB64)
         })
-
-
-
-
 
         await utilidades.ralentizador(2000)
         mutex.acquire()

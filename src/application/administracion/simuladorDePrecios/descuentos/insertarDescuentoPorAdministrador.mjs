@@ -4,7 +4,7 @@ import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraes
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarDescuentoPorAdministrador = async (entrada) => {
@@ -38,7 +38,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         const zonaIDV = simulacion.zonaIDV
 
         await obtenerOferatPorOfertaUID(ofertaUID)

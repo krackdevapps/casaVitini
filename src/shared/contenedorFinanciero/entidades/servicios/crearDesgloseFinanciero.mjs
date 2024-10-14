@@ -3,7 +3,7 @@ import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 import { constructorInstantaneaServicios } from "./constructorInstantaneaServicios.mjs";
 
 
-export const crearDesgloseFinanciero = async (data) => {
+export const crearDesgloseFinanciero000 = async (data) => {
     try {
         const estructura = data.estructura
         const serviciosSolicitados = data.serviciosSolicitados

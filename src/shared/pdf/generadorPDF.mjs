@@ -352,7 +352,7 @@ export const generadorPDF = async (reserva) => {
             }
             for (const [apartamentoIDV, contenedor] of Object.entries(totalesPorServicio)) {
                 const nombre = contenedor.nombre
-                const totalNeto = contenedor.contenedor.precio
+                const totalNeto = contenedor.contenedor?.precio ||" Error"
                 const fila = [
                     [
                         {

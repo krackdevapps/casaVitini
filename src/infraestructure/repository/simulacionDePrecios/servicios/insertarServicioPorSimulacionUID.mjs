@@ -5,21 +5,29 @@ export const insertarServicioPorSimulacionUID = async (data) => {
         const simulacionUID = data.simulacionUID
         const nombre = data.nombre
         const contenedor = data.contenedor
+        const opcionesSel = data.opcionesSel
 
         const consulta = `
         INSERT INTO "simulacionesDePrecioServicios"
         (
         "simulacionUID",
         "nombre",
-        "contenedor"
+        "contenedor",
+        "opcionesSel"
         )
-        VALUES ($1, $2, $3)
+        VALUES (
+        $1,
+        $2,
+        $3,
+        $4::jsonb
+        )
         RETURNING *
         `;
         const parametros = [
             simulacionUID,
             nombre,
-            contenedor
+            contenedor,
+            opcionesSel
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

@@ -8,7 +8,7 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/r
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 
 export const insertarDescuentoPorCompatiblePorCodigo = async (entrada) => {
     const mutex = new Mutex()
@@ -65,7 +65,7 @@ export const insertarDescuentoPorCompatiblePorCodigo = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
 
         const apartamentosArray = simulacion.apartamentosIDVARRAY
         const zonaIDV = simulacion.zonaIDV

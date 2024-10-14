@@ -9,6 +9,7 @@ import { mensajesUI } from "../../../shared/mensajesUI.mjs";
 import { procesador } from "../../../shared/contenedorFinanciero/procesador.mjs";
 import { utilidades } from "../../../shared/utilidades.mjs";
 import { Mutex } from "async-mutex";
+import { obtenerComplementosPorApartamentoIDV } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementosPorApartamentoIDV.mjs";
 
 export const apartamentosDisponiblesPublico = async (entrada) => {
     const mutex = new Mutex()
@@ -69,6 +70,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
             const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
             estructura.ok = {
                 contenedorFinanciero: {},
+                complementosAlojamiento: {},
                 apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
             }
             for (const apartamentoIDV of apartamentosDisponiblesEncontrados) {
@@ -84,7 +86,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                         },
                         servicios: {
                             origen: "hubServicios",
-                            serviciosUIDSolicitados: []
+                            serviciosSolicitados: []
                         },
                     },
                     capas: {
@@ -103,6 +105,13 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                     }
                 })
                 estructura.ok.contenedorFinanciero[apartamentoIDV] = desgloseFinanciero
+                const complementosDelAlojamientos = await obtenerComplementosPorApartamentoIDV(apartamentoIDV)
+                complementosDelAlojamientos.forEach(complemento => {
+                    delete complemento.testingVI
+                    delete complemento.apartamentoIDV
+                });
+                const complementosDelAlojamientosActivos  = complementosDelAlojamientos.filter((c) => c.estadoIDV === "activado")
+                estructura.ok.complementosAlojamiento[apartamentoIDV] = complementosDelAlojamientosActivos
             }
         }
 

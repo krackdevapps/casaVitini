@@ -17,6 +17,7 @@ import { validarDescuentosPorCodigo } from "../../../shared/reservas/nuevaReserv
 import { limpiarContenedorFinacieroInformacionPrivada } from "../../../shared/miCasa/misReservas/limpiarContenedorFinancieroInformacionPrivada.mjs";
 import { enviarMailReservaConfirmadaAlCliente } from "../../../shared/mail/enviarMailReservaConfirmadaAlCliente.mjs";
 import { enviarMailDeAvisoPorReservaPublica } from "../../../shared/mail/enviarMailDeAvisoPorReservaPublica.mjs";
+import { validarComplementosAlojamiento } from "../../../shared/reservas/nuevaReserva/reservaPulica/validarComplementosAlojamiento.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -28,8 +29,6 @@ export const preConfirmarReserva = async (entrada) => {
         await mutex.acquire()
 
         const reservaPublica = entrada.body.reserva;
-
-
 
         await validarObjetoReservaPublica({
             reservaPublica,
@@ -49,8 +48,6 @@ export const preConfirmarReserva = async (entrada) => {
         const codigosDescuento = reservaPublica.codigosDescuento
         const serviciosPorValidar = reservaPublica?.servicios
 
-
-
         await validarHoraLimitePublica()
 
         await limitesReservaPublica({
@@ -65,7 +62,7 @@ export const preConfirmarReserva = async (entrada) => {
         })
 
         const servicios = await validarServiciosPubicos(serviciosPorValidar)
-
+        await validarComplementosAlojamiento(reservaPublica)
         const contenedorErrorInfoObsoleta = []
         if (servicios.serviciosNoReconocidos.length > 0) {
             const serviciosNoReconocidos = servicios.serviciosNoReconocidos
@@ -101,32 +98,30 @@ export const preConfirmarReserva = async (entrada) => {
             }
             throw error
         }
-        const ok1 = {
-            ok: "bien"
-        }
-
         const resolvertInsertarReserva = await insertarReserva(reservaPublica)
         const reservaUID = resolvertInsertarReserva.reservaUID
 
         await actualizarEstadoPago(reservaUID)
         await campoDeTransaccion("confirmar")
-
         const resolverDetallesReserva = await detallesReserva({
             reservaUID: reservaUID,
             capas: [
                 "titular",
                 "alojamiento",
                 "pernoctantes",
-                "desgloseFinanciero"
+                "desgloseFinanciero",
+                "servicios", 
+                "complementosDeAlojamiento"
             ]
         })
         limpiarContenedorFinacieroInformacionPrivada(resolverDetallesReserva)
 
         const pdf = await generadorPDF(resolverDetallesReserva);
         if (!testingVI) {
-
-
+            //---enviarMailReservaConfirmadaAlCliente(reservaUID)
+            //---enviarMailDeAvisoPorReservaPublica(reservaUID)
         }
+        
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,

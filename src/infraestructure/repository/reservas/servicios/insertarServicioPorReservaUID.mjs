@@ -5,21 +5,29 @@ export const insertarServicioPorReservaUID = async (data) => {
         const reservaUID = data.reservaUID
         const nombre = data.nombre
         const contenedor = data.contenedor
+        const opcionesSel = data.opcionesSel
 
         const consulta = `
         INSERT INTO "reservaServicios"
         (
         "reservaUID",
-        "nombre",
-        "contenedor"
+        nombre,
+        contenedor,
+        "opcionesSel"
         )
-        VALUES ($1, $2, $3)
+        VALUES (
+        $1,
+        $2,
+        $3,
+        $4::jsonb
+        )
         RETURNING *
         `;
         const parametros = [
             reservaUID,
             nombre,
-            contenedor
+            contenedor,
+            opcionesSel
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

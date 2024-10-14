@@ -5,6 +5,7 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraes
 import { obtenerServiciosPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
+import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -41,9 +42,12 @@ export const detallesSimulacion = async (entrada) => {
         for (const contenedorOferta of contenedorOfertasPorCondicio) {
             await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
         }
-        const apartamentosIDVARRAY = simulacion.apartamentosIDVARRAY || []
+
+        const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
+
         const apartamentos = []
-        for (const apartamentoIDV of apartamentosIDVARRAY) {
+        for (const apartamento of alojamientosSimulacion) {
+            const apartamentoIDV = apartamento.apartamentoIDV
             let apartamentoUI
             const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV,
@@ -56,17 +60,14 @@ export const detallesSimulacion = async (entrada) => {
                 }))?.apartamentoUI
             } else {
                 apartamentoUI = `IDV no reconocido (${apartamentoIDV})`
-            }   
+            }
             apartamentos.push({
                 apartamentoIDV,
                 apartamentoUI
             })
         }
-
         await insertarApartamentoUIEnObjetoOfertas(contenedorOfertas)
-
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
-
         const ok = {
             ok: "Aquí tienes los detalles de la simulación",
             nombre,

@@ -5,7 +5,7 @@ import { validadoresCompartidos } from "../../../../shared/validadores/validador
 import { obtenerImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
 import { eliminarImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/eliminarImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 
 export const eliminarImpuestoEnSimulacion = async (entrada) => {
@@ -42,7 +42,7 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
 
         mutex.acquire()
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
 
         await obtenerImpuestoPorImpuestoUIDPorSimulacionUID({
             simulacionUID,

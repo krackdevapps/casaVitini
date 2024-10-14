@@ -34,6 +34,7 @@
     "npm-check-updates": "^17.0.3",
     "pdfmake": "^0.2.10",
     "pg": "^8.12.0",
+    "puppeteer": "^23.5.2",
     "qrcode": "^1.5.4",
     "session-file-store": "^1.5.0",
     "square": "^37.1.1",

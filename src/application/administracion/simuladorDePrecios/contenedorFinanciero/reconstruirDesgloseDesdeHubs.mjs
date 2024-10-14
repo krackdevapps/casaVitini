@@ -5,12 +5,13 @@ import { procesador } from "../../../../shared/contenedorFinanciero/procesador.m
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { obtenerServiciosPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs"
 import { insertarServicioPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/insertarServicioPorSimulacionUID.mjs"
 import { obtenerServicioPorServicioUID } from "../../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs"
 import { eliminarServicioEnSimulacionPorServicioUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/eliminarServicioEnSimulacionPorServicioUID.mjs"
 import { actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID.mjs"
+import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -64,12 +65,13 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         const zonaIDV = simulacion.zonaIDV
         const fechaCreacion_simple = simulacion.fechaCreacion_simple
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
-        const apartamentosArray = simulacion.apartamentosIDVARRAY
+        const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
+        const apartamentosArray = alojamientosSimulacion.map(a => a.apartamentoIDV)
         try {
             for (const apartamentoIDV of apartamentosArray) {
                 await obtenerConfiguracionPorApartamentoIDV({
@@ -86,6 +88,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         for (const servicio of serviciosInstantaneaSimulacion) {
             const servicioUID_enSimulacion = servicio.servicioUID
             const servicioUID = servicio.contenedor.servicioUID
+            const opcionesSel = servicio.opcionesSel
+
             await eliminarServicioEnSimulacionPorServicioUID(servicioUID_enSimulacion)
 
             const servicioDelHub = await obtenerServicioPorServicioUID(servicioUID)
@@ -95,7 +99,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             await insertarServicioPorSimulacionUID({
                 simulacionUID,
                 nombre: nombreServicico,
-                contenedor: contenedorServicio
+                contenedor: contenedorServicio,
+                opcionesSel
             })
         }
         const desgloseFinanciero = await procesador({

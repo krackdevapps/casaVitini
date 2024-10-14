@@ -16,6 +16,10 @@ export const generarDesgloseSimpleGuardarlo = async (simulacionUID) => {
                     origen: "instantaneaServiciosEnSimulacion",
                     simulacionUID: simulacionUID
                 },
+                complementosAlojamiento: {
+                    origen: "instantaneaComplementosalojamientoEnSimulacion",
+                    simulacionUID: simulacionUID
+                },
             },
             capas: {
                 ofertas: {

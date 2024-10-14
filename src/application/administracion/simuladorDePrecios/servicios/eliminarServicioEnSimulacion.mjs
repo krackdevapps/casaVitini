@@ -2,7 +2,7 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { eliminarServicioEnSimulacionPorServicioUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/eliminarServicioEnSimulacionPorServicioUID.mjs"
 import { obtenerServicioEnSimulacionPorServicioUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServicioEnSimulacionPorServicioUID.mjs"
 import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 
@@ -31,7 +31,7 @@ export const eliminarServicioEnSimulacion = async (entrada) => {
         const serviciosEnSimulacion = await obtenerServicioEnSimulacionPorServicioUID(servicioUID_enSimulacion)
         const simulacionUID = serviciosEnSimulacion.simulacionUID
         await eliminarServicioEnSimulacionPorServicioUID(servicioUID_enSimulacion)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {

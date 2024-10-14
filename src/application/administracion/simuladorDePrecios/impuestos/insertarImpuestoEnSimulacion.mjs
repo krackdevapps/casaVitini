@@ -7,7 +7,7 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/r
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarImpuestoEnSimulacion = async (entrada) => {
@@ -41,7 +41,7 @@ export const insertarImpuestoEnSimulacion = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         await obtenerImpuestoPorImpuestoUIDPorSimulacionUID({
             simulacionUID,
             impuestoUID,

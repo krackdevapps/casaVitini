@@ -13,6 +13,12 @@ import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from '../../infraestructur
 import { generadorReservaUID } from '../../shared/reservas/utilidades/generadorReservaUID.mjs';
 import { obtenerServicioPorServicioUID } from '../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs';
 import { insertarServicioPorReservaUID } from '../../infraestructure/repository/reservas/servicios/insertarServicioPorReservaUID.mjs';
+import { obtenerCamasDeLaHabitacionPorHabitacionUID } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs';
+import { obtenerComplementoPorComplementoUID } from '../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs';
+import { insertarComplementoAlojamientoPorReservaUID } from '../../infraestructure/repository/reservas/complementosAlojamiento/insertarComplementoAlojamientoPorReservaUID.mjs';
+import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from '../../infraestructure/repository/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs';
+import { obtenerConfiguracionPorApartamentoIDV } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -39,6 +45,8 @@ export const insertarReserva = async (reserva) => {
         const codigoInternacional = titular.codigoInternacional
         const codigosDescuento = reserva.codigosDescuento || []
         const contendorServicios = reserva?.servicios || []
+        const complementosAlojamiento = reserva?.complementosAlojamiento || []
+
 
         const reservaUID = await generadorReservaUID()
         const nuevaReserva = await insertarReservaAdministrativa({
@@ -58,9 +66,14 @@ export const insertarReserva = async (reserva) => {
             telefonoTitular: codigoInternacional + telefonoTitular,
             reservaUID: reservaUID
         })
-        for (const apartamentoConfiguracion in alojamiento) {
-            const apartamentoIDV = apartamentoConfiguracion
-            const habitaciones = alojamiento[apartamentoConfiguracion].habitaciones
+
+        for (const [apartamentoIDV, contenedor_alojamiento] of Object.entries(alojamiento)) {
+
+            await obtenerConfiguracionPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })
+
 
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
@@ -75,10 +88,11 @@ export const insertarReserva = async (reserva) => {
             })
             const apartamentoUID = nuevoApartamentoEnReserva.componenteUID
 
-            for (const habitacionConfiguracion in habitaciones) {
-                const habitacionIDV = habitacionConfiguracion
-                const camaIDV = habitaciones[habitacionIDV].camaSeleccionada.camaIDV
-                const pernoctantesPool = habitaciones[habitacionIDV].pernoctantes
+            const habitacionesConfiguracionAlojamiento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+            for (const habitacionConfiguracion of habitacionesConfiguracionAlojamiento) {
+                const habitacionIDV = habitacionConfiguracion.habitacionIDV
+                const habitacionUID = habitacionConfiguracion.componenteUID
+
                 const habitacion = await obtenerHabitacionComoEntidadPorHabitacionIDV({
                     habitacionIDV,
                     errorSi: "noExiste"
@@ -91,7 +105,19 @@ export const insertarReserva = async (reserva) => {
                     reservaUID: reservaUID,
                     habitacionUI: habitacionUI
                 })
-                const habitacionUID = nuevoHabitacionEnElApartamento.componenteUID
+
+                const habitacionUID_enReserva = nuevoHabitacionEnElApartamento.componenteUID
+
+                const camasSeleccionablesHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
+                let camaIDV
+                if (camasSeleccionablesHabitacion.length === 1) {
+                    const cama = camasSeleccionablesHabitacion[0]
+                    camaIDV = cama.camaIDV
+
+                } else if (camasSeleccionablesHabitacion.length > 1) {
+                    camaIDV = contenedor_alojamiento.habitaciones[habitacionIDV].camaSeleccionada.camaIDV
+                }
+
                 const cama = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
                     camaIDV,
                     tipoIDVArray: ["compartida"],
@@ -100,17 +126,15 @@ export const insertarReserva = async (reserva) => {
                 const camaUI = cama.camaUI
 
                 await insertarCamaEnLaHabitacion({
-                    habitacionUID: habitacionUID,
-                    nuevaCamaIDV: camaIDV,
                     reservaUID: reservaUID,
+                    habitacionUID: habitacionUID_enReserva,
+                    nuevaCamaIDV: camaIDV,
                     camaUI: camaUI
                 })
             }
         }
         const apartamentosArray = Object.keys(alojamiento);
-        const serviciosUID = contendorServicios.map((contenedor) => {
-            return contenedor.servicioUID
-        })
+        const serviciosUID = contendorServicios.map((contenedor) => contenedor.servicioUID)
         const soloCodigosBase64Descunetos = []
         codigosDescuento.forEach((contenedor) => {
             const codigosUID = contenedor.codigosUID
@@ -119,8 +143,7 @@ export const insertarReserva = async (reserva) => {
             })
 
         })
-
-
+        const complementosUIDSolicitados = complementosAlojamiento.map(contenedor => contenedor.complementoUID)
 
 
         const desgloseFinanciero = await procesador({
@@ -133,9 +156,13 @@ export const insertarReserva = async (reserva) => {
                     apartamentosArray: apartamentosArray,
                     origenSobreControl: "reserva"
                 },
+                complementosAlojamiento: {
+                    origen: "hubComplementosAlojamiento",
+                    complementosUIDSolicitados: complementosUIDSolicitados
+                },
                 servicios: {
                     origen: "hubServicios",
-                    serviciosUIDSolicitados: serviciosUID
+                    serviciosSolicitados: contendorServicios
                 },
             },
             capas: {
@@ -152,11 +179,17 @@ export const insertarReserva = async (reserva) => {
                 }
             }
         })
+
+   
         await insertarDesgloseFinacieroPorReservaUID({
             reservaUID,
             desgloseFinanciero
         })
-        for (const servicioUID of serviciosUID) {
+
+
+        for (const servicioSolicitado of contendorServicios) {
+            const servicioUID = servicioSolicitado.servicioUID
+            const opcionesSel = servicioSolicitado.opcionesSeleccionadas
             const servicio = await obtenerServicioPorServicioUID(servicioUID)
             const nombreServicico = servicio.nombre
             const contenedorServicio = servicio.contenedor
@@ -164,10 +197,36 @@ export const insertarReserva = async (reserva) => {
             await insertarServicioPorReservaUID({
                 reservaUID,
                 nombre: nombreServicico,
-                contenedor: contenedorServicio
+                contenedor: contenedorServicio,
+                opcionesSel: opcionesSel
             })
         }
+        for (const com of complementosAlojamiento) {
+            const complementoUID = com.complementoUID
+            const complmemento = await obtenerComplementoPorComplementoUID(complementoUID)
 
+            const complementoUI = complmemento.complementoUI
+            const apartamentoIDV = complmemento.apartamentoIDV
+            const definicion = complmemento.definicion
+            const tipoPrecio = complmemento.tipoPrecio
+            const precio = complmemento.precio
+
+            const apartamentoEnReserva = await obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID({
+                reservaUID,
+                apartamentoIDV
+            })
+
+
+            await insertarComplementoAlojamientoPorReservaUID({
+                reservaUID,
+                complementoUI,
+                apartamentoIDV,
+                definicion,
+                tipoPrecio,
+                precio,
+                apartamentoUID: apartamentoEnReserva.componenteUID
+            })
+        }
         return nuevaReserva
     } catch (errorCapturado) {
         throw errorCapturado

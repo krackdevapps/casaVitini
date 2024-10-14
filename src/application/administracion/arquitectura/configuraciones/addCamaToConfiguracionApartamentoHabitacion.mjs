@@ -24,13 +24,16 @@ export const addCamaToConfiguracionApartamentoHabitacion = async (entrada, salid
             limpiezaEspaciosAlrededor: "si",
         })
 
+
         const habitacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacionUID,
-            nombreCampo: "El habitacionUID",
-            filtro: "strictoIDV",
+            nombreCampo: "El identificador universal del cliente (habitacionUID)",
+            filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
+
 
         const obtenerDetallesPorCama_ = await obtenerCamaComoEntidadPorCamaIDVPorTipoIDV({
             camaIDV,

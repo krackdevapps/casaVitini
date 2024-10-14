@@ -6,7 +6,7 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/r
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
@@ -64,7 +64,7 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
             return cadenaAleatoria;
         };
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
 
 
 

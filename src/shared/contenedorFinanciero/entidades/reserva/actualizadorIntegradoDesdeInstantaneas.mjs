@@ -8,6 +8,10 @@ export const actualizadorIntegradoDesdeInstantaneas = async (reservaUID) => {
                 origen: "hubReservas",
                 reservaUID: reservaUID
             },
+            complementosAlojamiento: {
+                origen: "instantaneaComplementosAlojamientoEnReserva",
+                reservaUID: reservaUID
+            },
             servicios: {
                 origen: "instantaneaServiciosEnReserva",
                 reservaUID: reservaUID

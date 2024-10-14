@@ -10,6 +10,7 @@ import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
 import { insertarApartamentoUIEnObjetoOfertas } from "../ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs"
 import { enlacesDePagoDeLaReserva } from "./detallesReserva/enlacesDePagoDeLaReserva.mjs"
 import { obtenerServiciosPorReservaUID } from "../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs"
+import { obtenerComplementosAlojamientoPorReservaUID } from "../../infraestructure/repository/reservas/complementosAlojamiento/obtenerComplementosAlojamientoPorReservaUID.mjs"
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -26,7 +27,8 @@ export const detallesReserva = async (data) => {
             "desgloseFinanciero",
             "detallesPagos",
             "enlacesDePago",
-            "servicios"
+            "servicios",
+            "complementosDeAlojamiento"
         ]
         validadoresCompartidos.tipos.array({
             array: capas,
@@ -81,6 +83,9 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[6])) {
             reserva.servicios = await obtenerServiciosPorReservaUID(reservaUID)
+        }
+        if (capas.includes(contenedorCapas[7])) {
+            reserva.complementosDeAlojamiento = await obtenerComplementosAlojamientoPorReservaUID(reservaUID)
         }
         return reserva
     } catch (errorCapturado) {

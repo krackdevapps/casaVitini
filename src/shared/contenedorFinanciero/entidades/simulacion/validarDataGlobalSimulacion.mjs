@@ -3,6 +3,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructu
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
 import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
+import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
 
 export const validarDataGlobalSimulacion = async (data) => {
     try {
@@ -13,7 +14,7 @@ export const validarDataGlobalSimulacion = async (data) => {
                     "fechaCreacion",
                     "fechaEntrada",
                     "fechaSalida",
-                    "apartamentosIDVARRAY",
+                    //"apartamentosIDVARRAY",
                     "zonaIDV"
                 ]
                 const llavesEntrantes = Object.keys(data)
@@ -28,24 +29,15 @@ export const validarDataGlobalSimulacion = async (data) => {
                         }
                     }
                 }
-                if (llavesFaltantes.length > 0) {
-                    const custonError = {
-                        info: "Faltan las siguientes llaves para poder renderizar el contenedor financiero de la simulacion",
-                        llavesFaltantes: llavesFaltantes
-                    }
-                    throw custonError
-                }
+                return llavesFaltantes
             } catch (error) {
                 throw error
             }
         }
-
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: data,
             numeroDeLLavesMaximo: 6
         })
-        constructorError(data)
-
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: data.simulacionUID,
             nombreCampo: "El  simulacionUID",
@@ -54,6 +46,20 @@ export const validarDataGlobalSimulacion = async (data) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
+
+        const controlLlaves = constructorError(data)
+        await obtenerSimulacionPorSimulacionUID(simulacionUID)
+        const alojamientoSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
+        if (alojamientoSimulacion.length === 0) {
+            controlLlaves.push("apartamentosIDVARRAY")
+        }
+        if (controlLlaves.length > 0) {
+            const custonError = {
+                info: "Faltan las siguientes llaves para poder renderizar el contenedor financiero de la simulacion",
+                llavesFaltantes: controlLlaves
+            }
+            throw custonError
+        }
 
         const fechaCreacion = (await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: data.fechaCreacion,
@@ -68,11 +74,6 @@ export const validarDataGlobalSimulacion = async (data) => {
             fecha_ISO: data.fechaSalida,
             nombreCampo: "La fecha de salida"
         }))
-        const apartamentosIDVARRAY = validadoresCompartidos.tipos.array({
-            array: data.apartamentosIDVARRAY,
-            filtro: "strictoIDV",
-            nombreCampo: "El campo apartamentosIDVARRAY"
-        })
 
         const zonaIDV = data.zonaIDV
         if (
@@ -99,27 +100,12 @@ export const validarDataGlobalSimulacion = async (data) => {
             const error = "La fecha de creación simulada no puede ser superior a la fecha de entrada simulada.";
             throw new Error(error);
         }
-        await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        const controlIDVUnicos = {}
-        for (const apartamentoIDV of apartamentosIDVARRAY) {
-            if (controlIDVUnicos.hasOwnProperty(apartamentoIDV)) {
-                const m = `El identificador visual ${apartamentoIDV} está repetido.`
-                throw new Error(m)
-            }
-            controlIDVUnicos[apartamentoIDV] = true
-
-            await obtenerConfiguracionPorApartamentoIDV({
-                apartamentoIDV,
-                errorSi: "noExiste"
-            })
-        }
 
         const dataValidada = {
             simulacionUID,
             fechaCreacion,
             fechaEntrada,
             fechaSalida,
-            apartamentosIDVARRAY,
             zonaIDV
         }
         return dataValidada

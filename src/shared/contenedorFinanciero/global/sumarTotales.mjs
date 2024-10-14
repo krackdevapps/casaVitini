@@ -61,6 +61,30 @@ export const sumarTotales = (data) => {
             totalesGlobal.totalDescuentos = new Decimal(totalDescuentos).plus(totalesGlobal.totalDescuentos)
 
         }
+        if (estructura.entidades.hasOwnProperty("complementosAlojamiento")) {
+            const complementosAlojamiento = estructura.entidades.complementosAlojamiento
+            const totales = complementosAlojamiento.global.totales
+            const totalNeto = totales.totalNeto
+
+            const totalDescuentos = totales?.totalDescuento || "0.00"
+            const impuestosAplicados = totales?.impuestosAplicados || "0.00"
+
+
+            totalesGlobal.totalNeto = new Decimal(totalNeto).plus(totalesGlobal.totalNeto)
+
+            if (!totalesGlobal.hasOwnProperty("totalNetoConDescuentos")) {
+            }
+            if (!totalesGlobal.hasOwnProperty("impuestosAplicados")) {
+                totalesGlobal.impuestosAplicados = "0.00"
+            }
+            totalesGlobal.impuestosAplicados = new Decimal(impuestosAplicados).plus(totalesGlobal.impuestosAplicados)
+
+            if (!totalesGlobal.hasOwnProperty("totalDescuentos")) {
+                totalesGlobal.totalDescuentos = "0.00"
+            }
+            totalesGlobal.totalDescuentos = new Decimal(totalDescuentos).plus(totalesGlobal.totalDescuentos)
+
+        }
         totalesGlobal.totalNeto = new Decimal(totalesGlobal.totalNeto).toFixed(2)
 
         const totalDescuentos = new Decimal(totalesGlobal.totalDescuentos).toFixed(2)

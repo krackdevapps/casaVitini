@@ -4,8 +4,11 @@ import { validadoresCompartidos } from "../../../../shared/validadores/validador
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { insertarServicioPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/insertarServicioPorSimulacionUID.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { validarObjetoDelServicio } from "../../../../shared/reservas/detallesReserva/servicios/validarObjetoDelServicio.mjs"
+import { obtenerServicioPorCriterioPublicoPorServicioUIDArray } from "../../../../infraestructure/repository/servicios/obtenerServicioPorCriterioPublicoPorServicioUIDArray.mjs"
+import { validarOpcionesDelServicio } from "../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
 
 export const insertarServicioEnSimulacion = async (entrada) => {
     try {
@@ -16,7 +19,7 @@ export const insertarServicioEnSimulacion = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 2
+            numeroDeLLavesMaximo: 3
         })
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
@@ -36,18 +39,39 @@ export const insertarServicioEnSimulacion = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "si"
         })
+
+        const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
+        validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
+
         await campoDeTransaccion("iniciar")
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
         contenedorServicio.servicioUID = servicio.servicioUID
+
+        const servicioExistenteAccesible = await obtenerServicioPorCriterioPublicoPorServicioUIDArray({
+            zonaIDVArray: [
+                "privada",
+                "global"
+            ],
+            estadoIDV: "activado",
+            serviciosUIDArray: [servicioUID]
+        })
+
+        await validarOpcionesDelServicio({
+            opcionesSeleccionadasDelServicio,
+            servicioExistenteAccesible: servicioExistenteAccesible[0]
+        })
+        const opcionesSeleccionadas = opcionesSeleccionadasDelServicio.opcionesSeleccionadas
+
         const servicioInsertado = await insertarServicioPorSimulacionUID({
             simulacionUID,
             nombre: nombreServicico,
-            contenedor: contenedorServicio
+            contenedor: contenedorServicio,
+            opcionesSel: opcionesSeleccionadas
         })
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {

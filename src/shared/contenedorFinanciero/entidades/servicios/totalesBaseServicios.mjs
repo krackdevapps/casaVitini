@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 const precisionDecimal = Number(process.env.PRECISION_DECIMAL)
 Decimal.set({ precision: precisionDecimal });
-export const totalesBaseServicios = async (data) => {
+export const totalesBaseServicios000 = async (data) => {
     try {
         const estructura = data.estructura
         const serviciosSolicitados = data.serviciosSolicitados

@@ -39,7 +39,16 @@ export const actualizarEstadoServicio = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-
+        const estadosIDV = [
+            "activado", 
+            "desactivado"
+        ]
+        
+        if (!estadosIDV.includes(estadoIDV)) {
+            const m = "El campo estadoIDV solo espepra activado o desactivado"
+            throw new Error(m)
+            
+        }
         await obtenerServicioPorServicioUID(servicioUID)
 
         await campoDeTransaccion("iniciar")

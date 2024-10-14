@@ -4,38 +4,152 @@ import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mj
 
 export const validarServicio = async (data) => {
     try {
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
+
         const servicio = data.servicio
-        const numeroLlaves = Object.keys(data)
+        const gruposDeOpciones = Joi.array().items(
+            Joi.object({
+                nombreGrupo: Joi.string().custom((value, helpers) => {
+                    try {
+
+                        return validadoresCompartidos.tipos.cadena({
+                            string: value,
+                            nombreCampo: "El campo del nombre del grupo de opciones",
+                            filtro: "strictoConEspacios",
+                            sePermiteVacio: "no",
+                            soloMayusculas: "no",
+                            limpiezaEspaciosAlrededor: "si",
+                            limpiezaEspaciosInternosGrandes: "si"
+                        })
+                    } catch (error) {
+                        const path = helpers.state.path.join('.');
+                        const mensajeError = `Error en ${path}: ${error.message}`;
+                        return helpers.message(mensajeError);
+                    }
+
+                }).required().messages(commonMessages),
+                configuracionGrupo: Joi.object({
+                    confSelObligatoria: Joi.array().items(
+                        Joi.string().custom((value, helpers) => {
+                            try {
+                                const validado = validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: `El identificador visual de confSelObligatoria`,
+                                    filtro: "strictoIDV",
+                                    sePermiteVacio: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                })
+                                const confsIDV = [
+                                    "unaObligatoria",
+                                    "ningunaObligatoria"
+                                ]
+                                if (!confsIDV.includes(validado)) {
+                                    const m = `No se reconoce el identificador visual de la configuracion confSelObligatoria, solo se espera, unaObligatoria o ningunaObligatoria`
+                                    throw new Error(m)
+                                }
+                                return validado
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+
+                        }).required().messages(commonMessages),
+                    ).required().messages(commonMessages),
+                    confSelNumero: Joi.array().items(
+                        Joi.string().custom((value, helpers) => {
+                            try {
+                                const validado = validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: `El identificador visual de confSelNumero`,
+                                    filtro: "strictoIDV",
+                                    sePermiteVacio: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                })
+                                const confsIDV = [
+                                    "maximoUnaOpcion",
+                                    "variasOpcionesAlMismoTiempo"
+                                ]
+                                if (!confsIDV.includes(validado)) {
+                                    const m = `No se reconoce el identificador visual de la configuracion confSelNumero, solo se espera, maximoUnaOpcion o variasOpcionesAlMismoTiempo`
+                                    throw new Error(m)
+                                }
+                                return validado
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+
+                        }).required().messages(commonMessages),
+                    ).required().messages(commonMessages)
+                }).required(),
+
+                opcionesGrupo: Joi.array().items(
+                    Joi.object({
+                        nombreOpcion: Joi.string().custom((value, helpers) => {
+                            try {
+                                return validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: "El campo del nombre de la opcion",
+                                    filtro: "strictoConEspacios",
+                                    sePermiteVacio: "no",
+                                    soloMayusculas: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                    limpiezaEspaciosInternosGrandes: "si"
+                                })
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+
+                        }).required().messages(commonMessages),
+                        precioOpcion: Joi.string().allow('').required().custom((value, helpers) => {
+                            try {
+                                return validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: "El campo del precio",
+                                    filtro: "cadenaConNumerosConDosDecimales",
+                                    sePermiteVacio: "si",
+                                    impedirCero: "si",
+                                    devuelveUnTipoNumber: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                })
+
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+
+                        }).messages(commonMessages),
+                    }).required()
+                ).required()
+            }).required()
+        ).required()
+
+
 
         const schema = Joi.object({
-            nombreServicio: Joi.required(),
-            zonaIDV: Joi.string(),
+            nombreServicio: Joi.string().messages(commonMessages),
+            zonaIDV: Joi.string().messages(commonMessages),
             contenedor: Joi.object({
                 fechaInicio: Joi.date(),
                 fechaFinal: Joi.date(),
-                disponibilidadIDV: Joi.string(),
-                tituloPublico: Joi.string(),
-                precio: Joi.string(),
-                definicion: Joi.string(),
-                duracionIDV: Joi.string()
-            }).required().messages({
-                'object.base': '{{#label}} debe ser un array'
-            }),
-        }).required().messages({
-            'any.required': '{{#label}} es una llave obligatoria'
-        })
+                disponibilidadIDV: Joi.string().messages(commonMessages),
+                tituloPublico: Joi.string().messages(commonMessages),
+                definicion: Joi.string().messages(commonMessages),
+                duracionIDV: Joi.string().messages(commonMessages),
+                gruposDeOpciones: gruposDeOpciones
+            }).required().messages(commonMessages),
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: schema,
             objeto: servicio
         })
 
-
-
-        if (numeroLlaves.length > 3) {
-            const m = "Se esperaban no mas de 3 llaves en el primer nivel del objeto"
-            throw new Error(m)
-        }
         validadoresCompartidos.tipos.cadena({
             string: servicio.nombreServicio,
             nombreCampo: "El nombreServicio",
@@ -62,14 +176,8 @@ export const validarServicio = async (data) => {
             throw new Error(m)
         }
 
-        const contenedor = validadoresCompartidos.tipos.objetoLiteral({
-            objetoLiteral: servicio?.contenedor,
-            nombreCampo: "El contenedor",
-        })
-        let llavesValidadas = 6
-
+        const contenedor = servicio.contenedor
         const duracionIDV = contenedor.duracionIDV
-
         const duraciones = [
             "permanente",
             "rango"
@@ -134,21 +242,24 @@ export const validarServicio = async (data) => {
             limpiezaEspaciosInternos: "si",
         })
 
-        validadoresCompartidos.tipos.cadena({
-            string: contenedor.precio,
-            nombreCampo: "El campo del precio",
-            filtro: "cadenaConNumerosConDosDecimales",
-            sePermiteVacio: "no",
-            impedirCero: "si",
-            devuelveUnTipoNumber: "no",
-            limpiezaEspaciosAlrededor: "si",
+        servicio.contenedor.gruposDeOpciones.forEach((grupo, ig) => {
+            const grupoIDV = `grupo${ig}`
+            grupo.grupoIDV = grupoIDV
+
+            const opcionesGrupo = grupo.opcionesGrupo
+            opcionesGrupo.forEach((opcion, io) => {
+                const opcionIDV = `${grupoIDV}opcion${io}`
+                opcion.opcionIDV = opcionIDV
+            })
+
+        })
+        const opcionesFormateadasComoObjeto = {}
+        servicio.contenedor.gruposDeOpciones.forEach(gp => {
+            const grupoIDV = gp.grupoIDV
+            opcionesFormateadasComoObjeto[grupoIDV] = gp
         })
 
-        if (Object.keys(contenedor).length > llavesValidadas) {
-            const m = `Se esperaban no mas de ${llavesValidadas} llaves en el primer nivel del objeto`
-            throw new Error(m)
-        }
-
+        servicio.contenedor.gruposDeOpciones = opcionesFormateadasComoObjeto
     } catch (error) {
         throw error
     }

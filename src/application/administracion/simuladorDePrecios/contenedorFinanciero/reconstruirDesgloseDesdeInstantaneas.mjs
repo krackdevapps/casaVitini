@@ -3,7 +3,7 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 
 export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
@@ -30,7 +30,7 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         await generarDesgloseSimpleGuardarlo(simulacionUID)
 
         await campoDeTransaccion("confirmar")

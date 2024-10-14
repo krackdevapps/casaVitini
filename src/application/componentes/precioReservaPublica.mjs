@@ -6,6 +6,8 @@ import { validarDescuentosPorCodigo } from "../../shared/reservas/nuevaReserva/r
 import { validarObjetoReservaPublica } from "../../shared/reservas/nuevaReserva/reservaPulica/validarObjetoReservaPublica.mjs"
 import { validarServiciosPubicos } from "../../shared/servicios/validarServiciosPublicos.mjs"
 import { limpiarContenedorFinacieroInformacionPrivada } from "../../shared/miCasa/misReservas/limpiarContenedorFinancieroInformacionPrivada.mjs"
+import { validarComplementosAlojamiento } from "../../shared/reservas/nuevaReserva/reservaPulica/validarComplementosAlojamiento.mjs"
+import { obtenerComplementoPorComplementoUIDArray } from "../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUIDArray.mjs"
 
 export const precioReservaPublica = async (entrada) => {
     try {
@@ -37,7 +39,10 @@ export const precioReservaPublica = async (entrada) => {
         const alojamiento = reservaPublica.alojamiento
         const apartamentosIDV = Object.keys(alojamiento)
         const contenedorCodigosDescuento = reservaPublica.codigosDescuento || []
-        const serviciosUIDSolicitados = reservaPublica?.servicios || []
+        const servicios = reservaPublica?.servicios || []
+        const complementosAlojamiento = reservaPublica?.complementosAlojamiento || []
+
+        //await validarComplementosAlojamiento(reservaPublica)
 
         const ok = {
             ok: "Precio actualizado en base a componentes solicitados"
@@ -49,14 +54,30 @@ export const precioReservaPublica = async (entrada) => {
             }
         }
 
-        const serviciosSiReconocidos = []
-        if (serviciosUIDSolicitados.length > 0) {
-            const controlServicios = await validarServiciosPubicos(serviciosUIDSolicitados)
-            constructorInformacionObsoleta(ok)
-            ok.control.servicios = controlServicios
-            controlServicios.serviciosSiReconocidos.forEach((contenedor) => {
-                serviciosSiReconocidos.push(contenedor.servicioUID)
+        const complementosDeALojamientosUIDSolicitados = complementosAlojamiento.map(c => { return c.complementoUID })
+        const complementosDeAlojamientoSiRecononcidos = []
+        if (complementosDeALojamientosUIDSolicitados.length > 0) {
+            const control = await obtenerComplementoPorComplementoUIDArray({
+                complementoUIDArray: complementosDeALojamientosUIDSolicitados,
+                estadoIDV: "activado"
             })
+            constructorInformacionObsoleta(ok)
+
+            const complementosSiReonocidosSoloUID = control.map(c => {return c.complementoUID})
+
+            ok.control.complementosAlojamiento = {
+                complementosSiReconocidos: control,
+                complementosNoReconocidos: complementosAlojamiento.filter(c => !complementosSiReonocidosSoloUID.includes(c.complementoUID))
+            }
+            complementosDeAlojamientoSiRecononcidos.push(...complementosSiReonocidosSoloUID)
+        }
+
+        const serviciosSiReconocidos = []
+        if (servicios.length > 0) {
+            const controlServicios = await validarServiciosPubicos(servicios)
+            constructorInformacionObsoleta(ok)
+            ok.control.servicios = controlServicios 
+            serviciosSiReconocidos.push(...controlServicios.serviciosSiReconocidos)
         }
 
         const codigosDescuentosSiReconocidos = []
@@ -103,6 +124,8 @@ export const precioReservaPublica = async (entrada) => {
                 soloCodigosBase64Descunetos.push(codigoB64)
             })
         })
+
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {
@@ -113,9 +136,13 @@ export const precioReservaPublica = async (entrada) => {
                     apartamentosArray: apartamentosIDV,
                     origenSobreControl: "reserva"
                 },
+                complementosAlojamiento: {
+                    origen: "hubComplementosAlojamiento",
+                    complementosUIDSolicitados: complementosDeAlojamientoSiRecononcidos
+                },
                 servicios: {
                     origen: "hubServicios",
-                    serviciosUIDSolicitados: serviciosSiReconocidos
+                    serviciosSolicitados: serviciosSiReconocidos
                 },
             },
             capas: {

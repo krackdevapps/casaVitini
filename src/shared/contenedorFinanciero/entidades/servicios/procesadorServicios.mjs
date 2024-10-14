@@ -7,13 +7,17 @@ export const procesadorServicios = async (data) => {
     try {
         const estructura = data.estructura
         const origen = data.origen
-        const serviciosUIDSolicitados = data.serviciosUIDSolicitados
+        const serviciosSolicitados = data.serviciosSolicitados
+        const opcionesSolicitadasDelservicios = {}
         const servicios = []
         if (origen === "hubServicios") {
-            for (const servicioUID of serviciosUIDSolicitados) {
+            for (const servicioSol of serviciosSolicitados) {
+                const servicioUID = servicioSol.servicioUID
                 const servicio = await obtenerServicioPorServicioUID(servicioUID)
                 servicios.push(servicio)
+                opcionesSolicitadasDelservicios[servicioUID] = servicioSol
             }
+
         } else if (origen === "instantaneaServiciosEnReserva") {
             const reservaUID = data.reservaUID
             if (!reservaUID) {
@@ -21,6 +25,14 @@ export const procesadorServicios = async (data) => {
                 throw new Error(m)
             }
             const serviciosDeLaReserva = await obtenerServiciosPorReservaUID(reservaUID)
+            serviciosDeLaReserva.forEach(s => {
+                const servicioUID = s.servicioUID
+                const opcionesSel = s.opcionesSel
+                opcionesSolicitadasDelservicios[servicioUID] = {
+                    servicioUID,
+                    opcionesSeleccionadas: opcionesSel
+                }
+            })
             servicios.push(...serviciosDeLaReserva)
         } else if (origen === "instantaneaServiciosEnSimulacion") {
             const simulacionUID = data.simulacionUID
@@ -29,8 +41,14 @@ export const procesadorServicios = async (data) => {
                 throw new Error(m)
             }
             const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
-
-
+            serviciosDeLaSimulacion.forEach(s => {
+                const servicioUID = s.servicioUID
+                const opcionesSel = s.opcionesSel
+                opcionesSolicitadasDelservicios[servicioUID] = {
+                    servicioUID,
+                    opcionesSeleccionadas: opcionesSel
+                }
+            })
             servicios.push(...serviciosDeLaSimulacion)
         } else {
             const m = "La confguracion de servicios en el procesador esta mal configurada, necesita origen en huServicios o instantaneaServiciosEnReserva"
@@ -39,7 +57,8 @@ export const procesadorServicios = async (data) => {
 
         await constructorInstantaneaServicios({
             estructura,
-            servicios
+            servicios,
+            opcionesSolicitadasDelservicios
         })
     } catch (error) {
         throw error

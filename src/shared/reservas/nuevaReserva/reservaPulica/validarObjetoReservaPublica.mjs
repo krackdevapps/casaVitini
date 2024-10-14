@@ -2,40 +2,41 @@ import { DateTime } from 'luxon';
 import { codigoZonaHoraria } from '../../../configuracion/codigoZonaHoraria.mjs';
 import { validadoresCompartidos } from '../../../validadores/validadoresCompartidos.mjs'
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
-import { obtenerCamaDeLaHabitacionPorHabitacionUID } from '../../../../infraestructure/repository/arquitectura/configuraciones/obtenerCamaDeLaHabitacionPorHabitacionUID.mjs';
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from '../../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 import Joi from 'joi';
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDVPorApartamentosIDV } from '../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDVPorApartamentosIDV.mjs';
+import { obtenerCamasDeLaHabitacionPorHabitacionUID } from '../../../../infraestructure/repository/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs';
 
 export const validarObjetoReservaPublica = async (data) => {
     try {
         const reservaPublica = data?.reservaPublica
         const filtroTitular = data?.filtroTitular
         const filtroHabitacionesCamas = data?.filtroHabitacionesCamas
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const camaSeleccionada = Joi.object({
-            camaUI: Joi.string().required()
-                .custom((value, helpers) => {
-                    try {
-                        return validadoresCompartidos.tipos.cadena({
-                            string: value,
-                            nombreCampo: `La llave camaUI`,
-                            filtro: "strictoConEspacios",
-                            sePermiteVacio: "no",
-                            limpiezaEspaciosAlrededor: "si",
-                        })
-                    } catch (error) {
-                        const path = helpers.state.path.join('.');
-                        const mensajeError = `Error en ${path}: ${error.message}`;
-                        return helpers.message(mensajeError);
-                    }
-                })
-                .messages({
-                    'string.base': '{{#label}} debe ser una cadena de texto',
-                    'string.empty': '{{#label}} no puede estar vacío',
-                    'any.required': '{{#label}} es una llave obligatoria'
-                }),
+            // camaUI: Joi.string().required()
+            //     .custom((value, helpers) => {
+            //         try {
+            //             return validadoresCompartidos.tipos.cadena({
+            //                 string: value,
+            //                 nombreCampo: `La llave camaUI`,
+            //                 filtro: "strictoConEspacios",
+            //                 sePermiteVacio: "no",
+            //                 limpiezaEspaciosAlrededor: "si",
+            //             })
+            //         } catch (error) {
+            //             const path = helpers.state.path.join('.');
+            //             const mensajeError = `Error en ${path}: ${error.message}`;
+            //             return helpers.message(mensajeError);
+            //         }
+            //     })
+            //     .messages({
+            //         'string.base': '{{#label}} debe ser una cadena de texto',
+            //         'string.empty': '{{#label}} no puede estar vacío',
+            //         'any.required': '{{#label}} es una llave obligatoria'
+            //     }),
             camaIDV: Joi.string().required()
                 .custom((value, helpers) => {
                     try {
@@ -52,159 +53,161 @@ export const validarObjetoReservaPublica = async (data) => {
                         return helpers.message(mensajeError);
                     }
                 })
-                .messages({
-                    'string.base': '{{#label}} debe ser una cadena de texto',
-                    'string.empty': '{{#label}} no puede estar vacío',
-                    'any.required': '{{#label}} es una llave obligatoria'
-                }),
+                .messages(commonMessages)
         })
 
         const habitacionSchema = Joi.object({
-            habitacionUI: Joi.string().required()
-                .custom((value, helpers) => {
-                    try {
-                        return validadoresCompartidos.tipos.cadena({
-                            string: value,
-                            nombreCampo: `La llave habitacionUI`,
-                            filtro: "strictoConEspacios",
-                            sePermiteVacio: "no",
-                            limpiezaEspaciosAlrededor: "si",
-                        })
-                    } catch (error) {
-                        const path = helpers.state.path.join('.');
-                        const mensajeError = `Error en ${path}: ${error.message}`;
-                        return helpers.message(mensajeError);
-                    }
-                })
-                .messages({
-                    'string.base': '{{#label}} debe ser una cadena de texto',
-                    'string.empty': '{{#label}} no puede estar vacío',
-                    'any.required': '{{#label}} es una llave obligatoria'
-                }),
-            camaSeleccionada: camaSeleccionada.optional().messages({
-                'string.base': '{{#label}} debe ser una cadena de texto',
-                'string.empty': '{{#label}} no puede estar vacío',
-                'any.required': '{{#key}} es una llave obligatoria 111'
-            }),
+            // habitacionUI: Joi.string().required()
+            //     .custom((value, helpers) => {
+            //         try {
+            //             return validadoresCompartidos.tipos.cadena({
+            //                 string: value,
+            //                 nombreCampo: `La llave habitacionUI`,
+            //                 filtro: "strictoConEspacios",
+            //                 sePermiteVacio: "no",
+            //                 limpiezaEspaciosAlrededor: "si",
+            //             })
+            //         } catch (error) {
+            //             const path = helpers.state.path.join('.');
+            //             const mensajeError = `Error en ${path}: ${error.message}`;
+            //             return helpers.message(mensajeError);
+            //         }
+            //     })
+            //     .messages({
+            //         'string.base': '{{#label}} debe ser una cadena de texto',
+            //         'string.empty': '{{#label}} no puede estar vacío',
+            //         'any.required': '{{#label}} es una llave obligatoria'
+            //     }),
+            camaSeleccionada: camaSeleccionada.optional().messages(commonMessages)
         })
 
         const apartamentoSchemaConHabitacion = Joi.object({
-            apartamentoUI: Joi.string().required()
-                .custom((value, helpers) => {
-                    try {
-                        return validadoresCompartidos.tipos.cadena({
-                            string: value,
-                            nombreCampo: `La llave apartamentoUI`,
-                            filtro: "strictoConEspacios",
-                            sePermiteVacio: "no",
-                            limpiezaEspaciosAlrededor: "si",
-                        })
-                    } catch (error) {
-                        const path = helpers.state.path.join('.');
-                        const mensajeError = `Error en ${path}: ${error.message}`;
-                        return helpers.message(mensajeError);
-                    }
-                })
-                .messages({
-                    'string.base': '{{#label}} debe ser una cadena de texto',
-                    'string.empty': '{{#label}} no puede estar vacío',
-                    'any.required': '{{#label}} es una llave obligatoria'
-                }),
+            // apartamentoUI: Joi.string().optional()
+            //     .custom((value, helpers) => {
+            //         try {
+            //             return validadoresCompartidos.tipos.cadena({
+            //                 string: value,
+            //                 nombreCampo: `La llave apartamentoUI`,
+            //                 filtro: "strictoConEspacios",
+            //                 sePermiteVacio: "no",
+            //                 limpiezaEspaciosAlrededor: "si",
+            //             })
+            //         } catch (error) {
+            //             const path = helpers.state.path.join('.');
+            //             const mensajeError = `Error en ${path}: ${error.message}`;
+            //             return helpers.message(mensajeError);
+            //         }
+            //     })
+            //     .messages({
+            //         'string.base': '{{#label}} debe ser una cadena de texto',
+            //         'string.empty': '{{#label}} no puede estar vacío',
+            //         'any.required': '{{#label}} es una llave obligatoria'
+            //     }),
             habitaciones: Joi.object().pattern(
                 Joi.string(),
                 habitacionSchema.required()
-            )
-                .min(1)
-                .required()
-                .messages({
-                    'object.base': '{{#label}} debe ser un objeto',
-                    'object.min': '{{#label}} debe contener al menos una habitación',
-                    'any.required': '{{#label}} es un campo obligatorio',
-                })
+            ).min(1)
+                .optional()
+                .messages(commonMessages)
 
         })
 
-        const apartamentoSchemaSimple = Joi.object().empty().required().messages({
-            'object.base': '{{#label}} debe ser una cadena de texto',
-            'string.empty': '{{#label}} no puede estar vacío',
-            'any.required': '{{#label}} es una llave obligatoria'
-        })
+        const apartamentoSchemaSimple = Joi.object().empty().required().messages(commonMessages)
+
+        const serviciosEsquema = Joi.array().items(
+            Joi.object({
+                servicioUID: Joi
+                    .string()
+                    .required()
+                    .custom((value, helpers) => {
+                        try {
+                            return validadoresCompartidos.tipos.cadena({
+                                string: value,
+                                nombreCampo: "El identificador universal (servicioUID)",
+                                filtro: "cadenaConNumerosEnteros",
+                                sePermiteVacio: "no",
+                                limpiezaEspaciosAlrededor: "si",
+                                devuelveUnTipoNumber: "si"
+                            })
+
+
+                        } catch (error) {
+                            const path = helpers.state.path.join('.');
+                            const mensajeError = `Error en ${path}: ${error.message}`;
+                            return helpers.message(mensajeError);
+                        }
+                    })
+                    .messages(commonMessages),
+                opcionesSeleccionadas: Joi.object().pattern(
+                    Joi.string()
+                        .required()
+                        .custom((value, helpers) => {
+                            try {
+                                return validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: "El identificador del grupoIDV",
+                                    filtro: "strictoIDV",
+                                    sePermiteVacio: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                })
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+                        }).messages(commonMessages),  // Claves dinámicas que sigan el patrón "grupo0", "grupo1", "grupo2", etc.
+                    Joi.array().items(
+                        Joi.string().custom((value, helpers) => {
+                            try {
+                                return validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: "El identificador de opcionIDV",
+                                    filtro: "strictoIDV",
+                                    sePermiteVacio: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                })
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+                        }).messages(commonMessages)).required(),// Los valores deben ser arrays de objetos
+                ).required().messages(commonMessages),
+            })
+        ).min(1)
+            .messages(commonMessages)
+
 
         const esquemaBase = {
             fechaEntrada: Joi.string()
                 .isoDate()
                 .required()
-                .messages({
-                    'string.base': '{{#label}} debe ser una cadena de texto',
-                    'string.empty': '{{#label}} no puede estar vacío',
-                    'string.isoDate': '{{#label}} debe ser una fecha válida en formato ISO',
-                    'any.required': '{{#label}} es una llave obligatoria'
-                }),
+                .messages(commonMessages),
             fechaSalida: Joi.string()
                 .isoDate()
                 .required()
-                .messages({
-                    'string.base': '{{#label}} debe ser una cadena de texto',
-                    'string.empty': '{{#label}} no puede estar vacío',
-                    'string.isoDate': '{{#label}} debe ser una fecha válida en formato ISO',
-                    'any.required': '{{#label}} es una llave obligatoria'
-                }),
-            servicios: Joi.array().items(
-                Joi.object({
-                    servicioUID: Joi.string().required().messages({
-                        'string.base': '{{#label}} debe ser una cadena',
-                        'any.required': '{{#label}} es una campo obligatorio',
-                    }),
-                    servicioUI: Joi.string().required().messages({
-                        'string.base': '{{#label}} debe ser una cadena',
-                        'any.required': '{{#label}} es una campo obligatorio',
-                    })
-                }).messages({
-                    'object.base': '{{#label}} debe ser un objeto',
-                    'any.required': '{{#label}} es una llave obligatoria',
-                }),
-
-            )
-                .min(1)
-                .messages({
-                    'array.base': '{{#label}} debe ser un array',
-                    'any.required': '{{#label}} es un array campo obligatorio',
-                    'array.min': '{{#label}} debe contener al menos un servicios si de declara la llave servicios',
-
-                }),
+                .messages(commonMessages),
+            servicios: serviciosEsquema,
             codigosDescuento: Joi.array().items(
                 Joi.object({
                     codigosUID: Joi.array().items(
-                        Joi.string().required().messages({
-                            'string.base': '{{#label}} debe ser una cadena',
-                            'any.required': '{{#label}} es una campo obligatorio',
-                        })
+                        Joi.string().required().messages(commonMessages)
                     ).min(1)
-                        .messages({
-                            'array.base': '{{#label}} debe ser un array',
-                            'any.required': '{{#label}} es un array campo obligatorio',
-                            'array.min': '{{#label}} debe contener al menos un servicios si de declara la llave servicios',
-
-                        }),
-                    descuentoUI: Joi.string().required().messages({
-                        'string.base': '{{#label}} debe ser una cadena',
-                        'any.required': '{{#label}} es una campo obligatorio',
-                    }),
-                    ofertaUID: Joi.string().required().messages({
-                        'string.base': '{{#label}} debe ser una cadena',
-                        'any.required': '{{#label}} es una campo obligatorio',
-                    })
-                }).messages({
-                    'object.base': '{{#label}} debe ser un objeto',
-                    'any.required': '{{#label}} es una llave obligatoria',
-                }),
+                        .messages(commonMessages),
+                    descuentoUI: Joi.string().required().messages(commonMessages),
+                    ofertaUID: Joi.string().required().messages(commonMessages)
+                }).messages(commonMessages),
             )
                 .min(1)
-                .messages({
-                    'array.base': '{{#label}} debe ser un array',
-                    'any.required': '{{#label}} es un array campo obligatorio',
-                    'array.min': '{{#label}} debe contener al menos un servicios si de declara la llave servicios',
-                })
+                .messages(commonMessages),
+            complementosAlojamiento: Joi.array().items(
+                Joi.object({
+                    complementoUI: Joi.string().required().messages(commonMessages),
+                    complementoUID: Joi.string().required().messages(commonMessages)
+                }).messages(commonMessages),
+            )
+                .min(1)
+                .messages(commonMessages)
         }
 
         const esquemaTitular = Joi.object({
@@ -229,11 +232,7 @@ export const validarObjetoReservaPublica = async (data) => {
 
                 })
                 .required()
-                .messages({
-                    'string.base': 'El nombre del titular debe ser una cadena de texto',
-                    'string.empty': 'El nombre del titular no puede estar vacío',
-                    'any.required': 'El nombre del titular es una llave obligatoria'
-                }),
+                .messages(commonMessages),
             pasaporteTitular: Joi
                 .string()
                 .custom((value, helpers) => {
@@ -253,12 +252,8 @@ export const validarObjetoReservaPublica = async (data) => {
                         return helpers.message(mensajeError);
                     }
                 })
-                .required()
-                .messages({
-                    'string.base': 'El pasaporte del titular debe ser una cadena de texto',
-                    'string.empty': 'El pasaporte del titular no puede estar vacío',
-                    'any.required': 'El pasaporte del titular es una llave obligatoria'
-                }),
+                .optional()
+                .messages(commonMessages),
             telefonoTitular: Joi
                 .string()
                 .custom((value, helpers) => {
@@ -275,11 +270,7 @@ export const validarObjetoReservaPublica = async (data) => {
                     }
                 })
                 .required()
-                .messages({
-                    'string.base': 'El telefono debe ser una cadena de texto',
-                    'string.empty': 'El telefono no puede estar vacío',
-                    'any.required': 'El telefono es una llave obligatoria'
-                }),
+                .messages(commonMessages),
             codigoInternacional: Joi
                 .string()
                 .custom((value, helpers) => {
@@ -297,11 +288,7 @@ export const validarObjetoReservaPublica = async (data) => {
                     }
                 })
                 .required()
-                .messages({
-                    'string.base': 'El codigosInternacionales debe ser una cadena de texto',
-                    'string.empty': 'Por favor, selecciona el código internacional del número de teléfono.',
-                    'any.required': 'El codigosInternacionales es una llave obligatoria'
-                }),
+                .messages(commonMessages),
             correoTitular: Joi
                 .string()
                 .custom((value, helpers) => {
@@ -318,36 +305,21 @@ export const validarObjetoReservaPublica = async (data) => {
                     }
                 })
                 .required()
-                .messages({
-                    'string.base': 'El correo debe ser una cadena de texto',
-                    'string.empty': 'El correo electrónico no puede estar vacío cuando se realiza la reserva mediante el método online.',
-                    'any.required': 'El correo es una llave obligatoria'
-                }),
+                .messages(commonMessages),
         }).required()
-            .messages({
-                'string.base': '{{#label}} debe ser una cadena de texto',
-                'string.empty': '{{#label}} no puede estar vacío',
-                'string.isoDate': '{{#label}} debe ser una fecha válida en formato ISO',
-                'any.required': '{{#label}} es una llave obligatoria'
-            })
+            .messages(commonMessages)
 
         if (filtroHabitacionesCamas === "activado") {
             const alojamiento = Joi.object().pattern(
                 Joi.string(),
-                apartamentoSchemaConHabitacion.required())
-                .required().messages({
-                    'object.base': '{{#label}} debe ser un ojeto',
-                    'any.required': '{{#label}} es un ojeto obligatorio'
-                })
+                apartamentoSchemaConHabitacion.required()
+            ).required().messages(commonMessages)
             esquemaBase.alojamiento = alojamiento
         } else if (filtroHabitacionesCamas === "desactivado") {
             const alojamiento = Joi.object().pattern(
                 Joi.string(),
                 apartamentoSchemaSimple.required())
-                .required().messages({
-                    'object.base': '{{#label}} debe ser un ojeto',
-                    'any.required': '{{#label}} es un ojeto obligatorio'
-                })
+                .required().messages(commonMessages)
             esquemaBase.alojamiento = alojamiento
         } else {
             const m = "filtroHabitacionesCamas solo puede estar en activado o desactivado"
@@ -403,8 +375,13 @@ export const validarObjetoReservaPublica = async (data) => {
         })
 
         const servicios = reservaPublica.servicios || []
+        const servicioUIDDuplicados = {}
         servicios.forEach((contenedor, i) => {
             const servicioUID = contenedor.servicioUID
+            const opcionesSeleccionadas = contenedor.opcionesSeleccionadas
+
+
+
             validadoresCompartidos.tipos.cadena({
                 string: servicioUID,
                 nombreCampo: `En la llave servicioUID de la posicion ${i + 1} del array de servicios, se esperaba una cadena con un numero entero`,
@@ -414,6 +391,25 @@ export const validarObjetoReservaPublica = async (data) => {
                 devuelveUnTipoNumber: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
+
+            if (servicioUIDDuplicados.hasOwnProperty(servicioUID)) {
+                const m = "No se permite identificadorwes de servicioUID duplicados."
+                throw new Error(m)
+            }
+            servicioUIDDuplicados[servicioUID] = true
+
+            // const grupoIDVDuplicados = {}
+            // Object.entries(opcionesSeleccionadas).forEach(([grupoIDV, os]) => {
+
+            //     if (grupoIDVDuplicados.hasOwnProperty(grupoIDV)) {
+            //         const m = `No se permite identificadores de grupoIDV duplicados en ${servicioUID}.`
+            //         throw new Error(m)
+            //     }
+            //     grupoIDVDuplicados[grupoIDV] = true
+    
+            // })
+
+
         })
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: reservaPublica?.fechaEntrada,
@@ -453,8 +449,7 @@ export const validarObjetoReservaPublica = async (data) => {
             throw new Error(error)
         }
 
-        for (const [apartamentoIDV, contenedor] of Object.entries(alojamiento)) {
-            const apartamentoUI_entrada = contenedor.apartamentoUI
+        for (const [apartamentoIDV, contenedor_apartamento] of Object.entries(alojamiento)) {
             try {
                 await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDVPorApartamentosIDV({
                     estadoConfiguracionIDV: "disponible",
@@ -463,7 +458,7 @@ export const validarObjetoReservaPublica = async (data) => {
                     errorSi: "noExiste"
                 })
             } catch (error) {
-                const m = `La configuración de alojamiento ${apartamentoUI_entrada} no esta disponible`
+                const m = `La configuración de alojamiento ${apartamentoIDV} no esta disponible`
                 throw new Error(m)
             }
 
@@ -471,63 +466,62 @@ export const validarObjetoReservaPublica = async (data) => {
                 apartamentoIDV,
                 errorSi: "noExiste"
             })
+
             const apartamentoUI = apartamento.apartamentoUI
-
-            const habitacionesDelApartamentoPorValidar = contenedor.habitaciones
-            const habitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
-
-            const habitacionesEstructura = {}
-            const habitacionesSoloIDV = []
-
-            habitacionesPorApartamento.forEach((habitacionApartamento) => {
-                const habitacionIDV = habitacionApartamento.habitacionIDV
-                const habitacionUID = habitacionApartamento.componenteUID
-                habitacionesEstructura[habitacionIDV] = habitacionUID
-                habitacionesSoloIDV.push(habitacionIDV)
-            })
 
             if (filtroHabitacionesCamas === "activado") {
 
-                for (const [habitacionIDV, contenedor] of Object.entries(habitacionesDelApartamentoPorValidar)) {
-                    const habitacionUI_entrada = contenedor.habitacionUI
-
-                    if (!habitacionesSoloIDV.includes(habitacionIDV)) {
-                        const error = `El ${apartamentoUI} contiene una habitacion que no existe, concretamente la ${habitacionUI_entrada} hace referencia a un habitacionIDV: ${habitacionIDV}`
-                        throw new Error(error)
-                    }
-                    const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
-                        habitacionIDV,
-                        errorSi: "noExiste"
-                    })
-                    const habitacionUID = habitacionesEstructura[habitacionIDV]
-                    const habitacionUI = habitacionComoEntidad.habitacionUI
-
-                    if (!contenedor?.camaSeleccionada?.camaIDV) {
-                        const m = `Por favor selecciona el tipo de cama que deseas en la ${habitacionUI} del ${apartamentoUI}`
+                const habitacionesDelApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+                const habitacionesIDVDelApartamento = habitacionesDelApartamento.map(obj => obj.habitacionIDV);
+                const habitacionDelApartamento_solicitadas = contenedor_apartamento.habitaciones || {}
+                const habitacionesIDV_solicitadas = Object.keys(habitacionDelApartamento_solicitadas)
+                habitacionesIDV_solicitadas.forEach((h) => {
+                    if (!habitacionesIDVDelApartamento.includes(h)) {
+                        const m = `No se reconoce la habitacion con identificador visual ${h} en el ${apartamentoUI} con identificador visual ${apartamentoIDV}`
                         throw new Error(m)
-
                     }
+                })
 
-                    const camaIDV = validadoresCompartidos.tipos.cadena({
-                        string: contenedor?.camaSeleccionada?.camaIDV,
-                        nombreCampo: `El identificador visual camaIDV, en la habitacion ${habitacionUI}`,
-                        filtro: "strictoIDV",
-                        sePermiteVacio: "no",
-                        limpiezaEspaciosAlrededor: "si",
-                    })
-                    const camaPorHabitacion = await obtenerCamaDeLaHabitacionPorHabitacionUID({
-                        habitacionUID: habitacionUID,
-                        camaIDV: camaIDV,
-                    })
+                for (const habitacionDelApartamento of habitacionesDelApartamento) {
+                    const habitacionUID = habitacionDelApartamento.componenteUID
+                    const habitacionIDV = habitacionDelApartamento.habitacionIDV
 
-                    if (!camaPorHabitacion) {
-                        const camaUI_entrada = contenedor.camaSeleccionada.camaUI
-                        const error = `No existe la ${camaUI_entrada}, dentro de ${habitacionUI} del ${apartamentoUI} por que no se puede encontrar su identificador visual: ${camaIDV}`
-                        throw new Error(error)
+                    const camasSeleccionablesHabitacion = await obtenerCamasDeLaHabitacionPorHabitacionUID(habitacionUID)
+                    if (camasSeleccionablesHabitacion.length === 1) {
+                        delete habitacionDelApartamento_solicitadas[habitacionIDV]
+                        if (Object.keys(habitacionDelApartamento_solicitadas).length === 0) {
+                            delete contenedor_apartamento?.habitaciones
+                        }
+
+                    } else if (camasSeleccionablesHabitacion.length > 1) {
+                        const habitacionComoEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                            habitacionIDV: habitacionIDV,
+                            errorSi: "noExiste"
+                        })
+                        const habitacionUI = habitacionComoEntidad.habitacionUI
+
+                        const camaSolicitada = habitacionDelApartamento_solicitadas[habitacionIDV]?.camaSeleccionada?.camaIDV
+                        if (!camaSolicitada) {
+                            const m = `Por favor selecciona el tipo de cama en la ${habitacionUI} del ${apartamentoUI}. Gracias.`
+                            throw new Error(m)
+                        }
+                        const camaIDV = validadoresCompartidos.tipos.cadena({
+                            string: camaSolicitada,
+                            nombreCampo: `El identificador visual camaIDV, en la habitacion ${habitacionUI}`,
+                            filtro: "strictoIDV",
+                            sePermiteVacio: "no",
+                            limpiezaEspaciosAlrededor: "si",
+                        })
+                        const existe = camasSeleccionablesHabitacion.some(obj => obj.camaIDV === camaIDV);
+                        if (!existe) {
+                            const error = `No existe la cama solicitada dentro de la ${habitacionUI} del ${apartamentoUI} por que no se puede encontrar su identificador visual: ${camaIDV}`
+                            throw new Error(error)
+                        }
                     }
                 }
             }
         }
+
     } catch (errorCapturado) {
         throw errorCapturado;
     }

@@ -6,6 +6,7 @@ import { validadoresCompartidos } from "../../../validadores/validadoresComparti
 import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs"
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
+import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
 
 
 export const procesadorReserva = async (data) => {
@@ -88,7 +89,10 @@ export const procesadorReserva = async (data) => {
             fechaEntrada = simulacion.fechaEntrada
             fechaSalida = simulacion.fechaSalida
             fechaActual = simulacion.fechaCreacion
-            apartamentosArray = simulacion.apartamentosIDVARRAY
+
+            const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
+            apartamentosArray = alojamientosSimulacion.map(a => a.apartamentoIDV)
+            console.log("apartamentosArray", apartamentosArray)
             origenSobreControl = "simulacion"
 
             for (const apartamentoIDV of apartamentosArray) {

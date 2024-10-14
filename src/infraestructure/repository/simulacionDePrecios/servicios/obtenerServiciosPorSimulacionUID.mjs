@@ -8,7 +8,8 @@ export const obtenerServiciosPorSimulacionUID = async (simulacionUID) => {
         FROM 
         "simulacionesDePrecioServicios" 
         WHERE 
-        "simulacionUID" = $1`;
+        "simulacionUID" = $1
+        ORDER BY "servicioUID" ASC`;
         const resuelve = await conexion.query(consulta, [simulacionUID])
         return resuelve.rows
     } catch (errorCapturado) {

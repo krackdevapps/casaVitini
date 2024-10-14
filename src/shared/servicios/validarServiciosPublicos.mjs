@@ -14,24 +14,28 @@ export const validarServiciosPubicos = async (data) => {
             return serviciosPublicos
         }
 
-        const serviciosUIDArray = serviciosPorValidar.map((contenedor) => {
-            return contenedor.servicioUID
-        })
+        filtroServicios:
+        for (const servicioPorValidar of serviciosPorValidar) {
+            const servicioUID = servicioPorValidar.servicioUID
 
-        const servicios = await obtenerServicioPorCriterioPublicoPorServicioUIDArray({
-            zonaIDVArray: [
-                "publica",
-                "global"
-            ],
-            estadoIDV: "activado",
-            serviciosUIDArray
-        })
+            const servicioExistenteAccesible = await obtenerServicioPorCriterioPublicoPorServicioUIDArray({
+                zonaIDVArray: [
+                    "publica",
+                    "global"
+                ],
+                estadoIDV: "activado",
+                serviciosUIDArray: [servicioUID]
+            })
 
-        for (const servicio of servicios) {
-            const contendor = servicio.contenedor
+            if (servicioExistenteAccesible.length === 0) {
+                serviciosPublicos.serviciosNoReconocidos.push(servicioPorValidar)
+                continue
+            }
+
+            const contendor = servicioExistenteAccesible[0].contenedor
             const tituloPublico = contendor.tituloPublico
             const duracionIDV = contendor.duracionIDV
-            const servicioUID = servicio.servicioUID
+            const nombre = servicioExistenteAccesible[0].nombbre
 
             if (duracionIDV === "rango") {
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
@@ -47,27 +51,51 @@ export const validarServiciosPubicos = async (data) => {
                     fechaFinRango_ISO: fechaFinal
                 })
                 if (!controlRango) {
+                    serviciosPublicos.serviciosNoReconocidos.push(servicioPorValidar)
                     continue
                 }
             }
-            serviciosPublicos.serviciosSiReconocidos.push({
-                servicioUID,
-                servicioUI: tituloPublico
-            })
-        }
 
+            // Valiar grupos de opciones
+            const opcionesSeleccionadasPorValidar = servicioPorValidar.opcionesSeleccionadas
 
-        const serviciosNoReconocidos = serviciosPublicos.serviciosNoReconocidos
-        const serviciodUIDValidos = serviciosPublicos.serviciosSiReconocidos.map((contenedor) => {
-            return contenedor.servicioUID
-        })
+            const gruposDeOpcionesDelServicio = servicioExistenteAccesible[0].contenedor.gruposDeOpciones
+            for (const [grupoIDV, grupoDeOpciones] of Object.entries(gruposDeOpcionesDelServicio)) {
 
-        serviciosPorValidar.forEach((contenedor) => {
-            const servicioUID = contenedor.servicioUID
-            if (!serviciodUIDValidos.includes(servicioUID)) {
-                serviciosNoReconocidos.push(contenedor)
+                // Servicio DB
+                const configuracionGrupo = grupoDeOpciones.configuracionGrupo
+                const nombreGrupo = grupoDeOpciones.nombreGrupo
+                const opcionesGrupo = grupoDeOpciones.opcionesGrupo
+                const confSelObligatoria = configuracionGrupo.confSelObligatoria
+                const confSelNumero = configuracionGrupo.confSelNumero
+
+                // Servicio a comprorbar
+                const grupoPorValidar = opcionesSeleccionadasPorValidar
+                // Comporbra si es obligatorio
+                if (confSelObligatoria.includes("unaObligatoria")) {
+                    if (!grupoPorValidar.hasOwnProperty(grupoIDV)) {
+                        serviciosPublicos.serviciosNoReconocidos.push(servicioPorValidar)
+                        break filtroServicios
+                    }
+                    if (grupoPorValidar[grupoIDV].length === 0) {
+                        const m = `El servicio ${tituloPublico}, en las opciones de selección ${nombreGrupo}, se requiere seleccionar al menos una opción, gracias.`
+                        throw new Error(m)
+                    }
+                }
+
+                if (confSelNumero.includes("maximoUnaOpcion") && grupoPorValidar[grupoIDV].length > 1) {
+                    const m = `El servicio ${tituloPublico}, en las opciones de selección ${nombreGrupo}, solo se permite maximo una opcion seleccionada`
+                    throw new Error(m)
+                }
+                const opcionesIDV = opcionesGrupo.map(o => o.opcionIDV);
+                const opcionesIDVNoReconocidos = grupoPorValidar[grupoIDV].filter(o => !opcionesIDV.includes(o));
+                if (opcionesIDVNoReconocidos.length > 0) {
+                    serviciosPublicos.serviciosNoReconocidos.push(servicioPorValidar)
+                    break filtroServicios
+                }
             }
-        })
+            serviciosPublicos.serviciosSiReconocidos.push(servicioPorValidar)
+        }
 
         return serviciosPublicos
     } catch (error) {

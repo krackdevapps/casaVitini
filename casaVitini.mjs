@@ -20,7 +20,7 @@ process.on('uncaughtException', (error) => {
 });
 
 const app = express()
-app.use(controlHTTPS)
+//app.use(controlHTTPS)
 
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')

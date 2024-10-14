@@ -219,6 +219,8 @@ export const calendario = async (entrada) => {
                 }
             };
             return calendario
+        } if (tipo === "rangoDeFechas") {
+            
         }
     } catch (errorCapturado) {
         throw errorCapturado

@@ -31,11 +31,10 @@ export const configuracionSession = session({
   saveUninitialized: false,
   rolling: false,
   cookie: {
-    secure: true,
+   // secure: true,
     maxAge: duracionSessionCliente,
-    sameSite: true,
-
-    httpOnly: true,
+   // sameSite: true,
+   // httpOnly: true,
     rolling: false,
   }
 })

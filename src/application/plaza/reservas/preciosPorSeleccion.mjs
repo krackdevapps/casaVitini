@@ -89,7 +89,7 @@ export const preciosPorSeleccion = async (entrada) => {
                 },
                 servicios: {
                     origen: "hubServicios",
-                    serviciosUIDSolicitados: []
+                    serviciosSolicitados: []
                 },
             },
             capas: {

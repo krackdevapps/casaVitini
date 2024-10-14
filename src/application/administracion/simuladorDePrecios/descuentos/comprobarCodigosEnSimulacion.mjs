@@ -11,7 +11,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructu
 import { selecionarOfertasPorCondicion } from "../../../../shared/ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs"
 import { obtenerOfertasPorRangoActualPorCodigoDescuentoArray } from "../../../../infraestructure/repository/simulacionDePrecios/ofertas/obtenerOfertasPorRangoActualPorCodigoDescuentoArray.mjs"
 import { selectorPorCondicion } from "../../../../shared/ofertas/entidades/reserva/selectorPorCondicion.mjs"
-import { validarDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validarDataGlobalDeSimulacion.mjs"
+import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 
 export const comprobarCodigosEnSimulacion = async (entrada) => {
     const mutex = new Mutex()
@@ -59,7 +59,7 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validarDataGlobalDeSimulacion(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
 
 
         const fechaEntrada = simulacion.fechaEntrada

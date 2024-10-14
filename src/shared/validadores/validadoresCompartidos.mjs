@@ -1386,6 +1386,20 @@ export const validadoresCompartidos = {
 
         },
 
-    }
+    },
+    herramientasExternas: {
+        joi: {
+            mensajesErrorPersonalizados: {
+                'any.required': '{{#label}} es una llave obligatoria',
+                'string.base': '{{#label}} debe ser una cadena',
+                'string.empty': '{{#label}} no puede estar vacío',
+                'string.isoDate': '{{#label}} debe ser una fecha válida en formato ISO',
+                'array.min': '{{#label}} debe contener al menos un elemento seleccionado',
+                'array.base': '{{#label}} debe ser un array',
+                'object.base': '{{#label}} debe ser un objeto',
+                'array.includesRequiredUnknowns': '{{#label}} debe contener al menos 1 valor requerido',
 
+            }
+        }
+    }
 }

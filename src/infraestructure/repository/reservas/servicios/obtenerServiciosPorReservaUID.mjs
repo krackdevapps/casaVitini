@@ -7,7 +7,8 @@ export const obtenerServiciosPorReservaUID = async (reservaUID) => {
         FROM 
         "reservaServicios" 
         WHERE 
-        "reservaUID" = $1`;
+        "reservaUID" = $1
+        ORDER BY "servicioUID" ASC`;
         const resuelve = await conexion.query(consulta, [reservaUID])
         return resuelve.rows
     } catch (errorCapturado) {
