@@ -6,6 +6,7 @@ import { obtenerServiciosPorSimulacionUID } from "../../../infraestructure/repos
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs";
+import { obtenerComplementosAlojamientoPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/complementosDeAlojamiento/obtenerComplementosAlojamientoPorSimulacionUID.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -48,6 +49,8 @@ export const detallesSimulacion = async (entrada) => {
         const apartamentos = []
         for (const apartamento of alojamientosSimulacion) {
             const apartamentoIDV = apartamento.apartamentoIDV
+            const apartamentoUID = apartamento.apartamentoUID
+
             let apartamentoUI
             const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
                 apartamentoIDV,
@@ -63,11 +66,13 @@ export const detallesSimulacion = async (entrada) => {
             }
             apartamentos.push({
                 apartamentoIDV,
-                apartamentoUI
+                apartamentoUI,
+                apartamentoUID
             })
         }
         await insertarApartamentoUIEnObjetoOfertas(contenedorOfertas)
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
+        const complementosDeAlojamientoDeLaSimulacion = await obtenerComplementosAlojamientoPorSimulacionUID(simulacionUID)
         const ok = {
             ok: "Aquí tienes los detalles de la simulación",
             nombre,
@@ -78,6 +83,7 @@ export const detallesSimulacion = async (entrada) => {
             fechaSalida,
             apartamentos,
             servicios: serviciosDeLaSimulacion,
+            complementosDeAlojamiento: complementosDeAlojamientoDeLaSimulacion,
             contenedorFinanciero: simulacion
         }
         return ok
