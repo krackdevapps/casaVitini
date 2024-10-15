@@ -40,6 +40,20 @@ export const selectorPorCondicion = async (data) => {
                 } else {
                     resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
                 }
+            } else if (tipoCondicion === "conFechaSalidaEntreRango") {
+                const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+                const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+
+                const fechaInicioRango_objeto = DateTime.fromISO(fechaInicioRango_ISO)
+                const fechaFinalRango_objeto = DateTime.fromISO(fechaFinalRango_ISO)
+                const fechaSalida_reserva_objeto = DateTime.fromISO(fechaSalida_reserva)
+
+                const fechaDentroDelRango = fechaSalida_reserva_objeto >= fechaInicioRango_objeto && fechaSalida_reserva_objeto <= fechaFinalRango_objeto;
+                if (!fechaDentroDelRango) {
+                    resultadoSelector.condicionesQueNoSeCumple.push(tipoCondicion)
+                } else {
+                    resultadoSelector.condicionesQueSeCumplen.push(tipoCondicion)
+                }
             } else if (tipoCondicion === "conFechaCreacionEntreRango") {
                 const fechaInicioOferta = oferta.fechaInicio
                 const fechaFinalOferata = oferta.fechaFinal

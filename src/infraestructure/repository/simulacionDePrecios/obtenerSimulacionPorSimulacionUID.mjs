@@ -15,8 +15,7 @@ export const obtenerSimulacionPorSimulacionUID = async (simulacionUID) => {
         to_char("fechaCreacion", 'YYYY-MM-DD') as "fechaCreacion", 
         to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
         to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
-        to_char("fechaCreacion",  'YYYY-MM-DD') AS "fechaCreacion_simple",
-        "apartamentosIDVARRAY"
+        to_char("fechaCreacion",  'YYYY-MM-DD') AS "fechaCreacion_simple"
         FROM
         "simulacionesDePrecio"
         WHERE

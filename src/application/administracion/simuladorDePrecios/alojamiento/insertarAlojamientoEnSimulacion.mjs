@@ -1,4 +1,5 @@
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { insertarApartamentoEnSimulacion } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/insertarApartamentoEnSimulacion.mjs"
 import { obtenerAlojamientoDeLaSimulacionPorApartamentoIDV } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerAlojamientoDeLaSimulacionPorApartamentoIDV.mjs"
@@ -55,6 +56,13 @@ export const insertarAlojamientoEnSimulacion = async (entrada) => {
         await campoDeTransaccion("confirmar")
         await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
+        const apartamentoUI = apartamentoEntidad.apartamentoUI
+        nuevoApartamento.apartamentoUI = apartamentoUI
+
         return {
             ok: "Se ha insertado el apartamento en la simulacion",
             nuevoApartamento,

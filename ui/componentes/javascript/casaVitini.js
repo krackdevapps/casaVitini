@@ -12478,6 +12478,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 })
 
                                 const numeroComplementosPorRenderizar = desglosePorComplementoDeAlojamiento.length
+                                console.log("numeroComplementosPorRenderizar", numeroComplementosPorRenderizar)
                                 if (numeroComplementosPorRenderizar === 0) {
                                     const info_selector = porComplemento_renderizado.querySelector("[componente=titulo]")
                                     if (!info_selector) {
@@ -12487,6 +12488,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         info.classList.add("textoCentrado")
                                         porComplemento_renderizado.appendChild(info)
                                     }
+                                } else {
+                                    porComplemento_renderizado.querySelector("[componente=titulo]")?.remove()
                                 }
 
                                 let posicion = 0
@@ -12547,6 +12550,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             "borderGrey1",
                                             "borderRadius14"
                                         )
+                                        contenedorServicio.appendChild(complementoUI_)
+
                                         const contenedorData = document.createElement("div")
                                         contenedorData.classList.add(
                                             "flexVertical",
@@ -12602,11 +12607,17 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         definicionUI.textContent = definicion
                                         contenedorData.appendChild(definicionUI)
 
-                                        contenedorServicio.appendChild(complementoUI_)
                                     }
                                     posicion++
                                 }
 
+                                const contenedoresVacios = porComplemento_renderizado.querySelectorAll(`[contenedorApartamento]`)
+                                contenedoresVacios.forEach((cv) => {
+                                    const complementosDelAlojamiento = cv.querySelectorAll("[complementouid_enreserva]")
+                                    if (complementosDelAlojamiento.length === 0) {
+                                        cv?.remove()
+                                    }
+                                })
                             },
                             totales: (data) => {
                                 const destino = data.destino
@@ -13996,6 +14007,25 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                     const descripcionCondicion = document.createElement("div")
                                     descripcionCondicion.textContent = "Esta condición determina que la oferta se aplica cuando la fecha de entrada de la reserva está entre el rango de vigencia de la oferta."
+                                    contenedorCondicion.appendChild(descripcionCondicion)
+
+                                    const rangoVigencia = document.createElement("div")
+                                    rangoVigencia.textContent = `${fechaInicioRango_ISO} >>> ${fechaFinalRango_ISO}`
+                                    contenedorCondicion.appendChild(rangoVigencia)
+
+                                } else if (tipoCondicion === "conFechaSalidaEntreRango") {
+                                    const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+                                    const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+
+                                    const tituloCondicion = document.createElement("div")
+                                    tituloCondicion.textContent = "Por fecha de salida"
+                                    tituloCondicion.classList.add(
+                                        "negrita",
+                                    )
+                                    contenedorCondicion.appendChild(tituloCondicion)
+
+                                    const descripcionCondicion = document.createElement("div")
+                                    descripcionCondicion.textContent = "Esta condición determina que la oferta se aplica cuando la fecha de salida de la reserva está entre el rango de especificado en la oferta."
                                     contenedorCondicion.appendChild(descripcionCondicion)
 
                                     const rangoVigencia = document.createElement("div")
@@ -18431,6 +18461,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         const selectorBotonCategoriaRenderizado = document.querySelector(`[categoriaReserva="${categoriaIDV}"]`)
                                         const estadoCategoria = selectorBotonCategoriaRenderizado?.getAttribute("estadoCategoria")
                                         const categoriaActual = document.querySelector("[estadoCategoria=actual]")?.getAttribute("categoriaReserva")
+                                        this.limpiarMenusCategorias()
+                                        selectorBotonCategoriaRenderizado.setAttribute("estadoCategoria", "actual")
+
                                         const funcionPersonalizada = `ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias`
 
                                         let url
@@ -18442,7 +18475,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                         const constructorDireccionFuncion = casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales[categoriaIDV]?.arranque
                                         if (typeof constructorDireccionFuncion === "function") {
-                                            this.limpiarMenusCategorias()
                                             const botonCategoriaGlobal = document.querySelector(`[categoriaReserva=${categoriaIDV}]`)
                                             botonCategoriaGlobal.style.background = "blue"
                                             botonCategoriaGlobal.style.color = "white"
@@ -38841,7 +38873,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         main.appendChild(titulo)
                         return
                     }
-                    this.detallesSimulacion.detalleSimulacion(respuestaServidor)
+                    await this.detallesSimulacion.detalleSimulacion(respuestaServidor)
+
+                    const zonaURL = parametros.zona
+                    if (zonaURL) {
+                        const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zonaURL)
+                        casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.categoriasGlobalesUI.controladorMostrar({
+                            origen: "url",
+                            categoria: categoriaGlobalIDV
+                        })
+                    }
                 }
                 else {
                     casaVitini.ui.componentes.urlDesconocida()
@@ -39116,13 +39157,30 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         casaVitini.ui.componentes.mensajeSimple(info)
                     }
                     if (respuestaServidor?.ok) {
+
+
+                        const simulacionData = respuestaServidor
+                        const nombre = simulacionData.nombre
+                        const zonaIDV = simulacionData.zonaIDV
+                        const simulacionUID = simulacionData.simulacionUID
+                        const fechaCreacion = simulacionData?.fechaCreacion
+                        const fechaEntrada = simulacionData?.fechaEntrada
+                        const fechaSalida = simulacionData?.fechaSalida
+                        const contenedorFinanciero = simulacionData.contenedorFinanciero
+                        const apartamentos = simulacionData.apartamentos
+                        const servicios = simulacionData.servicios || []
+                        const complementosDeAlojamiento = simulacionData.complementosDeAlojamiento
+                        const codigosDescuento = simulacionData.codigosDescuento || []
+
                         const selectorEspacio = document.querySelector("[componente=espacio]")
                         const contenedor = document.createElement("div")
                         contenedor.classList.add("contenedorNuevaSimiulacion")
                         selectorEspacio.appendChild(contenedor)
                         const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
 
-                        const simulacionUI = casaVitini.administracion.simuladorDePrecios.componentes.simulacionUI()
+                        const simulacionUI = casaVitini.administracion.simuladorDePrecios.componentes.simulacionUI({ simulacionUID })
+                        simulacionUI.setAttribute("componente", `simulacionUID_${simulacionUID}`)
+
                         selectorEspacio.appendChild(simulacionUI)
 
                         const selectorTitulo = document.querySelector(".tituloGris")
@@ -39226,18 +39284,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const selectorsApartamentos = simulacionUI.querySelector("[contenedor=apartamentosSeleccianados]")
                         const instanciaUID_contenedorApartamentos = selectorsApartamentos.querySelector("[instanciaUID]").getAttribute("instanciaUID")
 
-                        const simulacionData = respuestaServidor
-                        const nombre = simulacionData.nombre
-                        const zonaIDV = simulacionData.zonaIDV
-                        const simulacionUID = simulacionData.simulacionUID
-                        const fechaCreacion = simulacionData?.fechaCreacion
-                        const fechaEntrada = simulacionData?.fechaEntrada
-                        const fechaSalida = simulacionData?.fechaSalida
-                        const contenedorFinanciero = simulacionData.contenedorFinanciero
-                        const apartamentos = simulacionData.apartamentos
-                        const servicios = simulacionData.servicios || []
-                        const complementosDeAlojamiento = simulacionData.complementosDeAlojamiento
-                        const codigosDescuento = simulacionData.codigosDescuento || []
+
 
                         const hubFecha = (fecha) => {
                             if (fecha) {
@@ -39262,6 +39309,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         selectorFechaCreacion.querySelector("[fechaUI=unico]").textContent = hubFecha(fechaCreacion)
                         selectorFechaEntrada.querySelector("[fechaUI=fechaInicio]").textContent = hubFecha(fechaEntrada)
                         selectorFechaSalida.querySelector("[fechaUI=fechaFin]").textContent = hubFecha(fechaSalida)
+
+                        const selectorBotonReconstrucion = simulacionUI.querySelector("[boton=reconstruccionHubSinConfirmacion]")
+                        selectorBotonReconstrucion.addEventListener("click", () => {
+                            this.componentesUI.reconstruirDesgloseFinanciero.desdeHub.confirmarReconstrucion({
+                                simulacionUID: String(simulacionUID),
+                                sobreControl: "activado"
+                            })
+                        })
 
                         for (const contenedorApartamento of apartamentos) {
                             const apartamentoIDV = contenedorApartamento.apartamentoIDV
@@ -39291,20 +39346,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             apartamentos,
                             complementosDeAlojamiento
                         })
-
-
-
-
-
-
-                        const selectorBotonReconstrucion = simulacionUI.querySelector("[boton=reconstruccionHubSinConfirmacion]")
-                        selectorBotonReconstrucion.addEventListener("click", () => {
-                            this.componentesUI.reconstruirDesgloseFinanciero.desdeHub.confirmarReconstrucion({
-                                simulacionUID: String(simulacionUID),
-                                sobreControl: "activado"
-                            })
-                        })
-
                         if (contenedorFinanciero.desgloseFinanciero) {
                             casaVitini.ui.componentes.contenedorFinanciero.constructor({
                                 destino: `[contenedor=simulacion]`,
@@ -39344,9 +39385,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 return false
                             }
                             if (respuestaServidor?.ok) {
+                                console.log("respuestaSer", respuestaServidor)
                                 const alojamiento = respuestaServidor.ok
-                                const nuevoApartamento = alojamiento.nuevoApartamento
-                                const desgloseFinanciero = alojamiento.desgloseFinanciero
+                                const nuevoApartamento = respuestaServidor.nuevoApartamento
+                                const desgloseFinanciero = respuestaServidor.desgloseFinanciero
 
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
 
@@ -39357,6 +39399,18 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         modoUI: "simulador"
                                     })
                                 }
+                                const contenedorComplementosAlojamiento = document.querySelector("[contenedor=complementosAlojamiento]")
+                                const instanciaUID_contenedorComplementos = contenedorComplementosAlojamiento.getAttribute("instanciaUID")
+                                const apartamentoUI = casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.complementosDeAlojamiento.componentesUI.apartamentoUI({
+                                    apartamentoIDV: nuevoApartamento.apartamentoIDV,
+                                    apartamentoUI: nuevoApartamento.apartamentoUI,
+                                    apartamentoUID: nuevoApartamento.apartamentoUID,
+                                    instanciaUID_contenedorComplementos: instanciaUID_contenedorComplementos
+                                })
+                                const contenedorLista = contenedorComplementosAlojamiento.querySelector("[componente=contenedorLista]")
+
+                                contenedorLista.appendChild(apartamentoUI)
+
                                 return true
                             }
 
@@ -39408,6 +39462,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     })
                                 }
 
+                                const contenedorComplementosAlojamiento = document.querySelector(`[contenedor=complementosAlojamiento] [componente=contenedorLista] [apartamentoIDV="${apartamentoIDV}"]`)
+                                contenedorComplementosAlojamiento?.remove()
+
+
                             }
                             return casaVitini.administracion.simuladorDePrecios.componentes.actualizaSimulacion()
 
@@ -39442,55 +39500,55 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             contenedorLista.setAttribute("componente", "contenedorLista")
                             contenedor.appendChild(contenedorLista)
 
-                            const apartamentoUI = (data) => {
-                                const apartamentoUI = data.apartamentoUI
-                                const apartamentoUID = data.apartamentoUID
-                                const apartamentoIDV = data.apartamentoIDV
+                            // const apartamentoUI = (data) => {
+                            //     const apartamentoUI = data.apartamentoUI
+                            //     const apartamentoUID = data.apartamentoUID
+                            //     const apartamentoIDV = data.apartamentoIDV
 
-                                const ui = document.createElement("div")
-                                ui.setAttribute("apartamentoUID", apartamentoUID)
-                                ui.setAttribute("apartamentoIDV", apartamentoIDV)
-                                ui.classList.add(
-                                    "flexVertical",
-                                    "gap6",
-                                    "padding6",
-                                    "borderRadius12",
-                                    "backgroundGrey1"
-                                )
+                            //     const ui = document.createElement("div")
+                            //     ui.setAttribute("apartamentoUID", apartamentoUID)
+                            //     ui.setAttribute("apartamentoIDV", apartamentoIDV)
+                            //     ui.classList.add(
+                            //         "flexVertical",
+                            //         "gap6",
+                            //         "padding6",
+                            //         "borderRadius12",
+                            //         "backgroundGrey1"
+                            //     )
 
-                                const n = document.createElement("p")
-                                n.classList.add(
-                                    "negrita",
-                                    "padding14"
-                                )
-                                n.textContent = apartamentoUI
-                                ui.appendChild(n)
+                            //     const n = document.createElement("p")
+                            //     n.classList.add(
+                            //         "negrita",
+                            //         "padding14"
+                            //     )
+                            //     n.textContent = apartamentoUI
+                            //     ui.appendChild(n)
 
-                                const contBo = document.createElement("div")
-                                contBo.classList.add("flexHorizontal")
-                                ui.appendChild(contBo)
+                            //     const contBo = document.createElement("div")
+                            //     contBo.classList.add("flexHorizontal")
+                            //     ui.appendChild(contBo)
 
-                                const b = document.createElement("div")
-                                b.classList.add("botonV3")
-                                b.textContent = "Añadir complemento de alojamiento"
-                                b.addEventListener("click", () => {
-                                    this.componentesUI.insertarComplementoEnAlojamiento.ui({
-                                        instanciaUID_contenedorComplementos,
-                                        apartamentoIDV,
-                                    })
-                                })
-                                contBo.appendChild(b)
+                            //     const b = document.createElement("div")
+                            //     b.classList.add("botonV3")
+                            //     b.textContent = "Añadir complemento de alojamiento"
+                            //     b.addEventListener("click", () => {
+                            //         this.componentesUI.insertarComplementoEnAlojamiento.ui({
+                            //             instanciaUID_contenedorComplementos,
+                            //             apartamentoIDV,
+                            //         })
+                            //     })
+                            //     contBo.appendChild(b)
 
-                                const c = document.createElement("div")
-                                c.setAttribute("contenedor", "complementos")
-                                c.classList.add(
-                                    "flexVertical",
-                                    "gap6",
-                                )
-                                c.appendChild(this.componentesUI.infoSinComplemento())
-                                ui.appendChild(c)
-                                return ui
-                            }
+                            //     const c = document.createElement("div")
+                            //     c.setAttribute("contenedor", "complementos")
+                            //     c.classList.add(
+                            //         "flexVertical",
+                            //         "gap6",
+                            //     )
+                            //     c.appendChild(this.componentesUI.infoSinComplemento())
+                            //     ui.appendChild(c)
+                            //     return ui
+                            // }
                             if (apartamentos.length > 0) {
                                 constenedorGlobal.querySelector("[componente=sinInfo]")?.remove()
                             }
@@ -39499,10 +39557,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const apartamentoUI_ = a.apartamentoUI
                                 const apartamentoUID = a.apartamentoUID
 
-                                contenedorLista.appendChild(apartamentoUI({
+                                contenedorLista.appendChild(this.componentesUI.apartamentoUI({
                                     apartamentoIDV,
                                     apartamentoUI: apartamentoUI_,
-                                    apartamentoUID
+                                    apartamentoUID,
+                                    instanciaUID_contenedorComplementos
                                 }))
 
                             })
@@ -39775,6 +39834,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     const apartamentoIDV = data.apartamentoIDV
                                     const instanciaUID_eliminarServicio = data.instanciaUID_eliminarServicio
                                     const instanciaUID_contenedorComplementosDeAlojamiento = data.instanciaUID_contenedorComplementosDeAlojamiento
+                                    const main = document.querySelector("main")
+                                    const simulacionUID = main.querySelector("[simulacionUID]").getAttribute("simulacionUID")
+
 
                                     const ui = document.querySelector(`[instanciaUID="${instanciaUID_eliminarServicio}"]`)
                                     const contenedor = ui.querySelector("[componente=constructor]")
@@ -39911,6 +39973,57 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 b.textContent = "Eliminar"
                                 ui.appendChild(b)
 
+                                return ui
+                            },
+                            apartamentoUI: function (data) {
+                                const apartamentoUI = data.apartamentoUI
+                                const apartamentoUID = data.apartamentoUID
+                                const apartamentoIDV = data.apartamentoIDV
+                                const instanciaUID_contenedorComplementos = data.instanciaUID_contenedorComplementos
+
+
+                                const ui = document.createElement("div")
+                                ui.setAttribute("apartamentoUID", apartamentoUID)
+                                ui.setAttribute("apartamentoIDV", apartamentoIDV)
+                                ui.classList.add(
+                                    "flexVertical",
+                                    "gap6",
+                                    "padding6",
+                                    "borderRadius12",
+                                    "backgroundGrey1"
+                                )
+
+                                const n = document.createElement("p")
+                                n.classList.add(
+                                    "negrita",
+                                    "padding14"
+                                )
+                                n.textContent = apartamentoUI
+                                ui.appendChild(n)
+
+                                const contBo = document.createElement("div")
+                                contBo.classList.add("flexHorizontal")
+                                ui.appendChild(contBo)
+
+                                const b = document.createElement("div")
+                                b.classList.add("botonV3")
+                                b.textContent = "Añadir complemento de alojamiento"
+                                b.addEventListener("click", () => {
+                                    this.insertarComplementoEnAlojamiento.ui({
+                                        instanciaUID_contenedorComplementos,
+                                        apartamentoIDV,
+                                    })
+                                })
+                                contBo.appendChild(b)
+
+                                const c = document.createElement("div")
+                                c.setAttribute("contenedor", "complementos")
+                                c.classList.add(
+                                    "flexVertical",
+                                    "gap6",
+                                )
+                                c.appendChild(this.infoSinComplemento())
+                                ui.appendChild(c)
                                 return ui
                             }
                         },
@@ -41354,7 +41467,204 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             })
                         }
                     },
+                    categoriasGlobalesUI: {
+                        despliege: function (data) {
+                            const simulacionUID = data.simulacionUID
+                            const url = "/administracion/simulador_de_precios/simulacion:" + simulacionUID + "/zona:"
 
+                            const contenedor = document.createElement("div");
+                            contenedor.classList.add(
+                                "flexVertical"
+                            );
+                            contenedor.setAttribute("componente", "panelDetallesReserva")
+
+                            const contenedorBotonesExpandidos = document.createElement("div")
+                            contenedorBotonesExpandidos.classList.add("menuGlobalSimuiacion")
+                            contenedorBotonesExpandidos.setAttribute("contenedor", "botonesExpandidos")
+
+                            contenedor.appendChild(contenedorBotonesExpandidos)
+
+                            const marcoMenuResponsivo = document.createElement("div");
+                            marcoMenuResponsivo.setAttribute("class", "menuGlobalSimuiacion_responsivo");
+                            marcoMenuResponsivo.textContent = "Menú reserva"
+                            marcoMenuResponsivo.addEventListener("click", () => {
+                                document.body.style.overflow = "hidden";
+                                this.desplegarMenuResponsivo({
+                                    simulacionUID,
+                                })
+
+                            })
+                            contenedor.appendChild(marcoMenuResponsivo);
+
+                            const botonUI = (data) => {
+
+                                const categoria = data.categoria
+                                const zonaURL = casaVitini.utilidades.cadenas.camelToSnake(categoria)
+                                const cateoriaUI = data.cateoriaUI
+
+                                const ui = document.createElement("a");
+                                ui.setAttribute("class", "menuCategoria");
+                                ui.setAttribute("categoria", categoria);
+                                ui.href = url + zonaURL;
+                                ui.addEventListener("click", (e) => {
+                                    e.preventDefault()
+                                    this.controladorMostrar({
+                                        categoria: categoria,
+                                        origen: "botonCategoria",
+                                    })
+                                })
+                                ui.textContent = cateoriaUI;
+                                return ui
+
+                            }
+                            const lista = [
+                                {
+                                    categoria: "alojamiento",
+                                    cateoriaUI: "Alojamiento"
+                                },
+                                {
+                                    categoria: "complementosAlojamiento",
+                                    cateoriaUI: "Complementos del alojamiento"
+                                },
+                                {
+                                    categoria: "servicios",
+                                    cateoriaUI: "Servicios"
+                                },
+                                {
+                                    categoria: "codigosDescuento",
+                                    cateoriaUI: "Codigos de descuento"
+                                },
+                                {
+                                    categoria: "desgloseFinanciero",
+                                    cateoriaUI: "Deslose financiero"
+                                },
+                            ]
+
+                            lista.forEach((c) => {
+                                const boton = botonUI(c)
+                                contenedorBotonesExpandidos.appendChild(boton)
+                            })
+                            return contenedor;
+                        },
+                        desplegarMenuResponsivo: function (data) {
+                            const simulacionUID = data.simulacionUID
+
+                            const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                            ui.setAttribute("controlador", "controlResponsivoVisibilidad")
+                            document.querySelector("main").appendChild(ui)
+
+                            const contenedor = ui.querySelector("[componente=contenedor]")
+                            contenedor.style.paddingTop = "0px"
+
+                            const botonCancelar = document.createElement("div")
+                            botonCancelar.classList.add("botonV1")
+                            botonCancelar.setAttribute("boton", "cancelar")
+                            botonCancelar.textContent = "Cerrar";
+                            botonCancelar.addEventListener("click", () => {
+                                return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                            })
+                            contenedor.appendChild(botonCancelar)
+
+                            const panelGlobal = this.despliege({
+                                simulacionUID
+                            })
+                            const contenedorBotonesEspandidos = panelGlobal.querySelector("[contenedor=botonesExpandidos]")
+                            contenedorBotonesEspandidos.classList.remove("menuGlobalSimuiacion")
+                            contenedorBotonesEspandidos.style.display = 'grid'
+                            contenedorBotonesEspandidos.style.gap = '6px'
+
+                            contenedorBotonesEspandidos.querySelectorAll("[categoria]").forEach((boton) => {
+                                boton.classList.add("botonV1BlancoIzquierda")
+                                boton.classList.remove("menuCategoria")
+
+                            })
+                            contenedor.appendChild(contenedorBotonesEspandidos)
+
+                            const controlResponsivoVisibilidad = () => {
+                                const selectorElementoObservado = document.querySelector("[controlador=controlResponsivoVisibilidad]")
+                                if (!selectorElementoObservado) {
+                                    window.removeEventListener("resize", controlResponsivoVisibilidad);
+                                    return
+                                }
+                                const windowWidth = window.innerWidth;
+                                const threshold = "922"
+                                if (windowWidth > threshold) {
+                                    selectorElementoObservado?.remove()
+                                }
+                            }
+                            window.addEventListener("resize", controlResponsivoVisibilidad);
+
+                        },
+                        ocultaCategorias: function () {
+                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas();
+                            this.limpiarMenusCategorias()
+                            document.querySelector("[componente=contenedorDinamico]").innerHTML = null
+                        },
+                        limpiarMenusCategorias: () => {
+                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas();
+                            const botonesCategoria = document.querySelectorAll(`[contenedor=botonesExpandidos] [categoria]`)
+                            botonesCategoria.forEach((boton) => {
+                                boton.removeAttribute("style")
+                                boton.setAttribute("estadoCategoria", "otra")
+                            })
+                        },
+                        controladorMostrar: function (data) {
+                            const origen = data.origen
+                            const categoriaIDV = data.categoria
+                            const simulacionUID = document.querySelector("[simulacionUID]").getAttribute("simulacionUID")
+
+                            const url = "/administracion/simulador_de_precios/simulacion:" + simulacionUID + "/zona:"
+                            const categoriaActual = document.querySelector("[estadoCategoria=actual]")?.getAttribute("categoria")
+                            const selectorBotonCategoriaRenderizado = document.querySelector(`[categoria="${categoriaIDV}"]`)
+                            const estadoCategoria = selectorBotonCategoriaRenderizado?.getAttribute("estadoCategoria")
+                            this.limpiarMenusCategorias()
+                            selectorBotonCategoriaRenderizado.setAttribute("estadoCategoria", "actual")
+
+                            const todosLosContenedores = document.querySelectorAll("[zonaSimulacion]")
+                            todosLosContenedores.forEach(z => z.removeAttribute("style"))
+
+                            const zonaSel = document.querySelector(`[zonaSimulacion=${categoriaIDV}]`)
+                            zonaSel.style.display = "flex"
+                            const funcionPersonalizada = `administracion.simuladorDePrecios.detallesSimulacion.componentesUI.categoriasGlobalesUI.controladorMostrar`
+
+                            const botonCategoriaGlobal = document.querySelector(`[contenedor=botonesExpandidos] [categoria="${categoriaIDV}"]`)
+                            botonCategoriaGlobal.style.background = "blue"
+                            botonCategoriaGlobal.style.color = "white"
+                            const categoriaURL = casaVitini.utilidades.cadenas.camelToSnake(categoriaIDV)
+                            const directoriosFusion = url + categoriaURL
+                            const componentesExistenteUID = "simulacionUID_" + simulacionUID
+                            const titulo = "Casa Vitini"
+
+                            const estado = {
+                                zona: directoriosFusion,
+                                EstadoInternoZona: "estado",
+                                tipoCambio: "parcial",
+                                componenteExistente: componentesExistenteUID,
+                                funcionPersonalizada: funcionPersonalizada,
+                                args: {
+                                    origen: "url",
+                                    categoria: categoriaIDV
+                                }
+                            }
+                            console.log(categoriaActual, categoriaIDV, categoriaActual)
+                            if (!categoriaActual || categoriaIDV === categoriaActual) {
+                                window.history.replaceState(estado, titulo, directoriosFusion)
+                            } else if (categoriaIDV !== categoriaActual) {
+                                if (origen === "url") {
+                                    window.history.replaceState(estado, titulo, directoriosFusion);
+                                }
+                                if (origen === "botonCategoria" && (estadoCategoria === "otra" || !estadoCategoria)) {
+                                    window.history.pushState(estado, titulo, directoriosFusion);
+                                }
+                                if (origen === "botonCategoria" && estadoCategoria === "actual") {
+                                    window.history.replaceState(estado, titulo, directoriosFusion);
+                                }
+                            }
+
+
+                        }
+
+                    },
                 },
                 eliminarSimulacion: {
                     UI: function () {
@@ -41438,7 +41748,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 },
             },
             componentes: {
-                simulacionUI: function () {
+                simulacionUI: function (data) {
+                    const simulacionUID = data.simulacionUID
                     const contenedor = document.createElement("div")
                     contenedor.classList.add(
                         "flexVertical",
@@ -41594,16 +41905,28 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     })
                     contenedor.appendChild(selectorRangoSimulado)
 
+                    const menuGlobal = casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.categoriasGlobalesUI.despliege({
+                        simulacionUID
+                    })
+                    contenedor.appendChild(menuGlobal)
+
+                    const botonReconstrucionHub = document.createElement("div")
+                    botonReconstrucionHub.setAttribute("boton", "reconstruccionHubSinConfirmacion")
+                    botonReconstrucionHub.classList.add("botonV1")
+                    botonReconstrucionHub.textContent = "Reconstruir desglose desde los hubs"
+                    contenedor.appendChild(botonReconstrucionHub)
+
                     const porApartamentoDedicado = document.createElement("div");
                     porApartamentoDedicado.classList.add(
                         "flexVertical",
                         "gap6",
                         "backgroundGrey1",
                         "padding6",
-                        "borderRadius12"
+                        "borderRadius12",
+                        "ocultoInicial_enContexto"
                     );
-                    porApartamentoDedicado.setAttribute("zonaOferta", "porApartamentosEspecificos");
                     porApartamentoDedicado.setAttribute("contenedor", "apartamentosSeleccianados")
+                    porApartamentoDedicado.setAttribute("zonaSimulacion", "alojamiento")
                     contenedor.appendChild(porApartamentoDedicado)
 
                     const tituloApartamentos = document.createElement("p")
@@ -41624,12 +41947,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     const contenedorZonaCodigo = document.createElement("div")
                     contenedorZonaCodigo.setAttribute("contenedor", "codigosDescuento")
+                    contenedorZonaCodigo.setAttribute("zonaSimulacion", "codigosDescuento")
                     contenedorZonaCodigo.classList.add(
                         "flexVertical",
                         "gap6",
                         "backgroundGrey1",
                         "padding6",
-                        "borderRadius12"
+                        "borderRadius12",
+                        "ocultoInicial_enContexto"
                     )
 
                     contenedor.appendChild(contenedorZonaCodigo)
@@ -41678,12 +42003,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
 
                     const contenedorServicios = document.createElement("div");
+                    contenedorServicios.setAttribute("zonaSimulacion", "servicios")
                     contenedorServicios.classList.add(
                         "flexVertical",
                         "gap6",
                         "backgroundGrey1",
                         "padding6",
-                        "borderRadius12"
+                        "borderRadius12",
+                        "ocultoInicial_enContexto"
                     );
                     contenedorServicios.setAttribute("contenedor", "servicios")
                     contenedor.appendChild(contenedorServicios)
@@ -41696,20 +42023,18 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     tituloServicios.textContent = "Servicios de la simulación"
                     contenedorServicios.appendChild(tituloServicios)
 
-
-
-
-
                     const serviciosUI = casaVitini.administracion.simuladorDePrecios.componentes.servicios.arranque()
                     contenedorServicios.appendChild(serviciosUI)
 
                     const contenedorComplementosDeAlojamiento = document.createElement("div");
+                    contenedorComplementosDeAlojamiento.setAttribute("zonaSimulacion", "complementosAlojamiento")
                     contenedorComplementosDeAlojamiento.classList.add(
                         "flexVertical",
                         "gap6",
                         "backgroundGrey1",
                         "padding6",
-                        "borderRadius12"
+                        "borderRadius12",
+                        "ocultoInicial_enContexto"
                     );
                     contenedorComplementosDeAlojamiento.setAttribute("contenedor", "complementosAlojamiento")
                     contenedor.appendChild(contenedorComplementosDeAlojamiento)
@@ -41726,14 +42051,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const infoSinAlojamiento = casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.complementosDeAlojamiento.componentesUI.infoSinComplemento()
                     contenedorComplementosDeAlojamiento.appendChild(infoSinAlojamiento)
 
-                    const botonReconstrucionHub = document.createElement("div")
-                    botonReconstrucionHub.setAttribute("boton", "reconstruccionHubSinConfirmacion")
-                    botonReconstrucionHub.classList.add("botonV1")
-                    botonReconstrucionHub.textContent = "Reconstruir desglose desde los hubs"
-                    contenedor.appendChild(botonReconstrucionHub)
-
 
                     const contenedorSimulacion = document.createElement("div")
+                    contenedorSimulacion.classList.add("ocultoInicial_enContexto", "flexVertical")
+                    contenedorSimulacion.setAttribute("zonaSimulacion", "desgloseFinanciero")
                     contenedorSimulacion.setAttribute("contenedor", "simulacion")
                     contenedor.appendChild(contenedorSimulacion)
 
@@ -44633,6 +44954,24 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                             entradaUI.textContent = fechaInicioRango_humana
                             salidaUI.textContent = fechaFinalRango_humana
+                        } else  if (tipoCondicion === "conFechaSalidaEntreRango") {
+                            const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
+                            const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
+
+                            const fechaInicioRango_humana = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaInicioRango_ISO)
+                            const fechaFinalRango_humana = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaFinalRango_ISO)
+
+                            const selectorEntrada = descuentoUI.querySelector("[calendario=entrada]")
+                            const entradaUI = selectorEntrada.querySelector("[fechaUI]")
+
+                            const selectorSalida = descuentoUI.querySelector("[calendario=salida]")
+                            const salidaUI = selectorSalida.querySelector("[fechaUI]")
+
+                            selectorEntrada.setAttribute("memoriaVolatil", fechaInicioRango_ISO)
+                            selectorSalida.setAttribute("memoriaVolatil", fechaFinalRango_ISO)
+
+                            entradaUI.textContent = fechaInicioRango_humana
+                            salidaUI.textContent = fechaFinalRango_humana
                         } else if (tipoCondicion === "porRangoDeFechas") {
                             const fechaInicioRango_ISO = condicion.fechaInicioRango_ISO
                             const fechaFinalRango_ISO = condicion.fechaFinalRango_ISO
@@ -45421,13 +45760,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const destino = pantallaInmersiva.querySelector("[destino=inyector]")
 
                     const tituloUI = document.createElement("p")
-                    tituloUI.classList.add("tituloGris")
+                    tituloUI.classList.add("tituloGris", "padding6")
                     tituloUI.setAttribute("componente", "titulo")
                     tituloUI.textContent = "Añadir condición"
                     constructor.appendChild(tituloUI)
-
-
-
 
                     const divContenedorHorizontalTipoOfertas = document.createElement("div");
                     divContenedorHorizontalTipoOfertas.classList.add("crearOfertaContenedorHorizontalTipoOfertas");
@@ -45455,6 +45791,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             tipo: "conFechaEntradaEntreRango",
                             titulo: "Con fecha de entrada entre rango.",
                             descripcion: "Aplicar esta oferta cuando la fecha de entrada de una reserva está dentro de un rango de fechas."
+                        },
+                        {
+                            tipo: "conFechaSalidaEntreRango",
+                            titulo: "Con fecha de salida entre rango.",
+                            descripcion: "Aplicar esta oferta cuando la fecha de salida de una reserva está dentro de un rango de fechas."
                         },
                         {
                             tipo: "conFechaCreacionEntreRango",
@@ -45885,6 +46226,49 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         })
                         contenedor.appendChild(contenedorFechasUI)
 
+                        return contenedor
+                    },
+                    conFechaSalidaEntreRango: function () {
+
+                        const contenedor = document.createElement("div");
+                        contenedor.setAttribute("zonaOferta", "conFechaSalidaEntreRango");
+                        contenedor.classList.add("contenedorCondicion");
+
+                        const contenedorBotonesGlobales = document.createElement("div")
+                        contenedorBotonesGlobales.classList.add("contenedorBotonesGlobal")
+                        contenedorBotonesGlobales.setAttribute("contenedorEnCondicion", "botones")
+                        contenedor.appendChild(contenedorBotonesGlobales)
+
+                        const botonEliminarCondicion = this.botonEliminarCondicion()
+                        contenedorBotonesGlobales.appendChild(botonEliminarCondicion)
+
+                        const titulo = document.createElement("p");
+                        titulo.classList.add(
+                            "textoCentrado",
+                            "negrita"
+                        );
+                        titulo.textContent = "Con fecha de salida entre rango";
+                        contenedor.appendChild(titulo);
+
+
+                        const descripcionCondicion = document.createElement("p");
+                        descripcionCondicion.classList.add("crearOfertaTituloOpcion");
+                        descripcionCondicion.textContent = "Aplicar esta oferta cuando la fecha de salida de una reserva está dentro de un rango de fechas.";
+                        contenedor.appendChild(descripcionCondicion);
+
+                        const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                            modo: "administracion",
+                            sobreControlConfiguracion: {
+                                configuracionInicio: {
+                                    tituloCalendario: "Seleciona una fecha de inicio del rango"
+                                },
+                                configuracionFin: {
+                                    tituloCalendario: "Seleciona una fecha de fin del rango"
+                                }
+                            }
+
+                        })
+                        contenedor.appendChild(contenedorFechasUI)
                         return contenedor
                     },
                     porRangoDeFechas: function () {
@@ -46516,6 +46900,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                             oferta.condicionesArray.push(estructuraConficion)
 
+                        } else if (tipoCondicion === "conFechaSalidaEntreRango") {
+                            estructuraConficion.tipoCondicion = tipoCondicion
+
+                            const fechaInicioRango_ISO = espacioCondicion.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                            const fechaFinalRango_ISO = espacioCondicion.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                            estructuraConficion.fechaInicioRango_ISO = fechaInicioRango_ISO
+                            estructuraConficion.fechaFinalRango_ISO = fechaFinalRango_ISO
+
+                            oferta.condicionesArray.push(estructuraConficion)
+
                         } else if (tipoCondicion === "porRangoDeFechas") {
                             estructuraConficion.tipoCondicion = tipoCondicion
 
@@ -46534,7 +46928,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         } else {
                             const error = "No se reconoce el tipo de oferta"
-                            return casaVitini.ui.vistas.adver(error)
+                            return casaVitini.ui.vistas.advertenciaInmersiva(error)
                         }
                     })
 

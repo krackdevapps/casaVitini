@@ -3056,6 +3056,45 @@ summary:hover {
     gap: 6px;
 }
 
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    gap: 6px;
+}
+
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion_responsivo {
+    display: none;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 8px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .menuCategoria {
+    text-decoration: none;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: default;
+    border-radius: 10px;
+    transition: all 250ms linear;
+    padding: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
 
 @media screen and (max-width: 968px) {
     [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
@@ -3064,6 +3103,15 @@ summary:hover {
 
     [ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
         display: flex;
+    }
+
+    [zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion {
+        display: none;
+    }
+
+    [zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion_responsivo {
+        display: flex;
+
     }
 }
 
@@ -15805,7 +15853,9 @@ a {
     animation: parpadeoElementoIndicadorAzul 2s infinite linear;
 }
 
-
+.ocultoInicial_enContexto {
+    display: none;
+}
 .ocultoInicial {
     display: none !important;
 }

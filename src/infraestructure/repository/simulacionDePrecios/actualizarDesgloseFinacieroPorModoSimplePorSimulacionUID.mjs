@@ -7,7 +7,6 @@ export const actualizarDesgloseFinacieroPorModoSimplePorSimulacionUID = async (d
         const instantaneaOfertasPorAdministrador = JSON.stringify(data.instantaneaOfertasPorAdministrador)
         const instantaneaSobreControlPrecios = data.instantaneaSobreControlPrecios
         const simulacionUID = data.simulacionUID
-        const apartamentosIDVARRAY = JSON.stringify(data.apartamentosIDVARRAY)
         const consulta = `
         UPDATE
             "simulacionesDePrecio"
@@ -15,10 +14,10 @@ export const actualizarDesgloseFinacieroPorModoSimplePorSimulacionUID = async (d
             "instantaneaNoches" = COALESCE($1::jsonb, "instantaneaNoches"),
             "instantaneaOfertasPorCondicion" = COALESCE($2::jsonb, "instantaneaOfertasPorCondicion"),
             "instantaneaOfertasPorAdministrador" = COALESCE($3::jsonb, "instantaneaOfertasPorAdministrador"),
-            "instantaneaSobreControlPrecios" = COALESCE($4::jsonb, "instantaneaSobreControlPrecios"),
-            "apartamentosIDVARRAY" = $5::jsonb
+            "instantaneaSobreControlPrecios" = COALESCE($4::jsonb, "instantaneaSobreControlPrecios")
+
         WHERE 
-            "simulacionUID" = $6
+            "simulacionUID" = $5
         RETURNING *;
            `;
 
@@ -27,7 +26,6 @@ export const actualizarDesgloseFinacieroPorModoSimplePorSimulacionUID = async (d
             instantaneaOfertasPorCondicion,
             instantaneaOfertasPorAdministrador,
             instantaneaSobreControlPrecios,
-            apartamentosIDVARRAY,
             simulacionUID,
 
         ]

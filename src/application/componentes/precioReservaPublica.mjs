@@ -112,7 +112,6 @@ export const precioReservaPublica = async (entrada) => {
             })
 
             ok.control.codigosDescuentos = controlCodigosDescuentos
-
         }
 
         const soloCodigosBase64Descunetos = []
@@ -124,7 +123,6 @@ export const precioReservaPublica = async (entrada) => {
                 soloCodigosBase64Descunetos.push(codigoB64)
             })
         })
-
 
         const desgloseFinanciero = await procesador({
             entidades: {

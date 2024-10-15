@@ -8,7 +8,6 @@ export const actualizarRangoFechasPorSimulacionUID = async (data) => {
         const fechaEntrada = data.fechaEntrada
         const fechaSalida = data.fechaSalida
         const zonaIDV = data.zonaIDV
-        const apartamentosIDVARRAY = JSON.stringify(data.apartamentosIDVARRAY)
 
         const consulta = `
         UPDATE
@@ -17,10 +16,9 @@ export const actualizarRangoFechasPorSimulacionUID = async (data) => {
             "fechaEntrada" = $1,
             "fechaSalida" = $2,
             "fechaCreacion" = $3,
-            "apartamentosIDVARRAY" = $4,
-            "zonaIDV" = $5
+            "zonaIDV" = $4
         WHERE 
-            "simulacionUID" = $6
+            "simulacionUID" = $5
         RETURNING *;
            `;
 
@@ -28,7 +26,6 @@ export const actualizarRangoFechasPorSimulacionUID = async (data) => {
             fechaEntrada,
             fechaSalida,
             fechaCreacion,
-            apartamentosIDVARRAY,
             zonaIDV,
             simulacionUID
         ]

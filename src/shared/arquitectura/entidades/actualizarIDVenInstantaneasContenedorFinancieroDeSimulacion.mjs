@@ -19,13 +19,6 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
             const instantaneaSobreControlPrecios = contenedor.instantaneaSobreControlPrecios || {}
             const instantaneaOfertasPorCondicion = contenedor.instantaneaOfertasPorCondicion || []
             const instantaneaOfertasPorAdministrador = contenedor.instantaneaOfertasPorAdministrador || []
-            const apartamentosIDVARRAY = contenedor.apartamentosIDVARRAY || []
-
-            apartamentosIDVARRAY.forEach((apartamentoIDV, posicion) => {
-                if (apartamentoIDV === origenIDV) {
-                    apartamentosIDVARRAY[posicion] = destinoIDV;
-                }
-            })
 
             for (const contenedorOferta of instantaneaOfertasPorAdministrador) {
                 const oferta = contenedorOferta.oferta
@@ -74,7 +67,6 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
                 instantaneaOfertasPorCondicion,
                 instantaneaSobreControlPrecios,
                 instantaneaOfertasPorAdministrador,
-                apartamentosIDVARRAY
             })
             await generarDesgloseSimpleGuardarlo(simulacionUID)
         }

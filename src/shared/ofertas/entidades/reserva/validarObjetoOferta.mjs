@@ -125,6 +125,41 @@ export const validarObjetoOferta = async (data) => {
                     tipoVector: "igual"
                 })
 
+            } else if (tipoCondicionIDV === "conFechaSalidaEntreRango") {
+
+                if (Object.keys(condicion).length > 3) {
+                    const m = mensajeError({
+                        tipoCondicionIDV,
+                        numeroMaximo: 3
+                    })
+                    throw new Error(m)
+                }
+
+                const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
+                const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
+                if (!fechaInicioRango_ISO) {
+                    const error = "En el tipo de condicion conFechaSalidaEntreRango no hay definida la fecha de incio de rango."
+                    throw new Error(error)
+                }
+                if (!fechaFinalRango_ISO) {
+                    const error = "En el tipo de condicion conFechaSalidaEntreRango no hay definida la fecha final del rango"
+                    throw new Error(error)
+                }
+                await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: fechaInicioRango_ISO,
+                    nombreCampo: `La fecha de incio de la condicion ${tipoCondicionIDV}`
+                })
+                await validadoresCompartidos.fechas.validarFecha_ISO({
+                    fecha_ISO: fechaFinalRango_ISO,
+                    nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
+                })
+
+                await validadoresCompartidos.fechas.validacionVectorial({
+                    fechaEntrada: fechaInicioRango_ISO,
+                    fechaSalida: fechaFinalRango_ISO,
+                    tipoVector: "igual"
+                })
+
             } else if (tipoCondicionIDV === "conFechaCreacionEntreRango") {
             } else if (tipoCondicionIDV === "porNumeroDeApartamentos") {
 
