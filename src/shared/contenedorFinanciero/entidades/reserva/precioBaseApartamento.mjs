@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 import { obtenerConfiguracionPorApartamentoIDV } from '../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
-import { obtenerPerfilPrecioPorApartamentoUID } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
+import { obtenerPerfilPrecioPorApartamentoIDV } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 import { obtenerImpuestosPorEntidadIDV } from '../../../../infraestructure/repository/impuestos/obtenerImpuestosPorEntidadIDV.mjs';
 
@@ -15,7 +15,7 @@ export const precioBaseApartamento = async (apartamentoIDV) => {
             apartamentoIDV,
             errorSi: "noExiste"
         })).apartamentoUI
-        const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+        const perfilPrecio = await obtenerPerfilPrecioPorApartamentoIDV(apartamentoIDV)
         const precioNetoNoche = perfilPrecio.precio
 
         const detallesApartamento = {

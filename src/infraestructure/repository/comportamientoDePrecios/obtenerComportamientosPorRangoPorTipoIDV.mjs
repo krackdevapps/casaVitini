@@ -7,15 +7,16 @@ export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
     const arrayApartamentos = metadatos.arrayApartamentos
     const tipoIDV = metadatos.tipoIDV
     const estadoArray = metadatos.estadoArray
-
+   
     const consulta = `
          SELECT "comportamientoUID",
           "nombreComportamiento",
           "estadoIDV",
           "contenedor",
           to_char(("contenedor"->>'fechaInicio')::DATE, 'YYYY-MM-DD') as "fechaInicio",
-          to_char(("contenedor"->>'fechaFinal')::DATE, 'YYYY-MM-DD') as "fechaFinal"
-          
+          to_char(("contenedor"->>'fechaFinal')::DATE, 'YYYY-MM-DD') as "fechaFinal",
+          ("contenedor"->>'fechaFinal')::DATE - ("contenedor"->>'fechaInicio')::DATE as duracion_en_dias
+
          FROM "comportamientoPrecios"
          WHERE (
          -- Caso 1: Evento totalmente dentro del rango

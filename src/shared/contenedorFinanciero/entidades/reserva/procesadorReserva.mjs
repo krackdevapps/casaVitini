@@ -92,7 +92,7 @@ export const procesadorReserva = async (data) => {
 
             const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
             apartamentosArray = alojamientosSimulacion.map(a => a.apartamentoIDV)
-            console.log("apartamentosArray", apartamentosArray)
+
             origenSobreControl = "simulacion"
 
             for (const apartamentoIDV of apartamentosArray) {

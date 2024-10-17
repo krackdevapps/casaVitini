@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
-import { obtenerPerfilPrecioPorApartamentoUID } from "../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
+import { obtenerPerfilPrecioPorApartamentoIDV } from "../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs";
 import { Mutex } from "async-mutex";
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
@@ -84,7 +84,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
                 }
             }
 
-            const perfilPrecioDelApartamento = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+            const perfilPrecioDelApartamento = await obtenerPerfilPrecioPorApartamentoIDV(apartamentoIDV)
             if (perfilPrecioDelApartamento.length === 0) {
                 const error = "La configuración no es válida. No se puede establecer en disponible porque esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor, establece un perfil de precio para esta configuración.";
                 throw new Error(error);

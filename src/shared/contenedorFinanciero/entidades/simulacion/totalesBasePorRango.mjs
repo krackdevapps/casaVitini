@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { obtenerPerfilPrecioPorApartamentoUID } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
+import { obtenerPerfilPrecioPorApartamentoIDV } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs';
 import { constructorObjetoEstructuraPrecioDia } from '../reserva/constructorObjetoEstructuraPrecioDia.mjs';
 import { constructorIndiceDias } from '../reserva/constructorIndiceDias.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';

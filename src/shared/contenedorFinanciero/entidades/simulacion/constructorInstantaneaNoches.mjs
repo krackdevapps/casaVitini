@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { obtenerPerfilPrecioPorApartamentoUID } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
+import { obtenerPerfilPrecioPorApartamentoIDV } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs';
 import { constructorObjetoEstructuraPrecioDia } from '../reserva/constructorObjetoEstructuraPrecioDia.mjs';
 import { comportamientosPorRango } from '../../comportamientoPrecios/comportamientosPorRango.mjs'
 import { constructorIndiceDias } from '../reserva/constructorIndiceDias.mjs';
@@ -99,7 +99,7 @@ export const constructorInstantaneaNoches = async (data) => {
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (!apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
 
-                    const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+                    const perfilPrecio = await obtenerPerfilPrecioPorApartamentoIDV(apartamentoIDV)
                     const precioBase = perfilPrecio.precio
 
                     apartamentosPorNoche[apartamentoIDV] = {

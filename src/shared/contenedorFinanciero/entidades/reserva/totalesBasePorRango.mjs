@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { obtenerPerfilPrecioPorApartamentoUID } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
+import { obtenerPerfilPrecioPorApartamentoIDV } from '../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs';
 import { constructorObjetoEstructuraPrecioDia } from './constructorObjetoEstructuraPrecioDia.mjs';
 import { constructorIndiceDias } from './constructorIndiceDias.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
@@ -21,13 +21,8 @@ export const totalesBasePorRango = async (data) => {
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
         const contenedorEntidades = estructura.entidades
-
         const reservaEntidad = contenedorEntidades.reserva
-
-
-
         const instantaneaNoches = reservaEntidad.instantaneaNoches
-
 
         if (!reservaEntidad.hasOwnProperty("desglosePorNoche")) {
             reservaEntidad.desglosePorNoche = {}
@@ -64,9 +59,6 @@ export const totalesBasePorRango = async (data) => {
             const noche = desglosePorNoche[fecha_ISO]
             noche.precioNetoNoche = "0.00"
             for (const apartamentoIDV of apartamentosArray) {
-
-
-
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {

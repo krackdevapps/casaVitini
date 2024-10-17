@@ -200,7 +200,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                     },
                     servicios: {
                         origen: "hubServicios",
-                        serviciosUIDSolicitados: []
+                        serviciosSolicitados: []
                     },
                 },
                 capas: {

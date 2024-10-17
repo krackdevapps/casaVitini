@@ -3,7 +3,7 @@ import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { actualizarPerfilPrecioPorApartamentoUID } from "../../../infraestructure/repository/precios/actualizarPerfilPrecioPorApartamentoUID.mjs";
-import { obtenerPerfilPrecioPorApartamentoUID } from "../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
+import { obtenerPerfilPrecioPorApartamentoIDV } from "../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerImpuestosPorEntidadIDV } from "../../../infraestructure/repository/impuestos/obtenerImpuestosPorEntidadIDV.mjs";
 
@@ -59,7 +59,7 @@ export const establecerNuevoPrecioApartamento = async (entrada) => {
         }
         await actualizarPerfilPrecioPorApartamentoUID(dataActualizarPerfilPrecio)
 
-        const perfilDePrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+        const perfilDePrecio = await obtenerPerfilPrecioPorApartamentoIDV(apartamentoIDV)
         const precioNetoApartamentoPorNoche = perfilDePrecio.precio;
         detallesApartamento.precioNetoPorNoche = precioNetoApartamentoPorNoche;
         detallesApartamento.totalImpuestos = "0.00";

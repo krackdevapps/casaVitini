@@ -397,11 +397,20 @@ summary:hover {
     grid-template-rows: 0.01fr auto;
     grid-gap: 6px;
     scale: 1;
-    transition: scale 250ms ease-in-out;
+    transition: all 250ms ease-in-out;
 
     @starting-style {
         scale: 0;
     }
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/calendario"] .administracion_calendario_marcoMes {
+
+        grid-gap: 4px;
+    }
+
+
 }
 
 
@@ -966,19 +975,21 @@ summary:hover {
     -webkit-user-select: none;
     text-align: center;
     width: fit-content;
-
-    transform: all 250ms;
-
-
+    transition: all 250ms linear;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-
-
     gap: 6px;
     padding: 20px;
     flex: 1;
+}
+
+@media (max-width: 720px) {
+
+    [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI {
+        padding: 4px;
+    }
 }
 
 .calendarioIncrustado {
@@ -1047,6 +1058,18 @@ summary:hover {
     grid-row-gap: 0px;
     align-items: center;
     gap: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 6px;
+    border-radius: 16px;
+    transition: 250ms all linear;
+
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/calendario"] .administracion_calendario_navegacionMes {
+        margin-left: 6px;
+        margin-right: 6px;
+    }
 }
 
 .botonNavegacionMes {
@@ -12549,13 +12572,36 @@ summary:hover {
 [zonaCSS="administracion/calendario"] .administracion_calendario_contenedorInformacionDia {
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto 1fr auto;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
+    flex-direction: column;
+    /* width: 100%; */
+    /* top: 0px; */
+    /* padding-bottom: 6px; */
+    flex: 1;
+    overflow: hidden;
+}
 
-    width: 100%;
-    top: 0px;
-    padding-bottom: 6px;
+[zonaCSS="administracion/calendario"] .celdaDiaContenedorData {
+    display: block;
+    flex: 1;
+    padding-bottom: 10px;
+    padding-right: 14px;
+    padding-left: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: end;
+    transition: all 250 linear;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/calendario"] .celdaDiaContenedorData {
+        padding-bottom: 10px;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
 }
 
 .administracion_calendario_contenedorCapa {
@@ -12573,8 +12619,17 @@ summary:hover {
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-start;
-    padding-right: 14px;
     padding-top: 14px;
+    padding-right: 14px;
+    transition: all 250 linear;
+}
+
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/calendario"] .administracion_calendario_numeroDiaUI {
+        padding-top: 10px;
+        padding-right: 10px;
+    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia {
@@ -12583,6 +12638,8 @@ summary:hover {
     min-width: 20px;
     transition: all 250ms linear;
     opacity: 1;
+    display: flex;
+    border-radius: 12px;
 
     @starting-style {
         opacity: 0;
@@ -12598,10 +12655,14 @@ summary:hover {
     left: 0;
     background-color: rgb(37 37 37 / 0.2);
     border-radius: 12px;
-
     z-index: -1;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:hover {
+    background: grey;
+
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia.diaParcial::before {
@@ -13641,10 +13702,17 @@ summary:hover {
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI .marcoBotonesGlobales {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: auto auto auto auto 1fr;
+    grid-gap: 6px;
+    transition: 250ms all linear;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI .marcoBotonesGlobales {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI .botonSelectorMulticapa {
@@ -15856,6 +15924,7 @@ a {
 .ocultoInicial_enContexto {
     display: none;
 }
+
 .ocultoInicial {
     display: none !important;
 }

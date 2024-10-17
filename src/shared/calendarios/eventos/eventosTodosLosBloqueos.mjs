@@ -18,7 +18,11 @@ export const eventosTodosLosBloqueos = async (fecha) => {
         const calendarioObjeto = {}
         const calendarioBloqueosObjeto = {}
         for (let numeroDia = 1; numeroDia <= numeroDeDiasDelMes; numeroDia++) {
-            const llaveCalendarioObjeto = `${ano}-${mes}-${numeroDia}`
+
+            const diaISO = String(numeroDia).padStart(2, "0")
+            const mesISO = String(mes).padStart(2, "0")
+
+            const llaveCalendarioObjeto = `${ano}-${mesISO}-${diaISO}`
             calendarioObjeto[llaveCalendarioObjeto] = []
             calendarioBloqueosObjeto[llaveCalendarioObjeto] = []
         }
@@ -52,6 +56,7 @@ export const eventosTodosLosBloqueos = async (fecha) => {
             const fechaEntrada = detallesBloqueo.fechaInicio
             const fechaSalida = detallesBloqueo.fechaFin
             const apartamentoIDV = detallesBloqueo.apartamentoIDV
+
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV: apartamentoIDV,
                 errorSi: "noExiste"
@@ -59,18 +64,25 @@ export const eventosTodosLosBloqueos = async (fecha) => {
             const apartamentoUI = apartamento.apartamentoUI
             detallesBloqueo.apartamentoUI = apartamentoUI
             if (tipoBloqueo === "rangoTemporal") {
-                detallesBloqueo.fechaEntrada = fechaEntrada
-                detallesBloqueo.fechaSalida = fechaSalida
+
+                detallesBloqueo.contenedorFechasDelEvento = [{
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
+                    duracion_en_dias:  detallesBloqueo.duracion_en_dias + 1
+                }]
             } else if (tipoBloqueo === "permanente") {
-                detallesBloqueo.fechaEntrada = fechaInicialVirtual
-                detallesBloqueo.fechaSalida = fechaFinalVirtual
+                detallesBloqueo.contenedorFechasDelEvento = [{
+                    fechaEntrada: fechaInicialVirtual,
+                    fechaSalida: fechaFinalVirtual,
+                    duracion_en_dias:  detallesBloqueo.duracion_en_dias + 1
+                }]
             }
 
 
             delete detallesBloqueo.fechaInicio
             delete detallesBloqueo.fechaFin
 
-            detallesBloqueo.duracion_en_dias = detallesBloqueo.duracion_en_dias + 1
+    
             detallesBloqueo.tipoEvento = "todosLosBloqueos"
             detallesBloqueo.eventoUID = "todosLosBloqueos_" + bloqueoUID
             if (tipoBloqueo === "rangoTemporal") {
@@ -80,7 +92,7 @@ export const eventosTodosLosBloqueos = async (fecha) => {
                     const diaFechaInterna = fechaInternaObjeto.day
                     const mesFechaInterna = fechaInternaObjeto.month
                     const anoFechaInterna = fechaInternaObjeto.year
-                    const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
+                    const fechaInternaHumana = `${anoFechaInterna}-${String(mesFechaInterna).padStart(2, "0")}-${String(diaFechaInterna).padStart(2, "0")}`
                     const estructuraBloqueoDia = {
                         eventoUID: "todosLosBloqueos_" + bloqueoUID,
                         fechaEntrada: fechaEntrada,

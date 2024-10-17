@@ -16,9 +16,6 @@ export const eventosPorApartamneto = async (metadatos) => {
             const error = "El campo 'apartamentoIDV' solo puede ser una cadena de letras minúsculas y números."
             throw new Error(error)
         }
-
-
-
         await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
@@ -34,7 +31,10 @@ export const eventosPorApartamneto = async (metadatos) => {
         const numeroDeDiasDelMes = fechaObjeto.daysInMonth;
         const calendarioObjeto = {}
         for (let numeroDia = 1; numeroDia <= numeroDeDiasDelMes; numeroDia++) {
-            const llaveCalendarioObjeto = `${ano}-${mes}-${numeroDia}`
+            const diaISO = String(numeroDia).padStart(2, "0")
+            const mesISO = String(mes).padStart(2, "0")
+
+            const llaveCalendarioObjeto = `${ano}-${mesISO}-${diaISO}`
             calendarioObjeto[llaveCalendarioObjeto] = []
         }
         const obtenerFechasInternas = (fechaInicio_ISO, fechaFin_ISO) => {
@@ -69,9 +69,13 @@ export const eventosPorApartamneto = async (metadatos) => {
             const fechaEntrada = detallesReserva.fechaEntrada
             const fechaSalida = detallesReserva.fechaSalida
             const apartamentoIDVReserva = detallesReserva.apartamentoIDV
-            detallesReserva.duracion_en_dias = detallesReserva.duracion_en_dias + 1
             detallesReserva.tipoEvento = "porApartamento"
             detallesReserva.eventoUID = "porApartamento_" + apartamentoUID
+            detallesReserva.contenedorFechasDelEvento = [{
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
+                duracion_en_dias:  detallesReserva.duracion_en_dias + 1
+            }]
             detallesReserva.apartamentoUI = ((await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV: apartamentoIDVReserva,
                 errorSi: "noExiste"
@@ -82,7 +86,7 @@ export const eventosPorApartamneto = async (metadatos) => {
                 const diaFechaInterna = fechaInternaObjeto.day
                 const mesFechaInterna = fechaInternaObjeto.month
                 const anoFechaInterna = fechaInternaObjeto.year
-                const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
+                const fechaInternaHumana = `${anoFechaInterna}-${String(mesFechaInterna).padStart(2, "0")}-${String(diaFechaInterna).padStart(2, "0")}`
                 const estructuraReservaEnDia = {
                     eventoUID: "porApartamento_" + apartamentoUID,
                     fechaEntrada: fechaEntrada,

@@ -3,7 +3,7 @@ import Decimal from 'decimal.js';
 import { aplicarImpuestos } from './aplicarImpuestos.mjs';
 import { selectorRangoUniversal } from '../selectoresCompartidos/selectorRangoUniversal.mjs';
 import { resolverComportamientosDePrecio } from './resolverComportamientosDePrecio.mjs';
-import { obtenerPerfilPrecioPorApartamentoUID } from '../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs';
+import { obtenerPerfilPrecioPorApartamentoIDV } from '../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs';
 
 
 const constructorObjetoEstructuraPrecioDia = (fechaEntrada, fechaSalida) => {
@@ -35,7 +35,7 @@ export const precioRangoApartamento = async (metadatos) => {
 
         for (const apartamentoIDVGlobal of apartamentosIDVArreglo) {
 
-            const perfilPrecio = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDVGlobal)
+            const perfilPrecio = await obtenerPerfilPrecioPorApartamentoIDV(apartamentoIDVGlobal)
             const precioBase = perfilPrecio.precio
             const apartamentoUI = perfilPrecio.apartamentoUI
             const apartamentoIDV = perfilPrecio.apartamentoIDV

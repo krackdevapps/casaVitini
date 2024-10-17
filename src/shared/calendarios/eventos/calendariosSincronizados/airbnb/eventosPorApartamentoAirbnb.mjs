@@ -35,7 +35,10 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
         const numeroDeDiasDelMes = fechaObjeto.daysInMonth;
         const calendarioObjeto = {}
         for (let numeroDia = 1; numeroDia <= numeroDeDiasDelMes; numeroDia++) {
-            const llaveCalendarioObjeto = `${ano}-${mes}-${numeroDia}`
+            const diaISO = String(numeroDia).padStart(2, "0")
+            const mesISO = String(mes).padStart(2, "0")
+
+            const llaveCalendarioObjeto = `${ano}-${mesISO}-${diaISO}`
             calendarioObjeto[llaveCalendarioObjeto] = []
         }
         const obtenerFechasInternas = (fechaInicio_ISO, fechaFin_ISO) => {
@@ -75,11 +78,15 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
 
             const diferenciaEnDias = fechaSalida_objeto.diff(fechaEntrada_objeto, 'days').days + 1;
 
-            detallesDelEvento.duracion_en_dias = diferenciaEnDias
             detallesDelEvento.fechaEntrada = fechaEntrada
             detallesDelEvento.fechaSalida = fechaSalida
             detallesDelEvento.apartamentoUI = apartamentoUI
             detallesDelEvento.apartamentoIDV = apartamentoIDV
+            detallesDelEvento.contenedorFechasDelEvento = [{
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
+                duracion_en_dias: diferenciaEnDias
+            }]
 
             if (controlRango(fechaCalendario_ConCeros, fechaEntrada, fechaSalida)) {
                 eventosSeleccionados.push(detallesDelEvento)
@@ -91,13 +98,14 @@ export const eventosPorApartamentoAirbnb = async (contenedorDatos) => {
             const fechaSalida = detallesDelEvento.fechaSalida
             const uidEvento = detallesDelEvento.uidEvento
             detallesDelEvento.tipoEvento = "calendarioAirbnb"
+            
             const arrayConFechasInternas = obtenerFechasInternas(fechaEntrada, fechaSalida)
             for (const fechaInterna_ISO of arrayConFechasInternas) {
                 const fechaInternaObjeto = DateTime.fromISO(fechaInterna_ISO)
                 const diaFechaInterna = fechaInternaObjeto.day
                 const mesFechaInterna = fechaInternaObjeto.month
                 const anoFechaInterna = fechaInternaObjeto.year
-                const fechaInternaHumana = `${anoFechaInterna}-${mesFechaInterna}-${diaFechaInterna}`
+                const fechaInternaHumana = `${anoFechaInterna}-${String(mesFechaInterna).padStart(2, "0")}-${String(diaFechaInterna).padStart(2, "0")}`
                 const estructuraReservaEnDia = {
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,

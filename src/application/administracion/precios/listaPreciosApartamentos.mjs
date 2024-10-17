@@ -1,6 +1,6 @@
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
-import { obtenerPerfilPrecioPorApartamentoUID } from "../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoUID.mjs";
+import { obtenerPerfilPrecioPorApartamentoIDV } from "../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerImpuestosPorEntidadIDV } from "../../../infraestructure/repository/impuestos/obtenerImpuestosPorEntidadIDV.mjs";
 
@@ -31,7 +31,7 @@ export const listaPreciosApartamentos = async (entrada, salida) => {
                 apartamento: apartamentoIDV,
                 apartamentoUI: apartamentoUI
             };
-            const precioConfiguracionAlojamiento = await obtenerPerfilPrecioPorApartamentoUID(apartamentoIDV)
+            const precioConfiguracionAlojamiento = await obtenerPerfilPrecioPorApartamentoIDV(apartamentoIDV)
 
             const precioEncontrados = precioConfiguracionAlojamiento;
             const precioApartamento = precioEncontrados.precio;

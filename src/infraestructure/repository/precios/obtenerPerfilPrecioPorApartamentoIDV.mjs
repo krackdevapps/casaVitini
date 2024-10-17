@@ -1,6 +1,6 @@
 import { conexion } from "../globales/db.mjs";
 
-export const obtenerPerfilPrecioPorApartamentoUID = async (apartamentoIDV) => {
+export const obtenerPerfilPrecioPorApartamentoIDV = async (apartamentoIDV) => {
     try {
         const consulta = `
         SELECT 
@@ -16,5 +16,4 @@ export const obtenerPerfilPrecioPorApartamentoUID = async (apartamentoIDV) => {
     } catch (errorAdaptador) {
         throw errorAdaptador
     }
-
 }

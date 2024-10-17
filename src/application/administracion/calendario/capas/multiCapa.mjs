@@ -9,6 +9,12 @@ import { validadoresCompartidos } from "../../../../shared/validadores/validador
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerCalendariosPorPlataformaIDV } from "../../../../infraestructure/repository/calendario/obtenerCalendariosPorPlataformaIDV.mjs";
 import { eventosPorApartamneto } from "../../../../shared/calendarios/eventos/eventosPorApartamento.mjs";
+import { comportamientosDePrecioBasadosEnDiaPorApartamento } from "../../../../shared/calendarios/capasComoComponentes/comportamientosDePrecioBasadosEnDiaPorApartamento.mjs";
+import { comportamientosDePrecioPorApartamento } from "../../../../shared/calendarios/capasComoComponentes/comportamientosDePrecioPorApartamento.mjs";
+import { todosLosComportamientosDePrecioDeTodosLosApartamentos } from "../../../../shared/calendarios/capasComoComponentes/todosLosComportamientosDePrecioDeTodosLosApartamentos.mjs";
+import { todosLosComportamientosDePrecioBasadosEnDia } from "../../../../shared/calendarios/capasComoComponentes/todosLosComportamientosDePrecioBasadosEnDia.mjs";
+import { preciosNocheBasePorApartamento } from "../../../../shared/calendarios/capasComoComponentes/preciosNocheBasePorApartamento.mjs";
+import { todosLosPreciosNetoBaseSumados } from "../../../../shared/calendarios/capasComoComponentes/todosLosPreciosNetoBaseSumados.mjs";
 
 export const multiCapa = async (entrada) => {
     try {
@@ -44,7 +50,11 @@ export const multiCapa = async (entrada) => {
             const numeroDeDiasDelMes = fechaObjeto.daysInMonth;
             const calendarioObjeto = {};
             for (let numeroDia = 1; numeroDia <= numeroDeDiasDelMes; numeroDia++) {
-                const llaveCalendarioObjeto = `${ano}-${mes}-${numeroDia}`;
+
+                const diaISO = String(numeroDia).padStart(2, "0")
+                const mesISO = String(mes).padStart(2, "0")
+
+                const llaveCalendarioObjeto = `${ano}-${mesISO}-${diaISO}`;
                 calendarioObjeto[llaveCalendarioObjeto] = [];
             }
             return calendarioObjeto;
@@ -52,7 +62,8 @@ export const multiCapa = async (entrada) => {
         const mesPorDias = constructorObjetoPorDias(fecha);
         const estructuraGlobal = {
             eventosMes: mesPorDias,
-            eventosEnDetalle: []
+            eventosEnDetalle: [],
+            contenedorDia: {}
         };
         const capasComoComponentes = {
             reservas: async () => {
@@ -72,6 +83,58 @@ export const multiCapa = async (entrada) => {
                     selectorDia.push(...contenedorEventos);
                 }
                 estructuraGlobal.eventosEnDetalle.push(...eventosTodosLosApartamentos_.eventosEnDetalle);
+            },
+            precioNochePorApartamento: async () => {
+                if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
+                    const m = "En el objeto de contenedorCapas, en este tipo de capa, la de precioNochePorApartamento, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                }
+                const capasCompuestas = contenedorCapas?.capasCompuestas
+                if (!capasCompuestas.hasOwnProperty("precioNochePorApartamento")) {
+                    const m = "Dentro de la llave capaCompuesta, se espera una llave precioNochePorApartamento"
+                    throw new Error(m)
+                }
+                const apartamentosIDV = validadoresCompartidos.tipos.array({
+                    array: capasCompuestas.precioNochePorApartamento,
+                    nombreCampo: "La llave precioNochePorApartamento",
+                    filtro: "strictoIDV",
+                    nombreCompleto: "En el array de capasCompuestas precioNochePorApartamento",
+                    sePermitenDuplicados: "no"
+                })
+                const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
+                if (configuracionesApartamentos.length > 0) {
+                    const apartamentosIDVValidos = configuracionesApartamentos.map((apartamentoIDV) => {
+                        return apartamentoIDV.apartamentoIDV;
+                    });
+                    const controlApartamentosF2 = apartamentosIDV.every(apartamentosIDV => apartamentosIDVValidos.includes(apartamentosIDV));
+                    if (!controlApartamentosF2) {
+                        const elementosFaltantes = apartamentosIDV.filter(apartamentosIDV => !apartamentosIDVValidos.includes(apartamentosIDV));
+                        let error;
+                        if (elementosFaltantes.length === 1) {
+                            error = "En el array de apartamentosIDV hay un identificador que no existe: " + elementosFaltantes[0];
+                        } if (elementosFaltantes.length === 2) {
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + elementosFaltantes.join("y");
+                        }
+                        if (elementosFaltantes.length > 2) {
+                            const conComa = elementosFaltantes;
+                            const ultima = elementosFaltantes.pop();
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + conComa.join(", ") + " y " + ultima;
+                        }
+                        throw new Error(error);
+                    }
+                    const desglosePorNoche = await preciosNocheBasePorApartamento({
+                        fecha: fecha,
+                        apartamentosIDV
+                    });
+
+                    estructuraGlobal.contenedorDia.desglosePorNoche = desglosePorNoche
+                }
+            },
+            todosLosPreciosSumados: async () => {
+                const desglosePorNoche = await todosLosPreciosNetoBaseSumados({
+                    fecha: fecha
+                });
+                estructuraGlobal.contenedorDia.desglosePorNoche = desglosePorNoche
             },
             todosLosBloqueos: async () => {
                 await eliminarBloqueoCaducado();
@@ -133,6 +196,89 @@ export const multiCapa = async (entrada) => {
                         estructuraGlobal.eventosEnDetalle.push(...eventos.eventosEnDetalle);
                     }
                 }
+            },
+            comportamientosPorApartamento: async () => {
+                if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
+                    const m = "En el objeto de contenedorCapas, en este tipo de capa, la de comportamientosPorApartamento, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                }
+                const capasCompuestas = contenedorCapas?.capasCompuestas
+                if (!capasCompuestas.hasOwnProperty("comportamientosPorApartamento")) {
+                    const m = "Dentro de la llave capaCompuesta, se espera una llave comportamientosPorApartamento"
+                    throw new Error(m)
+                }
+                const apartamentosIDV = validadoresCompartidos.tipos.array({
+                    array: capasCompuestas.comportamientosPorApartamento,
+                    nombreCampo: "La llave comportamientosPorApartamento",
+                    filtro: "strictoIDV",
+                    nombreCompleto: "En el array de capasCompuestas comportamientosPorApartamento",
+                    sePermitenDuplicados: "no"
+                })
+                const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
+                if (configuracionesApartamentos.length > 0) {
+                    const apartamentosIDVValidos = configuracionesApartamentos.map((apartamentoIDV) => {
+                        return apartamentoIDV.apartamentoIDV;
+                    });
+                    const controlApartamentosF2 = apartamentosIDV.every(apartamentosIDV => apartamentosIDVValidos.includes(apartamentosIDV));
+                    if (!controlApartamentosF2) {
+                        const elementosFaltantes = apartamentosIDV.filter(apartamentosIDV => !apartamentosIDVValidos.includes(apartamentosIDV));
+                        let error;
+                        if (elementosFaltantes.length === 1) {
+                            error = "En el array de apartamentosIDV hay un identificador que no existe: " + elementosFaltantes[0];
+                        } if (elementosFaltantes.length === 2) {
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + elementosFaltantes.join("y");
+                        }
+                        if (elementosFaltantes.length > 2) {
+                            const conComa = elementosFaltantes;
+                            const ultima = elementosFaltantes.pop();
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + conComa.join(", ") + " y " + ultima;
+                        }
+                        throw new Error(error);
+                    }
+                    //  for (const apartamentoIDV of apartamentosIDV) {
+
+                    const eventosTipoRango = await comportamientosDePrecioPorApartamento({
+                        fecha: fecha,
+                        apartamentosIDV
+                    });
+                    for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoRango.eventosMes)) {
+                        const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                        selectorDia.push(...contenedorEventos);
+                    }
+                    estructuraGlobal.eventosEnDetalle.push(...eventosTipoRango.eventosEnDetalle);
+
+                    const eventosTipoDia = await comportamientosDePrecioBasadosEnDiaPorApartamento({
+                        fecha: fecha,
+                        apartamentosIDV
+                    });
+                    for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoDia.eventosMes)) {
+                        const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                        selectorDia.push(...contenedorEventos);
+                    }
+
+                    estructuraGlobal.eventosEnDetalle.push(...eventosTipoDia.eventosEnDetalle);
+                    //    }
+                }
+            },
+            todosLosComportamientosDePrecio: async () => {
+                const eventosTipoRango = await todosLosComportamientosDePrecioDeTodosLosApartamentos({
+                    fecha: fecha
+                });
+                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoRango.eventosMes)) {
+                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                    selectorDia.push(...contenedorEventos);
+                }
+                estructuraGlobal.eventosEnDetalle.push(...eventosTipoRango.eventosEnDetalle);
+
+                const eventosTipoDia = await todosLosComportamientosDePrecioBasadosEnDia({
+                    fecha: fecha,
+                });
+                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoDia.eventosMes)) {
+                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                    selectorDia.push(...contenedorEventos);
+                }
+
+                estructuraGlobal.eventosEnDetalle.push(...eventosTipoDia.eventosEnDetalle);
             },
             todoAirbnb: async () => {
 
@@ -213,11 +359,15 @@ export const multiCapa = async (entrada) => {
                 }
             },
             global: async () => {
+                // Orden de aparticion
                 await capasComoComponentes.reservas();
                 await capasComoComponentes.todosLosApartamentos();
+                await capasComoComponentes.todosLosComportamientosDePrecio()
                 await capasComoComponentes.todosLosBloqueos();
+                await capasComoComponentes.todosLosPreciosSumados();
+
                 await capasComoComponentes.todoAirbnb();
-            }
+            },
         };
         const capasDisponibles = Object.keys(capasComoComponentes);
         const todosPresentes = capas.every(capa => capasDisponibles.includes(capa));
