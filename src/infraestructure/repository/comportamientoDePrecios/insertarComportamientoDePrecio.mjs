@@ -4,7 +4,7 @@ export const insertarComportamientoDePrecio = async (data) => {
         const nombreComportamiento = data.nombreComportamiento
         const testing = data.testing
         const contenedor = data.contenedor
-        const estadoInicalDesactivado = "desactivado";
+        const estadoInicial = data.estadoInicial || "desactivado";
         const consulta = `
             INSERT INTO "comportamientoPrecios"
             (
@@ -25,7 +25,7 @@ export const insertarComportamientoDePrecio = async (data) => {
             `;
         const parametros = [
             nombreComportamiento,
-            estadoInicalDesactivado,
+            estadoInicial,
             contenedor,
             testing
         ]

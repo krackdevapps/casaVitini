@@ -50,7 +50,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         if (tipoEntidad === "apartamento") {
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
-                numeroDeLLavesMaximo: 5
+                numeroDeLLavesMaximo: 7
             })
 
             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
@@ -68,6 +68,22 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
+
+            const apartamentoUIPublico = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.apartamentoUIPublico,
+                nombreCampo: "El campo del apartamentoUIPublico",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            const desfinicionPublica = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.desfinicionPublica,
+                nombreCampo: "El campo del desfinicionPublica",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
 
             const caracteristicas = validadoresCompartidos.tipos.array({
                 array: entrada.body.caracteristicas,
@@ -93,7 +109,9 @@ export const modificarEntidadAlojamiento = async (entrada) => {
             const apartamentoComoEntidadActualizado = await actualizarApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDVNuevo: apartamentoIDV,
                 apartamentoUI: apartamentoUI,
-                apartamentoIDVSelector: entidadIDV
+                apartamentoIDVSelector: entidadIDV,
+                apartamentoUIPublico,
+                desfinicionPublica
             })
             if (apartamentoComoEntidadActualizado.rowCount === 0) {
                 const error = "No se han podido guardar los datos porque no se ha encontrado el apartamento.";

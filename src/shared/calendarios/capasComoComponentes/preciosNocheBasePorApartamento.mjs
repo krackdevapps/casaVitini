@@ -19,7 +19,7 @@ export const preciosNocheBasePorApartamento = async (metadatos) => {
         const ano = fechaArray[1]
         const fechaObjeto = DateTime.fromObject({ year: ano, month: mes, day: 1 });
         const numeroDeDiasDelMes = fechaObjeto.daysInMonth;
-        console.log("numeroDeDiasDelMes", numeroDeDiasDelMes, typeof numeroDeDiasDelMes)
+
         const fechaObjetoFin = DateTime.fromObject({ year: ano, month: mes, day: numeroDeDiasDelMes });
 
         const calendarioObjeto = {}
@@ -40,7 +40,7 @@ export const preciosNocheBasePorApartamento = async (metadatos) => {
                 reserva: {
                     origen: "externo",
                     fechaEntrada: fechaObjeto.toISODate(),
-                    fechaSalida:  fechaObjetoFin.plus({ days: 1 }).toISODate(),
+                    fechaSalida: fechaObjetoFin.plus({ days: 1 }).toISODate(),
                     fechaActual: fechaActual_ISO,
                     apartamentosArray: apartamentosIDV,
                     origenSobreControl: "reserva"

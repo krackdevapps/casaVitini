@@ -5,21 +5,30 @@ export const insertarApartamentoComoEntidad = async (data) => {
 
         const apartamentoIDV = data.apartamentoIDV
         const apartamentoUI = data.apartamentoUI
+        const apartamentoUIPublico = data.apartamentoUIPublico
+        const desfinicionPublica = data.desfinicionPublica
 
         const consulta = `
         INSERT INTO 
         apartamentos
         (
        "apartamentoIDV",
-        "apartamentoUI"
+        "apartamentoUI",
+        "apartamentoUIPublico",
+        "desfinicionPublica"
         )
         VALUES 
-        ( $1, $2 )
+        ( $1, $2, $3, $4 )
         RETURNING 
         "apartamentoIDV"
         `;
-
-        const resuelve = await conexion.query(consulta, [apartamentoIDV, apartamentoUI])
+        const parametros = [
+            apartamentoIDV,
+            apartamentoUI,
+            apartamentoUIPublico,
+            desfinicionPublica
+        ]
+        const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {
             const error = "No se ha insertado el apartamento como entidad"
             throw error

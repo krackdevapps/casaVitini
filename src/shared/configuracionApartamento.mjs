@@ -41,6 +41,9 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
                 errorSi: "noExiste"
             })
             configuracion[apartamentoIDV].apartamentoUI = apartamentoEntidad.apartamentoUI
+            configuracion[apartamentoIDV].apartamentoUIPublico = apartamentoEntidad.apartamentoUIPublico
+            configuracion[apartamentoIDV].desfinicionPublica = apartamentoEntidad.desfinicionPublica
+
             const caracteristicasDeLApartamento = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
             configuracion[apartamentoIDV].caracteristicas = caracteristicasDeLApartamento
             const configuracionHabitacionesPorApartamento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)

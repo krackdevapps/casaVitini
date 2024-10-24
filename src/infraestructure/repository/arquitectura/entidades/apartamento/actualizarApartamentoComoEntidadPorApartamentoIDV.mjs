@@ -6,20 +6,27 @@ export const actualizarApartamentoComoEntidadPorApartamentoIDV = async (data) =>
         const apartamentoIDVNuevo = data.apartamentoIDVNuevo
         const apartamentoUI = data.apartamentoUI
         const apartamentoIDVSelector = data.apartamentoIDVSelector
+        const apartamentoUIPublico = data.apartamentoUIPublico
+        const desfinicionPublica = data.desfinicionPublica
+
 
         const consulta = `
         UPDATE apartamentos
         SET 
         "apartamentoIDV" = COALESCE($1, "apartamentoIDV"),
-        "apartamentoUI"  = COALESCE($2, "apartamentoUI")
+        "apartamentoUI"  = COALESCE($2, "apartamentoUI"),
+        "apartamentoUIPublico"  = COALESCE($3, "apartamentoUIPublico"),
+        "desfinicionPublica"  = COALESCE($4, "desfinicionPublica")
         WHERE 
-        "apartamentoIDV" = $3
+        "apartamentoIDV" = $5
         RETURNING
         *
         `;
         const parametros = [
             apartamentoIDVNuevo,
             apartamentoUI,
+            apartamentoUIPublico,
+            desfinicionPublica,
             apartamentoIDVSelector
         ];
         const resuelve = await conexion.query(consulta, parametros)

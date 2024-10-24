@@ -14,8 +14,7 @@ export const obtenerTodasLasSimulaciones = async () => {
         "nombre",
         to_char("fechaCreacion", 'YYYY-MM-DD') as "fechaCreacion", 
         to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
-        to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
-        "apartamentosIDVARRAY"
+        to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida"
         FROM
         "simulacionesDePrecio"
         `;

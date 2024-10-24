@@ -29,7 +29,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
         if (tipoEntidad === "apartamento") {
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
-                numeroDeLLavesMaximo: 3
+                numeroDeLLavesMaximo: 4
             })
             const apartamentoUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.apartamentoUI,
@@ -43,6 +43,21 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 string: entrada.body.apartamentoIDV || apartamentoUI.toLowerCase().replace(/[^a-z0-9]/g, ''),
                 nombreCampo: "El apartamentoIDV",
                 filtro: "strictoIDV",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+            const apartamentoUIPublico = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.apartamentoUIPublico,
+                nombreCampo: "El campo del apartamentoUIPublico",
+                filtro: "strictoConEspacios",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            const desfinicionPublica = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.desfinicionPublica,
+                nombreCampo: "El campo del desfinicionPublica",
+                filtro: "strictoConEspacios",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
@@ -80,7 +95,9 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
 
             const dataInsertarApartamentoComoEntidad = {
                 apartamentoIDV: apartamentoIDV_unico,
-                apartamentoUI: apartamentoUI
+                apartamentoUI: apartamentoUI,
+                apartamentoUIPublico,
+                desfinicionPublica
             }
             const nuevoApartamentoComEntidad = await insertarApartamentoComoEntidad(dataInsertarApartamentoComoEntidad)
             const ok = {

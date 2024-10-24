@@ -15,17 +15,19 @@ export const crearComportamiento = async (entrada) => {
         await mutex.acquire();
         const comportamiento = {
             nombreComportamiento: entrada.body.nombreComportamiento,
-            estadoInicalDesactivado: "desactivado",
+            estadoInicialDesactivado: "desactivado",
             contenedor: entrada.body.contenedor,
-            estadoInicalDesactivado: "crear",
+            estadoInicialDesactivado: "crear",
         }
+
+
+        await validarComportamiento(comportamiento)
+        await campoDeTransaccion("iniciar")
+
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
             comportamiento.testingVI = testingVI
         }
-
-        await validarComportamiento(comportamiento)
-        await campoDeTransaccion("iniciar")
 
         const dataEvitarDuplicados = {
             transaccion: "crear",
@@ -38,7 +40,8 @@ export const crearComportamiento = async (entrada) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado correctamente el comportamiento",
-            comportamientoUID: nuevoComportamiento.comportamientoUID
+            comportamientoUID: nuevoComportamiento.comportamientoUID,
+            estadoInicial: "desactivado"
         };
         return ok
 

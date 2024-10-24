@@ -35,16 +35,16 @@ export const comportamientosDePrecioBasadosEnDiaPorApartamento = async (metadato
             estadoArray: ["activado"],
         })
         comportamientosDePrecios.push(...comportamientosDelApartamentoBasadosEnDias)
-        console.log("comportamientosDelApartamentoBasadosEnDias", comportamientosDelApartamentoBasadosEnDias)
+
 
         const comportamientosUIDUnicos = new Set();
         const comportamientosDePreciosUnicos = comportamientosDelApartamentoBasadosEnDias.filter(o => {
             if (comportamientosUIDUnicos.has(o.comportamientoUID)) {
-                console.log("duplicado", o.comportamientoUID)
+
                 return false; // Es un duplicado
             } else {
                 comportamientosUIDUnicos.add(o.comportamientoUID);
-                console.log("unico", o.comportamientoUID)
+
 
                 return true; // Es único
             }

@@ -30,13 +30,14 @@ export const calendario = async (entrada) => {
         const tipo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipo,
             nombreCampo: "El campo del tipo de calenadrio",
-            filtro: "strictoConEspacios",
+            filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
+            soloMinusculas: "no"
         })
-        if (tipo !== "actual" && tipo !== "personalizado") {
-            const error = "El campo de tipo solo puede ser actual o personalizado"
+
+        if (tipo !== "actual" && tipo !== "personalizado" && tipo !== "rangoAnualDesdeFecha") {
+            const error = "El campo de tipo solo puede ser actual, personalizado, rangoAnualDesdeFecha"
             throw new Error(error)
         }
 
@@ -219,9 +220,89 @@ export const calendario = async (entrada) => {
                 }
             };
             return calendario
-        } if (tipo === "rangoDeFechas") {
-            
+        } if (tipo === "rangoAnualDesdeFecha") {
+            validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
+                objeto: entrada.body,
+                numeroDeLLavesMaximo: 3
+            })
+
+            const ano = validadoresCompartidos.tipos.numero({
+                number: entrada.body.ano,
+                nombreCampo: "El campo del año",
+                filtro: "numeroSimple",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+            const mes = validadoresCompartidos.tipos.numero({
+                number: entrada.body.mes,
+                nombreCampo: "El campo del mes",
+                filtro: "numeroSimple",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+            })
+
+            if (mes < 1 || mes > 12) {
+                const error = "El mes solo puede ser un campo entre 1 y 12";
+                throw new Error(error);
+            }
+            if (ano < 1 || ano > 9999) {
+                const error = "El año solo puede ser un número entre 1 y 9999";
+                throw new Error(error);
+            }
+            // Crear un DateTime para el primer día del mes y año dado
+            const fechaInicial = DateTime.local(ano, mes, 1);
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            const fechaPresente = DateTime.now().setZone(zonaHoraria).startOf('day');
+            const unAñoAntes = fechaInicial.minus({ years: 1 });
+            const unAñoDespues = fechaInicial.plus({ years: 1 }).endOf('month');
+
+            // Inicializamos un array para las fechas
+            let fechas = [];
+
+            // Iteramos desde unAñoAntes hasta unAñoDespues
+            let fechaActual = unAñoAntes;
+
+            let arbolFechas = {};
+
+            // Iteramos desde unAñoAntes hasta unAñoDespues
+
+            while (fechaActual <= unAñoDespues) {
+                // Obtener el año y mes actuales
+                const añoActual = fechaActual.year;
+                const mesActual = fechaActual.month;
+
+                // Si el año no existe en el objeto, lo inicializamos
+                if (!arbolFechas[añoActual]) {
+                    arbolFechas[añoActual] = {};
+                }
+
+                // Si el mes no existe en el objeto dentro del año, lo inicializamos
+                if (!arbolFechas[añoActual][mesActual]) {
+                    arbolFechas[añoActual][mesActual] = {
+                        dias: [],
+                        posicionDia1: fechaActual.weekday
+                    };
+                }
+
+                // Agregamos la fecha actual al array correspondiente
+                arbolFechas[añoActual][mesActual].dias.push(fechaActual.toISODate());
+
+                // Pasamos al siguiente día
+                fechaActual = fechaActual.plus({ days: 1 });
+            }
+            const ok = {
+                ok: "Aqui tienes los datos de contruccio del calendario",
+                calendario: "ok",
+                fechaPresente: fechaPresente.toISODate(),
+                arbolFechas
+            }
+            return ok
         }
+
+
+
+
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

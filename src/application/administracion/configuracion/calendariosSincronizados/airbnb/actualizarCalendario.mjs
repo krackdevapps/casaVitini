@@ -75,7 +75,6 @@ export const actualizarCalendario = async (entrada) => {
                     throw new Error(errorDeFormado);
                 }
             } catch (errorCapturado) {
-                console.error(errorCapturado)
                 throw new Error(errorDeFormado);
             }
         }

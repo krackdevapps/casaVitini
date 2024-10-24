@@ -15,6 +15,7 @@ import { todosLosComportamientosDePrecioDeTodosLosApartamentos } from "../../../
 import { todosLosComportamientosDePrecioBasadosEnDia } from "../../../../shared/calendarios/capasComoComponentes/todosLosComportamientosDePrecioBasadosEnDia.mjs";
 import { preciosNocheBasePorApartamento } from "../../../../shared/calendarios/capasComoComponentes/preciosNocheBasePorApartamento.mjs";
 import { todosLosPreciosNetoBaseSumados } from "../../../../shared/calendarios/capasComoComponentes/todosLosPreciosNetoBaseSumados.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const multiCapa = async (entrada) => {
     try {
@@ -61,10 +62,26 @@ export const multiCapa = async (entrada) => {
         };
         const mesPorDias = constructorObjetoPorDias(fecha);
         const estructuraGlobal = {
+            capasIDV: capas,
             eventosMes: mesPorDias,
             eventosEnDetalle: [],
-            contenedorDia: {}
+            contenedorDia: {},
+            apartamentos: {}
         };
+
+        const inyectarTodosLosApartamentos = async () => {
+            const configuracionesAlojamiento = await obtenerTodasLasConfiguracionDeLosApartamento()
+            for (const alojamiento of configuracionesAlojamiento) {
+                const apartamentoIDV = alojamiento.apartamentoIDV
+                const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV: apartamentoIDV,
+                    errorSi: "noExiste"
+                }))
+                const apartamentoUI = apartamento.apartamentoUI
+                estructuraGlobal.apartamentos[apartamentoIDV] = apartamentoUI
+            }
+        }
+
         const capasComoComponentes = {
             reservas: async () => {
                 const eventosReservas_ = await eventosReservas(fecha);
@@ -215,6 +232,7 @@ export const multiCapa = async (entrada) => {
                     sePermitenDuplicados: "no"
                 })
                 const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
+                estructuraGlobal.apartamentos = {}
                 if (configuracionesApartamentos.length > 0) {
                     const apartamentosIDVValidos = configuracionesApartamentos.map((apartamentoIDV) => {
                         return apartamentoIDV.apartamentoIDV;
@@ -257,7 +275,15 @@ export const multiCapa = async (entrada) => {
                     }
 
                     estructuraGlobal.eventosEnDetalle.push(...eventosTipoDia.eventosEnDetalle);
-                    //    }
+
+                    for (const apartamentoIDV of apartamentosIDV) {
+                        const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV: apartamentoIDV,
+                            errorSi: "noExiste"
+                        }))
+                        const apartamentoUI = apartamento.apartamentoUI
+                        estructuraGlobal.apartamentos[apartamentoIDV] = apartamentoUI
+                    }
                 }
             },
             todosLosComportamientosDePrecio: async () => {
@@ -279,6 +305,8 @@ export const multiCapa = async (entrada) => {
                 }
 
                 estructuraGlobal.eventosEnDetalle.push(...eventosTipoDia.eventosEnDetalle);
+                await inyectarTodosLosApartamentos()
+
             },
             todoAirbnb: async () => {
 
@@ -365,8 +393,9 @@ export const multiCapa = async (entrada) => {
                 await capasComoComponentes.todosLosComportamientosDePrecio()
                 await capasComoComponentes.todosLosBloqueos();
                 await capasComoComponentes.todosLosPreciosSumados();
-
                 await capasComoComponentes.todoAirbnb();
+
+                await inyectarTodosLosApartamentos()
             },
         };
         const capasDisponibles = Object.keys(capasComoComponentes);

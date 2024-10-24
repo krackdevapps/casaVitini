@@ -49,7 +49,7 @@ describe('behavior of prices clients', () => {
             body: {
                 nombreComportamiento: "Comportameinto para testin",
                 testing: "testing",
-                estadoInicalDesactivado: "desactivado",
+                estadoInicialDesactivado: "desactivado",
                 contenedor: {
                     tipo: "porRango",
                     fechaInicio: "2024-08-14",

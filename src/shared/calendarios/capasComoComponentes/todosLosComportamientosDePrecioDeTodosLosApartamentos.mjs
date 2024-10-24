@@ -65,11 +65,11 @@ export const todosLosComportamientosDePrecioDeTodosLosApartamentos = async (meta
         const comportamientosUIDUnicos = new Set();
         const comportamientosDePreciosUnicos = comportamientosDePrecios.filter(o => {
             if (comportamientosUIDUnicos.has(o.comportamientoUID)) {
-                console.log("duplicado", o.comportamientoUID)
+
                 return false; // Es un duplicado
             } else {
                 comportamientosUIDUnicos.add(o.comportamientoUID);
-                console.log("unico", o.comportamientoUID)
+
 
                 return true; // Es único
             }

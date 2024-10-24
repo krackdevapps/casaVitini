@@ -304,7 +304,7 @@ export const validarObjetoReservaPublica = async (data) => {
                         return helpers.message(mensajeError);
                     }
                 })
-                .required()
+                .allow("")
                 .messages(commonMessages),
         }).required()
             .messages(commonMessages)

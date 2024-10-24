@@ -8,8 +8,8 @@ export const validarComportamiento = async (comportamiento) => {
         const schema = Joi.object({
             comportamientoUID: Joi.optional(),
             nombreComportamiento: Joi.required(),
-            testingVI: Joi.string(),
-            estadoInicalDesactivado: Joi.string(),
+            // testingVI: Joi.string(),
+            estadoInicialDesactivado: Joi.string(),
             transaccion: Joi.string(),
             contenedor: Joi.object({
                 tipo: Joi.required(),

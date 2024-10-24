@@ -54,31 +54,21 @@
 }
 
 #uiLogo {
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    height: fit-content;
-    width: fit-content;
-    position: relative;
+    height: 70px;
+    width: 171px;
     color: rgba(0, 0, 0, 0.9);
-    white-space: nowrap;
-    letter-spacing: 0px;
-    margin: 0px;
-
-
     cursor: default;
-    transition: all 500ms;
-    display: flex;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    border: 1px solid transparent;
-
+    transition: all 500ms linear;
     z-index: 10;
+    background-size: contain;
+
+    /* background-size: contain; */
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: url(/componentes/imagenes/logov.svg);
 }
 
-#imgLogo {
+.imgLogo {
     background: transparent;
     pointer-events: none;
     scale: 1;
@@ -495,10 +485,14 @@ header .zonas {
         grid-template-columns: 0% 100%;
     }
 
-    #imgLogo {
+    .imgLogo {
         width: 140px;
     }
+    #uiLogo{
+      /* width: 140px;   */
+        height: 56px;
 
+    }
     .uiPanelGlobal {
         align-items: center;
     }

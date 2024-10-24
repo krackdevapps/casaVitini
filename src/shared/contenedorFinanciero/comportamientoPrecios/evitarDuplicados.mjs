@@ -5,6 +5,10 @@ import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from "../../../
 import { obtenerComportamientosPorRangoPorCreacionPorTipoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorCreacionPorTipoIDV.mjs"
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
 import { obtenerComportamientosPorTipoIDVPorDiasArray } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs"
+import { obtenerComportamientosPorTipoPorApartamentoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoPorApartamentoIDV.mjs"
+import { obtenerComportamientosDistintosPorTipoPorApartamentoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoPorApartamentoIDV.mjs"
+import { DateTime } from "luxon"
+import { obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray.mjs"
 
 export const evitarDuplicados = async (data) => {
     try {
@@ -35,16 +39,26 @@ export const evitarDuplicados = async (data) => {
         if (transaccion === "crear" && comportamientosConNombreIgual.length > 0) {
             throw new Error(mensajeNombreRepetido);
         }
+        const comportamientosEnConflicto = []
+        const diasMap = {
+            1: 'lunes',
+            2: 'martes',
+            3: 'miercoles', // Sin acento
+            4: 'jueves',
+            5: 'viernes',
+            6: 'sabado', // Sin acento
+            7: 'domingo'
+        }
+
         if (tipoIDV === "porCreacion" || tipoIDV === "porRango") {
             const comportamientosEnConflicto = []
-            const apartamentosIDVContenedor = {}
-
             const fechaInicio_ISO = contenedor.fechaInicio
             const fechaFinal_ISO = contenedor.fechaFinal
             const fechaInicio_creacionReserva = contenedor.fechaInicio_creacionReserva
             const fechaFinal_creacionReserva = contenedor.fechaFinal_creacionReserva
             const apartamentos = contenedor.apartamentos
             const preContenedorApartamentos = {}
+            const apartamentosIDVArray = apartamentos.map(c => c.apartamentoIDV)
 
             for (const apartamento of apartamentos) {
                 const apartamentoIDV = apartamento.apartamentoIDV
@@ -61,14 +75,11 @@ export const evitarDuplicados = async (data) => {
                 }
             }
 
-
             const contenedorApartamentosIDV = []
-
             apartamentos.forEach((detallesApartmento) => {
                 const apartamentoIDV = detallesApartmento.apartamentoIDV
                 contenedorApartamentosIDV.push(apartamentoIDV)
             })
-
 
             const arrayApartamentos = Object.keys(preContenedorApartamentos)
             const comportamientosPorRango = await obtenerComportamientosPorRangoPorTipoIDV({
@@ -90,6 +101,31 @@ export const evitarDuplicados = async (data) => {
                 estadoArray: ["activado", "desactivado"]
             })
             comportamientosEnConflicto.push(...comportamientosPorAntelacion)
+
+            const fechaInicio_objeto = DateTime.fromISO(fechaInicio_ISO, { zone: 'utc' });
+            const fechaFinal_objeto = DateTime.fromISO(fechaFinal_ISO, { zone: 'utc' });
+
+            const contenedorNombresDiaSoliciados = {}
+
+            let inicioDelRango = fechaInicio_objeto;
+            while (inicioDelRango <= fechaFinal_objeto) {
+
+                const diaComoPosicion = DateTime.fromISO(inicioDelRango).toFormat('c')
+                if (Object.keys(contenedorNombresDiaSoliciados).length >= 7) {
+                    break
+                }
+                const nombreDia = diasMap[diaComoPosicion]
+                contenedorNombresDiaSoliciados[nombreDia] = true
+                inicioDelRango = inicioDelRango.plus({ days: 1 });
+            }
+
+            const comportamientosPorDias = await obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray({
+                tipoIDV: "porDias",
+                diasArray: Object.keys(contenedorNombresDiaSoliciados),
+                apartamentosIDVArray: apartamentosIDVArray
+
+            })
+            comportamientosEnConflicto.push(...comportamientosPorDias)
 
             if (transaccion === "actualizar") {
                 const selector = comportamientosEnConflicto.findIndex((item) => {
@@ -131,12 +167,24 @@ export const evitarDuplicados = async (data) => {
             const apartamentos = contenedor.apartamentos
 
             const comportamientosPorTipoPorDiasEnElRango = []
+            const comportamientosPorRango = []
+            const apartamentosIDVArray = apartamentos.map(c => c.apartamentoIDV)
+
+
+            const comportamientosCompartidosPorApartamentos = await obtenerComportamientosPorTipoPorApartamentoIDV({
+                tiposIDVArray: ["porCreacion", "porRango"],
+                apartamentosIDVArray: apartamentosIDVArray,
+            })
+            comportamientosPorRango.push(...comportamientosCompartidosPorApartamentos)
+
             if (transaccion === "crear") {
-                const comportamientosPorDiasArray = await obtenerComportamientosPorTipoIDVPorDiasArray({
-                    tipoIDV: tipoIDV,
-                    diasArray: diasArray
+                const comportamientosPorDias = await obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray({
+                    tipoIDV: "porDias",
+                    diasArray: diasArray,
+                    apartamentosIDVArray: apartamentosIDVArray
+
                 })
-                comportamientosPorTipoPorDiasEnElRango.push(...comportamientosPorDiasArray)
+                comportamientosEnConflicto.push(...comportamientosPorDias)
             }
             if (transaccion === "actualizar") {
                 const comportamientosDistintosPorDiasArray = await obtenerComportamientosDistintosPorTipoIDVPorDiasArray({
@@ -144,7 +192,7 @@ export const evitarDuplicados = async (data) => {
                     diasArray: diasArray,
                     comportamientoUID: comportamientoUID,
                 })
-                comportamientosPorTipoPorDiasEnElRango.push(...comportamientosDistintosPorDiasArray)
+                comportamientosEnConflicto.push(...comportamientosDistintosPorDiasArray)
             }
             const contenedorApartamentosIDV = []
 
@@ -153,54 +201,39 @@ export const evitarDuplicados = async (data) => {
                 contenedorApartamentosIDV.push(apartamentoIDV)
             })
 
-            const comportamientosEnConflicto = []
+            comportamientosPorRango.forEach((c) => {
+                const fechaFinal = c.contenedor.fechaFinal
+                const fechaInicio = c.contenedor.fechaInicio
 
-            for (const detallesComportamiento of comportamientosPorTipoPorDiasEnElRango) {
-                const comportamientoUID = detallesComportamiento.comportamientoUID
-                const nombreComportamiento = detallesComportamiento.nombreComportamiento
+                const fechaFinal_objeto = DateTime.fromISO(fechaFinal, { zone: 'utc' });
+                const fechaInicio_objeto = DateTime.fromISO(fechaInicio, { zone: 'utc' });
+
+                let inicioDelRango = fechaInicio_objeto;
+
+
+                while (inicioDelRango <= fechaFinal_objeto) {
+                    const diaComoPosicion = DateTime.fromISO(inicioDelRango).toFormat('c')
+                    if (diasArray.includes(diasMap[diaComoPosicion])) {
+                        comportamientosEnConflicto.push(c)
+                        break
+                    }
+                    inicioDelRango = inicioDelRango.plus({ days: 1 });
+                }
+            })
+
+
+
+            for (const detallesComportamiento of comportamientosEnConflicto) {
                 const apartamentos = detallesComportamiento.contenedor.apartamentos
 
-
-                let interruptorInsercion = false
-                for (const [i, detallesApartmento] of apartamentos.entries()) {
-                    const apartamentoIDV = detallesApartmento.apartamentoIDV
-                    if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
-                        const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                            apartamentoIDV: apartamentoIDV,
-                            errorSi: "noExiste"
-                        })).apartamentoUI
-                        detallesApartmento.apartamentoUI = apartamento
-                        interruptorInsercion = true
-                    } else {
-                        apartamentos.splice(i, 1);
-                    }
+                for (const c of apartamentos) {
+                    const apartamentoIDV = c.apartamentoIDV
+                    const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                        apartamentoIDV: apartamentoIDV,
+                        errorSi: "noExiste"
+                    })).apartamentoUI
+                    c.apartamentoUI = apartamento
                 }
-                if (interruptorInsercion) {
-                    comportamientosEnConflicto.push(detallesComportamiento)
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
 
             if (comportamientosEnConflicto.length > 0) {

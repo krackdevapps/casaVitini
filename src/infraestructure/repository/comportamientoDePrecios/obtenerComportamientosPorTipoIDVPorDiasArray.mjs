@@ -14,7 +14,7 @@ export const obtenerComportamientosPorTipoIDVPorDiasArray = async (data) => {
                    SELECT 1
                    FROM jsonb_array_elements_text(contenedor->'dias') AS elem
                    WHERE elem::text = ANY ($2::text[])
-            );;
+            )  ;
             `
         const parametros = [
             tipoIDV,

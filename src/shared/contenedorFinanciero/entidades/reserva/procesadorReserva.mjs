@@ -52,9 +52,6 @@ export const procesadorReserva = async (data) => {
                 tipoVector: "diferente"
             })
 
-
-
-
             apartamentosArray = validadoresCompartidos.tipos.array({
                 array: data.apartamentosArray,
                 nombreCampo: "El array de apartamentos en el procesador de precios",
