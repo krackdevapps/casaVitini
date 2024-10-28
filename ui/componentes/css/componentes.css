@@ -8936,7 +8936,7 @@ summary:hover {
 [zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_contenedorDetalles {
     background: rgba(255, 255, 255, 0.3);
     padding-left: 16px;
-    border-radius: 10px;
+    border-radius: 20px;
     text-decoration: none;
     color: black;
     user-select: none;
@@ -8976,7 +8976,6 @@ summary:hover {
 
 [zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_bloqueTitulo {
     border-radius: 10px;
-    padding: 6px;
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -8985,13 +8984,14 @@ summary:hover {
 }
 
 [zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .contenedorCaracteristicas {
-    border-radius: 10px;
+    border-radius: 19px;
     padding: 6px;
     display: flex;
     gap: 6px;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
+    border: 1px solid #00000038;
 }
 
 [zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_info {
@@ -9008,7 +9008,7 @@ summary:hover {
 
 [zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_contenedorBotones {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 6px;
     justify-content: center;
@@ -9067,7 +9067,7 @@ summary:hover {
     padding: 20px;
     cursor: default;
     background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    border-radius: 20px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     transition: all 500ms linear;
@@ -9399,7 +9399,7 @@ summary:hover {
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 6px;
-    align-items: center;
+    align-items: stretch;
 }
 
 [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .arquitecturaConfCrearConfiguracion_titulo {
@@ -12547,7 +12547,7 @@ summary:hover {
     align-items: stretch;
     gap: 6px;
     padding: 6px;
-    border-radius: 15px;
+    border-radius: 20px;
     background: rgba(255, 255, 255, 0.2);
 }
 
@@ -12712,6 +12712,10 @@ summary:hover {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 }
+[zonaCSS="administracion/calendario"] .diaPasado {
+    background-color: hsl(0deg 0% 50% / 72%) !important;
+    /* transition: background 250ms linear */
+}
 
 [zonaCSS="administracion/calendario"] .diaSelecionable,
 .administracion_calendario_componenteCalendario_dia.diaSelecionable:hover {
@@ -12720,8 +12724,8 @@ summary:hover {
 
 [zonaCSS="administracion/calendario"] .diaParcial,
 .administracion_calendario_componenteCalendario_dia.diaParcial::before {
-    background: rgb(255 214 0 / 72%);
-    transition: background 250ms linear
+    background: rgb(253 132 0 / 50%);   
+    transition: background 250ms linear;
 }
 
 [zonaCSS="administracion/calendario"] .diaCompleto,
@@ -12732,12 +12736,15 @@ summary:hover {
 
 [zonaCSS="administracion/calendario"] .diaDisponible,
 .administracion_calendario_componenteCalendario_dia.diaDisponible::before {
-    background-color: rgba(87 197 78 / 86%);
+    background-color: #a29f9f6e;
     transition: background 250ms linear
 }
 
 [zonaCSS="administracion/calendario"] .diaDeHoy::before {
     border: 3px solid rgb(0 0 0 / 50%);
+}
+[zonaCSS="administracion/calendario"] .diaDeHoy_calendarioVertical {
+    background-color: #3b92c7;
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_reservaUIInicio {

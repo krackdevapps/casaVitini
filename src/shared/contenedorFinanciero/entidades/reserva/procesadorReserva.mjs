@@ -7,6 +7,8 @@ import { constructorInstantaneaNoches } from "./constructorInstantaneaNoches.mjs
 import { totalesBasePorRango } from "./totalesBasePorRango.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
+import { DateTime } from "luxon"
+import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 
 
 export const procesadorReserva = async (data) => {
@@ -69,9 +71,12 @@ export const procesadorReserva = async (data) => {
             const reserva = await obtenerReservaPorReservaUID(reservaUID)
             fechaEntrada = reserva.fechaEntrada
             fechaSalida = reserva.fechaSalida
-            fechaActual = reserva.fechaCreacion_simple
             origenSobreControl = "reserva"
-
+            const fechaCreacionReservaUTC = reserva.fechaCreacion_simple
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            const fechaISO_TZ = DateTime.fromISO(fechaCreacionReservaUTC, { zone: "utc" })
+            .setZone(zonaHoraria);
+            fechaActual = fechaISO_TZ
             const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
             apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
                 return detallesApartamento.apartamentoIDV
@@ -86,6 +91,11 @@ export const procesadorReserva = async (data) => {
             fechaEntrada = simulacion.fechaEntrada
             fechaSalida = simulacion.fechaSalida
             fechaActual = simulacion.fechaCreacion
+            const fechaCreacionSimulacionUTC = simulacion.fechaCreacion_simple
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            const fechaISO_TZ = DateTime.fromISO(fechaCreacionSimulacionUTC, { zone: "utc" })
+            .setZone(zonaHoraria);
+            fechaActual = fechaISO_TZ
 
             const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
             apartamentosArray = alojamientosSimulacion.map(a => a.apartamentoIDV)

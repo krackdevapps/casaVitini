@@ -73,7 +73,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
         })
         if (configuracionesDisponibles.length === 0) {
             const error = "No hay ningún apartamento disponible.";
-            throw new Error(error);
+            //throw new Error(error);
         }
         const apartamentosDisponbiles = [];
         const apartamentosConfiguradosDisponibles = [];

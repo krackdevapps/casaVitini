@@ -31,9 +31,9 @@ export const enviarMailDeAvisoPorReservaPublica = async (reservaUID) => {
 
         const origen = process.env.CORREO_DIRRECION_DE_ORIGEN
         const destino = correoCopiaReservaPublica
-        const asunto = `Aviso de reserva preconfirmada: ${reservaUID}`
+        const asunto = `Aviso de solicitud de reserva: ${reservaUID}`
         const mensaje = `<html>
-        Se ha realizado una reserva desde la zona publica. A Continuacion se detallan los datos mas relevantes:
+        Se ha realizado una solicitud de reserva desde la zona publica. A Continuacion se detallan los datos mas relevantes:
         <br>
         Reserva: ${reservaUID}
         Titular: ${nombreCompletoTitularReserva}

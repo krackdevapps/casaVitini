@@ -12,6 +12,7 @@ import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../..
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs";
 import { insertarDesgloseFinacieroPorReservaUID } from "../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs";
 import { generadorReservaUID } from "../../../../shared/reservas/utilidades/generadorReservaUID.mjs";
+import { codigoZonaHoraria } from "../../../../shared/configuracion/codigoZonaHoraria.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -137,8 +138,9 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 })
             }
             const origen = "administracion";
-            const fechaCreacion = DateTime.utc().toISO();
-            const fechaCreacion_simple = DateTime.utc().toISODate();
+            const fechaCreacionUTC = DateTime.utc().toISO();
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            const fechaCreacion_simple_TZ = DateTime.now().setZone(zonaHoraria).toISODate();
 
             const estadoPago = "noPagado";
             await campoDeTransaccion("iniciar")
@@ -148,7 +150,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                 fechaSalida: fechaSalida,
                 estadoReserva: estadoInicialIDV,
                 origen: origen,
-                fechaCreacion: fechaCreacion,
+                fechaCreacion: fechaCreacionUTC,
                 estadoPago: estadoPago,
                 reservaUID: reservaUID,
                 testingVI: testingVI
@@ -194,7 +196,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                         origen: "externo",
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
-                        fechaActual: fechaCreacion_simple,
+                        fechaActual: z,
                         apartamentosArray: apartamentos,
                         origenSobreControl: "reserva"
                     },
