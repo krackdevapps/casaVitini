@@ -8,14 +8,14 @@ export const procesadorServicios = async (data) => {
         const estructura = data.estructura
         const origen = data.origen
         const serviciosSolicitados = data.serviciosSolicitados
-        const opcionesSolicitadasDelservicios = {}
+        const opcionesSolicitadasDelservicio = {}
         const servicios = []
         if (origen === "hubServicios") {
             for (const servicioSol of serviciosSolicitados) {
                 const servicioUID = servicioSol.servicioUID
                 const servicio = await obtenerServicioPorServicioUID(servicioUID)
                 servicios.push(servicio)
-                opcionesSolicitadasDelservicios[servicioUID] = servicioSol
+                opcionesSolicitadasDelservicio[servicioUID] = servicioSol
             }
 
         } else if (origen === "instantaneaServiciosEnReserva") {
@@ -28,7 +28,7 @@ export const procesadorServicios = async (data) => {
             serviciosDeLaReserva.forEach(s => {
                 const servicioUID = s.servicioUID
                 const opcionesSel = s.opcionesSel
-                opcionesSolicitadasDelservicios[servicioUID] = {
+                opcionesSolicitadasDelservicio[servicioUID] = {
                     servicioUID,
                     opcionesSeleccionadas: opcionesSel
                 }
@@ -44,7 +44,7 @@ export const procesadorServicios = async (data) => {
             serviciosDeLaSimulacion.forEach(s => {
                 const servicioUID = s.servicioUID
                 const opcionesSel = s.opcionesSel
-                opcionesSolicitadasDelservicios[servicioUID] = {
+                opcionesSolicitadasDelservicio[servicioUID] = {
                     servicioUID,
                     opcionesSeleccionadas: opcionesSel
                 }
@@ -58,7 +58,7 @@ export const procesadorServicios = async (data) => {
         await constructorInstantaneaServicios({
             estructura,
             servicios,
-            opcionesSolicitadasDelservicios
+            opcionesSolicitadasDelservicio
         })
     } catch (error) {
         throw error

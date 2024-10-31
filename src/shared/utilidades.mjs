@@ -227,6 +227,28 @@ export const utilidades = {
             return fechasRango1.filter(fechaControl => !fechasRango2.includes(fechaControl));
         }
     },
+    validarRutaObjeto: (data) => {
+        
+        const objetoParaValidar = data.objetoParaValidar
+        const ruta = data.ruta
+
+        const propiedades = ruta.split('.');
+        let actual = objetoParaValidar;
+
+        for (const prop of propiedades) {
+            if (actual && typeof actual === 'object' && prop in actual) {
+                actual = actual[prop];
+            } else {
+                return {
+                    estado: false
+                }; // La propiedad no existe
+            }
+        }
+        return {
+            estado: true,
+            contenedor: actual
+        }; // La propiedad existe
+    },
     ralentizador: async (milisegundos) => {
         await new Promise(resolve => setTimeout(resolve, Number(milisegundos)));
     },

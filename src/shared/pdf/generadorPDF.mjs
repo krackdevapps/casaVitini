@@ -214,6 +214,9 @@ export const generadorPDF = async (reserva) => {
 
                     alignment: "right"
                 },
+                nombreSimple: {
+                    color: "grey"
+                },
                 textoTitular: {
                     fontSize: 8,
                     alignment: "right"
@@ -262,6 +265,12 @@ export const generadorPDF = async (reserva) => {
                 },
                 tablaTotales: {
                     margin: [0, 5, 0, 15],
+                    bold: true,
+                    fontSize: 8,
+                    color: 'black',
+                },
+                contenedorServicio: {
+                    margin: [0, 0, 0, 15],
                     bold: true,
                     fontSize: 8,
                     color: 'black',
@@ -325,10 +334,87 @@ export const generadorPDF = async (reserva) => {
             }
             docDefinition.content.push(tablaFormatoPDFMake)
         }
-        const totalesPorServicio = contenedorFinanciero.desgloseFinanciero.entidades.servicios.desglosePorServicios
-        if (Object.entries(totalesPorServicio).length > 0) {
-            const tablaFormatoPDFMake = {
-                style: 'tablaTotales',
+        const complementosDeAlojamiento = contenedorFinanciero.desgloseFinanciero.entidades.complementosAlojamiento.desglosePorComplementoDeAlojamiento
+        if (complementosDeAlojamiento.length > 0) {
+
+            const contenedorServicio = {
+                style: 'contenedorServicio',
+                layout: 'lightHorizontalLines',
+                table: {
+                    widths: ['*', 300],
+                    body: [
+                        [
+                            [
+                                {
+                                    text: 'Complementos de alojamiento',
+                                    style: 'tituloColumnaIzquierda',
+                                }
+                            ],
+                            [
+                                {
+                                    text: 'Total',
+                                    style: 'tituloColumnaDerecha',
+                                }
+                            ]
+                        ]
+                    ]
+                }
+            }
+            const complementosAlojamiento_comoObjeto = {}
+            complementosDeAlojamiento.forEach(c => {
+                const apartamentoIDV = c.apartamentoIDV
+                const apartamentoUI = c.apartamentoUI
+                if (!complementosAlojamiento_comoObjeto.hasOwnProperty(apartamentoIDV)) {
+                    complementosAlojamiento_comoObjeto[apartamentoIDV] = {
+                        apartamentoUI,
+                        complementos: []
+                    }
+                }
+                complementosAlojamiento_comoObjeto[apartamentoIDV].complementos.push(c)
+            })
+
+
+            for (const [apartamentoIDV, contenedor] of Object.entries(complementosAlojamiento_comoObjeto)) {
+
+                const apartamentoUI = contenedor.apartamentoUI
+                const complementos = contenedor.complementos            
+
+                const filaServicio = [
+                    { text: apartamentoUI, style: 'nombreSimple' },
+                    { text: "", style: 'valorTotal' }
+                ];
+                contenedorServicio.table.body.push(filaServicio);
+                for (const c of complementos) {
+                    const complementoUI = c.complementoUI
+                    const precio = c.precio
+                    const tipoPrecio = c.tipoPrecio
+                    const noches = c.noches
+                    const total = c.total
+
+                    let precioFinal
+                    if (tipoPrecio === "fijoPorReserva") {
+                        precioFinal = `Total: ${precio}$`
+                    } else if (tipoPrecio === "porNoche") {
+                        precioFinal = `${precio}$ por noche (${noches} noches). Total: ${total}$`
+
+                    }
+                    const filaOpcion = [
+                        { text: complementoUI, style: 'apartamentoNombre' },
+                        { text: precioFinal, style: 'valorTotal' }
+                    ];
+                    contenedorServicio.table.body.push(filaOpcion);
+                    
+                }
+          
+            }
+ 
+            docDefinition.content.push(contenedorServicio)
+        }
+        const desglosePorServicios = contenedorFinanciero.desgloseFinanciero.entidades.servicios.desglosePorServicios
+        if (desglosePorServicios.length > 0) {
+
+            const contenedorServicio = {
+                style: 'contenedorServicio',
                 layout: 'lightHorizontalLines',
                 table: {
                     widths: ['*', 100],
@@ -346,30 +432,53 @@ export const generadorPDF = async (reserva) => {
                                     style: 'tituloColumnaDerecha',
                                 }
                             ]
-                        ],
+                        ]
                     ]
                 }
             }
-            for (const [apartamentoIDV, contenedor] of Object.entries(totalesPorServicio)) {
-                const nombre = contenedor.nombre
-                const totalNeto = contenedor.contenedor?.precio ||" Error"
-                const fila = [
-                    [
-                        {
-                            text: nombre,
-                            style: 'apartamentoNombre',
-                        },
-                    ],
-                    [
-                        {
-                            text: totalNeto + '$',
-                            style: 'valorTotal',
-                        },
-                    ],
-                ]
-                tablaFormatoPDFMake.table.body.push(fila)
+
+            for (const s of desglosePorServicios) {
+                console.log("con", s)
+                const servicio = s.servicio
+                const opcionesSeleccionadas = s.opcionesSolicitadasDelservicio.opcionesSeleccionadas
+                const contenedor = servicio.contenedor
+                const gruposDeOpciones = contenedor.gruposDeOpciones
+
+                const tituloPublico = contenedor.tituloPublico
+               
+
+                const filaServicio = [
+                    { text: tituloPublico, style: 'nombreSimple' },
+                    { text: "", style: 'valorTotal' }
+                ];
+                contenedorServicio.table.body.push(filaServicio);
+                for (const [grupoIDV, opcionesSel] of Object.entries(opcionesSeleccionadas)) {
+                    if (opcionesSel.length > 0) {
+                        console.log("gruposDeOpciones", gruposDeOpciones)
+
+                        const grupoSelecioonado = gruposDeOpciones[grupoIDV]
+                        const opcionesGrupo = grupoSelecioonado.opcionesGrupo
+                        console.log("opcionesGrupo", opcionesGrupo)
+                        opcionesGrupo.forEach(og => {
+                            const opcionIDV = og.opcionIDV
+                            if (opcionesSel.includes(opcionIDV)) {
+                                const nombreOpcion = og.nombreOpcion
+                                const precioOpcion = og.precioOpcion ? og.precioOpcion : "0.00"
+                                const filaOpcion = [
+                                    { text: nombreOpcion, style: 'apartamentoNombre' },
+                                    { text: precioOpcion + "$", style: 'valorTotal' }
+                                ];
+                                contenedorServicio.table.body.push(filaOpcion);
+
+                            }
+
+                        });
+                    }
+                }
+          
             }
-            docDefinition.content.push(tablaFormatoPDFMake)
+ 
+            docDefinition.content.push(contenedorServicio)
         }
         const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
         if (impuestos.length > 0) {

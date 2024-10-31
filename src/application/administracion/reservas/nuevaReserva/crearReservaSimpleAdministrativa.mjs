@@ -196,7 +196,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                         origen: "externo",
                         fechaEntrada: fechaEntrada,
                         fechaSalida: fechaSalida,
-                        fechaActual: z,
+                        fechaActual: fechaCreacion_simple_TZ,
                         apartamentosArray: apartamentos,
                         origenSobreControl: "reserva"
                     },

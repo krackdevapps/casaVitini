@@ -55,7 +55,7 @@ export const constructorInstantaneaComplementosAlojamiento = async (data) => {
                 const nochesDeLaReserva = estructura.entidades.reserva.global.rango.nochesReserva    
                 const precioNetoComplemento = new Decimal(precioComplemento).mul(nochesDeLaReserva)
                 complemento.noches = nochesDeLaReserva
-                complemento.total = precioNetoComplemento
+                complemento.total = precioNetoComplemento.toFixed(2)
                 global.totales.totalNeto = precioNetoComplemento.plus(global.totales.totalNeto)
             }
         }

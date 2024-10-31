@@ -536,6 +536,16 @@ export const validadoresCompartidos = {
                 } catch (errorCapturado) {
                     throw errorCapturado
                 }
+            } else if (filtro === "rutaArbol") {
+                try {
+                    const filtro = /^[a-zA-Z0-9.]+$/;
+                    if (!filtro.test(string)) {
+                        const mensaje = `${nombreCampo} solo acepta una cadena como una ruta de un arbol compuesta por de mayúsculas, minúsculas, números y puntos unicamente.`
+                        throw new Error(mensaje)
+                    }
+                } catch (errorCapturado) {
+                    throw errorCapturado
+                }
             } else if (filtro === "strictoConEspacios") {
                 try {
                     const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA()$]+$/g;
@@ -1399,6 +1409,16 @@ export const validadoresCompartidos = {
                 'object.base': '{{#label}} debe ser un objeto',
                 'array.includesRequiredUnknowns': '{{#label}} debe contener al menos 1 valor requerido',
 
+            }
+        }
+    },
+    diccionarios: {
+        configuracionesUsuario: {
+            arbol: {
+                calendario: {
+                    tipoSeleccion:  ["porDiasIndividual", "porRango"],
+                    tipoVision:  ["horizontal", "vertical"]
+                }
             }
         }
     }

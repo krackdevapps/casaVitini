@@ -1074,7 +1074,7 @@ const casaVitini = {
 
                         const posicionAleatoria = Math.floor(Math.random() * tiempos.length)
                         const tiempoAleatorio = tiempos[posicionAleatoria];
-
+                        console.log("p", posicionAleatoria)
                         const mmssASegundos = (tiempo) => {
                             const [minutos, segundos] = tiempo.split(':').map(Number);
                             return (minutos * 60) + segundos;
@@ -1087,7 +1087,7 @@ const casaVitini = {
                         if (video.buffered.length > 0) {
                             const bufferedEnd = video.buffered.end(video.buffered.length - 1);
                             const duration = video.duration;
-                            if (bufferedEnd >= duration * 0.1) {
+                            if (bufferedEnd >= duration * 0.01) {
                                 video.style.display = "block"
                             }
                         }
@@ -12919,7 +12919,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 for (const contenedorServicio of desglosePorServicios) {
 
                                     const servicio = contenedorServicio.servicio
-                                    const opcionesSolicitadasDelservicios = contenedorServicio.opcionesSolicitadasDelservicios
+                                    const opcionesSolicitadasDelservicio = contenedorServicio.opcionesSolicitadasDelservicio
 
                                     const servicioUID_enReserva = servicio.servicioUID
                                     const serviciosRenderizados = porServicio_renderizado.querySelectorAll("[servicioUID]")
@@ -13079,7 +13079,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                                 const nombreOpcion = op.nombreOpcion
                                                 const precioOpcion = op.precioOpcion ? op.precioOpcion + "$" : "0.00$ (Sin coste añadido)"
 
-                                                const selectorOpcionesGrupo = opcionesSolicitadasDelservicios.opcionesSeleccionadas[grupoIDV] || []
+                                                const selectorOpcionesGrupo = opcionesSolicitadasDelservicio.opcionesSeleccionadas[grupoIDV] || []
                                                 if (selectorOpcionesGrupo.includes(opcionIDV)) {
                                                     const contenedorOpcion = document.createElement("div")
                                                     contenedorOpcion.classList.add(
@@ -35125,10 +35125,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     main.setAttribute("zonaCSS", "administracion/configuracion")
                     const marcoElastico = document.querySelector("[componente=marcoElastico]")
                     marcoElastico.style.gap = "4px"
-                    const transaccion = {
+
+                    const respuestaServidor = await casaVitini.shell.servidor({
                         zona: "administracion/configuracion/horaDeEntradaSalida/obtenerConfiguracion"
-                    }
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                    })
                     if (respuestaServidor?.error) {
                         casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
@@ -54040,6 +54040,38 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         selectorContenedorBotones.removeAttribute("style")
                     },
                 },
+                configuracion: {
+                    obtenerConfiguracion: async (data) => {
+                        const paresConfIDV = data.paresConfIDV
+                        const respuestaServidor = await casaVitini.shell.servidor({
+                            zona: "administracion/configuracion/configuracionUsuario/obtenerConfiguracion",
+                            paresConfIDV: paresConfIDV
+                        })
+                        if (respuestaServidor?.error) {
+                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                        }
+                        if (respuestaServidor?.ok) {
+                            return respuestaServidor
+                        }
+                    },
+                    actualizarConfiguracion: async (data) => {
+
+                        const configuracionIDV = data.configuracionIDV
+                        const valor = data.valor
+
+                        const respuestaServidor = await casaVitini.shell.servidor({
+                            zona: "administracion/configuracion/configuracionUsuario/actualizarConfiguracion",
+                            configuracionIDV,
+                            valor
+                        })
+                        if (respuestaServidor?.error) {
+                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                        }
+                        if (respuestaServidor?.ok) {
+                            return respuestaServidor
+                        }
+                    }
+                }
             },
             nuevoUsuario: {
                 arranque: function () {
@@ -54150,13 +54182,27 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const sectionRenderizada = document.querySelector("main")
                     sectionRenderizada.style.maxWidth = "100%"
 
-                    const contenedorBotonesGlobales = this.contenedorBotonesGlobaltes()
+                    const contenedorBotonesGlobales = this.contenedorBotonesGlobales()
                     main.appendChild(contenedorBotonesGlobales)
                     const traductorURL = casaVitini.administracion.calendario.traductorURL()
-                    traductorURL.vision = !traductorURL?.vision ? "horizontal" : traductorURL.vision
-                    const vision = traductorURL.vision
 
-                    if (vision === "horizontal") {
+                    const configuracionUI = await casaVitini.administracion.usuarios.detallesUsuario.configuracion.obtenerConfiguracion({
+                        paresConfIDV: [
+                            "calendario.tipoSeleccion",
+                            "calendario.tipoVision"
+                        ]
+                    })
+                    const vision = configuracionUI.paresConfiguracion["calendario.tipoVision"]
+                    const tipoSeleccion = configuracionUI.paresConfiguracion["calendario.tipoSeleccion"]
+                    const botonSel = main.querySelector("[panel=botonesGlobales] [boton=tipoSel]")
+
+                    if (!tipoSeleccion) {
+                        botonSel.setAttribute("tipoSel", "porDiasIndividual")
+                    } else {
+                        botonSel.setAttribute("tipoSel", tipoSeleccion)
+
+                    }
+                    if (!vision || vision === "horizontal") {
                         return this.vision.visionHorizontal()
                     } else if (vision === "vertical") {
                         return this.vision.visionVertical()
@@ -54192,9 +54238,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 }
                 return contenedor
             },
-            contenedorBotonesGlobaltes: () => {
+            contenedorBotonesGlobales: () => {
                 const marcoBotonesGlobales = document.createElement("nav")
                 marcoBotonesGlobales.setAttribute("class", "marcoBotonesGlobales")
+                marcoBotonesGlobales.setAttribute("panel", "botonesGlobales")
 
                 const botonSelectorMultiCapa = document.createElement("div")
                 botonSelectorMultiCapa.classList.add("botonGlobal")
@@ -54224,7 +54271,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const botonIrAFecha = document.createElement("div")
                 botonIrAFecha.classList.add("botonGlobal")
                 botonIrAFecha.textContent = "Ir a fecha"
-                botonIrAFecha.addEventListener("click", (e) => {
+                botonIrAFecha.addEventListener("click", () => {
                     casaVitini.administracion.calendario.componentesUI.menuIrAFecha.arranque()
                 })
                 marcoBotonesGlobales.appendChild(botonIrAFecha)
@@ -54236,6 +54283,15 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     casaVitini.administracion.calendario.vision.controladorVision()
                 })
                 marcoBotonesGlobales.appendChild(botonVision)
+
+                const botonTipoSel = document.createElement("div")
+                botonTipoSel.classList.add("botonGlobal")
+                botonTipoSel.setAttribute("boton", "tipoSel")
+                botonTipoSel.textContent = "Selección"
+                botonTipoSel.addEventListener("click", () => {
+                    casaVitini.administracion.calendario.seleccion.controladorSeleccion()
+                })
+                marcoBotonesGlobales.appendChild(botonTipoSel)
 
                 return marcoBotonesGlobales
             },
@@ -54420,7 +54476,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const bloqueDia = document.createElement("li")
                     bloqueDia.setAttribute("class", "administracion_calendario_componenteCalendario_dia")
                     // bloqueDia.addEventListener("click", (e) => {
-                    //     //  casaVitini.administracion.calendario.controladorSelecionDias.selectorDia(e)
+                    //     //  casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.hub(e)
                     // })
                     const contenedorDia = document.createElement("div")
                     contenedorDia.classList.add("administracion_calendario_contenedorInformacionDia")
@@ -54537,7 +54593,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                 tituloMesGlobal.textContent = fechaUI;
                                 tituloMesGlobal.setAttribute("mesVisible", mesVisibleActual);
-                                traductorURL.fecha = `${mes}-${ano}`;
+                                traductorURL.fecha = `${Number(mes)}-${ano}`;
 
                                 setTimeout(() => {
                                     casaVitini.administracion.calendario.controladorRegistros({
@@ -54606,7 +54662,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const configuracionCalendario = data.configuracionCalendario
                     const instanciaUID_main = data.instanciaUID_main
                     const traductorURL = data.traductorURL
-                    traductorURL.vision = "vertical"
+                    // traductorURL.vision = "vertical"
                     const calendarioDestino = document.querySelector(`[instanciaUID="${instanciaUID_main}"] [mesIDV="${String(configuracionCalendario.mes).padStart(2, "0")}-${configuracionCalendario.ano}"]`)
 
                     if (calendarioDestino) {
@@ -54764,7 +54820,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     fechaCompararISO: fechaISO
                                 })
                                 const bloqueDia = document.createElement("li")
-                                bloqueDia.style.background = "#a29f9f6e"
+                                //bloqueDia.style.background = "#a29f9f6e"
                                 // bloqueDia.style.background = "hsl(0deg 0% 50.2% / 10%)"
 
                                 bloqueDia.classList.add(
@@ -54867,7 +54923,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const instanciaUID_main = main.getAttribute("instanciaUID")
                 const calendarioRenderizado = main.querySelector(`[componente=calendarioGlobal]`)
                 const traductorURL = this.traductorURL()
-                const vision = traductorURL.vision
+                const vision = document.querySelector("[vision]").getAttribute("vision")
                 const fecha = traductorURL.fecha.split("-")
                 const mesRenderizado = fecha[0]
                 const anoRenderizado = fecha[1]
@@ -54999,7 +55055,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const mes = fecha[0]
                 const capasSimples = traductorURL.capas || []
                 const capasCompuestas = traductorURL.capasCompuestas || {}
-                const vision = traductorURL.vision
 
                 const constructoCapasSimples = capasSimples.map((capa) => {
                     const capaSnake = casaVitini.utilidades.cadenas.camelToSnake(capa)
@@ -55019,7 +55074,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const constructoFinalCC = constructoCapasCompuestas.length > 0 ? `/${constructoCapasCompuestas.join("/")}` : ""
 
 
-                const constructoURL = "/administracion/calendario" + `/fecha:${mes}-${ano}` + `/vision:${vision}` + constructoFinalCS + constructoFinalCC
+                const constructoURL = "/administracion/calendario" + `/fecha:${mes}-${ano}` + constructoFinalCS + constructoFinalCC
 
 
                 const configuracion = {
@@ -55684,34 +55739,37 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor?.ok) {
-                    this.controladorSelecionDias.reseteaDiasSelecionados({ instanciaUIDMes })
-                    const capasIDV = respuestaServidor.capasIDV
+                    const mesDestino = document.querySelector(`[instanciaUID="${instanciaUIDMes}"]`)
+                    if (mesDestino) {
+                        const capasIDV = respuestaServidor.capasIDV
 
-                    renderizadorEventos({
-                        eventosMes: respuestaServidor.eventosMes,
-                        eventosEnDetalle: respuestaServidor.eventosEnDetalle,
-                        instanciaUIDMes: instanciaUIDMes
-                    })
-                    this.actualizaPrecioDia({
-                        contenedorDia: respuestaServidor.contenedorDia,
-                        instanciaUIDMes
-                    })
-
-                    if (
-                        capasIDV.includes("comportamientosPorApartamento") ||
-                        capasIDV.includes("global") ||
-                        capasIDV.includes("todosLosComportamientosDePrecio")
-                    ) {
-                        const apartamentos = respuestaServidor.apartamentos
-                        this.controladorSelecionDias.arranque({
-                            instanciaUIDMes,
-                            apartamentos,
-                            mesDestino: mesRenderizado,
-                            anoDestino: anoRenderizado
-
+                        renderizadorEventos({
+                            eventosMes: respuestaServidor.eventosMes,
+                            eventosEnDetalle: respuestaServidor.eventosEnDetalle,
+                            instanciaUIDMes: instanciaUIDMes
                         })
-                    } else {
-                        document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
+                        this.actualizaPrecioDia({
+                            contenedorDia: respuestaServidor.contenedorDia,
+                            instanciaUIDMes
+                        })
+
+                        if (
+                            capasIDV.includes("comportamientosPorApartamento") ||
+                            capasIDV.includes("global") ||
+                            capasIDV.includes("todosLosComportamientosDePrecio")
+                        ) {
+                            const apartamentos = respuestaServidor.apartamentos
+                            this.controladorSelecionDias.arranque({
+                                instanciaUIDMes,
+                                apartamentos,
+                                mesDestino: mesRenderizado,
+                                anoDestino: anoRenderizado
+
+                            })
+                        } else {
+                            document.querySelector("[contenedorcompartidofechassel]")?.removeAttribute("contenedorcompartidofechassel")
+                            document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
+                        }
                     }
                 }
             },
@@ -56381,7 +56439,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
 
                     const traductorURL = casaVitini.administracion.calendario.traductorURL()
-                    const vision = traductorURL.vision
+                    const vision = document.querySelector("[vision]").getAttribute("vision")
                     const mesesImplicados = []
                     if (vision === "horizontal") {
                         document.querySelector(`[instanciaUID="${instanciaUID_main}"] [componente=marcoMes]`)
@@ -56508,6 +56566,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     }
 
                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                    casaVitini.administracion.calendario.controladorSelecionDias.reseteaDiasSelecionados()
                     mesesImplicados.forEach(m => {
                         const mesIDV = m.getAttribute("mesIDV")
                         const fecha = mesIDV.split("-")
@@ -56855,9 +56914,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                 },
                 menuIrAFecha: {
-                    arranque: function () {
+                    arranque: async function () {
                         const traductorURL = casaVitini.administracion.calendario.traductorURL()
-                        const vision = traductorURL.vision
+                        const vision = document.querySelector("[vision]").getAttribute("vision")
                         const fecha = traductorURL.fecha.split("-")
                         const mesActual = fecha[0]
                         const anoActual = fecha[1]
@@ -56866,6 +56925,20 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const instanciaUID_ui = ui.getAttribute("instanciaUID")
                         const contenedor = ui.querySelector("[componente=contenedor]")
                         main.appendChild(ui)
+
+                        const spinnerSimple = casaVitini.ui.componentes.spinnerSimple()
+                        contenedor.appendChild(spinnerSimple)
+
+                        const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
+                            tipo: "actual"
+                        })
+                        spinnerSimple?.remove()
+                        if (calendarioResuelto.error) {
+                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                            return casaVitini.ui.componentes.advertenciaInmersiva(calednarioResuelto.error)
+                        }
+                        const mesPresente = calendarioResuelto.mes
+                        const anoPresente = calendarioResuelto.ano
 
 
                         const tituloPropuesta = document.createElement("p")
@@ -57006,8 +57079,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         // Ojo por que hay que aseurarse que lo cree siempre desd el mes presente. Ahora no lo hace
                         const mesesArray = this.generarMeses({
-                            mes: mesActual,
-                            año: anoActual
+                            mes: mesPresente,
+                            año: anoPresente
                         });
 
                         for (const opcionData of mesesArray) {
@@ -57031,7 +57104,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                             let mes
                             let ano
-                            console.log("selectorMesHorizontal.value", selectorMesHorizontal.value, "selectorAnoHorizontal.value", selectorAnoHorizontal.value)
                             if (visionSel === "horizontal") {
                                 mes = selectorMesHorizontal.value
                                 ano = selectorAnoHorizontal.value
@@ -57131,7 +57203,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         })
                         traductorURL.fecha = `${mes}-${ano}`
                         if (visionSel === "horizontal") {
-                            traductorURL.vision = `horizontal`
+                            // traductorURL.vision = `horizontal`
 
                             const sectionRenderizada = document.querySelector("main")
                             const instanciaUID_main = sectionRenderizada.getAttribute("instanciaUID")
@@ -57152,7 +57224,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         } else if (visionSel === "vertical") {
 
-                            traductorURL.vision = `vertical`
+                            //  traductorURL.vision = `vertical`
                             console.log("final", traductorURL)
                             casaVitini.administracion.calendario.controladorRegistros({
                                 tipoRegistro: "crear",
@@ -57205,7 +57277,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     const diasDelMes = document.querySelectorAll("[dia]")
                     diasDelMes.forEach(dia => {
-                        dia.removeEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia)
+                        dia.removeEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.hub)
                         dia.removeEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.infoNoSel)
                         dia.classList.remove("diaSelecionable")
                         dia.removeAttribute("style")
@@ -57224,8 +57296,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const anoDestino = data.anoDestino
                     const selectorMes = document.querySelector(`[instanciaUID="${instanciaUIDMes}"]`)
                     if (selectorMes) {
-
-                        //const marcoMes = selectorMes.closest("[campo=calendario]").querySelector("[componente=mesReferencia]")
                         const mes = mesDestino
                         const ano = anoDestino
                         const diasDelMes = selectorMes.querySelectorAll("[dia]")
@@ -57234,14 +57304,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         diasDelMes.forEach((dia) => {
                             const numeroDia = dia.getAttribute("dia")
-                            const contenedor = JSON.parse(dia.getAttribute("eventosContenedor")) || {}
+                            const contenedor = JSON.parse(dia.getAttribute("eventosContenedor") || "{}")
                             const eventosDelDia = contenedor.eventos
                             const eventosUID = Object.keys(eventosDelDia)
                             const fecha = `${ano}-${String(mes).padStart(2, "0")}-${numeroDia}`
 
-                            //   const selecionarDia = ()
                             if (eventosUID.length === 0) {
-                                dia.addEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia)
+                                dia.addEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.hub)
                                 dia.classList.add("diaSelecionable")
                                 if (contenedorCompartidoFechasSel.hasOwnProperty(fecha)) {
                                     casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
@@ -57273,8 +57342,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                     }
                                 }
+
                                 if (decisionFinal === true) {
-                                    dia.addEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia)
+                                    dia.addEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.hub)
                                     dia.classList.add("diaSelecionable")
                                     if (contenedorCompartidoFechasSel.hasOwnProperty(fecha)) {
                                         casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
@@ -57313,54 +57383,236 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     } else if (haciaEstado === "noSel") {
                         dia.removeAttribute("style")
                         dia.removeAttribute("estadoSel")
+                        
+                        dia.removeAttribute("rango")
+
                     }
 
                 },
-                selectorDia: function (e) {
-                    const contenedorDia = e.target.closest("[dia]")
-                    const diaSel = contenedorDia.getAttribute("dia")
-                    const fechaDelMes = contenedorDia.closest("[mesIDV]").getAttribute("mesIDV").split("-")
-                    const mes = fechaDelMes[0]
-                    const ano = fechaDelMes[1]
-                    const fechaSel = `${ano}-${String(mes).padStart(2, "0")}-${String(diaSel).padStart(2, "0")}`
+                selectorDia: {
+                    selectorDiaIndividual: function (e) {
+                        const contenedorDia = e.target.closest("[dia]")
+                        const diaSel = contenedorDia.getAttribute("dia")
+                        const fechaDelMes = contenedorDia.closest("[mesIDV]").getAttribute("mesIDV").split("-")
+                        const mes = fechaDelMes[0]
+                        const ano = fechaDelMes[1]
+                        const fechaSel = `${ano}-${String(mes).padStart(2, "0")}-${String(diaSel).padStart(2, "0")}`
 
-                    const estadoDia = contenedorDia.getAttribute("estadoSel")
-                    if (estadoDia === "activado") {
-                        casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
-                            dia: contenedorDia,
-                            haciaEstado: "noSel"
-                        })
-                    } else {
-                        casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
-                            dia: contenedorDia,
-                            haciaEstado: "sel"
-                        })
-
-                    }
-                    const contenedorCompartidoFechasSel = {}
-                    const obtenerContenedorDiasSel = document.querySelector("main").getAttribute("contenedorCompartidoFechasSel")
-                    if (obtenerContenedorDiasSel) {
-                        const contenedorRen = JSON.parse(obtenerContenedorDiasSel)
-                        Object.assign(contenedorCompartidoFechasSel, { ...contenedorRen });
-                    }
-
-                    if (estadoDia === "activado") {
-                        delete contenedorCompartidoFechasSel[fechaSel]
-                    } else {
-                        contenedorCompartidoFechasSel[fechaSel] = "diaSeleccioando"
-                    }
-                    if (Object.keys(contenedorCompartidoFechasSel).length > 0) {
-                        document.querySelector("main").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
-                        const botonRenderizado = document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")
-                        if (!botonRenderizado) {
-                            const boton = casaVitini.administracion.calendario.controladorSelecionDias.botonFlotante()
-                            document.querySelector("main").appendChild(boton)
+                        const estadoDia = contenedorDia.getAttribute("estadoSel")
+                        if (estadoDia === "activado") {
+                            casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
+                                dia: contenedorDia,
+                                haciaEstado: "noSel"
+                            })
+                        } else {
+                            casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
+                                dia: contenedorDia,
+                                haciaEstado: "sel"
+                            })
                         }
-                    } else {
-                        document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
-                        document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
+                        const contenedorCompartidoFechasSel = {}
+                        const obtenerContenedorDiasSel = document.querySelector("main").getAttribute("contenedorCompartidoFechasSel")
+                        if (obtenerContenedorDiasSel) {
+                            const contenedorRen = JSON.parse(obtenerContenedorDiasSel)
+                            Object.assign(contenedorCompartidoFechasSel, { ...contenedorRen });
+                        }
+
+                        if (estadoDia === "activado") {
+                            delete contenedorCompartidoFechasSel[fechaSel]
+                        } else {
+                            contenedorCompartidoFechasSel[fechaSel] = "diaSeleccioando"
+                        }
+                        if (Object.keys(contenedorCompartidoFechasSel).length > 0) {
+                             document.querySelector("main").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
+                        } else {
+                            document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
+                        }
+                        this.controladorUISelDia()
+                    },
+                    controladorUISelDia: () => {
+                        const obtenerContenedorDiasSel = JSON.parse(document.querySelector("main").getAttribute("contenedorCompartidoFechasSel") || "{}") 
+                        if (Object.keys(obtenerContenedorDiasSel).length > 0) {
+                            const botonRenderizado = document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")
+                            if (!botonRenderizado) {
+                                const boton = casaVitini.administracion.calendario.controladorSelecionDias.botonFlotante()
+                                document.querySelector("main").appendChild(boton)
+                            }
+                        } else {
+                            document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
+                            document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
+                        }
+
+
+                    },
+                    selectorPorRango: {
+                        inicioRango: function (e) {
+                            const contenedorDia = e.target.closest("[dia]")
+                            contenedorDia.setAttribute("rango", "inicio")
+                           // contenedorDia.setAttribute("estadoSel", "activado")
+
+                            contenedorDia.style.background = "pink"
+                            const diasRenderizados = document.querySelectorAll("[dia]")
+                            diasRenderizados.forEach((d) => {
+                                if (d !== contenedorDia) {
+                                    d.removeAttribute("rango")
+                                    d.removeAttribute("style")
+                                }
+                                d.addEventListener("mouseover", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.selectorPorRango.controlHover)
+                            })
+                        },
+                        finalRango: function (e) {
+                            const contenedorDia = e.target.closest("[dia]")
+                            const estadoDia = contenedorDia.getAttribute("estadoSel")
+                            const diasRenderizados = document.querySelectorAll("[dia]")
+                            const diasDelRango = document.querySelectorAll("[dia][rango]")
+
+                            const contenedorCompartidoFechasSel = {}
+                            diasDelRango.forEach(d => {
+                                d.setAttribute("estadoSel", "activado")
+                                d.style.background = "pink"
+                                const fechaDelMes = d.closest("[mesIDV]").getAttribute("mesIDV").split("-")
+                                const mes = fechaDelMes[0]
+                                const ano = fechaDelMes[1]
+                                const diaSel = d.getAttribute("dia")
+                                const fechaSel = `${ano}-${String(mes).padStart(2, "0")}-${String(diaSel).padStart(2, "0")}`
+                                contenedorCompartidoFechasSel[fechaSel] = "diaSeleccioando"
+                            })
+                            diasRenderizados.forEach((d) => {
+                                d.removeEventListener("mouseover", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.selectorPorRango.controlHover)
+                                d.removeAttribute("rango")
+                            })
+                            document.querySelector("main").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
+             
+                            casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.controladorUISelDia()
+
+
+                        },
+                        controlHover: function (e) {
+                            const diaInicioRango = document.querySelector("[dia][rango=inicio]");
+                            const diaDebajoComoFinalRango = e.target.closest("[dia]");
+
+                            const elementosEntre = [];
+
+                            if (diaDebajoComoFinalRango.getAttribute("rango") !== "inicio") {
+                                const todosLosDias = document.querySelectorAll("[dia]");
+
+                                const inicioIndex = Array.from(todosLosDias).indexOf(diaInicioRango);
+                                const finIndex = Array.from(todosLosDias).indexOf(diaDebajoComoFinalRango);
+
+                                const start = Math.min(inicioIndex, finIndex);
+                                const end = Math.max(inicioIndex, finIndex);
+
+                                for (let i = start; i <= end; i++) {
+                                    elementosEntre.push(todosLosDias[i]);
+                                }
+                                elementosEntre.forEach(e => {
+                                    const tipoRango = e.getAttribute("rango")
+                                    if (tipoRango !== "inicio") {
+
+
+                                        const contenedor = JSON.parse(e.getAttribute("eventosContenedor") || "{}") 
+                                        const eventosDelDia = contenedor.eventos
+                                        const eventosUID = Object.keys(eventosDelDia)
+                                        let decisionFinal = true
+                                        if (eventosUID.length > 0) {
+                                            for (const eventoUID of eventosUID) {
+                                                const mesIDV = e.closest("[mesIDV]")
+                                                const contenedorEvento = mesIDV.querySelector(`[eventoUID="${eventoUID}"]`)
+                                                const detallesDelEvento = JSON.parse(contenedorEvento.getAttribute("detallesDelEvento"))
+                                                const tipoEventoIDV = detallesDelEvento.tipoEvento
+            
+                                                if (tipoEventoIDV === "comportamientosPorApartamento") {
+                                                    const contenedor = detallesDelEvento.contenedor
+                                                    const tipoEvento = contenedor.tipo
+                                                    const apartamentos = contenedor.apartamentos
+                                                    const fechaInicio = contenedor.fechaInicio
+                                                    const fechaFinal = contenedor.fechaFinal
+                                                    if (tipoEvento === "porRango" && apartamentos.length === 1 && fechaInicio === fechaFinal) {
+                                                        decisionFinal = true
+                                                        break
+                                                    } else {
+                                                        decisionFinal = false
+                                                    }
+                                                } else if (tipoEventoIDV === "comportamientosPorApartamentoBasadoEnDia") {
+                                                    decisionFinal = false
+            
+                                                }
+                                            }
+                                        }
+
+                                        if (decisionFinal === true) { 
+                                            e.style.background = "pink";
+                                            e.setAttribute("rango", "intermedio");
+                                        }
+                                       
+                                    }
+                                });
+                            }
+                            const diasPreseleccionados = document.querySelectorAll("[dia][rango=intermedio]");
+                            diasPreseleccionados.forEach(e => {
+                                if (!elementosEntre.includes(e)) {
+                                    e.removeAttribute("rango");
+                                    e.removeAttribute("style");
+                                }
+                            });
+                        },
+                        controlHoverAntiguo: function (e) {
+
+                            const diaInicioRango = document.querySelector("[dia][rango=inicio]")
+                            const diaDebajoComoFinalRango = e.target.closest("[dia]")
+
+                            // Recorremos hasta llegar al elementoFin
+                            // Si el elemento de inicio está antes que el de fin, recorremos hacia adelante
+                            const elementosEntre = [];
+                            if (diaDebajoComoFinalRango.getAttribute("rango") !== "inicio") {
+                                let currentElement = diaInicioRango;
+                                // Determinar si elementoInicio está antes o después de elementoFin
+                                if (diaInicioRango.compareDocumentPosition(diaDebajoComoFinalRango) & Node.DOCUMENT_POSITION_FOLLOWING) {
+                                    // Si elementoInicio está antes, recorremos hacia adelante
+                                    currentElement = diaInicioRango.nextElementSibling;
+                                    while (currentElement && currentElement !== diaDebajoComoFinalRango) {
+                                        elementosEntre.push(currentElement);
+                                        currentElement = currentElement.nextElementSibling; // Avanzamos
+                                    }
+                                } else {
+                                    // Si elementoInicio está después, recorremos hacia atrás
+                                    currentElement = diaInicioRango.previousElementSibling;
+                                    while (currentElement && currentElement !== diaDebajoComoFinalRango) {
+                                        elementosEntre.push(currentElement);
+                                        currentElement = currentElement.previousElementSibling; // Retrocedemos
+                                    }
+                                }
+                                elementosEntre.forEach(e => {
+                                    e.style.background = "pink"
+                                    e.setAttribute("rango", "intermedio")
+                                })
+                            }
+                            const diasPreselecioandos = document.querySelectorAll("[dia][rango=intermedio]")
+                            diasPreselecioandos.forEach(e => {
+                                if (!elementosEntre.includes(e)) {
+                                    e.removeAttribute("rango")
+                                    e.removeAttribute("style")
+                                }
+                            })
+
+                        }
+                    },
+
+                    hub: function (e) {
+                        const tipoSel = document.querySelector("[boton=tipoSel]").getAttribute("tipoSel")
+                        if (tipoSel === "porRango") {
+                            const diaSelecionadoComoRangoInicio = document.querySelector("[dia][rango=inicio]")
+                            if (diaSelecionadoComoRangoInicio) {
+                                casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.selectorPorRango.finalRango(e)
+                            } else {
+                                casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.selectorPorRango.inicioRango(e)
+                            }
+                        } else if (tipoSel === "porDiasIndividual") {
+                            casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.selectorDiaIndividual(e)
+                        }
                     }
                 },
+
                 botonFlotante: function () {
 
                     const ui = document.createElement("div")
@@ -57438,7 +57690,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const instanciaUIDMes = document.querySelector("[componente=marcoMes]").getAttribute("instanciaUID")
                         document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
                         document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
-                        const diasRenderizados = document.querySelector(`[instanciaUID="${instanciaUIDMes}"]`).querySelectorAll("[dia]")
+                        const diasRenderizados = document.querySelectorAll("[dia]")
                         diasRenderizados.forEach(d => {
                             casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
                                 dia: d,
@@ -57626,7 +57878,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                     } else if (respuestaServidor?.ok) {
                         const traductorURL = casaVitini.administracion.calendario.traductorURL()
-                        const vision = traductorURL.vision
+                        const vision = document.querySelector("[vision]").getAttribute("vision")
                         document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
                         document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -57722,7 +57974,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor.error)
                     } else if (respuestaServidor?.ok) {
                         const traductorURL = casaVitini.administracion.calendario.traductorURL()
-                        const vision = traductorURL.vision
+                        const vision = document.querySelector("[vision]").getAttribute("vision")
                         casaVitini.administracion.calendario.limpiezaCalendario.hub({
                             limpiezaIDV: ["vista"]
                         })
@@ -57782,19 +58034,95 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     }
                 },
-                reseteaDiasSelecionados: function (data) {
-                    const instanciaUIDMes = data.instanciaUIDMes
-                    const diasRenderizados = document.querySelector(`[instanciaUID="${instanciaUIDMes}"]`).querySelectorAll("[dia]")
-
+                reseteaDiasSelecionados: function () {
+                    const diasRenderizados = document.querySelectorAll("[dia]") || []
                     diasRenderizados.forEach(d => {
                         this.estadosDia({
                             dia: d,
                             haciaEstado: "noSel"
                         })
                         d.classList.remove("diaSelecionable")
-                        d.removeEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia)
+                        d.removeEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.hub)
                         d.removeEventListener("click", casaVitini.administracion.calendario.controladorSelecionDias.infoNoSel)
+                    })
+                }
+            },
+            seleccion: {
+                controladorSeleccion: function () {
+                    const main = document.querySelector("main")
+                    const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                    main.appendChild(ui)
+                    const contenedor = ui.querySelector("[componente=contenedor]")
 
+                    const titulo = document.createElement("div")
+                    titulo.classList.add("titulo")
+                    titulo.textContent = `Tipo de selección de los días del calendario`
+                    contenedor.appendChild(titulo)
+
+                    const infoSel = document.createElement("p")
+                    infoSel.classList.add("textoCentrado")
+
+                    infoSel.textContent = "Determine el tipo de selección que se usara en los calendarios para seleccionarn dias. La visión por día individual le permite selecciona días individualmente y es más granular. La visión basada en rango  hace más cómodo seleccionar rangos de días, pero no es tan granular como la visión basada en días individuales. "
+                    contenedor.appendChild(infoSel)
+
+                    const botonHorizontal = document.createElement("div")
+                    botonHorizontal.classList.add("botonV1BlancoIzquierda")
+                    botonHorizontal.textContent = "Seleccionar dias individualmente"
+                    botonHorizontal.addEventListener("click", () => {
+                        this.actualizarEstadoSel("porDiasIndividual")
+
+                    })
+
+                    contenedor.appendChild(botonHorizontal)
+
+                    const botonVertical = document.createElement("div")
+                    botonVertical.classList.add("botonV1BlancoIzquierda")
+                    botonVertical.textContent = "Seleccioanr dias por rango"
+                    botonVertical.addEventListener("click", () => {
+                        this.actualizarEstadoSel("porRango")
+                    })
+
+                    contenedor.appendChild(botonVertical)
+
+
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("botonV1")
+                    botonCancelar.setAttribute("boton", "cancelar")
+                    botonCancelar.textContent = "Cerrar y volver al calendario"
+                    botonCancelar.addEventListener("click", () => {
+                        return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                    })
+                    contenedor.appendChild(botonCancelar)
+                },
+                actualizarEstadoSel: (valor) => {
+                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                    const main = document.querySelector("main")
+                    const botonSel = main.querySelector("[panel=botonesGlobales] [boton=tipoSel]")
+                    const tipoSelActual = botonSel.getAttribute("tipoSel")
+                    console.log("tipoSelActual === valor", tipoSelActual , valor)
+                    if (tipoSelActual === valor) { return }
+                    const diasRenderizados = document.querySelectorAll("[dia]") || []
+                    diasRenderizados.forEach(d => {
+                        casaVitini.administracion.calendario.controladorSelecionDias.estadosDia({
+                            dia: d,
+                            haciaEstado: "noSel"
+                        })
+                        // d.removeAttribute("style")
+                        // d.removeAttribute("estadoSel")
+                        // d.removeAttribute("rango")
+                    })
+                    document.querySelector("[contenedorCompartidoFechasSel]")?.removeAttribute("contenedorCompartidoFechasSel")
+                    document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
+                    console.log("valor", valor)
+                    if (!valor) {
+                        botonSel.setAttribute("tipoSel", "porDiasIndividual")
+                    } else {
+                        botonSel.setAttribute("tipoSel", valor)
+                    }
+                    casaVitini.administracion.usuarios.detallesUsuario.configuracion.actualizarConfiguracion({
+                        configuracionIDV: "calendario.tipoSeleccion",
+                        valor: valor
                     })
                 }
             },
@@ -57813,10 +58141,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     contenedor.appendChild(titulo)
 
                     const info = document.createElement("p")
-                    info.classList.add(
-                        "textoCentrado"
-                    )
-                    info.textContent = "Seleccione el tipo de visión del calendario. Puede escoger entre la visión paginada horizontal y la visión en tira vertical. La visión en tira vertical está limitada a un año hacia delante y hace atrás del mes presente"
+                    info.classList.add("textoCentrado", "padding14")
+                    info.textContent = "Seleccione el tipo de visión del calendario. Puede escoger entre la visión paginada horizontal y la visión en tira vertical. La visión en tira vertical está limitada a un año hacia delante y hace atrás del mes presente. La selección de la visión quedará almacenada en su configuración de usuario"
                     contenedor.appendChild(info)
 
 
@@ -57824,6 +58150,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     botonHorizontal.classList.add("botonV1BlancoIzquierda")
                     botonHorizontal.textContent = "Visión horizontal"
                     botonHorizontal.addEventListener("click", async () => {
+
+                        casaVitini.administracion.usuarios.detallesUsuario.configuracion.actualizarConfiguracion({
+                            configuracionIDV: "calendario.tipoVision",
+                            valor: "horizontal"
+                        })
+
                         await this.cambiarVision({
                             visionSel: "horizontal"
                         })
@@ -57836,12 +58168,30 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     botonVertical.classList.add("botonV1BlancoIzquierda")
                     botonVertical.textContent = "Visión vertical"
                     botonVertical.addEventListener("click", async () => {
+                        casaVitini.administracion.usuarios.detallesUsuario.configuracion.actualizarConfiguracion({
+                            configuracionIDV: "calendario.tipoVision",
+                            valor: "vertical"
+                        })
                         await this.cambiarVision({
                             visionSel: "vertical"
                         })
                     })
 
                     contenedor.appendChild(botonVertical)
+
+
+
+
+                    const botonSelPorDias = document.createElement("div")
+                    botonSelPorDias.classList.add("botonV1BlancoIzquierda")
+                    botonSelPorDias.textContent = "Visión horizontal"
+                    botonSelPorDias.addEventListener("click", async () => {
+                        await this.cambiarVision({
+                            visionSel: "horizontal"
+                        })
+                    })
+
+                    contenedor.appendChild(botonHorizontal)
 
                     const botonCancelar = document.createElement("div")
                     botonCancelar.classList.add("botonV1")
@@ -57858,7 +58208,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const traductorURL = casaVitini.administracion.calendario.traductorURL()
 
                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                    if (traductorURL.vision === visionSel) { return }
+                    const vision = document.querySelector("[vision]").getAttribute("vision")
+
+                    if (vision === visionSel) { return }
                     const selectorCalendario = document.querySelector("[componente=calendarioGlobal]")
                     selectorCalendario?.remove()
                     const main = document.querySelector("main")
@@ -57874,10 +58226,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const traductorURL = casaVitini.administracion.calendario.traductorURL()
                     const configuracionCalendario = {}
 
-                    traductorURL.vision = "vertical"
                     if (traductorURL.fecha === null) {
                         configuracionCalendario.tipo = "actual"
-                        traductorURL.capas = ["global"]
+                        // traductorURL.capas = ["global"]
                     } else {
                         const fecha = traductorURL.fecha.split("-")
                         const mes = Number(fecha[0])
@@ -57894,7 +58245,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         mes: calendarioResuelto.mes,
 
                     })
-                    console.log("test")
+                    traductorURL.fecha = `${calendarioResuelto.mes}-${calendarioResuelto.ano}`
+
                     casaVitini.administracion.calendario.controladorRegistros({
                         tipoRegistro: "crear",
                         traductorURL: traductorURL,
@@ -57908,7 +58260,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const configuracionCalendario = {}
                     const traductorURL = casaVitini.administracion.calendario.traductorURL()
 
-                    traductorURL.vision = "horizontal"
+                    //traductorURL.vision = "horizontal"
                     if (traductorURL.fecha === null) {
 
                         configuracionCalendario.tipoResolucion = "actual"

@@ -973,7 +973,6 @@ summary:hover {
         backdrop-filter: blur(50px);
         -webkit-backdrop-filter: blur(50px);
     }
-
     .calendarioNuevo {
         border-radius: 0px;
         flex: 1;
@@ -982,18 +981,13 @@ summary:hover {
         -webkit-backdrop-filter: blur(0px);
         box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
     }
-
     .calendarioFlotante {
         padding: 0px;
     }
-
-
-
     .marcoMes {
         flex: 1;
         gap: 4px;
     }
-
 }
 
 .calendarioFlotante {
@@ -12693,6 +12687,7 @@ summary:hover {
     transition: all 250ms linear;
     opacity: 1;
     display: flex;
+    background-color: #a29f9f6e;
 
     @starting-style {
         opacity: 0;
@@ -12713,13 +12708,15 @@ summary:hover {
     -webkit-backdrop-filter: blur(50px);
 }
 [zonaCSS="administracion/calendario"] .diaPasado {
-    background-color: hsl(0deg 0% 50% / 72%) !important;
+    /* background-color: hsl(0deg 0% 50% / 72%); */
     /* transition: background 250ms linear */
 }
 
-[zonaCSS="administracion/calendario"] .diaSelecionable,
-.administracion_calendario_componenteCalendario_dia.diaSelecionable:hover {
-    background: grey;
+[zonaCSS="administracion/calendario"] .diaSelecionable {
+    /* background: darkturquoise; */
+}
+[zonaCSS="administracion/calendario"] .diaSelecionable:hover {
+    background: green;
 }
 
 [zonaCSS="administracion/calendario"] .diaParcial,
@@ -12740,8 +12737,10 @@ summary:hover {
     transition: background 250ms linear
 }
 
-[zonaCSS="administracion/calendario"] .diaDeHoy::before {
-    border: 3px solid rgb(0 0 0 / 50%);
+[zonaCSS="administracion/calendario"] .diaDeHoy {
+    /* border: 3px solid rgb(0 0 0 / 50%); */
+    background-color:  #3b92c7;
+
 }
 [zonaCSS="administracion/calendario"] .diaDeHoy_calendarioVertical {
     background-color: #3b92c7;
@@ -13766,7 +13765,7 @@ summary:hover {
 
 [zonaCSS="administracion/calendario"] .marcoBotonesGlobales {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 6px;
     transition: 250ms all linear;
     width: 100%;

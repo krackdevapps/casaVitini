@@ -12,27 +12,16 @@ export const buscar = async (entrada, salida) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
 
         const esquemaBusqueda = Joi.object({
-            buscar: Joi.string().messages({
-                'string.base': '{{#label}} debe ser una cadena'
-            }),
-            pagina: Joi.number().messages({
-                'string.base': '{{#label}} debe ser una cadena'
-            }),
-            nombreColumna: Joi.string().messages({
-                'string.base': '{{#label}} debe ser una cadena'
-            }),
-            sentidoColumna: Joi.string().messages({
-                'string.base': '{{#label}} debe ser una cadena'
-            }),
-            tipoBusqueda: Joi.string().messages({
-                'string.base': '{{#label}} debe ser una cadena'
-            })
-        }).required().messages({
-            'object.base': '{{#label}} debe ser un ojeto'
-        })
+            buscar: Joi.string().messages(commonMessages),
+            pagina: Joi.number().messages(commonMessages),
+            nombreColumna: Joi.string().messages(commonMessages),
+            sentidoColumna: Joi.string().messages(commonMessages),
+            tipoBusqueda: Joi.string().messages(commonMessages),
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: esquemaBusqueda,

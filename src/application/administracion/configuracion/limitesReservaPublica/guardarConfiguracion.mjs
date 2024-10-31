@@ -78,10 +78,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             diasMaximosReserva: diasMaximosReserva,
             limiteFuturoReserva: limiteFuturoReserva,
             horaLimiteDelMismoDia: horaLimiteDelMismoDia
-
         }
-
-
         await actualizarParConfiguracion(dataActualizarParConfiguracion)
 
         await campoDeTransaccion("confirmar")

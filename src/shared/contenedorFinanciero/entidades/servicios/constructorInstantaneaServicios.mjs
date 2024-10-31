@@ -5,7 +5,7 @@ export const constructorInstantaneaServicios = async (data) => {
     try {
         const estructura = data.estructura
         const servicios = data.servicios
-        const opcionesSolicitadasDelservicios = data.opcionesSolicitadasDelservicios || {}
+        const opcionesSolicitadasDelservicio = data.opcionesSolicitadasDelservicio || {}
 
         const contenedorEntidades = estructura.entidades
 
@@ -35,7 +35,7 @@ export const constructorInstantaneaServicios = async (data) => {
             const gruposDeOpciones = contenedor.gruposDeOpciones
 
 
-            const servicioSoliciado_objeto = opcionesSolicitadasDelservicios[servicioUID]
+            const servicioSoliciado_objeto = opcionesSolicitadasDelservicio[servicioUID]
 
 
             const opcionesDelServicioSolicitadas = servicioSoliciado_objeto.opcionesSeleccionadas
@@ -58,7 +58,7 @@ export const constructorInstantaneaServicios = async (data) => {
 
                     desglosePorServicios.push({
                         servicio,
-                        opcionesSolicitadasDelservicios: servicioSoliciado_objeto
+                        opcionesSolicitadasDelservicio: servicioSoliciado_objeto
                     })
                 }
             }
