@@ -377,7 +377,7 @@ export const generadorPDF = async (reserva) => {
             for (const [apartamentoIDV, contenedor] of Object.entries(complementosAlojamiento_comoObjeto)) {
 
                 const apartamentoUI = contenedor.apartamentoUI
-                const complementos = contenedor.complementos            
+                const complementos = contenedor.complementos
 
                 const filaServicio = [
                     { text: apartamentoUI, style: 'nombreSimple' },
@@ -403,11 +403,11 @@ export const generadorPDF = async (reserva) => {
                         { text: precioFinal, style: 'valorTotal' }
                     ];
                     contenedorServicio.table.body.push(filaOpcion);
-                    
+
                 }
-          
+
             }
- 
+
             docDefinition.content.push(contenedorServicio)
         }
         const desglosePorServicios = contenedorFinanciero.desgloseFinanciero.entidades.servicios.desglosePorServicios
@@ -438,14 +438,14 @@ export const generadorPDF = async (reserva) => {
             }
 
             for (const s of desglosePorServicios) {
-                console.log("con", s)
+
                 const servicio = s.servicio
                 const opcionesSeleccionadas = s.opcionesSolicitadasDelservicio.opcionesSeleccionadas
                 const contenedor = servicio.contenedor
                 const gruposDeOpciones = contenedor.gruposDeOpciones
 
                 const tituloPublico = contenedor.tituloPublico
-               
+
 
                 const filaServicio = [
                     { text: tituloPublico, style: 'nombreSimple' },
@@ -454,11 +454,11 @@ export const generadorPDF = async (reserva) => {
                 contenedorServicio.table.body.push(filaServicio);
                 for (const [grupoIDV, opcionesSel] of Object.entries(opcionesSeleccionadas)) {
                     if (opcionesSel.length > 0) {
-                        console.log("gruposDeOpciones", gruposDeOpciones)
+
 
                         const grupoSelecioonado = gruposDeOpciones[grupoIDV]
                         const opcionesGrupo = grupoSelecioonado.opcionesGrupo
-                        console.log("opcionesGrupo", opcionesGrupo)
+
                         opcionesGrupo.forEach(og => {
                             const opcionIDV = og.opcionIDV
                             if (opcionesSel.includes(opcionIDV)) {
@@ -475,9 +475,9 @@ export const generadorPDF = async (reserva) => {
                         });
                     }
                 }
-          
+
             }
- 
+
             docDefinition.content.push(contenedorServicio)
         }
         const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos

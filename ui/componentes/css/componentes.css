@@ -155,7 +155,7 @@ main[zonaCSS="/"] {
     padding: 6px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportameintoEspacioBotones {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearComportameintoEspacioBotones {
 
     display: flex;
     flex-direction: column;
@@ -973,6 +973,7 @@ summary:hover {
         backdrop-filter: blur(50px);
         -webkit-backdrop-filter: blur(50px);
     }
+
     .calendarioNuevo {
         border-radius: 0px;
         flex: 1;
@@ -981,9 +982,11 @@ summary:hover {
         -webkit-backdrop-filter: blur(0px);
         box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
     }
+
     .calendarioFlotante {
         padding: 0px;
     }
+
     .marcoMes {
         flex: 1;
         gap: 4px;
@@ -5096,7 +5099,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
     border-radius: 12px;
     gap: 4px;
     row-gap: 4px;
@@ -5194,7 +5197,7 @@ summary:hover {
     align-items: center;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -5274,7 +5277,7 @@ summary:hover {
     flex-direction: column;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .detallesReservaCancelarReservabloqueBotones {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .detallesReservaCancelarReservabloqueBotones {
 
     display: flex;
     gap: 4px;
@@ -5285,7 +5288,7 @@ summary:hover {
     flex-direction: column;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"].detallesReservaCancelarReservabloqueBotones {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"].detallesReservaCancelarReservabloqueBotones {
 
     display: flex;
     gap: 4px;
@@ -5329,7 +5332,7 @@ summary:hover {
     flex-direction: column;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarReservabloqueBotones {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .detallesReservaCancelarReservabloqueBotones {
 
     display: flex;
     gap: 4px;
@@ -5389,7 +5392,7 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .detallesReservaCancelarBoton {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -5493,7 +5496,7 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarBoton {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -5648,7 +5651,7 @@ summary:hover {
     border-radius: 16px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espaciadoInterno {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .espaciadoInterno {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -5713,13 +5716,15 @@ summary:hover {
     padding: 6px;
     border-radius: 12px;
     gap: 6px;
-    display: flex;
+    display: grid;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-items: stretch;
-    justify-content: space-between;
     scale: 1;
     transition: scale .4s ease-in-out;
+    justify-items: stretch;
+    grid-template-rows: repeat(1, 1fr);
+    align-content: stretch;
+    align-items: start;
 
     @starting-style {
         scale: 0;
@@ -5775,7 +5780,7 @@ summary:hover {
     display: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .elementoOcultoInicialmente {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .elementoOcultoInicialmente {
     display: none;
 }
 
@@ -6248,7 +6253,7 @@ summary:hover {
     margin: 10px
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espacioComportamiento {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .espacioComportamiento {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -6260,7 +6265,7 @@ summary:hover {
     padding: 6px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espacioBloqueos {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .espacioBloqueos {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     grid-gap: 6px;
@@ -6325,7 +6330,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .espacioBloqueos {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .espacioBloqueos {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     grid-gap: 6px;
@@ -6654,19 +6659,17 @@ summary:hover {
     border-radius: 12px;
     flex-direction: column;
     flex-wrap: wrap;
-    align-content: flex-start;
+    align-content: stretch;
     justify-content: flex-start;
     align-items: stretch;
-    padding: 10px;
+    padding: 6px;
     gap: 10px;
     text-decoration: none;
     color: black;
     cursor: default;
 }
 
-[zonaCSS="administracion/precios"] .preciosEImpuestosBloqueApartamento:hover {
-    background: rgba(255, 255, 255, 0.5);
-}
+
 
 [zonaCSS="administracion/precios"] .preciosEImpuestosTituloApartamento {
     margin: 0px;
@@ -7019,7 +7022,7 @@ summary:hover {
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .preciosEImpuestosbotonOpcionCrearNuevoImpuesto {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .preciosEImpuestosbotonOpcionCrearNuevoImpuesto {
     outline: none;
     border: none;
     padding: 10px;
@@ -7031,7 +7034,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .selectorTipoComportamiento {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .selectorTipoComportamiento {
     outline: none;
     border: none;
     padding: 6px;
@@ -7047,7 +7050,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonTipoComportamiento {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .botonTipoComportamiento {
     outline: none;
     border: none;
     padding: 10px;
@@ -7066,7 +7069,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonTipoComportamiento:hover {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .botonTipoComportamiento:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
@@ -7158,7 +7161,7 @@ summary:hover {
     gap: 6px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .gestionDeOfertasContenedor {
+[zonaCSS="administracion/comportamientoDePrecios"] .gestionDeOfertasContenedor {
     border-radius: 26px;
     padding: 0px;
     display: flex;
@@ -7184,7 +7187,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .gestionDeOfertasBotonCrearOferta {
+[zonaCSS="administracion/comportamientoDePrecios"] .gestionDeOfertasBotonCrearOferta {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 14px;
     padding: 10px;
@@ -7209,7 +7212,7 @@ summary:hover {
     align-content: center;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .gestionDeOfertasContenedorBotones {
+[zonaCSS="administracion/comportamientoDePrecios"] .gestionDeOfertasContenedorBotones {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -7248,7 +7251,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaConentenedor {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaConentenedor {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 13px;
@@ -7341,7 +7344,7 @@ summary:hover {
     display: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportameintoContendorFechas {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearComportameintoContendorFechas {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 13px;
@@ -7358,7 +7361,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorPorDias {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .contenedorPorDias {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 13px;
@@ -7374,7 +7377,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .diaUI {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 13px;
     flex-direction: row;
@@ -7392,13 +7395,13 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI:hover {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .diaUI:hover {
     background: rgba(255, 255, 255, 0.6);
 
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportamientoConentenedor__ {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearComportamientoConentenedor__ {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -7529,7 +7532,7 @@ summary:hover {
     display: flex;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontalV2 {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaContenedorHorizontalV2 {
 
     display: grid;
     grid-template-columns: 0.25fr 1fr;
@@ -7543,7 +7546,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontal_modoCrear {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaContenedorHorizontal_modoCrear {
     display: flex;
     grid-template-columns: 0.25fr 1fr;
     grid-gap: 6px;
@@ -7610,7 +7613,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .creatOfertaBotonEstado {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .creatOfertaBotonEstado {
     background: rgba(255, 255, 255, 0.3);
     display: flex;
     border-radius: 12px;
@@ -7637,7 +7640,7 @@ summary:hover {
         align-items: stretch;
     }
 
-    [zonaCSS="administracion/comportamiento_de_precios"] .crearOfertaContenedorHorizontalV2 {
+    [zonaCSS="administracion/comportamientoDePrecios"] .crearOfertaContenedorHorizontalV2 {
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
@@ -7646,7 +7649,7 @@ summary:hover {
     }
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontal {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaContenedorHorizontal {
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
@@ -7806,7 +7809,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorFecha {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .contenedorFecha {
     background: rgba(255, 255, 255, 0.3);
     display: flex;
     flex-direction: column;
@@ -7822,7 +7825,7 @@ summary:hover {
     font-weight: bold;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .tituloFecha {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .tituloFecha {
     font-weight: bold;
 }
 
@@ -7856,7 +7859,7 @@ summary:hover {
     border-radius: 16px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
     display: flex;
     grid-template-columns: 1fr 1fr;
     grid-gap: 6px;
@@ -7873,7 +7876,7 @@ summary:hover {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
 
-    [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
+    [zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     }
 }
@@ -7909,7 +7912,7 @@ summary:hover {
     gap: 6px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaEpacioBotones {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaEpacioBotones {
 
     display: grid;
     justify-content: center;
@@ -7939,7 +7942,7 @@ summary:hover {
     color: white;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfervaBotonV1 {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfervaBotonV1 {
     margin: 0px;
     font-weight: bold;
     padding: 10px;
@@ -7952,7 +7955,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfervaBotonV1:hover {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfervaBotonV1:hover {
     background: rgba(0, 0, 0, 0.5);
     color: white;
 }
@@ -7981,7 +7984,7 @@ summary:hover {
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .comportamientoUI {
+[zonaCSS="administracion/comportamientoDePrecios"] .comportamientoUI {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 20px;
@@ -8063,7 +8066,7 @@ summary:hover {
     gap: 6px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .comportamintoDePreciosSuperBloque {
+[zonaCSS="administracion/comportamientoDePrecios"] .comportamintoDePreciosSuperBloque {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -8087,7 +8090,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .ofertaUIContenedorComportamiento {
+[zonaCSS="administracion/comportamientoDePrecios"] .ofertaUIContenedorComportamiento {
     display: grid;
     padding: 0;
     margin: 0;
@@ -8102,7 +8105,7 @@ summary:hover {
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSelecionados {
+[zonaCSS="administracion/comportamientoDePrecios"] .contenedorDiasSelecionados {
     display: grid;
     padding: 0;
     margin: 0;
@@ -8151,13 +8154,13 @@ summary:hover {
     padding: 6px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .ofertaUITituloOferta {
+[zonaCSS="administracion/comportamientoDePrecios"] .ofertaUITituloOferta {
     padding: 0px;
     margin: 0px;
 }
 
 
-[zonaCSS="administracion/comportamiento_de_precios"] .contenedorTituloEstado {
+[zonaCSS="administracion/comportamientoDePrecios"] .contenedorTituloEstado {
     padding: 0px;
 
 }
@@ -8170,7 +8173,7 @@ summary:hover {
     border-radius: 10px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .comportamientoUIFechaContenedor {
+[zonaCSS="administracion/comportamientoDePrecios"] .comportamientoUIFechaContenedor {
     background: rgba(0, 0, 0, 0.1);
     padding: 10px;
     border-radius: 16px;
@@ -8182,7 +8185,7 @@ summary:hover {
     flex-wrap: wrap;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .diaSeleciconadoCelda {
+[zonaCSS="administracion/comportamientoDePrecios"] .diaSeleciconadoCelda {
     background: rgba(0, 0, 0, 0.1);
     padding: 16px;
     border-radius: 12px;
@@ -8195,7 +8198,7 @@ summary:hover {
     font-weight: bold;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSeleccionados {
+[zonaCSS="administracion/comportamientoDePrecios"] .contenedorDiasSeleccionados {
     background: rgba(0, 0, 0, 0.1);
     padding: 10px;
     border-radius: 16px;
@@ -8248,7 +8251,7 @@ summary:hover {
     font-weight: bold;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .ofertaUITituloFecha {
+[zonaCSS="administracion/comportamientoDePrecios"] .ofertaUITituloFecha {
     font-weight: bold;
     text-align: center;
 }
@@ -8282,7 +8285,7 @@ summary:hover {
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOFertaBotonAnadirApartamento {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOFertaBotonAnadirApartamento {
     margin: 0px;
     padding: 10px;
     background: rgba(255, 255, 255, 0.3);
@@ -8296,7 +8299,7 @@ summary:hover {
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/comportamiento_de_precios"] .crearOFertaBotonAnadirApartamento:hover {
+[zonaCSS="administracion/comportamientoDePrecios"] .crearOFertaBotonAnadirApartamento:hover {
     background: rgba(0, 0, 0, 0.3);
     color: white;
 }
@@ -8323,7 +8326,7 @@ summary:hover {
     border-radius: 10px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaMenuVolatilAnadirApartamento {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaMenuVolatilAnadirApartamento {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
@@ -8378,7 +8381,7 @@ summary:hover {
 
 
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoUI {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaApartamentoUI {
     background: rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -8393,7 +8396,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoUI:hover {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaApartamentoUI:hover {
     color: white;
     background: black;
 }
@@ -8412,7 +8415,7 @@ summary:hover {
     padding: 2px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoTItulo {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaApartamentoTItulo {
     font-weight: bold;
     margin: 0px;
     padding: 2px;
@@ -8424,7 +8427,7 @@ summary:hover {
     padding: 2px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoEstado {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaApartamentoEstado {
     margin: 0px;
     padding: 2px;
 }
@@ -8462,7 +8465,7 @@ summary:hover {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaZonaAnadirApartamento {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearOfertaZonaAnadirApartamento {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     display: flex;
@@ -8509,7 +8512,7 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearApartamentoInfoSinApartamento {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .crearApartamentoInfoSinApartamento {
     padding: 6px;
     margin: 0px;
     text-align: center;
@@ -8582,7 +8585,7 @@ summary:hover {
     pointer-events: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .editarOfertaSoloLecturaUI {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .editarOfertaSoloLecturaUI {
     border-radius: 14px;
     display: flex;
     flex-direction: row;
@@ -8601,7 +8604,7 @@ summary:hover {
     padding: 6px;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .editarOfertaSoloLecutraInfo {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .editarOfertaSoloLecutraInfo {
     margin: 0px;
 }
 
@@ -8947,7 +8950,7 @@ summary:hover {
     background: rgba(255, 255, 255, 0.7);
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_contenedorEntidad {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_contenedorEntidad {
     border-radius: 10px;
     padding: 6px;
     display: flex;
@@ -8959,7 +8962,7 @@ summary:hover {
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_editarEntidad_contenedorEntidadDatos {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_editarEntidad_contenedorEntidadDatos {
     pointer-events: none;
     display: flex;
     gap: 6px;
@@ -8968,7 +8971,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_bloqueTitulo {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_bloqueTitulo {
     border-radius: 10px;
     display: flex;
     gap: 6px;
@@ -8977,7 +8980,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .contenedorCaracteristicas {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .contenedorCaracteristicas {
     border-radius: 19px;
     padding: 6px;
     display: flex;
@@ -8988,11 +8991,11 @@ summary:hover {
     border: 1px solid #00000038;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_info {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_info {
     padding: 6px;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_campoEntrada {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_campoEntrada {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
@@ -9000,7 +9003,7 @@ summary:hover {
     outline: none;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_contenedorBotones {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_contenedorBotones {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -9010,13 +9013,13 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_createEntiad_boton {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_createEntiad_boton {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .confAlojamiento_entidades_createEntiad_boton:hover {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_createEntiad_boton:hover {
     background: rgba(255, 255, 255, 0.7);
 }
 
@@ -9306,9 +9309,8 @@ summary:hover {
 
 [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(184px, 1fr));
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 6px;
-    grid-auto-rows: minmax(auto, auto);
     padding: 0px;
     justify-items: stretch;
     align-content: center;
@@ -9317,19 +9319,17 @@ summary:hover {
     justify-content: center;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 820px) {
     [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        ;
+        grid-template-columns: 1fr 1fr 1fr;
+
     }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 550px) {
     [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
-        grid-template-columns: repeat(1, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-        ;
+        grid-template-columns: 1fr 1fr;
+
     }
 }
 
@@ -12520,7 +12520,7 @@ summary:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_botonAnadir {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_botonAnadir {
     outline: none;
     border: none;
     padding: 10px;
@@ -12535,7 +12535,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_filaCaracteristica {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_filaCaracteristica {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -12545,13 +12545,13 @@ summary:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_contenedorCaracteristicas {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_contenedorCaracteristicas {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_botonBorrarFila {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_botonBorrarFila {
     outline: none;
     border: none;
     padding: 10px;
@@ -12707,6 +12707,7 @@ summary:hover {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 }
+
 [zonaCSS="administracion/calendario"] .diaPasado {
     /* background-color: hsl(0deg 0% 50% / 72%); */
     /* transition: background 250ms linear */
@@ -12715,13 +12716,14 @@ summary:hover {
 [zonaCSS="administracion/calendario"] .diaSelecionable {
     /* background: darkturquoise; */
 }
+
 [zonaCSS="administracion/calendario"] .diaSelecionable:hover {
     background: green;
 }
 
 [zonaCSS="administracion/calendario"] .diaParcial,
 .administracion_calendario_componenteCalendario_dia.diaParcial::before {
-    background: rgb(253 132 0 / 50%);   
+    background: rgb(253 132 0 / 50%);
     transition: background 250ms linear;
 }
 
@@ -12739,9 +12741,10 @@ summary:hover {
 
 [zonaCSS="administracion/calendario"] .diaDeHoy {
     /* border: 3px solid rgb(0 0 0 / 50%); */
-    background-color:  #3b92c7;
+    background-color: #3b92c7;
 
 }
+
 [zonaCSS="administracion/calendario"] .diaDeHoy_calendarioVertical {
     background-color: #3b92c7;
 }
@@ -13943,7 +13946,7 @@ summary:hover {
     align-items: center;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -13985,7 +13988,7 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="administracion/arquitectura_del_alojamiento/entidades/entidadUI"] .detallesReservaTituloCancelarReserva {
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -14006,7 +14009,7 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaTituloCancelarReserva {
+[zonaCSS="administracion/comportamientoDePrecios/comportamientoUI"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
@@ -14048,7 +14051,7 @@ summary:hover {
     text-align: center;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .contenedorReserva {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .contenedorReserva {
     margin: 6px;
     background: rgb(255 255 255 / 31%);
     display: flex;
@@ -14059,24 +14062,24 @@ summary:hover {
     border-radius: 20px;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .contenedorDatos {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .contenedorDatos {
     display: flex;
     padding: 16px;
     flex-direction: column;
     justify-content: center;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .dato {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .dato {
     margin: 0px;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .contenedorInformacion {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .contenedorInformacion {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .contenedorFechas {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .contenedorFechas {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -14088,7 +14091,7 @@ summary:hover {
     border-radius: 15px;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .contenedorBotones {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .contenedorBotones {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -14096,7 +14099,7 @@ summary:hover {
     justify-content: space-between;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .boton {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .boton {
     display: flex;
     padding: 10px;
     border-radius: 14px;
@@ -14111,11 +14114,11 @@ summary:hover {
     color: black;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .boton:hover {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .boton:hover {
     background: #0000005e;
 }
 
-[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientes_de_revision .info {
+[zonaCSS="administracion/reservas/pendientesDeRevision"] .reservas_pendientesDeRevision .info {
     display: flex;
     align-content: center;
     justify-content: center;

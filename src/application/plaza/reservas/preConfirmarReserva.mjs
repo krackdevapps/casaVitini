@@ -1,4 +1,3 @@
-import { Mutex } from "async-mutex";
 import { interruptor } from "../../../shared/configuracion/interruptor.mjs";
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { insertarReserva } from "../../../shared/reservas/insertarReserva.mjs";
@@ -18,15 +17,15 @@ import { limpiarContenedorFinacieroInformacionPrivada } from "../../../shared/mi
 import { enviarMailReservaConfirmadaAlCliente } from "../../../shared/mail/enviarMailReservaConfirmadaAlCliente.mjs";
 import { enviarMailDeAvisoPorReservaPublica } from "../../../shared/mail/enviarMailDeAvisoPorReservaPublica.mjs";
 import { validarComplementosAlojamiento } from "../../../shared/reservas/nuevaReserva/reservaPulica/validarComplementosAlojamiento.mjs";
+import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
-    const mutex = new Mutex()
     try {
         if (!await interruptor("aceptarReservasPublicas")) {
             throw new Error(mensajesUI.aceptarReservasPublicas);
         }
         await utilidades.ralentizador(2000)
-        await mutex.acquire()
+        await semaforoCompartidoReserva.acquire();
 
         const reservaPublica = entrada.body.reserva;
 
@@ -132,8 +131,8 @@ export const preConfirmarReserva = async (entrada) => {
         await campoDeTransaccion("cancelar");
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release();
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release();
         }
     }
 }

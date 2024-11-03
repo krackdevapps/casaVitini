@@ -1,4 +1,3 @@
-import { Mutex } from "async-mutex";
 import { apartamentosPorRango } from "../../../../../shared/selectoresCompartidos/apartamentosPorRango.mjs";
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
@@ -10,9 +9,9 @@ import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const anadirApartamentoReserva = async (entrada, salida) => {
-    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -24,7 +23,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
         })
-        await mutex.acquire();
+        await semaforoCompartidoReserva.acquire();
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
@@ -115,8 +114,8 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release()
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release()
         }
     }
 }

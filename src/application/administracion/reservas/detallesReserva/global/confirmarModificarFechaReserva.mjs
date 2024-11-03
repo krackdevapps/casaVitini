@@ -1,4 +1,3 @@
-import { Mutex } from "async-mutex";
 import { codigoZonaHoraria } from "../../../../../shared/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
@@ -11,9 +10,9 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { actualizarFechaSalidaReserva } from "../../../../../infraestructure/repository/reservas/rangoFlexible/actualizarFechaSalidaReserva.mjs";
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs";
 import { eliminarChecksPasadosPorNuevasFechasReserva } from "../../../../../infraestructure/repository/reservas/pernoctantes/eliminarChecksPasadosPorNuevasFechasReserva.mjs";
+import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
-    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -22,7 +21,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        await mutex.acquire();
+        await semaforoCompartidoReserva.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -189,8 +188,8 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release()
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release();
         }
     }
 }

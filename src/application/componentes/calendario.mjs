@@ -67,6 +67,26 @@ export const calendario = async (entrada) => {
             }
         }
 
+
+        const primeraFechaDisponible_objeto = tiempoZH.plus({ days: diasAntelacionReserva });
+        const primeraFechaDisponible = primeraFechaDisponible_objeto.toObject();
+        const primerDiaDelMes_primeraFechaDisponible = primeraFechaDisponible_objeto.set({ day: 1 });
+        const posicionDia1_primeraFechaDiponible = primerDiaDelMes_primeraFechaDisponible.weekday;
+        const numeroDeDiasPorMes_primeraFechaDisponible = primeraFechaDisponible_objeto.daysInMonth;
+
+        const mes_primeraFechaDisponbile = primeraFechaDisponible.month
+        const ano_primeraFechaDisponbile = primeraFechaDisponible.year
+
+
+        let tiempo_primeraFechaDisponible = "presente"
+        if (anoPresenteTZ > ano_primeraFechaDisponbile) {
+            tiempo_primeraFechaDisponible = "futuro"
+        } else if (anoPresenteTZ === ano_primeraFechaDisponbile && mesPresenteTZ === mes_primeraFechaDisponbile) {
+            tiempo_primeraFechaDisponible = "presente"
+        } else if (anoPresenteTZ === ano_primeraFechaDisponbile && mesPresenteTZ < mes_primeraFechaDisponbile) {
+            tiempo_primeraFechaDisponible = "futuro"
+        }
+
         if (tipo === "actual") {
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
@@ -80,12 +100,18 @@ export const calendario = async (entrada) => {
             const numeroDeDiasPorMes = tiempoZH.daysInMonth;
 
             const estructuraGlobal_DiasAntelacion = {};
-            const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
+
+
             for (let index = 0; index < diasAntelacionReserva; index++) {
+
+
                 const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
+
                 const anoObjeto = String(fechaAntelacionObjeto.year);
                 const mesObjeto = String(fechaAntelacionObjeto.month);
                 const diaObjeto = String(fechaAntelacionObjeto.day);
+
+
                 estructuraGlobal_DiasAntelacion[anoObjeto] ||= {};
                 const estructuraAno = estructuraGlobal_DiasAntelacion[anoObjeto];
                 estructuraAno[mesObjeto] ||= {};
@@ -98,8 +124,10 @@ export const calendario = async (entrada) => {
                 mes: fechaLimiteFuturo.month,
                 dia: fechaLimiteFuturo.day,
             };
+
+
             const respuesta = {
-                ok: "Aqui tienes los datos de contruccio del calendario",
+                ok: "Aqui tienes los datos de contrucción del calendario",
                 calendario: "ok",
                 ano: anoActual,
                 mes: mesActual,
@@ -114,7 +142,10 @@ export const calendario = async (entrada) => {
                     primeraFechaDisponible: {
                         dia: primeraFechaDisponible.day,
                         mes: primeraFechaDisponible.month,
-                        ano: primeraFechaDisponible.year
+                        ano: primeraFechaDisponible.year,
+                        numeroDiasPorMes: numeroDeDiasPorMes_primeraFechaDisponible,
+                        posicionDia1: posicionDia1_primeraFechaDiponible,
+                        tiempo: tiempo_primeraFechaDisponible
                     }
                 }
             };
@@ -183,7 +214,7 @@ export const calendario = async (entrada) => {
             const fecha = DateTime.fromObject({ year: ano, month: mes, day: 1 });
             const numeroDeDiasPorMes = fecha.daysInMonth;
             const posicionDiaComienzoMes = fecha.weekday;
-            calendario.ok = "Aqui tienes los datos de contruccio del calendario"
+            calendario.ok = "Aqui tienes los datos de contrucción del calendario"
             calendario.calendario = "ok";
             calendario.ano = ano;
             calendario.mes = mes;
@@ -192,6 +223,15 @@ export const calendario = async (entrada) => {
             calendario.posicionDia1 = posicionDiaComienzoMes;
             const estructuraGlobal_DiasAntelacion = {};
             const primeraFechaDisponible = tiempoZH.plus({ day: diasAntelacionReserva }).toObject();
+
+
+
+
+
+
+
+
+
             for (let index = 0; index < diasAntelacionReserva; index++) {
                 const fechaAntelacionObjeto = tiempoZH.plus({ day: index }).toObject();
                 const anoObjeto = String(fechaAntelacionObjeto.year);
@@ -209,6 +249,7 @@ export const calendario = async (entrada) => {
                 mes: fechaLimiteFuturo.month,
                 dia: fechaLimiteFuturo.day,
             };
+
             calendario.limites = {
                 diasAntelacion: estructuraGlobal_DiasAntelacion,
                 limiteFuturo: estructuraGlobal_limiteFuturo,
@@ -216,7 +257,10 @@ export const calendario = async (entrada) => {
                 primeraFechaDisponible: {
                     dia: primeraFechaDisponible.day,
                     mes: primeraFechaDisponible.month,
-                    ano: primeraFechaDisponible.year
+                    ano: primeraFechaDisponible.year,
+                    numeroDiasPorMes: numeroDeDiasPorMes_primeraFechaDisponible,
+                    posicionDia1: posicionDia1_primeraFechaDiponible,
+                    tiempo: tiempo_primeraFechaDisponible
                 }
             };
             return calendario
@@ -291,7 +335,7 @@ export const calendario = async (entrada) => {
                 fechaActual = fechaActual.plus({ days: 1 });
             }
             const ok = {
-                ok: "Aqui tienes los datos de contruccio del calendario",
+                ok: "Aqui tienes los datos de contrucción del calendario",
                 calendario: "ok",
                 fechaPresente: fechaPresente.toISODate(),
                 arbolFechas

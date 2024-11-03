@@ -1,18 +1,17 @@
-import { Mutex } from "async-mutex";
 import { evitarDuplicados } from "../../../shared/contenedorFinanciero/comportamientoPrecios/evitarDuplicados.mjs";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { insertarComportamientoDePrecio } from "../../../infraestructure/repository/comportamientoDePrecios/insertarComportamientoDePrecio.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { validarComportamiento } from "../../../shared/contenedorFinanciero/comportamientoPrecios/validarComportamiento.mjs";
+import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const crearComportamiento = async (entrada) => {
-    const mutex = new Mutex();
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
         IDX.administradores()
         IDX.control()
-        await mutex.acquire();
+        await semaforoCompartidoReserva.acquire();
         const comportamiento = {
             nombreComportamiento: entrada.body.nombreComportamiento,
             estadoInicialDesactivado: "desactivado",
@@ -49,8 +48,8 @@ export const crearComportamiento = async (entrada) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release();
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release();
         }
     }
 }

@@ -1,4 +1,3 @@
-import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -11,9 +10,9 @@ import { obtenerCamasFisicasPorReservaUID } from "../../../../../infraestructure
 import { insertarCamaFisicaEnLaHabitacion } from "../../../../../infraestructure/repository/reservas/apartamentos/insertarCamaFisicaEnLaHabitacion.mjs";
 import { obtenerCamaCompartidaDeLaHabitacion } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerCamaCompartidaDeLaHabitacion.mjs";
 import { obtenerCamaFisicaPorReservaUIDPorHabitacionUIDPorCamaIDV } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerCamaFisicaPorReservaUIDPorHabitacionUIDPorCamaIDV.mjs";
+import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const gestionarCamasDeHabitacion = async (entrada, salida) => {
-    const mutex = new Mutex()
     try {
 
         const session = entrada.session
@@ -22,7 +21,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        await mutex.acquire();
+        await semaforoCompartidoReserva.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 4
@@ -180,8 +179,8 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release()
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release()
         }
     }
 }

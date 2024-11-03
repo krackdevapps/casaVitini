@@ -41,7 +41,7 @@ export const enviarMailDeAvisoPorReservaPublica = async (reservaUID) => {
         Telefono: ${telefonoTitular}
         <br>
         <a href="https://casavitini.com/micasa/reservas/reserva:${reservaUID}">Ir a la reserva</a>
-        <a href="https://casavitini.com/administracion/reservas/pendientes_de_revision">Ir a reservas pendientes de revisión</a>
+        <a href="https://casavitini.com/administracion/reservas/pendientesDeRevision">Ir a reservas pendientes de revisión</a>
         </html>`
         const pdf = await generadorPDF(reserva)
         const composicionDelMensaje = {

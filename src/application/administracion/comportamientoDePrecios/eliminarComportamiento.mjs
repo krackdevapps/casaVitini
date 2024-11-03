@@ -1,12 +1,11 @@
-import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { eliminarComportamientoDePrecioPorComportamientoUID } from "../../../infraestructure/repository/comportamientoDePrecios/eliminarComportamientoDePrecioPorComportamientoUID.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
+import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const eliminarComportamiento = async (entrada, salida) => {
-    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -16,7 +15,7 @@ export const eliminarComportamiento = async (entrada, salida) => {
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
         })
-        await mutex.acquire()
+        await semaforoCompartidoReserva.acquire();
 
         const comportamientoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.comportamientoUID,
@@ -39,8 +38,8 @@ export const eliminarComportamiento = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release();
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release();
         }
     }
 }

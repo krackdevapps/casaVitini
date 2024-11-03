@@ -13,9 +13,9 @@ import { procesador } from "../../../../shared/contenedorFinanciero/procesador.m
 import { insertarDesgloseFinacieroPorReservaUID } from "../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/insertarDesgloseFinacieroPorReservaUID.mjs";
 import { generadorReservaUID } from "../../../../shared/reservas/utilidades/generadorReservaUID.mjs";
 import { codigoZonaHoraria } from "../../../../shared/configuracion/codigoZonaHoraria.mjs";
+import { semaforoCompartidoReserva } from "../../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
-    const mutex = new Mutex()
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -23,7 +23,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
-        await mutex.acquire();
+        await semaforoCompartidoReserva.acquire();
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 5
@@ -234,8 +235,8 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release();
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release();
         }
     }
 }

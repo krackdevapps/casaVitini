@@ -1,4 +1,3 @@
-import { Mutex } from "async-mutex";
 import { evitarDuplicados } from "../../../shared/contenedorFinanciero/comportamientoPrecios/evitarDuplicados.mjs";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
@@ -7,9 +6,9 @@ import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../infr
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { validarComportamiento } from "../../../shared/contenedorFinanciero/comportamientoPrecios/validarComportamiento.mjs";
+import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
 export const actualizarComportamiento = async (entrada, salida) => {
-    const mutex = new Mutex();
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
@@ -21,7 +20,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
         })
-        await mutex.acquire();
+        await semaforoCompartidoReserva.acquire();
         const comportamientoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.comportamientoUID,
             nombreCampo: "El identificador universal de la reserva (comportamientoUID)",
@@ -76,8 +75,8 @@ export const actualizarComportamiento = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        if (mutex) {
-            mutex.release()
+        if (semaforoCompartidoReserva) {
+            semaforoCompartidoReserva.release();
         }
     }
 }
