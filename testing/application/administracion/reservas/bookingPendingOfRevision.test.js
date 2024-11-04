@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { obtener_reservas } from '../../../../src/application/administracion/reservas/pendientesDeRevision/obtener_reservas.mjs';
+import { obtener_reservas } from '../../../../src/application/administracion/reservas/pendientes_de_revision/obtener_reservas.mjs';
 
 describe('bookingPendingOfRevision in administrative zone', () => {
     const fakeAdminSession = {

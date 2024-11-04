@@ -60,7 +60,7 @@ export const calendariosCompartidos = async (data) => {
                     end: fechaFin,
                     summary: 'Bloqueo permanente en casavitini.com',
                     uid: `bloqueo_${bloqueoUID}`,
-                    description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueosTemporales/${apartamentoIDV}/${bloqueoUID}`
+                    description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
                 };
                 eventos.push(estructuraEVENTO);
             }
@@ -101,7 +101,7 @@ export const calendariosCompartidos = async (data) => {
                     end: fechaSalida_objeto.toISO(),
                     summary: `Bloqueo temporal del ${apartamentoUI} en casavitini.com`,
                     uid: `bloqueo_${bloqueoUID}`,
-                    description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueosTemporales/${apartamentoIDV}/${bloqueoUID}`
+                    description: `Detalles del bloqueo: https://casavitini.com/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
                 };
                 eventos.push(estructuraEVENTO);
             }

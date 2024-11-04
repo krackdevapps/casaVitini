@@ -27963,8 +27963,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                                     "limpiezaBotonA"
                                                 )
                                                 botonVerOferta.textContent = "Ir a la oferta"
-                                                botonVerOferta.setAttribute("href", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
-                                                botonVerOferta.setAttribute("vista", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
+                                                botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                                botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                                 botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                                 contendorBotones.appendChild(botonVerOferta)
 
@@ -28165,8 +28165,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                                     "limpiezaBotonA"
                                                 )
                                                 botonVerOferta.textContent = "Ir a la oferta"
-                                                botonVerOferta.setAttribute("href", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
-                                                botonVerOferta.setAttribute("vista", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
+                                                botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                                botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                                 botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                                 contendorBotones.appendChild(botonVerOferta)
 
@@ -30871,8 +30871,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const botonReservasPendientes = document.createElement("a")
                     botonReservasPendientes.classList.add("administracion_reservas_contenedorBotonesGlobales")
                     botonReservasPendientes.textContent = "Reservas pendientes de revisión"
-                    botonReservasPendientes.setAttribute("vista", "/administracion/reservas/pendientesDeRevision")
-                    botonReservasPendientes.setAttribute("href", "/administracion/reservas/pendientesDeRevision")
+                    botonReservasPendientes.setAttribute("vista", "/administracion/reservas/pendientes_de_revision")
+                    botonReservasPendientes.setAttribute("href", "/administracion/reservas/pendientes_de_revision")
                     botonReservasPendientes.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     contenedorBotonesGlobales.appendChild(botonReservasPendientes)
                     const botonCrearReserva = document.createElement("a")
@@ -32213,13 +32213,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const sectionRenderizada = document.querySelector("main[instanciaUID]")
                     const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
                     const main = document.querySelector("main")
-                    main.setAttribute("zonaCSS", "administracion/reservas/pendientesDeRevision")
+                    main.setAttribute("zonaCSS", "administracion/reservas/pendientes_de_revision")
                     const espacioReservasPendientes = document.querySelector(`main[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
                     const info = document.createElement("div")
                     info.classList.add("info")
                     info.textContent = "No hay reservas pendientes de revisión"
                     const transaccion = {
-                        zona: "administracion/reservas/pendientesDeRevision/obtener_reservas"
+                        zona: "administracion/reservas/pendientes_de_revision/obtener_reservas"
                     }
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     if (respuestaServidor?.error) {
@@ -32524,7 +32524,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         marcoElastico.appendChild(apartamentoUI)
 
                         const espacioEventosAirbnb = document.createElement("div")
-                        espacioEventosAirbnb.classList.add("espacioEventosAirbnb")
+                        espacioEventosAirbnb.classList.add("flexVertical", "gap6")
                         espacioEventosAirbnb.setAttribute("componente", "espacioEventosAirbnb")
 
                         for (const [reservaUID, detallesReservas] of Object.entries(reservas)) {
@@ -38841,8 +38841,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     boton = document.createElement("a")
                     boton.classList.add("preciosEImpuestosDetalleApartamentoDetallesBoton")
                     boton.textContent = "Ir a la configuración del apartamento"
-                    boton.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/configuraciones/" + apartamentoIDV)
-                    boton.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/configuraciones/" + apartamentoIDV)
+                    boton.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/" + apartamentoIDV)
+                    boton.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/" + apartamentoIDV)
                     boton.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     bloqueBotones.appendChild(boton)
                     bloqueDetallesApartamento.appendChild(bloqueBotones)
@@ -40440,8 +40440,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         "limpiezaBotonA"
                                     )
                                     botonVerOferta.textContent = "Ir a la oferta"
-                                    botonVerOferta.setAttribute("href", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
-                                    botonVerOferta.setAttribute("vista", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
+                                    botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                    botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                     botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                     contendorBotones.appendChild(botonVerOferta)
 
@@ -40637,8 +40637,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         "limpiezaBotonA"
                                     )
                                     botonVerOferta.textContent = "Ir a la oferta"
-                                    botonVerOferta.setAttribute("href", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
-                                    botonVerOferta.setAttribute("vista", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
+                                    botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                    botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                     botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                     contendorBotones.appendChild(botonVerOferta)
 
@@ -43819,8 +43819,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     "limpiezaBotonA"
                                 )
                                 botonVerOferta.textContent = "Ir a la oferta"
-                                botonVerOferta.setAttribute("href", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
-                                botonVerOferta.setAttribute("vista", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
+                                botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                 botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                 contendorBotones.appendChild(botonVerOferta)
 
@@ -44769,7 +44769,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                 const main = document.querySelector("main")
-                if (comandoInicial === "gestionDeOfertas" && Object.keys(granuladoURL.parametros).length === 0) {
+                if (comandoInicial === "gestion_de_ofertas" && Object.keys(granuladoURL.parametros).length === 0) {
                     main.setAttribute("zonaCSS", "administracion/ofertas")
                     this.portada.portadaUI()
                 } else if (granuladoURL.parametros.oferta) {
@@ -44778,7 +44778,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 } else {
                     const info = {
                         titulo: "No existe ninguna oferta con ese identificador",
-                        descripcion: "La oferta que buscas con ese identificador no existe.Comprueba el identificador de la reserva"
+                        descripcion: "La oferta que buscas con ese identificador no existe. Comprueba el identificador de la reserva"
                     }
                     casaVitini.ui.componentes.mensajeSimple(info)
                 }
@@ -44793,8 +44793,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const botonCrearOfertas = document.createElement("a")
                     botonCrearOfertas.classList.add("gestionDeOfertasBotonCrearOferta")
                     botonCrearOfertas.textContent = "Crear una nueva oferta"
-                    botonCrearOfertas.setAttribute("href", "/administracion/gestionDeOfertas/crear_oferta")
-                    botonCrearOfertas.setAttribute("vista", "/administracion/gestionDeOfertas/crear_oferta")
+                    botonCrearOfertas.setAttribute("href", "/administracion/gestion_de_ofertas/crear_oferta")
+                    botonCrearOfertas.setAttribute("vista", "/administracion/gestion_de_ofertas/crear_oferta")
                     botonCrearOfertas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     contenedorBotones.appendChild(botonCrearOfertas)
                     contenedor.appendChild(contenedorBotones)
@@ -44852,8 +44852,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const ofertaUI = document.createElement("a")
                                 ofertaUI.classList.add("ofertaUI")
                                 ofertaUI.setAttribute("ofertaUID", ofertaUID)
-                                ofertaUI.setAttribute("href", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
-                                ofertaUI.setAttribute("vista", "/administracion/gestionDeOfertas/oferta:" + ofertaUID)
+                                ofertaUI.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+                                ofertaUI.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
                                 ofertaUI.addEventListener("click", casaVitini.administracion.gestionDeOfertas.traductorCambioVista)
                                 const tituloOferta = document.createElement("p")
                                 tituloOferta.classList.add("ofertaUITituloOferta")
@@ -45074,7 +45074,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     if (respuestaServidor?.ok) {
 
                         const nuevaOferta = respuestaServidor?.oferta.ofertaUID
-                        const vista = `/administracion/gestionDeOfertas/oferta:${nuevaOferta}`
+                        const vista = `/administracion/gestion_de_ofertas/oferta:${nuevaOferta}`
                         const navegacion = {
                             vista: vista,
                             tipoOrigen: "menuNavegador"
@@ -45649,7 +45649,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
-                            const vista = `/administracion/gestionDeOfertas`
+                            const vista = `/administracion/gestion_de_ofertas`
                             const navegacion = {
                                 vista: vista,
                                 tipoOrigen: "menuNavegador"
@@ -47344,13 +47344,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const main = document.querySelector("main")
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
-                if (comandoInicial === "comportamientoDePrecios" && Object.keys(granuladoURL.parametros).length === 0) {
+                if (comandoInicial === "comportamiento_de_precios" && Object.keys(granuladoURL.parametros).length === 0) {
 
-                    main.setAttribute("zonaCSS", "administracion/comportamientoDePrecios")
+                    main.setAttribute("zonaCSS", "administracion/comportamiento_de_precios")
                     casaVitini.administracion.comportamientoDePrecios.portadaUI()
                 } else if (granuladoURL.parametros.comportamiento) {
 
-                    main.setAttribute("zonaCSS", "administracion/comportamientoDePrecios/comportamientoUI")
+                    main.setAttribute("zonaCSS", "administracion/comportamiento_de_precios/comportamientoUI")
                     casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.UI(granuladoURL.parametros.comportamiento)
                 } else {
 
@@ -47371,8 +47371,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const botonCrearOfertas = document.createElement("a")
                 botonCrearOfertas.classList.add("gestionDeOfertasBotonCrearOferta")
                 botonCrearOfertas.textContent = "Crear un comportamiento de precios"
-                botonCrearOfertas.setAttribute("href", "/administracion/comportamientoDePrecios/crear_comportamiento")
-                botonCrearOfertas.setAttribute("vista", "/administracion/comportamientoDePrecios/crear_comportamiento")
+                botonCrearOfertas.setAttribute("href", "/administracion/comportamiento_de_precios/crear_comportamiento")
+                botonCrearOfertas.setAttribute("vista", "/administracion/comportamiento_de_precios/crear_comportamiento")
                 botonCrearOfertas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorBotones.appendChild(botonCrearOfertas)
                 contenedor.appendChild(contenedorBotones)
@@ -47432,8 +47432,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const comportamientoUI = document.createElement("a")
                             comportamientoUI.classList.add("comportamientoUI")
                             comportamientoUI.setAttribute("comportamientoUI", comportamientoUID)
-                            comportamientoUI.setAttribute("href", "/administracion/comportamientoDePrecios/comportamiento:" + comportamientoUID)
-                            comportamientoUI.setAttribute("vista", "/administracion/comportamientoDePrecios/comportamiento:" + comportamientoUID)
+                            comportamientoUI.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+                            comportamientoUI.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
                             comportamientoUI.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.traductorCambioVista)
 
                             const contenedorTituloEstado = document.createElement("div")
@@ -47863,11 +47863,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     }
                     opcionPredeterminada.disabled = true;
                     opcionPredeterminada.value = "no"
-                    opcionPredeterminada.text = "Selecciona el tipo de comportamiento."
+                    opcionPredeterminada.text = "Selecciona el tipo de comportamiento"
                     tipoDescuento.appendChild(opcionPredeterminada)
                     const opciones = [
-                        { value: "aumentoPorcentaje", text: "Aumentar precio por porcentaje." },
-                        { value: "aumentoCantidad", text: "Aumentar precio por cantidad." },
+                        { value: "aumentoPorcentaje", text: "Aumentar precio por porcentaje" },
+                        { value: "aumentoCantidad", text: "Aumentar precio por cantidad" },
                         { value: "reducirCantidad", text: "Reducir precio por cantidad" },
                         { value: "reducirPorcentaje", text: "Reducir precio por porcentaje" },
                         { value: "precioEstablecido", text: "Establecer el precio" }
@@ -48384,6 +48384,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     "ocultoInicial"
                 )
                 divPrincipal.appendChild(contenedorTipoComportamiento)
+                if (modo === "editarOferta") {
+                    const botonIrAlCalendario = document.createElement("div")
+                    botonIrAlCalendario.classList.add("botonV1")
+                    //                    botonIrAlCalendario.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.estadoComportamiento)
+                    botonIrAlCalendario.textContent = "Ver el comportamiento en el calendario"
+                    divPrincipal.appendChild(botonIrAlCalendario)
+                }
+
 
                 const contenedorPorRango = this.compomentesUI.perfilesComportamiento.porRango()
                 contenedorTipoComportamiento.appendChild(contenedorPorRango)
@@ -48391,6 +48399,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 contenedorTipoComportamiento.appendChild(contenedorPorDias)
                 const contenedorPorCreacion = await this.compomentesUI.perfilesComportamiento.porCreacion()
                 contenedorTipoComportamiento.appendChild(contenedorPorCreacion)
+
 
 
                 const divCrearOfertaEpacioBotones_3 = document.createElement("div");
@@ -49076,7 +49085,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         enlaceUI.classList.add("ofertaUINoHay")
                         const tituloOferta = document.createElement("p")
                         tituloOferta.classList.add("ofertaUITituloOferta")
-                        tituloOferta.textContent = "No hay ningún enlace creado.Desde aquí puedes ver todos los enlaces de pago generados desde las reservas de una forma centralizada.Puedes generar un enlace de pago desde la reserva en la pestaña enlaces de pago."
+                        tituloOferta.textContent = "No hay ningún enlace creado. Desde aquí puedes ver todos los enlaces de pago generados desde las reservas de una forma centralizada. Puedes generar un enlace de pago desde la reserva en la pestaña enlaces de pago."
                         enlaceUI.appendChild(tituloOferta)
                         espacioEnlacesRenderizados.appendChild(enlaceUI)
                         return
@@ -49314,7 +49323,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
 
-                if (comandoInicial === "gestion_de_bloqueosTemporales") {
+                if (comandoInicial === "gestion_de_bloqueos_temporales") {
                     main.setAttribute("zonaCSS", "administracion/gestion_de_bloqueos")
                     casaVitini.administracion.bloqueosTemporales.portadaUI()
                     return
@@ -49326,7 +49335,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     if (interruptor === "noIgnorar") {
                         directoriosFiltrados.push(directorio)
                     }
-                    if (directorio === "gestion_de_bloqueosTemporales") {
+                    if (directorio === "gestion_de_bloqueos_temporales") {
                         interruptor = "noIgnorar"
                     }
                 })
@@ -49353,13 +49362,38 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const selectorEspacioBloqueos = document.querySelector("[componente=bloqueosTemporales]")
                 const selectorTitulo = document.querySelector("[componente=titulo]")
                 selectorTitulo.textContent = "Bloqueos de los Apartamentos"
+
+
+                const info = document.createElement("p")
+                info.classList.add("padding10")
+                info.textContent = "Los bloqueos temporales, cuando están definidos por rango de fecha, es decir, no son permanentes, bloquean todo el día, desde las 00:00 hasta las 23:59. Los bloqueos no tienen en cuenta la hora de entrada y salida. Los bloqueos basados en rango temporal que tengan todos sus días en el pasado se autoeliminan. Solo verás bloqueos con rango temporal con días en el presente o futuro y bloqueos permanentes."
+                selectorEspacioBotonesGlobales.appendChild(info)
+
                 const contenedorBotonesPortada = document.createElement("div")
-                contenedorBotonesPortada.classList.add("portadaBloqueos_espacioBotones")
+                contenedorBotonesPortada.classList.add("portadaBloqueos_espacioBotones", "gap6")
+                selectorEspacioBotonesGlobales.appendChild(contenedorBotonesPortada)
+
+                const botonIrAlCalendario = document.createElement("a")
+                botonIrAlCalendario.classList.add("portadaBloqueos_botonV1")
+                botonIrAlCalendario.innerHTML = "Ver todos los bloqueos en el calendario"
+                botonIrAlCalendario.setAttribute("vista", "/administracion/calendario/capa:todos_los_bloqueos")
+                botonIrAlCalendario.setAttribute("href","/administracion/calendario/capa:todos_los_bloqueos")
+                botonIrAlCalendario.addEventListener("click", (boton) => {
+                    boton.preventDefault()
+                    const vista = boton.target.getAttribute("vista")
+                    const navegacion = {
+                        "vista": vista,
+                        "tipoOrigen": "menuNavegador"
+                    }
+                    casaVitini.shell.navegacion.controladorVista(navegacion)
+                })
+                contenedorBotonesPortada.appendChild(botonIrAlCalendario)
+
                 const botonCrearBloqueoUI = document.createElement("a")
                 botonCrearBloqueoUI.classList.add("portadaBloqueos_botonV1")
                 botonCrearBloqueoUI.innerHTML = "Crear un bloqueo"
-                botonCrearBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueosTemporales/crear_bloqueo")
-                botonCrearBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueosTemporales/crear_bloqueo")
+                botonCrearBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/crear_bloqueo")
+                botonCrearBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/crear_bloqueo")
                 botonCrearBloqueoUI.addEventListener("click", (boton) => {
                     boton.preventDefault()
                     const vista = boton.target.getAttribute("vista")
@@ -49370,7 +49404,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     casaVitini.shell.navegacion.controladorVista(navegacion)
                 })
                 contenedorBotonesPortada.appendChild(botonCrearBloqueoUI)
-                selectorEspacioBotonesGlobales.appendChild(contenedorBotonesPortada)
                 const transaccion = {
                     zona: "administracion/bloqueos/listarApartamentosConBloqueos"
                 }
@@ -49399,9 +49432,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const bloqueApartamentoUI = document.createElement("a")
                         bloqueApartamentoUI.classList.add("gestionBloqueoApartamento_bloqueApartamentoUI")
                         bloqueApartamentoUI.setAttribute("apartamentoIDV", apartamentoIDV)
-                        bloqueApartamentoUI.setAttribute("href", "/administracion/gestion_de_bloqueosTemporales/" + apartamentoIDV)
-                        bloqueApartamentoUI.setAttribute("vista", "/administracion/gestion_de_bloqueosTemporales/" + apartamentoIDV)
+                        bloqueApartamentoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV)
+                        bloqueApartamentoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV)
                         bloqueApartamentoUI.addEventListener("click", casaVitini.administracion.bloqueosTemporales.traductorCambioVista)
+                        selectorEspacioBloqueos.appendChild(bloqueApartamentoUI)
+
                         const tituloApartamentoUI = document.createElement("div")
                         tituloApartamentoUI.classList.add("gestionBloqueoApartamento_tituloApartamentoUI")
                         tituloApartamentoUI.classList.add("negrita")
@@ -49411,7 +49446,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         numeroBloqueosUI.classList.add("gestionBloqueoApartamento_numeroBloqueosUI")
                         numeroBloqueosUI.textContent = mensajeNumeroBloqueos
                         bloqueApartamentoUI.appendChild(numeroBloqueosUI)
-                        selectorEspacioBloqueos.appendChild(bloqueApartamentoUI)
+                        
                     })
                 }
             },
@@ -49470,12 +49505,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
 
 
-                            const bloqueBloqueoUI = document.createElement("a")
+                            const bloqueBloqueoUI = document.createElement("div")
                             bloqueBloqueoUI.classList.add("listaBloqueos_bloqueBloqueoUI")
                             bloqueBloqueoUI.setAttribute("bloqueoUID", bloqueoUID)
-                            bloqueBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueosTemporales/" + apartamentoIDV + "/" + bloqueoUID)
-                            bloqueBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueosTemporales/" + apartamentoIDV + "/" + bloqueoUID)
-                            bloqueBloqueoUI.addEventListener("click", casaVitini.administracion.bloqueosTemporales.bloqueosPorApartamento.traductorCambioVista)
+                           // bloqueBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
+                           // bloqueBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
+                            //bloqueBloqueoUI.addEventListener("click", casaVitini.administracion.bloqueosTemporales.bloqueosPorApartamento.traductorCambioVista)
                             let tipoBloqueoDefinicion
                             if (tipoBloqueoIDV === "rangoTemporal") {
                                 tipoBloqueoDefinicion = "Rango temporal"
@@ -49573,6 +49608,37 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             contenedorMotivoBloqueo.appendChild(motivoUI)
                             bloqueBloqueoUI.appendChild(contenedorMotivoBloqueo)
                             selectorEspacioBloqueos.appendChild(bloqueBloqueoUI)
+
+
+
+                            const contenedorBotones = document.createElement("div")
+                            contenedorBotones.classList.add("flexVertical", "gap6")
+                            bloqueBloqueoUI.appendChild(contenedorBotones)
+    
+                            const botonEntrarBloqueo = document.createElement("a")
+                            botonEntrarBloqueo.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
+                            botonEntrarBloqueo.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
+                            botonEntrarBloqueo.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                            botonEntrarBloqueo.classList.add("botonV1BlancoIzquierda")
+                            botonEntrarBloqueo.textContent = "Editar bloqueo del alojamiento"
+                            contenedorBotones.appendChild(botonEntrarBloqueo)
+    
+                            let urlCalendario
+                            if (tipoBloqueoIDV === "rangoTemporal") {
+                                const mes = fechaInicio.split("-")[1]
+                                const ano = fechaInicio.split("-")[0]
+                                urlCalendario = `/administracion/calendario/fecha:${Number(mes)}-${ano}/capa:todos_los_bloqueos`
+                            }  else    if (tipoBloqueoIDV === "permanente") {
+                                urlCalendario = "/administracion/calendario/capa:todos_los_bloqueos"
+                            }
+    
+                            const botonIrACalendario = document.createElement("a")
+                            botonIrACalendario.setAttribute("href", urlCalendario)
+                            botonIrACalendario.setAttribute("vista", urlCalendario)
+                            botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                            botonIrACalendario.classList.add("botonV1BlancoIzquierda")
+                            botonIrACalendario.textContent = "Ver bloqueo en el calendario"
+                            contenedorBotones.appendChild(botonIrACalendario)
                         })
                     }
                 },
@@ -49650,7 +49716,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         tipoBloqueoTituloUI.textContent = "Tipo bloqueo"
                         contenedorTipoBloqueoV2.appendChild(tipoBloqueoTituloUI)
                         const tipoBloqueoUI = document.createElement("select")
-                        tipoBloqueoUI.classList.add("administracion_bloqueos_detallesBloqueo_listaSelec")
+                        tipoBloqueoUI.classList.add("botonV1BlancoIzquierda_campo")
                         tipoBloqueoUI.setAttribute("datoBloqueo", "tipoBloqueoIDV")
                         tipoBloqueoUI.setAttribute("datoInicial", tipoBloqueoIDV)
                         tipoBloqueoUI.textContent = tipoBloqueoDefinicion
@@ -49689,7 +49755,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             zonaDefinicionUI = "Global - Se aplica a toda la zona, tando pública como administrativa"
                         }
                         const zonaUI = document.createElement("select")
-                        zonaUI.classList.add("administracion_bloqueos_detallesBloqueo_listaSelec")
+                        zonaUI.classList.add("botonV1BlancoIzquierda_campo")
                         zonaUI.setAttribute("datoBloqueo", "zonaIDV")
                         zonaUI.setAttribute("datoInicial", zonaIDV)
                         const opcion_publico = document.createElement("option");
@@ -49733,7 +49799,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
 
                         const motivoUI = document.createElement("textarea")
-                        motivoUI.classList.add("detalleBloqueos_motivo")
+                        motivoUI.classList.add("botonV1BlancoIzquierda_campo")
                         motivoUI.setAttribute("componente", "contenedorMotivo")
                         motivoUI.setAttribute("datoBloqueo", "motivoUI")
                         if (motivo === null) {
@@ -50073,10 +50139,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const tipoRetroceso = respuestaServidor?.tipoRetroceso
                             let vistaFinal
                             if (tipoRetroceso === "aPortada") {
-                                vistaFinal = `/administracion/gestion_de_bloqueosTemporales`
+                                vistaFinal = `/administracion/gestion_de_bloqueos_temporales`
                             }
                             if (tipoRetroceso === "aApartamento") {
-                                vistaFinal = `/administracion/gestion_de_bloqueosTemporales/` + apartamentoIDV
+                                vistaFinal = `/administracion/gestion_de_bloqueos_temporales/` + apartamentoIDV
                             }
                             const navegacion = {
                                 vista: vistaFinal,
@@ -50584,7 +50650,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         const nuevoUID = respuestaServidor?.nuevoBloqueoUID
                         const apartamentoIDV = respuestaServidor.apartamentoIDV
-                        const vistaFinal = `/administracion/gestion_de_bloqueosTemporales/` + apartamentoIDV + "/" + nuevoUID
+                        const vistaFinal = `/administracion/gestion_de_bloqueos_temporales/` + apartamentoIDV + "/" + nuevoUID
                         const navegacion = {
                             vista: vistaFinal,
                             tipoOrigen: "menuNavegador"
@@ -50649,8 +50715,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const botonalojamientoUI = document.createElement("a")
                 botonalojamientoUI.classList.add("botonV1BlancoIzquierda")
                 botonalojamientoUI.textContent = "Configuración del alojamiento"
-                botonalojamientoUI.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/configuraciones")
-                botonalojamientoUI.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/configuraciones")
+                botonalojamientoUI.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones")
+                botonalojamientoUI.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones")
                 botonalojamientoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorBotonesPortada.appendChild(botonalojamientoUI)
 
@@ -50662,8 +50728,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const botonEntidadesAlojamientoUI = document.createElement("a")
                 botonEntidadesAlojamientoUI.classList.add("botonV1BlancoIzquierda")
                 botonEntidadesAlojamientoUI.textContent = "Entidades de alojamiento"
-                botonEntidadesAlojamientoUI.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades")
-                botonEntidadesAlojamientoUI.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades")
+                botonEntidadesAlojamientoUI.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades")
+                botonEntidadesAlojamientoUI.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades")
                 botonEntidadesAlojamientoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorBotonesPortada.appendChild(botonEntidadesAlojamientoUI)
                 espacioConfiguracionDelAlojamiento.appendChild(contenedorBotonesPortada)
@@ -50717,8 +50783,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const botonAnadirApartamento = document.createElement("a")
                         botonAnadirApartamento.classList.add("botonV1BlancoIzquierda")
                         botonAnadirApartamento.textContent = "Crear un nuevo apartamento"
-                        botonAnadirApartamento.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:apartamento")
-                        botonAnadirApartamento.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:apartamento")
+                        botonAnadirApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
+                        botonAnadirApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
                         botonAnadirApartamento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorBotonSeccionEntidad.appendChild(botonAnadirApartamento)
                         contenedorApartamentos.appendChild(contenedorBotonSeccionEntidad)
@@ -50738,8 +50804,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const contenedorDetalleApartamento = document.createElement("a")
                                 contenedorDetalleApartamento.classList.add("confAlojamiento_entidades_contenedorDetalles")
                                 contenedorDetalleApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                                contenedorDetalleApartamento.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
-                                contenedorDetalleApartamento.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
+                                contenedorDetalleApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
+                                contenedorDetalleApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
                                 contenedorDetalleApartamento.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.entidades.traductorCambioVista)
                                 const tituloApartamento = document.createElement("div")
                                 tituloApartamento.classList.add("confAlojamiento_entidades_titulo")
@@ -50763,8 +50829,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const botonAnadirHabitacion = document.createElement("a")
                         botonAnadirHabitacion.classList.add("botonV1BlancoIzquierda")
                         botonAnadirHabitacion.textContent = "Crear una nueva habitación"
-                        botonAnadirHabitacion.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:habitacion")
-                        botonAnadirHabitacion.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:habitacion")
+                        botonAnadirHabitacion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:habitacion")
+                        botonAnadirHabitacion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:habitacion")
                         botonAnadirHabitacion.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.entidades.traductorCambioVista)
                         contenedorBotonSeccionHabitacion.appendChild(botonAnadirHabitacion)
                         contenedorHabitaciones.appendChild(contenedorBotonSeccionHabitacion)
@@ -50783,8 +50849,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const contenedorDetalleHabitacion = document.createElement("a")
                                 contenedorDetalleHabitacion.classList.add("confAlojamiento_entidades_contenedorDetalles")
                                 contenedorDetalleHabitacion.setAttribute("habitacionIDV", habitacionIDV)
-                                contenedorDetalleHabitacion.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/habitacion:" + habitacionIDV)
-                                contenedorDetalleHabitacion.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/habitacion:" + habitacionIDV)
+                                contenedorDetalleHabitacion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/habitacion:" + habitacionIDV)
+                                contenedorDetalleHabitacion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/habitacion:" + habitacionIDV)
                                 contenedorDetalleHabitacion.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.entidades.traductorCambioVista)
                                 const tituloHabitacion = document.createElement("div")
                                 tituloHabitacion.classList.add("confAlojamiento_entidades_titulo")
@@ -50808,8 +50874,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const botonAnadirCamas = document.createElement("a")
                         botonAnadirCamas.classList.add("botonV1BlancoIzquierda")
                         botonAnadirCamas.textContent = "Crear una nueva cama"
-                        botonAnadirCamas.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:cama")
-                        botonAnadirCamas.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:cama")
+                        botonAnadirCamas.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:cama")
+                        botonAnadirCamas.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:cama")
                         botonAnadirCamas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorBotonSeccionCamas.appendChild(botonAnadirCamas)
                         contenedorCamas.appendChild(contenedorBotonSeccionCamas)
@@ -50828,8 +50894,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const contenedorDetalleCama = document.createElement("a")
                                 contenedorDetalleCama.classList.add("confAlojamiento_entidades_contenedorDetalles")
                                 contenedorDetalleCama.setAttribute("camaIDV", camaIDV)
-                                contenedorDetalleCama.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/cama:" + camaIDV)
-                                contenedorDetalleCama.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/cama:" + camaIDV)
+                                contenedorDetalleCama.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/cama:" + camaIDV)
+                                contenedorDetalleCama.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/cama:" + camaIDV)
                                 contenedorDetalleCama.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.entidades.traductorCambioVista)
                                 const tituloCama = document.createElement("div")
                                 tituloCama.classList.add("confAlojamiento_entidades_titulo")
@@ -51118,7 +51184,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         if (respuestaServidor?.ok) {
                             const nuevoUID = respuestaServidor?.nuevoUID
-                            const vista = `/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/${selectorTipoEntidad}:${nuevoUID}`
+                            const vista = `/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/${selectorTipoEntidad}:${nuevoUID}`
                             const navegacion = {
                                 vista: vista,
                                 tipoOrigen: "menuNavegador"
@@ -51658,7 +51724,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
 
                             const entidadIDV = document.querySelector("[entidadIDV]").getAttribute("entidadIDV")
-                            const urlVista = "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/" + selectorTipoEntidada + ":" + entidadIDV;
+                            const urlVista = "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/" + selectorTipoEntidada + ":" + entidadIDV;
                             const navegacion = {
                                 vista: urlVista,
                             }
@@ -51741,7 +51807,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
-                                const vista = `/administracion/arquitecturaDelAlojamiento/entidades`
+                                const vista = `/administracion/arquitectura_del_alojamiento/entidades`
                                 const navegacion = {
                                     vista: vista,
 
@@ -51804,8 +51870,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const botonCrearConfiguracion = document.createElement("a")
                     botonCrearConfiguracion.classList.add("arquitecturaConfApartamento_portada_boton")
                     botonCrearConfiguracion.textContent = "Crear nueva configuración de alojamiento"
-                    botonCrearConfiguracion.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/configuraciones/crear")
-                    botonCrearConfiguracion.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/configuraciones/crear")
+                    botonCrearConfiguracion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/crear")
+                    botonCrearConfiguracion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/crear")
                     botonCrearConfiguracion.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     espacioBotonesGlobales.appendChild(botonCrearConfiguracion)
                     selectorEspacioConfiguracionDelALojamiento.appendChild(espacioBotonesGlobales)
@@ -51844,8 +51910,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const contenedorApartamento = document.createElement("a")
                                 contenedorApartamento.classList.add("arquitecturaConfiguracionesAlojamiento_contenedorConfiguracion")
                                 contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                                contenedorApartamento.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/configuraciones/" + apartamentoIDV)
-                                contenedorApartamento.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/configuraciones/" + apartamentoIDV)
+                                contenedorApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/" + apartamentoIDV)
+                                contenedorApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/" + apartamentoIDV)
                                 contenedorApartamento.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.traductorCambioVista)
                                 const contenedorTitulo = document.createElement("div")
                                 contenedorTitulo.classList.add("arquitecturaConfAlojamiento_configuracionesTitulo")
@@ -51955,8 +52021,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const botonIrALaEntidad = document.createElement("a")
                             botonIrALaEntidad.classList.add("arquitecturaConfApartamento_boton")
                             botonIrALaEntidad.textContent = "Ir a la entidad de alojamiento"
-                            botonIrALaEntidad.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
-                            botonIrALaEntidad.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
+                            botonIrALaEntidad.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
+                            botonIrALaEntidad.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
                             botonIrALaEntidad.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                             contenedorBotonesGlobalesApartamento.appendChild(botonIrALaEntidad)
 
@@ -52387,7 +52453,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     advertenciaInmersiva.remove()
                                 })
                                 const navegacion = {
-                                    "vista": "/administracion/arquitecturaDelAlojamiento/configuraciones",
+                                    "vista": "/administracion/arquitectura_del_alojamiento/configuraciones",
                                     "tipoOrigen": "menuNavegador"
                                 }
                                 casaVitini.shell.navegacion.controladorVista(navegacion)
@@ -53023,8 +53089,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const enlace = document.createElement("a")
                                 enlace.classList.add("enlace")
                                 enlace.textContent = "Ir directo a crear un nuevo apartamento como entidad"
-                                enlace.setAttribute("href", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:apartamento")
-                                enlace.setAttribute("vista", "/administracion/arquitecturaDelAlojamiento/entidades/crear_entidad/tipo:apartamento")
+                                enlace.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
+                                enlace.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
                                 enlace.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                 main.appendChild(enlace)
                             }
@@ -53083,7 +53149,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         if (respuestaServidor?.ok) {
                             const apartamentoIDV = respuestaServidor?.apartamentoIDV
-                            const vista = `/administracion/arquitecturaDelAlojamiento/configuraciones/${apartamentoIDV}`
+                            const vista = `/administracion/arquitectura_del_alojamiento/configuraciones/${apartamentoIDV}`
                             const navegacion = {
                                 "vista": vista,
                                 "tipoOrigen": "menuNavegador"
@@ -55618,7 +55684,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const apartamentoIDV = detallesDelEvento.apartamentoIDV
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = `Bloqueo ${apartamentoUI}`
-                        urlUI = `/administracion/gestion_de_bloqueosTemporales/${apartamentoIDV}/${bloqueoUID}`
+                        urlUI = `/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
                     } else if (tipoEvento === "calendarioAirbnb") {
                         const descripcion = detallesDelEvento.descripcion || ""
                         const apartamentoUI = detallesDelEvento.apartamentoUI
@@ -58092,7 +58158,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const botonEliminarComportamientos = document.createElement("div")
                     botonEliminarComportamientos.classList.add("botonV1BlancoIzquierda")
                     botonEliminarComportamientos.setAttribute("boton", "cancelar")
-                    botonEliminarComportamientos.textContent = "Elimninar comportamientos simples de los dias y apartamentos selecionados"
+                    botonEliminarComportamientos.textContent = "Eliminar comportamientos simples de los días y apartamentos selecionados"
                     botonEliminarComportamientos.addEventListener("click", () => {
                         casaVitini.administracion.calendario.controladorSelecionDias.eliminarComportamientos({
                             fechasArray,
