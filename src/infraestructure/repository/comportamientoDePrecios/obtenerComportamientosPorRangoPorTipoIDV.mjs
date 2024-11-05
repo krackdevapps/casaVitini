@@ -18,22 +18,31 @@ export const obtenerComportamientosPorRangoPorTipoIDV = async (metadatos) => {
           ("contenedor"->>'fechaFinal')::DATE - ("contenedor"->>'fechaInicio')::DATE as duracion_en_dias
 
          FROM "comportamientoPrecios"
-         WHERE (
-         -- Caso 1: Evento totalmente dentro del rango
-           (("contenedor"->>'fechaInicio')::DATE >=$1::DATE
-            AND ("contenedor"->>'fechaFinal')::DATE <= $2::DATE)
-                 OR
-                 -- Caso 2: Evento parcialmente dentro del rango
-           (("contenedor"->>'fechaInicio')::DATE <=$1::DATE
-            AND ("contenedor"->>'fechaFinal')::DATE >=$1::DATE)
-                 OR (("contenedor"->>'fechaInicio')::DATE <= $2::DATE
-                     AND ("contenedor"->>'fechaFinal')::DATE >= $2::DATE)
-                 OR
-                 -- Caso 3: Evento que atraviesa el rango
-           (("contenedor"->>'fechaInicio')::DATE <$1::DATE
-            AND ("contenedor"->>'fechaFinal')::DATE > $2::DATE) )
-            AND "contenedor"->>'tipo'= $3
-            AND EXISTS
+         WHERE
+          (
+                -- Caso 1: Evento total o parcialmente dentro del rango - verificado
+                (
+                    (
+                        ("contenedor"->>'fechaInicio')::DATE <=$1::DATE
+                        AND
+                        ("contenedor"->>'fechaFinal')::DATE >=$1::DATE
+                    )
+                        OR
+                    (
+                        ("contenedor"->>'fechaInicio')::DATE <= $2::DATE
+                        AND
+                        ("contenedor"->>'fechaFinal')::DATE >= $2::DATE
+                    )
+                )
+                OR 
+                -- Caso 2: Evento totalmente fuera del rango - verificado
+                (
+                ("contenedor"->>'fechaInicio')::DATE > $1::DATE AND $2::DATE > ("contenedor"->>'fechaFinal')::DATE
+                )
+            )
+         AND
+              "contenedor"->>'tipo'= $3
+              AND EXISTS
               ( SELECT 1
                FROM jsonb_array_elements("contenedor"->'apartamentos') AS apt
                WHERE apt->>'apartamentoIDV' = ANY($4)

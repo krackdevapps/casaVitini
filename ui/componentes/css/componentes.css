@@ -963,9 +963,21 @@ summary:hover {
     z-index: 1000;
     overflow: auto;
     padding: 30px;
+    pointer-events: none;
+}
+.mostrarSoloEnResponsivo {
+    display: none;
+    scale: 1;
+    transition: scale 500ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
+
 }
 
-@media (max-width: 720px) {
+
+@media (max-width: 720px), (max-height: 600px)  {
     .bloqueCalendarioNuevo {
         padding: 0px;
         position: fixed;
@@ -985,12 +997,19 @@ summary:hover {
 
     .calendarioFlotante {
         padding: 0px;
+        top: 0px !important;
+
     }
 
     .marcoMes {
         flex: 1;
         gap: 4px;
     }
+
+    .mostrarSoloEnResponsivo {
+        display: flex;
+    }
+
 }
 
 .calendarioFlotante {
@@ -1147,26 +1166,12 @@ summary:hover {
     align-items: center;
 }
 
-.mostrarSoloEnResponsivo {
-    display: none;
-    scale: 1;
-    transition: scale 500ms ease-in-out;
-
-    @starting-style {
-        scale: 0;
-    }
-
-}
 
 @media (max-width: 720px) {
 
     .filaInformacion,
     .marcoaAlojamiento {
         width: 90%;
-    }
-
-    .mostrarSoloEnResponsivo {
-        display: flex;
     }
 
 }
@@ -7929,7 +7934,7 @@ summary:hover {
     grid-template-columns: repeat(3, 1fr);
 }
 
-[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfervaBotonV1 {
+ .botonV2_negrita {
     margin: 0px;
     font-weight: bold;
     padding: 10px;
@@ -7942,12 +7947,12 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfervaBotonV1:hover {
+ .botonV2_negrita:hover {
     background: rgba(0, 0, 0, 0.5);
     color: white;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfervaBotonV1 {
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonV2_negrita {
     margin: 0px;
     font-weight: bold;
     padding: 10px;
@@ -7960,7 +7965,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
-[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfervaBotonV1:hover {
+[zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonV2_negrita:hover {
     background: rgba(0, 0, 0, 0.5);
     color: white;
 }
@@ -8004,9 +8009,7 @@ summary:hover {
     gap: 10px;
 }
 
-.comportamientoUI:hover {
-    background: rgba(255, 255, 255, 0.6);
-}
+
 
 .enlaceUI {
     background: rgba(255, 255, 255, 0.3);
@@ -8166,7 +8169,7 @@ summary:hover {
 
 
 [zonaCSS="administracion/comportamiento_de_precios"] .contenedorTituloEstado {
-    padding: 0px;
+    padding: 10px;
 
 }
 
@@ -8666,10 +8669,6 @@ summary:hover {
     cursor: default;
 }
 
-.listaBloqueos_bloqueBloqueoUI:hover {
-    background: rgba(255, 255, 255, 0.6);
-}
-
 [zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_contenedorTipoBloqueo {
     padding: 6px;
     border-radius: 6px;
@@ -8819,11 +8818,11 @@ summary:hover {
 }
 
 [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorBotones {
-    display: flex;
-    justify-content: center;
+    display: grid;
     flex-wrap: wrap;
     flex-direction: row;
     gap: 6px;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_botonV1 {
@@ -15291,6 +15290,16 @@ summary:hover {
 .gridHorizontal2C {
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+.gridHorizontal2C_resp {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 720px) {
+    .gridHorizontal2C_resp {
+        grid-template-columns: 1fr;
+    }
 }
 
 .gridHorizontal2C_minContent_auto {

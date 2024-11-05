@@ -21,27 +21,24 @@ export const obtenerComportamientosPorCreacionPorFechaCracion = async (metadatos
             "comportamientoPrecios"
         WHERE 
             (
-                -- Caso 1: Evento totalmente dentro del rango
+                -- Caso 1: Evento total o parcialmente dentro del rango - verificado
                 (
-                    ("contenedor"->>'fechaInicio')::DATE >=$1::DATE AND 
-                    ("contenedor"->>'fechaFinal')::DATE <= $2::DATE
+                    (
+                        ("contenedor"->>'fechaInicio')::DATE <=$1::DATE
+                        AND
+                        ("contenedor"->>'fechaFinal')::DATE >=$1::DATE
+                    )
+                        OR
+                    (
+                        ("contenedor"->>'fechaInicio')::DATE <= $2::DATE
+                        AND
+                        ("contenedor"->>'fechaFinal')::DATE >= $2::DATE
+                    )
                 )
                 OR 
-                -- Caso 2: Evento parcialmente dentro del rango
+                -- Caso 2: Evento totalmente fuera del rango - verificado
                 (
-                    ("contenedor"->>'fechaInicio')::DATE <=$1::DATE AND 
-                    ("contenedor"->>'fechaFinal')::DATE >=$1::DATE
-                )
-                OR 
-                (
-                    ("contenedor"->>'fechaInicio')::DATE <= $2::DATE AND 
-                    ("contenedor"->>'fechaFinal')::DATE >= $2::DATE
-                )
-                OR 
-                -- Caso 3: Evento que atraviesa el rango
-                (
-                ("contenedor"->>'fechaInicio')::DATE <$1::DATE AND
-                ("contenedor"->>'fechaInicio_creacionReserva')::DATE > $3::DATE
+                ("contenedor"->>'fechaInicio')::DATE > $1::DATE AND $2::DATE > ("contenedor"->>'fechaFinal')::DATE
                 )
             )
             AND 
@@ -59,6 +56,7 @@ export const obtenerComportamientosPorCreacionPorFechaCracion = async (metadatos
                 )
             AND 
                 "estadoIDV" = $6
+     
           ;`
         const parametros = [
             fechaInicio,
@@ -75,3 +73,33 @@ export const obtenerComportamientosPorCreacionPorFechaCracion = async (metadatos
         throw errorCapturado
     }
 }
+
+
+/*
+
+                -- Caso 1: Evento totalmente dentro del rango
+                --(
+                --    ("contenedor"->>'fechaInicio')::DATE >=$1::DATE AND 
+                --    ("contenedor"->>'fechaFinal')::DATE <= $2::DATE
+                --)
+                --OR 
+                -- Caso 2: Evento parcialmente dentro del rango
+                (
+                    ("contenedor"->>'fechaInicio')::DATE <=$1::DATE
+                    AND
+                    ("contenedor"->>'fechaFinal')::DATE >=$1::DATE
+                )
+                OR
+                (
+                    ("contenedor"->>'fechaInicio')::DATE <= $2::DATE
+                    AND
+                    ("contenedor"->>'fechaFinal')::DATE >= $2::DATE
+                )
+                --OR 
+                -- Caso 3: Evento que atraviesa el rango -- REVISTAR ESTO
+                --(
+                --("contenedor"->>'fechaInicio')::DATE <$1::DATE AND
+                --("contenedor"->>'fechaFinal')::DATE >= $2::DATE
+                --)
+
+*/

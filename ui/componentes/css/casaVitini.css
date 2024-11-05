@@ -427,8 +427,8 @@ header .zonas {
     border-radius: 100%;
     background: rgb(0 0 0 / 50%);
     padding: 10px;
-    transition: scale 250ms ease-in-out;
 
+    backdrop-filter: blur(50px);
     scale: 1;
 
     @starting-style {
@@ -442,6 +442,8 @@ header .zonas {
     width: 10px;
     border-radius: 100%;
     background: rgba(255, 255, 255, 0.3);
+    transition: scale 250ms ease-in-out;
+    -webkit-backdrop-filter: blur(50px);
     padding: 13px;
     transition: scale 250ms ease-in-out;
     scale: 1;

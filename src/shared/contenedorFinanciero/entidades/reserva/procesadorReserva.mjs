@@ -21,6 +21,7 @@ export const procesadorReserva = async (data) => {
         let fechaSalida
         let fechaActual
         let apartamentosArray
+        let obtenerComportamientosPorFechaCracionIgnorandoFechaActual
 
         let instantaneaNoches
         let instantaneaOfertasPorCondicion
@@ -31,7 +32,7 @@ export const procesadorReserva = async (data) => {
 
         let origenSobreControl
         if (origen === "externo") {
-
+            obtenerComportamientosPorFechaCracionIgnorandoFechaActual = data.obtenerComportamientosPorFechaCracionIgnorandoFechaActual
             fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: data.fechaEntrada,
                 nombreCampo: "La fecha de entrada del procesador de precios"
@@ -137,7 +138,8 @@ export const procesadorReserva = async (data) => {
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
             fechaCreacion_ISO: fechaActual,
-            apartamentosArray
+            apartamentosArray,
+            obtenerComportamientosPorFechaCracionIgnorandoFechaActual
         })
         await totalesBasePorRango({
             simulacionUID,

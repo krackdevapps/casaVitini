@@ -31,7 +31,7 @@ export const preciosNocheBasePorApartamento = async (metadatos) => {
             calendarioObjeto[llaveCalendarioObjeto] = []
         }
 
-        const zonaHoraria = (await codigoZonaHoraria).zonaHoraria;
+        const zonaHoraria = await (codigoZonaHoraria).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActual_ISO = tiempoZH.toISODate();
 
@@ -43,7 +43,8 @@ export const preciosNocheBasePorApartamento = async (metadatos) => {
                     fechaSalida: fechaObjetoFin.plus({ days: 1 }).toISODate(),
                     fechaActual: fechaActual_ISO,
                     apartamentosArray: apartamentosIDV,
-                    origenSobreControl: "reserva"
+                    origenSobreControl: "reserva",
+                    obtenerComportamientosPorFechaCracionIgnorandoFechaActual: "si"
                 },
                 servicios: {
                     origen: "hubServicios",

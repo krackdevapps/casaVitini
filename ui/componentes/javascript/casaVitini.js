@@ -146,9 +146,10 @@ const casaVitini = {
                         })
 
                         casaVitini.shell.controladoresUI.limpiezaUI({ zonaDestino: zona })
-                        if (menu_renderizado.querySelector("[zona=" + zona + "]")) {
-                            menu_renderizado.querySelector("[zona=" + zona + "]").style.background = "rgba(0, 0, 0, 0.6)"
-                            menu_renderizado.querySelector("[zona=" + zona + "]").style.color = "white"
+
+                        if (menu_renderizado.querySelector(`[zona="${zona}"]`)) {
+                            menu_renderizado.querySelector(`[zona="${zona}"]`).style.background = "rgba(0, 0, 0, 0.6)"
+                            menu_renderizado.querySelector(`[zona="${zona}"]`).style.color = "white"
                         }
 
                         await casaVitini.shell.controladoresUI.controladorEstadoIDX()
@@ -299,9 +300,9 @@ const casaVitini = {
                 selectorMenuRenderizado.querySelectorAll("[zona]").forEach(zonaObsoleta => {
                     zonaObsoleta.removeAttribute("style")
                 })
-                if (zonaActual && selectorMenuRenderizado.querySelector("[zona=" + zonaActual + "]")) {
-                    selectorMenuRenderizado.querySelector("[zona=" + zonaActual + "]").style.background = "rgba(0, 0, 0, 0.6)"
-                    selectorMenuRenderizado.querySelector("[zona=" + zonaActual + "]").style.color = "white"
+                if (zonaActual && selectorMenuRenderizado.querySelector(`[zona="${zonaActual}"]`)) {
+                    selectorMenuRenderizado.querySelector(`[zona="${zonaActual}"]`).style.background = "rgba(0, 0, 0, 0.6)"
+                    selectorMenuRenderizado.querySelector(`[zona="${zonaActual}"]`).style.color = "white"
                 }
 
             },
@@ -824,6 +825,7 @@ const casaVitini = {
 
             },
             ocultarElementos: (e) => {
+
                 if (e?.target) {
                     const botonDesplegarCalendario = e.target.closest("[boton=desplegarCalendario]")
                     if (botonDesplegarCalendario) {
@@ -1284,7 +1286,8 @@ const casaVitini = {
                                     instanciaUID_contenedorFechas,
                                     rangoIDV: "inicioRango",
                                     metodoSelectorDia: metodoSelectorPasarela,
-                                    tituloCalendario: "Selecciona una fecha de entrada por favor"
+                                    tituloCalendario: "Selecciona una fecha de entrada por favor",
+                                    seleccionableDiaLimite: "no"
                                 })
                             })
                             const textoDiaEntrada = document.createElement('div');
@@ -1316,8 +1319,8 @@ const casaVitini = {
                                     instanciaUID_contenedorFechas,
                                     rangoIDV: "finalRango",
                                     metodoSelectorDia: metodoSelectorPasarela,
-                                    tituloCalendario: "Selecciona una fecha de salida por favor"
-
+                                    tituloCalendario: "Selecciona una fecha de salida por favor",
+                                    seleccionableDiaLimite: "no"
                                 })
                             })
                             const textoDiaSalida = document.createElement('div');
@@ -1436,7 +1439,8 @@ const casaVitini = {
                                 instanciaUID_contenedorFechas,
                                 rangoIDV: "finalRango",
                                 metodoSelectorDia: metodoSelectorPasarela,
-                                tituloCalendario: "Selecciona una fecha de salida por favor"
+                                tituloCalendario: "Selecciona una fecha de salida por favor",
+                                seleccionableDiaLimite: "no"
 
                             })
                         } else if (fechaSalida) {
@@ -1450,7 +1454,8 @@ const casaVitini = {
                                 instanciaUID_contenedorFechas,
                                 rangoIDV: "inicioRango",
                                 metodoSelectorDia: metodoSelectorPasarela,
-                                tituloCalendario: "Selecciona una fecha de entrada por favor"
+                                tituloCalendario: "Selecciona una fecha de entrada por favor",
+                                seleccionableDiaLimite: "no"
 
                             })
                         }
@@ -1857,7 +1862,9 @@ const casaVitini = {
 
                         reservaLocal.fechaEntrada = fechaEntradaVolatil_ISO
                         reservaLocal.fechaSalida = fechaSalidaVolatil_ISO
+
                         reservaLocal.alojamiento = {}
+
                         const apartamentosSeleccionados = document.querySelectorAll("[estadoApartamento=seleccionado]")
                         apartamentosSeleccionados.forEach((apartamento) => {
                             const apartamentoIDV = apartamento.getAttribute("apartamentoIDV")
@@ -2576,12 +2583,11 @@ const casaVitini = {
 
                         const contenedorAlojamiento = document.createElement("div")
                         contenedorAlojamiento.setAttribute("data", "alojamiento")
+
                         contenedor.appendChild(contenedorAlojamiento)
 
                         const tituloAlojamiento = document.createElement("p")
-                        tituloAlojamiento.classList.add(
-                            "tituloBloqueSeccion"
-                        )
+                        tituloAlojamiento.classList.add("tituloBloqueSeccion")
                         tituloAlojamiento.textContent = "Alojamiento"
                         contenedor.appendChild(contenedorAlojamiento)
 
@@ -2872,7 +2878,7 @@ const casaVitini = {
                             uiDestinno.innerHTML = null
                             const contenedorUI = document.createElement("div")
                             contenedorUI.classList.add(
-                                "flexVertical",
+                                "gridHorizontal2C_resp",
                                 "gap14",
                             )
                             uiDestinno.appendChild(contenedorUI)
@@ -8742,11 +8748,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             .calendarioFlotante {
                                 top: ${alturaDinamica - 40}px
                                 }
-                            @media (max-width: 720px) {
-                                .calendarioFlotante {
-                                    top: 0px;
-                                }
-                            }
+                    
                         `;
                         bloqueCalendario.appendChild(claseDinamica);
                         bloqueCalendario.setAttribute("instanciaUID", instanciaUID)
@@ -8763,8 +8765,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         calendario.appendChild(contenedorCarga)
                         bloqueCalendario.appendChild(calendario)
-                        document.querySelector("main").appendChild(bloqueCalendario)
-
+                        //document.querySelector("main").appendChild(bloqueCalendario)
+                        return bloqueCalendario
 
                     } catch (errorCapturado) {
                         throw errorCapturado
@@ -8780,15 +8782,46 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
                     const rangoIDV = data.rangoIDV
                     const seleccionableDiaLimite = data.seleccionableDiaLimite
+                    if (seleccionableDiaLimite !== "si" && seleccionableDiaLimite !== "no" && rangoIDV !== "unico") {
+                        const m = "configurarCalendario necesita selecioanbleDiaLimite en si o no"
+                        return casaVitini.ui.componentes.advertenciaInmersiva(m)
+                    }
 
                     const contenedorOrigen = areaContenedorFechas.querySelector(contenedorOrigenIDV)
-                    const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(contenedorOrigen) + 20
+                    const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(contenedorOrigen) + 16
                     const selectorCalendario = document.querySelector("[contenedor=calendario]")
+                    const calendarioObsoleto = selectorCalendario?.getAttribute("calendarioIO")
+
+                    const dictConfIDV = {
+                        inicioRango: "entrada",
+                        finalRango: "salida",
+                        unico: "unico"
+                    }
 
                     const bloqueCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
                     bloqueCalendario.forEach((calendarioObsoelto) => {
                         calendarioObsoelto.remove()
                     })
+                    if (calendarioObsoleto === dictConfIDV[rangoIDV]) {
+                        return
+                    }
+
+                    const calendarioUI = casaVitini.ui.componentes.calendario.constructorCalendarioNuevo({
+                        almacenamientoCalendarioID: "almacenamientoCalendario",
+                        perfilMes,
+                        alturaDinamica: alturaDinamicaArriba,
+                        instanciaUID,
+                        instanciaUID_contenedorFechas,
+                        metodoAlternativo,
+                        metodoSelectorDia,
+                        seleccionableDiaLimite,
+                        mensajeInfo: "Cargando...",
+                        tipoFecha: "enEspera",
+                        calendarioIO: "enEspera"
+                    })
+                    document.querySelector("main").appendChild(calendarioUI)
+                    document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
+                    const configGlobal = calendarioUI.querySelector("[contenedor=calendario]")
 
                     const fechasSeleccionadas = () => {
                         const fechaEntradaVolatil = areaContenedorFechas.querySelector("[calendario=entrada]").
@@ -8822,111 +8855,106 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         return contenedorFechas
                     }
                     const resolverCalendario = {}
-                    const configuracionCalendario = {
-                        almacenamientoCalendarioID: "almacenamientoCalendario",
-                        perfilMes,
-                        alturaDinamica: alturaDinamicaArriba,
-                        instanciaUID,
-                        instanciaUID_contenedorFechas,
-                        metodoAlternativo,
-                        metodoSelectorDia,
-                        seleccionableDiaLimite
-                    }
                     if (rangoIDV === "inicioRango") {
                         const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha"
-                        if (selectorCalendario?.getAttribute("calendarioIO") === "entrada") {
-                            return
-                        }
+
+
                         if (fechasSeleccionadas().fechaEntrada?.volatil) {
                             resolverCalendario.tipo = "personalizado"
-
                             resolverCalendario.mes = Number(fechasSeleccionadas().fechaEntrada.mes)
                             resolverCalendario.ano = Number(fechasSeleccionadas().fechaEntrada.ano)
 
-                            configuracionCalendario.tipoFecha = "entrada"
-                            configuracionCalendario.calendarioIO = "entrada"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
+                            configGlobal.setAttribute("tipoFecha", "entrada")
+                            configGlobal.setAttribute("calendarioIO", "entrada")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
 
                         } else if (fechasSeleccionadas().fechaSalida?.volatil) {
-                            resolverCalendario.tipo = "personalizado"
-                            const diaSel = Number(fechasSeleccionadas().fechaSalida.dia)
-                            const mesSel = Number(fechasSeleccionadas().fechaSalida.mes)
-                            const anoSel = Number(fechasSeleccionadas().fechaSalida.ano)
+                            if (seleccionableDiaLimite === "no") {
 
-                            let mesFinal = mesSel
-                            let anoFinal = anoSel
-                            if (diaSel === 1) {
-                                mesFinal = mesSel === 1 ? 12 : mesSel - 1
-                                anoFinal = mesFinal === 12 ? anoFinal - 1 : anoFinal
+                                const diaSel = Number(fechasSeleccionadas().fechaSalida.dia)
+
+                                if (1 === diaSel) {
+                                    const mesSel = Number(fechasSeleccionadas().fechaSalida.mes)
+                                    const anoSel = Number(fechasSeleccionadas().fechaSalida.ano)
+                                    const mesFinal = mesSel === 1 ? 12 : mesSel - 1
+                                    const anoFinal = mesFinal === 12 ? anoSel - 1 : anoSel
+                                    resolverCalendario.mes = Number(mesFinal)
+                                    resolverCalendario.ano = Number(anoFinal)
+                                } else {
+                                    resolverCalendario.mes = Number(fechasSeleccionadas().fechaSalida.mes)
+                                    resolverCalendario.ano = Number(fechasSeleccionadas().fechaSalida.ano)
+                                }
+                            } else {
+                                resolverCalendario.mes = Number(fechasSeleccionadas().fechaSalida.mes)
+                                resolverCalendario.ano = Number(fechasSeleccionadas().fechaSalida.ano)
                             }
 
-                            resolverCalendario.mes = Number(mesFinal)
-                            resolverCalendario.ano = Number(anoFinal)
+                            resolverCalendario.tipo = "personalizado"
+                            configGlobal.setAttribute("tipoFecha", "entrada")
+                            configGlobal.setAttribute("calendarioIO", "entrada")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
 
-                            configuracionCalendario.tipoFecha = "entrada"
-                            configuracionCalendario.calendarioIO = "entrada"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
                         } else {
                             resolverCalendario.tipo = "actual"
-                            configuracionCalendario.tipoFecha = "entrada"
-                            configuracionCalendario.calendarioIO = "entrada"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
+                            configGlobal.setAttribute("tipoFecha", "entrada")
+                            configGlobal.setAttribute("calendarioIO", "entrada")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
 
                         }
                     } else if (rangoIDV === "finalRango") {
 
                         const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha"
-
-                        if (selectorCalendario?.getAttribute("calendarioIO") === "salida") {
-                            return
-                        }
                         if (fechasSeleccionadas().fechaSalida?.volatil) {
                             resolverCalendario.tipo = "personalizado"
 
                             resolverCalendario.mes = Number(fechasSeleccionadas().fechaSalida.mes)
                             resolverCalendario.ano = Number(fechasSeleccionadas().fechaSalida.ano)
 
-                            configuracionCalendario.tipoFecha = "salida"
-                            configuracionCalendario.calendarioIO = "salida"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
+                            configGlobal.setAttribute("tipoFecha", "salida")
+                            configGlobal.setAttribute("calendarioIO", "salida")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
 
 
                         } else if (fechasSeleccionadas().fechaEntrada?.volatil) {
-                            const posicionDia = areaContenedorFechas.querySelector("[calendario=entrada]").getAttribute("posicionDia")
-                            if (posicionDia === "final") {
+                            if (seleccionableDiaLimite === "no") {
                                 const mesInicial = Number(fechasSeleccionadas().fechaEntrada.mes)
                                 const anoInicial = Number(fechasSeleccionadas().fechaEntrada.ano)
+                                const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
+                                    tipo: "personalizado",
+                                    mes: mesInicial,
+                                    ano: anoInicial
+                                })
+                                const numeroDiasPorMes = calendarioResuelto.numeroDiasPorMes
+                                if (numeroDiasPorMes === Number(fechasSeleccionadas().fechaEntrada.dia)) {
+                                    const mesFinal = mesInicial < 12 ? mesInicial + 1 : 1
+                                    const anoFinal = mesFinal === 1 ? anoInicial + 1 : anoInicial
 
-                                const mesFinal = mesInicial < 12 ? mesInicial + 1 : 1
-                                const anoFinal = mesFinal === 1 ? anoInicial + 1 : anoInicial
-
-                                resolverCalendario.mes = mesFinal
-                                resolverCalendario.ano = anoFinal
+                                    resolverCalendario.mes = mesFinal
+                                    resolverCalendario.ano = anoFinal
+                                } else {
+                                    resolverCalendario.mes = Number(fechasSeleccionadas().fechaEntrada.mes)
+                                    resolverCalendario.ano = Number(fechasSeleccionadas().fechaEntrada.ano)
+                                }
                             } else {
                                 resolverCalendario.mes = Number(fechasSeleccionadas().fechaEntrada.mes)
                                 resolverCalendario.ano = Number(fechasSeleccionadas().fechaEntrada.ano)
                             }
 
-
-
                             resolverCalendario.tipo = "personalizado"
 
-                            configuracionCalendario.tipoFecha = "salida"
-                            configuracionCalendario.calendarioIO = "salida"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
+                            configGlobal.setAttribute("tipoFecha", "salida")
+                            configGlobal.setAttribute("calendarioIO", "salida")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
                         } else {
                             resolverCalendario.tipo = "actual"
 
-                            configuracionCalendario.tipoFecha = "salida"
-                            configuracionCalendario.calendarioIO = "salida"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
+                            configGlobal.setAttribute("tipoFecha", "salida")
+                            configGlobal.setAttribute("calendarioIO", "salida")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
 
                         }
                     } else if (rangoIDV === "unico") {
                         const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha"
-                        if (selectorCalendario?.getAttribute("calendarioIO") === "unico") {
-                            return
-                        }
                         const fechaUnica = areaContenedorFechas.querySelector("[calendario=unico]").getAttribute("memoriaVolatil") | []
 
                         const diaSeleccionado = Number(fechaUnica[2])
@@ -8940,24 +8968,21 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             resolverCalendario.mes = Number(mesSeleccionado)
                             resolverCalendario.ano = Number(anoSeleccionado)
 
-                            configuracionCalendario.tipoFecha = "unico"
-                            configuracionCalendario.calendarioIO = "unico"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
+
+                            configGlobal.setAttribute("tipoFecha", "unico")
+                            configGlobal.setAttribute("calendarioIO", "unico")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
                         } else {
                             resolverCalendario.tipo = "actual"
 
-                            configuracionCalendario.tipoFecha = "unico"
-                            configuracionCalendario.calendarioIO = "unico"
-                            configuracionCalendario.mensajeInfo = tituloCalendario
-
+                            configGlobal.setAttribute("tipoFecha", "unico")
+                            configGlobal.setAttribute("calendarioIO", "unico")
+                            configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
                         }
-
                     } else {
                         const m = "configurarCalendario no reconoce el rango, puede ser inicioRango, finalRango o unico"
                         return casaVitini.ui.componentes.advertenciaInmersiva(m)
                     }
-                    casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(configuracionCalendario)
-                    document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
                     const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolverCalendario)
                     calendarioResuelto.origen = "configuracionCalendario"
                     calendarioResuelto.instanciaUID = instanciaUID
@@ -11235,6 +11260,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 return
                             }
                         }
+
                         if (selectorCalendarioRenderizado) {
                             selectorCalendarioRenderizado.querySelector("[contenedor=construyendoCalendario]")?.remove()
                             selectorCalendarioRenderizado.querySelector("[contenedor=calendario]").removeAttribute("style")
@@ -11551,11 +11577,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         if (calendarioIO === "entrada") {
 
 
-                            if (numeroDiaDelMes === Number(numeroDia)) {
-                                contendorDestino.querySelector("[calendario=entrada]").setAttribute("posicionDia", "final")
-                            } else {
-                                contendorDestino.querySelector("[calendario=entrada]").removeAttribute("posicionDia")
-                            }
+
                             contendorDestino.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaSeleccionada_ISO)
                             contendorDestino.querySelector("[fechaUI=fechaInicio]").textContent = fechaSeleccionada_humana
                             if (fechasSeleccionadas().fechaSalida?.volatil) {
@@ -11596,11 +11618,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 }
                             }
                         } else if (calendarioIO === "salida") {
-                            if (1 === Number(numeroDia)) {
-                                contendorDestino.querySelector("[calendario=salida]").setAttribute("posicionDia", "inicio")
-                            } else {
-                                contendorDestino.querySelector("[calendario=salida]").removeAttribute("posicionDia")
-                            }
                             contendorDestino.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSeleccionada_ISO)
                             contendorDestino.querySelector("[fechaUI=fechaFin]").textContent = fechaSeleccionada_humana
 
@@ -13017,7 +13034,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const destino = data.destino
                                 const desglosePorServicios = data.desglosePorServicios
                                 const modoUI = data.modoUI
-
+                                console.log("desglosePorServicios.length", desglosePorServicios.length, "modoUI", modoUI)
                                 if (desglosePorServicios.length === 0 && modoUI === "plaza") {
                                     document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=servicio]")?.remove()
                                     return
@@ -17497,6 +17514,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         perfilMes: "calendario_entrada_asistido_detallesReserva_conPasado",
                                         mensajeInfo: "Selecciona la fecha de entrada que quieras actualizar en esta reserva",
                                         metodoSelectorDia: "ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.fechas.seleccionarDia",
+                                        seleccionableDiaLimite: "no"
                                     },
 
                                     configuracionCalendarioFinal: {
@@ -17505,6 +17523,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         perfilMes: "calendario_salida_asistido_detallesReserva_conPasado",
                                         metodoSelectorDia: "ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.fechas.seleccionarDia",
                                         mensajeInfo: "Selecciona la fecha de salida que quieras actualizar en esta reserva.",
+                                        seleccionableDiaLimite: "no"
 
                                     }
                                 })
@@ -17824,6 +17843,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         perfilMes: "calendario_entrada_asistido_detallesReserva_conPasado",
                                         mensajeInfo: "Selecciona la fecha de entrada que quieras actualizar en esta reserva",
                                         metodoSelectorDia: "administracion.reservas.detallesReserva.reservaUI.fechas.seleccionarDia",
+                                        seleccionableDiaLimite: "no"
                                     },
 
                                     configuracionCalendarioFinal: {
@@ -17832,6 +17852,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         perfilMes: "calendario_salida_asistido_detallesReserva_conPasado",
                                         metodoSelectorDia: "administracion.reservas.detallesReserva.reservaUI.fechas.seleccionarDia",
                                         mensajeInfo: "Selecciona la fecha de salida que quieras actualizar en esta reserva.",
+                                        seleccionableDiaLimite: "no"
 
                                     }
                                 })
@@ -30918,7 +30939,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             instanciaUID_contenedorFechas,
                             rangoIDV: "inicioRango",
                             metodoSelectorDia: null,
-                            tituloCalendario: "Seleciona una fecha de inicio de rango para la búsqueda"
+                            tituloCalendario: "Seleciona una fecha de inicio de rango para la búsqueda",
+                            seleccionableDiaLimite: "si"
+
 
                         })
                     })
@@ -30947,7 +30970,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             instanciaUID_contenedorFechas,
                             rangoIDV: "finalRango",
                             metodoSelectorDia: null,
-                            tituloCalendario: "Seleciona una fecha de fin de rango para la búsqueda"
+                            tituloCalendario: "Seleciona una fecha de fin de rango para la búsqueda",
+                            seleccionableDiaLimite: "si"
                         })
                     })
                     bloqueFechaSalida.setAttribute("paralizadorevento", "ocultadorCalendarios")
@@ -31763,220 +31787,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     document.querySelector("[componente=botonBuscarAlojamiento]").addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.buscarAlojamiento)
                     document.querySelector("[componente=botonConfirmarReserva]").addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.confirmarReservaNueva)
-                },
-                constructorCalendario: async (boton) => {
-                    const botonID = boton.target.closest("[calendario]").getAttribute("componente")
-                    let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                    let fechaSalidaSelecionda = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                    const alturaDinamicaArriba = casaVitini.utilidades.observador.medirPorJerarquiaDom.vertical.desdeAbajoDelElemento(boton.target.closest("[componente]"))
-                    const bloqueCalendario = document.querySelector("[componente=bloqueCalendario]")
-                    const calendario = document.querySelector("[contenedor=calendario]")
-                    if (botonID === "fechaEntrada") {
-                        if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                            bloqueCalendario.remove()
-                            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-
-                        }
-                        if (calendario?.getAttribute("calendarioIO") === "salida") {
-                            bloqueCalendario.remove()
-                            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                        }
-                        let resolucionCalendario
-                        if (fechaEntradaSelecionda) {
-                            const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-                            let mesEntradaSeleccionado = fechaEntradaSelecionda_array[1]
-                            let anoEntradaSeleccionado = fechaEntradaSelecionda_array[2]
-                            resolucionCalendario = {
-                                tipo: "personalizado",
-                                mes: Number(mesEntradaSeleccionado),
-                                ano: Number(anoEntradaSeleccionado)
-                            }
-                        } else {
-                            resolucionCalendario = {
-                                tipo: "actual",
-                            }
-                        }
-                        const metadatosCalendario = {
-                            tipoFecha: "entrada",
-                            almacenamientoCalendarioID: "administracionCalendario",
-                            perfilMes: "calendario_entrada_perfilSimple",
-                            calendarioIO: "entrada",
-                            mensajeInfo: "Selecciona la fecha de entrada para esta reserva nueva",
-                            alturaDinamica: alturaDinamicaArriba,
-                            instanciaUID: instanciaUID,
-                            metodoSelectorDia: "ui.componentes.calendario.calendarioCompartido.seleccionarDia"
-                        }
-                        casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(metadatosCalendario)
-                        document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                        const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolucionCalendario)
-                        calendarioResuelto.instanciaUID = instanciaUID
-                        await casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
-                    }
-                    if (botonID === "fechaSalida") {
-                        if (calendario?.getAttribute("calendarioIO") === "salida") {
-                            bloqueCalendario.remove()
-                            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-
-                        }
-                        if (calendario?.getAttribute("calendarioIO") === "entrada") {
-                            bloqueCalendario.remove()
-                            document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                        }
-                        let resolucionCalendario
-                        if (fechaEntradaSelecionda && !fechaSalidaSelecionda) {
-                            const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-                            let mesEntradaSeleccionado = fechaEntradaSelecionda_array[1]
-                            let anoEntradaSeleccionado = fechaEntradaSelecionda_array[2]
-                            resolucionCalendario = {
-                                tipo: "personalizado",
-                                mes: Number(mesEntradaSeleccionado),
-                                ano: Number(anoEntradaSeleccionado)
-                            }
-                        }
-                        if (fechaSalidaSelecionda) {
-                            const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                            let mesSalidaSeleccionado = fechaSalidaSelecionda_array[1]
-                            let anoSalidaSeleccionado = fechaSalidaSelecionda_array[2]
-                            resolucionCalendario = {
-                                tipo: "personalizado",
-
-                                mes: Number(mesSalidaSeleccionado),
-                                ano: Number(anoSalidaSeleccionado)
-                            }
-                        }
-                        if (!fechaEntradaSelecionda && !fechaSalidaSelecionda) {
-                            resolucionCalendario = {
-                                tipo: "actual",
-                                comando: "construyeObjeto"
-                            }
-                        }
-                        let metadatosCalendario = {
-                            tipoFecha: "salida",
-                            almacenamientoCalendarioID: "administracionCalendario",
-                            perfilMes: "calendario_salida_perfilSimple",
-                            calendarioIO: "salida",
-                            mensajeInfo: "Selecciona la fecha de salida para esta reserva nueva",
-                            alturaDinamica: alturaDinamicaArriba,
-                            instanciaUID: instanciaUID,
-                            metodoSelectorDia: "ui.componentes.calendario.calendarioCompartido.seleccionarDia"
-                        }
-                        casaVitini.ui.componentes.calendario.constructorCalendarioNuevo(metadatosCalendario)
-                        document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
-                        const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolucionCalendario)
-                        calendarioResuelto.instanciaUID = instanciaUID
-                        casaVitini.ui.componentes.calendario.constructorMesNuevo(calendarioResuelto)
-                    }
-                },
-                seleccionarDia: (dia) => {
-                    let diaSeleccionadoComoElemento = dia.target;
-                    let calendario = document.querySelector("[componente=bloqueCalendario] [componente=marcoCalendario]")
-                    let calendarioIO = calendario.getAttribute("calendarioIO")
-                    let diaSeleccionado = dia.target.getAttribute("dia")
-                    diaSeleccionado = diaSeleccionado.padStart(2, "0")
-                    diaSeleccionado = Number(diaSeleccionado)
-                    let anoSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("ano")
-                    anoSeleccionado = anoSeleccionado.padStart(4, "0")
-                    anoSeleccionado = Number(anoSeleccionado)
-                    let mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes")
-                    mesSeleccionado = mesSeleccionado.padStart(2, "0")
-                    mesSeleccionado = Number(mesSeleccionado)
-                    const fechaSeleccionadaUI = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
-                    let selectorDias = document.querySelectorAll("[calendarioIO] [dia]")
-                    selectorDias.forEach((dia) => {
-
-                        dia.classList.remove("calendarioDiaReserva")
-                        dia.classList.remove("calendarioDiaSeleccionado")
-                    })
-                    if (diaSeleccionadoComoElemento.getAttribute("estadoDia") === "seleccionado") {
-                        diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                        if (calendarioIO === "entrada") {
-                            document.querySelector("[calendario=entrada]").removeAttribute("memoriaVolatil")
-                            document.querySelector("[dataReserva=fechaEntrada]").textContent = "Seleccionar fecha de entrada"
-                        }
-                        if (calendarioIO === "salida") {
-                            document.querySelector("[calendario=salida]").removeAttribute("memoriaVolatil")
-                            document.querySelector("[dataReserva=fechaSalida]").textContent = "Seleccionar fecha de salida"
-                        }
-                        diaSeleccionadoComoElemento.classList.remove("calendarioDiaSeleccionado")
-                        diaSeleccionadoComoElemento.removeAttribute("estadoDia")
-
-                    }
-                    let diasDisponibles = document.querySelectorAll("[estado=disponible]")
-                    diasDisponibles.forEach(diaDisponible => {
-                        diaDisponible.removeAttribute("estadoDia")
-                        diaDisponible.style.background = ""
-                        diaDisponible.style.color = ""
-                    })
-                    diaSeleccionadoComoElemento.setAttribute("estadoDia", "seleccionado")
-                    diaSeleccionadoComoElemento.classList.add("calendarioDiaSeleccionado")
-                    let fechaEntradaSelecionda = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
-                    let diaSeleccionadoEntrada
-                    let mesSeleccionadoEntrada
-                    let anoSeleccionadoEntrada
-                    if (fechaEntradaSelecionda) {
-                        const fechaEntradaSelecionda_array = fechaEntradaSelecionda.split("/")
-                        diaSeleccionadoEntrada = fechaEntradaSelecionda_array[0]
-                        diaSeleccionadoEntrada = Number(diaSeleccionadoEntrada)
-                        mesSeleccionadoEntrada = fechaEntradaSelecionda_array[1]
-                        mesSeleccionadoEntrada = Number(mesSeleccionadoEntrada)
-                        anoSeleccionadoEntrada = fechaEntradaSelecionda_array[2]
-                        anoSeleccionadoEntrada = Number(anoSeleccionadoEntrada)
-                        datosFechaEntradaSeleccionada = "existen"
-                    }
-                    let fechaSalidaSelecionda = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-                    let diaSeleccionadoSalida
-                    let mesSeleccionadoSalida
-                    let anoSeleccionadoSalida
-                    if (fechaSalidaSelecionda) {
-                        const fechaSalidaSelecionda_array = fechaSalidaSelecionda.split("/")
-                        diaSeleccionadoSalida = fechaSalidaSelecionda_array[0]
-                        diaSeleccionadoSalida = Number(diaSeleccionadoSalida)
-                        mesSeleccionadoSalida = fechaSalidaSelecionda_array[1]
-                        mesSeleccionadoSalida = Number(mesSeleccionadoSalida)
-                        anoSeleccionadoSalida = fechaSalidaSelecionda_array[2]
-                        anoSeleccionadoSalida = Number(anoSeleccionadoSalida)
-                        datosFechaSalidaSeleccionada = "existen"
-                    }
-                    if (calendarioIO === "entrada") {
-                        document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
-                        document.querySelector("[dataReserva=fechaEntrada]").textContent = fechaSeleccionadaUI
-                        if (fechaSalidaSelecionda) {
-                            if (mesSeleccionadoSalida === mesSeleccionado && anoSeleccionado === anoSeleccionadoSalida) {
-                                selectorDias.forEach((dia) => {
-                                    if (Number(dia.getAttribute("dia")) > diaSeleccionado && Number(dia.getAttribute("dia")) < diaSeleccionadoSalida) {
-
-                                        dia.classList.add("calendarioDiaReserva")
-                                    }
-                                })
-                            } else {
-                                selectorDias.forEachEach((dia) => {
-                                    if (Number(dia.getAttribute("dia")) > diaSeleccionado) {
-                                        dia.classList.add("calendarioDiaReserva")
-                                    }
-                                })
-                            }
-                        }
-                    }
-                    if (calendarioIO === "salida") {
-                        document.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSeleccionadaUI)
-                        document.querySelector("[dataReserva=fechaSalida]").textContent = fechaSeleccionadaUI
-                        if (fechaEntradaSelecionda) {
-                            if (mesSeleccionadoEntrada === mesSeleccionado && anoSeleccionado === anoSeleccionadoEntrada) {
-                                selectorDias.forEach((dia) => {
-                                    if (Number(dia.getAttribute("dia")) < diaSeleccionado && Number(dia.getAttribute("dia")) > diaSeleccionadoEntrada) {
-                                        dia.classList.add("calendarioDiaReserva")
-                                    }
-                                })
-                            } else {
-                                selectorDias.forEach((dia) => {
-                                    if (Number(dia.getAttribute("dia")) < diaSeleccionado) {
-                                        dia.classList.add("calendarioDiaReserva")
-                                    }
-                                })
-                            }
-                        }
-                    }
                 },
                 buscarAlojamiento: async () => {
                     try {
@@ -34371,7 +34181,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             instanciaUID_contenedorFechas,
                             rangoIDV: "inicioRango",
                             metodoSelectorDia: null,
-                            tituloCalendario: "Seleciona una fehca de inicio de vigencia del servicio"
+                            tituloCalendario: "Seleciona una fehca de inicio de vigencia del servicio",
+                            seleccionableDiaLimite: "si"
                         })
                     })
 
@@ -34400,7 +34211,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             instanciaUID_contenedorFechas,
                             rangoIDV: "finalRango",
                             metodoSelectorDia: null,
-                            tituloCalendario: "Seleciona una fehca de fin de vigencia del servicio"
+                            tituloCalendario: "Seleciona una fehca de fin de vigencia del servicio",
+                            seleccionableDiaLimite: "si"
 
                         })
                     })
@@ -42134,7 +41946,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             instanciaUID_contenedorFechas,
                             rangoIDV: "unico",
                             metodoSelectorDia: "administracion.simuladorDePrecios.componentes.pasarelaSelectorDia",
-                            tituloCalendario: "Selecciona la fecha de creación simulada de la reserva"
+                            tituloCalendario: "Selecciona la fecha de creación simulada de la reserva",
+
                         })
                     })
 
@@ -42186,10 +41999,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         seleccionableDiaLimite: "no",
                         sobreControlConfiguracion: {
                             configuracionInicio: {
-                                tituloCalendario: "Seleciona una fecha de entrada simulada de la reserva"
+                                tituloCalendario: "Seleciona una fecha de entrada simulada de la reserva",
+                                seleccionableDiaLimite: "no"
                             },
                             configuracionFin: {
-                                tituloCalendario: "Seleciona una fecha de salida simulada de la reserva"
+                                tituloCalendario: "Seleciona una fecha de salida simulada de la reserva",
+                                seleccionableDiaLimite: "no"
                             }
                         }
                     })
@@ -45725,7 +45540,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         instanciaUID_contenedorFechas,
                         rangoIDV: "inicioRango",
                         metodoSelectorDia: null,
-                        tituloCalendario: "Selecciona la fecha de inicio del rango de vigencia de la oferta"
+                        tituloCalendario: "Selecciona la fecha de inicio del rango de vigencia de la oferta",
+                        seleccionableDiaLimite: "si"
                     })
                 })
 
@@ -45755,7 +45571,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         instanciaUID_contenedorFechas,
                         rangoIDV: "finalRango",
                         metodoSelectorDia: null,
-                        tituloCalendario: "Selecciona la fecha del fin del rango de vigencia de la oferta"
+                        tituloCalendario: "Selecciona la fecha del fin del rango de vigencia de la oferta",
+                        seleccionableDiaLimite: "si"
 
                     })
                 })
@@ -46503,10 +46320,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             modo: "administracion",
                             sobreControlConfiguracion: {
                                 configuracionInicio: {
-                                    tituloCalendario: "Seleciona una fecha de inicio del rango"
+                                    tituloCalendario: "Seleciona una fecha de inicio del rango",
+                                    seleccionableDiaLimite: "si"
                                 },
                                 configuracionFin: {
-                                    tituloCalendario: "Seleciona una fecha de fin del rango"
+                                    tituloCalendario: "Seleciona una fecha de fin del rango",
+                                    seleccionableDiaLimite: "si"
                                 }
                             }
 
@@ -46547,10 +46366,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             modo: "administracion",
                             sobreControlConfiguracion: {
                                 configuracionInicio: {
-                                    tituloCalendario: "Seleciona una fecha de inicio del rango"
+                                    tituloCalendario: "Seleciona una fecha de inicio del rango",
+                                    seleccionableDiaLimite: "si"
                                 },
                                 configuracionFin: {
-                                    tituloCalendario: "Seleciona una fecha de fin del rango"
+                                    tituloCalendario: "Seleciona una fecha de fin del rango",
+                                    seleccionableDiaLimite: "si"
                                 }
                             }
 
@@ -46589,6 +46410,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
                             modo: "administracion",
+                            seleccionableDiaLimite: "si"
 
                         })
                         contenedor.appendChild(contenedorFechasUI)
@@ -46806,6 +46628,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 metodoSelectorDia: "administracion.gestionDeOfertas.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia",
                                 nombreContenedor: "totalNetoPorRango",
                                 modo: "administracion",
+                                seleccionableDiaLimite: "si"
 
                             })
                             contenedorDescuento.appendChild(contenedorFechasUI)
@@ -47362,12 +47185,22 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 }
 
             },
-            portadaUI: async () => {
+            portadaUI: async function () {
                 const espacioOfertas = document.querySelector("[componente=espacioComportamiento]")
                 const contenedor = document.createElement("div")
                 contenedor.classList.add("gestionDeOfertasContenedor")
                 const contenedorBotones = document.createElement("div")
-                contenedorBotones.classList.add("gestionDeOfertasContenedorBotones")
+                contenedorBotones.classList.add("gestionDeOfertasContenedorBotones", "gap6")
+
+                const botonIrAlCalendario = document.createElement("a")
+                botonIrAlCalendario.classList.add("gestionDeOfertasBotonCrearOferta")
+                botonIrAlCalendario.textContent = "Ver comportamientos en el calendario"
+                botonIrAlCalendario.setAttribute("href", "/administracion/calendario/capa:todos_los_comportamientos_de_precio/capa:todos_los_precios_sumados")
+                botonIrAlCalendario.setAttribute("vista", "/administracion/calendario/capa:todos_los_comportamientos_de_precio/capa:todos_los_precios_sumados")
+                botonIrAlCalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                contenedorBotones.appendChild(botonIrAlCalendario)
+
+
                 const botonCrearOfertas = document.createElement("a")
                 botonCrearOfertas.classList.add("gestionDeOfertasBotonCrearOferta")
                 botonCrearOfertas.textContent = "Crear un comportamiento de precios"
@@ -47375,6 +47208,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 botonCrearOfertas.setAttribute("vista", "/administracion/comportamiento_de_precios/crear_comportamiento")
                 botonCrearOfertas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorBotones.appendChild(botonCrearOfertas)
+
+
+
                 contenedor.appendChild(contenedorBotones)
                 const contenedorOfertas = document.createElement("div")
                 contenedorOfertas.classList.add("comportamintoDePreciosSuperBloque")
@@ -47401,228 +47237,257 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         espacioListaOfertas.appendChild(ofertaUI)
                         return
                     } else if (comportamientosCondigurados.length > 0) {
-
-
-                        const comportamientosUI = (data) => {
-                            const contenedor = data.contenedor
-                            const tipo = contenedor.tipo
-                            const comportamientoUID = data.comportamientoUID
-                            const nombreComportamiento = data.nombreComportamiento
-                            const estadoIDV = data.estadoIDV
-
-                            const objetoEstado = {
-                                activado: "Comportamiento activado",
-                                desactivado: "Comportamiento desactivado"
-                            }
-
-                            const definicionTipo = {
-                                porRango: "Basado en el rango de vigencia del comportamiento.",
-                                porDias: "Basado en días de la semana.",
-                                porCreacion: "Basado en el rango de vigencia del comportamiento y el rango de creación."
-
-                            }
-
-                            const descripcionObjeto = {
-                                porRango: "Este comportamiento solo se aplica a los días con noche que estén dentro del rango especificado.",
-                                porDias: "Este comportamiento se aplica a los días con noche de la semana específicos.Este comportamiento se aplicará repetidamente hasta que se desactive o elimine.",
-                                porCreacion: "Este comportamiento solo se aplica a los días con noche que estén dentro del rango especificado.Siempre que la reserva se halla hecha entre los rangos de creación especificados."
-
-                            }
-
-                            const comportamientoUI = document.createElement("a")
-                            comportamientoUI.classList.add("comportamientoUI")
-                            comportamientoUI.setAttribute("comportamientoUI", comportamientoUID)
-                            comportamientoUI.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
-                            comportamientoUI.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
-                            comportamientoUI.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.traductorCambioVista)
-
-                            const contenedorTituloEstado = document.createElement("div")
-                            contenedorTituloEstado.classList.add("contenedorTituloEstado")
-
-                            const tituloComportamiento = document.createElement("p")
-                            tituloComportamiento.classList.add("ofertaUITituloOferta")
-                            tituloComportamiento.classList.add("negrita")
-                            tituloComportamiento.textContent = nombreComportamiento
-                            contenedorTituloEstado.appendChild(tituloComportamiento)
-
-                            const estadoComportamiento = document.createElement("p")
-                            estadoComportamiento.classList.add("ofertaUITituloOferta")
-                            estadoComportamiento.textContent = objetoEstado[estadoIDV]
-                            contenedorTituloEstado.appendChild(estadoComportamiento)
-
-
-                            const definicionTipoUI = document.createElement("p")
-                            definicionTipoUI.classList.add("ofertaUITituloOferta")
-                            definicionTipoUI.textContent = definicionTipo[tipo]
-                            contenedorTituloEstado.appendChild(definicionTipoUI)
-
-                            comportamientoUI.appendChild(contenedorTituloEstado)
-
-                            const descripcion = document.createElement("p")
-                            descripcion.classList.add("contenedorTituloEstado")
-                            descripcion.textContent = descripcionObjeto[tipo]
-                            comportamientoUI.appendChild(descripcion)
-
-
-                            if (tipo === "porRango") {
-                                const fechaInicio = contenedor.fechaInicio
-                                const fechaFinal = contenedor.fechaFinal
-
-                                const contenedorGlobalOferta = document.createElement("div")
-                                contenedorGlobalOferta.classList.add("ofertaUIContenedorComportamiento")
-
-                                const contenedorDetalleOferta = document.createElement("div")
-                                contenedorDetalleOferta.classList.add("ofertaUIContenedorDetalles")
-
-                                const fechaInicioContenedor = document.createElement("div")
-                                fechaInicioContenedor.classList.add("comportamientoUIFechaContenedor")
-                                const tituloFechaInicio = document.createElement("div")
-                                tituloFechaInicio.classList.add("ofertaUITituloFecha")
-                                tituloFechaInicio.textContent = "Fecha de inicio del comportamiento"
-                                fechaInicioContenedor.appendChild(tituloFechaInicio)
-                                const datoFechaInicio = document.createElement("div")
-                                datoFechaInicio.classList.add("ofertaUIDatoFecha")
-                                datoFechaInicio.textContent = fechaInicio
-                                fechaInicioContenedor.appendChild(datoFechaInicio)
-                                contenedorGlobalOferta.appendChild(fechaInicioContenedor)
-                                const fechaFinContenedor = document.createElement("div")
-                                fechaFinContenedor.classList.add("comportamientoUIFechaContenedor")
-                                const tituloFechaFin = document.createElement("div")
-                                tituloFechaFin.classList.add("ofertaUITituloFecha")
-                                tituloFechaFin.textContent = "Fecha de fin  del comportamiento"
-                                fechaFinContenedor.appendChild(tituloFechaFin)
-                                const datoFechaFin = document.createElement("div")
-                                datoFechaFin.classList.add("ofertaUIDatoFecha")
-                                datoFechaFin.textContent = fechaFinal
-                                fechaFinContenedor.appendChild(datoFechaFin)
-                                contenedorGlobalOferta.appendChild(fechaFinContenedor)
-                                comportamientoUI.appendChild(contenedorGlobalOferta)
-
-                                return comportamientoUI
-                            } else if (tipo === "porDias") {
-                                const diasArray = contenedor.dias
-                                const numeroDedias = diasArray.length
-
-                                const contenedorGlobalOferta = document.createElement("div")
-                                contenedorGlobalOferta.classList.add("contenedorDiasSelecionados")
-                                contenedorGlobalOferta.style.gridTemplateColumns = `repeat(${numeroDedias}, 1fr)`
-
-
-                                const contenedorDetalleOferta = document.createElement("div")
-                                contenedorDetalleOferta.classList.add("ofertaUIContenedorDetalles")
-
-
-                                const diasObjeto = {
-                                    lunes: "Lunes",
-                                    martes: "Martes",
-                                    miercoles: "Miércoles",
-                                    jueves: "Jueves",
-                                    viernes: "Viernes",
-                                    sabado: "Sábado",
-                                    domingo: "Domingo"
-                                }
-
-                                for (const dia of diasArray) {
-                                    const contenedorDia = document.createElement("div")
-                                    contenedorDia.classList.add("diaSeleciconadoCelda")
-                                    contenedorDia.textContent = diasObjeto[dia]
-                                    contenedorGlobalOferta.appendChild(contenedorDia)
-
-                                }
-                                comportamientoUI.appendChild(contenedorGlobalOferta)
-                                return comportamientoUI
-
-
-                            } else if (tipo === "porCreacion") {
-                                const fechaFinal_creacionReserva = contenedor.fechaFinal_creacionReserva
-                                const fechaInicio_creacionReserva = contenedor.fechaInicio_creacionReserva
-
-                                const fechaInicio = contenedor.fechaInicio
-                                const fechaFinal = contenedor.fechaFinal
-
-                                const contenedorGlobalOferta = document.createElement("div")
-                                contenedorGlobalOferta.classList.add("ofertaUIContenedorComportamiento")
-
-                                const fechaInicioContenedor = document.createElement("div")
-                                fechaInicioContenedor.classList.add("comportamientoUIFechaContenedor")
-                                const tituloFechaInicio = document.createElement("div")
-                                tituloFechaInicio.classList.add("ofertaUITituloFecha")
-                                tituloFechaInicio.textContent = "Fecha de inicio del comportamiento"
-                                fechaInicioContenedor.appendChild(tituloFechaInicio)
-                                const datoFechaInicio = document.createElement("div")
-                                datoFechaInicio.classList.add("ofertaUIDatoFecha")
-                                datoFechaInicio.textContent = fechaInicio
-                                fechaInicioContenedor.appendChild(datoFechaInicio)
-                                contenedorGlobalOferta.appendChild(fechaInicioContenedor)
-                                const fechaFinContenedor = document.createElement("div")
-                                fechaFinContenedor.classList.add("comportamientoUIFechaContenedor")
-                                const tituloFechaFin = document.createElement("div")
-                                tituloFechaFin.classList.add("ofertaUITituloFecha")
-                                tituloFechaFin.textContent = "Fecha de fin del comportamiento"
-                                fechaFinContenedor.appendChild(tituloFechaFin)
-                                const datoFechaFin = document.createElement("div")
-                                datoFechaFin.classList.add("ofertaUIDatoFecha")
-                                datoFechaFin.textContent = fechaFinal
-                                fechaFinContenedor.appendChild(datoFechaFin)
-                                contenedorGlobalOferta.appendChild(fechaFinContenedor)
-                                comportamientoUI.appendChild(contenedorGlobalOferta)
-
-
-                                const infoCreacion = document.createElement("div")
-                                infoCreacion.textContent = "El rango de creacion determina que la fecah de creacion de una reserva, debe de estar dentro de este rango para que se aplique el comportamiento de precio."
-                                comportamientoUI.appendChild(infoCreacion)
-
-
-                                const contenedorRangoCreacion = document.createElement("div")
-                                contenedorRangoCreacion.classList.add("ofertaUIContenedorComportamiento")
-
-                                const fechaInicioCreacionContenedor = document.createElement("div")
-                                fechaInicioCreacionContenedor.classList.add("comportamientoUIFechaContenedor")
-
-                                const tituloFechaInicioCreacion = document.createElement("div")
-                                tituloFechaInicioCreacion.classList.add("ofertaUITituloFecha")
-                                tituloFechaInicioCreacion.textContent = "Fecha de inicio del rango de creación"
-                                fechaInicioCreacionContenedor.appendChild(tituloFechaInicioCreacion)
-
-                                const datoFechaInicioCreacion = document.createElement("div")
-                                datoFechaInicioCreacion.classList.add("ofertaUIDatoFecha")
-                                datoFechaInicioCreacion.textContent = fechaFinal_creacionReserva
-                                fechaInicioCreacionContenedor.appendChild(datoFechaInicioCreacion)
-                                contenedorRangoCreacion.appendChild(fechaInicioCreacionContenedor)
-
-                                const fechaFinContenedorCreacion = document.createElement("div")
-                                fechaFinContenedorCreacion.classList.add("comportamientoUIFechaContenedor")
-
-                                const tituloFechaFinCreacion = document.createElement("div")
-                                tituloFechaFinCreacion.classList.add("ofertaUITituloFecha")
-                                tituloFechaFinCreacion.textContent = "Fecha de fin del rango de creación"
-                                fechaFinContenedorCreacion.appendChild(tituloFechaFinCreacion)
-
-                                const datoFechaFinCreacion = document.createElement("div")
-                                datoFechaFinCreacion.classList.add("ofertaUIDatoFecha")
-                                datoFechaFinCreacion.textContent = fechaInicio_creacionReserva
-                                fechaFinContenedorCreacion.appendChild(datoFechaFinCreacion)
-
-                                contenedorRangoCreacion.appendChild(fechaFinContenedorCreacion)
-                                comportamientoUI.appendChild(contenedorRangoCreacion)
-
-                                return comportamientoUI
-                            }
-
-                        }
-
                         comportamientosCondigurados.forEach((detallesComportamiento) => {
-                            const comportamientoUI = comportamientosUI(detallesComportamiento)
-
+                            const comportamientoUI = this.comportamientosUI(detallesComportamiento)
                             espacioListaOfertas.appendChild(comportamientoUI)
                         })
                     }
                 }
             },
+            comportamientosUI: (data) => {
+                const contenedor = data.contenedor
+                const tipo = contenedor.tipo
+                const comportamientoUID = data.comportamientoUID
+                const nombreComportamiento = data.nombreComportamiento
+                const estadoIDV = data.estadoIDV
+
+                const objetoEstado = {
+                    activado: "Comportamiento activado",
+                    desactivado: "Comportamiento desactivado"
+                }
+
+                const definicionTipo = {
+                    porRango: "Basado en el rango de vigencia del comportamiento.",
+                    porDias: "Basado en días de la semana.",
+                    porCreacion: "Basado en el rango de vigencia del comportamiento y el rango de creación."
+
+                }
+
+                const descripcionObjeto = {
+                    porRango: "Este comportamiento solo se aplica a los días con noche que estén dentro del rango especificado.",
+                    porDias: "Este comportamiento se aplica a los días con noche de la semana específicos.Este comportamiento se aplicará repetidamente hasta que se desactive o elimine.",
+                    porCreacion: "Este comportamiento solo se aplica a los días con noche que estén dentro del rango especificado.Siempre que la reserva se halla hecha entre los rangos de creación especificados."
+
+                }
+
+                const comportamientoUI = document.createElement("div")
+                comportamientoUI.classList.add("comportamientoUI")
+                // comportamientoUI.setAttribute("comportamientoUI", comportamientoUID)
+                // comportamientoUI.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+                // comportamientoUI.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+                // comportamientoUI.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.traductorCambioVista)
+
+                const contenedorTituloEstado = document.createElement("div")
+                contenedorTituloEstado.classList.add("contenedorTituloEstado")
+
+                const tituloComportamiento = document.createElement("p")
+                tituloComportamiento.classList.add("ofertaUITituloOferta")
+                tituloComportamiento.classList.add("negrita")
+                tituloComportamiento.textContent = nombreComportamiento
+                contenedorTituloEstado.appendChild(tituloComportamiento)
+
+                const estadoComportamiento = document.createElement("p")
+                estadoComportamiento.classList.add("ofertaUITituloOferta")
+                estadoComportamiento.textContent = objetoEstado[estadoIDV]
+                contenedorTituloEstado.appendChild(estadoComportamiento)
+
+
+                const definicionTipoUI = document.createElement("p")
+                definicionTipoUI.classList.add("ofertaUITituloOferta")
+                definicionTipoUI.textContent = definicionTipo[tipo]
+                contenedorTituloEstado.appendChild(definicionTipoUI)
+
+                comportamientoUI.appendChild(contenedorTituloEstado)
+
+                const descripcion = document.createElement("p")
+                descripcion.classList.add("contenedorTituloEstado")
+                descripcion.textContent = descripcionObjeto[tipo]
+                comportamientoUI.appendChild(descripcion)
+
+
+                if (tipo === "porRango") {
+                    const fechaInicio = contenedor.fechaInicio
+                    const fechaFinal = contenedor.fechaFinal
+
+                    const contenedorGlobalOferta = document.createElement("div")
+                    contenedorGlobalOferta.classList.add("ofertaUIContenedorComportamiento")
+
+                    const contenedorDetalleOferta = document.createElement("div")
+                    contenedorDetalleOferta.classList.add("ofertaUIContenedorDetalles")
+
+                    const fechaInicioContenedor = document.createElement("div")
+                    fechaInicioContenedor.classList.add("comportamientoUIFechaContenedor")
+                    const tituloFechaInicio = document.createElement("div")
+                    tituloFechaInicio.classList.add("ofertaUITituloFecha")
+                    tituloFechaInicio.textContent = "Fecha de inicio del comportamiento"
+                    fechaInicioContenedor.appendChild(tituloFechaInicio)
+                    const datoFechaInicio = document.createElement("div")
+                    datoFechaInicio.classList.add("ofertaUIDatoFecha")
+                    datoFechaInicio.textContent = fechaInicio
+                    fechaInicioContenedor.appendChild(datoFechaInicio)
+                    contenedorGlobalOferta.appendChild(fechaInicioContenedor)
+                    const fechaFinContenedor = document.createElement("div")
+                    fechaFinContenedor.classList.add("comportamientoUIFechaContenedor")
+                    const tituloFechaFin = document.createElement("div")
+                    tituloFechaFin.classList.add("ofertaUITituloFecha")
+                    tituloFechaFin.textContent = "Fecha de fin  del comportamiento"
+                    fechaFinContenedor.appendChild(tituloFechaFin)
+                    const datoFechaFin = document.createElement("div")
+                    datoFechaFin.classList.add("ofertaUIDatoFecha")
+                    datoFechaFin.textContent = fechaFinal
+                    fechaFinContenedor.appendChild(datoFechaFin)
+                    contenedorGlobalOferta.appendChild(fechaFinContenedor)
+                    comportamientoUI.appendChild(contenedorGlobalOferta)
+
+
+                } else if (tipo === "porDias") {
+                    const diasArray = contenedor.dias
+                    const numeroDedias = diasArray.length
+
+                    const contenedorGlobalOferta = document.createElement("div")
+                    contenedorGlobalOferta.classList.add("contenedorDiasSelecionados")
+                    contenedorGlobalOferta.style.gridTemplateColumns = `repeat(${numeroDedias}, 1fr)`
+
+
+                    const contenedorDetalleOferta = document.createElement("div")
+                    contenedorDetalleOferta.classList.add("ofertaUIContenedorDetalles")
+
+
+                    const diasObjeto = {
+                        lunes: "Lunes",
+                        martes: "Martes",
+                        miercoles: "Miércoles",
+                        jueves: "Jueves",
+                        viernes: "Viernes",
+                        sabado: "Sábado",
+                        domingo: "Domingo"
+                    }
+
+                    for (const dia of diasArray) {
+                        const contenedorDia = document.createElement("div")
+                        contenedorDia.classList.add("diaSeleciconadoCelda")
+                        contenedorDia.textContent = diasObjeto[dia]
+                        contenedorGlobalOferta.appendChild(contenedorDia)
+
+                    }
+                    comportamientoUI.appendChild(contenedorGlobalOferta)
+
+
+                } else if (tipo === "porCreacion") {
+                    const fechaFinal_creacionReserva = contenedor.fechaFinal_creacionReserva
+                    const fechaInicio_creacionReserva = contenedor.fechaInicio_creacionReserva
+
+                    const fechaInicio = contenedor.fechaInicio
+                    const fechaFinal = contenedor.fechaFinal
+
+                    const contenedorGlobalOferta = document.createElement("div")
+                    contenedorGlobalOferta.classList.add("ofertaUIContenedorComportamiento")
+
+                    const fechaInicioContenedor = document.createElement("div")
+                    fechaInicioContenedor.classList.add("comportamientoUIFechaContenedor")
+                    const tituloFechaInicio = document.createElement("div")
+                    tituloFechaInicio.classList.add("ofertaUITituloFecha")
+                    tituloFechaInicio.textContent = "Fecha de inicio del comportamiento"
+                    fechaInicioContenedor.appendChild(tituloFechaInicio)
+                    const datoFechaInicio = document.createElement("div")
+                    datoFechaInicio.classList.add("ofertaUIDatoFecha")
+                    datoFechaInicio.textContent = fechaInicio
+                    fechaInicioContenedor.appendChild(datoFechaInicio)
+                    contenedorGlobalOferta.appendChild(fechaInicioContenedor)
+                    const fechaFinContenedor = document.createElement("div")
+                    fechaFinContenedor.classList.add("comportamientoUIFechaContenedor")
+                    const tituloFechaFin = document.createElement("div")
+                    tituloFechaFin.classList.add("ofertaUITituloFecha")
+                    tituloFechaFin.textContent = "Fecha de fin del comportamiento"
+                    fechaFinContenedor.appendChild(tituloFechaFin)
+                    const datoFechaFin = document.createElement("div")
+                    datoFechaFin.classList.add("ofertaUIDatoFecha")
+                    datoFechaFin.textContent = fechaFinal
+                    fechaFinContenedor.appendChild(datoFechaFin)
+                    contenedorGlobalOferta.appendChild(fechaFinContenedor)
+                    comportamientoUI.appendChild(contenedorGlobalOferta)
+
+
+                    const infoCreacion = document.createElement("div")
+                    infoCreacion.classList.add("padding6")
+                    infoCreacion.textContent = "El rango de creacion determina que la fecah de creacion de una reserva, debe de estar dentro de este rango para que se aplique el comportamiento de precio."
+                    comportamientoUI.appendChild(infoCreacion)
+
+
+                    const contenedorRangoCreacion = document.createElement("div")
+                    contenedorRangoCreacion.classList.add("ofertaUIContenedorComportamiento")
+                    comportamientoUI.appendChild(contenedorRangoCreacion)
+
+                    const fechaInicioCreacionContenedor = document.createElement("div")
+                    fechaInicioCreacionContenedor.classList.add("comportamientoUIFechaContenedor")
+                    contenedorRangoCreacion.appendChild(fechaInicioCreacionContenedor)
+
+
+                    const tituloFechaInicioCreacion = document.createElement("div")
+                    tituloFechaInicioCreacion.classList.add("ofertaUITituloFecha")
+                    tituloFechaInicioCreacion.textContent = "Fecha de inicio del rango de creación"
+                    fechaInicioCreacionContenedor.appendChild(tituloFechaInicioCreacion)
+
+                    const datoFechaInicioCreacion = document.createElement("div")
+                    datoFechaInicioCreacion.classList.add("ofertaUIDatoFecha")
+                    datoFechaInicioCreacion.textContent = fechaFinal_creacionReserva
+                    fechaInicioCreacionContenedor.appendChild(datoFechaInicioCreacion)
+
+                    const fechaFinContenedorCreacion = document.createElement("div")
+                    fechaFinContenedorCreacion.classList.add("comportamientoUIFechaContenedor")
+                    contenedorRangoCreacion.appendChild(fechaFinContenedorCreacion)
+
+
+                    const tituloFechaFinCreacion = document.createElement("div")
+                    tituloFechaFinCreacion.classList.add("ofertaUITituloFecha")
+                    tituloFechaFinCreacion.textContent = "Fecha de fin del rango de creación"
+                    fechaFinContenedorCreacion.appendChild(tituloFechaFinCreacion)
+
+                    const datoFechaFinCreacion = document.createElement("div")
+                    datoFechaFinCreacion.classList.add("ofertaUIDatoFecha")
+                    datoFechaFinCreacion.textContent = fechaInicio_creacionReserva
+                    fechaFinContenedorCreacion.appendChild(datoFechaFinCreacion)
+
+                }
+
+                const contenedorBotones = document.createElement("div")
+                contenedorBotones.classList.add("flexVertical", "gap6")
+                comportamientoUI.appendChild(contenedorBotones)
+
+                const botonEntrar = document.createElement("a")
+                botonEntrar.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+                botonEntrar.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+                botonEntrar.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                botonEntrar.classList.add("botonV1BlancoIzquierda")
+                botonEntrar.textContent = "Editar el comportamiento de precio"
+                contenedorBotones.appendChild(botonEntrar)
+                const apartamentosIDV = []
+                contenedor.apartamentos.forEach(c => {
+                    apartamentosIDV.push(c.apartamentoIDV)
+                })
+                let urlFinal
+                if (tipo === "porDias") {
+                    urlFinal = `/administracion/calendario/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentosIDV.join("=")}/capa:precio_noche_por_apartamento/precio_noche_por_apartamento:${apartamentosIDV.join("=")}`
+                } else {
+                    const fechaInicio = contenedor.fechaInicio
+                    const mes = fechaInicio.split("-")[1]
+                    const ano = fechaInicio.split("-")[0]
+                    urlFinal = `/administracion/calendario/fecha:${Number(mes)}-${ano}/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentosIDV.join("=")}/capa:precio_noche_por_apartamento/precio_noche_por_apartamento:${apartamentosIDV.join("=")}`
+                }
+
+                const botonIrACalendario = document.createElement("a")
+                botonIrACalendario.setAttribute("href", urlFinal)
+                botonIrACalendario.setAttribute("vista", urlFinal)
+                botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                botonIrACalendario.classList.add("botonV1BlancoIzquierda")
+                botonIrACalendario.textContent = "Ver el el comportamiento de precio en el calendario"
+                contenedorBotones.appendChild(botonIrACalendario)
+                return comportamientoUI
+            },
             crearComportamiento: {
                 arranque: () => {
                     const main = document.querySelector("main")
-                    main.setAttribute("zonaCSS", "administracion/comportamientoDePrecios/comportamientoUI")
+                    main.setAttribute("zonaCSS", "administracion/comportamiento_de_precios/comportamientoUI")
                     const selector = document.querySelector("[componente=espacioComportamiento]")
 
                     casaVitini.administracion.comportamientoDePrecios.detalleUI("crearOferta")
@@ -47693,7 +47558,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     }
                     if (respuestaServidor?.ok) {
                         const comportamientoUID = respuestaServidor?.comportamientoUID
-                        const vista = `/administracion/comportamientoDePrecios/comportamiento:${comportamientoUID}`
+                        const vista = `/administracion/comportamiento_de_precios/comportamiento:${comportamientoUID}`
                         const navegacion = {
                             vista: vista,
 
@@ -47935,11 +47800,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 UI: async (comportamientoUID) => {
                     const seccionRenderizadaOrigen = document.querySelector("main")
                     const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
-                    const transaccion = {
+
+                    const respuestaServidor = await casaVitini.shell.servidor({
                         zona: "administracion/comportamientoDePrecios/detallesComportamiento",
                         comportamientoUID: String(comportamientoUID)
-                    }
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                    })
                     const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                     if (!seccionRenderizada) { return }
                     if (respuestaServidor?.error) {
@@ -48384,13 +48249,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     "ocultoInicial"
                 )
                 divPrincipal.appendChild(contenedorTipoComportamiento)
-                if (modo === "editarOferta") {
-                    const botonIrAlCalendario = document.createElement("div")
-                    botonIrAlCalendario.classList.add("botonV1")
-                    //                    botonIrAlCalendario.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.estadoComportamiento)
-                    botonIrAlCalendario.textContent = "Ver el comportamiento en el calendario"
-                    divPrincipal.appendChild(botonIrAlCalendario)
-                }
+
 
 
                 const contenedorPorRango = this.compomentesUI.perfilesComportamiento.porRango()
@@ -48406,39 +48265,39 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 divCrearOfertaEpacioBotones_3.classList.add("crearOfertaEpacioBotones");
                 divCrearOfertaEpacioBotones_3.style.pointerEvents = "all"
 
-                const pCrearOfervaBotonV1_3 = document.createElement("p");
-                pCrearOfervaBotonV1_3.classList.add("crearOfervaBotonV1");
-                pCrearOfervaBotonV1_3.setAttribute("tipoOferta", "porApartamentoDedicado");
+                const pbotonV2_negrita_3 = document.createElement("p");
+                pbotonV2_negrita_3.classList.add("botonV2_negrita");
+                pbotonV2_negrita_3.setAttribute("tipoOferta", "porApartamentoDedicado");
                 if (modo === "crearOferta") {
-                    pCrearOfervaBotonV1_3.setAttribute("componente", "botonCrearOferta");
-                    pCrearOfervaBotonV1_3.textContent = "Crear comportamiento";
-                    pCrearOfervaBotonV1_3.addEventListener("click", () => {
+                    pbotonV2_negrita_3.setAttribute("componente", "botonCrearOferta");
+                    pbotonV2_negrita_3.textContent = "Crear comportamiento";
+                    pbotonV2_negrita_3.addEventListener("click", () => {
                         casaVitini.administracion.comportamientoDePrecios.crearComportamiento.crearComortamientoConfirmar()
                     })
                 }
                 if (modo === "editarOferta") {
-                    pCrearOfervaBotonV1_3.setAttribute("componente", "botonEditarOferta");
-                    pCrearOfervaBotonV1_3.textContent = "Editar comportamiento";
-                    pCrearOfervaBotonV1_3.style.pointerEvents = "all"
-                    pCrearOfervaBotonV1_3.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.comportamientoModos)
+                    pbotonV2_negrita_3.setAttribute("componente", "botonEditarOferta");
+                    pbotonV2_negrita_3.textContent = "Editar comportamiento";
+                    pbotonV2_negrita_3.style.pointerEvents = "all"
+                    pbotonV2_negrita_3.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.comportamientoModos)
                 }
 
                 const pBotonGuardarOferta_03 = document.createElement("p");
-                pBotonGuardarOferta_03.classList.add("crearOfervaBotonV1");
+                pBotonGuardarOferta_03.classList.add("botonV2_negrita");
                 pBotonGuardarOferta_03.classList.add("elementoOcultoInicialmente");
                 pBotonGuardarOferta_03.setAttribute("componente", "botonGuardarCambios");
                 pBotonGuardarOferta_03.setAttribute("tipoOferta", "porApartamentoDedicado");
                 pBotonGuardarOferta_03.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.guardarCambiosComportamiento)
                 pBotonGuardarOferta_03.textContent = "Guardar comportamiento";
                 const pBotonCancelarCambiosOferta_O3 = document.createElement("p");
-                pBotonCancelarCambiosOferta_O3.classList.add("crearOfervaBotonV1");
+                pBotonCancelarCambiosOferta_O3.classList.add("botonV2_negrita");
                 pBotonCancelarCambiosOferta_O3.classList.add("elementoOcultoInicialmente");
                 pBotonCancelarCambiosOferta_O3.setAttribute("componente", "botonCancelarCambios");
                 pBotonCancelarCambiosOferta_O3.setAttribute("tipoOferta", "porApartamentoDedicado");
                 pBotonCancelarCambiosOferta_O3.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.comportamientoModos)
                 pBotonCancelarCambiosOferta_O3.textContent = "Cancelar cambios y dejar de editar";
                 const pBotonEliminarOferta_O3 = document.createElement("p");
-                pBotonEliminarOferta_O3.classList.add("crearOfervaBotonV1");
+                pBotonEliminarOferta_O3.classList.add("botonV2_negrita");
                 pBotonEliminarOferta_O3.classList.add("elementoOcultoInicialmente");
                 pBotonEliminarOferta_O3.setAttribute("componente", "botonEliminarOferta");
                 pBotonEliminarOferta_O3.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.eliminarComportamiento.UI)
@@ -48446,7 +48305,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 divCrearOfertaEpacioBotones_3.appendChild(pBotonGuardarOferta_03);
                 divCrearOfertaEpacioBotones_3.appendChild(pBotonCancelarCambiosOferta_O3);
                 divCrearOfertaEpacioBotones_3.appendChild(pBotonEliminarOferta_O3);
-                divPrincipal.appendChild(pCrearOfervaBotonV1_3)
+                divPrincipal.appendChild(pbotonV2_negrita_3)
                 divPrincipal.appendChild(divCrearOfertaEpacioBotones_3)
                 return divPrincipal
 
@@ -48607,7 +48466,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             modo: "administracion",
                             sobreControlConfiguracion: {
                                 configuracionInicio: {
-                                    tituloCalendario: "Seleciona una fecha de inicio del comportamiento"
+                                    tituloCalendario: "Seleciona una fecha de inicio del comportamiento",
+                                    seleccionableDiaLimite: "si"
+                                },
+                                configuracionFin: {
+                                    tituloCalendario: "Seleciona una fecha de fin del comportamiento",
+                                    seleccionableDiaLimite: "si"
                                 }
                             }
                         })
@@ -48619,7 +48483,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             metodoPersonalizado: "comportamientoDePrecios",
                             sobreControlConfiguracion: {
                                 configuracionFin: {
-                                    tituloCalendario: "Seleciona una fecha de de fin del comportamiento"
+                                    tituloCalendario: "Seleciona una fecha de de fin del comportamiento",
+
                                 }
                             }
                         })
@@ -48649,10 +48514,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             modo: "administracion",
                             sobreControlConfiguracion: {
                                 configuracionInicio: {
-                                    tituloCalendario: "Seleciona una fecha de inicio del comportamiento"
+                                    tituloCalendario: "Seleciona una fecha de inicio del comportamiento",
+                                    seleccionableDiaLimite: "si"
                                 },
                                 configuracionFin: {
-                                    tituloCalendario: "Seleciona una fecha de de fin del comportamiento"
+                                    tituloCalendario: "Seleciona una fecha de de fin del comportamiento",
+                                    seleccionableDiaLimite: "si"
                                 }
                             }
                         })
@@ -48670,10 +48537,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             modo: "administracion",
                             sobreControlConfiguracion: {
                                 configuracionInicio: {
-                                    tituloCalendario: "Seleciona la fecha de inicio del rango donde debe de estar la fecha de creación de la reserva"
+                                    tituloCalendario: "Seleciona la fecha de inicio del rango donde debe de estar la fecha de creación de la reserva",
+                                    seleccionableDiaLimite: "si"
                                 },
                                 configuracionFin: {
-                                    tituloCalendario: "Seleciona una fecha de de fin del rango donde debe de estar la fecha de creación de la reserva"
+                                    tituloCalendario: "Seleciona una fecha de de fin del rango donde debe de estar la fecha de creación de la reserva",
+                                    seleccionableDiaLimite: "si"
                                 }
                             }
 
@@ -48786,9 +48655,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         contenedorTipoComportamiento.appendChild(comportamientoPorAntelacion);
                         const fechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
-
                             modo: "administracion",
-
+                            seleccionableDiaLimite: "si"
                         })
                         comportamientoPorAntelacion.appendChild(fechasUI)
 
@@ -48856,8 +48724,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             "ratonDefault",
                             "gap6"
                         )
-                        comportamientoUI.setAttribute("href", "/administracion/comportamientoDePrecios/comportamiento:" + comportamientoUID)
-                        comportamientoUI.setAttribute("vista", "/administracion/comportamientoDePrecios/comportamiento:" + comportamientoUID)
+                        comportamientoUI.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+                        comportamientoUI.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
                         comportamientoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
                         const tituloComportamiento = document.createElement("p")
@@ -49377,7 +49245,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 botonIrAlCalendario.classList.add("portadaBloqueos_botonV1")
                 botonIrAlCalendario.innerHTML = "Ver todos los bloqueos en el calendario"
                 botonIrAlCalendario.setAttribute("vista", "/administracion/calendario/capa:todos_los_bloqueos")
-                botonIrAlCalendario.setAttribute("href","/administracion/calendario/capa:todos_los_bloqueos")
+                botonIrAlCalendario.setAttribute("href", "/administracion/calendario/capa:todos_los_bloqueos")
                 botonIrAlCalendario.addEventListener("click", (boton) => {
                     boton.preventDefault()
                     const vista = boton.target.getAttribute("vista")
@@ -49446,7 +49314,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         numeroBloqueosUI.classList.add("gestionBloqueoApartamento_numeroBloqueosUI")
                         numeroBloqueosUI.textContent = mensajeNumeroBloqueos
                         bloqueApartamentoUI.appendChild(numeroBloqueosUI)
-                        
+
                     })
                 }
             },
@@ -49508,8 +49376,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const bloqueBloqueoUI = document.createElement("div")
                             bloqueBloqueoUI.classList.add("listaBloqueos_bloqueBloqueoUI")
                             bloqueBloqueoUI.setAttribute("bloqueoUID", bloqueoUID)
-                           // bloqueBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
-                           // bloqueBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
+                            // bloqueBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
+                            // bloqueBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
                             //bloqueBloqueoUI.addEventListener("click", casaVitini.administracion.bloqueosTemporales.bloqueosPorApartamento.traductorCambioVista)
                             let tipoBloqueoDefinicion
                             if (tipoBloqueoIDV === "rangoTemporal") {
@@ -49614,7 +49482,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const contenedorBotones = document.createElement("div")
                             contenedorBotones.classList.add("flexVertical", "gap6")
                             bloqueBloqueoUI.appendChild(contenedorBotones)
-    
+
                             const botonEntrarBloqueo = document.createElement("a")
                             botonEntrarBloqueo.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
                             botonEntrarBloqueo.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
@@ -49622,16 +49490,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             botonEntrarBloqueo.classList.add("botonV1BlancoIzquierda")
                             botonEntrarBloqueo.textContent = "Editar bloqueo del alojamiento"
                             contenedorBotones.appendChild(botonEntrarBloqueo)
-    
+
                             let urlCalendario
                             if (tipoBloqueoIDV === "rangoTemporal") {
                                 const mes = fechaInicio.split("-")[1]
                                 const ano = fechaInicio.split("-")[0]
                                 urlCalendario = `/administracion/calendario/fecha:${Number(mes)}-${ano}/capa:todos_los_bloqueos`
-                            }  else    if (tipoBloqueoIDV === "permanente") {
+                            } else if (tipoBloqueoIDV === "permanente") {
                                 urlCalendario = "/administracion/calendario/capa:todos_los_bloqueos"
                             }
-    
+
                             const botonIrACalendario = document.createElement("a")
                             botonIrACalendario.setAttribute("href", urlCalendario)
                             botonIrACalendario.setAttribute("vista", urlCalendario)
@@ -49782,12 +49650,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         contenedorZonaUI.appendChild(zonaUI)
                         contenedorTipoBloqueo.appendChild(contenedorZonaUI)
                         if (tipoBloqueoIDV === "rangoTemporal") {
-                            const metadatosconstructorRangoTemporalUI = {
+
+                            const selectorRangoUI = casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.selectorRangoTemporalUI({
                                 fechaInicio,
                                 fechaFin,
                                 modo: "estadoConDatos"
-                            }
-                            const selectorRangoUI = casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.selectorRangoTemporalUI(metadatosconstructorRangoTemporalUI)
+                            })
                             bloqueBloqueoUI.appendChild(selectorRangoUI)
                         }
                         if (tipoBloqueoIDV === "permanente") {
@@ -49882,7 +49750,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             instanciaUID_contenedorFechas,
                             rangoIDV: "inicioRango",
                             metodoSelectorDia: null,
-                            tituloCalendario: "Selecciona la fecha de inicio del rango de bloqueo"
+                            tituloCalendario: "Selecciona la fecha de inicio del rango de bloqueo",
+                            seleccionableDiaLimite: "si"
 
                         })
                     })
@@ -49915,7 +49784,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             instanciaUID_contenedorFechas,
                             rangoIDV: "finalRango",
                             metodoSelectorDia: null,
-                            tituloCalendario: "Selecciona la fecha del fin del rango de bloqueo"
+                            tituloCalendario: "Selecciona la fecha del fin del rango de bloqueo",
+                            seleccionableDiaLimite: "si"
                         })
                     })
                     const tipoSalidaUITituloUI = document.createElement("div")
@@ -49955,9 +49825,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     const contenedorBotones = document.createElement("div")
                     contenedorBotones.classList.add("detallesBloqueo_contenedorBotones")
                     contenedorBotones.setAttribute("componente", "contenedorBotones")
+                    contenedorBotones.removeAttribute("style")
                     if (configuracion === "crear") {
+                        contenedorBotones.style.gridTemplateColumns = "1fr"
                         const botonCrear = document.createElement("div")
-                        botonCrear.classList.add("detallesBloqueo_botonV1")
+                        botonCrear.classList.add("botonV2_negrita")
                         botonCrear.textContent = "Crear bloqueo"
                         botonCrear.addEventListener("click", () => {
                             casaVitini.administracion.bloqueosTemporales.crearBloqueo.transactor()
@@ -49965,8 +49837,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         contenedorBotones.appendChild(botonCrear)
                     }
                     if (configuracion === "modificar") {
+                        contenedorBotones.style.gridTemplateColumns = "1fr"
                         const botonModificiar = document.createElement("div")
-                        botonModificiar.classList.add("detallesBloqueo_botonV1")
+                        botonModificiar.classList.add("botonV2_negrita")
                         botonModificiar.textContent = "Modificiar bloqueo"
                         botonModificiar.addEventListener("click", () => {
                             casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.controladorBotonesGlobales.guardarEliminar()
@@ -49975,27 +49848,30 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     }
                     if (configuracion === "guardarEliminar") {
                         const botonGuardarCambios = document.createElement("div")
-                        botonGuardarCambios.classList.add("detallesBloqueo_botonV1")
+                        botonGuardarCambios.classList.add("botonV2_negrita")
                         botonGuardarCambios.textContent = "Guardar cambios"
                         botonGuardarCambios.addEventListener("click", () => {
                             casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.guardarCambios()
                         })
                         contenedorBotones.appendChild(botonGuardarCambios)
-                        const botonEliminarBloqueo = document.createElement("div")
-                        botonEliminarBloqueo.classList.add("detallesBloqueo_botonV1")
-                        botonEliminarBloqueo.textContent = "Eliminar bloqueo"
-                        botonEliminarBloqueo.addEventListener("click", () => {
-                            casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.eliminarBloqueo.UI()
-                        })
-                        contenedorBotones.appendChild(botonEliminarBloqueo)
+
                         const botonCancelarCambios = document.createElement("div")
-                        botonCancelarCambios.classList.add("detallesBloqueo_botonV1")
+                        botonCancelarCambios.classList.add("botonV2_negrita")
                         botonCancelarCambios.textContent = "Cancelar cambios"
                         botonCancelarCambios.addEventListener("click", () => {
                             casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.controladorBotonesGlobales.modificar()
                             casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.cancelarCambios()
                         })
                         contenedorBotones.appendChild(botonCancelarCambios)
+
+                        const botonEliminarBloqueo = document.createElement("div")
+                        botonEliminarBloqueo.classList.add("botonV2_negrita")
+                        botonEliminarBloqueo.textContent = "Eliminar bloqueo"
+                        botonEliminarBloqueo.addEventListener("click", () => {
+                            casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.eliminarBloqueo.UI()
+                        })
+                        contenedorBotones.appendChild(botonEliminarBloqueo)
+
                     }
                     return contenedorBotones
                 },
@@ -55356,11 +55232,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     tipo: tipo
                 }
                 if (tipo === "personalizado") {
-                    configuracionCalendario.mes = mes
-                    configuracionCalendario.ano = ano
+                    configuracionCalendario.mes = Number(mes)
+                    configuracionCalendario.ano = Number(ano)
                 }
 
                 const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(configuracionCalendario)
+
                 contenedorMes.setAttribute("mesIDV", `${String(calendarioResuelto.mes).padStart(2, "0")}-${calendarioResuelto.ano}`)
 
                 const contenedorMes_enEspera = calendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
@@ -55424,7 +55301,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     ano: ano,
                     mes: mes,
                     origen: "historial",
-                    contenedorCapas: traductorURL
+                    traductorURL: traductorURL
                 }
                 const estado = {
                     zona: constructoURL,
@@ -55463,6 +55340,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     mes: calendarioResuelto?.mes,
                     instanciaUIDMes: calendarioResuelto?.instanciaUIDMes,
                 })
+
                 traductorURL.fecha = `${calendarioResuelto.mes}-${calendarioResuelto.ano}`
 
                 const capas = traductorURL.capas || {}
@@ -55673,12 +55551,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const comportamientoUID = detallesDelEvento.comportamientoUID
                         const nombreComportamiento = detallesDelEvento.nombreComportamiento
                         nombreEventoFinal = nombreComportamiento
-                        urlUI = `/administracion/comportamientoDePrecios/comportamiento:${comportamientoUID}`
+                        urlUI = `/administracion/comportamiento_de_precios/comportamiento:${comportamientoUID}`
                     } else if (tipoEvento === "comportamientosPorApartamentoBasadoEnDia") {
                         const comportamientoUID = detallesDelEvento.comportamientoUID
                         const nombreComportamiento = detallesDelEvento.nombreComportamiento
                         nombreEventoFinal = nombreComportamiento
-                        urlUI = `/administracion/comportamientoDePrecios/comportamiento:${comportamientoUID}`
+                        urlUI = `/administracion/comportamiento_de_precios/comportamiento:${comportamientoUID}`
                     } else if (tipoEvento === "todosLosBloqueos") {
                         const bloqueoUID = detallesDelEvento.bloqueoUID
                         const apartamentoIDV = detallesDelEvento.apartamentoIDV

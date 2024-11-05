@@ -11,15 +11,28 @@ export const comportamientosPorRango = async (data) => {
         estadoArray: ["activado"]
     })
     contenedorCompportamientos.push(...comportamientosDePrecioPorRango)
-    const comportamientosDePrecioPorFechaCreacion = await obtenerComportamientosPorCreacionPorFechaCracion({
-        fechaInicio: data.fechaEntrada,
-        fechaFinal: data.fechaSalida,
-        fechaCreacionReserva: data.fechaCreacionReserva,
-        tipoIDV: "porCreacion",
-        arrayApartamentos: data.arrayApartamentos,
-        estado: "activado"
-    })
-    contenedorCompportamientos.push(...comportamientosDePrecioPorFechaCreacion)
+    if (data?.obtenerComportamientosPorFechaCracionIgnorandoFechaActual === "si") {
+        const comportamientos = await obtenerComportamientosPorRangoPorTipoIDV({
+            fechaInicio: data.fechaEntrada,
+            fechaFinal: data.fechaSalida,
+            tipoIDV: "porCreacion",
+            arrayApartamentos: data.arrayApartamentos,
+            estadoArray: ["activado"]
+        })
+        contenedorCompportamientos.push(...comportamientos)
+    } else {
+        const comportamientosDePrecioPorFechaCreacion = await obtenerComportamientosPorCreacionPorFechaCracion({
+            fechaInicio: data.fechaEntrada,
+            fechaFinal: data.fechaSalida,
+            fechaCreacionReserva: data.fechaCreacionReserva,
+            tipoIDV: "porCreacion",
+            arrayApartamentos: data.arrayApartamentos,
+            estado: "activado"
+        })
+    
+        contenedorCompportamientos.push(...comportamientosDePrecioPorFechaCreacion) 
+    }
+   
 
     const comportamientosPorRangoFormateados = {}
     contenedorCompportamientos.forEach((comportamiento, i) => {

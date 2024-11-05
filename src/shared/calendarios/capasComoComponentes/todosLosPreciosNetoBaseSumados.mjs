@@ -30,10 +30,10 @@ export const todosLosPreciosNetoBaseSumados = async (metadatos) => {
             calendarioObjeto[llaveCalendarioObjeto] = []
         }
 
-        const zonaHoraria = (await codigoZonaHoraria).zonaHoraria;
+        const zonaHoraria = await (codigoZonaHoraria).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
         const fechaActual_ISO = tiempoZH.toISODate();
-        
+
         const configuracionesAlojamiento = await obtenerTodasLasConfiguracionDeLosApartamento()
         const apartamentosIDV = configuracionesAlojamiento.map(c => c.apartamentoIDV)
         const desgloseFinanciero = await procesador({
@@ -41,10 +41,12 @@ export const todosLosPreciosNetoBaseSumados = async (metadatos) => {
                 reserva: {
                     origen: "externo",
                     fechaEntrada: fechaObjeto.toISODate(),
-                    fechaSalida:  fechaObjetoFin.plus({ days: 1 }).toISODate(),
+                    fechaSalida: fechaObjetoFin.plus({ days: 1 }).toISODate(),
                     fechaActual: fechaActual_ISO,
                     apartamentosArray: apartamentosIDV,
-                    origenSobreControl: "reserva"
+                    origenSobreControl: "reserva",
+                    obtenerComportamientosPorFechaCracionIgnorandoFechaActual: "si"
+
                 },
                 servicios: {
                     origen: "hubServicios",

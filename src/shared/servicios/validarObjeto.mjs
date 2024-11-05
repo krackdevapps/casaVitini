@@ -204,10 +204,10 @@ export const validarServicio = async (data) => {
             await validadoresCompartidos.fechas.validacionVectorial({
                 fechaEntrada: fechaInicio,
                 fechaSalida: fechaFinal,
-                tipoVector: "diferente"
+                tipoVector: "igual"
             })
 
-            llavesValidadas = llavesValidadas + 2
+  
         } else if (duracionIDV === "permanente") {
             delete contenedor.fechaInicio
             delete contenedor.fechaFinal

@@ -17,6 +17,7 @@ export const constructorInstantaneaNoches = async (data) => {
         const fechaCreacion_ISO = data.fechaCreacion_ISO
         const apartamentosArray = data.apartamentosArray
         const instantaneaNoches = data.instantaneaNoches
+        const obtenerComportamientosPorFechaCracionIgnorandoFechaActual = data.obtenerComportamientosPorFechaCracionIgnorandoFechaActual
 
         const diasArray = constructorObjetoEstructuraPrecioDia(fechaEntrada, fechaSalida)
         diasArray.pop()
@@ -64,7 +65,8 @@ export const constructorInstantaneaNoches = async (data) => {
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
             fechaCreacionReserva: fechaCreacion_ISO,
-            arrayApartamentos: apartamentosArray
+            arrayApartamentos: apartamentosArray,
+            obtenerComportamientosPorFechaCracionIgnorandoFechaActual
         })
         const comportamientosPorDiasFormateados = await comportamientosPorDias({
             nombreDiasAgrupados: indiceDias.nombresDiasAgrupados,
