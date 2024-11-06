@@ -4696,10 +4696,11 @@ summary:hover {
     border: 3px solid transparent;
     pointer-events: none;
 }
-
-.calendarioDiaNoDisponiblePorAntelacion {
-    background: rgb(246, 116, 116);
+ 
+.calendarioDiaNoDisponiblePorAntelacion{
+    background: rgb(246, 116, 116) !important;
     border: 3px solid transparent;
+    color: black !important;
     pointer-events: none;
 }
 
