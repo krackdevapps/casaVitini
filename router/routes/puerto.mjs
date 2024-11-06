@@ -37,7 +37,7 @@ export const puerto = async (entrada, salida) => {
             const cargarModulosDesdeDirectorio = async (rutaActual, arbol) => {
                 const arbolDeLaRuta = await fs.promises.readdir(rutaActual, { withFileTypes: true })
                 for (const ramaDeLaRuta of arbolDeLaRuta) {
-                    const rutaEntrada = path.join(ramaDeLaRuta.path, ramaDeLaRuta.name)
+                    const rutaEntrada = path.join(ramaDeLaRuta.parentPath, ramaDeLaRuta.name)
                     if (ramaDeLaRuta.isDirectory()) {
                         arbol[ramaDeLaRuta.name] = {}
                         await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
