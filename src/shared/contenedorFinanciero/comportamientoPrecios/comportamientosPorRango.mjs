@@ -29,10 +29,10 @@ export const comportamientosPorRango = async (data) => {
             arrayApartamentos: data.arrayApartamentos,
             estado: "activado"
         })
-    
-        contenedorCompportamientos.push(...comportamientosDePrecioPorFechaCreacion) 
+
+        contenedorCompportamientos.push(...comportamientosDePrecioPorFechaCreacion)
     }
-   
+
 
     const comportamientosPorRangoFormateados = {}
     contenedorCompportamientos.forEach((comportamiento, i) => {

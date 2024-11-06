@@ -29,7 +29,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
         if (tipoEntidad === "apartamento") {
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
-                numeroDeLLavesMaximo: 4
+                numeroDeLLavesMaximo: 5
             })
             const apartamentoUI = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.apartamentoUI,

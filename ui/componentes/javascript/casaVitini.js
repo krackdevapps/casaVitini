@@ -13034,7 +13034,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const destino = data.destino
                                 const desglosePorServicios = data.desglosePorServicios
                                 const modoUI = data.modoUI
-                                console.log("desglosePorServicios.length", desglosePorServicios.length, "modoUI", modoUI)
+
+
+
                                 if (desglosePorServicios.length === 0 && modoUI === "plaza") {
                                     document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=servicio]")?.remove()
                                     return
@@ -42211,7 +42213,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     if (respuestaServidor?.error) {
                         selectorContendorSimulacion.removeAttribute("style")
-                        spinnerSimple?.remove()
+                    
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         const selectorRecovery = data?.selectorRecovery
@@ -42228,7 +42230,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     if (respuestaServidor?.ok) {
                         selectorContendorSimulacion.innerHTML = null
                         selectorContendorSimulacion.removeAttribute("style")
-                        spinnerSimple?.remove()
+                    
 
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                         return casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.desplegarContenedorFinanciero({
@@ -56064,7 +56066,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
 
                 if (respuestaServidor?.error) {
-                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                    return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor?.ok) {
                     const estructuraFinal = []
@@ -56139,6 +56141,15 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             contenedorCapas.capasCompuestas[parametroEnCamel] = composicionCapa
                         }
                     }
+
+
+                    const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizada({
+                        alineacion: "arriba"
+                    })
+                    document.querySelector("main").appendChild(pantallaInmersiva)
+
+                    const destino = pantallaInmersiva.querySelector("[destino=inyector]")
+
                     const contenedorMenuCapas = document.createElement("div")
                     contenedorMenuCapas.classList.add("contenedorMenuCapas")
                     contenedorMenuCapas.setAttribute("componente", "contenedorMenuCapas")
@@ -56173,7 +56184,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     botonCancelar.textContent = "Cerrar"
                     botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                     contenedorMenuCapas.appendChild(botonCancelar)
-                    const apartamentosLista = await casaVitini.administracion.calendario.obtenerConfiguracionesApartamento()
+                    const apartamentosLista = await casaVitini.administracion.calendario.obtenerConfiguracionesApartamento() || []
 
 
                     const info = (t) => {
@@ -56455,7 +56466,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         contenedorTodosLosApartamentos.appendChild(contenedorListaPorApartamento)
                     }
 
-                    const calendariosListaAirnbnb = await casaVitini.administracion.calendario.obtenerCalendariosSincronizados.airbnb()
+                    const calendariosListaAirnbnb = await casaVitini.administracion.calendario.obtenerCalendariosSincronizados.airbnb() || []
                     if (calendariosListaAirnbnb.length > 0) {
                         const grupoAirbnb = document.createElement("details")
                         grupoAirbnb.classList.add("contenedorGrupoFondo")
@@ -56521,12 +56532,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         grupoAirbnb.appendChild(contenedorListaPorApartamento)
                     }
-                    const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizada({
-                        alineacion: "arriba"
-                    })
-                    const destino = pantallaInmersiva.querySelector("[destino=inyector]")
+
                     destino.appendChild(contenedorMenuCapas)
-                    document.querySelector("main").appendChild(pantallaInmersiva)
                     const controladorSelectoresCapas = (selector) => {
                         const contenedorCapa = selector.target.closest("[capaUID]")
                         const todasLasCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")

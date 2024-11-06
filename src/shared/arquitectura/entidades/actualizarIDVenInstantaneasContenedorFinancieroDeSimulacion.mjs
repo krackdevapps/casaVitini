@@ -9,12 +9,17 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
         const origenIDV = data.origenIDV
         const destinoIDV = data.destinoIDV
         const contenedoresFinancierosSimulaciones = await obtenerTodasLasSimulaciones()
-        if (origenIDV === destinoIDV) {
-            const m = "No se puede actualizar un orgienIDV y un destinoIDV siendo el mismo podría provocar problema de integridad en el contenedor financiero."
 
-        }
         for (const contenedor of contenedoresFinancierosSimulaciones) {
             const simulacionUID = contenedor.simulacionUID
+            const fechaCreacion = contenedor.fechaCreacion
+            const fechaEntrada = contenedor.fechaEntrada
+            const fechaSalida = contenedor.fechaSalida
+
+            if (!fechaCreacion || !fechaEntrada || fechaSalida) {
+                continue
+            }
+
             const instantaneaNoches = contenedor.instantaneaNoches || {}
             const instantaneaSobreControlPrecios = contenedor.instantaneaSobreControlPrecios || {}
             const instantaneaOfertasPorCondicion = contenedor.instantaneaOfertasPorCondicion || []
