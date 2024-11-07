@@ -7,6 +7,7 @@ export const obtenerMensajes = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
+        IDX.empleados()
         IDX.control()
 
         const mensajesDePortada = await obtenerTodosLosMensjaes()

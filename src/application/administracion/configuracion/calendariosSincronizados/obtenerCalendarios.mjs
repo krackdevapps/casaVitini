@@ -8,6 +8,7 @@ export const obtenerCalendarios = async (entrada) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
         IDX.administradores()
+        IDX.empleados()
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,

@@ -228,7 +228,6 @@ details {
 details summary {
     cursor: default;
     transition: margin 150ms ease-out, background 250ms linear;
-    ;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -965,6 +964,7 @@ summary:hover {
     padding: 30px;
     pointer-events: none;
 }
+
 .mostrarSoloEnResponsivo {
     display: none;
     scale: 1;
@@ -977,7 +977,8 @@ summary:hover {
 }
 
 
-@media (max-width: 720px), (max-height: 600px)  {
+@media (max-width: 720px),
+(max-height: 600px) {
     .bloqueCalendarioNuevo {
         padding: 0px;
         position: fixed;
@@ -1483,7 +1484,7 @@ summary:hover {
     align-items: center;
     pointer-events: none;
     opacity: 0;
-    margin-top: 10px;
+    margin-top: 16px;
 }
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoIntermedioBotonIrResumenReserva {
@@ -1503,16 +1504,23 @@ summary:hover {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    border-radius: 90px;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    gap: 6px;
+    background: #ff9338;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     transition: all 500ms linear;
+    width: 100%;
+    max-width: 720px;
+}
+
+[zonaCSS="/alojamiento"] .plaza_alojamiento_boronResumenReservaEnMarcoFlotante:hover {
+    background: blue;
+    color: white;
 }
 
 .plaza_alojamiento_boronResumenReservaEnMarcoFlotante:hover {
@@ -1540,7 +1548,7 @@ summary:hover {
     user-select: none;
     -webkit-user-select: none;
     scale: 1;
-    transition: scale 500ms ease-in-out, box-shadow 150ms ease-in-out;
+    transition: scale 500ms ease-in-out, box-shadow 350ms ease-in-out;
 
     @starting-style {
         scale: 0;
@@ -1549,7 +1557,7 @@ summary:hover {
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartamento:hover {
     z-index: 12;
-    box-shadow: 0px 0px 20px 10px #0000007a;
+    box-shadow: 0px 0px 20px 5px #00000026;
 }
 
 .plaza_alojamiento_contenedorApartamento:hover+.plaza_alojamiento_contenedorApartamento_selectorUI {
@@ -4696,8 +4704,8 @@ summary:hover {
     border: 3px solid transparent;
     pointer-events: none;
 }
- 
-.calendarioDiaNoDisponiblePorAntelacion{
+
+.calendarioDiaNoDisponiblePorAntelacion {
     background: rgb(246, 116, 116) !important;
     border: 3px solid transparent;
     color: black !important;
@@ -6489,10 +6497,10 @@ summary:hover {
     flex-wrap: nowrap;
     align-items: stretch;
     justify-content: flex-start;
-    gap: 12px;
+    gap: 20px;
     background: #dbdbdb;
     padding: 16px;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 [zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueHorizontal {
@@ -6501,8 +6509,8 @@ summary:hover {
     flex-wrap: nowrap;
     align-items: stretch;
     justify-content: flex-start;
-    gap: 12px;
-    padding: 16px;
+    gap: 10px;
+    padding: 12px;
     border-radius: 10px;
 
 }
@@ -6514,7 +6522,7 @@ summary:hover {
     align-content: center;
     flex-wrap: nowrap;
     justify-content: center;
-    gap: 6px;
+    gap: 0px;
 }
 
 [zonaCSS="administracion/clientes/editar"] .detallesClienteUI {
@@ -6549,7 +6557,7 @@ summary:hover {
     align-content: stretch;
     width: 100%;
     border-radius: 6px;
-    gap: 6px;
+    gap: 20px;
 }
 
 [zonaCSS="administracion/clientes/editar"] .detallesClienteTituloDato {
@@ -6566,7 +6574,7 @@ summary:hover {
     justify-content: center;
     gap: 6px;
     align-content: center;
-    padding: 16px;
+    padding: 12px;
 }
 
 [zonaCSS="administracion/clientes/editar"] .detallesClienteDatoCampo {
@@ -6596,7 +6604,7 @@ summary:hover {
     align-content: stretch;
     width: 100%;
     border-radius: 6px;
-    gap: 6px;
+    gap: 20px;
 }
 
 [zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueDato {
@@ -7935,7 +7943,7 @@ summary:hover {
     grid-template-columns: repeat(3, 1fr);
 }
 
- .botonV2_negrita {
+.botonV2_negrita {
     margin: 0px;
     font-weight: bold;
     padding: 10px;
@@ -7948,7 +7956,7 @@ summary:hover {
     -webkit-user-select: none;
 }
 
- .botonV2_negrita:hover {
+.botonV2_negrita:hover {
     background: rgba(0, 0, 0, 0.5);
     color: white;
 }
@@ -11643,7 +11651,7 @@ summary:hover {
 
 @keyframes parpadeaFondoSemiBlanco {
     0% {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
     }
 
     50% {
@@ -11651,7 +11659,7 @@ summary:hover {
     }
 
     100% {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
     }
 }
 
@@ -12718,13 +12726,9 @@ summary:hover {
     /* transition: background 250ms linear */
 }
 
-[zonaCSS="administracion/calendario"] .diaSelecionable {
-    /* background: darkturquoise; */
-}
 
-[zonaCSS="administracion/calendario"] .diaSelecionable:hover {
-    background: green;
-}
+
+
 
 [zonaCSS="administracion/calendario"] .diaParcial,
 .administracion_calendario_componenteCalendario_dia.diaParcial::before {
@@ -12748,6 +12752,15 @@ summary:hover {
     /* border: 3px solid rgb(0 0 0 / 50%); */
     background-color: #3b92c7;
 
+}
+
+[zonaCSS="administracion/calendario"] .diaSel {
+    background: black ;
+    color: white ;
+}
+[zonaCSS="administracion/calendario"] .diaSelecionable:hover {
+    background: blue;
+    color: white;
 }
 
 [zonaCSS="administracion/calendario"] .diaDeHoy_calendarioVertical {
@@ -13825,14 +13838,44 @@ summary:hover {
     font-weight: bold;
 }
 
-.contenedorMenuCapas .filaIconoTexto {
+.contenedorListaApartamentos {
+    padding: 0px;
+}
+
+.filaIconoTexto {
+    padding: 6px;
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+
+}
+
+.contenedorMenuCapas {
     display: flex;
     padding: 10px;
     gap: 10px;
     align-content: center;
-    align-items: center;
     justify-content: flex-start;
-    flex-direction: row;
+    flex-direction: column;
+}
+
+.contenedorTituloCapa {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+    margin: 5px;
+}
+
+.contenedorTituloCapa:hover {
+    background: rgb(255 255 255 / 30%);
+    border-radius: 14px;
+    transition: background 150ms linear;
+}
+
+.contenedorCapa {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .contenedorMenuCapas .icono {
@@ -15292,6 +15335,7 @@ summary:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+
 .gridHorizontal2C_resp {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -16033,7 +16077,7 @@ a {
 }
 
 .ocultoInicial {
-    display: none !important;
+    display: none;
 }
 
 .area300px {

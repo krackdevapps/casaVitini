@@ -4,10 +4,18 @@ import { Mutex } from "async-mutex";
 import { generadorReservaUID } from "../../../shared/reservas/utilidades/generadorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { insertarSimulacionVacia } from "../../../infraestructure/repository/simulacionDePrecios/insertarSimulacionVacia.mjs";
+import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 
 export const guardarSimulacion = async (entrada) => {
     const mutex = new Mutex()
     try {
+        const session = entrada.session
+        const IDX = new VitiniIDX(session)
+        IDX.administradores()
+        IDX.empleados()
+        IDX.control()
+
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
