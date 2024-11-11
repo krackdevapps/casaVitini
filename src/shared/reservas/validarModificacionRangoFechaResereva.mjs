@@ -20,8 +20,6 @@ export const validarModificacionRangoFechaResereva = async (data) => {
             throw new Error(error)
         }
 
-
-
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoPago = reserva.estadoPagoIDV
 

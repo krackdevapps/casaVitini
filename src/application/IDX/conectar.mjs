@@ -6,6 +6,7 @@ import { obtenerIDX } from "../../infraestructure/repository/usuarios/obtenerIDX
 import { eliminarSessionPorRolPorCaducidad } from "../../infraestructure/repository/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../infraestructure/repository/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { actualizarUltimoLogin } from "../../infraestructure/repository/usuarios/actualizarUltimoLogin.mjs";
+import { validador } from "../../shared/IDX/validador.mjs";
 
 export const conectar = async (entrada) => {
     try {
@@ -18,20 +19,12 @@ export const conectar = async (entrada) => {
             const m = "No se esperan mas de dos llaves en el objeto de identificacion"
             throw new Error(m)
         }
-        const usuario = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.usuario,
-            nombreCampo: "El nombre de usuario (VitiniIDX)",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
-        })
+        const usuario = entrada.body.usuario;
         const clave = entrada.body.clave;
-        if (!clave) {
-            const error = "Falta especificar la clave";
-            throw new Error(error);
-        }
-
+        validador({
+            usuario,
+            clave
+        })
 
         const intentosMaximos = 10;
         const controladorIntentos = {
@@ -60,8 +53,6 @@ export const conectar = async (entrada) => {
                 }
             }
         }
-
-
         try {
             await obtenerIDX(usuario)
         } catch (error) {

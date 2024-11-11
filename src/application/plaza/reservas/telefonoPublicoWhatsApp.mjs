@@ -1,15 +1,11 @@
-import { obtenerParConfiguracion } from "../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs"
+import { obtenerParametroConfiguracion } from "../../../shared/configuracion/obtenerParametroConfiguracion.mjs"
 
 export const telefonoPublicoWhatsApp = async () => {
     try {
-
         const dadaObtenerPares = [
             "telefonoPublicoWhatsApp"
         ]
-        const paresConfiguracion = await obtenerParConfiguracion(dadaObtenerPares)
-        paresConfiguracion.telefonoPublicoWhatsApp = !paresConfiguracion.telefonoPublicoWhatsApp ? "" :
-            paresConfiguracion.telefonoPublicoWhatsApp
-
+        const paresConfiguracion = await obtenerParametroConfiguracion(dadaObtenerPares)
         const ok = {
             ok: paresConfiguracion
         }
@@ -19,5 +15,4 @@ export const telefonoPublicoWhatsApp = async () => {
     } catch (errorCapturado) {
         throw errorCapturado
     }
-
 }

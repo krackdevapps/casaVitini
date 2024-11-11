@@ -1,0 +1,63 @@
+#!/bin/zsh 
+
+# Configuración
+DB_NAME=""
+DB_USER=""
+DB_PASSWORD=""
+DB_HOST=""
+DB_PORT=""
+SQL_SCHEMA_GATEWAY="schema_gateway.sql"
+SQL_SCHEMA_FINAL="schemnaAndAccountDemo.sql"
+TABLE_NAME=""
+USERDEMO=""
+PASSDEMO=""
+COMMAND_PSQL=""
+COMMAND_PGDUMD=""
+
+# Generar la sal aleatoria de 16 bytes y convertirla a hexadecimal
+sal=$(openssl rand -hex 16)
+echo "Sal: $sal"
+
+# Generar el hash con SHA3-512 combinando los datos y la sal
+hash=$(echo -n "${PASSDEMO}${sal}" | openssl dgst -sha3-512 | awk '{print $2}')
+echo "Hash SHA3-512: $hash"
+
+SQL_INSERT="INSERT
+            INTO $TABLE_NAME 
+            (usuario, clave, sal, \"estadoCuentaIDV\", \"rolIDV\") 
+            VALUES 
+            ('$USERDEMO', '$hash', '$sal', 'activado', 'administrador');"
+
+# Paso 1: Extraer el esquema vacío de la base de datos
+echo "Extrayendo el esquema vacío de la base de datos..."
+PGPASSWORD=$DB_PASSWORD $COMMAND_PGDUMD -U $DB_USER -h $DB_HOST -p $DB_PORT -s $DB_NAME > $SQL_SCHEMA_GATEWAY
+echo "Esquema vacío guardado en $SQL_SCHEMA_GATEWAY."
+
+# Paso 2: Crear un servidor y una base de datos nueva para insertar el esquema
+echo "Borrando base de datos obsoleta y creando nueva base de datos..."
+NEW_DB_NAME="${DB_NAME}_pasarela"
+PGPASSWORD=$DB_PASSWORD $COMMAND_PSQL -U $DB_USER -h $DB_HOST -p $DB_PORT -c "DROP DATABASE IF EXISTS \"$NEW_DB_NAME\";"
+PGPASSWORD=$DB_PASSWORD $COMMAND_PSQL -U $DB_USER -h $DB_HOST -p $DB_PORT -c "CREATE DATABASE \"$NEW_DB_NAME\";"
+
+# Paso 3: Insertar el esquema vacío en el servidor
+echo "Insertando el esquema vacío en la nueva base de datos $NEW_DB_NAME..."
+PGPASSWORD=$DB_PASSWORD $COMMAND_PSQL -U $DB_USER -h $DB_HOST -p $DB_PORT -d $NEW_DB_NAME -f $SQL_SCHEMA_GATEWAY
+
+# Paso 4: Insertar una fila de ejemplo en una tabla específica
+echo "Insertando una fila de datos en la tabla $TABLE_NAME..."
+PGPASSWORD=$DB_PASSWORD $COMMAND_PSQL -U $DB_USER -h $DB_HOST -p $DB_PORT -d $NEW_DB_NAME -c $SQL_INSERT
+
+# Paso 5: Extraer el esquema lleno (esquema con datos)
+echo "Extrayendo el esquema con datos de la nueva base de datos..."
+PGPASSWORD=$DB_PASSWORD $COMMAND_PGDUMD -U $DB_USER -h $DB_HOST -p $DB_PORT $NEW_DB_NAME > ../../ejemplos/$SQL_SCHEMA_FINAL
+
+# Paso 6: Borrar base de datos
+echo "Borrando la base de datos $NEW_DB_NAME..."
+PGPASSWORD=$DB_PASSWORD $COMMAND_PSQL -U $DB_USER -h $DB_HOST -p $DB_PORT -c "DROP DATABASE IF EXISTS \"$NEW_DB_NAME\";"
+
+# Paso 7: Borrar esquema de pasrela
+echo "Borrando archio de esquema de pasarela $SQL_FILLED_SCHEMA_FILE..."
+rm $SQL_SCHEMA_GATEWAY
+echo "Esquema lleno guardado en $SQL_FILLED_SCHEMA_FILE."
+
+echo "Script completado. Esquema vacío y lleno guardados como $(pwd)/$SQL_SCHEMA_FINAL."

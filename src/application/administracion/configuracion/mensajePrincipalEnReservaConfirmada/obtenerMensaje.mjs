@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
+import { obtenerParametroConfiguracion } from "../../../../shared/configuracion/obtenerParametroConfiguracion.mjs";
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 
 export const obtenerMensaje = async (entrada) => {
@@ -13,12 +13,8 @@ export const obtenerMensaje = async (entrada) => {
         const dadaObtenerPares = [
             "mensajePrincipalEnReservaConfirmada"
         ]
-        const paresConfiguracion = await obtenerParConfiguracion(dadaObtenerPares)
-        paresConfiguracion.mensajePrincipalEnReservaConfirmada = !paresConfiguracion.mensajePrincipalEnReservaConfirmada ? "" :
-            paresConfiguracion.mensajePrincipalEnReservaConfirmada
-
+        const paresConfiguracion = await obtenerParametroConfiguracion(dadaObtenerPares)
         paresConfiguracion.mensajePrincipalEnReservaConfirmada = Buffer.from(paresConfiguracion.mensajePrincipalEnReservaConfirmada, "base64").toString()
-
         const ok = {
             ok: paresConfiguracion
         }

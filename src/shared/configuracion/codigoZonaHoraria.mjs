@@ -1,5 +1,5 @@
-import { obtenerParConfiguracion } from "../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs"
+import { obtenerParametroConfiguracion } from "./obtenerParametroConfiguracion.mjs"
 export const codigoZonaHoraria = async () => {
-    const configuracion = await obtenerParConfiguracion(["zonaHoraria"])
+    const configuracion = await obtenerParametroConfiguracion(["zonaHoraria"])
     return configuracion
 }

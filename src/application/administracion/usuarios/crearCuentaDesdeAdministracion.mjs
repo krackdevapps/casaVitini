@@ -29,6 +29,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         })
 
         const clave = entrada.body.clave;
+        validadoresCompartidos.claves.minimoRequisitos(clave);
         const usuarioIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuarioIDX,
             nombreCampo: "El nombre de usuario (VitiniIDX)",

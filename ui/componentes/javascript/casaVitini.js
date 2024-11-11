@@ -525,7 +525,7 @@ const casaVitini = {
                 circuloAnimado.classList.add("circuloAnimado")
                 const mensajeIniciando = document.createElement("div")
                 mensajeIniciando.classList.add("flexVertical")
-                mensajeIniciando.textContent = "Iniciando session..."
+                mensajeIniciando.textContent = "Comprobando tu Vitini ID..."
                 bloqueRespuesta.appendChild(circuloAnimado)
                 bloqueRespuesta.appendChild(mensajeIniciando)
                 bloqueRespuesta.style.opacity = "1"
@@ -18446,7 +18446,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         botonNuevaReserva.setAttribute("href", url + "alojamiento");
                                         botonNuevaReserva.addEventListener("click", (e) => {
                                             e.preventDefault()
-                                    
+
                                             this.controladorCategorias({
                                                 categoria: "alojamiento",
                                                 origen: "botonCategoria",
@@ -18843,7 +18843,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     contenedorPropuesta.appendChild(botonCancelar)
                                     const infoPropuesta = document.createElement("div")
                                     infoPropuesta.classList.add("padding14")
-                                    infoPropuesta.textContent = `Has propuesto cambiar la fecha de entrada de esta reserva a ${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}. Si quieres confirmar la propuesta y cambiar la reserva, pulsa en el botón de confirmar de abajo. Si deseas cancelar, pulsa en el botón cancelar de arriba. Cuando puedes el botón confirmar, se realizará una última verificación para comprobar que los días siguen disponibles.`
+                                    infoPropuesta.textContent = `Has propuesto cambiar la fecha de entrada de esta reserva a ${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}. Si quieres confirmar la propuesta y cambiar la reserva, pulsa en el botón de confirmar de abajo. Si deseas cancelar, pulsa en el botón cancelar de arriba. Cuando pulses el botón confirmar, se realizará una última verificación para comprobar que los días siguen disponibles.`
                                     contenedorPropuesta.appendChild(infoPropuesta)
 
                                     const informacionImplicacion = document.createElement("div")
@@ -18894,7 +18894,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     contenedorPropuesta.appendChild(botonCancelar)
                                     const infoPropuesta = document.createElement("div")
                                     infoPropuesta.classList.add("padding14")
-                                    infoPropuesta.textContent = `Has propuesto cambiar la fecha de salida de la reserva a ${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}. Si quieres confirmar la propuesta y cambiar la reserva, pulsa en el botón de confirmar de abajo. Si deseas cancelar, pulsa en el botón cancelar de arriba. Cuando puedes el botón confirmar, se realizará una última verificación para comprobar que los días siguen disponibles.`
+                                    infoPropuesta.textContent = `Has propuesto cambiar la fecha de salida de la reserva a ${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}. Si quieres confirmar la propuesta y cambiar la reserva, pulsa en el botón de confirmar de abajo. Si deseas cancelar, pulsa en el botón cancelar de arriba. Cuando pulses el botón confirmar, se realizará una última verificación para comprobar que los días siguen disponibles.`
                                     contenedorPropuesta.appendChild(infoPropuesta)
 
                                     const informacionImplicacion = document.createElement("div")
@@ -26301,7 +26301,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     if (respuestaServidor?.ok) {
                                         const selectorDetallesDelPagoRenderizado = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)
                                         if (selectorDetallesDelPagoRenderizado) {
-                                          //  casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.transacciones.arranque()
+                                            //  casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.transacciones.arranque()
                                             casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
                                                 categoria: "transacciones",
                                                 origen: "url",
@@ -27111,8 +27111,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         })
                                         constructor.appendChild(spinner)
 
-                                 
-                                        const respuestaServidor = await casaVitini.shell.servidor( {
+
+                                        const respuestaServidor = await casaVitini.shell.servidor({
                                             zona: "administracion/servicios/obtenerServicios"
                                         })
                                         const uiRenderizada = document.querySelectorAll(`[instanciaUID="${instanciaUID_UIFlotanteServicios}"]`)
@@ -32252,7 +32252,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     botonIrACalendario.setAttribute("vista", '/administracion/calendario/capa:global')
                     botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     botonIrACalendario.classList.add("botonV1BlancoIzquierda")
-                    botonIrACalendario.textContent = "Ver sitación global en el calendario"
+                    botonIrACalendario.textContent = "Ver situación global en el calendario"
                     marcoElastico.appendChild(botonIrACalendario)
 
 
@@ -33264,7 +33264,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         if (!respuestaServidor) {
                             selectorEstado.textContent = estadoActualMemoriaVolatil
                             selectorEstado.setAttribute("estado", estadoActual)
-                        } else   if (respuestaServidor?.error) {
+                        } else if (respuestaServidor?.error) {
                             selectorEstado.textContent = estadoActualMemoriaVolatil
                             selectorEstado.setAttribute("estado", estadoActual)
                             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
@@ -33934,7 +33934,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     if (!respuestaServidor) {
                         selectorEstado.textContent = estadoActualMemoriaVolatil
                         selectorEstado.setAttribute("estadoServicio", estadoActual)
-                    } else  if (respuestaServidor?.error) {
+                    } else if (respuestaServidor?.error) {
                         document.querySelector("[estadoServicio]").textContent = estadoActualMemoriaVolatil
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
@@ -39004,9 +39004,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 }
                 else {
                     casaVitini.ui.componentes.urlDesconocida()
-
                 }
-
             },
             portada: {
                 mostrarSimulacionesResueltas: async function (data) {
@@ -39495,8 +39493,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 return false
                             }
                             if (respuestaServidor?.ok) {
-
-                                const alojamiento = respuestaServidor.ok
                                 const nuevoApartamento = respuestaServidor.nuevoApartamento
                                 const desgloseFinanciero = respuestaServidor.desgloseFinanciero
 
@@ -39518,9 +39514,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     instanciaUID_contenedorComplementos: instanciaUID_contenedorComplementos
                                 })
                                 const contenedorLista = contenedorComplementosAlojamiento.querySelector("[componente=contenedorLista]")
-
                                 contenedorLista.appendChild(apartamentoUI)
-
                                 return true
                             }
 
@@ -54416,7 +54410,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     const contenedorBotonesGlobales = this.contenedorBotonesGlobales()
                     main.appendChild(contenedorBotonesGlobales)
-                    const traductorURL = casaVitini.administracion.calendario.traductorURL()
 
                     const configuracionUI = await casaVitini.administracion.usuarios.detallesUsuario.configuracion.obtenerConfiguracion({
                         paresConfIDV: [
@@ -54432,7 +54425,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         botonSel.setAttribute("tipoSel", "porDiasIndividual")
                     } else {
                         botonSel.setAttribute("tipoSel", tipoSeleccion)
-
                     }
                     if (!vision || vision === "horizontal") {
                         return this.vision.visionHorizontal()
@@ -58517,7 +58509,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     traductorURL.fecha = `${calendarioResuelto.mes}-${calendarioResuelto.ano}`
 
                     casaVitini.administracion.calendario.controladorRegistros({
-                        tipoRegistro: "crear",
+                        tipoRegistro: "actualizar",
                         traductorURL: traductorURL,
                     });
                 },

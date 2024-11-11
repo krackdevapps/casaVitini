@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.0 (Debian 17.0-1.pgdg120+1)
--- Dumped by pg_dump version 17.0 (Debian 17.0-1.pgdg120+1)
+-- Dumped from database version 17.0 (Postgres.app)
+-- Dumped by pg_dump version 17.0 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,42 +17,85 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-SET defauucast_tablespace = '';
+--
+-- Name: tipo_estadoConfiguracionAlojamiento; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."tipo_estadoConfiguracionAlojamiento" AS ENUM (
+    'disponible',
+    'nodisponible'
+);
+
+
+ALTER TYPE public."tipo_estadoConfiguracionAlojamiento" OWNER TO postgres;
+
+--
+-- Name: tipo_estadoCuenta; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."tipo_estadoCuenta" AS ENUM (
+    'activado',
+    'desactivado'
+);
+
+
+ALTER TYPE public."tipo_estadoCuenta" OWNER TO postgres;
+
+--
+-- Name: tipo_estadosReserva; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."tipo_estadosReserva" AS ENUM (
+    'confirmada',
+    'pendiente',
+    'cancelada'
+);
+
+
+ALTER TYPE public."tipo_estadosReserva" OWNER TO postgres;
+
+--
+-- Name: tipo_interrupores; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.tipo_interrupores AS ENUM (
+    'aceptarReservasPublicas'
+);
+
+
+ALTER TYPE public.tipo_interrupores OWNER TO postgres;
+
+--
+-- Name: tipo_plataformaDePago; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."tipo_plataformaDePago" AS ENUM (
+    'cheque',
+    'efectivo',
+    'pasarela',
+    'tarjeta',
+    'transferenciaBancaria'
+);
+
+
+ALTER TYPE public."tipo_plataformaDePago" OWNER TO postgres;
+
+--
+-- Name: tipo_usuariosRoles; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."tipo_usuariosRoles" AS ENUM (
+    'administrador',
+    'empleado',
+    'cliente'
+);
+
+
+ALTER TYPE public."tipo_usuariosRoles" OWNER TO postgres;
+
+SET default_tablespace = '';
 
 SET default_table_access_method = heap;
-
---
--- Name: clientes; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.clientes (
-    "clienteUID" bigint NOT NULL,
-    nombre text,
-    "primerApellido" text,
-    "segundoApellido" text,
-    pasaporte text,
-    telefono text,
-    mail text,
-    notas text,
-    "testingVI" text
-);
-
-
-ALTER TABLE public.clientes OWNER TO postgres;
-
---
--- Name: Clientes_ID_Cliente_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.clientes ALTER COLUMN "clienteUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."Clientes_ID_Cliente_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
 
 --
 -- Name: apartamentos; Type: TABLE; Schema: public; Owner: postgres
@@ -60,7 +103,9 @@ ALTER TABLE public.clientes ALTER COLUMN "clienteUID" ADD GENERATED ALWAYS AS ID
 
 CREATE TABLE public.apartamentos (
     "apartamentoIDV" text NOT NULL,
-    "apartamentoUI" text
+    "apartamentoUI" text,
+    "apartamentoUIPublico" text,
+    "desfinicionPublica" text
 );
 
 
@@ -174,6 +219,71 @@ CREATE TABLE public.camas (
 ALTER TABLE public.camas OWNER TO postgres;
 
 --
+-- Name: clientes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.clientes (
+    "clienteUID" bigint NOT NULL,
+    nombre text,
+    "primerApellido" text,
+    "segundoApellido" text,
+    pasaporte text,
+    telefono text,
+    mail text,
+    notas text,
+    "testingVI" text
+);
+
+
+ALTER TABLE public.clientes OWNER TO postgres;
+
+--
+-- Name: clientes_ID_Cliente_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.clientes ALTER COLUMN "clienteUID" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."clientes_ID_Cliente_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: complementosDeAlojamiento; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."complementosDeAlojamiento" (
+    "complementoUID" bigint NOT NULL,
+    "apartamentoIDV" text,
+    "estadoIDV" text,
+    definicion text,
+    "tipoPrecio" text,
+    precio numeric(10,2),
+    "testingVI" text,
+    "complementoUI" text
+);
+
+
+ALTER TABLE public."complementosDeAlojamiento" OWNER TO postgres;
+
+--
+-- Name: complementosDeAlojamiento_complementoUID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."complementosDeAlojamiento" ALTER COLUMN "complementoUID" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."complementosDeAlojamiento_complementoUID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: comportamientoPrecios; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -209,9 +319,9 @@ ALTER TABLE public."comportamientoPrecios" ALTER COLUMN "comportamientoUID" ADD 
 CREATE TABLE public."configuracionApartamento" (
     "configuracionUID" bigint NOT NULL,
     "apartamentoIDV" text NOT NULL,
-    "estadoConfiguracionIDV" text NOT NULL,
     imagen text,
-    "zonaIDV" text NOT NULL
+    "zonaIDV" text NOT NULL,
+    "estadoConfiguracionIDV" public."tipo_estadoConfiguracionAlojamiento" NOT NULL
 );
 
 
@@ -344,33 +454,6 @@ ALTER TABLE public."enlaceDeRecuperacionCuenta" ALTER COLUMN "enlaceUID" ADD GEN
 
 
 --
--- Name: enlaceVerificarCuenta; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."enlaceVerificarCuenta" (
-    "enlaceUID" bigint NOT NULL,
-    "IDX" text NOT NULL,
-    "publicoUID" text NOT NULL
-);
-
-
-ALTER TABLE public."enlaceVerificarCuenta" OWNER TO postgres;
-
---
--- Name: enlaceVerificarCuenta_uid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public."enlaceVerificarCuenta" ALTER COLUMN "enlaceUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."enlaceVerificarCuenta_uid_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
 -- Name: enlacesDePago; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -423,122 +506,6 @@ ALTER TABLE public."enlacesPdf" OWNER TO postgres;
 
 ALTER TABLE public."enlacesPdf" ALTER COLUMN "enlaceUID" ADD GENERATED ALWAYS AS IDENTITY (
     SEQUENCE NAME public."enlacesPdf_uid_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Name: estadoApartamentos; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."estadoApartamentos" (
-    "estadoUID" bigint NOT NULL,
-    "estadoIDV" text,
-    "estadoUI" text
-);
-
-
-ALTER TABLE public."estadoApartamentos" OWNER TO postgres;
-
---
--- Name: estadoApartamentos_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public."estadoApartamentos" ALTER COLUMN "estadoUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."estadoApartamentos_id_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Name: estadoPerfilPrecio; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."estadoPerfilPrecio" (
-    "estadoUID" bigint NOT NULL,
-    "estadoIDV" text
-);
-
-
-ALTER TABLE public."estadoPerfilPrecio" OWNER TO postgres;
-
---
--- Name: estadoPerfilPrecio_uid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public."estadoPerfilPrecio" ALTER COLUMN "estadoUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."estadoPerfilPrecio_uid_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Name: estadosCuenta; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."estadosCuenta" (
-    "estadoIDV" text NOT NULL
-);
-
-
-ALTER TABLE public."estadosCuenta" OWNER TO postgres;
-
---
--- Name: estadosPago; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."estadosPago" (
-    "estadoUID" bigint NOT NULL,
-    "estadosDV" text
-);
-
-
-ALTER TABLE public."estadosPago" OWNER TO postgres;
-
---
--- Name: estadosPago_uid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public."estadosPago" ALTER COLUMN "estadoUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."estadosPago_uid_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- Name: estadosReserva; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."estadosReserva" (
-    "estadoUID" bigint NOT NULL,
-    "estadoIDV" text
-);
-
-
-ALTER TABLE public."estadosReserva" OWNER TO postgres;
-
---
--- Name: estadosReserva_uid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public."estadosReserva" ALTER COLUMN "estadoUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."estadosReserva_uid_seq"
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -660,34 +627,6 @@ ALTER TABLE public."mensajesEnPortada" ALTER COLUMN "mensajeUID" ADD GENERATED A
 
 
 --
--- Name: monedas; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.monedas (
-    "monedaUID" bigint NOT NULL,
-    "monedaIDV" text,
-    "monedaUI" text,
-    "simboloIDV" text
-);
-
-
-ALTER TABLE public.monedas OWNER TO postgres;
-
---
--- Name: monedas_uid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.monedas ALTER COLUMN "monedaUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.monedas_uid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
 -- Name: ofertas; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -708,11 +647,11 @@ CREATE TABLE public.ofertas (
 ALTER TABLE public.ofertas OWNER TO postgres;
 
 --
--- Name: ofertasV2_ofertaUID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: ofertas_ofertaUID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 ALTER TABLE public.ofertas ALTER COLUMN "ofertaUID" ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."ofertasV2_ofertaUID_seq"
+    SEQUENCE NAME public."ofertas_ofertaUID_seq"
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -720,18 +659,6 @@ ALTER TABLE public.ofertas ALTER COLUMN "ofertaUID" ADD GENERATED ALWAYS AS IDEN
     CACHE 1
 );
 
-
---
--- Name: plataformaDePago; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."plataformaDePago" (
-    "plataformaIDV" text NOT NULL,
-    "plataformaUI" text NOT NULL
-);
-
-
-ALTER TABLE public."plataformaDePago" OWNER TO postgres;
 
 --
 -- Name: poolClientes; Type: TABLE; Schema: public; Owner: postgres
@@ -799,8 +726,7 @@ ALTER TABLE public."poolTitularesReserva" ALTER COLUMN "titularPoolUID" ADD GENE
 CREATE TABLE public."preciosApartamentos" (
     "precioUID" bigint NOT NULL,
     "apartamentoIDV" text,
-    precio numeric(10,2),
-    "monedaIDV" text
+    precio numeric(10,2)
 );
 
 
@@ -907,6 +833,38 @@ ALTER TABLE public."reservaCamas" ALTER COLUMN "componenteUID" ADD GENERATED ALW
 
 
 --
+-- Name: reservaComplementosAlojamiento; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."reservaComplementosAlojamiento" (
+    "complementoUID" bigint NOT NULL,
+    "complementoUI" text NOT NULL,
+    definicion text,
+    precio numeric(10,2) NOT NULL,
+    "tipoPrecio" text NOT NULL,
+    "apartamentoIDV" text,
+    "reservaUID" numeric(1000,0),
+    "apartamentoUID" bigint NOT NULL
+);
+
+
+ALTER TABLE public."reservaComplementosAlojamiento" OWNER TO postgres;
+
+--
+-- Name: reservaComplementosAlojamiento_complementoUID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."reservaComplementosAlojamiento" ALTER COLUMN "complementoUID" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."reservaComplementosAlojamiento_complementoUID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: reservaFinanciero; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -959,7 +917,6 @@ ALTER TABLE public."reservaHabitaciones" ALTER COLUMN "componenteUID" ADD GENERA
 
 CREATE TABLE public."reservaPagos" (
     "pagoUID" bigint NOT NULL,
-    "plataformaDePagoIDV" text NOT NULL,
     "tarjetaDigitos" text,
     "pagoUIDPasarela" text,
     "reservaUID" numeric(1000,0) NOT NULL,
@@ -969,7 +926,8 @@ CREATE TABLE public."reservaPagos" (
     "pagadorNombre" text,
     "pagadorPasaporte" text,
     "chequeUID" text,
-    "transferenciaUID" text
+    "transferenciaUID" text,
+    "plataformaDePagoIDV" public."tipo_plataformaDePago" NOT NULL
 );
 
 
@@ -1027,11 +985,11 @@ CREATE TABLE public."reservaReembolsos" (
     "reembolsoUID" bigint NOT NULL,
     "pagoUID" bigint NOT NULL,
     cantidad numeric(10,2) NOT NULL,
-    "plataformaDePagoIDV" text NOT NULL,
     "reembolsoUIDPasarela" text,
     "estadoIDV" text,
     "fechaCreacion" timestamp without time zone,
-    "fechaActualizacion" timestamp without time zone
+    "fechaActualizacion" timestamp without time zone,
+    "plataformaDePagoIDV" public."tipo_plataformaDePago" NOT NULL
 );
 
 
@@ -1059,7 +1017,8 @@ CREATE TABLE public."reservaServicios" (
     "servicioUID" bigint NOT NULL,
     "reservaUID" numeric(1000,0),
     nombre text,
-    contenedor jsonb
+    contenedor jsonb,
+    "opcionesSel" jsonb NOT NULL
 );
 
 
@@ -1128,13 +1087,13 @@ ALTER TABLE public."reservaFinanciero" ALTER COLUMN "componenteUID" ADD GENERATE
 CREATE TABLE public.reservas (
     "fechaEntrada" date NOT NULL,
     "fechaSalida" date NOT NULL,
-    "estadoReservaIDV" text NOT NULL,
     "estadoPagoIDV" text,
     "origenIDV" text,
     "fechaCreacion" timestamp without time zone,
     "fechaCancelacion" timestamp without time zone,
+    "testingVI" text,
     "reservaUID" numeric(1000,0) NOT NULL,
-    "testingVI" text
+    "estadoReservaIDV" public."tipo_estadosReserva" NOT NULL
 );
 
 
@@ -1199,7 +1158,6 @@ CREATE TABLE public."simulacionesDePrecio" (
     "fechaCreacion" date,
     "fechaEntrada" date,
     "fechaSalida" date,
-    "apartamentosIDVARRAY" jsonb,
     "reservaUID" numeric(10,0) NOT NULL,
     "testingVI" text,
     "zonaIDV" text
@@ -1209,6 +1167,65 @@ CREATE TABLE public."simulacionesDePrecio" (
 ALTER TABLE public."simulacionesDePrecio" OWNER TO postgres;
 
 --
+-- Name: simulacionesDePrecioAlojamiento; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."simulacionesDePrecioAlojamiento" (
+    "apartamentoUID" bigint NOT NULL,
+    "apartamentoIDV" text NOT NULL,
+    "simulacionUID" bigint NOT NULL
+);
+
+
+ALTER TABLE public."simulacionesDePrecioAlojamiento" OWNER TO postgres;
+
+--
+-- Name: simulacionesDePrecioAlojamiento_apartamentoUID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."simulacionesDePrecioAlojamiento" ALTER COLUMN "apartamentoUID" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."simulacionesDePrecioAlojamiento_apartamentoUID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: simulacionesDePrecioComplementosAlojamiento; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."simulacionesDePrecioComplementosAlojamiento" (
+    "complementoUID" bigint NOT NULL,
+    "complementoUI" text,
+    definicion text,
+    precio numeric(10,2),
+    "tipoPrecio" text,
+    "apartamentoIDV" text,
+    "simulacionUID" bigint NOT NULL,
+    "apartamentoUID" bigint NOT NULL
+);
+
+
+ALTER TABLE public."simulacionesDePrecioComplementosAlojamiento" OWNER TO postgres;
+
+--
+-- Name: simulacionesDePrecioComplementosAlojamiento_complementoUID_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."simulacionesDePrecioComplementosAlojamiento" ALTER COLUMN "complementoUID" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."simulacionesDePrecioComplementosAlojamiento_complementoUID_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: simulacionesDePrecioServicios; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -1216,7 +1233,8 @@ CREATE TABLE public."simulacionesDePrecioServicios" (
     "servicioUID" bigint NOT NULL,
     nombre text,
     contenedor jsonb,
-    "simulacionUID" bigint NOT NULL
+    "simulacionUID" bigint NOT NULL,
+    "opcionesSel" jsonb NOT NULL
 );
 
 
@@ -1257,16 +1275,16 @@ ALTER TABLE public."simulacionesDePrecio" ALTER COLUMN "simulacionUID" ADD GENER
 CREATE TABLE public.usuarios (
     usuario text NOT NULL,
     clave text NOT NULL,
-    "rolIDV" text NOT NULL,
     sal text NOT NULL,
-    "estadoCuentaIDV" text,
     "zonaHoraria" text,
     intentos bigint,
     "cuentaVerificadaIDV" text,
     "codigoVerificacion" text,
     "fechaCaducidadCuentaNoVerificada" timestamp without time zone,
     "ultimoLogin" timestamp without time zone,
-    "testingVI" text
+    "testingVI" text,
+    "estadoCuentaIDV" public."tipo_estadoCuenta" NOT NULL,
+    "rolIDV" public."tipo_usuariosRoles" NOT NULL
 );
 
 
@@ -1301,18 +1319,6 @@ ALTER TABLE public."usuariosConfiguracion" ALTER COLUMN "configuracionUID" ADD G
 
 
 --
--- Name: usuariosRoles; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."usuariosRoles" (
-    "rolIDV" text NOT NULL,
-    "rolUI" text
-);
-
-
-ALTER TABLE public."usuariosRoles" OWNER TO postgres;
-
---
 -- Name: usuariosZonaHoraria; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -1341,6 +1347,633 @@ ALTER TABLE public."usuariosZonaHoraria" ALTER COLUMN "zonaUID" ADD GENERATED AL
 
 
 --
+-- Data for Name: apartamentos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.apartamentos ("apartamentoIDV", "apartamentoUI", "apartamentoUIPublico", "desfinicionPublica") FROM stdin;
+\.
+
+
+--
+-- Data for Name: apartamentosCaracteristicas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."apartamentosCaracteristicas" ("caracteristicaUID", "apartamentoIDV", "caracteristicaUI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: bloqueosApartamentos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."bloqueosApartamentos" ("bloqueoUID", "apartamentoIDV", "tipoBloqueoIDV", "fechaInicio", "fechaFin", motivo, "zonaIDV", "calendarioIDV", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: calendariosSincronizados; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."calendariosSincronizados" ("calendarioUID", url, nombre, "apartamentoIDV", "plataformaOrigenIDV", "dataIcal", "publicoUID", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: camas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.camas ("camaIDV", "camaUI", capacidad, "tipoIDV", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: clientes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.clientes ("clienteUID", nombre, "primerApellido", "segundoApellido", pasaporte, telefono, mail, notas, "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: complementosDeAlojamiento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."complementosDeAlojamiento" ("complementoUID", "apartamentoIDV", "estadoIDV", definicion, "tipoPrecio", precio, "testingVI", "complementoUI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: comportamientoPrecios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."comportamientoPrecios" ("comportamientoUID", "nombreComportamiento", "estadoIDV", contenedor, "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: configuracionApartamento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."configuracionApartamento" ("configuracionUID", "apartamentoIDV", imagen, "zonaIDV", "estadoConfiguracionIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: configuracionCamasEnHabitacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."configuracionCamasEnHabitacion" ("componenteUID", "habitacionUID", "camaIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: configuracionGlobal; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."configuracionGlobal" ("configuracionUID", valor) FROM stdin;
+\.
+
+
+--
+-- Data for Name: configuracionHabitacionesDelApartamento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."configuracionHabitacionesDelApartamento" ("componenteUID", "apartamentoIDV", "habitacionIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: datosDeUsuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."datosDeUsuario" (usuario, mail, nombre, "primerApellido", "segundoApellido", pasaporte, telefono, "estadoCorreoIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: enlaceDeRecuperacionCuenta; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."enlaceDeRecuperacionCuenta" ("enlaceUID", usuario, "codigoUPID", "fechaCaducidad") FROM stdin;
+\.
+
+
+--
+-- Data for Name: enlacesDePago; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."enlacesDePago" ("nombreEnlace", codigo, "reservaUID", descripcion, "fechaCaducidad", cantidad, "enlaceUID", "estadoPagoIDV", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: enlacesPdf; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."enlacesPdf" ("enlaceUID", "publicoUID", "reservaUID", "fechaCaducidad") FROM stdin;
+\.
+
+
+--
+-- Data for Name: habitaciones; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.habitaciones ("habitacionIDV", "habitacionUI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: impuestos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.impuestos ("impuestoUID", nombre, "tipoImpositivo", "tipoValorIDV", "entidadIDV", "estadoIDV", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: interruptoresGlobales; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."interruptoresGlobales" ("interruptorIDV", "estadoIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: mensajesEnPortada; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."mensajesEnPortada" ("mensajeUID", mensaje, "estadoIDV", posicion, "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: ofertas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.ofertas ("ofertaUID", "nombreOferta", "condicionesArray", "descuentosJSON", "fechaInicio", "estadoIDV", "fechaFinal", "zonaIDV", "entidadIDV", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: poolClientes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."poolClientes" ("clienteUID", "nombreCompleto", pasaporte, "pernoctanteUID", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: poolTitularesReserva; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."poolTitularesReserva" ("titularPoolUID", "nombreTitular", "pasaporteTitular", "mailTitular", "telefonoTitular", "reservaUID") FROM stdin;
+\.
+
+
+--
+-- Data for Name: preciosApartamentos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."preciosApartamentos" ("precioUID", "apartamentoIDV", precio) FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaApartamentos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaApartamentos" ("componenteUID", "reservaUID", "apartamentoIDV", "apartamentoUI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaCamas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaCamas" ("componenteUID", "habitacionUID", "camaIDV", "reservaUID", "camaUI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaCamasFisicas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaCamasFisicas" ("componenteUID", "camaIDV", "reservaUID", "habitacionUID", "camaUI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaComplementosAlojamiento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaComplementosAlojamiento" ("complementoUID", "complementoUI", definicion, precio, "tipoPrecio", "apartamentoIDV", "reservaUID", "apartamentoUID") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaFinanciero; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaFinanciero" ("componenteUID", "reservaUID", "desgloseFinanciero", "instantaneaNoches", "instantaneaOfertasPorCondicion", "instantaneaSobreControlPrecios", "instantaneaOfertasPorAdministrador", "instantaneaImpuestos") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaHabitaciones; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaHabitaciones" ("componenteUID", "apartamentoUID", "habitacionIDV", "reservaUID", "habitacionUI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaPagos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaPagos" ("pagoUID", "tarjetaDigitos", "pagoUIDPasarela", "reservaUID", tarjeta, cantidad, "fechaPago", "pagadorNombre", "pagadorPasaporte", "chequeUID", "transferenciaUID", "plataformaDePagoIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaPernoctantes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaPernoctantes" ("componenteUID", "reservaUID", "habitacionUID", "clienteUID", "fechaCheckIn", "fechaCheckOutAdelantado") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaReembolsos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaReembolsos" ("reembolsoUID", "pagoUID", cantidad, "reembolsoUIDPasarela", "estadoIDV", "fechaCreacion", "fechaActualizacion", "plataformaDePagoIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaServicios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaServicios" ("servicioUID", "reservaUID", nombre, contenedor, "opcionesSel") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservaTitulares; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."reservaTitulares" ("titularUID", "clienteUID", "reservaUID", "testingVI") FROM stdin;
+\.
+
+
+--
+-- Data for Name: reservas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.reservas ("fechaEntrada", "fechaSalida", "estadoPagoIDV", "origenIDV", "fechaCreacion", "fechaCancelacion", "testingVI", "reservaUID", "estadoReservaIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: servicios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.servicios ("servicioUID", nombre, "zonaIDV", contenedor, "testingVI", "estadoIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: sessiones; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.sessiones (sid, sess, expire) FROM stdin;
+\.
+
+
+--
+-- Data for Name: simulacionesDePrecio; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."simulacionesDePrecio" ("simulacionUID", "desgloseFinanciero", "instantaneaNoches", "instantaneaSobreControlPrecios", "instantaneaOfertasPorCondicion", "instantaneaOfertasPorAdministrador", "instantaneaImpuestos", nombre, "fechaCreacion", "fechaEntrada", "fechaSalida", "reservaUID", "testingVI", "zonaIDV") FROM stdin;
+\.
+
+
+--
+-- Data for Name: simulacionesDePrecioAlojamiento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."simulacionesDePrecioAlojamiento" ("apartamentoUID", "apartamentoIDV", "simulacionUID") FROM stdin;
+\.
+
+
+--
+-- Data for Name: simulacionesDePrecioComplementosAlojamiento; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."simulacionesDePrecioComplementosAlojamiento" ("complementoUID", "complementoUI", definicion, precio, "tipoPrecio", "apartamentoIDV", "simulacionUID", "apartamentoUID") FROM stdin;
+\.
+
+
+--
+-- Data for Name: simulacionesDePrecioServicios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."simulacionesDePrecioServicios" ("servicioUID", nombre, contenedor, "simulacionUID", "opcionesSel") FROM stdin;
+\.
+
+
+--
+-- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuarios (usuario, clave, sal, "zonaHoraria", intentos, "cuentaVerificadaIDV", "codigoVerificacion", "fechaCaducidadCuentaNoVerificada", "ultimoLogin", "testingVI", "estadoCuentaIDV", "rolIDV") FROM stdin;
+demo	92c51476462967d9572057f5f97a70839d86937ca74699832695c6a873c78c947c2ea1bfe6a362fde05abb243bbe86b1840152c41c2302075cad60554d51fc9f	1b102a825806d5774903d0037e67d970	\N	\N	\N	\N	\N	\N	\N	activado	administrador
+\.
+
+
+--
+-- Data for Name: usuariosConfiguracion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."usuariosConfiguracion" ("configuracionUID", usuario, "configuracionIDV", valor) FROM stdin;
+\.
+
+
+--
+-- Data for Name: usuariosZonaHoraria; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."usuariosZonaHoraria" ("zonaUID", "configuracionIDV", "zonaHoraria", usuario) FROM stdin;
+\.
+
+
+--
+-- Name: apartamentosCaracteristicas_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."apartamentosCaracteristicas_uid_seq"', 1, false);
+
+
+--
+-- Name: bloqueosApartamentos_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."bloqueosApartamentos_uid_seq"', 1, false);
+
+
+--
+-- Name: calendariosSincronizados_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."calendariosSincronizados_uid_seq"', 1, false);
+
+
+--
+-- Name: clientes_ID_Cliente_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."clientes_ID_Cliente_seq"', 1, false);
+
+
+--
+-- Name: complementosDeAlojamiento_complementoUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."complementosDeAlojamiento_complementoUID_seq"', 1, false);
+
+
+--
+-- Name: comportamientoPrecios_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."comportamientoPrecios_uid_seq"', 1, false);
+
+
+--
+-- Name: configuracionApartamentoDisponibildiad_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."configuracionApartamentoDisponibildiad_uid_seq"', 1, false);
+
+
+--
+-- Name: configuracionApartamento_UID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."configuracionApartamento_UID_seq"', 1, false);
+
+
+--
+-- Name: configuracionHabitacion_UID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."configuracionHabitacion_UID_seq"', 1, false);
+
+
+--
+-- Name: enlaceDeRecuperacionCuenta_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."enlaceDeRecuperacionCuenta_uid_seq"', 1, false);
+
+
+--
+-- Name: enlacesDePago_enlaceUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."enlacesDePago_enlaceUID_seq"', 1, false);
+
+
+--
+-- Name: enlacesPdf_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."enlacesPdf_uid_seq"', 1, false);
+
+
+--
+-- Name: impuestos_idv_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.impuestos_idv_seq', 1, false);
+
+
+--
+-- Name: impuestos_impuestoUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."impuestos_impuestoUID_seq"', 1, false);
+
+
+--
+-- Name: mensaesEnPortada_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."mensaesEnPortada_uid_seq"', 1, false);
+
+
+--
+-- Name: mensajesEnPortada_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."mensajesEnPortada_uid_seq"', 1, false);
+
+
+--
+-- Name: ofertas_ofertaUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."ofertas_ofertaUID_seq"', 1, false);
+
+
+--
+-- Name: poolClientesPreFormateo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."poolClientesPreFormateo_id_seq"', 1, false);
+
+
+--
+-- Name: poolTitularesReserva_ud_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."poolTitularesReserva_ud_seq"', 1, false);
+
+
+--
+-- Name: precios_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.precios_uid_seq', 1, false);
+
+
+--
+-- Name: reservaApartamentos_UID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaApartamentos_UID_seq"', 1, false);
+
+
+--
+-- Name: reservaCamasFisicas_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaCamasFisicas_uid_seq"', 1, false);
+
+
+--
+-- Name: reservaCamas_UID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaCamas_UID_seq"', 1, false);
+
+
+--
+-- Name: reservaComplementosAlojamiento_complementoUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaComplementosAlojamiento_complementoUID_seq"', 1, false);
+
+
+--
+-- Name: reservaHabitaciones_ID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaHabitaciones_ID_seq"', 1, false);
+
+
+--
+-- Name: reservaPagos_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaPagos_uid_seq"', 1, false);
+
+
+--
+-- Name: reservaPernoctante_UID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaPernoctante_UID_seq"', 1, false);
+
+
+--
+-- Name: reservaReembolsos_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaReembolsos_uid_seq"', 1, false);
+
+
+--
+-- Name: reservaServicios_servicioUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaServicios_servicioUID_seq"', 1, false);
+
+
+--
+-- Name: reservaTitulares_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaTitulares_uid_seq"', 1, false);
+
+
+--
+-- Name: reservaTotales_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."reservaTotales_uid_seq"', 1, false);
+
+
+--
+-- Name: servicios_servicioUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."servicios_servicioUID_seq"', 1, false);
+
+
+--
+-- Name: simulacionesDePrecioAlojamiento_apartamentoUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."simulacionesDePrecioAlojamiento_apartamentoUID_seq"', 1, false);
+
+
+--
+-- Name: simulacionesDePrecioComplementosAlojamiento_complementoUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."simulacionesDePrecioComplementosAlojamiento_complementoUID_seq"', 1, false);
+
+
+--
+-- Name: simulacionesDePrecioServicios_servicioUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."simulacionesDePrecioServicios_servicioUID_seq"', 1, false);
+
+
+--
+-- Name: simulacionesDePrecio_simulacionUID_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."simulacionesDePrecio_simulacionUID_seq"', 1, false);
+
+
+--
+-- Name: usuariosConfiguracion_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."usuariosConfiguracion_uid_seq"', 1, false);
+
+
+--
+-- Name: usuariosZonaHoraria_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."usuariosZonaHoraria_uid_seq"', 1, false);
+
+
+--
 -- Name: apartamentos apartamento; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1354,6 +1987,14 @@ ALTER TABLE ONLY public.apartamentos
 
 ALTER TABLE ONLY public."apartamentosCaracteristicas"
     ADD CONSTRAINT "apartamentosCaracteristicas_pkey" PRIMARY KEY ("caracteristicaUID");
+
+
+--
+-- Name: apartamentos apartamentos_apartamentoUI_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.apartamentos
+    ADD CONSTRAINT "apartamentos_apartamentoUI_key" UNIQUE ("apartamentoUI");
 
 
 --
@@ -1410,6 +2051,14 @@ ALTER TABLE ONLY public.camas
 
 ALTER TABLE ONLY public.clientes
     ADD CONSTRAINT clientes_pkey PRIMARY KEY ("clienteUID");
+
+
+--
+-- Name: complementosDeAlojamiento complementosDeAlojamiento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."complementosDeAlojamiento"
+    ADD CONSTRAINT "complementosDeAlojamiento_pkey" PRIMARY KEY ("complementoUID");
 
 
 --
@@ -1525,14 +2174,6 @@ ALTER TABLE ONLY public."enlaceDeRecuperacionCuenta"
 
 
 --
--- Name: enlaceVerificarCuenta enlaceVerificarCuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."enlaceVerificarCuenta"
-    ADD CONSTRAINT "enlaceVerificarCuenta_pkey" PRIMARY KEY ("enlaceUID");
-
-
---
 -- Name: enlacesDePago enlacesDePago_codigo_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1562,86 +2203,6 @@ ALTER TABLE ONLY public."enlacesDePago"
 
 ALTER TABLE ONLY public."enlacesPdf"
     ADD CONSTRAINT "enlacesPdf_pkey" PRIMARY KEY ("enlaceUID");
-
-
---
--- Name: estadoApartamentos estadoApartamentos_estado_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadoApartamentos"
-    ADD CONSTRAINT "estadoApartamentos_estado_key" UNIQUE ("estadoIDV");
-
-
---
--- Name: estadoApartamentos estadoApartamentos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadoApartamentos"
-    ADD CONSTRAINT "estadoApartamentos_pkey" PRIMARY KEY ("estadoUID");
-
-
---
--- Name: estadoPerfilPrecio estadoPerfilPrecio_estado_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadoPerfilPrecio"
-    ADD CONSTRAINT "estadoPerfilPrecio_estado_key" UNIQUE ("estadoIDV");
-
-
---
--- Name: estadoPerfilPrecio estadoPerfilPrecio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadoPerfilPrecio"
-    ADD CONSTRAINT "estadoPerfilPrecio_pkey" PRIMARY KEY ("estadoUID");
-
-
---
--- Name: estadosCuenta estadosCuenta_estado_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadosCuenta"
-    ADD CONSTRAINT "estadosCuenta_estado_key" UNIQUE ("estadoIDV");
-
-
---
--- Name: estadosCuenta estadosCuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadosCuenta"
-    ADD CONSTRAINT "estadosCuenta_pkey" PRIMARY KEY ("estadoIDV");
-
-
---
--- Name: estadosPago estadosPago_estadosPago_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadosPago"
-    ADD CONSTRAINT "estadosPago_estadosPago_key" UNIQUE ("estadosDV");
-
-
---
--- Name: estadosPago estadosPago_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadosPago"
-    ADD CONSTRAINT "estadosPago_pkey" PRIMARY KEY ("estadoUID");
-
-
---
--- Name: estadosReserva estadosReserva_estado_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadosReserva"
-    ADD CONSTRAINT "estadosReserva_estado_key" UNIQUE ("estadoIDV");
-
-
---
--- Name: estadosReserva estadosReserva_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."estadosReserva"
-    ADD CONSTRAINT "estadosReserva_pkey" PRIMARY KEY ("estadoUID");
 
 
 --
@@ -1709,30 +2270,6 @@ ALTER TABLE ONLY public."mensajesEnPortada"
 
 
 --
--- Name: monedas monedas_monedaIDV_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.monedas
-    ADD CONSTRAINT "monedas_monedaIDV_key" UNIQUE ("monedaIDV");
-
-
---
--- Name: monedas monedas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.monedas
-    ADD CONSTRAINT monedas_pkey PRIMARY KEY ("monedaUID");
-
-
---
--- Name: monedas monedas_simbolo_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.monedas
-    ADD CONSTRAINT monedas_simbolo_key UNIQUE ("simboloIDV");
-
-
---
 -- Name: ofertas ofertasV2_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1746,14 +2283,6 @@ ALTER TABLE ONLY public.ofertas
 
 ALTER TABLE ONLY public.ofertas
     ADD CONSTRAINT "ofertas_nombreOferta_key" UNIQUE ("nombreOferta");
-
-
---
--- Name: plataformaDePago plataformaDePago_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."plataformaDePago"
-    ADD CONSTRAINT "plataformaDePago_pkey" PRIMARY KEY ("plataformaIDV");
 
 
 --
@@ -1826,6 +2355,14 @@ ALTER TABLE ONLY public."reservaCamasFisicas"
 
 ALTER TABLE ONLY public."reservaCamas"
     ADD CONSTRAINT "reservaCamas_pkey" PRIMARY KEY ("componenteUID");
+
+
+--
+-- Name: reservaComplementosAlojamiento reservaComplementosAlojamiento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."reservaComplementosAlojamiento"
+    ADD CONSTRAINT "reservaComplementosAlojamiento_pkey" PRIMARY KEY ("complementoUID");
 
 
 --
@@ -1933,6 +2470,22 @@ ALTER TABLE ONLY public."simulacionesDePrecioServicios"
 
 
 --
+-- Name: simulacionesDePrecioAlojamiento simulacionesDePrecioAlojamiento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."simulacionesDePrecioAlojamiento"
+    ADD CONSTRAINT "simulacionesDePrecioAlojamiento_pkey" PRIMARY KEY ("apartamentoUID");
+
+
+--
+-- Name: simulacionesDePrecioComplementosAlojamiento simulacionesDePrecioComplementosAlojamiento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."simulacionesDePrecioComplementosAlojamiento"
+    ADD CONSTRAINT "simulacionesDePrecioComplementosAlojamiento_pkey" PRIMARY KEY ("complementoUID");
+
+
+--
 -- Name: simulacionesDePrecio simulacionesDePrecio_reservaUID_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1962,14 +2515,6 @@ ALTER TABLE ONLY public."simulacionesDePrecio"
 
 ALTER TABLE ONLY public."usuariosConfiguracion"
     ADD CONSTRAINT "usuariosConfiguracion_pkey" PRIMARY KEY ("configuracionUID");
-
-
---
--- Name: usuariosRoles usuariosRoles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."usuariosRoles"
-    ADD CONSTRAINT "usuariosRoles_pkey" PRIMARY KEY ("rolIDV");
 
 
 --
@@ -2132,6 +2677,14 @@ ALTER TABLE ONLY public."reservaCamasFisicas"
 
 
 --
+-- Name: complementosDeAlojamiento complementosDeAlojamiento_apartamentoIDV_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."complementosDeAlojamiento"
+    ADD CONSTRAINT "complementosDeAlojamiento_apartamentoIDV_fkey" FOREIGN KEY ("apartamentoIDV") REFERENCES public."configuracionApartamento"("apartamentoIDV") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: datosDeUsuario datosDeUsuiario_usuarioIDX_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2140,43 +2693,11 @@ ALTER TABLE ONLY public."datosDeUsuario"
 
 
 --
--- Name: configuracionApartamento estadoConfiguracion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."configuracionApartamento"
-    ADD CONSTRAINT "estadoConfiguracion" FOREIGN KEY ("estadoConfiguracionIDV") REFERENCES public."estadoApartamentos"("estadoIDV") ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: usuarios estadoCuenta; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuarios
-    ADD CONSTRAINT "estadoCuenta" FOREIGN KEY ("estadoCuentaIDV") REFERENCES public."estadosCuenta"("estadoIDV") ON UPDATE CASCADE;
-
-
---
--- Name: reservas estadoReserva; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.reservas
-    ADD CONSTRAINT "estadoReserva" FOREIGN KEY ("estadoReservaIDV") REFERENCES public."estadosReserva"("estadoIDV") ON UPDATE CASCADE;
-
-
---
 -- Name: reservaCamasFisicas habitacionUID; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."reservaCamasFisicas"
     ADD CONSTRAINT "habitacionUID" FOREIGN KEY ("habitacionUID") REFERENCES public."reservaHabitaciones"("componenteUID") ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: preciosApartamentos moneda; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."preciosApartamentos"
-    ADD CONSTRAINT moneda FOREIGN KEY ("monedaIDV") REFERENCES public.monedas("monedaIDV") ON UPDATE CASCADE;
 
 
 --
@@ -2193,22 +2714,6 @@ ALTER TABLE ONLY public."reservaReembolsos"
 
 ALTER TABLE ONLY public."poolClientes"
     ADD CONSTRAINT "pernoctanteUID" FOREIGN KEY ("pernoctanteUID") REFERENCES public."reservaPernoctantes"("componenteUID") ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: reservaPagos plataforma; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."reservaPagos"
-    ADD CONSTRAINT plataforma FOREIGN KEY ("plataformaDePagoIDV") REFERENCES public."plataformaDePago"("plataformaIDV");
-
-
---
--- Name: reservaReembolsos plataformaDePago; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."reservaReembolsos"
-    ADD CONSTRAINT "plataformaDePago" FOREIGN KEY ("plataformaDePagoIDV") REFERENCES public."plataformaDePago"("plataformaIDV");
 
 
 --
@@ -2268,6 +2773,30 @@ ALTER TABLE ONLY public."reservaTitulares"
 
 
 --
+-- Name: reservaComplementosAlojamiento reservaComplementosAlojamiento_apartamentoIDV_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."reservaComplementosAlojamiento"
+    ADD CONSTRAINT "reservaComplementosAlojamiento_apartamentoIDV_fkey" FOREIGN KEY ("apartamentoIDV") REFERENCES public."configuracionApartamento"("apartamentoIDV") ON UPDATE CASCADE;
+
+
+--
+-- Name: reservaComplementosAlojamiento reservaComplementosAlojamiento_apartamentoUID_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."reservaComplementosAlojamiento"
+    ADD CONSTRAINT "reservaComplementosAlojamiento_apartamentoUID_fkey" FOREIGN KEY ("apartamentoUID") REFERENCES public."reservaApartamentos"("componenteUID") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: reservaComplementosAlojamiento reservaComplementosAlojamiento_reservaUID_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."reservaComplementosAlojamiento"
+    ADD CONSTRAINT "reservaComplementosAlojamiento_reservaUID_fkey" FOREIGN KEY ("reservaUID") REFERENCES public.reservas("reservaUID") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: reservaCamasFisicas reservaUID; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2300,19 +2829,51 @@ ALTER TABLE ONLY public."enlacesDePago"
 
 
 --
--- Name: usuarios rol; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuarios
-    ADD CONSTRAINT rol FOREIGN KEY ("rolIDV") REFERENCES public."usuariosRoles"("rolIDV") ON UPDATE CASCADE;
-
-
---
 -- Name: simulacionesDePrecioServicios simulacionUID; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."simulacionesDePrecioServicios"
     ADD CONSTRAINT "simulacionUID" FOREIGN KEY ("simulacionUID") REFERENCES public."simulacionesDePrecio"("simulacionUID") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: simulacionesDePrecioAlojamiento simulacionesDePrecioAlojamiento_alojamientoIDV_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."simulacionesDePrecioAlojamiento"
+    ADD CONSTRAINT "simulacionesDePrecioAlojamiento_alojamientoIDV_fkey" FOREIGN KEY ("apartamentoIDV") REFERENCES public."configuracionApartamento"("apartamentoIDV") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: simulacionesDePrecioAlojamiento simulacionesDePrecioAlojamiento_simulacionUID_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."simulacionesDePrecioAlojamiento"
+    ADD CONSTRAINT "simulacionesDePrecioAlojamiento_simulacionUID_fkey" FOREIGN KEY ("simulacionUID") REFERENCES public."simulacionesDePrecio"("simulacionUID") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: simulacionesDePrecioComplementosAlojamiento simulacionesDePrecioComplementosAlojamiento_apartamentoIDV_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."simulacionesDePrecioComplementosAlojamiento"
+    ADD CONSTRAINT "simulacionesDePrecioComplementosAlojamiento_apartamentoIDV_fkey" FOREIGN KEY ("apartamentoIDV") REFERENCES public."configuracionApartamento"("apartamentoIDV") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: simulacionesDePrecioComplementosAlojamiento simulacionesDePrecioComplementosAlojamiento_apartamentoUID_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."simulacionesDePrecioComplementosAlojamiento"
+    ADD CONSTRAINT "simulacionesDePrecioComplementosAlojamiento_apartamentoUID_fkey" FOREIGN KEY ("apartamentoUID") REFERENCES public."simulacionesDePrecioAlojamiento"("apartamentoUID") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: simulacionesDePrecioComplementosAlojamiento simulacionesDePrecioComplementosAlojamiento_simulacionUID_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."simulacionesDePrecioComplementosAlojamiento"
+    ADD CONSTRAINT "simulacionesDePrecioComplementosAlojamiento_simulacionUID_fkey" FOREIGN KEY ("simulacionUID") REFERENCES public."simulacionesDePrecio"("simulacionUID") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -2332,14 +2893,6 @@ ALTER TABLE ONLY public."enlaceDeRecuperacionCuenta"
 
 
 --
--- Name: enlaceVerificarCuenta usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."enlaceVerificarCuenta"
-    ADD CONSTRAINT usuario FOREIGN KEY ("IDX") REFERENCES public.usuarios(usuario) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
 -- Name: usuariosConfiguracion usuarios; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2351,6 +2904,3 @@ ALTER TABLE ONLY public."usuariosConfiguracion"
 -- PostgreSQL database dump complete
 --
 
-COPY public.usuarios (usuario, clave, "rolIDV", sal, "estadoCuentaIDV", "zonaHoraria", intentos, "cuentaVerificadaIDV", "codigoVerificacion", "fechaCaducidadCuentaNoVerificada", "ultimoLogin", "testingVI") FROM stdin;
-admin	3cdfbaf02424006bc61d8c898c5c3b7388e6bd95e41bfed5f36032da533a925c3b60c83f1a1c29de1af3412bfbd2a0485b152257b23fee9d930883cb698d8690	administrador	d0d163bef7625e75ca06ace7a2e4833b	activado	\N	\N	si	\N	\N	\N	\N
-\.

@@ -1,7 +1,6 @@
 import { listaZonasHorarias } from "../../../../shared/zonasHorarias.mjs";
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
-
-import { obtenerParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
+import { obtenerParametroConfiguracion } from "../../../../shared/configuracion/obtenerParametroConfiguracion.mjs";
 
 export const obtenerConfiguracion = async (entrada, salida) => {
     try {
@@ -12,7 +11,7 @@ export const obtenerConfiguracion = async (entrada, salida) => {
         IDX.control()
 
         const paresConf = ["zonaHoraria"]
-        const paresConfiguracion = await obtenerParConfiguracion(paresConf)
+        const paresConfiguracion = await obtenerParametroConfiguracion(paresConf)
         const ok = {
             ok: {
                 zonaHoraria: paresConfiguracion.zonaHoraria,

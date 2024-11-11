@@ -12,6 +12,7 @@ export const utilidades = {
         return fecha.toLocaleString("sv-SE", opciones).replace(/\s+/g, 'T');
     },
     calcularPorcentajeTranscurridoUTC: (fechaHoraEntradaUTC, fechaHoraSalidaUTC, fechaActualUTC) => {
+        console.log("fechaHoraEntradaUTC", fechaHoraEntradaUTC, "fechaHoraSalidaUTC", fechaHoraSalidaUTC, "fechaActualUTC", fechaActualUTC)
         const ahora = new Date(fechaActualUTC); // Fecha y hora actuales
         const fechaEntradaCompleta = new Date(fechaHoraEntradaUTC);
         const fechaSalidaCompleta = new Date(fechaHoraSalidaUTC);

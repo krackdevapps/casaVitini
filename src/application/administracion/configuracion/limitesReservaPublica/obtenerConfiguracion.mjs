@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
+import { obtenerParametroConfiguracion } from "../../../../shared/configuracion/obtenerParametroConfiguracion.mjs";
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 export const obtenerConfiguracion = async (entrada, salida) => {
     try {
@@ -14,7 +14,7 @@ export const obtenerConfiguracion = async (entrada, salida) => {
             "limiteFuturoReserva",
             "horaLimiteDelMismoDia"
         ]
-        const paresConfiguracion = await obtenerParConfiguracion(dadaObtenerPares)
+        const paresConfiguracion = await obtenerParametroConfiguracion(dadaObtenerPares)
         const ok = {
             ok: paresConfiguracion
         }

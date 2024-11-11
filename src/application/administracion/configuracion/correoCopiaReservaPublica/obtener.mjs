@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
+import { obtenerParametroConfiguracion } from "../../../../shared/configuracion/obtenerParametroConfiguracion.mjs";
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 
 export const obtener = async (entrada) => {
@@ -13,9 +13,7 @@ export const obtener = async (entrada) => {
         const dadaObtenerPares = [
             "correoCopiaReservaPublica"
         ]
-        const paresConfiguracion = await obtenerParConfiguracion(dadaObtenerPares)
-        paresConfiguracion.correoCopiaReservaPublica = !paresConfiguracion.correoCopiaReservaPublica ? "" :
-            paresConfiguracion.correoCopiaReservaPublica
+        const paresConfiguracion = await obtenerParametroConfiguracion(dadaObtenerPares)
         const ok = {
             ok: paresConfiguracion
         }

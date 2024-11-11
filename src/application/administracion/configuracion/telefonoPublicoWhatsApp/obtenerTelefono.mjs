@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
+import { obtenerParametroConfiguracion } from "../../../../shared/configuracion/obtenerParametroConfiguracion.mjs";
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 
 export const obtenerTelefono = async (entrada) => {
@@ -13,9 +13,7 @@ export const obtenerTelefono = async (entrada) => {
         const dadaObtenerPares = [
             "telefonoPublicoWhatsApp"
         ]
-        const paresConfiguracion = await obtenerParConfiguracion(dadaObtenerPares)
-        paresConfiguracion.telefonoPublicoWhatsApp = !paresConfiguracion.telefonoPublicoWhatsApp ? "" :
-            paresConfiguracion.telefonoPublicoWhatsApp
+        const paresConfiguracion = await obtenerParametroConfiguracion(dadaObtenerPares)
         const ok = {
             ok: paresConfiguracion
         }

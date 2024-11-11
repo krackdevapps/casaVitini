@@ -32,7 +32,7 @@ export const validadorFuturo = async (data) => {
         const configuracionBloqueos = {
             fechaInicioRango: fechaSalidaReserva_ISO,
             fechaFinRango: fechaSeleccionadaParaFuturo_ISO,
-            apartamentoIDV: apartamentosReservaActual,
+            apartamentosIDV_array: apartamentosReservaActual,
             zonaBloqueo_array: [
                 "global",
                 "privado"

@@ -2,6 +2,7 @@ import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 import { apartamentosPorRango } from "../../../../../shared/selectoresCompartidos/apartamentosPorRango.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
 
 export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida) => {
     try {
@@ -14,6 +15,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
         })
+
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaEntrada,
             nombreCampo: "La fecha de entrada"
@@ -24,9 +26,16 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             nombreCampo: "La fecha de salida"
         })
 
+        const configuracionesAlojamiento = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+            estadoIDV: "disponible",
+            zonaArray: ["global", "privada"]
+        })
+        const apartamentosIDV = configuracionesAlojamiento.map(c => c.apartamentoIDV)
+
         const transactor = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
+            apartamentosIDV: apartamentosIDV,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
             zonaBloqueo_array: ["privado", "global"],
         });

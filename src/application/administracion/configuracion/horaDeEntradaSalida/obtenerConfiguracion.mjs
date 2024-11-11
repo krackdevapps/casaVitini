@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs";
+import { obtenerParametroConfiguracion } from "../../../../shared/configuracion/obtenerParametroConfiguracion.mjs";
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 
 
@@ -11,7 +11,7 @@ export const obtenerConfiguracion = async (entrada) => {
         IDX.control()
         const paresConf = ["horaEntradaTZ", "horaSalidaTZ"]
 
-        const paresConfiguracion = await obtenerParConfiguracion(paresConf)
+        const paresConfiguracion = await obtenerParametroConfiguracion(paresConf)
         const ok = { ok: paresConfiguracion };
         return ok
     } catch (errorCapturado) {

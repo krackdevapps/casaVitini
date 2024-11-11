@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../shared/configuracion/codigoZonaHoraria.mjs";
-import { interruptor } from "../../../shared/configuracion/interruptor.mjs";
+import { interruptor } from "../../../shared/configuracion/interruptores/interruptor.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { mensajesUI } from "../../../shared/mensajesUI.mjs";

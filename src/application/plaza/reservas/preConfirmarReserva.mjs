@@ -1,4 +1,4 @@
-import { interruptor } from "../../../shared/configuracion/interruptor.mjs";
+import { interruptor } from "../../../shared/configuracion/interruptores/interruptor.mjs";
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { insertarReserva } from "../../../shared/reservas/insertarReserva.mjs";
 import { detallesReserva } from "../../../shared/reservas/detallesReserva.mjs";
@@ -109,7 +109,7 @@ export const preConfirmarReserva = async (entrada) => {
                 "alojamiento",
                 "pernoctantes",
                 "desgloseFinanciero",
-                "servicios", 
+                "servicios",
                 "complementosDeAlojamiento"
             ]
         })
@@ -120,7 +120,7 @@ export const preConfirmarReserva = async (entrada) => {
             //---enviarMailReservaConfirmadaAlCliente(reservaUID)
             //---enviarMailDeAvisoPorReservaPublica(reservaUID)
         }
-        
+
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,

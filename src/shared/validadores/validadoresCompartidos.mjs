@@ -398,6 +398,10 @@ export const validadoresCompartidos = {
                     const error = "La contraseña debe de tener un mínimo de 12 caracteres"
                     throw new Error(error)
                 }
+                if (clave.length > 70) {
+                    const error = "La contraseña no debe tener mas de 70 caracteres"
+                    throw new Error(error)
+                }
                 let tieneMayuscula = false;
                 let tieneNumero = false;
                 let tieneCaracterEspecial = false;
@@ -530,7 +534,7 @@ export const validadoresCompartidos = {
                 try {
                     const filtro = /^[a-zA-Z0-9]+$/;
                     if (!filtro.test(string)) {
-                        const mensaje = `${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas y números.`
+                        const mensaje = `${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas, números y no se permite Ñ ni Ç.`
                         throw new Error(mensaje)
                     }
                 } catch (errorCapturado) {

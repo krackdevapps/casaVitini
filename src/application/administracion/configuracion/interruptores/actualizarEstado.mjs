@@ -3,6 +3,8 @@ import { validadoresCompartidos } from "../../../../shared/validadores/validador
 import { obtenerInterruptorPorInterruptorIDV } from "../../../../infraestructure/repository/configuracion/interruptores/obtenerInterruptorPorInterruptorIDV.mjs";
 import { actualizarEstadoDelInterruptor } from "../../../../infraestructure/repository/configuracion/interruptores/actualizarEstadoDelInterruptor.mjs";
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { interruptoresIDV } from "../../../../shared/configuracion/interruptores/interruptoresIDV.mjs";
+import { insertarInterruptor } from "../../../../infraestructure/repository/configuracion/interruptores/insertarInterruptor.mjs";
 
 export const actualizarEstado = async (entrada, salida) => {
     try {
@@ -31,10 +33,16 @@ export const actualizarEstado = async (entrada, salida) => {
             soloMinusculas: "si"
         })
         validadoresCompartidos.filtros.estados(estado)
+        interruptoresIDV(interruptorIDV)
 
-        await obtenerInterruptorPorInterruptorIDV(interruptorIDV)
         await campoDeTransaccion("iniciar")
-
+       const interruptor = await obtenerInterruptorPorInterruptorIDV(interruptorIDV)
+        if (!interruptor) {
+            await insertarInterruptor({
+                interruptorIDV,
+                valorIDV: "desactivado"
+            })
+        }
         const dataActualizarInterruptor = {
             estado: estado,
             interruptorIDV: interruptorIDV
@@ -51,5 +59,4 @@ export const actualizarEstado = async (entrada, salida) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     }
-
 }
