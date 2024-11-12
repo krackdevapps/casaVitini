@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../../../shared/validadores/validadoresC
 import { obtenerIDX } from "../../../infraestructure/repository/usuarios/obtenerIDX.mjs";
 import { actualizarDatos } from "../../../infraestructure/repository/usuarios/actualizarDatos.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida) => {
     try {
@@ -84,6 +85,10 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             mail: mail
         };
         await validadoresCompartidos.usuarios.unicidadCorreo(validarDatosUsuario);
+        await controlRol({
+            usuarioOperacion: IDX.vitiniIDX(),
+            usuarioDestino: usuarioIDX
+        })  
         await campoDeTransaccion("iniciar")
 
 

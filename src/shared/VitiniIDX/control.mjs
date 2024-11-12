@@ -17,6 +17,9 @@ export class VitiniIDX {
     rol() {
         return this.rolIDV
     }
+    vitiniIDX() {
+        return this.usuario
+    }
     control() {
         try {
             const VitiniIDX = this.usuario;

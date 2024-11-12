@@ -5,12 +5,14 @@ import { obtenerAdministradores } from "../../../infraestructure/repository/usua
 import { eliminarSessionUsuario } from "../../../infraestructure/repository/usuarios/eliminarSessionUsuario.mjs";
 import { eliminarUsuario } from "../../../infraestructure/repository/usuarios/eliminarUsuario.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
+        IDX.empleados()
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -23,6 +25,10 @@ export const eliminarCuentaDesdeAdministracion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
+        })
+        await controlRol({
+            usuarioOperacion: IDX.vitiniIDX(),
+            usuarioDestino: usuarioIDX
         })
         await campoDeTransaccion("iniciar")
 

@@ -3,6 +3,8 @@ import { validadoresCompartidos } from "../../../shared/validadores/validadoresC
 import { buscarUsuariosPorTermino } from "../../../infraestructure/repository/usuarios/buscarUsuarios.mjs";
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
 import Joi from "joi";
+import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
+import { rolesIDV } from "../../../shared/usuarios/rolesIDV.mjs";
 
 export const buscarUsuarios = async (entrada, salida) => {
     try {
@@ -12,6 +14,7 @@ export const buscarUsuarios = async (entrada, salida) => {
         IDX.empleados()
         IDX.control()
 
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const esquemaBusqueda = Joi.object({
             buscar: Joi.string().required(),
@@ -19,7 +22,7 @@ export const buscarUsuarios = async (entrada, salida) => {
             tipoBusqueda: Joi.string(),
             nombreColumna: Joi.string(),
             sentidoColumna: Joi.string()
-        }).required()
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: esquemaBusqueda,
@@ -61,10 +64,14 @@ export const buscarUsuarios = async (entrada, salida) => {
 
         if (nombreColumna) {
             sentidoColumna = !sentidoColumna ? "ascendente" : sentidoColumna
-            await validadoresCompartidos.baseDeDatos.validarNombreColumna({
-                nombreColumna: nombreColumna,
-                tabla: "datosDeUsuario"
-            })
+
+            if (nombreColumna !== "rolIDV") {
+                await validadoresCompartidos.baseDeDatos.validarNombreColumna({
+                    nombreColumna: nombreColumna,
+                    tabla: "datosDeUsuario"
+                })
+            }
+
             validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
 
         }
@@ -102,7 +109,24 @@ export const buscarUsuarios = async (entrada, salida) => {
         usuariosEncontrados.forEach((detallesUsuario) => {
             delete detallesUsuario.totalUsuarios;
         });
-        Respuesta.usuarios = usuariosEncontrados;
+        const resultadosFormateados = []
+
+        const roles = rolesIDV({
+            operacion: "enumerar"
+        })
+        for (const u of usuariosEncontrados) {
+            const rolIDV = u.rolIDV
+            delete u.rolIDV
+            const rolUI = roles[rolIDV]
+            const usuarioFormateado = {
+                ...Object.fromEntries(Object.entries(u).slice(0, 1)),
+                rolIDV: rolUI,
+                ...Object.fromEntries(Object.entries(u).slice(1))
+            };
+            resultadosFormateados.push(usuarioFormateado);
+        }
+
+        Respuesta.usuarios = resultadosFormateados;
         return Respuesta
     } catch (errorCapturado) {
         throw errorCapturado

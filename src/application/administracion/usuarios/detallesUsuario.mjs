@@ -3,12 +3,14 @@ import { validadoresCompartidos } from "../../../shared/validadores/validadoresC
 import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
 import { obtenerDatosPersonales } from "../../../infraestructure/repository/usuarios/obtenerDatosPersonales.mjs";
 import { insertarFilaDatosPersonales } from "../../../infraestructure/repository/usuarios/insertarFilaDatosPersonales.mjs";
+import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
-export const detallesUsuario = async (entrada, salida) => {
+export const detallesUsuario = async (entrada) => {
     try {
         const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
+        const IDX = new VitiniIDX(session)
         IDX.administradores()
+        IDX.empleados()
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -27,6 +29,10 @@ export const detallesUsuario = async (entrada, salida) => {
         const ok = {
             ok: {}
         };
+        await controlRol({
+            usuarioOperacion: IDX.vitiniIDX(),
+            usuarioDestino: usuarioIDX
+        })
         const usaurio = await obtenerUsuario({
             usuario: usuarioIDX,
             errorSi: "noExiste"

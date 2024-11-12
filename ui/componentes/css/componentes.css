@@ -2618,7 +2618,7 @@ summary:hover {
 
 
     [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] {
-        grid-template-columns: auto auto auto auto !important;
+        grid-template-columns: auto auto auto auto auto !important;
     }
 
     [zonaCSS="administracion/usuarios/buscador"] [gridUID="gridUsuarios"] [nombreColumna="pasaporte"],

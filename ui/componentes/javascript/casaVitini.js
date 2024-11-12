@@ -16868,24 +16868,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 }
                             }
                             gridConstruido_renderizado.appendChild(fila)
-
-
-
-
-
-
-
-
-
                         })
-
-
-
-
-
-
-
-
                         this.tarjetas.selectorFiltro.despliegue({
                             gridUID,
                             columnas: columnasGrid,
@@ -17359,11 +17342,18 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         },
                         constructorTarjetas: (data) => {
                             const columnasGrid = data.columnasGrid
+                            console.log("columnadGrid", columnasGrid)
                             const filas = data.filas
                             const gridUID = data.gridUID
                             const mascaraURL = data.mascaraURL
                             const columnasAceptadas = columnasGrid.map((columna) => {
                                 return columna.columnaIDV
+                            })
+                            const diccionarioColumnas = {}
+                            columnasGrid.forEach(c => {
+                                const columnaIDV = c.columnaIDV
+                                const columnaUI = c.columnaUI
+                                diccionarioColumnas[columnaIDV] = columnaUI
                             })
 
                             const contenedorTarjetas = document.querySelector("[contenedor=tarjetas]")
@@ -17397,8 +17387,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 tarjeta.setAttribute("vista", mascaraURL?.mascara + fila[mascaraURL?.parametro])
                                 tarjeta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                 contenedor.appendChild(tarjeta)
-
+                                console.log("fila", fila)
                                 Object.entries(fila).forEach(([dataIDV, data]) => {
+                                    console.log("dataIDV", dataIDV, "data", data)
                                     if (columnasAceptadas.includes(dataIDV)) {
 
                                         const contenedor = document.createElement("div")
@@ -17408,7 +17399,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         tarjeta.appendChild(contenedor)
 
                                         const titulo = document.createElement("div")
-                                        titulo.innerHTML = dataIDV
+                                        titulo.innerHTML = diccionarioColumnas[dataIDV]
                                         contenedor.appendChild(titulo)
 
                                         const dataUI = document.createElement("div")
@@ -17416,7 +17407,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             "negrita",
                                             "textoElipsis"
                                         )
-                                        dataUI.textContent = data
+                                        dataUI.textContent = data || "(Sin datos)"
                                         contenedor.appendChild(dataUI)
                                     }
                                 })
@@ -37270,7 +37261,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 buscadorUI: () => {
                     const espacioClientes = document.querySelector("[componente=espacioClientes]")
                     const campoBuscador = document.createElement("input")
-                    campoBuscador.classList.add("campoBuscadorClientes")
+                    campoBuscador.classList.add("botonV1BlancoIzquierda_campo")
                     campoBuscador.setAttribute("componente", "zonaNavegacionPaginadaClientes")
                     campoBuscador.setAttribute("componenteCampo", "buscadorPorId")
                     campoBuscador.setAttribute("placeholder", "Busque un cliente por nombre, por cualquier dato.")
@@ -53074,8 +53065,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     Object.entries(parametrosFormatoURL).forEach(([nombreParametroURL, valorParametroURL]) => {
                         const nombreParametroIDV = casaVitini.utilidades.cadenas.snakeToCamel(nombreParametroURL)
                         let nombreColumnaIDV
-                        if ((valorParametroURL)?.toLowerCase() === "cliente_uid") {
-                            nombreColumnaIDV = "clienteUID"
+                        if ((valorParametroURL)?.toLowerCase() === "rol_idv") {
+                            nombreColumnaIDV = "rolIDV"
                         } else if (valorParametroURL) {
                             nombreColumnaIDV = casaVitini.utilidades.cadenas.snakeToCamel(valorParametroURL)
                         } else if ((nombreParametroIDV)?.toLowerCase() === "buscar") {
@@ -53106,7 +53097,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     contenedorBotones.appendChild(botonCrearCuenta)
                     espacioClientes.appendChild(contenedorBotones)
                     const campoBuscador = document.createElement("input")
-                    campoBuscador.classList.add("campoBuscadorClientes")
+                    campoBuscador.classList.add("botonV1BlancoIzquierda_campo")
                     campoBuscador.setAttribute("componente", "zonaNavegacionPaginadaUsuarios")
                     campoBuscador.setAttribute("componenteCampo", "buscadorUsuarios")
                     campoBuscador.setAttribute("placeholder", "Busque un usuario por nombre de usuario, por nombre, por pasaporte, por correo o por teléfono. También puedes hacer búsquedas combinadas.")
@@ -53183,7 +53174,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     let nombreColumnaURL
                     const nombreColumna = transaccion.nombreColumna
-                    if (nombreColumna) {
+
+                    if ((nombreColumna)?.toLowerCase() === "rolidv") {
+                        nombreColumnaURL = "rol_idv"
+                    } else if (nombreColumna) {
                         nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
                     }
 
@@ -53221,6 +53215,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         {
                             columnaUI: "Usuario",
                             columnaIDV: "usuario",
+                        },
+                        {
+                            columnaUI: "Rol",
+                            columnaIDV: "rolIDV",
                         },
                         {
                             columnaUI: "Correo",
@@ -53349,11 +53347,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                         if (respuestaServidor?.error) {
-                            const info = {
-                                titulo: "No existe ningun usuario con ese identificador",
-                                descripcion: "El usuario no existe.Prueba con otro identificador"
-                            }
-                            casaVitini.ui.componentes.mensajeSimple(info)
+
+                            casaVitini.ui.componentes.mensajeSimple({
+                                titulo: "Alerta",
+                                descripcion: respuestaServidor?.error
+                            })
                         }
                         if (respuestaServidor?.ok) {
                             const detallesUsuario = respuestaServidor?.ok
@@ -53431,7 +53429,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                         if (respuestaServidor?.error) {
-                            casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                            casaVitini.ui.componentes.mensajeSimple({
+                                titulo: "Alerta",
+                                descripcion: respuestaServidor?.error
+                            })
                         }
                         if (respuestaServidor?.ok) {
                             const detallesUsuario = respuestaServidor?.ok
@@ -53857,7 +53858,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                         if (respuestaServidor?.error) {
-                            casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                            casaVitini.ui.componentes.mensajeSimple({
+                                titulo: "Alerta",
+                                descripcion: respuestaServidor?.error
+                            })
                         }
                         if (respuestaServidor?.ok) {
                             const rol = respuestaServidor?.ok.rol

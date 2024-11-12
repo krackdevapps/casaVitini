@@ -3,6 +3,8 @@ import { validadoresCompartidos } from "../../../shared/validadores/validadoresC
 import { vitiniCrypto } from "../../../shared/VitiniIDX/vitiniCrypto.mjs";
 import { actualizarClave } from "../../../infraestructure/repository/usuarios/actualizarClave.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
+import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
     try {
@@ -10,6 +12,7 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
+        IDX.empleados()
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -33,7 +36,11 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
             throw new Error(error);
         }
         validadoresCompartidos.claves.minimoRequisitos(claveNuevaDos);
-
+     
+        await controlRol({
+            usuarioOperacion: IDX.vitiniIDX(),
+            usuarioDestino: usuarioIDX
+        })
 
         const cryptoData = {
             sentido: "cifrar",

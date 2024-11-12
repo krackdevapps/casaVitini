@@ -4,6 +4,7 @@ import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obt
 import { eliminarSessionUsuario } from "../../../infraestructure/repository/usuarios/eliminarSessionUsuario.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { actualizarEstadoCuenta } from "../../../infraestructure/repository/usuarios/actualizarEstadoCuenta.mjs";
+import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
@@ -42,7 +43,10 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
             usuario: usuarioIDX,
             errorSi: "noExiste"
         })
-
+        await controlRol({
+            usuarioOperacion: IDX.vitiniIDX(),
+            usuarioDestino: usuarioIDX
+        })
         if (!cuentaIDX.clave) {
             const error = "No se puede activar una cuenta que carece de contraseña. Por favor, establece una contraseña primero.";
             throw new Error(error);

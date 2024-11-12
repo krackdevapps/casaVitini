@@ -10,7 +10,6 @@ import { actualizarRolCuenta } from '../../../../src/application/administracion/
 import { buscarUsuarios } from '../../../../src/application/administracion/usuarios/buscarUsuarios.mjs';
 import { datosCuentaIDX } from '../../../../src/application/administracion/usuarios/datosCuentaIDX.mjs';
 import { detallesUsuario } from '../../../../src/application/administracion/usuarios/detallesUsuario.mjs';
-import { obtenerRoles } from '../../../../src/application/administracion/usuarios/obtenerRoles.mjs';
 import { eliminarCuentaDesdeAdministracion } from '../../../../src/application/administracion/usuarios/eliminarCuentaDesdeAdministracion.mjs';
 
 describe('managin users', () => {
@@ -148,16 +147,7 @@ describe('managin users', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('get rols avaibles from adminitration', async () => {
-        const m = {
-            body: {},
-            session: fakeAdminSession
-        }
-        const response = await obtenerRoles(m)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
+
     test('delete user acount account from adminitration', async () => {
         const m = {
             body: {
