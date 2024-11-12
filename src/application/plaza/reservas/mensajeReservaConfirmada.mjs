@@ -1,4 +1,4 @@
-import { obtenerParConfiguracion } from "../../../infraestructure/repository/configuracion/parConfiguracion/obtenerParConfiguracion.mjs"
+import { obtenerParametroConfiguracion } from "../../../shared/configuracion/obtenerParametroConfiguracion.mjs"
 
 export const mensajeReservaConfirmada = async () => {
     try {
@@ -6,9 +6,7 @@ export const mensajeReservaConfirmada = async () => {
         const dadaObtenerPares = [
             "mensajePrincipalEnReservaConfirmada"
         ]
-        const paresConfiguracion = await obtenerParConfiguracion(dadaObtenerPares)
-        paresConfiguracion.mensajePrincipalEnReservaConfirmada = !paresConfiguracion.mensajePrincipalEnReservaConfirmada ? "" :
-            paresConfiguracion.mensajePrincipalEnReservaConfirmada
+        const paresConfiguracion = await obtenerParametroConfiguracion(dadaObtenerPares)
         paresConfiguracion.mensajePrincipalEnReservaConfirmada = Buffer.from(paresConfiguracion.mensajePrincipalEnReservaConfirmada, "base64").toString()
 
         const ok = {

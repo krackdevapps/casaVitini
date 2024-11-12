@@ -6090,8 +6090,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             arranque: () => {
                                 const main = document.querySelector("main")
                                 main.setAttribute("zonaCSS", "/micasa")
-                                const botonCambiarClave = document.querySelector("[componente=botonEliminarCuenta]")
-                                botonCambiarClave.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.eliminarCuenta.portada.transactor)
+                                const botonEliminarCuenta = document.querySelector("[componente=botonEliminarCuenta]")
+                                botonEliminarCuenta.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.eliminarCuenta.portada.transactor)
                             },
                             transactor: async () => {
                                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
@@ -6102,28 +6102,23 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     botonCancelar: "ocultar"
                                 }
                                 casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                                const clave = document.querySelector("[campo=clave]").value
-                                const transaccion = {
+                                const clave = document.querySelector("[campo=clave]")?.value || ""
+
+                                const respuestaServidor = await casaVitini.shell.servidor({
                                     zona: "miCasa/eliminarCuentaDesdeMiCasa",
                                     clave: clave
-                                }
-
-                                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                })
+                                console.log("respuestaServidor", respuestaServidor)
                                 const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                                if (!pantallaDeCargaRenderizada) { return }
-                                pantallaDeCargaRenderizada.remove()
+                                                         pantallaDeCargaRenderizada?.remove()
                                 if (respuestaServidor?.error) {
                                     return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                 }
                                 if (respuestaServidor?.ok) {
-
-
                                     await casaVitini.shell.controladoresUI.controladorEstadoIDX()
-
                                     const main = document.querySelector("main")
                                     main.innerHTML = null
-
-                                    const informacion = "Se ha elegido tu cuenta correctamente. Sentimos que te vayas vuelve cuando quieras."
+                                    const informacion = "Se ha eliminad tu cuenta correctamente. Sentimos que te vayas y vuelve cuando quieras."
                                     const info = document.createElement("div")
                                     info.classList.add(
                                         "margin10",
@@ -6132,7 +6127,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     )
                                     info.textContent = informacion
                                     main.appendChild(info)
-
                                 }
                             }
                         }
@@ -6509,13 +6503,26 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                             }
                             if (respuestaServidor?.ok) {
-                                const vista = {
-                                    vista: "/micasa",
-                                    tipoOrigen: "menuNavegador"
-                                }
-                                await casaVitini.shell.navegacion.controladorVista(vista)
-                                const informacion = "Se ha creado la cuenta correctamente. Bienvenido a Casa Vitini. Ya puedes iniciar sesión con tu VitiniID."
-                                casaVitini.ui.componentes.advertenciaInmersiva(informacion)
+            
+                                const main = document.querySelector("main")
+                                main.innerHTML = null
+                                const info = document.createElement("div")
+                                info.classList.add(
+                                    "margin10",
+                                    "textoCentrado",
+                                    "negritas"
+                                )
+                                info.textContent = "Se ha creado la cuenta correctamente. Bienvenido a Casa Vitini. Ya puedes iniciar sesión con tu VitiniID."
+                                main.appendChild(info)
+
+                                const contenedorBotones = document.createElement("div")
+                                contenedorBotones.classList.add("flexVertical")
+                                main.appendChild(contenedorBotones)
+
+                                const botonIS = document.createElement("div")
+                                botonIS.classList.add("botonV1")
+                                botonIS.textContent = "Iniciar sessión"
+                                contenedorBotones.appendChild(botonIS)
                             }
                         },
                     }
