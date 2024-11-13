@@ -20,7 +20,7 @@ Aplicación de gestión de reservas
 - Gestión de bloqueos de apartamentos;
 - Configuración de la arquitectura del alojamiento;
 - Buscador de reservas por texto o distintos tipos de rangos de fechas;
-- Gestión de clientes: Buscador de clientes, editor de fichas de clientes;
+- Gestión de clientes: Buscador de clientes, editor de fichas de clientes, visor de reservas por cliente junto a su rol dentro de la reserva, ya sea como pernoctante o titular;
 - Gestión de usuarios: Buscador de usuarios, editor de cuentas de usuarios;
 - Tres tipos de roles de cuentas de usuario: Administrador, Empleado y Cliente;
 - Gestión de enlaces de pago;
@@ -31,8 +31,8 @@ Aplicación de gestión de reservas
 - Gestión de la zona horaria local;
 - Gestión de calendarios importados para evitar overbooking: Calendarios ICAL compatibles con Airbnb;
 - Gestión de la hora de entrada y salida;
-- Gestión de los limistes de una reserva publica: Por ejemplo, se puede determinar que una reserva hecha por un cliente con o sin VitiniID, no pueda ser anterior a X días de antelación. Que no pueda tener un máximo de X días de duración y que no pueda empezar mas allá de X día desde el día de doy en el futuro.;
-- Gestión de mensajes simple en portada;
+- Gestión de los límites de una reserva publica: Por ejemplo, se puede determinar que una reserva hecha por un cliente con o sin VitiniID, no pueda ser anterior a X días de antelación. Que no pueda tener un máximo de X días de duración y que no pueda empezar mas allá de X día desde el día de doy en el futuro.;
+- Gestión de mensajes en portada;
 - Gestión centralizada de interruptores para funciones de acceso rápido;
 
 ### Implementación en local para desarrollo
@@ -42,6 +42,6 @@ Si quieres probar la aplicación rellena el archivo de variables de entorno. Tie
 1. Instala node lts y postgres version 17 en tu sistema.
 2. Importa la base de datos vacía de ejemplo en tu servidor postgres, el archivo está en ejemplos/schemnaAndAccountDemo.sql
 3. Configura la conexión con la base de datos en: src/infraestructure/repository/globales/db.mjs 
-4. Escribe los datos de conexión en el archivo de variables de entorno de ejemplo, define también el entorno en el archivo de variables de entorno, el entorno puede ser `nativo` o `docker`.  Estas dos variables sirven para que en db.mjs sepa a qué servidor de base de datos conectarse.
+4. Escribe los datos de conexión en el archivo de variables de entorno de ejemplo, define también el entorno en el archivo de variables de entorno, el entorno puede ser `nativo` o `docker`. Estas dos variables sirven para que en db.mjs sepa a qué servidor de base de datos conectarse.
 5. `node casavitini.mjs` o abre el archivo .workspace con Visual Studio Code y desde el ejecutalo desde los scripts de NPM
 
