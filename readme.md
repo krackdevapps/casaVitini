@@ -39,8 +39,8 @@ Aplicación de gestión de reservas
 
 Si quieres probar la aplicación rellena el archivo de variables de entorno. Tiene un archivo SQL con la estructura de la base de datos vacía con un usuario administrador llamado `demo` y clave es `demo`, para poder acceder al panel de administración.
 
-1. Instala node y postgres en tu sistema.
-2. Importa la base de datos vacía de ejemplo en tu servidor postgres version 17, el archivo está en ejemplos/basededatosvacia.sql
+1. Instala node lts y postgres version 17 en tu sistema.
+2. Importa la base de datos vacía de ejemplo en tu servidor postgres, el archivo está en ejemplos/basededatosvacia.sql
 3. Configura la conexión con la base de datos en: src/infraestructure/repository/globales/db.mjs 
 4. Escribe los datos de conexión en el archivo de variables de entorno de ejemplo, define también el entorno en el archivo de variables de entorno, el entorno puede ser `nativo` o `docker`.  Estas dos variables sirven para que en db.mjs sepa a qué servidor de base de datos conectarse.
 5. `node casavitini.mjs` o abre el archivo .workspace con Visual Studio Code y desde el ejecutalo desde los scripts de NPM
