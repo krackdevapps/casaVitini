@@ -1,32 +1,32 @@
 import { conexion } from "../globales/db.mjs";
 
 export const buscarUsuariosPorTermino = async (data) => {
-    const terminosFormateados = data.terminosFormateados
-    const numeroPorPagina = data.numeroPorPagina
-    const numeroPagina = Number((data.numeroPagina - 1) + "0");
-    const nombreColumna = data.nombreColumna
-    const sentidoColumna = data.sentidoColumna
+  const terminosFormateados = data.terminosFormateados
+  const numeroPorPagina = data.numeroPorPagina
+  const numeroPagina = Number((data.numeroPagina - 1) + "0");
+  const nombreColumna = data.nombreColumna
+  const sentidoColumna = data.sentidoColumna
 
-    const sentidoColumnaTraductor = (sentidoColumna) => {
-        if (sentidoColumna === "ascendente") {
-            return "ASC"
-        }
-        if (sentidoColumna === "descendente") {
-            return "DESC"
-        }
+  const sentidoColumnaTraductor = (sentidoColumna) => {
+    if (sentidoColumna === "ascendente") {
+      return "ASC"
     }
+    if (sentidoColumna === "descendente") {
+      return "DESC"
+    }
+  }
 
-    const constructorSQL = (nombreColumna, sentidoColumna) => {
-        if (nombreColumna) {
-            const sentidoColumnaSQL = sentidoColumnaTraductor(sentidoColumna)
-            return `,"${nombreColumna}" ${sentidoColumnaSQL}`;
-        } else {
-            return ""
-        }
+  const constructorSQL = (nombreColumna, sentidoColumna) => {
+    if (nombreColumna) {
+      const sentidoColumnaSQL = sentidoColumnaTraductor(sentidoColumna)
+      return `,"${nombreColumna}" ${sentidoColumnaSQL}`;
+    } else {
+      return ""
     }
-    console.log("terminosFormateados",terminosFormateados)
-    try {
-        const consulta1 = `    
+  }
+
+  try {
+    const consulta1 = `    
         SELECT usuario, mail, nombre, "primerApellido", "segundoApellido", pasaporte, telefono,
         COUNT(*) OVER() as "totalUsuarios"
         FROM "datosDeUsuario"
@@ -76,7 +76,7 @@ export const buscarUsuariosPorTermino = async (data) => {
         ${constructorSQL(nombreColumna, sentidoColumna)}
         LIMIT $2 OFFSET $3;`;
 
-        const consulta = `    
+    const consulta = `    
         SELECT
          d.usuario,
          d.mail,
@@ -131,14 +131,14 @@ export const buscarUsuariosPorTermino = async (data) => {
         ${constructorSQL(nombreColumna, sentidoColumna)}
         LIMIT $2 OFFSET $3;`;
 
-        const parametros = [
-            terminosFormateados,
-            numeroPorPagina,
-            numeroPagina
-        ]
-        const resuelve = await conexion.query(consulta, parametros)
-        return resuelve.rows
-    } catch (errorCapturado) {
-        throw errorCapturado;
-    }
+    const parametros = [
+      terminosFormateados,
+      numeroPorPagina,
+      numeroPagina
+    ]
+    const resuelve = await conexion.query(consulta, parametros)
+    return resuelve.rows
+  } catch (errorCapturado) {
+    throw errorCapturado;
+  }
 };

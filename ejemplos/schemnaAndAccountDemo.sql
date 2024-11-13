@@ -55,17 +55,6 @@ CREATE TYPE public."tipo_estadosReserva" AS ENUM (
 ALTER TYPE public."tipo_estadosReserva" OWNER TO postgres;
 
 --
--- Name: tipo_interrupores; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public.tipo_interrupores AS ENUM (
-    'aceptarReservasPublicas'
-);
-
-
-ALTER TYPE public.tipo_interrupores OWNER TO postgres;
-
---
 -- Name: tipo_plataformaDePago; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -79,19 +68,6 @@ CREATE TYPE public."tipo_plataformaDePago" AS ENUM (
 
 
 ALTER TYPE public."tipo_plataformaDePago" OWNER TO postgres;
-
---
--- Name: tipo_usuariosRoles; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public."tipo_usuariosRoles" AS ENUM (
-    'administrador',
-    'empleado',
-    'cliente'
-);
-
-
-ALTER TYPE public."tipo_usuariosRoles" OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -1284,7 +1260,7 @@ CREATE TABLE public.usuarios (
     "ultimoLogin" timestamp without time zone,
     "testingVI" text,
     "estadoCuentaIDV" public."tipo_estadoCuenta" NOT NULL,
-    "rolIDV" public."tipo_usuariosRoles" NOT NULL
+    "rolIDV" text
 );
 
 
@@ -1687,7 +1663,7 @@ COPY public."simulacionesDePrecioServicios" ("servicioUID", nombre, contenedor, 
 --
 
 COPY public.usuarios (usuario, clave, sal, "zonaHoraria", intentos, "cuentaVerificadaIDV", "codigoVerificacion", "fechaCaducidadCuentaNoVerificada", "ultimoLogin", "testingVI", "estadoCuentaIDV", "rolIDV") FROM stdin;
-demo	92c51476462967d9572057f5f97a70839d86937ca74699832695c6a873c78c947c2ea1bfe6a362fde05abb243bbe86b1840152c41c2302075cad60554d51fc9f	1b102a825806d5774903d0037e67d970	\N	\N	\N	\N	\N	\N	\N	activado	administrador
+demo	50276d564dcf40de516d3b66fd376002b67f04797012256ceea0d2536041ff1529cb4ef5ad84d63b059e804b40729c57294f7b38ff12a795765b68e59bd6cf6d	01bc4a26fffc8b789e12d140e57c0afc	\N	\N	\N	\N	\N	\N	\N	activado	administrador
 \.
 
 
@@ -2150,14 +2126,6 @@ ALTER TABLE ONLY public."datosDeUsuario"
 
 
 --
--- Name: datosDeUsuario datosDeUsuiario_pasaporte_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."datosDeUsuario"
-    ADD CONSTRAINT "datosDeUsuiario_pasaporte_key" UNIQUE (pasaporte);
-
-
---
 -- Name: enlaceDeRecuperacionCuenta enlaceDeRecuperacionCuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2443,6 +2411,14 @@ ALTER TABLE ONLY public.reservas
 
 ALTER TABLE ONLY public.reservas
     ADD CONSTRAINT "reservas_reservaUIDnuevo_key" UNIQUE ("reservaUID");
+
+
+--
+-- Name: usuarios roles; Type: CHECK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.usuarios
+    ADD CONSTRAINT roles CHECK (("rolIDV" = ANY (ARRAY['administrador'::text, 'empleado'::text, 'cliente'::text]))) NOT VALID;
 
 
 --

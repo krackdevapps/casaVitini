@@ -72,6 +72,7 @@ export const detallesReserva = async (entrada) => {
             capas: [
                 "titular",
                 "alojamiento",
+                "complementosDeAlojamiento",
                 "pernoctantes",
                 "desgloseFinanciero",
                 "detallesPagos",

@@ -3118,6 +3118,12 @@ summary:hover {
     flex-wrap: nowrap;
     align-items: center;
 }
+[zonaCSS="/micasa/reservas"] [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+    display: grid;
+    grid-template-columns: auto auto auto auto 50px;
+    gap: 6px;
+}
+
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
     display: grid;
@@ -3167,6 +3173,10 @@ summary:hover {
 
 @media screen and (max-width: 968px) {
     [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+        display: none;
+    }
+
+    [zonaCSS="/micasa/reservas"] [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
         display: none;
     }
 

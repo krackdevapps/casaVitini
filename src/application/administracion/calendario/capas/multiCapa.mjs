@@ -232,6 +232,9 @@ export const multiCapa = async (entrada) => {
                     sePermitenDuplicados: "no"
                 })
                 const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
+                console.log("apartamentosIDV", apartamentosIDV)
+
+                console.log("configuracionesApartamentos", configuracionesApartamentos)
                 estructuraGlobal.apartamentos = {}
                 if (configuracionesApartamentos.length > 0) {
                     const apartamentosIDVValidos = configuracionesApartamentos.map((apartamentoIDV) => {
@@ -241,6 +244,7 @@ export const multiCapa = async (entrada) => {
                     if (!controlApartamentosF2) {
                         const elementosFaltantes = apartamentosIDV.filter(apartamentosIDV => !apartamentosIDVValidos.includes(apartamentosIDV));
                         let error;
+                        console.log("elementosFaltantes", elementosFaltantes)
                         if (elementosFaltantes.length === 1) {
                             error = "En el array de apartamentosIDV hay un identificador que no existe: " + elementosFaltantes[0];
                         } if (elementosFaltantes.length === 2) {

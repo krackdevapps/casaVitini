@@ -63,6 +63,12 @@ export const insertarServicioEnReserva = async (entrada) => {
             serviciosUIDArray: [servicioUID]
         })
 
+        if (servicioExistenteAccesible.length === 0) {
+            const m = "No se encuentra el servicio, verifique que el servicio este configurado en la zona global o privada y que este Activado"
+            throw new Error(m)
+        }
+        console.log("s", servicioExistenteAccesible)
+
         await validarOpcionesDelServicio({
             opcionesSeleccionadasDelServicio,
             servicioExistenteAccesible: servicioExistenteAccesible[0]
