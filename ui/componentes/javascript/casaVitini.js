@@ -27419,7 +27419,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         })
 
                                         document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`).remove()
-                                        console.log("e", respuestaServidor)
+
                                         if (respuestaServidor?.error) {
                                             return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                                         }
