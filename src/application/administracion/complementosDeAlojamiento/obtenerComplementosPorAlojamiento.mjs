@@ -9,7 +9,8 @@ export const obtenerComplementosPorAlojamiento = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-
+        
+    
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",

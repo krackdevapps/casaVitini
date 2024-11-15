@@ -9,6 +9,7 @@ import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraes
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
 
 export const insertarDescuentoPorCompatible = async (entrada) => {
     const mutex = new Mutex()
@@ -44,7 +45,9 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        const apartamentosArray = simulacion.apartamentosIDVARRAY
+        const alojamientoSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
+        const apartamentosArray = alojamientoSimulacion.map(a => a.apartamentoIDV)
+
         const zonaIDV = simulacion.zonaIDV
 
         try {

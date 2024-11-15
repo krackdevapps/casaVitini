@@ -28,7 +28,9 @@ describe('crudEntitiys', () => {
             body: {
                 tipoEntidad: "apartamento",
                 apartamentoUI: apartamentoUI,
-                apartamentoIDV: apartamentoIDV
+                apartamentoIDV: apartamentoIDV,
+                apartamentoUIPublico: "Apartamento para testing",
+                definicionPublica: "Apartamento creado para testing"
             },
             session: fakeAdminSession
         }
@@ -55,7 +57,7 @@ describe('crudEntitiys', () => {
 
             expect(error).toBeInstanceOf(Error);
 
-            expect(error.message).toBe('El apartamentoIDV solo acepta una cadena de mayúsculas, minúsculas y números.');
+            expect(error.message).toBe('El apartamentoIDV solo acepta una cadena de mayúsculas, minúsculas, números y no se permite Ñ ni Ç.');
         }
     })
 
@@ -76,7 +78,7 @@ describe('crudEntitiys', () => {
 
             expect(error).toBeInstanceOf(Error);
 
-            expect(error.message).toBe('El campo del apartamentoUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /');
+            expect(error.message).toBe('El campo del apartamentoUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y / ()');
         }
     })
 
@@ -116,7 +118,7 @@ describe('crudEntitiys', () => {
 
             expect(error).toBeInstanceOf(Error);
 
-            expect(error.message).toBe('El campo del camaUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y /');
+            expect(error.message).toBe('El campo del camaUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y / ()');
         }
     })
 
@@ -268,6 +270,8 @@ describe('crudEntitiys', () => {
                 entidadIDV: apartamentoIDV,
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI,
+                apartamentoUIPublico: "apartamento actualziado",
+                definicionPublica: "Definicion actualizada",
                 caracteristicas: [
                     "test"
                 ]

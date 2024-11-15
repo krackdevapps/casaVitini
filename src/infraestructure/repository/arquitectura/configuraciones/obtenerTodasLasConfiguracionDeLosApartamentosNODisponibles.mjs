@@ -2,7 +2,7 @@ import { conexion } from "../../globales/db.mjs";
 
 export const obtenerTodasLasConfiguracionDeLosApartamentosNODisponibles = async () => {
     try {
-        const estadoNoDisonible = "noDisponible";
+        const estadoNoDisonible = "nodisponible";
         const consulta = `
         SELECT
         "apartamentoIDV"

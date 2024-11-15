@@ -42,7 +42,7 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
             })
             configuracion[apartamentoIDV].apartamentoUI = apartamentoEntidad.apartamentoUI
             configuracion[apartamentoIDV].apartamentoUIPublico = apartamentoEntidad.apartamentoUIPublico
-            configuracion[apartamentoIDV].desfinicionPublica = apartamentoEntidad.desfinicionPublica
+            configuracion[apartamentoIDV].definicionPublica = apartamentoEntidad.definicionPublica
 
             const caracteristicasDeLApartamento = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
             configuracion[apartamentoIDV].caracteristicas = caracteristicasDeLApartamento

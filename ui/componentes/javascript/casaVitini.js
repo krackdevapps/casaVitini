@@ -1576,7 +1576,7 @@ const casaVitini = {
                             for (const [apartamentoIDV, contenedor] of Object.entries(apartamentosDisponibles)) {
                                 const apartamentoUI = contenedor.apartamentoUI
                                 const apartamentoUIPublico = contenedor.apartamentoUIPublico
-                                const desfinicionPublica = contenedor.desfinicionPublica
+                                const definicionPublica = contenedor.definicionPublica
                                 const habitaciones = contenedor.habitaciones
                                 const caracteristicas = contenedor.caracteristicas
                                 const totalInicial = contenedorFinanciero[apartamentoIDV].global.totales.totalFinal
@@ -1658,7 +1658,7 @@ const casaVitini = {
 
                                 const definicionPublicaUI = document.createElement("div")
                                 definicionPublicaUI.setAttribute("class", "elementoTituloPrincipal")
-                                definicionPublicaUI.textContent = desfinicionPublica
+                                definicionPublicaUI.textContent = definicionPublica
                                 contenedorNombres.appendChild(definicionPublicaUI)
 
                                 const bloqueTituloApartamentoComponenteUI = document.createElement("div")
@@ -2892,7 +2892,7 @@ const casaVitini = {
 
                                 const apartamentoUI = apartamentosDisponibles[apartamentoIDV].apartamentoUI
                                 const apartamentoUIPublico = apartamentosDisponibles[apartamentoIDV].apartamentoUIPublico
-                                const desfinicionPublica = apartamentosDisponibles[apartamentoIDV].desfinicionPublica
+                                const definicionPublica = apartamentosDisponibles[apartamentoIDV].definicionPublica
                                 const complementosAlojamientoArray = complementosAlojamiento[apartamentoIDV]
                                 const habitaciones = apartamentosDisponibles[apartamentoIDV].habitaciones
 
@@ -2917,7 +2917,7 @@ const casaVitini = {
 
                                 const definicionPublicaUI = document.createElement("p")
                                 definicionPublicaUI.setAttribute("class", "negrita")
-                                definicionPublicaUI.textContent = desfinicionPublica
+                                definicionPublicaUI.textContent = definicionPublica
                                 nombreContenedor.appendChild(definicionPublicaUI)
 
 
@@ -3072,20 +3072,6 @@ const casaVitini = {
                             codigoInternacional: codigoInternacional
                         }
 
-                        // const serviciosSelecionados = []
-                        // document.querySelectorAll(`[servicioUID][estado="activado"]`).forEach((servicioUISelecionado) => {
-                        //     const servicioUID = servicioUISelecionado.getAttribute("servicioUID")
-                        //     const servicioUI = servicioUISelecionado.querySelector("[data=servicioUI]").textContent
-                        //     serviciosSelecionados.push({
-                        //         servicioUID,
-                        //         servicioUI
-                        //     })
-                        // })
-                        // if (serviciosSelecionados.length === 0) {
-                        //     delete reservaPublica.servicios
-                        // } else {
-                        //     reservaPublica.servicios = serviciosSelecionados
-                        // }
 
                         const codigosRenderizados = []
                         document.querySelectorAll("[contenedor=ofertasComprobadas] [codigosUID]").forEach((ofertaRenderizada) => {
@@ -3105,6 +3091,7 @@ const casaVitini = {
                         } else {
                             reservaPublica.codigosDescuento = codigosRenderizados
                         }
+
 
                         const respuestaServidor = await casaVitini.shell.servidor({
                             zona: "plaza/reservas/preConfirmarReserva",
@@ -9746,7 +9733,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 if (diasAntelacion[anoActual_decimal] &&
                                     diasAntelacion[anoActual_decimal][mesActual_decimal] &&
                                     diasAntelacion[anoActual_decimal][mesActual_decimal][diaFinal_decimal]) {
-                                    bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
+                                    bloqueDia.classList.add("calendarioDiaNoDisponible")
                                     bloqueDia.setAttribute("estadoDia", "noDisponible")
                                 }
                                 if (objetoFechaLimitePorDias.arbol[anoActual_decimal] &&
@@ -9796,6 +9783,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         }
                                         if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                            bloqueDia.classList.remove("calendarioDiaNoDisponiblePorAntelacion")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
 
                                         }
@@ -9845,14 +9833,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "disponible")
-
-
                                         }
                                         if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaSeleccionado")
                                             bloqueDia.setAttribute("estadoDia", "seleccionado")
-
-
                                         }
                                     } else {
 
@@ -9862,7 +9846,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             if (bloqueDia.getAttribute("estadoDia") !== "noDisponible") {
                                                 bloqueDia.classList.add("calendarioDiaDisponible")
                                                 bloqueDia.setAttribute("estadoDia", "disponible")
-
                                             }
                                         }
                                     }
@@ -30867,7 +30850,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 }
             },
             buscador: {
-                arranque: () => {
+                arranque: function () {
                     const main = document.querySelector("main")
                     const instanciaUID = main.getAttribute("instanciaUID")
 
@@ -30900,18 +30883,25 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
                             parametrosFormatoIDV.instanciaUID = instanciaUID
                         })
-                        const buscadorUI = document.querySelector("[componente=navegacionZonaAdministracion]")
-
-                        const estadoBusquedaUI = document.createElement("div")
-                        estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
-                        estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
-                        estadoBusquedaUI.textContent = "Buscando..."
-                        buscadorUI.parentNode.insertBefore(estadoBusquedaUI, buscadorUI.nextSibling);
-
-
+                        this.contructorMarcoInfo()
+                        parametrosFormatoIDV.termino = decodeURI(parametrosFormatoIDV.termino)
                         casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(parametrosFormatoIDV)
                     } else {
                         casaVitini.ui.componentes.urlDesconocida()
+                    }
+                },
+                contructorMarcoInfo: () => {
+                    const buscadorUI = document.querySelector("[componente=navegacionZonaAdministracion]")
+
+                    const estadoBusquedaUI = document.createElement("div")
+                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+                    estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
+                    estadoBusquedaUI.textContent = "Buscando..."
+
+                    const comRenderizado = document.querySelector("[componente=estadoBusqueda]")
+                    if (!comRenderizado) {
+                        buscadorUI.parentNode.insertBefore(estadoBusquedaUI, buscadorUI.nextSibling);
+
                     }
                 },
                 buscadorUI: (url) => {
@@ -31463,10 +31453,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     }
 
                     if (respuestaServidor?.error) {
+                        this.contructorMarcoInfo()
                         document.querySelector("[componente=estadoBusqueda]").textContent = respuestaServidor?.error
                         return
                     }
                     if (respuestaServidor?.totalReservas === 0) {
+                        this.contructorMarcoInfo()
                         document.querySelector("[gridUID=gridReservas]")?.remove()
                         document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                         document.querySelector("[componente=estadoBusqueda]").textContent = "No se han encontrado reservas"
@@ -31559,7 +31551,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
 
-                    const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
+                    const constructorURLFinal = encodeURI(granuladoURL.directoriosFusion + parametrosURLFInal)
                     const constructorAlmacen = {
                         tipoConsulta
                     }
@@ -31917,7 +31909,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const habitaciones = configuracion.habitaciones
                                 const apartamentoUIPublico = configuracion.apartamentoUIPublico
                                 const caracteristicas = configuracion.caracteristicas
-                                const desfinicionPublica = configuracion.desfinicionPublica
+                                const definicionPublica = configuracion.definicionPublica
 
                                 const bloqueApartamentoUI = document.createElement("div")
                                 bloqueApartamentoUI.classList.add("bloqueApartamentoUI")
@@ -31954,7 +31946,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                 const tituloDefinicion = document.createElement("p")
                                 tituloDefinicion.classList.add("padding6")
-                                tituloDefinicion.textContent = desfinicionPublica
+                                tituloDefinicion.textContent = definicionPublica
                                 contenedorDetalles.appendChild(tituloDefinicion)
 
                                 const botonSeleccionarApartamento = document.createElement("div")
@@ -37240,7 +37232,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
                     })
-
+                    parametrosFormatoIDV.buscar = decodeURI(parametrosFormatoIDV.buscar)
                     casaVitini.administracion.clientes.buscador.mostrarClientesResueltos(parametrosFormatoIDV)
                 } else if (parametros.cliente && comandoInicial === "editar") {
 
@@ -37319,13 +37311,27 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     campoBuscador.setAttribute("componente", "zonaNavegacionPaginadaClientes")
                     campoBuscador.setAttribute("componenteCampo", "buscadorPorId")
                     campoBuscador.setAttribute("placeholder", "Busque un cliente por nombre, por cualquier dato.")
-                    campoBuscador.addEventListener("input", casaVitini.administracion.clientes.buscador.buscadorClientesPorCampo)
+                    campoBuscador.addEventListener("input", (e) => { casaVitini.administracion.clientes.buscador.buscadorClientesPorCampo(e) })
                     espacioClientes.appendChild(campoBuscador)
 
 
 
                 },
-                buscadorClientesPorCampo: async (cliente) => {
+                constructorMarcoInfo: () => {
+                    const campo = document.querySelector("[componente=zonaNavegacionPaginadaClientes]")
+
+                    const estadoBusquedaUI = document.createElement("div")
+                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+                    estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
+                    estadoBusquedaUI.textContent = "Buscando..."
+                    const comRenderizado = document.querySelector("[componente=estadoBusqueda]")
+                    if (!comRenderizado) {
+                        campo.parentNode.insertBefore(estadoBusquedaUI, campo.nextSibling);
+                    }
+
+                },
+                buscadorClientesPorCampo: async function (cliente) {
+
 
                     const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                     const campo = document.querySelector("[componente=zonaNavegacionPaginadaClientes]")
@@ -37334,13 +37340,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     document.querySelector("[areaGrid=gridClientes]")?.remove()
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[contenedor=filtrosOrden]")?.remove()
-
-                    const estadoBusquedaUI = document.createElement("div")
-                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
-                    estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
-                    estadoBusquedaUI.textContent = "Buscando..."
-
-                    campo.parentNode.insertBefore(estadoBusquedaUI, campo.nextSibling);
+                    this.constructorMarcoInfo()
 
 
                     const granuladorURL = casaVitini.utilidades.granuladorURL()
@@ -37415,12 +37415,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     }
 
                     if (respuestaServidor?.error) {
-
+                        this.constructorMarcoInfo()
                         document.querySelector("[componente=estadoBusqueda]").textContent = respuestaServidor?.error
                         return
                     }
                     if (respuestaServidor.totalClientes === 0) {
-
+                        this.constructorMarcoInfo()
                         document.querySelector("[componente=estadoBusqueda]").textContent = "No se han encontrado clientes"
                         return
                     }
@@ -37482,7 +37482,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
 
-                    const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
+                    const constructorURLFinal = encodeURI(granuladoURL.directoriosFusion + parametrosURLFInal)
                     casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
                         metodoSalida: "administracion.clientes.buscador.mostrarClientesResueltos",
                         configuracionGrid: {
@@ -50878,7 +50878,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                             const campoDefTituloPublicoApartamento = document.createElement("input")
                             campoDefTituloPublicoApartamento.classList.add("botonV1BlancoIzquierda_campo")
-                            campoDefTituloPublicoApartamento.setAttribute("campo", "desfinicionPublica")
+                            campoDefTituloPublicoApartamento.setAttribute("campo", "definicionPublica")
                             campoDefTituloPublicoApartamento.placeholder = "Definicion publica bajo el titulo publico del apartamento"
                             bloqueTituloApartamento.appendChild(campoDefTituloPublicoApartamento)
                             contenedorEntidad.appendChild(bloqueTituloApartamento)
@@ -51117,7 +51117,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const apartamentoIDV = respuestaServidor?.ok.apartamentoIDV
                                 const apartamentoUI = respuestaServidor?.ok.apartamentoUI
                                 const apartamentoUIPublico = respuestaServidor?.ok.apartamentoUIPublico
-                                const desfinicionPublica = respuestaServidor?.ok.desfinicionPublica
+                                const definicionPublica = respuestaServidor?.ok.definicionPublica
 
 
                                 const caracteristicas = respuestaServidor.caracteristicas
@@ -51173,10 +51173,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                 const campoDefTituloPublicoApartamento = document.createElement("input")
                                 campoDefTituloPublicoApartamento.classList.add("botonV1BlancoIzquierda_campo")
-                                campoDefTituloPublicoApartamento.setAttribute("campo", "desfinicionPublica")
-                                campoDefTituloPublicoApartamento.setAttribute("valorInicial", desfinicionPublica)
+                                campoDefTituloPublicoApartamento.setAttribute("campo", "definicionPublica")
+                                campoDefTituloPublicoApartamento.setAttribute("valorInicial", definicionPublica)
                                 campoDefTituloPublicoApartamento.placeholder = "Definicion publica bajo el titulo publico del apartamento"
-                                campoDefTituloPublicoApartamento.value = desfinicionPublica
+                                campoDefTituloPublicoApartamento.value = definicionPublica
                                 bloqueTituloApartamento.appendChild(campoDefTituloPublicoApartamento)
                                 contenedorEntidad.appendChild(bloqueTituloApartamento)
 
@@ -53052,9 +53052,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 const parametroBuscar = granuladoURL.parametros.buscar
                 const rawArray = granuladoURL.rawArray
 
-
                 if (rawArray.length === 2) {
-
                     casaVitini.administracion.usuarios.portada.buscadorUI()
                 } else if (parametroBuscar?.length > 0) {
 
@@ -53080,10 +53078,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         parametrosFormatoIDV[nombreParametroIDV] = nombreColumnaIDV
                     })
+                    parametrosFormatoIDV.buscar = decodeURI(parametrosFormatoIDV.buscar)
 
                     casaVitini.administracion.usuarios.portada.mostrarUsuariosResueltos(parametrosFormatoIDV)
                 } else if (rawArray.length > 2) {
-
                     casaVitini.administracion.usuarios.detallesUsuario.arranque()
                 }
             },
@@ -53107,11 +53105,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     campoBuscador.setAttribute("componente", "zonaNavegacionPaginadaUsuarios")
                     campoBuscador.setAttribute("componenteCampo", "buscadorUsuarios")
                     campoBuscador.setAttribute("placeholder", "Busque un usuario por nombre de usuario, por nombre, por pasaporte, por correo o por teléfono. También puedes hacer búsquedas combinadas.")
-                    campoBuscador.addEventListener("input", casaVitini.administracion.usuarios.portada.buscadorUsuariosPorCampo)
+                    campoBuscador.addEventListener("input", (e) => {
+                        casaVitini.administracion.usuarios.portada.buscadorUsuariosPorCampo(e)
+                    })
                     espacioClientes.appendChild(campoBuscador)
 
                 },
-                buscadorUsuariosPorCampo: async (cliente) => {
+                buscadorUsuariosPorCampo: async function (cliente) {
                     const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                     const campo = document.querySelector("[componente=zonaNavegacionPaginadaUsuarios]")
 
@@ -53124,12 +53124,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[contenedor=filtrosOrden]")?.remove()
 
-                    const estadoBusquedaUI = document.createElement("div")
-                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
-                    estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
-                    estadoBusquedaUI.textContent = "Buscando usuarios..."
-                    campo.parentNode.insertBefore(estadoBusquedaUI, campo.nextSibling);
-
+                    this.constructorMarcoInfo()
 
                     const campoVacio = cliente.target.value.length
                     if (campoVacio === 0) {
@@ -53201,13 +53196,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         return
                     }
 
-
                     if (resolverUsuarios?.error) {
+                        this.constructorMarcoInfo()
                         document.querySelector("[componente=estadoBusqueda]").textContent = resolverUsuarios?.error
                         return
                     }
 
                     if (resolverUsuarios.totalUsuarios === 0) {
+                        this.constructorMarcoInfo()
                         document.querySelector("[componente=estadoBusqueda]").textContent = "No se han encontrado usuarios"
                         return
                     }
@@ -53272,7 +53268,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
                     }
 
-                    const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
+                    const constructorURLFinal = encodeURI(granuladoURL.directoriosFusion + parametrosURLFInal)
 
                     casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
                         metodoSalida: "administracion.usuarios.portada.mostrarUsuariosResueltos",
@@ -53320,6 +53316,19 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         window.history.replaceState(estado, titulo, constructorURLFinal);
                     }
                 },
+                constructorMarcoInfo: () => {
+                    const campo = document.querySelector("[componente=zonaNavegacionPaginadaUsuarios]")
+
+                    const estadoBusquedaUI = document.createElement("div")
+                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+                    estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
+                    estadoBusquedaUI.textContent = "Buscando usuarios..."
+
+                    const comRenderizado = document.querySelector("[componente=estadoBusqueda]")
+                    if (!comRenderizado) {
+                        campo.parentNode.insertBefore(estadoBusquedaUI, campo.nextSibling);
+                    }
+                }
             },
             detallesUsuario: {
                 arranque: () => {

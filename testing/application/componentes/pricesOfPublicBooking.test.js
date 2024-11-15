@@ -2,6 +2,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../sharedUsesCases/makeHostArquitecture.mjs';
 import { precioReservaPublica } from '../../../src/application/componentes/precioReservaPublica.mjs';
+import { DateTime } from 'luxon';
 
 describe('Prices of public booking', () => {
     const apartamentoIDV = "apartmentpriceofpublicbooking"
@@ -30,9 +31,14 @@ describe('Prices of public booking', () => {
             camaUI: camaUI,
         })
     })
+
+    const fechaCreacionVirtual = DateTime.utc().toISO();
+
+    const fechaInicioVirutal = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 2 }).toISODate();
+    const fechaFinalVirtual = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
     const fakeBooking = {
-        fechaEntrada: "2024-10-11",
-        fechaSalida: "2024-10-12",
+        fechaEntrada: fechaInicioVirutal,
+        fechaSalida: fechaFinalVirtual,
         alojamiento: {
             [apartamentoIDV]: {
                 apartamentoUI: apartamentoUI,

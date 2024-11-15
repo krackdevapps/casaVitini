@@ -156,7 +156,7 @@ describe('global operations in bookins', () => {
         const fakeUser = {
             body: {
                 usuarioIDX: fakeAdminSession.usuario,
-                clave: "1234567890",
+                clave: "1234567890A!",
                 rolIDV: "administrador",
             },
             session: fakeAdminSession
@@ -167,7 +167,7 @@ describe('global operations in bookins', () => {
         const m = {
             body: {
                 reservaUID: String(reservaUID),
-                clave: "1234567890"
+                clave: "1234567890A!"
             },
             session: fakeAdminSession
         }

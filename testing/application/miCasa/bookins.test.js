@@ -85,6 +85,20 @@ describe('miCasa bookins', () => {
         })
         reservaUID = reserva.reservaUID
     })
+    test('create user from administration for operations', async () => {
+        const response = await crearCuentaDesdeAdministracion({
+            body: {
+                usuarioIDX: fakeAdminSession.usuario,
+                clave: "1234567890A!",
+                rolIDV: fakeAdminSession.rolIDV
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
     test('create user from administration with ok', async () => {
         const m = {
             body: {
@@ -100,7 +114,7 @@ describe('miCasa bookins', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update data of user from adminitration', async () => {
+    test('update data of user from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: usuario_cliente,

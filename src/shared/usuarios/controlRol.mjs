@@ -7,12 +7,15 @@ export const controlRol = async (data) => {
             usuario: data.usuarioOperacion,
             errorSi: "noExiste"
         })
+
         const rol_operacion = usuarioOperacion.rolIDV
 
         const usuarioDestino = await obtenerUsuario({
             usuario: data.usuarioDestino,
             errorSi: "noExiste"
         })
+
+
         const rol_destino = usuarioDestino.rolIDV
 
         const diccionarioRol = {

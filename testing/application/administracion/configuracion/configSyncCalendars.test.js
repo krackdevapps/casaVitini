@@ -47,7 +47,9 @@ END:VCALENDAR`
             body: {
                 tipoEntidad: "apartamento",
                 apartamentoUI: apartamentoUI,
-                apartamentoIDV: apartamentoIDV
+                apartamentoIDV: apartamentoIDV,
+                apartamentoUIPublico: "Apartamento para testing",
+                definicionPublica: "apartamento para testing"
             },
             session: fakeAdminSession
         }

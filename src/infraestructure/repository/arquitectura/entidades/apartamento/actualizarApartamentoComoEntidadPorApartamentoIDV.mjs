@@ -7,7 +7,7 @@ export const actualizarApartamentoComoEntidadPorApartamentoIDV = async (data) =>
         const apartamentoUI = data.apartamentoUI
         const apartamentoIDVSelector = data.apartamentoIDVSelector
         const apartamentoUIPublico = data.apartamentoUIPublico
-        const desfinicionPublica = data.desfinicionPublica
+        const definicionPublica = data.definicionPublica
 
 
         const consulta = `
@@ -16,7 +16,7 @@ export const actualizarApartamentoComoEntidadPorApartamentoIDV = async (data) =>
         "apartamentoIDV" = COALESCE($1, "apartamentoIDV"),
         "apartamentoUI"  = COALESCE($2, "apartamentoUI"),
         "apartamentoUIPublico"  = COALESCE($3, "apartamentoUIPublico"),
-        "desfinicionPublica"  = COALESCE($4, "desfinicionPublica")
+        "definicionPublica"  = COALESCE($4, "definicionPublica")
         WHERE 
         "apartamentoIDV" = $5
         RETURNING
@@ -26,7 +26,7 @@ export const actualizarApartamentoComoEntidadPorApartamentoIDV = async (data) =>
             apartamentoIDVNuevo,
             apartamentoUI,
             apartamentoUIPublico,
-            desfinicionPublica,
+            definicionPublica,
             apartamentoIDVSelector
         ];
         const resuelve = await conexion.query(consulta, parametros)

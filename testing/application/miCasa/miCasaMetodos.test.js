@@ -49,7 +49,7 @@ describe('miCasa Metodos', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update status of account from adminitration', async () => {
+    test('update status of account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: usuarioIDV_inicial,

@@ -67,7 +67,7 @@ END:VCALENDAR
                 contenedorCapas: {
                     capas: ["porApartamento"],
                     capasCompuestas: {
-                        porApartamento: ["apartamento3", "apartamento5"]
+                        porApartamento: [apartamentoIDV]
                     }
                 }
             },

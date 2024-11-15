@@ -345,7 +345,6 @@ export const validarObjetoReservaPublica = async (data) => {
             const m = error?.details[0].message.replaceAll('"', "'")
             throw new Error(m)
         }
-
         if (filtroTitular === "activado") {
             reservaPublica.titular = value.titular
         }

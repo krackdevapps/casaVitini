@@ -2,10 +2,8 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { eliminarServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/eliminarServicioEnReservaPorServicioUID.mjs"
 import { obtenerServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServicioEnReservaPorServicioUID.mjs"
-import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
-import { procesador } from "../../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const eliminarServicioEnReserva = async (entrada) => {
@@ -41,9 +39,7 @@ export const eliminarServicioEnReserva = async (entrada) => {
 
         await campoDeTransaccion("iniciar")
         await eliminarServicioEnReservaPorServicioUID(servicioUID_enReserva)
-
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
-
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado el servicio de la reserva"

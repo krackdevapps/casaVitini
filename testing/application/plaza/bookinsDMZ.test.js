@@ -12,6 +12,11 @@ import { crearOferta } from '../../../src/application/administracion/ofertas/cre
 import { actualizarEstadoOferta } from '../../../src/application/administracion/ofertas/actualizarEstadoOferta.mjs';
 import { eliminarOfertaPorTestingVI } from '../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
 import { preConfirmarReserva } from '../../../src/application/plaza/reservas/preConfirmarReserva.mjs';
+import { obtenerComplementosPorAlojamiento } from '../../../src/application/administracion/complementosDeAlojamiento/obtenerComplementosPorAlojamiento.mjs';
+import { eliminarServiciosPorTestingVI } from '../../../src/infraestructure/repository/servicios/eliminarServiciosPorTestingVI.mjs';
+import { crearServicio } from '../../../src/application/administracion/servicios/crearServicio.mjs';
+import { actualizarEstadoServicio } from '../../../src/application/administracion/servicios/actualizarEstadoServicio.mjs';
+import { detallesServicio } from '../../../src/application/administracion/servicios/detallesServicio.mjs';
 
 describe('miCasa bookins', () => {
 
@@ -35,7 +40,10 @@ describe('miCasa bookins', () => {
 
     const fechaInicioVirutal = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 2 }).toISODate();
     const fechaFinalVirtual = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
+
     const codeOffer = "testingDMZBookinmethods"
+    let servicioUID
+    let servicioTemporal
     const fakeOffer = {
         nombreOferta: "oferta creadada para testing",
         zonaIDV: "global",
@@ -55,15 +63,72 @@ describe('miCasa bookins', () => {
         }
     }
 
+    const contenedorFakeService = {
+        duracionIDV: "rango",
+        disponibilidadIDV: "constante",
+        tituloPublico: "Pack entretenimiento",
+        definicion: "Este pack de entretenimiento es un pack temporal para testing.\n\nEste pack tiene diferentes opciones.\n\nPor favor seleccione las opciones",
+        gruposDeOpciones: [
+            {
+                nombreGrupo: "Viaje a Francia",
+                configuracionGrupo: {
+                    confSelObligatoria: [
+                        "unaObligatoria"
+                    ],
+                    confSelNumero: [
+                        "variasOpcionesAlMismoTiempo"
+                    ]
+                },
+                opcionesGrupo: [
+                    {
+                        nombreOpcion: "Viaje en avión, restaurante includio",
+                        precioOpcion: "100.00"
+                    },
+                    {
+                        nombreOpcion: "Viaje en Tren, desayuno incluido",
+                        precioOpcion: "50.00"
+                    }
+                ]
+            },
+            {
+                nombreGrupo: "Viaje a Alemania",
+                configuracionGrupo: {
+                    confSelObligatoria: [
+                        "unaObligatoria"
+                    ],
+                    confSelNumero: [
+                        "variasOpcionesAlMismoTiempo"
+                    ]
+                },
+                opcionesGrupo: [
+                    {
+                        nombreOpcion: "Viaje en Tren",
+                        precioOpcion: "50.00"
+                    },
+                    {
+                        nombreOpcion: "Incluir el desayuno",
+                        precioOpcion: "10.00"
+                    }
+                ]
+            }
+        ],
+        fechaInicio: "2024-11-13",
+        fechaFinal: "2024-11-23"
+    }
+
+    const fakeService = {
+        nombreServicio: "servicio para testing",
+        zonaIDV: "global",
+        contenedor: contenedorFakeService
+    }
+
     beforeAll(async () => {
-
-
-
 
         process.env.TESTINGVI = testingVI
         await eliminarClientePorTestingVI(testingVI)
         await eliminarReservaPorTestingVI(testingVI)
         await eliminarOfertaPorTestingVI(testingVI)
+        await eliminarServiciosPorTestingVI(testingVI)
 
         await makeHostArquitecture({
             operacion: "eliminar",
@@ -71,7 +136,6 @@ describe('miCasa bookins', () => {
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
         })
-
 
         await makeHostArquitecture({
             operacion: "construir",
@@ -82,6 +146,29 @@ describe('miCasa bookins', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
+
+        const newTemporalService = await crearServicio({
+            body: {
+                ...fakeService
+            },
+            session: fakeAdminSession
+        })
+        servicioUID = newTemporalService.nuevoServicioUID
+
+        await actualizarEstadoServicio({
+            body: {
+                servicioUID,
+                estadoIDV: "activado"
+            },
+            session: fakeAdminSession
+        })
+        servicioTemporal = await detallesServicio({
+            body: {
+                servicioUID: servicioUID
+            },
+            session: fakeAdminSession
+        })
+
     })
     test('get apartments avaibles in DMZ with ok', async () => {
         const m = {
@@ -188,37 +275,70 @@ describe('miCasa bookins', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
+
+    let complementoAlojaminetoUID
+
+    test('get complement of hosting', async () => {
+        const m = {
+            body: {
+                apartamentoIDV: apartamentoIDV
+            },
+            session: fakeAdminSession
+        }
+        const response = await obtenerComplementosPorAlojamiento(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+        complementoAlojaminetoUID = response.complementosPorApartamentoIDV[0].complementoUID
+    })
     test('confirm bookin from DMZ with ok', async () => {
+        const gruposDeOpciones = servicioTemporal.ok.contenedor.gruposDeOpciones
+        const opcionesSeleccionadas = {}
+        Object.entries(gruposDeOpciones).forEach(([grupoIDV, contenedor]) => {
+            if (!opcionesSeleccionadas.hasOwnProperty(grupoIDV)) {
+                opcionesSeleccionadas[grupoIDV] = []
+            }
+            contenedor.opcionesGrupo.forEach(og => {
+                const opcionIDV = og.opcionIDV
+                opcionesSeleccionadas[grupoIDV].push(opcionIDV)
+            })
+        })
         const m = {
             body: {
                 codigoDescuento: codeOffer,
                 reserva: {
                     fechaEntrada: fechaInicioVirutal,
                     fechaSalida: fechaFinalVirtual,
-                    titular: {
-                        nombreTitular: "nombre titular",
-                        pasaporteTitular: "pasporte",
-                        correoTitular: "mail@maiol.com",
-                        telefonoTitular: "23453245",
-                        codigoInternacional: "+34"
-                    },
                     alojamiento: {
                         [apartamentoIDV]: {
-                            apartamentoUI: apartamentoUI,
                             habitaciones: {
                                 [habitacionIDV]: {
-                                    habitacionUI: habitacionUI,
                                     camaSeleccionada: {
-                                        camaIDV: camaIDV,
-                                        camaUI: camaUI,
+                                        camaIDV: camaIDV
                                     }
-                                },
-
+                                }
                             }
                         }
                     },
-
-                },
+                    complementosAlojamiento: [
+                        {
+                            complementoUI: "Complemento temporal para testing",
+                            complementoUID: complementoAlojaminetoUID
+                        },
+                    ],
+                    servicios: [
+                        {
+                            servicioUID: servicioUID,
+                            opcionesSeleccionadas
+                        }
+                    ],
+                    titular: {
+                        nombreTitular: "test",
+                        correoTitular: "test@test.com",
+                        telefonoTitular: "3333",
+                        codigoInternacional: "+1"
+                    }
+                }
             }
         }
 
@@ -232,6 +352,7 @@ describe('miCasa bookins', () => {
         await eliminarClientePorTestingVI(testingVI)
         await eliminarReservaPorTestingVI(testingVI)
         await eliminarOfertaPorTestingVI(testingVI)
+        await eliminarServiciosPorTestingVI(testingVI)
 
         await makeHostArquitecture({
             operacion: "eliminar",

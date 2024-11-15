@@ -10,30 +10,82 @@ import { addCamaToConfiguracionApartamentoHabitacion } from '../../../../../src/
 import { eliminarCamaComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/cama/eliminarCamaComoEntidad.mjs';
 import { eliminarHabitacionComoEntidad } from '../../../../../src/infraestructure/repository/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs';
 import { addHabitacionToConfiguracionApartamento } from '../../../../../src/application/administracion/arquitectura/configuraciones/addHabitacionToConfiguracionApartamento.mjs';
+import { eliminarUsuarioPorTestingVI } from '../../../../../src/infraestructure/repository/usuarios/eliminarUsuarioPorTestingVI.mjs';
+import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
+import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
+import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 
 describe('configuration of hosting', () => {
     const apartamentoIDV = "testingapartmentforconfigurationshostings"
     const apartamentoUI = "Apartamento para testing de configuraciones de alojamiento"
+    const apartamentoUI_2 = "Apartamento dos"
+    const apartamentoIDV_2 = "testingapartmentforconfiguratidos"
+
     const habitacionIDV = "habitacionparatestingdeconfiguraciones"
+    const habitacionUI = "Habitacion temporal para testing holder"
+
+    const habitacionIDV_2 = "habitacionparatestingdeconfiguracionesdos"
+    const habitacionUI_2 = "Habitacion temporal para testing holder dos"
+
+    const camaUI = "camaTemporalParaTesting"
     const camaIDV = "camatestingdeconfiguraciones"
+
+    const camaUI_2 = "camaTemporalParaTestingdos"
+    const camaIDV_2 = "camatestingdeconfiguracionesdos"
+
+    const testingVI = "hostingTemporalForTesting"
     let habitacionUID
+    let reservaUID
     const fakeAdminSession = {
         usuario: "test",
         rolIDV: "administrador"
     }
     beforeAll(async () => {
+        process.env.TESTINGVI = testingVI
+        await eliminarUsuarioPorTestingVI(testingVI)
+        await eliminarReservaPorTestingVI(testingVI)
         await eliminarApartamentoComoEntidad(apartamentoIDV)
-        await eliminarCamaComoEntidad(camaIDV)
-        await eliminarHabitacionComoEntidad(habitacionIDV)
-        await campoDeTransaccion("iniciar")
-    })
+        await eliminarCamaComoEntidad(camaIDV_2)
+        await eliminarApartamentoComoEntidad(apartamentoIDV_2)
+        await eliminarHabitacionComoEntidad(habitacionIDV_2)
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV,
+            habitacionIDV: habitacionIDV,
+            camaIDV: camaIDV
+        })
 
+        await makeHostArquitecture({
+            operacion: "construir",
+            apartamentoIDV: apartamentoIDV,
+            apartamentoUI: apartamentoUI,
+            habitacionIDV: habitacionIDV,
+            habitacionUI: habitacionUI,
+            camaIDV: camaIDV,
+            camaUI: camaUI,
+        })
+
+        const reserva = await crearReservaSimpleAdministrativa({
+            body: {
+                fechaEntrada: "2026-10-10",
+                fechaSalida: "2026-10-20",
+                apartamentos: [apartamentoIDV],
+                estadoInicialIDV: "confirmada",
+                estadoInicialOfertasIDV: "noAplicarOfertas"
+
+            },
+            session: fakeAdminSession
+        })
+        reservaUID = reserva.reservaUID
+    })
     test('createEntity ok', async () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "apartamento",
-                apartamentoUI: apartamentoUI,
-                apartamentoIDV: apartamentoIDV
+                apartamentoUI: apartamentoUI_2,
+                apartamentoIDV: apartamentoIDV_2,
+                apartamentoUIPublico: "apartamento para testing",
+                definicionPublica: "Defininicion para testin"
             },
             session: fakeAdminSession
         }
@@ -45,8 +97,8 @@ describe('configuration of hosting', () => {
     test('create configuration base of hosting with ok', async () => {
         const makeEntity = {
             body: {
-                apartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamentoUI
+                apartamentoIDV: apartamentoIDV_2,
+                apartamentoUI: apartamentoUI_2
             },
             session: fakeAdminSession
         }
@@ -93,8 +145,8 @@ describe('configuration of hosting', () => {
         const makeEntity = {
             body: {
                 tipoEntidad: "habitacion",
-                habitacionUI: "Habitacion para testing",
-                habitacionIDV: habitacionIDV
+                habitacionUI: habitacionUI_2,
+                habitacionIDV: habitacionIDV_2
             },
             session: fakeAdminSession
         }
@@ -109,7 +161,7 @@ describe('configuration of hosting', () => {
             body: {
                 tipoEntidad: "cama",
                 camaUI: "Nueva cama para testing",
-                camaIDV: camaIDV,
+                camaIDV: camaIDV_2,
                 capacidad: "3",
                 tipoCama: "compartida"
             },
@@ -124,8 +176,8 @@ describe('configuration of hosting', () => {
     test('add room in configuracion hosting base with ok', async () => {
         const makeEntity = {
             body: {
-                habitacionIDV: habitacionIDV,
-                apartamentoIDV: apartamentoIDV,
+                habitacionIDV: habitacionIDV_2,
+                apartamentoIDV: apartamentoIDV_2,
             },
             session: fakeAdminSession
         }
@@ -142,8 +194,8 @@ describe('configuration of hosting', () => {
     test('add bed in room in configuracion hosting with ok', async () => {
         const makeEntity = {
             body: {
-                camaIDV: camaIDV,
-                habitacionUID: habitacionUID
+                camaIDV: camaIDV_2,
+                habitacionUID: String(habitacionUID)
             },
             session: fakeAdminSession
         }
@@ -155,10 +207,10 @@ describe('configuration of hosting', () => {
 
 
 
-    test('add bed in room in configuracion hosting with ok', async () => {
+    test('delete configuracion hosting with ok', async () => {
         const makeEntity = {
             body: {
-                apartamentoIDV
+                apartamentoIDV: apartamentoIDV_2
             },
             session: fakeAdminSession
         }
@@ -170,7 +222,12 @@ describe('configuration of hosting', () => {
     afterAll(async () => {
         await campoDeTransaccion("cancelar")
         await eliminarCamaComoEntidad(camaIDV)
+        await eliminarCamaComoEntidad(camaIDV_2)
         await eliminarApartamentoComoEntidad(apartamentoIDV)
+        await eliminarApartamentoComoEntidad(apartamentoIDV_2)
         await eliminarHabitacionComoEntidad(habitacionIDV)
+        await eliminarHabitacionComoEntidad(habitacionIDV_2)
+        await eliminarReservaPorTestingVI(testingVI)
+
     })
 })

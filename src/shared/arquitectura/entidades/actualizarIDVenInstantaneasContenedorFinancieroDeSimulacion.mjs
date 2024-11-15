@@ -9,14 +9,13 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
         const origenIDV = data.origenIDV
         const destinoIDV = data.destinoIDV
         const contenedoresFinancierosSimulaciones = await obtenerTodasLasSimulaciones()
-
         for (const contenedor of contenedoresFinancierosSimulaciones) {
             const simulacionUID = contenedor.simulacionUID
             const fechaCreacion = contenedor.fechaCreacion
             const fechaEntrada = contenedor.fechaEntrada
             const fechaSalida = contenedor.fechaSalida
-
-            if (!fechaCreacion || !fechaEntrada || fechaSalida) {
+     
+            if (!fechaCreacion || !fechaEntrada || !fechaSalida) {
                 continue
             }
 

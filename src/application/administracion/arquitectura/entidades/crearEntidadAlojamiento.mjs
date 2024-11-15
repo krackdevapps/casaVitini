@@ -54,9 +54,9 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
-            const desfinicionPublica = validadoresCompartidos.tipos.cadena({
-                string: entrada.body.desfinicionPublica,
-                nombreCampo: "El campo del desfinicionPublica",
+            const definicionPublica = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.definicionPublica,
+                nombreCampo: "El campo del definicionPublica",
                 filtro: "strictoConEspacios",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
@@ -97,7 +97,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 apartamentoIDV: apartamentoIDV_unico,
                 apartamentoUI: apartamentoUI,
                 apartamentoUIPublico,
-                desfinicionPublica
+                definicionPublica
             }
             const nuevoApartamentoComEntidad = await insertarApartamentoComoEntidad(dataInsertarApartamentoComoEntidad)
             const ok = {

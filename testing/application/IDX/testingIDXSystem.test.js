@@ -28,7 +28,7 @@ describe('testingIDXSystem', () => {
         await eliminarUsuarioPorTestingVI(testingVI)
 
     })
-    test('create user from adminitration', async () => {
+    test('create user from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: usuarioIDV_inicial,
@@ -45,7 +45,7 @@ describe('testingIDXSystem', () => {
     })
 
 
-    test('update status of account from adminitration', async () => {
+    test('update status of account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: usuarioIDV_inicial,

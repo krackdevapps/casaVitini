@@ -4,22 +4,17 @@ import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitect
 import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
 import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
 import { eliminarOfertaPorTestingVI } from '../../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
-import { crearNuevoImpuesto } from '../../../../src/application/administracion/impuestos/crearNuevoImpuesto.mjs';
-import { eliminarImpuestoPorTestingVI } from '../../../../src/infraestructure/repository/impuestos/eliminarImpuestoPorTestingVI.mjs';
-import { insertarImpuestoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/insertarImpuestoEnSimulacion.mjs';
-import { insertarImpuestoDedicadoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/insertarImpuestoDedicadoEnSimulacion.mjs';
-import { eliminarImpuestoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/impuestos/eliminarImpuestoEnSimulacion.mjs';
 import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
 import { insertarAlojamientoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/alojamiento/insertarAlojamientoEnSimulacion.mjs';
+import { eliminarAlojamientoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/alojamiento/eliminarAlojamientoEnSimulacion.mjs';
 
-describe('taxes of simulation', () => {
+describe('hosting of simulation', () => {
     const fakeAdminSession = {
         usuario: "test",
         rolIDV: "administrador"
     }
     let simulacionUID
-    let impuestoUID
-   
+
     const testingVI = "taxestestinginsimulation"
     const apartamentoIDV = "apartmenttaxestestinginsimulation"
     const apartamentoUI = "Apartamento temporal creado testing taxestestinginsimulation"
@@ -31,7 +26,6 @@ describe('taxes of simulation', () => {
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
         await eliminarSimulacionPorTestingVI(testingVI)
-        await eliminarImpuestoPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV,
@@ -47,33 +41,11 @@ describe('taxes of simulation', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
-
-
-    })
-    test('create tax with ok', async () => {
-        const m = {
-            body: {
-                nombre: "tax for testing created",
-                tipoImpositivo: "100.00",
-                tipoValorIDV: "porcentaje",
-                entidadIDV: "reserva",
-            },
-            session: fakeAdminSession
-        }
-        const response = await crearNuevoImpuesto(m)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-        impuestoUID = response.nuevoImpuestoUID
     })
     test('create initial and save void simulation with ok', async () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-
-
-
-
             },
             session: fakeAdminSession
         }
@@ -95,7 +67,6 @@ describe('taxes of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-
     test('insert global data in simulation created with ok', async () => {
         const m = {
             body: {
@@ -114,55 +85,23 @@ describe('taxes of simulation', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    test('insert tax in simulation with ok', async () => {
-        const m = {
+    test('delete hostin in simulation with ok', async () => {
+        const response = await eliminarAlojamientoEnSimulacion({
             body: {
                 simulacionUID: String(simulacionUID),
-                impuestoUID: String(impuestoUID)
+                apartamentoIDV: String(apartamentoIDV)
+
             },
             session: fakeAdminSession
-        }
-        const response = await insertarImpuestoEnSimulacion(m)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('insert adhoc tax in simulation with ok', async () => {
-        const m = {
-            body: {
-                simulacionUID: String(simulacionUID),
-                nombreImpuesto: "tax for testing created",
-                tipoImpositivo: "100.00",
-                tipoValorIDV: "porcentaje",
-            },
-            session: fakeAdminSession
-        }
-        const response = await insertarImpuestoDedicadoEnSimulacion(m)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
-    test('delete tax in simulation with ok', async () => {
-        const m = {
-            body: {
-                simulacionUID: String(simulacionUID),
-                impuestoUID: String(impuestoUID)
-
-            },
-            session: fakeAdminSession
-        }
-        const response = await eliminarImpuestoEnSimulacion(m)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
-
-
 
     afterAll(async () => {
         await eliminarOfertaPorTestingVI(testingVI)
         await eliminarSimulacionPorTestingVI(testingVI)
-        await eliminarImpuestoPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV,

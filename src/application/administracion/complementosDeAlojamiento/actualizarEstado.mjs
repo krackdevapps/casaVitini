@@ -2,8 +2,6 @@ import { Mutex } from "async-mutex";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
-import { obtenerServicioPorServicioUID } from "../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs";
-import { actualizarEstadoServicioPorServicioUID } from "../../../infraestructure/repository/servicios/actualizarEstadoServicioPorServicioUID.mjs";
 import { obtenerComplementoPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs";
 import { actualizarEstadoIDVPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/actualizarEstadoIDVPorComplementoUID.mjs";
 

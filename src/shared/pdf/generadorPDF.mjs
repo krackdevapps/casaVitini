@@ -288,7 +288,7 @@ export const generadorPDF = async (reserva) => {
                 columnGap: 0
             }
         };
-        const totalesPorApartamento = contenedorFinanciero.desgloseFinanciero.entidades.reserva.desglosePorApartamento
+        const totalesPorApartamento = contenedorFinanciero.desgloseFinanciero.entidades.reserva?.desglosePorApartamento || {}
         if (Object.entries(totalesPorApartamento).length > 0) {
             const tablaFormatoPDFMake = {
                 style: 'tablaTotales',
@@ -334,7 +334,7 @@ export const generadorPDF = async (reserva) => {
             }
             docDefinition.content.push(tablaFormatoPDFMake)
         }
-        const complementosDeAlojamiento = contenedorFinanciero.desgloseFinanciero.entidades.complementosAlojamiento.desglosePorComplementoDeAlojamiento
+        const complementosDeAlojamiento = contenedorFinanciero.desgloseFinanciero.entidades.complementosAlojamiento?.desglosePorComplementoDeAlojamiento || {}
         if (complementosDeAlojamiento.length > 0) {
 
             const contenedorServicio = {

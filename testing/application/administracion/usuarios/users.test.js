@@ -14,7 +14,7 @@ import { eliminarCuentaDesdeAdministracion } from '../../../../src/application/a
 
 describe('managin users', () => {
     const fakeAdminSession = {
-        usuario: "test",
+        usuario: "testadmintemporal",
         rolIDV: "administrador"
     }
 
@@ -25,35 +25,50 @@ describe('managin users', () => {
         process.env.TESTINGVI = testingVI
 
     })
-    test('create user from adminitration', async () => {
-        const m = {
+
+    test('create user from administration for operations', async () => {
+        const response = await crearCuentaDesdeAdministracion({
+            body: {
+                usuarioIDX: fakeAdminSession.usuario,
+                clave: "1234567890A!",
+                rolIDV: fakeAdminSession.rolIDV
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+
+    test('create user from administration', async () => {
+        const response = await crearCuentaDesdeAdministracion({
             body: {
                 usuarioIDX: "userfortesting",
-                clave: "1234567890",
+                clave: "1234567890A!",
                 rolIDV: "cliente"
             },
             session: fakeAdminSession
-        }
-        const response = await crearCuentaDesdeAdministracion(m)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update pass for user from adminitration', async () => {
-        const m = {
+    test('update pass for user from administration', async () => {
+
+        const response = await actualizarClaveUsuarioAdministracion({
             body: {
                 usuarioIDX: "userfortesting",
-                claveNueva: "1234567890A!",
-                claveNuevaDos: "1234567890A!"
+                claveNueva: "1234567890A!1",
+                claveNuevaDos: "1234567890A!1"
             },
             session: fakeAdminSession
-        }
-        const response = await actualizarClaveUsuarioAdministracion(m)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update data of user from adminitration', async () => {
+    test('update data of user from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: "userfortesting",
@@ -71,7 +86,7 @@ describe('managin users', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update status of account from adminitration', async () => {
+    test('update status of account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: "userfortesting",
@@ -84,7 +99,7 @@ describe('managin users', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update IDX of account from adminitration', async () => {
+    test('update IDX of account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: "userfortesting",
@@ -97,7 +112,7 @@ describe('managin users', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update rol of account from adminitration', async () => {
+    test('update rol of account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: "userfortesting1",
@@ -110,7 +125,7 @@ describe('managin users', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('search users from adminitration', async () => {
+    test('search users from administration', async () => {
         const m = {
             body: {
                 buscar: "userfortesting1"
@@ -122,7 +137,7 @@ describe('managin users', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('details of user account from adminitration', async () => {
+    test('details of user account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: "userfortesting1",
@@ -135,7 +150,7 @@ describe('managin users', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    test('details of user data account from adminitration', async () => {
+    test('details of user data account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: "userfortesting1",
@@ -148,7 +163,7 @@ describe('managin users', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    test('delete user acount account from adminitration', async () => {
+    test('delete user acount account from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: "userfortesting1",

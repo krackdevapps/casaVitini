@@ -1,36 +1,39 @@
 
 import { describe, expect, test } from '@jest/globals';
-import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
-import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
-import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { eliminarServiciosPorTestingVI } from '../../../../../src/infraestructure/repository/servicios/eliminarServiciosPorTestingVI.mjs';
-import { insertarServicioEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/servicios/insertarServicioEnReserva.mjs';
-import { eliminarServicioEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/servicios/eliminarServicioEnReserva.mjs';
-import { crearServicio } from '../../../../../src/application/administracion/servicios/crearServicio.mjs';
-import { detallesServicio } from '../../../../../src/application/administracion/servicios/detallesServicio.mjs';
-import { actualizarServicioEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/servicios/actualizarServicioEnReserva.mjs';
-import { obtenerDetallesDelServicioEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/servicios/obtenerDetallesDelServicioEnReserva.mjs';
-import { obtenerServiciosDisponibles } from '../../../../../src/application/administracion/reservas/detallesReserva/servicios/obtenerServiciosDisponibles.mjs';
-import { actualizarEstadoServicio } from '../../../../../src/application/administracion/servicios/actualizarEstadoServicio.mjs';
+import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
+import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
+import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
+import { insertarAlojamientoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/alojamiento/insertarAlojamientoEnSimulacion.mjs';
+import { insertarServicioEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/servicios/insertarServicioEnSimulacion.mjs';
+import { actualizarServicioEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/servicios/actualizarServicioEnSimulacion.mjs';
+import { obtenerDetallesDelServicioEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/servicios/obtenerDetallesDelServicioEnSimulacion.mjs';
+import { eliminarServiciosPorTestingVI } from '../../../../src/infraestructure/repository/servicios/eliminarServiciosPorTestingVI.mjs';
+import { eliminarServicioEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/servicios/eliminarServicioEnSimulacion.mjs';
+import { crearServicio } from '../../../../src/application/administracion/servicios/crearServicio.mjs';
+import { actualizarEstadoServicio } from '../../../../src/application/administracion/servicios/actualizarEstadoServicio.mjs';
+import { detallesServicio } from '../../../../src/application/administracion/servicios/detallesServicio.mjs';
 
-describe('services in bookins', () => {
+describe('services of simulation', () => {
     const fakeAdminSession = {
-        usuario: "userfortesting",
+        usuario: "test",
         rolIDV: "administrador"
     }
-    let reservaUID
+    let simulacionUID
+    let servicioUID
+    let servicioUID_enSimulacion
     let servicioTemporal
-    const apartamentoIDV = "apartmenttestingholdinreserve"
-    const apartamentoUI = "Apartamento temporal creado testing holder"
-    const habitacionIDV = "roomtestingholdinreserve"
-    const habitacionUI = "Habitacion temporal para testing holder"
-    const camaIDV = "bedtestingholder"
-    const camaUI = "Cama temporal para testing holder"
-    const testingVI = "serviciotesting"
     const nombreServicio = "servicio para testing"
     const zonaIDV = "global"
     const estadoIDV = "activado"
-    const contenedor = {
+    const testingVI = "taxestestinginsimulation"
+    const apartamentoIDV = "apartmenttaxestestinginsimulation"
+    const apartamentoUI = "Apartamento temporal creado testing taxestestinginsimulation"
+    const habitacionIDV = "roomtaxestestinginsimulation"
+    const habitacionUI = "Habitacion temporal para testing taxestestinginsimulation"
+    const camaIDV = "bedttaxestestinginsimulation"
+    const camaUI = "Cama temporal para testing taxestestinginsimulation"
+    const contenedorFake = {
         duracionIDV: "rango",
         disponibilidadIDV: "constante",
         tituloPublico: "Pack entretenimiento",
@@ -82,22 +85,17 @@ describe('services in bookins', () => {
         fechaInicio: "2024-11-13",
         fechaFinal: "2024-11-23"
     }
-    let servicioUID
-    let servicioUID_enReserva
-
-
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
+        await eliminarSimulacionPorTestingVI(testingVI)
         await eliminarServiciosPorTestingVI(testingVI)
+
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV,
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
         })
-
-        await eliminarReservaPorTestingVI(testingVI)
-
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV,
@@ -108,47 +106,23 @@ describe('services in bookins', () => {
             camaUI: camaUI,
         })
 
-        const reserva = await crearReservaSimpleAdministrativa({
-            body: {
-                fechaEntrada: "2026-10-10",
-                fechaSalida: "2026-10-20",
-                apartamentos: [apartamentoIDV],
-                estadoInicialIDV: "confirmada",
-                estadoInicialOfertasIDV: "noAplicarOfertas"
 
-            },
-            session: fakeAdminSession
-        })
-        reservaUID = reserva.reservaUID
     })
-
     test('create new service with ok', async () => {
         const response = await crearServicio({
             body: {
                 nombreServicio,
                 zonaIDV,
-                contenedor
+                contenedor: JSON.parse(JSON.stringify(contenedorFake))
             },
             session: fakeAdminSession
         })
+
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         servicioUID = response.nuevoServicioUID
-    })
 
-    test('update status of service with ok', async () => {
-
-        const response = await actualizarEstadoServicio({
-            body: {
-                servicioUID,
-                estadoIDV
-            },
-            session: fakeAdminSession
-        })
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
     })
 
     test('get service with ok', async () => {
@@ -165,8 +139,69 @@ describe('services in bookins', () => {
         servicioTemporal = response
     })
 
-    test('insert service in booking with ok', async () => {
+    test('update status of service with ok', async () => {
 
+        const response = await actualizarEstadoServicio({
+            body: {
+                servicioUID,
+                estadoIDV
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+    test('create initial and save void simulation with ok', async () => {
+        const m = {
+            body: {
+                nombre: "Simulacion temporal y volatil para testing",
+            },
+            session: fakeAdminSession
+        }
+        const response = await guardarSimulacion(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+        simulacionUID = response.simulacionUID
+    })
+
+    test('insert hostin in simulation with ok', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV)
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+
+    test('insert global data in simulation created with ok', async () => {
+        const m = {
+            body: {
+                simulacionUID: simulacionUID,
+                fechaCreacion: "2026-10-10",
+                fechaEntrada: "2026-10-11",
+                fechaSalida: "2026-10-14",
+                zonaIDV: "global",
+                apartamentosIDVARRAY: [apartamentoIDV],
+            },
+            session: fakeAdminSession
+        }
+        const response = await actualizarSimulacionPorDataGlobal(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+
+
+    test('insert service in simulation with ok', async () => {
         const gruposDeOpciones = servicioTemporal.ok.contenedor.gruposDeOpciones
 
 
@@ -180,9 +215,9 @@ describe('services in bookins', () => {
                 opcionesSeleccionadas[grupoIDV].push(opcionIDV)
             })
         })
-        const response = await insertarServicioEnReserva({
+        const response = await insertarServicioEnSimulacion({
             body: {
-                reservaUID: String(reservaUID),
+                simulacionUID: String(simulacionUID),
                 servicioUID: String(servicioUID),
                 opcionesSeleccionadasDelServicio: {
                     servicioUID: String(servicioUID),
@@ -194,9 +229,24 @@ describe('services in bookins', () => {
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
-        servicioUID_enReserva = response.servicio.servicioUID
+        servicioUID_enSimulacion = response.servicio.servicioUID
     })
-    test('update service in booking with ok', async () => {
+
+    test('get service with ok', async () => {
+
+        const response = await obtenerDetallesDelServicioEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                servicioUID_enSimulacion: String(servicioUID_enSimulacion)
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+    test('update service in simulation with ok', async () => {
         const gruposDeOpciones = servicioTemporal.ok.contenedor.gruposDeOpciones
         const opcionesSeleccionadas = {}
         Object.entries(gruposDeOpciones).forEach(([grupoIDV, contenedor]) => {
@@ -208,10 +258,11 @@ describe('services in bookins', () => {
                 opcionesSeleccionadas[grupoIDV].push(opcionIDV)
             })
         })
-        const response = await actualizarServicioEnReserva({
+
+        const response = await actualizarServicioEnSimulacion({
             body: {
-                reservaUID: String(reservaUID),
-                servicioUID_enReserva: String(servicioUID_enReserva),
+                simulacionUID: String(simulacionUID),
+                servicioUID_enSimulacion: String(servicioUID_enSimulacion),
                 opcionesSeleccionadasDelServicio: {
                     servicioUID: String(servicioUID),
                     opcionesSeleccionadas
@@ -224,46 +275,23 @@ describe('services in bookins', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    test('get detail of service in booking with ok', async () => {
-        const response = await obtenerDetallesDelServicioEnReserva({
+
+    test('delete service in simulation with ok', async () => {
+
+        const response = await eliminarServicioEnSimulacion({
             body: {
-                reservaUID: String(reservaUID),
-                servicioUID_enReserva: String(servicioUID_enReserva),
+                servicioUID_enSimulacion: String(servicioUID_enSimulacion),
             },
             session: fakeAdminSession
         })
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
-
-    test('get services avaibles for booking with ok', async () => {
-        const response = await obtenerServiciosDisponibles({
-            body: {},
-            session: fakeAdminSession
-        })
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
-
-    test('delete service in booking with ok', async () => {
-        const m = {
-            body: {
-                servicioUID_enReserva: String(servicioUID_enReserva),
-
-            },
-            session: fakeAdminSession
-        }
-        const response = await eliminarServicioEnReserva(m)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
 
     afterAll(async () => {
-        await eliminarReservaPorTestingVI(testingVI)
         await eliminarServiciosPorTestingVI(testingVI)
+        await eliminarSimulacionPorTestingVI(testingVI)
         await makeHostArquitecture({
             operacion: "eliminar",
             apartamentoIDV: apartamentoIDV,

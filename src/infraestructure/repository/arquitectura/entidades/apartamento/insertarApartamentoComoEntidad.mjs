@@ -6,7 +6,7 @@ export const insertarApartamentoComoEntidad = async (data) => {
         const apartamentoIDV = data.apartamentoIDV
         const apartamentoUI = data.apartamentoUI
         const apartamentoUIPublico = data.apartamentoUIPublico
-        const desfinicionPublica = data.desfinicionPublica
+        const definicionPublica = data.definicionPublica
 
         const consulta = `
         INSERT INTO 
@@ -15,7 +15,7 @@ export const insertarApartamentoComoEntidad = async (data) => {
        "apartamentoIDV",
         "apartamentoUI",
         "apartamentoUIPublico",
-        "desfinicionPublica"
+        "definicionPublica"
         )
         VALUES 
         ( $1, $2, $3, $4 )
@@ -26,7 +26,7 @@ export const insertarApartamentoComoEntidad = async (data) => {
             apartamentoIDV,
             apartamentoUI,
             apartamentoUIPublico,
-            desfinicionPublica
+            definicionPublica
         ]
         const resuelve = await conexion.query(consulta, parametros)
         if (resuelve.rowCount === 0) {

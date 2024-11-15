@@ -14,8 +14,6 @@ export const enviarMailReservaConfirmadaAlCliente = async (reservaUID) => {
                 "desgloseFinanciero"
             ]
         })
-
-
         const global = reserva.global
         const nombreCompletoTitularReserva = reserva.titular.nombreTitular
         const emailDestinoTitular = reserva.titular.mailTitular
@@ -32,6 +30,7 @@ export const enviarMailReservaConfirmadaAlCliente = async (reservaUID) => {
         Cree su VitiniID para poder tener acceso persistente a la copia de su reserva.
         <br>
         <a href="https://casavitini.com/micasa/reservas/reserva:${reservaUID}">Ir a mi reserva (Necesita un VitiniID)</a>
+        <br>
         <a href="https://casavitini.com/micasa/crear_nueva_cuenta">Crear mi VitiniID (Es rápido y gratuito)</a>
         </html>`
         const pdf = await generadorPDF(reserva)

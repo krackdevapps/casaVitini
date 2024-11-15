@@ -81,7 +81,7 @@ CREATE TABLE public.apartamentos (
     "apartamentoIDV" text NOT NULL,
     "apartamentoUI" text,
     "apartamentoUIPublico" text,
-    "desfinicionPublica" text
+    "definicionPublica" text
 );
 
 
@@ -1326,7 +1326,7 @@ ALTER TABLE public."usuariosZonaHoraria" ALTER COLUMN "zonaUID" ADD GENERATED AL
 -- Data for Name: apartamentos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.apartamentos ("apartamentoIDV", "apartamentoUI", "apartamentoUIPublico", "desfinicionPublica") FROM stdin;
+COPY public.apartamentos ("apartamentoIDV", "apartamentoUI", "apartamentoUIPublico", "definicionPublica") FROM stdin;
 \.
 
 

@@ -8,6 +8,7 @@ import { actualizarNombreSimulacion } from '../../../../src/application/administ
 import { listaSimulacionesPaginados } from '../../../../src/application/administracion/simuladorDePrecios/listaSimulacionesPaginados.mjs';
 import { eliminarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/eliminarSimulacion.mjs';
 import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
+import { insertarAlojamientoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/alojamiento/insertarAlojamientoEnSimulacion.mjs';
 
 describe('Global Operations Simulation', () => {
     const fakeAdminSession = {
@@ -47,10 +48,6 @@ describe('Global Operations Simulation', () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-
-
-
-
             },
             session: fakeAdminSession
         }
@@ -73,7 +70,18 @@ describe('Global Operations Simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-
+    test('insert hostin in simulation with ok', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV)
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
     test('insert global data in simulation created with ok', async () => {
         const m = {
             body: {

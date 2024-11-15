@@ -12,6 +12,7 @@ import { actualizarAutorizacionDescuentoCompatible } from '../../../../src/appli
 import { obtenerDescuentosCompatiblesConLaSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/obtenerDescuentosCompatiblesConLaSimulacion.mjs';
 import { eliminarDescuentoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/descuentos/eliminarDescuentoEnSimulacion.mjs';
 import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
+import { insertarAlojamientoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/alojamiento/insertarAlojamientoEnSimulacion.mjs';
 
 describe('discounts of simulation', () => {
     const fakeAdminSession = {
@@ -75,10 +76,6 @@ describe('discounts of simulation', () => {
         const m = {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
-
-
-
-
             },
             session: fakeAdminSession
         }
@@ -87,6 +84,18 @@ describe('discounts of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
+    })
+    test('insert hostin in simulation with ok', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV)
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
     })
     test('insert global data in simulation created with ok', async () => {
         const m = {

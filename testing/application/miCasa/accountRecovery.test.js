@@ -22,11 +22,11 @@ describe('account recovery', () => {
         process.env.TESTINGVI = testingVI
         await eliminarUsuarioPorTestingVI(testingVI)
     })
-    test('create user from adminitration', async () => {
+    test('create user from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: usuarioIDV_inicial,
-                clave: "1234567890",
+                clave: "1234567890!A",
                 rolIDV: "cliente"
             },
             session: fakeAdminSession
@@ -36,7 +36,7 @@ describe('account recovery', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update data of user from adminitration', async () => {
+    test('update data of user from administration', async () => {
         const m = {
             body: {
                 usuarioIDX: usuarioIDV_inicial,

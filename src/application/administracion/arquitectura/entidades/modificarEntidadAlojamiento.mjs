@@ -76,9 +76,9 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
-            const desfinicionPublica = validadoresCompartidos.tipos.cadena({
-                string: entrada.body.desfinicionPublica,
-                nombreCampo: "El campo del desfinicionPublica",
+            const definicionPublica = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.definicionPublica,
+                nombreCampo: "El campo del definicionPublica",
                 filtro: "strictoConEspacios",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
@@ -111,7 +111,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 apartamentoUI: apartamentoUI,
                 apartamentoIDVSelector: entidadIDV,
                 apartamentoUIPublico,
-                desfinicionPublica
+                definicionPublica
             })
             if (apartamentoComoEntidadActualizado.rowCount === 0) {
                 const error = "No se han podido guardar los datos porque no se ha encontrado el apartamento.";

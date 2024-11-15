@@ -42,7 +42,7 @@ export const validarOpcionesDelServicio = async (data) => {
             const confSelNumero = configuracionGrupo.confSelNumero
 
             // Servicio a comprorbar
-            const grupoPorValidar = opcionesSeleccionadasPorValidar
+            const grupoPorValidar = opcionesSeleccionadasPorValidar || {}
             // Comporbra si es obligatorio
             if (confSelObligatoria.includes("unaObligatoria")) {
                 if (!grupoPorValidar.hasOwnProperty(grupoIDV)) {

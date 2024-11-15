@@ -4,6 +4,7 @@ import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitect
 import { guardarSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/guardarSimulacion.mjs';
 import { actualizarSimulacionPorDataGlobal } from '../../../../src/application/administracion/simuladorDePrecios/actualizarSimulacionPorDataGlobal.mjs';
 import { eliminarSimulacionPorTestingVI } from '../../../../src/infraestructure/repository/simulacionDePrecios/eliminarSimulacionPorTestingVI.mjs';
+import { insertarAlojamientoEnSimulacion } from '../../../../src/application/administracion/simuladorDePrecios/alojamiento/insertarAlojamientoEnSimulacion.mjs';
 
 describe('Generate Voltail Simulation', () => {
     const fakeAdminSession = {
@@ -57,6 +58,18 @@ describe('Generate Voltail Simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
+    })
+    test('insert hostin in simulation with ok', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV)
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
     })
     test('insert global data in simulation created with ok', async () => {
         const m = {

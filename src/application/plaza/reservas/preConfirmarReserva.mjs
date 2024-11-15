@@ -47,7 +47,9 @@ export const preConfirmarReserva = async (entrada) => {
         const codigosDescuento = reservaPublica.codigosDescuento
         const serviciosPorValidar = reservaPublica?.servicios
 
-        await validarHoraLimitePublica()
+        await validarHoraLimitePublica({
+            fechaEntrada
+        })
 
         await limitesReservaPublica({
             fechaEntrada: fechaEntrada,
@@ -114,11 +116,10 @@ export const preConfirmarReserva = async (entrada) => {
             ]
         })
         limpiarContenedorFinacieroInformacionPrivada(resolverDetallesReserva)
-
         const pdf = await generadorPDF(resolverDetallesReserva);
         if (!testingVI) {
-            //---enviarMailReservaConfirmadaAlCliente(reservaUID)
-            //---enviarMailDeAvisoPorReservaPublica(reservaUID)
+            enviarMailReservaConfirmadaAlCliente(reservaUID)
+            enviarMailDeAvisoPorReservaPublica(reservaUID)
         }
 
         const ok = {

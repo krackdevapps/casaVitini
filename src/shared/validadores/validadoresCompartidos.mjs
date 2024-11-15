@@ -683,6 +683,7 @@ export const validadoresCompartidos = {
             } else if (filtro === "url") {
                 try {
                     const filtro = /^[A-Za-z0-9_\-/%=:]*$/;
+
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena de minúsculas, mayúsculas, números y estos caracteres: _, \, %, -, /, = y :`
                         throw new Error(mensaje)
@@ -1420,8 +1421,8 @@ export const validadoresCompartidos = {
         configuracionesUsuario: {
             arbol: {
                 calendario: {
-                    tipoSeleccion:  ["porDiasIndividual", "porRango"],
-                    tipoVision:  ["horizontal", "vertical"]
+                    tipoSeleccion: ["porDiasIndividual", "porRango"],
+                    tipoVision: ["horizontal", "vertical"]
                 }
             }
         }

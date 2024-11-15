@@ -18,49 +18,93 @@ describe('services clients', () => {
     const nombreServicio = "servicio para testing"
     const zonaIDV = "global"
     const estadoIDV = "activado"
-    const contenedor = {
-        precio: "10.00",
-        definicion: "Este servicio incluye servicio de recogida desde el aeropuerto a Casa Vitini y servicio de vuelva al aeropuerto en transporte privado.\n",
-        fechaFinal: "2024-09-28",
+    const contenedorFake = {
         duracionIDV: "rango",
-        fechaInicio: "2024-09-18",
-        tituloPublico: "Servicio de transporte de ida y vuelva al aeropuerto - nombre externo",
-        disponibilidadIDV: "constante"
+        disponibilidadIDV: "constante",
+        tituloPublico: "Pack entretenimiento",
+        definicion: "Este pack de entretenimiento es un pack temporal para testing.\n\nEste pack tiene diferentes opciones.\n\nPor favor seleccione las opciones",
+        gruposDeOpciones: [
+            {
+                nombreGrupo: "Viaje a Francia",
+                configuracionGrupo: {
+                    confSelObligatoria: [
+                        "unaObligatoria"
+                    ],
+                    confSelNumero: [
+                        "maximoUnaOpcion"
+                    ]
+                },
+                opcionesGrupo: [
+                    {
+                        nombreOpcion: "Viaje en avión, restaurante includio",
+                        precioOpcion: "100.00"
+                    },
+                    {
+                        nombreOpcion: "Viaje en Tren, desayuno incluido",
+                        precioOpcion: "50.00"
+                    }
+                ]
+            },
+            {
+                nombreGrupo: "Viaje a Alemania",
+                configuracionGrupo: {
+                    confSelObligatoria: [
+                        "unaObligatoria"
+                    ],
+                    confSelNumero: [
+                        "variasOpcionesAlMismoTiempo"
+                    ]
+                },
+                opcionesGrupo: [
+                    {
+                        nombreOpcion: "Viaje en Tren",
+                        precioOpcion: "50.00"
+                    },
+                    {
+                        nombreOpcion: "Incluir el desayuno",
+                        precioOpcion: "10.00"
+                    }
+                ]
+            }
+        ],
+        fechaInicio: "2024-11-13",
+        fechaFinal: "2024-11-23"
     }
     let servicioUID
-
     beforeAll(async () => {
         await eliminarServiciosPorTestingVI(testingVI)
         process.env.TESTINGVI = testingVI;
     })
 
     test('create new service with ok', async () => {
-        const newClient = {
+       
+        const response = await crearServicio({
             body: {
                 nombreServicio,
                 zonaIDV,
-                contenedor
+                contenedor: JSON.parse(JSON.stringify(contenedorFake))
             },
             session: fakeAdminSession
-        }
-        const response = await crearServicio(newClient)
+        })
+
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         servicioUID = response.nuevoServicioUID
-    })
 
+    })
     test('update service with ok', async () => {
-        const newClient = {
+      
+
+        const response = await actualizarServicio( {
             body: {
                 nombreServicio,
                 zonaIDV,
-                contenedor,
+                contenedor: contenedorFake,
                 servicioUID
             },
             session: fakeAdminSession
-        }
-        const response = await actualizarServicio(newClient)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
@@ -68,27 +112,27 @@ describe('services clients', () => {
 
 
     test('get service with ok', async () => {
-        const newClient = {
+
+        const response = await detallesServicio({
             body: {
                 servicioUID
             },
             session: fakeAdminSession
-        }
-        const response = await detallesServicio(newClient)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
 
     test('update status of service with ok', async () => {
-        const newClient = {
+ 
+        const response = await actualizarEstadoServicio({
             body: {
                 servicioUID,
                 estadoIDV
             },
             session: fakeAdminSession
-        }
-        const response = await actualizarEstadoServicio(newClient)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
@@ -111,7 +155,7 @@ describe('services clients', () => {
 
     test('get all services with ok', async () => {
         const response = await obtenerServicios({
-               session: fakeAdminSession
+            session: fakeAdminSession
         })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');

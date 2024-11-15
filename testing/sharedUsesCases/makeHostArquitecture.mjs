@@ -8,6 +8,8 @@ import { cambiarEstadoConfiguracionAlojamiento } from "../../src/application/adm
 import { crearConfiguracionAlojamiento } from "../../src/application/administracion/arquitectura/configuraciones/crearConfiguracionAlojamiento.mjs"
 import { crearEntidadAlojamiento } from "../../src/application/administracion/arquitectura/entidades/crearEntidadAlojamiento.mjs"
 import { establecerNuevoPrecioApartamento } from "../../src/application/administracion/precios/establecerNuevoPrecioApartamento.mjs"
+import { crearComplementoDeAlojamiento } from "../../src/application/administracion/complementosDeAlojamiento/crearComplementoDeAlojamiento.mjs"
+import { actualizarEstado } from "../../src/application/administracion/complementosDeAlojamiento/actualizarEstado.mjs"
 
 export const makeHostArquitecture = async (data) => {
     try {
@@ -33,7 +35,9 @@ export const makeHostArquitecture = async (data) => {
                 body: {
                     tipoEntidad: "apartamento",
                     apartamentoUI: apartamentoUI,
-                    apartamentoIDV: apartamentoIDV
+                    apartamentoIDV: apartamentoIDV,
+                    apartamentoUIPublico: "Apartamento temporal para testing",
+                    definicionPublica: "Definicion del apartamento temporal para testing"
                 },
                 session: fakeAdminSession
             })
@@ -106,6 +110,24 @@ export const makeHostArquitecture = async (data) => {
                 body: {
                     apartamentoIDV: apartamentoIDV,
                     nuevoEstado: "disponible"
+                },
+                session: fakeAdminSession
+            })
+            const complementoDeAlojamiento = await crearComplementoDeAlojamiento({
+                body: {
+                    apartamentoIDV: apartamentoIDV,
+                    complementoUI: "Complemento creado para testing",
+                    definicion: "Definicion temporal del complementos de alojamiento creado para testing",
+                    tipoPrecio: "porNoche",
+                    precio: "100.00",
+                },
+                session: fakeAdminSession
+            })
+            const complementoUID = complementoDeAlojamiento.nuevoComplementoUID
+            await actualizarEstado({
+                body: {
+                    complementoUID,
+                    estadoIDV: "activado"
                 },
                 session: fakeAdminSession
             })

@@ -67,7 +67,9 @@ export const preciosPorSeleccion = async (entrada) => {
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
-        await validarHoraLimitePublica()
+        await validarHoraLimitePublica({
+            fechaEntrada
+        })
         await limitesReservaPublica({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida

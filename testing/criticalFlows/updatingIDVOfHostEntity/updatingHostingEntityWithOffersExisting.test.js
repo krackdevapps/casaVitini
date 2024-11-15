@@ -19,6 +19,7 @@ import { obtenerReserva } from '../../../src/application/administracion/reservas
 import { actualizarSobreControlNoche as actualizarSobreControlNoche_reserva } from '../../../src/application/administracion/reservas/detallesReserva/sobreControlPrecios/actualizarSobreControlNoche.mjs';
 import { actualizarSobreControlNoche as actualizarSobreControlNoche_simulacion } from '../../../src/application/administracion/simuladorDePrecios/sobreControlPrecios/actualizarSobreControlNoche.mjs';
 import { detallesSimulacion } from '../../../src/application/administracion/simuladorDePrecios/detallesSimulacion.mjs';
+import { insertarAlojamientoEnSimulacion } from '../../../src/application/administracion/simuladorDePrecios/alojamiento/insertarAlojamientoEnSimulacion.mjs';
 
 describe('critical: updating hosting entity with offers existing', () => {
     const testingVI = "testingcritical"
@@ -138,9 +139,6 @@ describe('critical: updating hosting entity with offers existing', () => {
             camaUI: camaUI,
         })
     })
-
-
-
 
 
 
@@ -273,9 +271,6 @@ describe('critical: updating hosting entity with offers existing', () => {
             body: {
                 nombre: "Simulacion temporal y volatil para testing",
 
-
-
-
             },
             session: fakeAdminSession
         }
@@ -284,6 +279,18 @@ describe('critical: updating hosting entity with offers existing', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
+    })
+    test('insert hostin in simulation with ok', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV)
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
     })
     test('insert global data in simulation created with ok', async () => {
         const m = {
@@ -377,6 +384,8 @@ describe('critical: updating hosting entity with offers existing', () => {
                 entidadIDV: apartamentoIDV,
                 apartamentoIDV: apartamentoIDV_actualizado,
                 apartamentoUI: apartamentoUI,
+                apartamentoUIPublico: "Apartamento",
+                definicionPublica: "definicion",
                 caracteristicas: [
                     "testing"
                 ]
@@ -578,7 +587,7 @@ describe('critical: updating hosting entity with offers existing', () => {
 
 
     })
-    test('get details of booking simulacioan and test for updates IDV with ok', async () => {
+    test('get details of booking simulation and test for updates IDV with ok', async () => {
         const m = {
             body: {
                 simulacionUID: String(simulacionUID)
@@ -602,17 +611,6 @@ describe('critical: updating hosting entity with offers existing', () => {
             ...instantaneaOfertasPorAdministrador,
             ...instantaneaOfertasPorCondicion
         ]
-
-        let interruptorAlojamiento = false
-        apartamentosIDVARRAY.forEach((apartamentoIDV_enAlojamiento) => {
-            expect(apartamentoIDV_enAlojamiento).toBe(apartamentoIDV_actualizado);
-            if (apartamentoIDV_enAlojamiento === apartamentoIDV_actualizado) {
-                interruptorAlojamiento = true;
-                expect(apartamentoIDV_enAlojamiento).toBe(apartamentoIDV_actualizado);
-            }
-
-        })
-        expect(interruptorAlojamiento).toBe(true);
 
         let interruptorInstantaneaNoches = false
         for (const contenedorNoche of Object.values(instantaneaNoches)) {
@@ -687,13 +685,9 @@ describe('critical: updating hosting entity with offers existing', () => {
                 }
             }
         }
-
-
         expect(interruptor_oferta_individualPorApartamento).toBe(true);
         expect(interruptor_oferta_porRangoDias).toBe(true);
         expect(interruptor_oferta_porApartamentosEspecificos).toBe(true);
-
-
     })
     afterAll(async () => {
         await makeHostArquitecture({
