@@ -29,8 +29,8 @@ export const actualizarSimulacionPorDataGlobal = async (entrada) => {
             simulacionUID,
             zonaIDV
         })
-        // const contenedorSimulacion = entrada.body
-        // const desgloseFinancieroActualizado = await actualizarSimulacionDesdeDataGlobal(contenedorSimulacion)
+        //const contenedorSimulacion = entrada.body
+        //const desgloseFinancieroActualizado = await actualizarSimulacionDesdeDataGlobal(contenedorSimulacion)
         const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         const ok = {
             ok: "Se ha guardado la nueva simulación",

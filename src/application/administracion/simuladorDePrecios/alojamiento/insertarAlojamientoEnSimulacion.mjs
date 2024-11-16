@@ -54,8 +54,8 @@ export const insertarAlojamientoEnSimulacion = async (entrada) => {
             apartamentoIDV
         })
         await campoDeTransaccion("confirmar")
-        //await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-        //const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
@@ -66,7 +66,7 @@ export const insertarAlojamientoEnSimulacion = async (entrada) => {
         return {
             ok: "Se ha insertado el apartamento en la simulacion",
             nuevoApartamento,
-          //  desgloseFinanciero
+            desgloseFinanciero
         }
     } catch (error) {
         await campoDeTransaccion("cancelar")

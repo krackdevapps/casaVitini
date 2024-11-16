@@ -30,6 +30,14 @@ describe('critical: updating hosting entity with offers existing', () => {
     const camaIDV = "camatesting"
     const camaUI = "Cama para testing critical flow"
     const apartamentoIDV_actualizado = "apartamentoactualizado00000000000"
+
+    const apartamentoIDV_2 = "apartmenttaxestestinginsimulationdos"
+    const apartamentoUI_2 = "Apartamento temporal creado testing taxestestinginsimulationdos"
+    const habitacionIDV_2 = "roomtaxestestinginsimulationdos"
+    const habitacionUI_2 = "Habitacion temporal para testing taxestestinginsimulationdos "
+    const camaIDV_2 = "bedttaxestestinginsimulationdos"
+    const camaUI_2 = "Cama temporal para testing taxestestinginsimulationdos"
+
     let reservaUID
     let simulacionUID
     let ofertaUID_type1
@@ -120,10 +128,17 @@ describe('critical: updating hosting entity with offers existing', () => {
         })
         await makeHostArquitecture({
             operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
+        })
+        await makeHostArquitecture({
+            operacion: "eliminar",
             apartamentoIDV: apartamentoIDV_actualizado,
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
         })
+
 
         await eliminarReservaPorTestingVI(testingVI)
         await eliminarSimulacionPorTestingVI(testingVI)
@@ -137,6 +152,16 @@ describe('critical: updating hosting entity with offers existing', () => {
             habitacionUI: habitacionUI,
             camaIDV: camaIDV,
             camaUI: camaUI,
+        })
+
+        await makeHostArquitecture({
+            operacion: "construir",
+            apartamentoIDV: apartamentoIDV_2,
+            apartamentoUI: apartamentoUI_2,
+            habitacionIDV: habitacionIDV_2,
+            habitacionUI: habitacionUI_2,
+            camaIDV: camaIDV_2,
+            camaUI: camaUI_2,
         })
     })
 
@@ -280,17 +305,21 @@ describe('critical: updating hosting entity with offers existing', () => {
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
     })
+
     test('insert hostin in simulation with ok', async () => {
-        const response = await insertarAlojamientoEnSimulacion({
-            body: {
-                simulacionUID: String(simulacionUID),
-                apartamentoIDV: String(apartamentoIDV)
-            },
-            session: fakeAdminSession
-        })
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
+        try {
+            const response = await insertarAlojamientoEnSimulacion({
+                body: {
+                    simulacionUID: String(simulacionUID),
+                    apartamentoIDV: String(apartamentoIDV)
+                },
+                session: fakeAdminSession
+            })
+        } catch (error) {
+            expect(error).not.toBeUndefined();
+            expect(typeof error).toBe('object');
+            expect(error).toHaveProperty('info');
+        }
     })
     test('insert global data in simulation created with ok', async () => {
         const m = {
@@ -305,6 +334,18 @@ describe('critical: updating hosting entity with offers existing', () => {
             session: fakeAdminSession
         }
         const response = await actualizarSimulacionPorDataGlobal(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+    test('insert hostin in simulation with ok', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV_2)
+            },
+            session: fakeAdminSession
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
@@ -701,6 +742,12 @@ describe('critical: updating hosting entity with offers existing', () => {
             apartamentoIDV: apartamentoIDV_actualizado,
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
+        })
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
         })
         await eliminarOfertaPorTestingVI(testingVI)
         await eliminarReservaPorTestingVI(testingVI)

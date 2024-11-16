@@ -2600,7 +2600,7 @@ const casaVitini = {
                             contenedor.classList.add(
                                 "flexVertical",
                                 "ocultoInicial",
-                                "gap6",
+                          
                                 "padding6",
                                 "borderRadius20"
                             )
@@ -13583,14 +13583,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const contenedorOfertas_selector = contenedorFinanciero.querySelector("[contenedor=ofertas]")
                             if (!contenedorOfertas_selector) {
                                 const contenedorPlegable = document.createElement("details")
-                                contenedorPlegable.classList.add("contenedorOfertas")
+                                contenedorPlegable.classList.add("contenedorEntidad")
                                 contenedorPlegable.setAttribute("contenedor", "ofertas")
                                 contenedorPlegable.setAttribute("componente", "plegable")
-                                contenedorPlegable.classList.add(
-                                    "flexVertical",
-                                    "gap6",
+                                // contenedorPlegable.classList.add(
+                                //     "flexVertical",
+                                //     "gap6",
 
-                                )
+                                // )
                                 contenedorFinanciero.appendChild(contenedorPlegable)
 
                                 const tituloContendor = document.createElement("summary")
@@ -13605,7 +13605,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 contenedor.classList.add(
                                     "flexVertical",
                                     "gap6",
-                                    "padding6"
+                           
                                 )
                                 contenedorPlegable.appendChild(contenedor)
 
@@ -15262,11 +15262,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         if (!contenedorImpuestos_selector) {
                             const contenedorPlegable = document.createElement('details');
-                            contenedorPlegable.classList.add(
-                                "contenedorImpuestos",
-                                "flexVertical",
-                                "gap6",
-                            )
+                            contenedorPlegable.classList.add(                                "contenedorEntidad"                     )
                             contenedorPlegable.setAttribute("contenedor", "impuestos")
 
 
@@ -15284,7 +15280,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 "contenedorImpuestos",
                                 "flexVertical",
                                 "gap6",
-                                "padding6"
+                             
                             )
                             contenedorPlegable.appendChild(contenedor)
 
@@ -15569,10 +15565,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         if (!contenedorTotales_selector) {
 
                             const contenedorPlegable = document.createElement("details")
-                            contenedorPlegable.classList.add(
-                                "flexVertical",
-                                "gap6"
-                            )
+                            contenedorPlegable.classList.add("contenedorEntidad"  )
                             contenedorPlegable.setAttribute("contenedor", "totalesGlobales")
                             contenedorPlegable.setAttribute("componente", "plegable")
                             document.querySelector(destino).querySelector("[contenedor=financiero]").appendChild(contenedorPlegable)
@@ -15590,7 +15583,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 "contenedorImpuestos",
                                 "flexVertical",
                                 "gap6",
-                                "padding6"
+                            
                             )
                             contenedorPlegable.appendChild(contenedor)
 

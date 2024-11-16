@@ -23,6 +23,15 @@ describe('hosting of simulation', () => {
     const camaIDV = "bedttaxestestinginsimulation"
     const camaUI = "Cama temporal para testing taxestestinginsimulation"
 
+
+    const apartamentoIDV_2 = "apartmenttaxestestinginsimulationdos"
+    const apartamentoUI_2 = "Apartamento temporal creado testing taxestestinginsimulationdos"
+    const habitacionIDV_2 = "roomtaxestestinginsimulationdos"
+    const habitacionUI_2 = "Habitacion temporal para testing taxestestinginsimulationdos "
+    const camaIDV_2 = "bedttaxestestinginsimulationdos"
+    const camaUI_2 = "Cama temporal para testing taxestestinginsimulationdos"
+
+
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
         await eliminarSimulacionPorTestingVI(testingVI)
@@ -41,6 +50,22 @@ describe('hosting of simulation', () => {
             camaIDV: camaIDV,
             camaUI: camaUI,
         })
+
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
+        })
+        await makeHostArquitecture({
+            operacion: "construir",
+            apartamentoIDV: apartamentoIDV_2,
+            apartamentoUI: apartamentoUI_2,
+            habitacionIDV: habitacionIDV_2,
+            habitacionUI: habitacionUI_2,
+            camaIDV: camaIDV_2,
+            camaUI: camaUI_2,
+        })
     })
     test('create initial and save void simulation with ok', async () => {
         const m = {
@@ -55,17 +80,24 @@ describe('hosting of simulation', () => {
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
     })
-    test('insert hostin in simulation with ok', async () => {
-        const response = await insertarAlojamientoEnSimulacion({
-            body: {
-                simulacionUID: String(simulacionUID),
-                apartamentoIDV: String(apartamentoIDV)
-            },
-            session: fakeAdminSession
-        })
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
+    test('insert hostin in simulation with error', async () => {
+
+
+
+        try {
+            const response = await insertarAlojamientoEnSimulacion({
+                body: {
+                    simulacionUID: String(simulacionUID),
+                    apartamentoIDV: String(apartamentoIDV)
+                },
+                session: fakeAdminSession
+            })
+        } catch (error) {
+            expect(error).not.toBeUndefined();
+            expect(typeof error).toBe('object');
+            expect(error).toHaveProperty('info');
+        }
+
     })
     test('insert global data in simulation created with ok', async () => {
         const m = {
@@ -80,6 +112,18 @@ describe('hosting of simulation', () => {
             session: fakeAdminSession
         }
         const response = await actualizarSimulacionPorDataGlobal(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+    test('insert hostin in simulation with ok', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV_2)
+            },
+            session: fakeAdminSession
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
@@ -107,6 +151,12 @@ describe('hosting of simulation', () => {
             apartamentoIDV: apartamentoIDV,
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
+        })
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
         })
     })
 

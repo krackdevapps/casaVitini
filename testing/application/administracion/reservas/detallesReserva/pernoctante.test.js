@@ -61,6 +61,12 @@ describe('pernoctantes in bookins', () => {
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
         })
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
+        })
 
         await eliminarReservaPorTestingVI(testingVI)
 

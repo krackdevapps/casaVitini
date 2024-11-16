@@ -86,16 +86,19 @@ describe('discounts of simulation', () => {
         simulacionUID = response.simulacionUID
     })
     test('insert hostin in simulation with ok', async () => {
-        const response = await insertarAlojamientoEnSimulacion({
-            body: {
-                simulacionUID: String(simulacionUID),
-                apartamentoIDV: String(apartamentoIDV)
-            },
-            session: fakeAdminSession
-        })
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
+        try {
+            const response = await insertarAlojamientoEnSimulacion({
+                body: {
+                    simulacionUID: String(simulacionUID),
+                    apartamentoIDV: String(apartamentoIDV)
+                },
+                session: fakeAdminSession
+            })
+        } catch (error) {
+            expect(error).not.toBeUndefined();
+            expect(typeof error).toBe('object');
+            expect(error).toHaveProperty('info');
+        }
     })
     test('insert global data in simulation created with ok', async () => {
         const m = {

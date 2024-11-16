@@ -75,12 +75,12 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
         })
 
         await campoDeTransaccion("confirmar")
-        //await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-        //const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
+        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         return {
             ok: "Se ha insertado el complemento de alojamiento en la simulacion",
             complementoDeAlojamiento,
-            //desgloseFinanciero
+            desgloseFinanciero
         }
     } catch (error) {
         await campoDeTransaccion("cancelar")

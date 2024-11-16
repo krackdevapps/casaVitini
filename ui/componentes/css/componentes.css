@@ -227,17 +227,17 @@ details {
 
 details summary {
     cursor: default;
-    transition: margin 150ms ease-out, background 250ms linear;
+    transition: all 150ms ease-out;
     user-select: none;
     -webkit-user-select: none;
 }
 
 details[open] summary {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 summary {
-    margin: 6px;
+    /* margin-top: 6px; */
     border-radius: 10px;
 }
 
@@ -656,14 +656,13 @@ summary:hover {
     border-radius: 10px;
     border: 3px solid transparent;
 
-    transition: all 250ms;
+    transition: all 250ms linear;
     display: flex;
     align-content: center;
     justify-content: flex-end;
     align-items: center;
 
     scale: 1;
-    transition: scale 250ms ease-in-out;
 
     @starting-style {
         scale: 0;
@@ -688,7 +687,7 @@ summary:hover {
 }
 
 .dia:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgb(108 167 255 / 40%);
 }
 
 
@@ -4728,9 +4727,9 @@ summary:hover {
 }
 
 .calendarioDiaSeleccionado {
-    color: white;
-    background: #000000;
-    border: 3px solid transparent;
+    color: white !important;
+    background: #000000 !important;
+    border: 3px solid transparent !important;
 }
 
 [zonaCSS="/alojamiento/resumen"] .ressumenReservaBloquePago {
@@ -5609,6 +5608,9 @@ summary:hover {
 [ui="reservaUI"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
     color: white;
     background: red;
+}
+[contenedor="financiero"] .contenedorEntidad {
+    padding:  6px;
 }
 
 [ui="reservaUI"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
@@ -15990,7 +15992,7 @@ summary:hover {
 
 
 [contenedor="financiero"] .reserva_resumen_desglose_pago_bloque {
-    padding: 6px;
+    padding: 0px;
     border-radius: 12px;
     gap: 6px;
     display: flex;

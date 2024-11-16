@@ -27,6 +27,15 @@ describe('hostin plugins of simulation', () => {
     const camaIDV = "bedttaxestestinginsimulation"
     const camaUI = "Cama temporal para testing taxestestinginsimulation"
 
+    const apartamentoIDV_2 = "apartmenttaxestestinginsimulationdos"
+    const apartamentoUI_2 = "Apartamento temporal creado testing taxestestinginsimulationdos"
+    const habitacionIDV_2 = "roomtaxestestinginsimulationdos"
+    const habitacionUI_2 = "Habitacion temporal para testing taxestestinginsimulationdos "
+    const camaIDV_2 = "bedttaxestestinginsimulationdos"
+    const camaUI_2 = "Cama temporal para testing taxestestinginsimulationdos"
+
+
+
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
         await eliminarSimulacionPorTestingVI(testingVI)
@@ -44,6 +53,22 @@ describe('hostin plugins of simulation', () => {
             habitacionUI: habitacionUI,
             camaIDV: camaIDV,
             camaUI: camaUI,
+        })
+
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
+        })
+        await makeHostArquitecture({
+            operacion: "construir",
+            apartamentoIDV: apartamentoIDV_2,
+            apartamentoUI: apartamentoUI_2,
+            habitacionIDV: habitacionIDV_2,
+            habitacionUI: habitacionUI_2,
+            camaIDV: camaIDV_2,
+            camaUI: camaUI_2,
         })
 
 
@@ -77,19 +102,24 @@ describe('hostin plugins of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
-    })
+    }) 
+    test('insert hostin in with ok simulation but responde warning error for data required for make financialContainer', async () => {
 
-    test('insert hostin in simulation with ok', async () => {
-        const response = await insertarAlojamientoEnSimulacion({
-            body: {
-                simulacionUID: String(simulacionUID),
-                apartamentoIDV: String(apartamentoIDV)
-            },
-            session: fakeAdminSession
-        })
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
+        try {
+            const response = await insertarAlojamientoEnSimulacion({
+                body: {
+                    simulacionUID: String(simulacionUID),
+                    apartamentoIDV: String(apartamentoIDV)
+                },
+                session: fakeAdminSession
+            })
+        } catch (error) {
+            expect(error).not.toBeUndefined();
+            expect(typeof error).toBe('object');
+            expect(error).toHaveProperty('info');
+        }
+  
+  
     })
 
 
@@ -106,6 +136,19 @@ describe('hostin plugins of simulation', () => {
             session: fakeAdminSession
         }
         const response = await actualizarSimulacionPorDataGlobal(m)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+    test('insert hostin in simulation with error', async () => {
+        const response = await insertarAlojamientoEnSimulacion({
+            body: {
+                simulacionUID: String(simulacionUID),
+                apartamentoIDV: String(apartamentoIDV_2)
+            },
+            session: fakeAdminSession
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
@@ -148,6 +191,12 @@ describe('hostin plugins of simulation', () => {
             apartamentoIDV: apartamentoIDV,
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
+        })
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
         })
     })
 

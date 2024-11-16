@@ -229,5 +229,20 @@ describe('configuration of hosting', () => {
         await eliminarHabitacionComoEntidad(habitacionIDV_2)
         await eliminarReservaPorTestingVI(testingVI)
 
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV,
+            habitacionIDV: habitacionIDV,
+            camaIDV: camaIDV
+        })
+
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2
+        })
+
+
     })
 })

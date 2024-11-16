@@ -28,8 +28,13 @@ describe('discounts in bookins', () => {
     const camaUI = "Cama temporal para testing de discounts"
 
     const apartamentoIDV_2 = "apartamentfortestingadddiscountstoreservetwo"
+    const apartamentoUI_2 = "Apartamento temporal creado para discountsdos"
+    const camaUI_2 = "Cama temporal para testing de discountsdos"
+
+
     const habitacionIDV_2 = "temporalroomfortestingadddiscountstoreservetwo"
-    const camaIDV_2 = "temporalbedfortestingaddapartamentotoreservetwo"
+    const habitacionUI_2 = "Habitacion temporal para testing discountsdos"
+    const camaIDV_2 = "temporalbedfortestingaddapartamentotoreservetwodos"
 
     const fechaCreacionVirtual = DateTime.utc().toISO();
     const fechaInicioVirutal = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 2 }).toISODate();
@@ -68,9 +73,7 @@ describe('discounts in bookins', () => {
             camaIDV: camaIDV
         })
         await eliminarOfertaPorTestingVI(testingVI)
-
         await eliminarReservaPorTestingVI(testingVI)
-
         await makeHostArquitecture({
             operacion: "construir",
             apartamentoIDV: apartamentoIDV,
@@ -79,6 +82,15 @@ describe('discounts in bookins', () => {
             habitacionUI: habitacionUI,
             camaIDV: camaIDV,
             camaUI: camaUI,
+        })
+        await makeHostArquitecture({
+            operacion: "construir",
+            apartamentoIDV: apartamentoIDV_2,
+            apartamentoUI: apartamentoUI_2,
+            habitacionIDV: habitacionIDV_2,
+            habitacionUI: habitacionUI_2,
+            camaIDV: camaIDV_2,
+            camaUI: camaUI_2,
         })
 
         const reserva = await crearReservaSimpleAdministrativa({
@@ -197,6 +209,12 @@ describe('discounts in bookins', () => {
             apartamentoIDV: apartamentoIDV,
             habitacionIDV: habitacionIDV,
             camaIDV: camaIDV
+        })
+        await makeHostArquitecture({
+            operacion: "eliminar",
+            apartamentoIDV: apartamentoIDV_2,
+            habitacionIDV: habitacionIDV_2,
+            camaIDV: camaIDV_2,
         })
     })
 
