@@ -189,8 +189,7 @@ describe('detailsReserver', () => {
     test('apartment avaibles for adding to booking with ok', async () => {
         const newClient = {
             body: {
-                fechaEntrada: "2026-10-10",
-                fechaSalida: "2026-10-20",
+                reservaUID: String(reservaUID)
             },
             session: fakeAdminSession
         }

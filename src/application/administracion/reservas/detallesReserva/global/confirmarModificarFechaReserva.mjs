@@ -1,7 +1,6 @@
 import { codigoZonaHoraria } from "../../../../../shared/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
-import { vitiniSysError } from "../../../../../shared/vitiniSysError.mjs";
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 import { validarModificacionRangoFechaResereva } from "../../../../../shared/reservas/validarModificacionRangoFechaResereva.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -93,10 +92,11 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 &&
                 (fechaEntrada_Objeto > fechaSolicitada_objeto)) {
                 const estructura = {
+                    error: "No se ha actualiza la fecha de entrada de la reserva",
                     detallesDelError: mensajeSinPasado,
                     ...transaccionInterna
                 };
-                throw new vitiniSysError(estructura);
+                throw estructura
             }
 
             if ((codigoFinal === "rangoPasadoLimitado")
@@ -105,10 +105,11 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limitePasado, { zone: zonaHoraria });
                 if (fechaLimite_objeto >= fechaSolicitada_objeto) {
                     const estructura = {
+                        error: "No se ha actualiza la fecha de entrada de la reserva",
                         detallesDelError: mensajeSinPasado,
                         ...transaccionInterna
                     };
-                    throw new vitiniSysError(estructura);
+                    throw estructura
                 }
             }
             const reservaActualizada = await actualizarFechaEntradaReserva({
@@ -148,20 +149,22 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
                 &&
                 (fechaSalida_Objeto < fechaSolicitada_objeto)) {
                 const estructura = {
+                    error: "No se ha actualiza la fecha de salida de la reserva",
                     detallesDelError: mensajeSinFuturo,
                     ...transaccionInterna
                 };
-                throw new vitiniSysError(estructura);
+                throw estructura
             } else if ((codigoFinal === "rangoFuturoLimitado")
                 &&
                 (fechaSalida_Objeto < fechaSolicitada_objeto)) {
                 const fechaLimite_objeto = DateTime.fromISO(transaccionInterna.limiteFuturo, { zone: zonaHoraria });
                 if (fechaLimite_objeto <= fechaSolicitada_objeto) {
                     const estructura = {
+                        error: "No se ha actualiza la fecha de salida de la reserva",
                         detallesDelError: mensajeSinFuturo,
                         ...transaccionInterna
                     };
-                    throw new vitiniSysError(estructura);
+                    throw estructura
                 }
             }
             const reservaActualizada = await actualizarFechaSalidaReserva({

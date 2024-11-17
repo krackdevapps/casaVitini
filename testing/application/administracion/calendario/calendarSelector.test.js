@@ -65,9 +65,9 @@ END:VCALENDAR
             body: {
                 fecha: "7-2024",
                 contenedorCapas: {
-                    capas: ["porApartamento"],
+                    capas: ["reservasPorApartamento"],
                     capasCompuestas: {
-                        porApartamento: [apartamentoIDV]
+                        reservasPorApartamento: [apartamentoIDV]
                     }
                 }
             },
@@ -84,7 +84,7 @@ END:VCALENDAR
             body: {
                 fecha: "7-2024",
                 contenedorCapas: {
-                    capas: ["reservas"],
+                    capas: ["todasLasReservas"],
                 }
             },
             session: fakeAdminSession
@@ -101,7 +101,7 @@ END:VCALENDAR
             body: {
                 fecha: "7-2024",
                 contenedorCapas: {
-                    capas: ["todosLosApartamentos"],
+                    capas: ["todasLasReservasPorApartamento"],
                 }
             },
             session: fakeAdminSession

@@ -1,8 +1,8 @@
 import { conexion } from "../globales/db.mjs"
 export const obtenerBloqueosPorRangoPorApartamentoIDV = async (metadatos) => {
   try {
-    const fechaInicio_ISO = metadatos.fechaInicioRango
-    const fechaFinal_ISO = metadatos.fechaFinRango
+    const fechaInicio_ISO = metadatos.fechaInicio
+    const fechaFinal_ISO = metadatos.fechaFin
     const zonaBloqueoIDV_array = metadatos.zonaBloqueoIDV_array
     const apartamentosIDV_array = metadatos.apartamentosIDV_array || []
 
@@ -21,7 +21,8 @@ export const obtenerBloqueosPorRangoPorApartamentoIDV = async (metadatos) => {
       "zonaIDV",
       motivo,
       to_char("fechaInicio", 'YYYY-MM-DD') as "fechaInicio", 
-      to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin"  
+      to_char("fechaFin", 'YYYY-MM-DD') as "fechaFin",
+      ("fechaFin" - "fechaInicio") as duracion_en_dias
       FROM "bloqueosApartamentos" 
       WHERE                     
       "apartamentoIDV" = ANY($4)

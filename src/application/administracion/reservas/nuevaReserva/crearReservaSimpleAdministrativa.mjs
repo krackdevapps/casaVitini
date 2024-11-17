@@ -108,9 +108,12 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida";
             throw new Error(error);
         }
+        const apartamentosIDV = configuracionesDisponibles.map(c => c.apartamentoIDV)
+
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
+            apartamentosIDV: apartamentosIDV,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
             zonaBloqueo_array: ["privado", "global"],
         });
@@ -125,8 +128,12 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             };
             const controlApartamentosDisponibles = validarApartamentosDisonbiles(apartamentos, apartamentosDisponibles);
             if (!controlApartamentosDisponibles) {
-                const error = "Los apartamentos solicitados para este rango de fechas no están disponibles.";
-                throw new Error(error);
+                const contenedorError = {
+                    code: "hostingNoAvaible",
+                    error: "Los apartamentos solicitados para este rango de fechas no están disponibles.",
+                    apartamentosDisponibles
+                }
+                throw contenedorError
             }
             const testingVI = process.env.TESTINGVI
             if (testingVI) {

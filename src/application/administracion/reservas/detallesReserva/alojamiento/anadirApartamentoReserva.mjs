@@ -27,7 +27,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
-            nombreCampo: "El identificador universal de la reserva (reservaUID)",
+            nombreCampo: "El identificador universal de la reservaUID",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -74,42 +74,47 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
+            apartamentosIDV: [apartamentoIDV],
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
             zonaBloqueo_array: ["privada", "global"],
         })
+
+               
         const apartamentosDisponiblesResueltos = resuelveApartamentosDisponibles.apartamentosDisponibles;
         if (apartamentosDisponiblesResueltos.length === 0) {
             const error = "No hay ningún apartamento disponible para las fechas de la reserva";
             throw new Error(error);
         }
-        if (apartamentosDisponiblesResueltos.length > 0) {
-            let resultadoValidacion = null;
-            for (const apartamentosDisponible of apartamentosDisponiblesResueltos) {
-                if (apartamentoIDV === apartamentosDisponible) {
-                    resultadoValidacion = apartamentoIDV;
-                }
-            }
-            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                apartamentoIDV,
-                errorSi: "noExiste"
-            });
-            const nuevoApartamentoEnReserva = await insertarApartamentoEnReserva({
-                reservaUID: reservaUID,
-                apartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamento.apartamentoUI
-            })
+        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        });
 
-            await actualizadorIntegradoDesdeInstantaneas(reservaUID)
-            await campoDeTransaccion("confirmar")
-
-            const ok = {
-                ok: "Apartamento añadido correctamente",
-                apartamentoIDV: apartamentoIDV,
-                apartamentoUI: apartamento.apartamentoUI,
-                nuevoUID: nuevoApartamentoEnReserva.componenteUID,
+        if (!apartamentosDisponiblesResueltos.includes(apartamentoIDV)) {
+            const contenedorError = {
+                error: `El apartamento ${apartamento.apartamentoUI} con identifcador visual ${apartamentoIDV} no esta disponible.`,
+                code: "hostingNoAvaible",
+                apartamentoIDV: apartamentoIDV
             }
-            return ok
+            throw contenedorError
         }
+        const nuevoApartamentoEnReserva = await insertarApartamentoEnReserva({
+            reservaUID: reservaUID,
+            apartamentoIDV: apartamentoIDV,
+            apartamentoUI: apartamento.apartamentoUI
+        })
+
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+        await campoDeTransaccion("confirmar")
+
+        const ok = {
+            ok: "Apartamento añadido correctamente",
+            apartamentoIDV: apartamentoIDV,
+            apartamentoUI: apartamento.apartamentoUI,
+            nuevoUID: nuevoApartamentoEnReserva.componenteUID,
+        }
+        return ok
+
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
         throw errorCapturado

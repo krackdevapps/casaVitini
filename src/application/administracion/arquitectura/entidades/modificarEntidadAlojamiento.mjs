@@ -80,7 +80,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 string: entrada.body.definicionPublica,
                 nombreCampo: "El campo del definicionPublica",
                 filtro: "strictoConEspacios",
-                sePermiteVacio: "no",
+                sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
 

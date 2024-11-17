@@ -78,8 +78,9 @@ describe('critical: control avaible apartments when creating bookins withd locks
             expect(response).not.toBeUndefined();
 
         } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-        }
+            expect(error).toHaveProperty('code', 'hostingNoAvaible');
+            const apartmentosNoDisponbiles = error.apartamentosDisponibles
+            expect(apartmentosNoDisponbiles).not.toContain(apartamentoIDV);            }
     })
     test('create booking with range crossed', async () => {
         try {
@@ -97,8 +98,9 @@ describe('critical: control avaible apartments when creating bookins withd locks
             expect(response).not.toBeUndefined();
 
         } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-        }
+            expect(error).toHaveProperty('code', 'hostingNoAvaible');
+            const apartmentosNoDisponbiles = error.apartamentosDisponibles
+            expect(apartmentosNoDisponbiles).not.toContain(apartamentoIDV);            }
     })
     test('create booking with range crossed', async () => {
         try {
@@ -116,8 +118,9 @@ describe('critical: control avaible apartments when creating bookins withd locks
             expect(response).not.toBeUndefined();
 
         } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-        }
+            expect(error).toHaveProperty('code', 'hostingNoAvaible');
+            const apartmentosNoDisponbiles = error.apartamentosDisponibles
+            expect(apartmentosNoDisponbiles).not.toContain(apartamentoIDV);            }
     })
 
     test('create booking with range crossed', async () => {
@@ -136,8 +139,9 @@ describe('critical: control avaible apartments when creating bookins withd locks
             expect(response).not.toBeUndefined();
 
         } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-        }
+            expect(error).toHaveProperty('code', 'hostingNoAvaible');
+            const apartmentosNoDisponbiles = error.apartamentosDisponibles
+            expect(apartmentosNoDisponbiles).not.toContain(apartamentoIDV);            }
     })
 
 
@@ -157,8 +161,9 @@ describe('critical: control avaible apartments when creating bookins withd locks
             expect(response).not.toBeUndefined();
 
         } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-        }
+            expect(error).toHaveProperty('code', 'hostingNoAvaible');
+            const apartmentosNoDisponbiles = error.apartamentosDisponibles
+            expect(apartmentosNoDisponbiles).not.toContain(apartamentoIDV);            }
     })
 
     afterAll(async () => {

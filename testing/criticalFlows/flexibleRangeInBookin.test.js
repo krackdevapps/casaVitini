@@ -185,9 +185,7 @@ describe('critical: flexible global date range bookins', () => {
             const response = await confirmarModificarFechaReserva(m)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            const limitePasadoEsperado = JSON.parse(error.message).limitePasado
-            expect(error).toBeInstanceOf(Error);
-            expect(limitePasadoEsperado).toBe('2026-10-07');
+            expect(error).toHaveProperty('limitePasado', '2026-10-07');
         }
     })
     test('set elasticy of future range of booking with error', async () => {
@@ -204,9 +202,8 @@ describe('critical: flexible global date range bookins', () => {
             const response = await confirmarModificarFechaReserva(m)
             expect(response).not.toBeUndefined();
         } catch (error) {
-            expect(error).toBeInstanceOf(Error);
-            const limiteFuturoEsperado = JSON.parse(error.message).limiteFuturo
-            expect(limiteFuturoEsperado).toBe('2026-10-23');
+            expect(error).toHaveProperty('limiteFuturo', '2026-10-23');
+
         }
     })
 

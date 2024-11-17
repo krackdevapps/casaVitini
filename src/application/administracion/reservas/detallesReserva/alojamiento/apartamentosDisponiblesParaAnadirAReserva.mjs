@@ -3,6 +3,8 @@ import { apartamentosPorRango } from "../../../../../shared/selectoresCompartido
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
+import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { eliminarBloqueoCaducado } from "../../../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 
 export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida) => {
     try {
@@ -13,19 +15,26 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 2
+            numeroDeLLavesMaximo: 1
         })
 
-        const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: entrada.body.fechaEntrada,
-            nombreCampo: "La fecha de entrada"
+        const reservaUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.reservaUID,
+            nombreCampo: "El identificador universal de la reservaUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
-        const fechaSalida = await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: entrada.body.fechaSalida,
-            nombreCampo: "La fecha de salida"
-        })
-
+        const detallesReserva = await obtenerReservaPorReservaUID(reservaUID)
+        if (detallesReserva.estadoReservaIDV === "cancelada") {
+            const error = "La reserva no se puede modificar porque está cancelada.";
+            throw new Error(error);
+        }
+        await eliminarBloqueoCaducado();
+        const fechaEntrada = detallesReserva.fechaEntrada
+        const fechaSalida = detallesReserva.fechaSalida
         const configuracionesAlojamiento = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
             estadoIDV: "disponible",
             zonaArray: ["global", "privada"]

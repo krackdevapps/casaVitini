@@ -16,6 +16,7 @@ import { todosLosComportamientosDePrecioBasadosEnDia } from "../../../../shared/
 import { preciosNocheBasePorApartamento } from "../../../../shared/calendarios/capasComoComponentes/preciosNocheBasePorApartamento.mjs";
 import { todosLosPreciosNetoBaseSumados } from "../../../../shared/calendarios/capasComoComponentes/todosLosPreciosNetoBaseSumados.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { bloqueosPorApartamento } from "../../../../shared/calendarios/capasComoComponentes/bloqueosPorApartamento.mjs";
 
 export const multiCapa = async (entrada) => {
     try {
@@ -83,7 +84,8 @@ export const multiCapa = async (entrada) => {
         }
 
         const capasComoComponentes = {
-            reservas: async () => {
+            // Cambiar reservas por todasLasReservas
+            todasLasReservas: async () => {
                 const eventosReservas_ = await eventosReservas(fecha);
                 for (const [fechaDia, contenedorEventos] of Object.entries(eventosReservas_.eventosMes)) {
                     const selectorDia = estructuraGlobal.eventosMes[fechaDia];
@@ -91,19 +93,79 @@ export const multiCapa = async (entrada) => {
                 }
                 estructuraGlobal.eventosEnDetalle.push(...eventosReservas_.eventosEnDetalle);
             },
-            todosLosApartamentos: async () => {
+            todasLasReservasPorApartamento: async () => {
                 const eventosTodosLosApartamentos_ = await eventosTodosLosApartamentos(fecha);
-
-
                 for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosApartamentos_.eventosMes)) {
                     const selectorDia = estructuraGlobal.eventosMes[fechaDia];
                     selectorDia.push(...contenedorEventos);
                 }
                 estructuraGlobal.eventosEnDetalle.push(...eventosTodosLosApartamentos_.eventosEnDetalle);
             },
+            todosLosPreciosSumados: async () => {
+                const desglosePorNoche = await todosLosPreciosNetoBaseSumados({
+                    fecha: fecha
+                });
+                estructuraGlobal.contenedorDia.desglosePorNoche = desglosePorNoche
+            },
+            todosLosBloqueos: async () => {
+                await eliminarBloqueoCaducado();
+                const eventosTodosLosBloqueos_ = await eventosTodosLosBloqueos(fecha);
+                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosBloqueos_.eventosMes)) {
+                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                    selectorDia.push(...contenedorEventos);
+                }
+                estructuraGlobal.eventosEnDetalle.push(...eventosTodosLosBloqueos_.eventosEnDetalle);
+            },
+            todosLosComportamientosDePrecio: async () => {
+                const eventosTipoRango = await todosLosComportamientosDePrecioDeTodosLosApartamentos({
+                    fecha: fecha
+                });
+                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoRango.eventosMes)) {
+                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                    selectorDia.push(...contenedorEventos);
+                }
+                estructuraGlobal.eventosEnDetalle.push(...eventosTipoRango.eventosEnDetalle);
+
+                const eventosTipoDia = await todosLosComportamientosDePrecioBasadosEnDia({
+                    fecha: fecha,
+                });
+                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoDia.eventosMes)) {
+                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                    selectorDia.push(...contenedorEventos);
+                }
+
+                estructuraGlobal.eventosEnDetalle.push(...eventosTipoDia.eventosEnDetalle);
+                await inyectarTodosLosApartamentos()
+
+            },
+            todoAirbnb: async () => {
+
+                const plataformaAibnb = "airbnb";
+                const calendariosPorPlataforma = await obtenerCalendariosPorPlataformaIDV(plataformaAibnb)
+                if (calendariosPorPlataforma.length > 0) {
+                    const calendariosUIDS = calendariosPorPlataforma.map((calendario) => {
+                        return calendario.calendarioUID;
+                    });
+                    for (const calendarioUID of calendariosUIDS) {
+                        const metadatosEventos = {
+                            fecha: fecha,
+                            calendarioUID: String(calendarioUID)
+                        };
+                        const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos);
+                        for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
+                            const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                            selectorDia.push(...contenedorEventos);
+                        }
+                        estructuraGlobal.eventosEnDetalle.push(...eventosPorApartamentoAirbnb_.eventosEnDetalle);
+                    }
+                }
+            },
             precioNochePorApartamento: async () => {
                 if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
                     const m = "En el objeto de contenedorCapas, en este tipo de capa, la de precioNochePorApartamento, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                } else if (capas.includes("todosLosPreciosSumados")) {
+                    const m = "Si solicitas la capa compuesto precioNochePorApartamento no solicites la capa todosLosPreciosSumados por que es contradictorio"
                     throw new Error(m)
                 }
                 const capasCompuestas = contenedorCapas?.capasCompuestas
@@ -147,36 +209,24 @@ export const multiCapa = async (entrada) => {
                     estructuraGlobal.contenedorDia.desglosePorNoche = desglosePorNoche
                 }
             },
-            todosLosPreciosSumados: async () => {
-                const desglosePorNoche = await todosLosPreciosNetoBaseSumados({
-                    fecha: fecha
-                });
-                estructuraGlobal.contenedorDia.desglosePorNoche = desglosePorNoche
-            },
-            todosLosBloqueos: async () => {
-                await eliminarBloqueoCaducado();
-                const eventosTodosLosBloqueos_ = await eventosTodosLosBloqueos(fecha);
-                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTodosLosBloqueos_.eventosMes)) {
-                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
-                    selectorDia.push(...contenedorEventos);
-                }
-                estructuraGlobal.eventosEnDetalle.push(...eventosTodosLosBloqueos_.eventosEnDetalle);
-            },
-            porApartamento: async () => {
+            reservasPorApartamento: async () => {
                 if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
-                    const m = "En el objeto de contenedorCapas, en este tipo de capa, la de porApartamento, se espera una llave capasCompuestas"
+                    const m = "En el objeto de contenedorCapas, en este tipo de capa, la de reservasPorApartamento, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                } else if (capas.includes("todasLasReservasPorApartamento")) {
+                    const m = "Si solicitas la capa compuesta porApartamento no solicites la capa todasLasReservasPorApartamento por que es contradictorio"
                     throw new Error(m)
                 }
                 const capasCompuestas = contenedorCapas?.capasCompuestas
-                if (!capasCompuestas.hasOwnProperty("porApartamento")) {
-                    const m = "Dentro de la llave capaCompuesta, se espera una llave porApartamento"
+                if (!capasCompuestas.hasOwnProperty("reservasPorApartamento")) {
+                    const m = "Dentro de la llave capaCompuesta, se espera una llave reservasPorApartamento"
                     throw new Error(m)
                 }
                 const apartamentosIDV = validadoresCompartidos.tipos.array({
-                    array: capasCompuestas.porApartamento,
-                    nombreCampo: "La llave porApartamento",
+                    array: capasCompuestas.reservasPorApartamento,
+                    nombreCampo: "La llave reservasPorApartamento",
                     filtro: "strictoIDV",
-                    nombreCompleto: "En el array de capasCompuestas porApartamento",
+                    nombreCompleto: "En el array de capasCompuestas reservasPorApartamento",
                     sePermitenDuplicados: "no"
                 })
                 const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
@@ -214,9 +264,77 @@ export const multiCapa = async (entrada) => {
                     }
                 }
             },
+            bloqueosPorApartamento: async () => {
+                if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
+                    const m = "En el objeto de contenedorCapas, en este tipo de capa, la de bloqueosPorApartamento, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                } else if (capas.includes("todosLosBloqueos")) {
+                    const m = "Si solicitas la capa compuesta bloqueosPorApartamento no solicites la capa todosLosBloqueos por que es contradictorio"
+                    throw new Error(m)
+                }
+                const capasCompuestas = contenedorCapas?.capasCompuestas
+                if (!capasCompuestas.hasOwnProperty("bloqueosPorApartamento")) {
+                    const m = "Dentro de la llave capaCompuesta, se espera una llave bloqueosPorApartamento"
+                    throw new Error(m)
+                }
+                const apartamentosIDV = validadoresCompartidos.tipos.array({
+                    array: capasCompuestas.bloqueosPorApartamento,
+                    nombreCampo: "La llave bloqueosPorApartamento",
+                    filtro: "strictoIDV",
+                    nombreCompleto: "En el array de capasCompuestas bloqueosPorApartamento",
+                    sePermitenDuplicados: "no"
+                })
+                const configuracionesApartamentos = await obtenerTodasLasConfiguracionDeLosApartamento()
+                estructuraGlobal.apartamentos = {}
+                if (configuracionesApartamentos.length > 0) {
+                    const apartamentosIDVValidos = configuracionesApartamentos.map((apartamentoIDV) => {
+                        return apartamentoIDV.apartamentoIDV;
+                    });
+                    const controlApartamentosF2 = apartamentosIDV.every(apartamentosIDV => apartamentosIDVValidos.includes(apartamentosIDV));
+                    if (!controlApartamentosF2) {
+                        const elementosFaltantes = apartamentosIDV.filter(apartamentosIDV => !apartamentosIDVValidos.includes(apartamentosIDV));
+                        let error;
+
+                        if (elementosFaltantes.length === 1) {
+                            error = "En el array de apartamentosIDV hay un identificador que no existe: " + elementosFaltantes[0];
+                        } if (elementosFaltantes.length === 2) {
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + elementosFaltantes.join("y");
+                        }
+                        if (elementosFaltantes.length > 2) {
+                            const conComa = elementosFaltantes;
+                            const ultima = elementosFaltantes.pop();
+                            error = "En el array de apartamentosIDV hay identificadores que no existen: " + conComa.join(", ") + " y " + ultima;
+                        }
+                        throw new Error(error);
+                    }
+                    //  for (const apartamentoIDV of apartamentosIDV) {
+
+                    const eventosTipoRango = await bloqueosPorApartamento({
+                        fecha: fecha,
+                        apartamentosIDV
+                    });
+                    for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoRango.eventosMes)) {
+                        const selectorDia = estructuraGlobal.eventosMes[fechaDia];
+                        selectorDia.push(...contenedorEventos);
+                    }
+                    estructuraGlobal.eventosEnDetalle.push(...eventosTipoRango.eventosEnDetalle);
+
+                    for (const apartamentoIDV of apartamentosIDV) {
+                        const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV: apartamentoIDV,
+                            errorSi: "noExiste"
+                        }))
+                        const apartamentoUI = apartamento.apartamentoUI
+                        estructuraGlobal.apartamentos[apartamentoIDV] = apartamentoUI
+                    }
+                }
+            },
             comportamientosPorApartamento: async () => {
                 if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
                     const m = "En el objeto de contenedorCapas, en este tipo de capa, la de comportamientosPorApartamento, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                } else if (capas.includes("todosLosComportamientosDePrecio")) {
+                    const m = "Si solicitas la capa compuesto comportamientosPorApartamento no solicites la capa todosLosComportamientosDePrecio por que es contradictorio"
                     throw new Error(m)
                 }
                 const capasCompuestas = contenedorCapas?.capasCompuestas
@@ -290,54 +408,13 @@ export const multiCapa = async (entrada) => {
                     }
                 }
             },
-            todosLosComportamientosDePrecio: async () => {
-                const eventosTipoRango = await todosLosComportamientosDePrecioDeTodosLosApartamentos({
-                    fecha: fecha
-                });
-                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoRango.eventosMes)) {
-                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
-                    selectorDia.push(...contenedorEventos);
-                }
-                estructuraGlobal.eventosEnDetalle.push(...eventosTipoRango.eventosEnDetalle);
-
-                const eventosTipoDia = await todosLosComportamientosDePrecioBasadosEnDia({
-                    fecha: fecha,
-                });
-                for (const [fechaDia, contenedorEventos] of Object.entries(eventosTipoDia.eventosMes)) {
-                    const selectorDia = estructuraGlobal.eventosMes[fechaDia];
-                    selectorDia.push(...contenedorEventos);
-                }
-
-                estructuraGlobal.eventosEnDetalle.push(...eventosTipoDia.eventosEnDetalle);
-                await inyectarTodosLosApartamentos()
-
-            },
-            todoAirbnb: async () => {
-
-                const plataformaAibnb = "airbnb";
-                const calendariosPorPlataforma = await obtenerCalendariosPorPlataformaIDV(plataformaAibnb)
-                if (calendariosPorPlataforma.length > 0) {
-                    const calendariosUIDS = calendariosPorPlataforma.map((calendario) => {
-                        return calendario.calendarioUID;
-                    });
-                    for (const calendarioUID of calendariosUIDS) {
-                        const metadatosEventos = {
-                            fecha: fecha,
-                            calendarioUID: String(calendarioUID)
-                        };
-                        const eventosPorApartamentoAirbnb_ = await eventosPorApartamentoAirbnb(metadatosEventos);
-                        for (const [fechaDia, contenedorEventos] of Object.entries(eventosPorApartamentoAirbnb_.eventosMes)) {
-                            const selectorDia = estructuraGlobal.eventosMes[fechaDia];
-                            selectorDia.push(...contenedorEventos);
-                        }
-                        estructuraGlobal.eventosEnDetalle.push(...eventosPorApartamentoAirbnb_.eventosEnDetalle);
-                    }
-                }
-            },
             calendariosAirbnb: async () => {
 
                 if (!contenedorCapas.hasOwnProperty("capasCompuestas")) {
                     const m = "En el objeto de contenedorCapas, en este tipo de capa, la de calendariosAirbnb, se espera una llave capasCompuestas"
+                    throw new Error(m)
+                } else if (capas.includes("todoAirbnb")) {
+                    const m = "Si solicitas la capa compuesto calendariosAirbnb no solicites la capa todoAirbnb por que es contradictorio"
                     throw new Error(m)
                 }
                 const capasCompuestas = contenedorCapas?.capasCompuestas
@@ -392,8 +469,8 @@ export const multiCapa = async (entrada) => {
             },
             global: async () => {
                 // Orden de aparticion
-                await capasComoComponentes.reservas();
-                await capasComoComponentes.todosLosApartamentos();
+                await capasComoComponentes.todasLasReservas();
+                await capasComoComponentes.todasLasReservasPorApartamento();
                 await capasComoComponentes.todosLosComportamientosDePrecio()
                 await capasComoComponentes.todosLosBloqueos();
                 await capasComoComponentes.todosLosPreciosSumados();

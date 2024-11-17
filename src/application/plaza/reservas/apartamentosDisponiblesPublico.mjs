@@ -10,6 +10,7 @@ import { procesador } from "../../../shared/contenedorFinanciero/procesador.mjs"
 import { utilidades } from "../../../shared/utilidades.mjs";
 import { Mutex } from "async-mutex";
 import { obtenerComplementosPorApartamentoIDV } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementosPorApartamentoIDV.mjs";
+import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
 
 export const apartamentosDisponiblesPublico = async (entrada) => {
     const mutex = new Mutex()
@@ -47,12 +48,16 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
-        const fechaActual_ISO = tiempoZH.toISODate();
-
+        const configuracionesApartamento = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
+            estadoIDV: "disponible",
+            zonaArray: ["global", "publica"]
+        })
+        const apartamentosIDV = configuracionesApartamento.map(c => c.apartamentoIDV)
 
         const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
+            apartamentosIDV: apartamentosIDV,
             zonaConfiguracionAlojamientoArray: ["publica", "global"],
             zonaBloqueo_array: ["publico", "global"],
         })

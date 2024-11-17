@@ -10,7 +10,7 @@ export const apartamentosPorRango = async (data) => {
 
     const fechaEntrada = data.fechaEntrada
     const fechaSalida = data.fechaSalida
-    const apartamentosIDV = data.apartamentosIDV
+    const apartamentosIDV = data?.apartamentosIDV || []
     const zonaConfiguracionAlojamientoArray = data.zonaConfiguracionAlojamientoArray
     const zonaBloqueo_array = data.zonaBloqueo_array
 
@@ -30,6 +30,13 @@ export const apartamentosPorRango = async (data) => {
             const error = "La fecha de entrada no puede ser igual o superior que la fecha de salida"
             throw new Error(error)
         }
+
+        if (!Array.isArray(apartamentosIDV) || apartamentosIDV?.length === 0) {
+            const m = "apartamentoIDV no recive un array o recibe un array vacio"
+            throw new Error(m)
+        }
+
+
         const apartamentosDisponiblesArray = []
         const reservas = await obtenerReservasPorRango({
             fechaIncioRango_ISO: fechaEntrada,
@@ -38,18 +45,16 @@ export const apartamentosPorRango = async (data) => {
 
         const apartamentosIDVBloqueados = []
 
-        const bloqueos = await obtenerBloqueosPorRangoPorApartamentoIDV({
-            fechaInicioRango: fechaEntrada,
-            fechaFinRango: fechaSalida,
+        const bloqueosTemporalesYPermanentes = await obtenerBloqueosPorRangoPorApartamentoIDV({
+            fechaInicio: fechaEntrada,
+            fechaFin: fechaSalida,
             apartamentosIDV_array: apartamentosIDV,
             zonaBloqueoIDV_array: zonaBloqueo_array
         })
-
-        bloqueos.forEach((apartamento) => {
+        bloqueosTemporalesYPermanentes.forEach((apartamento) => {
             apartamentosIDVBloqueados.push(apartamento.apartamentoIDV)
         })
-
-
+ 
         for (const reserva of reservas) {
             const reservaUID = reserva.reservaUID
             const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)

@@ -1505,25 +1505,21 @@ summary:hover {
     align-items: stretch;
     border-radius: 20px;
     gap: 6px;
-    background: #ff9338;
+    background: transparent;
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    transition: all 500ms linear;
+    /* transition: all 500ms linear; */
     width: 100%;
     max-width: 720px;
 }
 
-[zonaCSS="/alojamiento"] .plaza_alojamiento_boronResumenReservaEnMarcoFlotante:hover {
-    background: blue;
-    color: white;
-}
-
-.plaza_alojamiento_boronResumenReservaEnMarcoFlotante:hover {
-    background: rgba(255, 255, 255, 0.8);
+[zonaCSS="/alojamiento"] .parpadeaFondoSemiBlanco:hover {
+    background: rgba(0, 0, 255, 0.429) !important;
+    color: white !important;
 }
 
 .sombraCompartida {
@@ -11667,7 +11663,7 @@ summary:hover {
     }
 
     50% {
-        background: #ffa84b;
+        background: color(srgb 1 0.52 0 / 0.16);
     }
 
     100% {

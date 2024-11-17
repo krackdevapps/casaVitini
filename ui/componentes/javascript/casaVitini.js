@@ -1796,8 +1796,11 @@ const casaVitini = {
 
 
                             const botonResumenReserva = document.createElement("div")
-                            botonResumenReserva.classList.add("plaza_alojamiento_boronResumenReservaEnMarcoFlotante")
-                            botonResumenReserva.classList.add("parpadeaFondoSemiBlanco")
+                            botonResumenReserva.classList.add(
+                                "plaza_alojamiento_boronResumenReservaEnMarcoFlotante",
+                                "parpadeaFondoSemiBlanco"
+                            )
+                     
                             botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
 
                             botonResumenReserva.addEventListener("click", casaVitini.ui.vistas.alojamiento.portada.iraResumenReserva)
@@ -20552,7 +20555,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 },
                                 abrirMenuReservas: async () => {
                                     const main = document.querySelector("main")
-
+                                    const reservaUID = main.querySelector("[reservaUID]").getAttribute("reservaUID")
                                     const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
                                     const instanciaUID = ui.getAttribute("instanciaUID")
                                     const contenedor = ui.querySelector("[componente=contenedor]")
@@ -20577,8 +20580,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
                                     const transaccion = {
                                         zona: "administracion/reservas/detallesReserva/alojamiento/apartamentosDisponiblesParaAnadirAReserva",
-                                        fechaEntrada: fechaEntrada,
-                                        fechaSalida: fechaSalida
+                                        reservaUID: String(reservaUID),
+                            
                                     }
                                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                                     contenedor.innerHTML = null
@@ -32522,7 +32525,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             calendariosAirbnb.push(c.calendarioUID)
                         }
                     })
-                    const urlBase = `administracion/calendario/capa:por_apartamento/por_apartamento:${apartamentoIDV}/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}`
+                  // const urlBase = `administracion/calendario/capa:por_apartamento/por_apartamento:${apartamentoIDV}/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}`
+
+                    const urlBase = `administracion/calendario/capa:reservas_por_apartamento/reservas_por_apartamento:${apartamentoIDV}/capa:bloqueos_por_apartamento/bloqueos_por_apartamento:${apartamentoIDV}`
                     let urlCalendarioAirbnb = ""
                     if (calendariosAirbnb.length > 0) {
                         urlCalendarioAirbnb = `/capa:calendarios_airbnb/calendarios_airbnb:${calendariosAirbnb.join("=")}`
@@ -50976,7 +50981,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const bloqueCapacidadPernoctativa = document.createElement("div")
                             bloqueCapacidadPernoctativa.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
                             const infoCaapacidadPernoctativa = document.createElement("div")
-                            infoCaapacidadPernoctativa.classList.add("botonV1BlancoIzquierda")
+                            infoCaapacidadPernoctativa.classList.add("padding14")
                             infoCaapacidadPernoctativa.textContent = "Escriba la capacidad pernoctativa de la cama."
                             bloqueCapacidadPernoctativa.appendChild(infoCaapacidadPernoctativa)
                             const campoCapacidadPernoctativa = document.createElement("input")
@@ -51516,19 +51521,21 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const selectorCampos = document.querySelectorAll("[campo]")
                             selectorCampos.forEach((campo) => {
                                 const valorInicial = campo.getAttribute("valorInicial")
-                                if (valorInicial) {
-                                    campo.value = valorInicial
-                                } else {
-                                    campo.parentElement.remove()
-                                }
+                                campo.value = valorInicial || ""
+                            
                             })
+
                             const contenedorCaracteristicas = document.querySelector("[contenedor=caracteristicas]")
+                            
                             if (contenedorCaracteristicas) {
+
+                                const caracteristicasObsoletas = contenedorCaracteristicas.querySelectorAll("[contenedor=caracteristica]")
+                                caracteristicasObsoletas.forEach(c => c?.remove())
+
                                 const caracteristicasApartamento = contenedorCaracteristicas.getAttribute("caracteristicasIniciales")
                                 const caracteristicasParseadas = caracteristicasApartamento ? JSON.parse(caracteristicasApartamento) : []
                                 contenedorCaracteristicas.innerHTML = null
                                 for (const caracteristica of caracteristicasParseadas) {
-
                                     const filaCaracteristicaUI = casaVitini.administracion.arquitecturaDelAlojamiento.entidades.editarEntidad.caracteristicasUI(caracteristica)
                                     contenedorCaracteristicas.appendChild(filaCaracteristicaUI)
                                 }
@@ -55583,6 +55590,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = `Bloqueo ${apartamentoUI}`
                         urlUI = `/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
+                    } else  if (tipoEvento === "bloqueoPorApartamento") {
+                        const bloqueoUID = detallesDelEvento.bloqueoUID
+                        const apartamentoIDV = detallesDelEvento.apartamentoIDV
+                        const apartamentoUI = detallesDelEvento.apartamentoUI
+                        nombreEventoFinal = `Bloqueo ${apartamentoUI}`
+                        urlUI = `/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
                     } else if (tipoEvento === "calendarioAirbnb") {
                         const descripcion = detallesDelEvento.descripcion || ""
                         const apartamentoUI = detallesDelEvento.apartamentoUI
@@ -56339,7 +56352,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     grupoGlobalCapas.appendChild(contenedorCapaGlobal)
                     const contenedorCapaReservas = document.createElement("div")
                     contenedorCapaReservas.classList.add("contenedorCapa")
-                    contenedorCapaReservas.setAttribute("capaUID", "reservas")
+                    contenedorCapaReservas.setAttribute("capaUID", "todasLasReservas")
                     contenedorCapaReservas.setAttribute("tipo", "capaSimple")
                     filaIconoTitulo = document.createElement("div")
                     filaIconoTitulo.classList.add("filaIconoTexto")
@@ -56357,6 +56370,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     filaIconoTitulo.appendChild(tituloReservas)
                     contenedorCapaReservas.appendChild(filaIconoTitulo)
                     grupoGlobalCapas.appendChild(contenedorCapaReservas)
+                    
                     const contenedorTodosLosBloqueos = document.createElement("div")
                     contenedorTodosLosBloqueos.classList.add("contenedorCapa")
                     contenedorTodosLosBloqueos.setAttribute("capaUID", "todosLosBloqueos")
@@ -56376,7 +56390,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     tituloTodosLosBloqueos.textContent = "Todos los bloqueos"
                     filaIconoTitulo.appendChild(tituloTodosLosBloqueos)
                     contenedorTodosLosBloqueos.appendChild(filaIconoTitulo)
-                    grupoGlobalCapas.appendChild(contenedorTodosLosBloqueos)
+                  //  grupoGlobalCapas.appendChild(contenedorTodosLosBloqueos)
                     contenedorMenuCapas.appendChild(grupoGlobalCapas)
 
 
@@ -56397,18 +56411,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         tituloDesplegable.textContent = "Reservas por apartamento"
                         contenedorTodosLosApartamentos.appendChild(tituloDesplegable)
 
-
-                        // const titulo = document.createElement("p")
-                        // titulo.classList.add(
-                        //     "flexVertical",
-                        //     "padding14"
-                        // )
-                        // titulo.textContent = "Reservas"
-                        // tituloDesplegable.appendChild(titulo)
-
                         filaIconoTitulo = document.createElement("div")
                         filaIconoTitulo.classList.add("filaIconoTexto")
-                        filaIconoTitulo.setAttribute("capaUID", "todosLosApartamentos")
+                        filaIconoTitulo.setAttribute("capaUID", "todasLasReservasPorApartamento")
                         filaIconoTitulo.setAttribute("tipo", "global")
                         filaIconoTitulo.setAttribute("grupo", "cabeza")
                         const iconoTodosLosApartamentos = document.createElement("div")
@@ -56420,7 +56425,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         filaIconoTitulo.appendChild(iconoTodosLosApartamentos)
                         const tituloTodosLosApartamentos = document.createElement("div")
                         tituloTodosLosApartamentos.classList.add("tituloCapa")
-                        tituloTodosLosApartamentos.textContent = "Todos los apartamentos (Solo eventos)"
+                        tituloTodosLosApartamentos.textContent = "Todos las reservas por apartamento (Solo eventos por apartamento)"
                         tituloTodosLosApartamentos.classList.add("negrita")
                         filaIconoTitulo.appendChild(tituloTodosLosApartamentos)
                         contenedorTodosLosApartamentos.appendChild(filaIconoTitulo)
@@ -56431,8 +56436,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const apartamentoUI = detallesApartamento.apartamentoUI
                             const contenedorApartamento = document.createElement("div")
                             contenedorApartamento.classList.add("contenedorCapa")
-                            contenedorApartamento.setAttribute("porApartamento", apartamentoIDV)
-                            contenedorApartamento.setAttribute("capaUID", "porApartamento")
+                            contenedorApartamento.setAttribute("reservasPorApartamento", apartamentoIDV)
+                            contenedorApartamento.setAttribute("capaUID", "reservasPorApartamento")
                             contenedorApartamento.setAttribute("grupo", "elemento")
                             filaIconoTitulo = document.createElement("div")
                             filaIconoTitulo.classList.add("filaIconoTexto")
@@ -56517,6 +56522,70 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
                         contenedorTodosLosApartamentos.appendChild(contenedorListaPorApartamento)
                     }
+
+                    if (apartamentosLista.length > 0) {
+                        const contenedorTodosLosApartamentos = document.createElement("details")
+                        contenedorTodosLosApartamentos.classList.add("contenedorGrupoFondo")
+                        contenedorTodosLosApartamentos.setAttribute("grupo", "campo")
+                        contenedorMenuCapas.appendChild(contenedorTodosLosApartamentos)
+
+
+                        const tituloDesplegable = document.createElement("summary")
+                        tituloDesplegable.classList.add(
+                            "borderRadius14",
+                            "padding10",
+                            "margin0"
+                        )
+                        tituloDesplegable.textContent = "Bloqueos por apartamento"
+                        contenedorTodosLosApartamentos.appendChild(tituloDesplegable)
+
+                        filaIconoTitulo = document.createElement("div")
+                        filaIconoTitulo.classList.add("filaIconoTexto")
+                        filaIconoTitulo.setAttribute("capaUID", "todosLosBloqueos")
+                        filaIconoTitulo.setAttribute("tipo", "global")
+                        filaIconoTitulo.setAttribute("grupo", "cabeza")
+                        const iconoTodosLosApartamentos = document.createElement("div")
+                        iconoTodosLosApartamentos.classList.add("icono")
+                        estadoSelector = document.createElement("div")
+                        estadoSelector.classList.add("estadoSelector")
+                        estadoSelector.setAttribute("componente", "icono")
+                        iconoTodosLosApartamentos.appendChild(estadoSelector)
+                        filaIconoTitulo.appendChild(iconoTodosLosApartamentos)
+                        const tituloTodosLosApartamentos = document.createElement("div")
+                        tituloTodosLosApartamentos.classList.add("tituloCapa")
+                        tituloTodosLosApartamentos.textContent = "Todos los apartamentos"
+                        tituloTodosLosApartamentos.classList.add("negrita")
+                        filaIconoTitulo.appendChild(tituloTodosLosApartamentos)
+                        contenedorTodosLosApartamentos.appendChild(filaIconoTitulo)
+                        const contenedorListaPorApartamento = document.createElement("div")
+                        contenedorListaPorApartamento.classList.add("contenedorListaApartamentos")
+                        for (const detallesApartamento of apartamentosLista) {
+                            const apartamentoIDV = detallesApartamento.apartamentoIDV
+                            const apartamentoUI = detallesApartamento.apartamentoUI
+                            const contenedorApartamento = document.createElement("div")
+                            contenedorApartamento.classList.add("contenedorCapa")
+                            contenedorApartamento.setAttribute("bloqueosPorApartamento", apartamentoIDV)
+                            contenedorApartamento.setAttribute("capaUID", "bloqueosPorApartamento")
+                            contenedorApartamento.setAttribute("grupo", "elemento")
+                            filaIconoTitulo = document.createElement("div")
+                            filaIconoTitulo.classList.add("filaIconoTexto")
+                            const iconoApartamento = document.createElement("div")
+                            iconoApartamento.classList.add("icono")
+                            estadoSelector = document.createElement("div")
+                            estadoSelector.classList.add("estadoSelector")
+                            estadoSelector.setAttribute("componente", "icono")
+                            iconoApartamento.appendChild(estadoSelector)
+                            filaIconoTitulo.appendChild(iconoApartamento)
+                            const tituloApartamento = document.createElement("div")
+                            tituloApartamento.classList.add("tituloCapa")
+                            tituloApartamento.textContent = apartamentoUI
+                            filaIconoTitulo.appendChild(tituloApartamento)
+                            contenedorApartamento.appendChild(filaIconoTitulo)
+                            contenedorListaPorApartamento.appendChild(contenedorApartamento)
+                        }
+                        contenedorTodosLosApartamentos.appendChild(contenedorListaPorApartamento)
+                    }
+
 
                     const calendariosListaAirnbnb = await casaVitini.administracion.calendario.obtenerCalendariosSincronizados.airbnb() || []
                     if (calendariosListaAirnbnb.length > 0) {
@@ -56775,19 +56844,20 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const capaUID = capa.getAttribute("capaUID")
                             estructura.capas.push(capaUID)
                         })
-                        if (!capasSelecionadas.includes("todosLosApartamentos")) {
-                            const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=porApartamento][estado=seleccionado]")
-                            const porApartamento = []
+               
+                        if (!capasSelecionadas.includes("todasLasReservasPorApartamento")) {
+                            const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=reservasPorApartamento][estado=seleccionado]")
+                            const reservasPorApartamento = []
                             apartametnosSeleccionados.forEach((apartamento) => {
-                                const apartamentoIDV = apartamento.getAttribute("porApartamento")
-                                porApartamento.push(apartamentoIDV)
+                                const apartamentoIDV = apartamento.getAttribute("reservasPorApartamento")
+                                reservasPorApartamento.push(apartamentoIDV)
                             })
                             if (apartametnosSeleccionados.length > 0) {
-                                estructura.capasCompuestas.porApartamento = porApartamento
-                                estructura.capas.push("porApartamento")
+                                estructura.capasCompuestas.reservasPorApartamento = reservasPorApartamento
+                                estructura.capas.push("reservasPorApartamento")
                             }
                         } else {
-                            estructura.capas.push("todosLosApartamentos")
+                            estructura.capas.push("todasLasReservasPorApartamento")
                         }
 
                         if (!capasSelecionadas.includes("todosLosComportamientosDePrecio")) {
@@ -56803,6 +56873,20 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             }
                         } else {
                             estructura.capas.push("todosLosComportamientosDePrecio")
+                        }
+                        if (!capasSelecionadas.includes("todosLosBloqueos")) {
+                            const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=bloqueosPorApartamento][estado=seleccionado]")
+                            const bloqueosPorApartamento = []
+                            apartametnosSeleccionados.forEach((apartamento) => {
+                                const apartamentoIDV = apartamento.getAttribute("bloqueosPorApartamento")
+                                bloqueosPorApartamento.push(apartamentoIDV)
+                            })
+                            if (apartametnosSeleccionados.length > 0) {
+                                estructura.capasCompuestas.bloqueosPorApartamento = bloqueosPorApartamento
+                                estructura.capas.push("bloqueosPorApartamento")
+                            }
+                        } else {
+                            estructura.capas.push("todosLosBloqueos")
                         }
                         if (!capasSelecionadas.includes("todoAirbnb")) {
                             const calendariosAirBnbSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=calendariosAirbnb][estado=seleccionado]")
@@ -57686,7 +57770,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             })
                         }
                         const contenedorCompartidoFechasSel = {}
-                        const obtenerContenedorDiasSel = document.querySelector("main").getAttribute("contenedorCompartidoFechasSel")
+                        const obtenerContenedorDiasSel = document.querySelector("main configuracion").getAttribute("contenedorCompartidoFechasSel")
                         if (obtenerContenedorDiasSel) {
                             const contenedorRen = JSON.parse(obtenerContenedorDiasSel)
                             Object.assign(contenedorCompartidoFechasSel, { ...contenedorRen });
@@ -57698,14 +57782,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             contenedorCompartidoFechasSel[fechaSel] = "diaSeleccioando"
                         }
                         if (Object.keys(contenedorCompartidoFechasSel).length > 0) {
-                            document.querySelector("main").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
+                            document.querySelector("main configuracion").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
                         } else {
-                            document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
+                            document.querySelector("main configuracion").removeAttribute("contenedorCompartidoFechasSel")
                         }
                         this.controladorUISelDia()
                     },
                     controladorUISelDia: () => {
-                        const obtenerContenedorDiasSel = JSON.parse(document.querySelector("main").getAttribute("contenedorCompartidoFechasSel") || "{}")
+                        const obtenerContenedorDiasSel = JSON.parse(document.querySelector("main configuracion").getAttribute("contenedorCompartidoFechasSel") || "{}")
                         if (Object.keys(obtenerContenedorDiasSel).length > 0) {
                             const botonRenderizado = document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")
                             if (!botonRenderizado) {
@@ -57714,7 +57798,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             }
                         } else {
                             document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
-                            document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
+                            document.querySelector("main configuracion").removeAttribute("contenedorCompartidoFechasSel")
                         }
 
 
@@ -57758,7 +57842,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 d.removeEventListener("mouseover", casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.selectorPorRango.controlHover)
                                 d.removeAttribute("rango")
                             })
-                            document.querySelector("main").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
+                            document.querySelector("main configuracion").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
 
                             casaVitini.administracion.calendario.controladorSelecionDias.selectorDia.controladorUISelDia()
 
@@ -57964,7 +58048,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     botonDeSel.textContent = "Deselecionar todos los dias selecionados en todos los meses y volver al calendario"
                     botonDeSel.addEventListener("click", () => {
                         const instanciaUIDMes = document.querySelector("[componente=marcoMes]").getAttribute("instanciaUID")
-                        document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
+                        document.querySelector("main configuracion").removeAttribute("contenedorCompartidoFechasSel")
                         document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
                         const diasRenderizados = document.querySelectorAll("[dia]")
                         diasRenderizados.forEach(d => {
@@ -58155,7 +58239,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     } else if (respuestaServidor?.ok) {
                         const traductorURL = casaVitini.administracion.calendario.traductorURL()
                         const vision = document.querySelector("[vision]").getAttribute("vision")
-                        document.querySelector("main").removeAttribute("contenedorCompartidoFechasSel")
+                        document.querySelector("main configuracion").removeAttribute("contenedorCompartidoFechasSel")
                         document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
 

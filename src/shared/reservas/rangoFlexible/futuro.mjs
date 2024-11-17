@@ -29,16 +29,16 @@ export const validadorFuturo = async (data) => {
             const error = "El mes de salida seleccionado no puede ser inferior a al mes de la fecha de entrada de la reserva"
             throw new Error(error)
         }
-        const configuracionBloqueos = {
-            fechaInicioRango: fechaSalidaReserva_ISO,
-            fechaFinRango: fechaSeleccionadaParaFuturo_ISO,
+ 
+        const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV( {
+            fechaInicio: fechaSalidaReserva_ISO,
+            fechaFin: fechaSeleccionadaParaFuturo_ISO,
             apartamentosIDV_array: apartamentosReservaActual,
             zonaBloqueo_array: [
                 "global",
                 "privado"
             ],
-        }
-        const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV(configuracionBloqueos)
+        })
         const contenedorBloqueosEncontrados = []
         for (const detallesDelBloqueo of bloqueosSeleccionados) {
             const fechaEntradaBloqueo_ISO = detallesDelBloqueo.fechaInicio

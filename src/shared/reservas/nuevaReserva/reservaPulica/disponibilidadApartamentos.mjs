@@ -8,12 +8,10 @@ export const disponibilidadApartamentos = async (data) => {
         const fechaEntrada = data.fechaEntrada
         const fechaSalida = data.fechaSalida
         const apartamentosIDVArray = data.apartamentosIDVArray
-
-
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
-            apartamentosIDV_array: apartamentosIDVArray,
+            apartamentosIDV: apartamentosIDVArray,
             zonaConfiguracionAlojamientoArray: ["publica", "global"],
             zonaBloqueo_array: ["publico", "global"],
         })
@@ -44,14 +42,17 @@ export const disponibilidadApartamentos = async (data) => {
                 array: apartamentoUIOcupados,
                 articulo: "el"
             })
-            let error
-
-            if (apartamentosOcupados.length === 1) {
-                error = `Sentimos informar que el ${constructo} ya no esta disponible para las fechas seleccionadas.`
-            } else {
-                error = `Sentimos informar que el ${constructo} ya no estan dipsonibles para las fechas seleccionadas.`
+          
+            const contenedorError = {
+                code: "hotingNoAvaible",
+                apartamentosDisponibles,
             }
-            throw new Error(error)
+            if (apartamentosOcupados.length === 1) {
+                contenedorError.error = `Sentimos informar que el ${constructo} ya no esta disponible para las fechas seleccionadas.`
+            } else {
+                contenedorError.error = `Sentimos informar que el ${constructo} ya no estan dipsonibles para las fechas seleccionadas.`
+            }
+            throw contenedorError
         }
     } catch (error) {
         throw error

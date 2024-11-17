@@ -2,9 +2,8 @@ import { conexion } from "../globales/db.mjs";
 
 export const obtenerBloqueosPorTipoIDVPorApartamentoIDV = async (data) => {
     try {
-
-        const apartamentoIDV = data.apartamentoIDV
         const tipoBloqueoIDV = data.tipoBloqueoIDV
+        const apartamentoIDV = data.apartamentoIDV
 
         const consulta = `
         SELECT 
@@ -17,8 +16,8 @@ export const obtenerBloqueosPorTipoIDVPorApartamentoIDV = async (data) => {
         "apartamentoIDV" = $2;`;
 
         const parametros = [
-            apartamentoIDV,
-            tipoBloqueoIDV
+            tipoBloqueoIDV,
+            apartamentoIDV
         ];
         const resuelve = await conexion.query(consulta, parametros)
         return resuelve.rows
