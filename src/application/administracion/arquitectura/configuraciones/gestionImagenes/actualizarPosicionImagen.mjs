@@ -78,9 +78,9 @@ export const actualizarPosicionImagen = async (entrada) => {
             apartamentoIDV,
             imagenUID
         })
-        console.log("final", posicionFinalImagen, "actual", posicionActualImagen)
+
         if (posicionFinalImagen < posicionActualImagen) {
-            console.log("1")
+
             await actualizarRestoDePosicionesPorCoordenadas({
                 apartamentoIDV,
                 imagenUID_enMovimiento: imagenUID,
@@ -89,7 +89,7 @@ export const actualizarPosicionImagen = async (entrada) => {
                 posicionFinal: Number(posicionActualImagen)
             })
         } else {
-            console.log("2")
+
             await actualizarRestoDePosicionesPorCoordenadas({
                 apartamentoIDV,
                 imagenUID_enMovimiento: imagenUID,

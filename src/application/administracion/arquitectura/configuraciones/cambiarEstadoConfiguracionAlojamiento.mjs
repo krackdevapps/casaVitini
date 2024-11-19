@@ -17,7 +17,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
         IDX.administradores()
         IDX.control()
 
-        console.log("rol", IDX.rol())
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,

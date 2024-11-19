@@ -2,6 +2,7 @@ import { actualizarImagenPorApartamentoIDV } from "../../../../../infraestructur
 import { obtenerImagenPorImagenUIDPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/gestionDeImagenes/obtenerImagenPorImagenUIDPorApartamentoIDV.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { utilidades } from "../../../../../shared/utilidades.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 
@@ -38,30 +39,7 @@ export const actualizarImagen = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-     //   await utilidades.ralentizador(5000)
- 
-        const esImagenPNG = (contenidoArchivo) => {
-            const binarioMagicoPNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-            const buffer = Buffer.from(contenidoArchivo, 'base64');
-            return buffer.subarray(0, 8).compare(binarioMagicoPNG) === 0;
-        };
-        const esImagenTIFF = (contenidoArchivo) => {
-            const binarioMagicoTIFF = Buffer.from([73, 73, 42, 0]); // Puedes ajustar estos valores según el formato TIFF que estés buscando
-            const buffer = Buffer.from(contenidoArchivo, 'base64');
-            return buffer.subarray(0, 4).compare(binarioMagicoTIFF) === 0 || buffer.subarray(0, 4).compare(Buffer.from([77, 77, 0, 42])) === 0; // Otro formato posible
-        };
-        const esImagenJPEG = (contenidoArchivo) => {
-            const binarioMagicoJPEG = Buffer.from([255, 216, 255]);
-            const buffer = Buffer.from(contenidoArchivo, 'base64');
-            return buffer.subarray(0, 3).compare(binarioMagicoJPEG) === 0;
-        };
-        if (esImagenPNG(contenidoArchivo)) {
-        } else if (esImagenTIFF(contenidoArchivo)) {
-        } else if (esImagenJPEG(contenidoArchivo)) {
-        } else {
-            const error = "Solo se acetan imagenes PNG, TIFF, JPEG y JPG.";
-            throw new Error(error);
-        }
+        utilidades.filtroBase64Imagenes(contenidoArchivo)
         await campoDeTransaccion("iniciar")
 
         await obtenerConfiguracionPorApartamentoIDV({

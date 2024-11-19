@@ -14,6 +14,9 @@ import { eliminarUsuarioPorTestingVI } from '../../../../../src/infraestructure/
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
 import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
 import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
+import { gestionImagenConfiguracionApartamento } from '../../../../../src/application/administracion/arquitectura/configuraciones/gestionImagenConfiguracionApartamento.mjs';
+import { base64Assets } from '../../../../sharedAssets/base64Assets.mjs';
+import { eliminarImagenConfiguracionApartamento } from '../../../../../src/application/administracion/arquitectura/configuraciones/eliminarImagenConfiguracionApartamento.mjs';
 
 describe('configuration of hosting', () => {
     const apartamentoIDV = "testingapartmentforconfigurationshostings"
@@ -26,7 +29,7 @@ describe('configuration of hosting', () => {
 
     const habitacionIDV_2 = "habitacionparatestingdeconfiguracionesdos"
     const habitacionUI_2 = "Habitacion temporal para testing holder dos"
-
+    const assets = base64Assets()
     const camaUI = "camaTemporalParaTesting"
     const camaIDV = "camatestingdeconfiguraciones"
 
@@ -107,6 +110,35 @@ describe('configuration of hosting', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
+
+    test('add or update image for hostin configuration base with ok', async () => {
+        const makeEntity = {
+            body: {
+                apartamentoIDV: apartamentoIDV_2,
+                contenidoArchivo: assets.images.jpeg
+            },
+            session: fakeAdminSession
+        }
+        const response = await gestionImagenConfiguracionApartamento(makeEntity)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+    test('delete image for hostin configuration base with ok', async () => {
+        const makeEntity = {
+            body: {
+                apartamentoIDV: apartamentoIDV_2
+            },
+            session: fakeAdminSession
+        }
+        const response = await eliminarImagenConfiguracionApartamento(makeEntity)
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
+
     test('create configuration base of hosting with ok', async () => {
         try {
             const makeEntity = {

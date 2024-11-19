@@ -2375,7 +2375,7 @@ const casaVitini = {
                                     contenedor.innerHTML = null
                                     ui.classList.add("flextJustificacion_arriba")
                                     const imagenes = respuestaServidor.imagenes
-                                    console.log("imagenes", imagenes)
+
                                     const botonCancelar = document.createElement("div")
                                     botonCancelar.classList.add("botonV1")
                                     botonCancelar.setAttribute("boton", "cancelar")
@@ -53537,7 +53537,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             const opcion = document.createElement("option");
                                             const posicionUI = index + 1
                                             opcion.value = posicionUI;
-                                            console.log("posicionUI", posicionUI, "posicionActual", posicionActual)
+
                                             if (posicionUI === Number(posicionActual)) {
                                                 opcion.text = `Posicion actual de la imagen: ${posicionUI}`;
                                                 opcion.disabled = true;
@@ -53613,7 +53613,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             const valorDeInicioDelProceso = opcionesDeInicioDelProceso.value
                                             opcionesDeInicioDelProceso.text = `Mover a la posición ${valorDeInicioDelProceso}`
                                             listaSelectora.removeAttribute("style")
-                                            console.log("e", typeof valorDeInicioDelProceso)
+
                                             let posiccionFinalDOM
                                             if (Number(nuevaPosicion) < Number(valorDeInicioDelProceso)) {
                                                 posiccionFinalDOM = Number(nuevaPosicion) - 1
@@ -53622,10 +53622,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             }
 
                                             const posiccionInicialDOM = Number(valorDeInicioDelProceso) - 1
-                                            console.log("posiccionFinalDOM", posiccionFinalDOM, "posiccionInicialDOM", posiccionInicialDOM)
+
                                             const contenedoresImg = Array.from(gridImagenes.querySelectorAll("[imagenUID]"));
                                             const elementoParaMover = contenedoresImg[posiccionInicialDOM];
-                                            console.log("elemento a mover", elementoParaMover)
+
 
                                             gridImagenes.removeChild(elementoParaMover);
                                             gridImagenes.insertBefore(elementoParaMover, contenedoresImg[posiccionFinalDOM]);

@@ -253,4 +253,27 @@ export const utilidades = {
     ralentizador: async (milisegundos) => {
         await new Promise(resolve => setTimeout(resolve, Number(milisegundos)));
     },
+    filtroBase64Imagenes: (base64String) => {
+        try {
+            const binarioMagicoPNG = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
+            const binarioMagicoJPEG = new Uint8Array([255, 216, 255]);
+            const binarioMagicoTIFF = new Uint8Array([73, 73, 42, 0]); // Ajustado a 4 bytes
+            const arrayBuffer = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
+            const buffer = new Uint8Array(arrayBuffer);
+    
+            const compareBytes = (buffer, magicBytes) => magicBytes.every((byte, index) => buffer[index] === byte);
+            if (compareBytes(buffer.subarray(0, 8), binarioMagicoPNG)) {
+                return "PNG";
+            } else if (compareBytes(buffer.subarray(0, 3), binarioMagicoJPEG)) {
+                return "JPEG"; // Verifica TIFF 
+            } else if (compareBytes(buffer.subarray(0, 4), binarioMagicoTIFF)) {
+                return "TIFF";
+            } else {
+                const m = "Tipo de imagen desconocido";
+                throw new Error(m)
+            }
+        } catch (error) {
+            throw new Error("No se puede decodificar esta imagen.")
+        }
+    }
 }
