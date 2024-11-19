@@ -1,10 +1,10 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
-import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { actualizarImagenDelApartamentoPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/actualizarImagenDelApartamentoPorApartamentoIDV.mjs";
-import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { insertarImagenPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/gestionDeImagenes/insertarImagenPorApartamentoIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
+import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 
-export const gestionImagenConfiguracionApartamento = async (entrada) => {
+export const subirNuevaImagen = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
@@ -54,24 +54,20 @@ export const gestionImagenConfiguracionApartamento = async (entrada) => {
         }
         await campoDeTransaccion("iniciar")
 
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+        await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })
 
-        if (configuracionApartamento.estadoConfiguracionIDV === "disponible") {
-            const error = "No se puede actualizar la imagen de una configuración de apartamento cuando está disponible. Cambie el estado primero.";
-            throw new Error(error);
-        }
-        await actualizarImagenDelApartamentoPorApartamentoIDV({
+        const imagenInsertada = await insertarImagenPorApartamentoIDV({
             apartamentoIDV,
-            imagen: contenidoArchivo
+            imagenBase64: contenidoArchivo
         })
         await campoDeTransaccion("confirmar")
 
         const ok = {
             ok: "Se ha actualizado la imagen correctamente",
-            imagen: String(contenidoArchivo)
+            ...imagenInsertada
         }
         return ok
     } catch (errorCapturado) {

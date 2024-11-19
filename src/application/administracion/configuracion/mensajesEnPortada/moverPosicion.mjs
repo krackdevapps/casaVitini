@@ -76,24 +76,21 @@ export const moverPosicion = async (entrada) => {
         };
         await campoDeTransaccion("iniciar")
 
-        const dataActualizarPosicionDelMensaje_1 = {
+   
+        await actualizarPosicionDelMensajeDePortada({
             mensajeUID: mensajeUIDAfectado,
             posicion: "0"
-        }
-        await actualizarPosicionDelMensajeDePortada(dataActualizarPosicionDelMensaje_1)
+        })
 
-        const dataActualizarPosicionDelMensajeActual = {
+        await actualizarPosicionDelMensajeDePortada({
             mensajeUID: mensajeUID,
             posicion: nuevaPosicion
-        }
-        await actualizarPosicionDelMensajeDePortada(dataActualizarPosicionDelMensajeActual)
+        })
 
-
-        const dataActualizarPosicionDelMensajeFinal = {
+        await actualizarPosicionDelMensajeDePortada( {
             mensajeUID: mensajeUIDAfectado,
             posicion: posicionAntigua
-        }
-        await actualizarPosicionDelMensajeDePortada(dataActualizarPosicionDelMensajeFinal)
+        })
 
         await campoDeTransaccion("confirmar")
         const ok = {

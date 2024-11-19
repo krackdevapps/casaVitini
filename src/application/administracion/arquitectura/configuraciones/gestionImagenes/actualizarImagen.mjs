@@ -1,10 +1,11 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
-import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { actualizarImagenDelApartamentoPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/actualizarImagenDelApartamentoPorApartamentoIDV.mjs";
-import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { actualizarImagenPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/gestionDeImagenes/actualizarImagenPorApartamentoIDV.mjs";
+import { obtenerImagenPorImagenUIDPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/gestionDeImagenes/obtenerImagenPorImagenUIDPorApartamentoIDV.mjs";
+import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
+import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
+import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 
-export const gestionImagenConfiguracionApartamento = async (entrada) => {
+export const actualizarImagen = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
@@ -12,7 +13,7 @@ export const gestionImagenConfiguracionApartamento = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 2
+            numeroDeLLavesMaximo: 3
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -20,6 +21,14 @@ export const gestionImagenConfiguracionApartamento = async (entrada) => {
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+        })
+        const imagenUID = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.imagenUID,
+            nombreCampo: "El campo del imagenUID",
+            filtro: "cadenaConNumerosEnteros",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+            devuelveUnTipoNumber: "si"
         })
 
         const contenidoArchivo = validadoresCompartidos.tipos.cadena({
@@ -29,7 +38,8 @@ export const gestionImagenConfiguracionApartamento = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-
+     //   await utilidades.ralentizador(5000)
+ 
         const esImagenPNG = (contenidoArchivo) => {
             const binarioMagicoPNG = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
             const buffer = Buffer.from(contenidoArchivo, 'base64');
@@ -54,18 +64,19 @@ export const gestionImagenConfiguracionApartamento = async (entrada) => {
         }
         await campoDeTransaccion("iniciar")
 
-        const configuracionApartamento = await obtenerConfiguracionPorApartamentoIDV({
+        await obtenerConfiguracionPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })
-
-        if (configuracionApartamento.estadoConfiguracionIDV === "disponible") {
-            const error = "No se puede actualizar la imagen de una configuración de apartamento cuando está disponible. Cambie el estado primero.";
-            throw new Error(error);
-        }
-        await actualizarImagenDelApartamentoPorApartamentoIDV({
+        await obtenerImagenPorImagenUIDPorApartamentoIDV({
             apartamentoIDV,
-            imagen: contenidoArchivo
+            imagenUID
+        })
+
+        await actualizarImagenPorApartamentoIDV({
+            apartamentoIDV,
+            imagenUID,
+            imagenBase64: contenidoArchivo
         })
         await campoDeTransaccion("confirmar")
 

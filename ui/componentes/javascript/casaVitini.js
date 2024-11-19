@@ -1640,10 +1640,37 @@ const casaVitini = {
                                 const bloqueImagen = document.createElement("div")
                                 bloqueImagen.setAttribute("class", "bloqueImagen")
 
+                                const contenedorValdosasFlotantes = document.createElement("div")
+                                contenedorValdosasFlotantes.classList.add("flexHorizontal", "gap6", "flexAlineacionI")
+                                bloqueApartamento.appendChild(contenedorValdosasFlotantes)
+
+
                                 const contenedorTitulo = document.createElement("div")
                                 contenedorTitulo.classList.add("plaza_alojamiento_contenedorApartamento_contenedorTitulo")
+                                contenedorValdosasFlotantes.appendChild(contenedorTitulo)
+
+
+                                const contnedorBotonesEnValdosa = document.createElement("div")
+                                contnedorBotonesEnValdosa.classList.add("flexVertical")
+                                contenedorValdosasFlotantes.appendChild(contnedorBotonesEnValdosa)
+
+                                const botonVerImagenes = document.createElement("div")
+                                botonVerImagenes.setAttribute("boton", "verImagenes")
+                                botonVerImagenes.classList.add("flexVertical", "padding12", "borderRadius16", "backgroundGrey1", "blur50", "ocultoInicial")
+                                botonVerImagenes.addEventListener("click", () => {
+                                    casaVitini.ui.vistas.alojamiento.portada.gestionImagenes.ui.arranque({
+                                        apartamentoUI,
+                                        apartamentoIDV
+                                    })
+                                })
+                                botonVerImagenes.textContent = "Ver imagenes"
+                                contnedorBotonesEnValdosa.appendChild(botonVerImagenes)
+
+
+
                                 const bloqueVerticalTitulo = document.createElement("div")
                                 bloqueVerticalTitulo.setAttribute("class", "bloqueVerticalTitulo")
+                                contenedorTitulo.appendChild(bloqueVerticalTitulo)
 
                                 const contenedorNombres = document.createElement("div")
                                 contenedorNombres.classList.add("flexVertical")
@@ -1664,7 +1691,6 @@ const casaVitini = {
                                 const bloqueTituloApartamentoComponenteUI = document.createElement("div")
                                 bloqueTituloApartamentoComponenteUI.setAttribute("class", "tituloApartamentoComponenteUI")
                                 bloqueVerticalTitulo.appendChild(bloqueTituloApartamentoComponenteUI)
-                                contenedorTitulo.appendChild(bloqueVerticalTitulo)
                                 const bloqueCaracteristicas = document.createElement("div")
                                 bloqueCaracteristicas.classList.add("plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas")
                                 for (const caracteristica of caracteristicas) {
@@ -1677,14 +1703,8 @@ const casaVitini = {
                                     contenedorTitulo.appendChild(bloqueCaracteristicas)
                                 }
 
-                                bloqueApartamento.appendChild(contenedorTitulo)
-
                                 const contenedorTotalYOfertas = document.createElement("div")
-                                contenedorTotalYOfertas.classList.add(
-                                    "flexVertical",
-                                    "gap10",
-
-                                )
+                                contenedorTotalYOfertas.classList.add("flexVertical")
                                 contenedorTotalYOfertas.setAttribute("contenedor", "totalYOfertas")
                                 bloqueTituloApartamentoComponenteUI.appendChild(contenedorTotalYOfertas)
 
@@ -1800,7 +1820,7 @@ const casaVitini = {
                                 "plaza_alojamiento_boronResumenReservaEnMarcoFlotante",
                                 "parpadeaFondoSemiBlanco"
                             )
-                     
+
                             botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
 
                             botonResumenReserva.addEventListener("click", casaVitini.ui.vistas.alojamiento.portada.iraResumenReserva)
@@ -1824,36 +1844,27 @@ const casaVitini = {
                     obtenerImagenApartamento: async (metadatos) => {
                         const apartamentoIDV = metadatos.apartamentoIDV
                         const instanciaUIDDestino = metadatos.instanciaUID
-                        const transacccion = {
+
+                        const respuestaServidor = await casaVitini.shell.servidor({
                             zona: "componentes/imagenDelApartamento",
                             apartamentoIDV: apartamentoIDV
-                        }
-                        const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+                        })
                         if (respuestaServidor?.error) {
                             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
                             const contenedorApartamentoRenderizado = document.querySelector(`[apartamentoIDV=${apartamentoIDV}][instanciaUID="${instanciaUIDDestino}"]`)
                             if (contenedorApartamentoRenderizado) {
+                                const numeroImagenesGaleria = respuestaServidor.numeroImagenesGaleria
+                                if (numeroImagenesGaleria !== "0") {
+                                    const selectorBoton = contenedorApartamentoRenderizado.querySelector("[boton=verImagenes]")
+                                    selectorBoton.classList.remove("ocultoInicial")
+                                }
                                 const imagen = respuestaServidor.imagen
-                                const detectarTipoDeImagen = (base64String) => {
-                                    const binarioMagicoPNG = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
-                                    const binarioMagicoJPEG = new Uint8Array([255, 216, 255]);
-                                    const binarioMagicoTIFF = new Uint8Array([73, 73, 42]);
-                                    const arrayBuffer = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
-                                    const buffer = new Uint8Array(arrayBuffer);
-                                    if (buffer.subarray(0, 8).every((value, index) => value === binarioMagicoPNG[index])) {
-                                        return "PNG";
-                                    } else if (buffer.subarray(0, 3).every((value, index) => value === binarioMagicoJPEG[index])) {
-                                        return "JPEG";
-                                    } else if (buffer.subarray(0, 3).every((value, index) => value === binarioMagicoTIFF[index])) {
-                                        return "TIFF";
-                                    } else {
-                                        return "Tipo de imagen desconocido";
-                                    }
-                                };
-                                const tipoDeImagen = detectarTipoDeImagen(imagen);
-                                contenedorApartamentoRenderizado.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagen})`;
+                                if (imagen) {
+                                    const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagen);
+                                    contenedorApartamentoRenderizado.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagen})`;
+                                }
                                 contenedorApartamentoRenderizado.style.backgroundSize = "cover";
                                 contenedorApartamentoRenderizado.style.backgroundPosition = "center";
                                 contenedorApartamentoRenderizado.style.backgroundRepeat = "no-repeat";
@@ -2071,9 +2082,14 @@ const casaVitini = {
 
                         const selectorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
                         const selectorTotalUI = selectorApartamento.querySelector(`[componente=valorTotal]`)
+                        const selectortotalYOfertas = selectorApartamento.querySelector(`[contenedor=totalYOfertas]`)
+
                         const selectorContenedorOfertas = selectorApartamento.querySelector(`[contenedor=ofertas]`)
                         selectorContenedorOfertas.innerHTML = null
                         selectorContenedorOfertas.classList.add("ocultoInicial")
+
+                        selectortotalYOfertas.style.gap = "0px"
+
                         selectorTotalUI.textContent = `${total}$ Total`
 
                         const contenedorSimplificadoOfertas = []
@@ -2089,6 +2105,9 @@ const casaVitini = {
                         })
                         if (contenedorSimplificadoOfertas.length > 0) {
                             selectorContenedorOfertas.classList.remove("ocultoInicial")
+                            selectortotalYOfertas.style.gap = "10px"
+
+
                         }
                         contenedorSimplificadoOfertas.forEach((contenedorOferta) => {
                             const nombreOferta = contenedorOferta.nombreOferta
@@ -2110,7 +2129,7 @@ const casaVitini = {
 
 
                                 const tituloUI = document.createElement("p")
-                                tituloUI.classList.add("tituloGris", "padding18")
+                                tituloUI.classList.add("tituloGris", "padding6", "textoCentrado")
                                 tituloUI.setAttribute("componente", "titulo")
                                 tituloUI.textContent = "Detalles de la oferta seleccionada"
                                 contenedor.appendChild(tituloUI)
@@ -2321,6 +2340,244 @@ const casaVitini = {
                             return contenedorDescuentos
                         },
                     },
+                    gestionImagenes: {
+                        ui: {
+                            arranque: async function (data) {
+                                const apartamentoIDV = data.apartamentoIDV
+                                const apartamentoUI = data.apartamentoUI
+
+                                const main = document.querySelector("main")
+                                const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                                ui.style.zIndex = "300"
+                                const instanciaUID_ui = ui.getAttribute("instanciaUID")
+                                const contenedor = ui.querySelector("[componente=contenedor]")
+                                main.appendChild(ui)
+
+
+                                const spinner = casaVitini.ui.componentes.spinner({
+                                    mensaje: `Obteniendo fotos de ${apartamentoUI}...`
+                                })
+                                contenedor.appendChild(spinner)
+
+                                const respuestaServidor = await casaVitini.shell.servidor({
+                                    zona: "componentes/obtenerImagenesPorApartamentoIDV",
+                                    apartamentoIDV
+                                })
+                                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_ui}"]`)
+                                if (!instanciaRenderizada) { return }
+                                spinner.remove()
+
+                                if (respuestaServidor?.error) {
+                                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                                }
+                                if (respuestaServidor?.ok) {
+                                    contenedor.innerHTML = null
+                                    ui.classList.add("flextJustificacion_arriba")
+                                    const imagenes = respuestaServidor.imagenes
+                                    console.log("imagenes", imagenes)
+                                    const botonCancelar = document.createElement("div")
+                                    botonCancelar.classList.add("botonV1")
+                                    botonCancelar.setAttribute("boton", "cancelar")
+                                    botonCancelar.textContent = "Cerrar y volver"
+                                    botonCancelar.addEventListener("click", () => {
+                                        return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                    })
+                                    contenedor.appendChild(botonCancelar)
+
+                                    const gridImagenes = document.createElement("div")
+                                    gridImagenes.setAttribute("contenedor", "gridImagenes")
+                                    gridImagenes.setAttribute("grupoIDV", apartamentoIDV)
+                                    gridImagenes.classList.add("gridImagenes")
+                                    contenedor.appendChild(gridImagenes)
+
+                                    imagenes.sort((a, b) => a.posicion - b.posicion);
+                                    imagenes.forEach(imagen => {
+                                        const imagenUID = imagen?.imagenUID
+                                        const imagenBase64 = imagen.imagenBase64
+                                        const posicion = imagen?.posicion
+                                        const contenedor = this.contenedorImagen({
+                                            imagenBase64: imagenBase64,
+                                            apartamentoIDV,
+                                            imagenUID,
+                                            posicion
+                                        })
+                                        gridImagenes.appendChild(contenedor)
+                                    })
+
+                                }
+
+                            },
+                            contenedorImagen: function (data) {
+                                const imagenBase64 = data.imagenBase64
+                                const apartamentoIDV = data.apartamentoIDV
+                                const imagenUID = data.imagenUID
+                                const posicion = data?.posicion
+                                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                                const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
+                                const imagenResponsiva = `${apartamentoIDV}_imagen${posicion}`
+                                const contenedor = document.createElement("div")
+                                contenedor.classList.add("flexVertical", "contenedorImagen")
+                                contenedor.setAttribute("instanciauID", instanciaUID)
+                                contenedor.setAttribute("imagenUID", imagenUID)
+                                contenedor.setAttribute("imagenResponsiva", imagenResponsiva)
+                                contenedor.setAttribute("componente", "fotoAmpliable")
+                                contenedor.setAttribute("apartamentoIDV", apartamentoIDV)
+                                contenedor.addEventListener("click", (e) => {
+                                    this.ampliarImagen(e)
+                                })
+
+                                const cImagen = document.createElement("div")
+                                cImagen.classList.add("flexVertical", "contenedorImagenFondo")
+                                cImagen.setAttribute("contenedor", "imagenBase64")
+                                cImagen.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
+                                contenedor.appendChild(cImagen)
+
+                                return contenedor
+                            },
+                            cerrarImagen: () => {
+                                const grupoActual = document.
+                                    querySelector(`[componente=contenedorImagenAmpliada][grupoActualIDV]`)
+                                    .getAttribute("grupoActualIDV")
+                                const numeroImagen = document
+                                    .querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                                    .getAttribute("numeroImagen")
+                                const imagenElemento = document.querySelector(`main [grupoIDV="${grupoActual}"] [numeroImagen="${numeroImagen}"]`)
+                                const posicionImagen = imagenElemento.getBoundingClientRect();
+                                const contenedorImagen = document.querySelector("main [componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]")
+                                contenedorImagen.addEventListener("transitionend", () => {
+                                    contenedorImagenAmpliada.remove()
+                                })
+
+                                document.body.style.removeProperty("overflow")
+                                const contenedorImagenAmpliada = document.querySelector("main [componente=contenedorImagenAmpliada]")
+                                contenedorImagenAmpliada.style.pointerEvents = "none"
+                                contenedorImagen.style.top = posicionImagen.y + "px"
+                                contenedorImagen.style.left = posicionImagen.x + "px"
+                                contenedorImagen.style.width = posicionImagen.width + "px"
+                                contenedorImagen.style.height = posicionImagen.height + "px"
+                                contenedorImagenAmpliada.style.opacity = "0"
+                            },
+                            cambiarImagen: (sentidoDireccion) => {
+                                const grupoActual = document.
+                                    querySelector(`[componente=contenedorImagenAmpliada][grupoActualIDV]`)
+                                    .getAttribute("grupoActualIDV")
+                                const imagenActual = document
+                                    .querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                                    .getAttribute("numeroImagen")
+                                const numerosTotales = document.querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                                    .getAttribute("numerosTotales")
+                                let imagenDestino
+                                if (sentidoDireccion === "imagenSiguiente") {
+                                    const imagenSiguiente = Number(imagenActual) + 1
+                                    imagenDestino = imagenSiguiente > numerosTotales ? 0 : imagenSiguiente
+                                }
+                                if (sentidoDireccion === "imagenAnterior") {
+                                    const imagenAnterior = Number(imagenActual) - 1
+                                    imagenDestino = imagenAnterior < 0 ? numerosTotales : imagenAnterior
+                                }
+                                document.querySelector(`[componente=contenedorImagenAmpliada][numeroImagen]`)
+                                    .setAttribute("numeroImagen", imagenDestino)
+                                const contenedorImagen = document
+                                    .querySelector(`[grupoIDV="${grupoActual}"] [numeroImagen="${imagenDestino}"]`)
+                                const imagenBase64 = contenedorImagen.querySelector("[contenedor=imagenBase64]").style.backgroundImage
+                                const contenedorImagenAmpliada = document.querySelector(`[componente=contenedorImagenAmpliada] [contenedor=imagenVolatil]`)
+                                contenedorImagenAmpliada.style.backgroundImage = imagenBase64
+                            },
+                            ampliarImagen: function (imagen) {
+                                document.body.style.overflow = 'hidden';
+                                const imagenElemento = imagen.target.closest("[imagenResponsiva]")
+                                const fondoClaseCSS = imagenElemento.querySelector("[contenedor=imagenBase64]").style.backgroundImage
+                                const imagenesAmpliables = document.querySelectorAll("[componente=fotoAmpliable]")
+
+                                imagenesAmpliables.forEach((imagenAmpliable) => {
+                                    imagenAmpliable.removeAttribute("style")
+                                })
+                                const grupoIDV = imagenElemento.closest("[grupoIDV]").getAttribute("grupoIDV")
+                                const imagenesDelApartamento = imagenElemento.closest("[grupoIDV]").querySelectorAll("[componente]")
+                                let numerosTotales = 0
+                                imagenesDelApartamento.forEach((imagenDelGrupo, numero) => {
+                                    numerosTotales = numero
+                                    imagenDelGrupo.setAttribute("numeroImagen", numero)
+                                })
+
+                                const numeroImagen = imagenElemento.getAttribute("numeroImagen")
+                                const posicionImagen = imagenElemento.getBoundingClientRect();
+                                const contenedorImagenAmpliada = document.createElement("div")
+                                contenedorImagenAmpliada.classList.add("contenedorImagenAmpliada")
+                                contenedorImagenAmpliada.setAttribute("componente", "contenedorImagenAmpliada")
+                                contenedorImagenAmpliada.setAttribute("grupoActualIDV", grupoIDV)
+                                contenedorImagenAmpliada.setAttribute("numeroImagen", numeroImagen)
+                                contenedorImagenAmpliada.setAttribute("numerosTotales", numerosTotales)
+                                document.querySelector("main").appendChild(contenedorImagenAmpliada)
+
+
+                                const contenedorBotones = document.createElement("div")
+                                contenedorBotones.classList.add("gridHorizotnal3C", "gap10", "padding10")
+                                contenedorBotones.setAttribute("componente", "contenedorBotones")
+                                const botonAtras = document.createElement("div")
+                                botonAtras.classList.add("botonV1Blanco", "blur50")
+                                botonAtras.textContent = "Atras"
+                                botonAtras.addEventListener("click", () => {
+                                    this.cambiarImagen("imagenAnterior")
+                                })
+                                contenedorBotones.appendChild(botonAtras)
+                                const botonCerrar = document.createElement("div")
+                                botonCerrar.classList.add("botonV1Blanco", "blur50")
+                                botonCerrar.textContent = "Cerrar"
+
+                                botonCerrar.addEventListener("click", () => {
+                                    this.cerrarImagen()
+
+                                })
+
+                                contenedorBotones.appendChild(botonCerrar)
+                                const botonSiguiente = document.createElement("div")
+                                botonSiguiente.classList.add("botonV1Blanco", "blur50")
+                                botonSiguiente.textContent = "Siguiente"
+                                botonSiguiente.addEventListener("click", () => {
+                                    this.cambiarImagen("imagenSiguiente")
+                                })
+
+                                contenedorBotones.appendChild(botonSiguiente)
+                                const marcoEspaciadorContenedorBotones = document.createElement("div")
+                                marcoEspaciadorContenedorBotones.classList.add("marcoEspaciadoContenedorBotones")
+                                marcoEspaciadorContenedorBotones.appendChild(contenedorBotones)
+                                contenedorImagenAmpliada.appendChild(marcoEspaciadorContenedorBotones)
+
+
+
+                                const contenedorImagenVolatil = document.createElement("div")
+                                contenedorImagenVolatil.classList.add("contenedorImagenVolatil")
+                                // contenedorImagenVolatil.classList.add(fondoClaseCSS)
+                                contenedorImagenVolatil.style.backgroundImage = fondoClaseCSS
+                                contenedorImagenVolatil.setAttribute("contenedor", "imagenVolatil")
+                                // contenedorImagenVolatil.setAttribute("imagenAmpliadaClaseCSS", fondoClaseCSS)
+                                contenedorImagenVolatil.style.top = posicionImagen.y + "px"
+                                contenedorImagenVolatil.style.left = posicionImagen.x + "px"
+                                contenedorImagenVolatil.style.width = posicionImagen.width + "px"
+                                contenedorImagenVolatil.style.height = posicionImagen.height + "px"
+                                contenedorImagenAmpliada.appendChild(contenedorImagenVolatil)
+
+                                requestAnimationFrame(() => { });
+                                let start = null;
+                                const step = (timestamp) => {
+                                    if (!start) { start = timestamp } else {
+                                        contenedorImagenVolatil.style.top = "0px"
+                                        contenedorImagenVolatil.style.left = "0"
+                                        contenedorImagenVolatil.style.height = "100vh"
+                                        contenedorImagenVolatil.style.width = "100vw"
+                                    };
+                                    let progress = timestamp - start;
+                                    if (progress < 1) {
+                                        window.requestAnimationFrame(step);
+                                    }
+                                }
+                                requestAnimationFrame(step);
+                            }
+                        },
+
+                    }
                 },
                 resumen: {
                     arranque: async function () {
@@ -2603,7 +2860,7 @@ const casaVitini = {
                             contenedor.classList.add(
                                 "flexVertical",
                                 "ocultoInicial",
-                          
+
                                 "padding6",
                                 "borderRadius20"
                             )
@@ -9787,6 +10044,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaReservaLimite")
                                             bloqueDia.classList.remove("calendarioDiaNoDisponiblePorAntelacion")
+                                            bloqueDia.classList.remove("calendarioDiaNoDisponible")
+
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
 
                                         }
@@ -9857,6 +10116,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     if (mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano) {
                                         if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaReservaLimite")
+                                            bloqueDia.classList.remove("calendarioDiaNoDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         } else
                                             if (diaFinal_decimal > fechaEntradaSeleccionada.dia &&
@@ -13608,7 +13868,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 contenedor.classList.add(
                                     "flexVertical",
                                     "gap6",
-                           
+
                                 )
                                 contenedorPlegable.appendChild(contenedor)
 
@@ -15265,7 +15525,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         if (!contenedorImpuestos_selector) {
                             const contenedorPlegable = document.createElement('details');
-                            contenedorPlegable.classList.add(                                "contenedorEntidad"                     )
+                            contenedorPlegable.classList.add("contenedorEntidad")
                             contenedorPlegable.setAttribute("contenedor", "impuestos")
 
 
@@ -15283,7 +15543,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 "contenedorImpuestos",
                                 "flexVertical",
                                 "gap6",
-                             
+
                             )
                             contenedorPlegable.appendChild(contenedor)
 
@@ -15568,7 +15828,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         if (!contenedorTotales_selector) {
 
                             const contenedorPlegable = document.createElement("details")
-                            contenedorPlegable.classList.add("contenedorEntidad"  )
+                            contenedorPlegable.classList.add("contenedorEntidad")
                             contenedorPlegable.setAttribute("contenedor", "totalesGlobales")
                             contenedorPlegable.setAttribute("componente", "plegable")
                             document.querySelector(destino).querySelector("[contenedor=financiero]").appendChild(contenedorPlegable)
@@ -15586,7 +15846,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 "contenedorImpuestos",
                                 "flexVertical",
                                 "gap6",
-                            
+
                             )
                             contenedorPlegable.appendChild(contenedor)
 
@@ -18963,25 +19223,27 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     return
                                 }
                                 if (respuestaServidor?.error) {
-                                    const detallesError = respuestaServidor?.error
-
-                                    const eventos = detallesError.eventos
+                                    const eventos = respuestaServidor.eventos
                                     if (eventos) {
                                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                         const contenedorError = document.createElement("div")
                                         contenedorError.classList.add("contenedorErrorPropuesta")
                                         const tituloPropuesta = document.createElement("p")
-                                        tituloPropuesta.classList.add("tituloGris")
+                                        tituloPropuesta.classList.add(
+                                            "tituloGris",
+                                            "padding14",
+                                            "textoCentrado"
+                                        )
                                         tituloPropuesta.textContent = "No se puede cambiar la fecha debido a otros eventos ya existentes."
                                         tituloPropuesta.style.color = "black"
                                         contenedorError.appendChild(tituloPropuesta)
                                         const botonCancelar = document.createElement("div")
-                                        botonCancelar.classList.add("detallesReservaCancelarBoton")
+                                        botonCancelar.classList.add("botonV1")
                                         botonCancelar.textContent = "Cerrar y volver a la reserva"
                                         botonCancelar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                                         contenedorError.appendChild(botonCancelar)
                                         const infoPropuesta = document.createElement("div")
-                                        infoPropuesta.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                                        infoPropuesta.classList.add("padding14")
                                         infoPropuesta.textContent = mensajes[sentidoRango][1]
                                         contenedorError.appendChild(infoPropuesta)
                                         for (const detallesDelEvento of eventos) {
@@ -18995,34 +19257,50 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             const tipoElemento = detallesDelEvento.tipoElemento
                                             const descripcion = detallesDelEvento.descripcion
                                             const contenedorEvento = document.createElement("div")
-                                            contenedorEvento.classList.add("contenedorEvento")
+                                            contenedorEvento.classList.add(
+                                                "flexVertical",
+                                                "borderRadius20",
+                                                "backgroundWhite3",
+                                                "padding6",
+                                                "gap6"
+                                            )
+                                            contenedorError.appendChild(contenedorEvento)
+
+                                            const contenedorData = document.createElement("div")
+                                            contenedorData.classList.add(
+                                                "flexVertcial",
+                                                "gap6",
+                                                "padding14"
+                                            )
+                                            contenedorEvento.appendChild(contenedorData)
+
                                             const tipoEvento = document.createElement("div")
                                             tipoEvento.classList.add("negrita")
                                             tipoEvento.textContent = tipoElemento.toUpperCase()
-                                            contenedorEvento.appendChild(tipoEvento)
+                                            contenedorData.appendChild(tipoEvento)
                                             const nombreDato = document.createElement("div")
                                             nombreDato.textContent = "Rango del evento"
-                                            contenedorEvento.appendChild(nombreDato)
+                                            contenedorData.appendChild(nombreDato)
                                             const fechaEvento = document.createElement("div")
-
                                             fechaEvento.textContent = `${fechaEntrada_Humana} >>> ${fechaSalida_Humana}`
-                                            contenedorEvento.appendChild(fechaEvento)
+                                            contenedorData.appendChild(fechaEvento)
+
                                             if (tipoElemento === "reserva") {
                                                 const botonIrAlEvento = document.createElement("a")
-                                                botonIrAlEvento.classList.add("botonIrAlEvento")
+                                                botonIrAlEvento.classList.add("botonV1BlancoIzquierda")
                                                 botonIrAlEvento.textContent = "Ir a los detalles de la reserva"
-                                                botonIrAlEvento.setAttribute("href", "/administracion/reservas/" + eventoUID)
-                                                botonIrAlEvento.setAttribute("vista", "/administracion/reservas/" + eventoUID)
+                                                botonIrAlEvento.setAttribute("href", "/administracion/reservas/reserva:" + eventoUID)
+                                                botonIrAlEvento.setAttribute("vista", "/administracion/reservas/reserva:" + eventoUID)
                                                 botonIrAlEvento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                                 contenedorEvento.appendChild(botonIrAlEvento)
                                             }
                                             if (tipoElemento === "bloqueo") {
                                                 const apartamentoIDV = detallesDelEvento.apartamentoIDV
                                                 const botonIrAlEvento = document.createElement("a")
-                                                botonIrAlEvento.classList.add("botonIrAlEvento")
+                                                botonIrAlEvento.classList.add("botonV1BlancoIzquierda")
                                                 botonIrAlEvento.textContent = "Ir a los detalles del bloqueo"
-                                                botonIrAlEvento.setAttribute("href", "/administracion/bloqueos/" + apartamentoIDV + "/" + eventoUID)
-                                                botonIrAlEvento.setAttribute("vista", "/administracion/bloqueos/" + apartamentoIDV + "/" + eventoUID)
+                                                botonIrAlEvento.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + eventoUID)
+                                                botonIrAlEvento.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + eventoUID)
                                                 botonIrAlEvento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                                 contenedorEvento.appendChild(botonIrAlEvento)
                                             }
@@ -19031,7 +19309,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                                 const match = descripcion.match(regex);
                                                 const urlEvento = match?.[1] ?? "No se encontró la URL en el texto proporcionado.";
                                                 const botonIrAlEvento = document.createElement("a")
-                                                botonIrAlEvento.classList.add("botonIrAlEvento")
+                                                botonIrAlEvento.classList.add("botonV1BlancoIzquierda")
                                                 botonIrAlEvento.textContent = "Ir a los detalles del calendario sincronizado"
                                                 botonIrAlEvento.setAttribute("href", urlEvento)
                                                 botonIrAlEvento.setAttribute("vista", urlEvento)
@@ -19043,31 +19321,26 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                                 botonIrAlEvento.textContent = "Este evento es de un calendario externo sincronizado y no ofrece detalles del mismo"
                                                 contenedorEvento.appendChild(botonIrAlEvento)
                                             }
-                                            contenedorError.appendChild(contenedorEvento)
                                         }
                                         const mensajeError = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
                                         mensajeError.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorError)
                                         document.querySelector("main").appendChild(mensajeError)
                                         pantallaDeCargaRenderizada.remove()
 
-                                        casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                                        // casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                     } else {
                                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
                                     }
 
 
-                                }
-                                if (respuestaServidor?.ok) {
+                                } else if (respuestaServidor?.ok) {
 
                                     pantallaDeCargaRenderizada?.remove()
                                     const sentidoRangoRespueata = respuestaServidor.sentidoRango
                                     const fecha_ISO = respuestaServidor.fecha_ISO
                                     const fechaArray_ISO = fecha_ISO.split("-")
                                     const fecha_Humano = `${fechaArray_ISO[2]}/${fechaArray_ISO[1]}/${fechaArray_ISO[0]}`
-
-
-
 
                                     casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.actualizarReservaRenderizada()
                                     if (sentidoRangoRespueata === "pasado" && pantallaDeCargaRenderizada) {
@@ -20581,7 +20854,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     const transaccion = {
                                         zona: "administracion/reservas/detallesReserva/alojamiento/apartamentosDisponiblesParaAnadirAReserva",
                                         reservaUID: String(reservaUID),
-                            
+
                                     }
                                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                                     contenedor.innerHTML = null
@@ -30793,6 +31066,29 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 }
             }
 
+        },
+        formatos: {
+            imagenes: {
+                base64: (base64String) => {
+                    const binarioMagicoPNG = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
+                    const binarioMagicoJPEG = new Uint8Array([255, 216, 255]);
+                    const binarioMagicoTIFF = new Uint8Array([73, 73, 42, 0]); // Ajustado a 4 bytes
+                    const arrayBuffer = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
+                    const buffer = new Uint8Array(arrayBuffer);
+
+                    const compareBytes = (buffer, magicBytes) => magicBytes.every((byte, index) => buffer[index] === byte);
+                    if (compareBytes(buffer.subarray(0, 8), binarioMagicoPNG)) {
+                        return "PNG";
+                    } else if (compareBytes(buffer.subarray(0, 3), binarioMagicoJPEG)) {
+                        return "JPEG"; // Verifica TIFF 
+                    } else if (compareBytes(buffer.subarray(0, 4), binarioMagicoTIFF)) {
+                        return "TIFF";
+                    } else {
+                        const m = "Tipo de imagen desconocido";
+                        return casaVitini.ui.componentes.advertenciaInmersiva(m);
+                    }
+                }
+            }
         }
     },
     administracion: {
@@ -32525,7 +32821,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             calendariosAirbnb.push(c.calendarioUID)
                         }
                     })
-                  // const urlBase = `administracion/calendario/capa:por_apartamento/por_apartamento:${apartamentoIDV}/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}`
+                    // const urlBase = `administracion/calendario/capa:por_apartamento/por_apartamento:${apartamentoIDV}/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}`
 
                     const urlBase = `administracion/calendario/capa:reservas_por_apartamento/reservas_por_apartamento:${apartamentoIDV}/capa:bloqueos_por_apartamento/bloqueos_por_apartamento:${apartamentoIDV}`
                     let urlCalendarioAirbnb = ""
@@ -36338,11 +36634,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     }
                 },
                 actualizarInterruptor: async (interruptor) => {
-                    const seccionRenderizadaOrigen = document.querySelector("main")
-                    const seccionUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                    const main = document.querySelector("main")
+                    const seccionUID = main.getAttribute("instanciaUID")
                     const interruptorIDV = interruptor.interruptorIDV
                     const estado = interruptor.estado
-                    const selectorListaEstadosInterruptor = seccionRenderizadaOrigen.querySelector(`[interruptor=${interruptorIDV}]`)
+                    const selectorListaEstadosInterruptor = main.querySelector(`[interruptor=${interruptorIDV}]`)
                     const valorInicial = selectorListaEstadosInterruptor.getAttribute("valorInicial")
                     const estadoSoliciado = selectorListaEstadosInterruptor.querySelector(`option[value=${estado}]`)
                     let procesandoEstadoUI
@@ -36892,11 +37188,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                 },
                 actualizarEstado: async (interruptor) => {
-                    const seccionRenderizadaOrigen = document.querySelector("main")
-                    const seccionUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                    const main = document.querySelector("main")
+                    const seccionUID = main.getAttribute("instanciaUID")
                     const mensajeUID = interruptor.mensajeUID
                     const estadoIDV = interruptor.estadoSeleccionado
-                    const selectorListaEstadosInterruptor = seccionRenderizadaOrigen.querySelector(`[mensajeUID="${mensajeUID}"] [componente=selectorEstado]`)
+                    const selectorListaEstadosInterruptor = main.querySelector(`[mensajeUID="${mensajeUID}"] [componente=selectorEstado]`)
                     const valorInicial = selectorListaEstadosInterruptor.getAttribute("valorInicial")
                     const estadoSoliciado = selectorListaEstadosInterruptor.querySelector(`option[value=${estadoIDV}]`)
                     let procesandoEstadoUI
@@ -38420,9 +38716,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
         precios: {
             arranque: async () => {
                 const main = document.querySelector("main")
-                const seccionRenderizadaOrigen = document.querySelector("main")
                 main.style.wordBreak = "break-word"
-                const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                const instanciaUID = main.getAttribute("instanciaUID")
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
                 if (comandoInicial === "precios" && Object.keys(granuladoURL.parametros).length === 0) {
@@ -44866,7 +45161,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const metadatosPantallaCarga = {
-                        mensaje: "Creando reserva...",
+                        mensaje: "Creando oferta...",
                         instanciaUID: instanciaUID,
                     }
                     casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
@@ -47798,8 +48093,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
             },
             detallesComportamiento: {
                 UI: async (comportamientoUID) => {
-                    const seccionRenderizadaOrigen = document.querySelector("main")
-                    const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                    const main = document.querySelector("main")
+                    const instanciaUID = main.getAttribute("instanciaUID")
 
                     const respuestaServidor = await casaVitini.shell.servidor({
                         zona: "administracion/comportamientoDePrecios/detallesComportamiento",
@@ -49333,8 +49628,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
             },
             bloqueosPorApartamento: {
                 UI: async (apartamento) => {
-                    const seccionRenderizadaOrigen = document.querySelector("main")
-                    const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                    const main = document.querySelector("main")
+                    const instanciaUID = main.getAttribute("instanciaUID")
                     const selectorTitulo = document.querySelector("[componente=titulo]")
                     selectorTitulo.textContent = "Bloqueos temporales"
                     const selectorEspacioBloqueos = document.querySelector("[componente=bloqueosTemporales]")
@@ -49361,7 +49656,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                             const mensaje = document.createElement("p")
                             mensaje.textContent = "El apartamento no tiene ningún bloqueo definido"
-                            seccionRenderizadaOrigen.appendChild(mensaje)
+                            main.appendChild(mensaje)
 
                         }
 
@@ -49526,8 +49821,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
             },
             detallesDelBloqueo: {
                 UI: async (url) => {
-                    const seccionRenderizadaOrigen = document.querySelector("main")
-                    const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                    const main = document.querySelector("main")
+                    const instanciaUID = main.getAttribute("instanciaUID")
                     const apartmentoIDV = url[0]
                     const bloqueoUID = url[1]
                     const selectorTitulo = document.querySelector("[componente=titulo]")
@@ -50654,11 +50949,18 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         const contenedorGlobal = document.createElement("div")
                         contenedorGlobal.classList.add("confAlojamiento_entidades_contenedorGlobal")
+                        espacioConfiguracionDelAlojamiento.appendChild(contenedorGlobal)
+
 
                         const contenedorApartamentos = document.createElement("div")
                         contenedorApartamentos.classList.add("confAlojamiento_entidades_contenedor")
+                        contenedorGlobal.appendChild(contenedorApartamentos)
+
+
                         const contenedorBotonSeccionEntidad = document.createElement("div")
                         contenedorBotonSeccionEntidad.classList.add("confAlojamiento_entidades_contenedorBotones")
+                        contenedorApartamentos.appendChild(contenedorBotonSeccionEntidad)
+
                         const botonAnadirApartamento = document.createElement("a")
                         botonAnadirApartamento.classList.add("botonV1BlancoIzquierda")
                         botonAnadirApartamento.textContent = "Crear un nuevo apartamento"
@@ -50666,7 +50968,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         botonAnadirApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
                         botonAnadirApartamento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorBotonSeccionEntidad.appendChild(botonAnadirApartamento)
-                        contenedorApartamentos.appendChild(contenedorBotonSeccionEntidad)
                         const contenedorApartamentosExistentes = document.createElement("div")
                         contenedorApartamentosExistentes.classList.add("confAlojamiento_entidades_contenedorEntidades")
                         if (apartamentos.length === 0) {
@@ -50699,7 +51000,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             })
                             contenedorApartamentos.appendChild(contenedorApartamentosExistentes)
                         }
-                        contenedorGlobal.appendChild(contenedorApartamentos)
 
                         const contenedorHabitaciones = document.createElement("div")
                         contenedorHabitaciones.classList.add("confAlojamiento_entidades_contenedor")
@@ -50790,7 +51090,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             contenedorCamas.appendChild(contenedorCamasExistentes)
                         }
                         contenedorGlobal.appendChild(contenedorCamas)
-                        espacioConfiguracionDelAlojamiento.appendChild(contenedorGlobal)
                     }
                 },
                 traductorCambioVista: (entidad) => {
@@ -51082,8 +51381,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         casaVitini.administracion.arquitecturaDelAlojamiento.entidades.editarEntidad.portadaUI(Object.entries(parametros)[0])
                     },
                     portadaUI: async (entidadMatriz) => {
-                        const seccionRenderizadaOrigen = document.querySelector("main")
-                        const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
+                        const main = document.querySelector("main")
+                        const instanciaUID = main.getAttribute("instanciaUID")
                         const espacioBotonesGlobales = document.querySelector("[componente=espacioBotonesGlobales]")
                         const espacioConfiguracionDelAlojamiento = document.querySelector("[componente=configuracionDelAlojamiento]")
                         const selectorTitulo = document.querySelector("[componente=titulo]")
@@ -51522,11 +51821,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             selectorCampos.forEach((campo) => {
                                 const valorInicial = campo.getAttribute("valorInicial")
                                 campo.value = valorInicial || ""
-                            
+
                             })
 
                             const contenedorCaracteristicas = document.querySelector("[contenedor=caracteristicas]")
-                            
+
                             if (contenedorCaracteristicas) {
 
                                 const caracteristicasObsoletas = contenedorCaracteristicas.querySelectorAll("[contenedor=caracteristica]")
@@ -51725,6 +52024,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 arranque: async () => {
                     const main = document.querySelector("main")
                     const urlRaw = window.location.pathname;
+                    const granuladoURL = casaVitini.utilidades.granuladorURL()
+                    const parametros = granuladoURL.parametros
+
                     let url = urlRaw.toLowerCase()
                     url = url.split("/")
                     url = url.filter((url) => url)
@@ -51732,15 +52034,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     delete url[1]
                     delete url[2]
                     url = url.filter((url) => url)
-                    if (url.length === 0) {
+                    if (Object.keys(parametros).length === 0) {
                         main.setAttribute("zonaCSS", "administracion/arquitectura_de_alojamiento/configuraciones")
                         casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.portadaUI()
-                    } else if (url.length === 1) {
-                        main.setAttribute("zonaCSS", "administracion/arquitectura_de_alojamiento/configuraciones/detalles")
-                        const apartamentoIDV = url
-                        casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.portadaUI(apartamentoIDV)
-                    } else if (url.length === 2) {
-
+                    } else if (parametros.alojamiento) {
+                        casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.arranque({
+                            parametros
+                        })
                     }
                 },
                 portadaUI: async () => {
@@ -51791,8 +52091,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const contenedorApartamento = document.createElement("a")
                                 contenedorApartamento.classList.add("arquitecturaConfiguracionesAlojamiento_contenedorConfiguracion")
                                 contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                                contenedorApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/" + apartamentoIDV)
-                                contenedorApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/" + apartamentoIDV)
+                                contenedorApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
+                                contenedorApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
                                 contenedorApartamento.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.traductorCambioVista)
                                 const contenedorTitulo = document.createElement("div")
                                 contenedorTitulo.classList.add("arquitecturaConfAlojamiento_configuracionesTitulo")
@@ -51825,29 +52125,55 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     casaVitini.shell.navegacion.controladorVista(entrada)
                 },
                 detallesConfiguracion: {
-                    portadaUI: async (IDV) => {
-                        const seccionRenderizadaOrigen = document.querySelector("main")
-                        const instanciaUID = seccionRenderizadaOrigen.getAttribute("instanciaUID")
-                        const apartamentoIDV = IDV[0]
+                    arranque: function (data) {
+                        const main = document.querySelector("main")
+
+                        const parametros = data.parametros
+                        const alojamiento = parametros.alojamiento
+                        const zona = parametros.zona
+
+                        if (alojamiento && zona) {
+
+                            if (zona === "gestion_de_imagenes") {
+                                this.zonas.gestion_de_imagenes.arranque({
+                                    apartamentoIDV: alojamiento
+                                })
+                            } else {
+                                return casaVitini.ui.componentes.urlDesconocida()
+                            }
+                        } else if (alojamiento) {
+
+                            main.setAttribute("zonaCSS", "administracion/arquitectura_de_alojamiento/configuraciones/detalles")
+                            casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.portadaUI({
+                                apartamentoIDV: parametros.alojamiento
+                            })
+                        } else {
+                            return casaVitini.ui.componentes.urlDesconocida()
+                        }
+
+                    },
+                    portadaUI: async function (data) {
+                        const main = document.querySelector("main")
+                        const instanciaUID = main.getAttribute("instanciaUID")
+                        const apartamentoIDV = data.apartamentoIDV
                         const selectorTitulo = document.querySelector(" [componente=titulo]")
                         selectorTitulo.textContent = "Configuración del apartamento"
                         document.querySelector("[componente=espacioConfiguracionDelAlojamiento]").style.gap = "0"
                         const selectorEspacioConfiguracion = document.querySelector("[componente=espacioConfiguracionDelAlojamiento]")
-                        const transaccion = {
+
+                        const respuestaServidor = await casaVitini.shell.servidor({
                             zona: "administracion/arquitectura/configuraciones/detalleConfiguracionAlojamiento",
                             apartamentoIDV: apartamentoIDV
-                        }
-                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                        })
 
                         const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-
                         if (!seccionRenderizada) { return }
                         if (respuestaServidor?.error) {
-                            const info = {
+
+                            casaVitini.ui.componentes.mensajeSimple({
                                 titulo: "No existe la configuración de alojamiento",
                                 descripcion: respuestaServidor.error
-                            }
-                            casaVitini.ui.componentes.mensajeSimple(info)
+                            })
                         }
                         if (respuestaServidor?.ok) {
 
@@ -51890,6 +52216,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             contenedorTituloYBoton.appendChild(tituloApartamento)
                             const contenedorBotonesGlobalesApartamento = document.createElement("div")
                             contenedorBotonesGlobalesApartamento.classList.add("arquitecturaConfApartamento_contenedorBotonesGlobales")
+                            contenedorTituloYBoton.appendChild(contenedorBotonesGlobalesApartamento)
+
                             const botonIrPerfilPrecio = document.createElement("a")
                             botonIrPerfilPrecio.classList.add("arquitecturaConfApartamento_boton")
                             botonIrPerfilPrecio.textContent = "Ir al perfil del precio"
@@ -51913,7 +52241,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             botonAddHabitacion.textContent = "Añadir habitación"
                             botonAddHabitacion.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.addHabitacion.UI)
                             contenedorBotonesGlobalesApartamento.appendChild(botonAddHabitacion)
-                            contenedorTituloYBoton.appendChild(contenedorBotonesGlobalesApartamento)
                             const botonEstadoApartamento = document.createElement("div")
                             botonEstadoApartamento.classList.add("arquitecturaConfApartamento_boton")
                             botonEstadoApartamento.setAttribute("estadoActual", estadoConfiguracion)
@@ -51954,6 +52281,15 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             botonEliminar.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.eliminarConfiguracion.UI)
                             contenedorBotonesGlobalesApartamento.appendChild(botonEliminar)
 
+
+
+                            const botonIrPerfilPrecio1 = document.createElement("a")
+                            botonIrPerfilPrecio1.classList.add("arquitecturaConfApartamento_boton")
+                            botonIrPerfilPrecio1.textContent = "Gestión de imagenes del apartamento"
+                            botonIrPerfilPrecio1.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV + "/zona:gestion_de_imagenes")
+                            botonIrPerfilPrecio1.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV + "/zona:gestion_de_imagenes")
+                            botonIrPerfilPrecio1.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                            contenedorTituloYBoton.appendChild(botonIrPerfilPrecio1)
 
 
                             contenedorApartamento.appendChild(contenedorTituloYBoton)
@@ -52746,23 +53082,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     contenedorImagen.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.gestionImagen.subirImagen)
                                     contenedorImagen.removeEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.gestionImagen.mostrarOpciones)
                                 } else {
-                                    const detectarTipoDeImagen = (base64String) => {
-                                        const binarioMagicoPNG = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
-                                        const binarioMagicoJPEG = new Uint8Array([255, 216, 255]);
-                                        const binarioMagicoTIFF = new Uint8Array([73, 73, 42]);
-                                        const arrayBuffer = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
-                                        const buffer = new Uint8Array(arrayBuffer);
-                                        if (buffer.subarray(0, 8).every((value, index) => value === binarioMagicoPNG[index])) {
-                                            "PNG";
-                                        } else if (buffer.subarray(0, 3).every((value, index) => value === binarioMagicoJPEG[index])) {
-                                            "JPEG";
-                                        } else if (buffer.subarray(0, 3).every((value, index) => value === binarioMagicoTIFF[index])) {
-                                            "TIFF";
-                                        } else {
-                                            "Tipo de imagen desconocido";
-                                        }
-                                    };
-                                    const tipoDeImagen = detectarTipoDeImagen(imagenBase64);
+
+                                    const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
                                     contenedorImagen.style.backgroundImage = `url(data:image/${tipoDeImagen};base64,${imagenBase64})`;
                                     casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.gestionImagen.opcionesImagen()
                                 }
@@ -52842,7 +53163,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const actualizarImagen = document.createElement("div")
                             actualizarImagen.classList.add("arquitecturaConfApartamento_contenedorImg_opcion")
                             actualizarImagen.setAttribute("componente", "opcionImagen")
-                            actualizarImagen.textContent = "Actualiar imagen"
+                            actualizarImagen.textContent = "Actualizar imagen"
                             actualizarImagen.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.gestionImagen.subirImagen)
                             contenedorOpciones.appendChild(actualizarImagen)
                             const eliminarImagen = document.createElement("div")
@@ -52942,6 +53263,469 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             infoNoCamas.setAttribute("componente", "infoVolatilCamasHabitacion")
                             infoNoCamas.textContent = "Esta habitación no tiene ninguna cama configurada, añade una cama para hacer seleccionable esta habitación."
                             return infoNoCamas
+                        }
+                    },
+                    zonas: {
+                        gestion_de_imagenes: {
+                            arranque: async function (data) {
+                                const apartamentoIDV = data.apartamentoIDV
+                                const main = document.querySelector("main")
+                                const instanciaUID = main.getAttribute("instanciaUID")
+
+                                const titulo = main.querySelector("[componente=titulo]")
+                                titulo.textContent = `Cargando imagenes...`
+
+                                const espacio = document.querySelector("[componente=espacioConfiguracionDelAlojamiento]")
+
+
+                                const contenedorBotones = document.createElement("div")
+                                contenedorBotones.classList.add("flexHorizontal")
+                                contenedorBotones.setAttribute("apartamentoIDV", apartamentoIDV)
+                                espacio.appendChild(contenedorBotones)
+
+
+                                const botonAnadir = document.createElement("a")
+                                botonAnadir.classList.add("botonV1BlancoIzquierda")
+                                botonAnadir.textContent = "Insertar nueva imagen"
+                                botonAnadir.addEventListener("click", () => {
+                                    this.subirImagen()
+                                })
+                                contenedorBotones.appendChild(botonAnadir)
+
+                                const gridImagenes = document.createElement("div")
+                                gridImagenes.setAttribute("contenedor", "gridImagenes")
+                                gridImagenes.classList.add("gridImagenes")
+                                main.appendChild(gridImagenes)
+
+
+                                const respuestaServidor = await casaVitini.shell.servidor({
+                                    zona: "administracion/arquitectura/configuraciones/gestionImagenes/obtenerImagenesDelAlojamiento",
+                                    apartamentoIDV: apartamentoIDV
+                                })
+                                const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                                if (!seccionRenderizada) { return }
+                                if (respuestaServidor?.error) {
+
+                                    casaVitini.ui.componentes.mensajeSimple({
+                                        titulo: "No existe la configuración de alojamiento",
+                                        descripcion: respuestaServidor.error
+                                    })
+                                }
+
+                                if (respuestaServidor?.ok) {
+                                    const imagenes = respuestaServidor?.imagenes
+                                    const apartamentoUI = respuestaServidor.apartamentoUI
+                                    titulo.textContent = `Gestión de imagenes del alojamiento ${apartamentoUI} (${apartamentoIDV})`
+                                    imagenes.sort((a, b) => a.posicion - b.posicion);
+                                    imagenes.forEach(imagen => {
+                                        const imagenUID = imagen?.imagenUID
+                                        const imagenBase64 = imagen.imagenBase64
+                                        const posicion = imagen?.posicion
+                                        const contenedor = this.contenedorImagen.ui({
+                                            imagenBase64: imagenBase64,
+                                            apartamentoIDV,
+                                            imagenUID,
+                                            posicion
+                                        })
+                                        gridImagenes.appendChild(contenedor)
+                                    })
+                                }
+                            },
+                            subirImagen: function () {
+                                const selectorEspacio = document.querySelector("[componente=espacioConfiguracionDelAlojamiento]")
+                                const apartamentoIDV = selectorEspacio.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
+                                const main = document.querySelector("main")
+                                const gridImagenes = main.querySelector("[contenedor=gridImagenes]")
+
+                                const campoEntrada = document.createElement("input")
+                                const selectorCampoRederizado = document.getElementById("campoEntrada")
+
+                                if (!selectorCampoRederizado) {
+                                    selectorEspacio.appendChild(campoEntrada)
+                                } else {
+                                    selectorCampoRederizado?.remove()
+                                }
+                                campoEntrada.id = "campoEntrada"
+                                campoEntrada.type = "file"
+                                campoEntrada.style.display = "none"
+                                campoEntrada.addEventListener("change", (event) => {
+                                    const archivoSeleccionado = event.target.files[0];
+                                    if (archivoSeleccionado) {
+
+                                        const lector = new FileReader();
+                                        lector.onload = async (eventoCarga) => {
+                                            const contenidoBuffer = eventoCarga.target.result;
+
+                                            const contenidoBase64 = btoa(new Uint8Array(contenidoBuffer).reduce((datos, byte) => datos + String.fromCharCode(byte), ""));
+                                            const contenedorImagen = this.contenedorImagen.ui({
+                                                imagenBase64: contenidoBase64,
+                                                estadoInicial: "cargando"
+                                            })
+                                            gridImagenes.appendChild(contenedorImagen)
+
+                                            const respuestaServidor = await casaVitini.shell.servidor({
+                                                zona: "administracion/arquitectura/configuraciones/gestionImagenes/subirNuevaImagen",
+                                                apartamentoIDV: apartamentoIDV,
+                                                contenidoArchivo: contenidoBase64
+                                            })
+                                            if (!contenedorImagen) {
+                                                return
+                                            }
+                                            if (respuestaServidor?.error) {
+                                                contenedorImagen?.remove()
+                                                casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                                            }
+                                            if (respuestaServidor?.ok) {
+                                                const imagenUID = respuestaServidor.imagenUID
+                                                contenedorImagen.querySelector("[contenedor=spinner]")?.remove()
+                                                contenedorImagen.setAttribute("imagenUID", imagenUID)
+                                                contenedorImagen.setAttribute("apartamentoIDV", apartamentoIDV)
+                                                this.contenedorImagen.activarBoton(contenedorImagen)
+
+
+                                            }
+                                            campoEntrada.remove()
+
+                                        }
+                                        lector.readAsArrayBuffer(archivoSeleccionado);
+                                    };
+                                })
+
+                                campoEntrada.click()
+                            },
+                            contenedorImagen: {
+                                ui: function (data) {
+                                    const imagenBase64 = data.imagenBase64
+                                    const apartamentoIDV = data.apartamentoIDV
+                                    const imagenUID = data.imagenUID
+                                    const estadoInicial = data.estadoInicial
+                                    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+
+                                    const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
+
+
+                                    const contenedor = document.createElement("div")
+                                    contenedor.classList.add("flexVertical", "contenedorImagen")
+                                    contenedor.setAttribute("instanciauID", instanciaUID)
+                                    contenedor.setAttribute("imagenUID", imagenUID)
+                                    contenedor.setAttribute("apartamentoIDV", apartamentoIDV)
+
+
+                                    const cImagen = document.createElement("div")
+                                    cImagen.classList.add("flexVertical", "contenedorImagenFondo")
+                                    cImagen.setAttribute("contenedor", "imagenBase64")
+                                    cImagen.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
+                                    contenedor.appendChild(cImagen)
+
+                                    const spinner = casaVitini.ui.componentes.spinnerSimple()
+                                    spinner.classList.add("blur50")
+
+
+                                    if (estadoInicial === "cargando") {
+                                        cImagen.appendChild(spinner)
+                                    }
+
+                                    const opciones = document.createElement("div")
+                                    opciones.classList.add("botonV1BlancoIzquierda")
+                                    opciones.setAttribute("boton", "opciones")
+                                    contenedor.appendChild(opciones)
+
+                                    if (estadoInicial === "cargando") {
+                                        opciones.textContent = "Cargando..."
+                                    } else {
+                                        this.activarBoton(contenedor)
+                                    }
+
+                                    return contenedor
+                                },
+                                activarBoton: function (contenedor) {
+                                    const apartamentoIDV = contenedor.getAttribute("apartamentoIDV")
+                                    const imagenUID = contenedor.getAttribute("imagenUID")
+                                    const posicion = contenedor.getAttribute("posicion")
+                                    const instanciaUID = contenedor.getAttribute("instanciaUID")
+                                    const imagenFondo = contenedor.querySelector("[contenedor=imagenBase64]").style.backgroundImage
+
+                                    const opciones = contenedor.querySelector("[boton=opciones]")
+                                    opciones.textContent = "Opciones"
+                                    opciones.addEventListener("click", (e) => {
+                                        this.opcionesImagen.ui({
+                                            apartamentoIDV,
+                                            imagenUID,
+                                            posicion,
+                                            instanciaUID,
+                                            imagenFondo,
+                                            e
+                                        })
+                                    })
+                                    contenedor.appendChild(opciones)
+                                },
+                                opcionesImagen: {
+                                    ui: function (data) {
+                                        const contenedorImagenOrigen = data.e.target.closest("[imagenUID]")
+                                        const apartamentoIDV = data.apartamentoIDV
+                                        const imagenUID = data.imagenUID
+                                        const instanciaUID = data.instanciaUID
+                                        const imagenFondo = data.imagenFondo
+                                        const totalImagenes = document.querySelector("[contenedor=gridImagenes]").querySelectorAll("[imagenUID]").length
+                                        const main = document.querySelector("main")
+                                        const gridImagenes = main.querySelector("[contenedor=gridImagenes]");
+                                        const contenedorImg = Array.from(gridImagenes.querySelectorAll("[imagenUID]"));
+                                        const posicionActual = contenedorImg.indexOf(contenedorImagenOrigen) + 1;
+
+                                        const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                                        const instanciaUID_flotante = ui.getAttribute("instanciaUID")
+                                        main.appendChild(ui)
+                                        const contenedor = ui.querySelector("[componente=contenedor]")
+
+
+                                        const botonCancelar = document.createElement("div")
+                                        botonCancelar.classList.add("botonV1")
+                                        botonCancelar.textContent = "Cerrar y volver"
+                                        botonCancelar.addEventListener("click", () => {
+                                            return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                        })
+                                        contenedor.appendChild(botonCancelar)
+
+                                        // Cargamos la imagen
+                                        // Boton borrar imagen
+                                        // boton actualizar imagen
+                                        // select cambiar de posicion
+                                        const cImagen = document.createElement("div")
+                                        cImagen.classList.add("flexVertical", "contenedorImagenFondoFlotante")
+                                        cImagen.setAttribute("contenedor", "imagenBase64")
+                                        cImagen.style.backgroundImage = imagenFondo
+                                        contenedor.appendChild(cImagen)
+
+                                        const botonActualizarImagen = document.createElement("div")
+                                        botonActualizarImagen.classList.add("botonV1BlancoIzquierda")
+                                        botonActualizarImagen.setAttribute("boton", "actualizar")
+                                        botonActualizarImagen.textContent = "Actualizar imagen"
+                                        botonActualizarImagen.addEventListener("click", (e) => {
+                                            this.actualizarImagen({
+                                                e,
+                                                imagenUID,
+                                                apartamentoIDV
+
+                                            })
+                                        })
+                                        contenedor.appendChild(botonActualizarImagen)
+
+
+                                        const contenedorOpciones = document.createElement("select")
+                                        contenedorOpciones.setAttribute("boton", "listaPosiciones")
+                                        contenedorOpciones.classList.add("botonV1BlancoIzquierda")
+                                        contenedorOpciones.addEventListener("change", (e) => {
+                                            const coordenadasSel = e.target.selectedIndex
+
+                                            this.cambiarPosicion({
+                                                imagenUID,
+                                                apartamentoIDV,
+                                                nuevaPosicion: e.target.value,
+                                                listaSelectora: e.target,
+                                                coordenadasSel,
+                                                instanciaUID_flotante,
+                                                posicionActual
+                                            })
+                                        })
+
+                                        const opcion = document.createElement("option");
+                                        opcion.value = "";
+                                        opcion.disabled = true;
+                                        opcion.text = "Seleciona la posición de destino";
+                                        contenedorOpciones.add(opcion);
+                                        for (let index = 0; index < totalImagenes; index++) {
+                                            const opcion = document.createElement("option");
+                                            const posicionUI = index + 1
+                                            opcion.value = posicionUI;
+                                            console.log("posicionUI", posicionUI, "posicionActual", posicionActual)
+                                            if (posicionUI === Number(posicionActual)) {
+                                                opcion.text = `Posicion actual de la imagen: ${posicionUI}`;
+                                                opcion.disabled = true;
+                                                opcion.selected = true;
+                                                opcion.setAttribute("estado", "inicial")
+                                            } else {
+                                                opcion.text = `Mover a la posición ${posicionUI}`;
+                                            }
+                                            contenedorOpciones.add(opcion);
+                                        }
+
+                                        contenedor.appendChild(contenedorOpciones)
+
+
+                                        const botonEliminar = document.createElement("div")
+                                        botonEliminar.classList.add("botonV1BlancoIzquierda")
+                                        botonEliminar.setAttribute("boton", "elimnar")
+                                        botonEliminar.textContent = "Eliminar imagen"
+                                        botonEliminar.addEventListener("click", (e) => {
+                                            this.eliminarImagen({
+                                                imagenUID,
+                                                apartamentoIDV,
+                                                e
+                                            })
+                                        })
+                                        contenedor.appendChild(botonEliminar)
+
+                                    },
+                                    cambiarPosicion: async function (data) {
+                                        const imagenUID = data.imagenUID
+                                        const nuevaPosicion = data.nuevaPosicion
+                                        const apartamentoIDV = data.apartamentoIDV
+                                        const instanciaUID_flotante = data.instanciaUID_flotante
+                                        const listaSelectora = data.listaSelectora
+                                        const coordenadasSel = data.coordenadasSel
+                                        const posicionActual = data.posicionActual
+                                        const opcionesListaComo = listaSelectora.options
+                                        listaSelectora.style.pointerEvents = "none"
+                                        const main = document.querySelector("main")
+
+                                        const opcionSel = opcionesListaComo[coordenadasSel]
+                                        const cacheTexto = opcionSel.text
+                                        opcionSel.text = `Moviendo a posicion ${nuevaPosicion}...`;
+                                        const gridImagenes = main.querySelector("[contenedor=gridImagenes]")
+
+
+                                        const respuestaServidor = await casaVitini.shell.servidor({
+                                            zona: "/administracion/arquitectura/configuraciones/gestionImagenes/actualizarPosicionImagen",
+                                            apartamentoIDV: apartamentoIDV,
+                                            imagenUID: imagenUID,
+                                            nuevaPosicion: String(nuevaPosicion)
+                                        })
+
+                                        const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_flotante}"]`)
+                                        if (!instanciaRenderizada) {
+                                            return
+                                        }
+                                        if (respuestaServidor.error) {
+                                            opcionSel.text = cacheTexto
+                                            listaSelectora.removeAttribute("style")
+                                            return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor.error)
+                                        }
+                                        if (respuestaServidor.ok) {
+                                            const opcionesDeInicioDelProceso = listaSelectora.querySelector("[estado=inicial]")
+                                            opcionesDeInicioDelProceso.disabled = false
+                                            opcionesDeInicioDelProceso.selected = false
+                                            opcionesDeInicioDelProceso.removeAttribute("estado")
+
+                                            opcionSel.text = `Posicion actual de la imagen: ${nuevaPosicion}`;
+                                            opcionSel.disabled = true
+                                            opcionSel.selected = true
+                                            opcionSel.setAttribute("estado", "inicial")
+                                            const valorDeInicioDelProceso = opcionesDeInicioDelProceso.value
+                                            opcionesDeInicioDelProceso.text = `Mover a la posición ${valorDeInicioDelProceso}`
+                                            listaSelectora.removeAttribute("style")
+                                            console.log("e", typeof valorDeInicioDelProceso)
+                                            let posiccionFinalDOM
+                                            if (Number(nuevaPosicion) < Number(valorDeInicioDelProceso)) {
+                                                posiccionFinalDOM = Number(nuevaPosicion) - 1
+                                            } else {
+                                                posiccionFinalDOM = Number(nuevaPosicion)
+                                            }
+
+                                            const posiccionInicialDOM = Number(valorDeInicioDelProceso) - 1
+                                            console.log("posiccionFinalDOM", posiccionFinalDOM, "posiccionInicialDOM", posiccionInicialDOM)
+                                            const contenedoresImg = Array.from(gridImagenes.querySelectorAll("[imagenUID]"));
+                                            const elementoParaMover = contenedoresImg[posiccionInicialDOM];
+                                            console.log("elemento a mover", elementoParaMover)
+
+                                            gridImagenes.removeChild(elementoParaMover);
+                                            gridImagenes.insertBefore(elementoParaMover, contenedoresImg[posiccionFinalDOM]);
+                                        }
+
+
+
+                                    },
+                                    eliminarImagen: async function (data) {
+                                        const apartamentoIDV = data.apartamentoIDV
+                                        const imagenUID = data.imagenUID
+                                        const e = data.e.target
+                                        const cacheBoton = e.textContent
+                                        const botones = e.closest("[componente=contenedor]").querySelectorAll("[boton]")
+                                        botones.forEach(c => c.style.pointerEvents = "none")
+                                        e.textContent = "Eliminando..."
+
+                                        const respuestaServidor = await casaVitini.shell.servidor({
+                                            zona: "/administracion/arquitectura/configuraciones/gestionImagenes/eliminarImagen",
+                                            apartamentoIDV: apartamentoIDV,
+                                            imagenUID: imagenUID,
+                                        })
+
+                                        if (respuestaServidor.error) {
+                                            e.textContent = cacheBoton
+                                            botones.forEach(c => c.removeAttribute("style"))
+                                            return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor.error)
+                                        }
+                                        if (respuestaServidor.ok) {
+                                            document.querySelector("[contenedor=gridImagenes]").querySelector(`[imagenUID="${imagenUID}"]`)?.remove()
+                                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                        }
+                                    },
+                                    actualizarImagen: function (data) {
+                                        const imagenUID = data.imagenUID
+                                        const apartamentoIDV = data.apartamentoIDV
+                                        const e = data.e.target
+                                        const contenedor = e.closest("[componente=contenedor]")
+                                        const imagenBase64Flotante = contenedor.querySelector("[contenedor=imagenBase64]")
+                                        const contenedorImagen = document.querySelector(`[contenedor=gridImagenes] [imagenUID="${imagenUID}"] [contenedor=imagenBase64]`)
+                                        const cacheImagen = contenedorImagen.style.backgroundImage
+                                        const main = document.querySelector("main")
+                                        const campoEntrada = document.createElement("input")
+                                        const selectorCampoRederizado = document.getElementById("campoEntrada")
+
+                                        if (!selectorCampoRederizado) {
+                                            main.appendChild(campoEntrada)
+                                        } else {
+                                            selectorCampoRederizado?.remove()
+                                        }
+                                        campoEntrada.id = "campoEntrada"
+                                        campoEntrada.type = "file"
+                                        campoEntrada.style.display = "none"
+                                        campoEntrada.addEventListener("change", (event) => {
+                                            const archivoSeleccionado = event.target.files[0];
+                                            if (archivoSeleccionado) {
+                                                const spinner = casaVitini.ui.componentes.spinnerSimple()
+                                                spinner.classList.add("blur50")
+                                                contenedorImagen.appendChild(spinner)
+
+                                                const spinner_imagenFLotante = casaVitini.ui.componentes.spinnerSimple()
+                                                spinner_imagenFLotante.classList.add("blur50")
+                                                imagenBase64Flotante.appendChild(spinner_imagenFLotante)
+
+                                                const lector = new FileReader();
+                                                lector.onload = async (eventoCarga) => {
+                                                    const contenidoBuffer = eventoCarga.target.result;
+                                                    const contenidoBase64 = btoa(new Uint8Array(contenidoBuffer).reduce((datos, byte) => datos + String.fromCharCode(byte), ""));
+                                                    const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(contenidoBase64);
+                                                    contenedorImagen.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${contenidoBase64})`
+                                                    imagenBase64Flotante.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${contenidoBase64})`
+                                                    const respuestaServidor = await casaVitini.shell.servidor({
+                                                        zona: "administracion/arquitectura/configuraciones/gestionImagenes/actualizarImagen",
+                                                        apartamentoIDV: apartamentoIDV,
+                                                        imagenUID: imagenUID,
+                                                        contenidoArchivo: contenidoBase64
+                                                    })
+                                                    if (!contenedorImagen) {
+                                                        return
+                                                    }
+                                                    if (respuestaServidor?.error) {
+                                                        contenedorImagen.style.backgroundImage = cacheImagen
+                                                        imagenBase64Flotante.style.backgroundImage = cacheImagen
+                                                        spinner_imagenFLotante?.remove()
+                                                        spinner?.remove()
+                                                        casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                                                    }
+                                                    if (respuestaServidor?.ok) {
+                                                        spinner_imagenFLotante?.remove()
+                                                        spinner?.remove()
+                                                    }
+                                                    campoEntrada.remove()
+                                                }
+                                                lector.readAsArrayBuffer(archivoSeleccionado);
+                                            };
+                                        })
+                                        campoEntrada.click()
+                                    },
+                                }
+                            },
                         }
                     }
                 },
@@ -55590,7 +56374,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         const apartamentoUI = detallesDelEvento.apartamentoUI
                         nombreEventoFinal = `Bloqueo ${apartamentoUI}`
                         urlUI = `/administracion/gestion_de_bloqueos_temporales/${apartamentoIDV}/${bloqueoUID}`
-                    } else  if (tipoEvento === "bloqueoPorApartamento") {
+                    } else if (tipoEvento === "bloqueoPorApartamento") {
                         const bloqueoUID = detallesDelEvento.bloqueoUID
                         const apartamentoIDV = detallesDelEvento.apartamentoIDV
                         const apartamentoUI = detallesDelEvento.apartamentoUI
@@ -56370,7 +57154,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     filaIconoTitulo.appendChild(tituloReservas)
                     contenedorCapaReservas.appendChild(filaIconoTitulo)
                     grupoGlobalCapas.appendChild(contenedorCapaReservas)
-                    
+
                     const contenedorTodosLosBloqueos = document.createElement("div")
                     contenedorTodosLosBloqueos.classList.add("contenedorCapa")
                     contenedorTodosLosBloqueos.setAttribute("capaUID", "todosLosBloqueos")
@@ -56390,7 +57174,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     tituloTodosLosBloqueos.textContent = "Todos los bloqueos"
                     filaIconoTitulo.appendChild(tituloTodosLosBloqueos)
                     contenedorTodosLosBloqueos.appendChild(filaIconoTitulo)
-                  //  grupoGlobalCapas.appendChild(contenedorTodosLosBloqueos)
+                    //  grupoGlobalCapas.appendChild(contenedorTodosLosBloqueos)
                     contenedorMenuCapas.appendChild(grupoGlobalCapas)
 
 
@@ -56844,7 +57628,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const capaUID = capa.getAttribute("capaUID")
                             estructura.capas.push(capaUID)
                         })
-               
+
                         if (!capasSelecionadas.includes("todasLasReservasPorApartamento")) {
                             const apartametnosSeleccionados = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID=reservasPorApartamento][estado=seleccionado]")
                             const reservasPorApartamento = []

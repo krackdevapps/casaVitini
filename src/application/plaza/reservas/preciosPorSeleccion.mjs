@@ -111,7 +111,9 @@ export const preciosPorSeleccion = async (entrada) => {
         })
         const impuestosAplicados = desgloseFinanciero.global.totales.impuestosAplicados
         const desglosePorApartamento = desgloseFinanciero.entidades.reserva.desglosePorApartamento
+        const totalNeto = desgloseFinanciero.global.totales.totalNeto
 
+        const totalDescuentos = desgloseFinanciero.global.totales.totalDescuentos
         const contenedorDescuentos = desgloseFinanciero.contenedorOfertas.entidades.reserva.desgloses
 
         const descuentosPorDias = contenedorDescuentos.porDia
@@ -159,11 +161,16 @@ export const preciosPorSeleccion = async (entrada) => {
 
         apartamentosIDVARRAY.forEach((apartamentoIDV) => {
             const netoDelApartamento = desglosePorApartamento[apartamentoIDV].totalNeto
-            const proporcionImpuestos = new Decimal(impuestosAplicados).div(numeroApartamentosSeleccionados)
-            const proporcionDescuentos = new Decimal(descuentosEnProporcion).div(numeroApartamentosSeleccionados)
+            const proporcionImpuestos = new Decimal(impuestosAplicados)
+                .div(numeroApartamentosSeleccionados)
+            const proporcionDescuentos = new Decimal(totalDescuentos)
+                .mul(netoDelApartamento)
+                .dividedBy(totalNeto)
             const descuentoDelApartamento = descuentosPorApartamento[apartamentoIDV] || 0
-            const precioApartamentoSeleccionadoNeto = new Decimal(netoDelApartamento).minus(proporcionDescuentos).minus(descuentoDelApartamento)
-            const prePrecioApartamentoSeleccionadoFinal = (precioApartamentoSeleccionadoNeto).plus(proporcionImpuestos)
+            const precioApartamentoSeleccionadoNeto = new Decimal(netoDelApartamento)
+                .minus(proporcionDescuentos).minus(descuentoDelApartamento)
+            const prePrecioApartamentoSeleccionadoFinal = (precioApartamentoSeleccionadoNeto)
+                .plus(proporcionImpuestos)
             preciosPorSeleccion[apartamentoIDV] = {
                 precioEnBaseASeleccion: prePrecioApartamentoSeleccionadoFinal.isNegative() ? "0.00" : prePrecioApartamentoSeleccionadoFinal.toFixed(2)
             }

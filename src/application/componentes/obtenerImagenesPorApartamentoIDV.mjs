@@ -1,8 +1,8 @@
-import { obtenerNumeroDeTodasLasImagenesPorApartamentoIDV } from "../../infraestructure/repository/arquitectura/configuraciones/gestionDeImagenes/obtenerNumeroDeTodasLasImagenesPorApartamentoIDV.mjs";
+import { obtenerTodasLasImagenesPorApartamentoIDV } from "../../infraestructure/repository/arquitectura/configuraciones/gestionDeImagenes/obtenerTodasLasImagenesPorApartamentoIDV.mjs";
 import { obtenerImagenApartamentoPorApartamentoIDV } from "../../infraestructure/repository/arquitectura/configuraciones/obtenerImagenApartamentoPorApartamentoIDV.mjs";
 import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
 
-export const imagenDelApartamento = async (entrada) => {
+export const obtenerImagenesPorApartamentoIDV = async (entrada) => {
     try {
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -21,12 +21,10 @@ export const imagenDelApartamento = async (entrada) => {
             estadoConfiguracionIDV_array: ["disponible"]
         })
 
-        const numeroImg = await obtenerNumeroDeTodasLasImagenesPorApartamentoIDV(apartamentoIDV)
-        const numeroTotal = numeroImg.totalImagenes
+        const imagenes = await obtenerTodasLasImagenesPorApartamentoIDV(apartamentoIDV)
         const ok = {
-            ok: "Imagen de apartamento PNG en base64",
-            imagen: configuracionDelApartamento.imagen,
-            numeroImagenesGaleria: numeroTotal
+            ok: `Todas las imagenes del ${apartamentoIDV}`,
+            imagenes
         }
         return ok
     } catch (errorCapturado) {

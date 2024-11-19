@@ -3113,6 +3113,7 @@ summary:hover {
     flex-wrap: nowrap;
     align-items: center;
 }
+
 [zonaCSS="/micasa/reservas"] [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
     display: grid;
     grid-template-columns: auto auto auto auto 50px;
@@ -4697,13 +4698,6 @@ summary:hover {
     border: 3px solid transparent;
 }
 
-.calendarioDiaReservaLimite {
-    color: rgb(183, 183, 183);
-    background: rgb(54, 54, 54);
-    border: 3px solid transparent;
-    pointer-events: none;
-}
-
 .calendarioDiaNoDisponible {
     background: rgb(148, 148, 148);
     border: 3px solid transparent;
@@ -5605,8 +5599,9 @@ summary:hover {
     color: white;
     background: red;
 }
+
 [contenedor="financiero"] .contenedorEntidad {
-    padding:  6px;
+    padding: 6px;
 }
 
 [ui="reservaUI"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
@@ -9009,7 +9004,7 @@ summary:hover {
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    border: 1px solid #00000038;
+    background: color(srgb 0 0 0 / 0.12);
 }
 
 [zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_info {
@@ -9180,7 +9175,7 @@ summary:hover {
 [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorTituloYBotones {
     display: flex;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    grid-gap: 0px;
+    grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     justify-items: stretch;
     justify-content: center;
@@ -10390,6 +10385,15 @@ summary:hover {
 .lds-spinner {
     display: flex;
     position: relative;
+    width: 40px;
+    height: 40px;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.lds-spinner_backup {
+    display: flex;
+    position: relative;
     width: 25px;
     height: 25px;
     padding: 10px;
@@ -10397,6 +10401,8 @@ summary:hover {
     margin: 20px;
     align-items: center;
 }
+
+
 
 .lds-spinner div {
     transform-origin: 12.5px 12.5px;
@@ -11359,6 +11365,7 @@ summary:hover {
     justify-content: center;
     flex-wrap: nowrap;
     gap: 20px;
+    border-radius: 20px;
 }
 
 [ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_tituloReembolso {
@@ -12763,9 +12770,10 @@ summary:hover {
 }
 
 [zonaCSS="administracion/calendario"] .diaSel {
-    background: black ;
-    color: white ;
+    background: black;
+    color: white;
 }
+
 [zonaCSS="administracion/calendario"] .diaSelecionable:hover {
     background: blue;
     color: white;
@@ -14618,22 +14626,15 @@ summary:hover {
 }
 
 
-[zonaCSS=instalaciones] .contenedorImagenAmpliada {
+.contenedorImagenAmpliada {
     background: black;
-
     width: 100vw;
-
     height: 100vh;
-
     margin: 0;
     top: 0px;
-
     padding: 0;
-
     border: none;
-
     transition: all 250ms linear;
-
     gap: 10px;
     touch-action: manipulation;
     cursor: default;
@@ -14645,7 +14646,7 @@ summary:hover {
     grid-row-gap: 0px;
     outline: none;
     opacity: 1;
-    z-index: 100;
+    z-index: 400;
 
     @starting-style {
         opacity: 0;
@@ -14654,7 +14655,7 @@ summary:hover {
 
 
 
-[zonaCSS=instalaciones] .contenedorImagenVolatil {
+ .contenedorImagenVolatil {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -14662,7 +14663,7 @@ summary:hover {
     position: relative;
 }
 
-[zonaCSS=instalaciones] .contenedorImagenAmpliada .contenedorBotones {
+.contenedorImagenAmpliada .contenedorBotones {
     display: grid;
     grid-template-columns: min-content auto min-content;
     grid-template-rows: 1fr;
@@ -14676,12 +14677,11 @@ summary:hover {
 }
 
 @media (max-width: 850px) {
-    [zonaCSS=instalaciones] .contenedorImagenAmpliada .contenedorBotones {
+ .contenedorImagenAmpliada .contenedorBotones {
         padding: 28px;
     }
 }
-
-[zonaCSS=instalaciones] .contenedorImagenAmpliada .marcoEspaciadoContenedorBotones {
+ .contenedorImagenAmpliada .marcoEspaciadoContenedorBotones {
     display: flex;
 
     top: 0px;
@@ -14692,7 +14692,7 @@ summary:hover {
     align-items: stretch;
 }
 
-[zonaCSS=instalaciones] .contenedorImagenAmpliada .contenedorBotones .boton {
+.contenedorImagenAmpliada .contenedorBotones .boton {
     display: flex;
     background-color: rgba(255, 255, 255, 0.4);
     border-radius: 10px;
@@ -14708,7 +14708,7 @@ summary:hover {
 }
 
 @media (max-width: 850px) {
-    [zonaCSS=instalaciones] .contenedorImagenAmpliada .contenedorBotones .boton {
+.contenedorImagenAmpliada .contenedorBotones .boton {
         width: auto;
     }
 }
@@ -16155,4 +16155,70 @@ textarea {
 
 .fondoNaranja {
     background: rgb(214, 192, 157);
+}
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .contenedorImagen {
+    height: 300px;
+    gap: 6px;
+    background: #00000021;
+    border-radius: 20px;
+    padding: 6px;
+}
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .gridImagenes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 10px;
+    width: 100%;
+}
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .contenedorImagenFondo {
+    background-size: cover;
+    background-position: center center;
+    flex: 1;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+}
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .contenedorImagenFondoFlotante {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    height: 300px;
+}
+
+
+
+[zonaCSS="/alojamiento"] .gridImagenes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    width: 100%;
+}
+
+[zonaCSS="/alojamiento"] .contenedorImagen {
+    height: 300px;
+    gap: 6px;
+    background: #00000021;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+
+[zonaCSS="/alojamiento"] .contenedorImagenFondo {
+    background-size: cover;
+    background-position: center center;
+    flex: 1;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
