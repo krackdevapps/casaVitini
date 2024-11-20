@@ -15968,7 +15968,8 @@ summary:hover {
     flex-direction: column;
     align-items: stretch;
     flex-wrap: nowrap;
-    border: 1px solid #80808078;
+    /* border: 1px solid #80808078; */
+    background: color(srgb 0 0 0 / 0.07);
 }
 
 [contenedor="financiero"] .reserva_resumen_desglose_porNoche {

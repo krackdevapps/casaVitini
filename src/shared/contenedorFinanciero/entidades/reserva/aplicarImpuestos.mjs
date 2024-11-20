@@ -10,11 +10,14 @@ export const aplicarImpuestos = async (data) => {
         estructura.impuestos = []
 
         const origen = data.origen
-
+        let totalNetoGlobal_preCalculado = new Decimal("0.00")
 
         if (estructura.entidades.hasOwnProperty("reserva")) {
             const totalNeto = new Decimal(estructura.entidades.reserva.global.totales.totalNeto)
             const totalFinal = new Decimal(estructura.entidades.reserva.global.totales.totalFinal)
+            totalNetoGlobal_preCalculado = totalNetoGlobal_preCalculado.plus(totalNeto)
+      
+
             const impuestosParaReservas = []
 
             if (origen === "hubImuestos") {
@@ -61,7 +64,7 @@ export const aplicarImpuestos = async (data) => {
                 if (tipoValorIDV === "porcentaje") {
                     const calculoImpuestoPorcentaje = totalNeto.times(tipoImpositivo).dividedBy(100)
                     presentacionImpuesto.porcentaje = tipoImpositivo
-                    presentacionImpuesto.tipoImpositivo = calculoImpuestoPorcentaje
+                    presentacionImpuesto.tipoImpositivo = calculoImpuestoPorcentaje.toFixed(2)
                     sumaImpuestos = sumaImpuestos.plus(calculoImpuestoPorcentaje)
                 }
                 if (tipoValorIDV === "tasa") {
@@ -75,6 +78,10 @@ export const aplicarImpuestos = async (data) => {
             estructura.entidades.reserva.global.totales.impuestosAplicados = sumaImpuestos.toFixed(2)
             estructura.entidades.reserva.global.totales.totalFinal = totalFinal.plus(sumaImpuestos).toFixed(2)
         }
+        if (estructura.entidades.hasOwnProperty("complementosAlojamiento")) {
+            const totalNeto = new Decimal(estructura.entidades.complementosAlojamiento.global.totales.totalNeto)
+            totalNetoGlobal_preCalculado = totalNetoGlobal_preCalculado.plus(totalNeto)
+        }
         if (estructura.entidades.hasOwnProperty("servicios")) {
             const desglosePorServicios = estructura.entidades.servicios.desglosePorServicios
 
@@ -82,6 +89,7 @@ export const aplicarImpuestos = async (data) => {
                 const totalNeto = new Decimal(estructura.entidades.servicios.global.totales.totalNeto)
                 const totalFinal = new Decimal(estructura.entidades.servicios.global.totales.totalFinal)
                 const impuestosParaServicios = []
+                totalNetoGlobal_preCalculado = totalNetoGlobal_preCalculado.plus(totalNeto)
 
                 if (origen === "hubImuestos") {
                     const impuestosDeAdministracion = await obtenerImpuestosPorAplicacionIDVPorEstado({
@@ -197,7 +205,7 @@ export const aplicarImpuestos = async (data) => {
                 entidadIDV
             }
             if (tipoValorIDV === "porcentaje") {
-                const calculoImpuestoPorcentaje = totalNeto.times(tipoImpositivo).dividedBy(100)
+                const calculoImpuestoPorcentaje = totalNetoGlobal_preCalculado.times(tipoImpositivo).dividedBy(100)
                 presentacionImpuesto.porcentaje = tipoImpositivo
                 presentacionImpuesto.tipoImpositivo = calculoImpuestoPorcentaje
                 sumaImpuestos = sumaImpuestos.plus(calculoImpuestoPorcentaje)
