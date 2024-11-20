@@ -36,7 +36,7 @@ describe('crud locks for apartments', () => {
         })
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDV,
-            estadoInicial: "nodisponible",
+            estadoInicial: "desactivado",
             zonaIDV: "global"
         })
     })

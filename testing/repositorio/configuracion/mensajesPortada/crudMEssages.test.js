@@ -42,7 +42,7 @@ describe('crud messages of front page', () => {
     test('update status of message', async () => {
         const response = await actualizarEstadoMensajeDePortada({
             mensajeUID: nuevoMensajeUID,
-            estado: "desactivado",
+            estadoIDV: "desactivado",
         });
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');

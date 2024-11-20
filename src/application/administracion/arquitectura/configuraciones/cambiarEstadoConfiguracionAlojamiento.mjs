@@ -46,21 +46,21 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
             errorSi: "noExiste"
         })
 
-        if (nuevoEstado !== "disponible" && nuevoEstado !== "nodisponible") {
-            const m = "El campo nuevoEstado solo puede ser disponible o nodisponible"
+        if (nuevoEstado !== "activado" && nuevoEstado !== "desactivado") {
+            const m = "El campo nuevoEstado solo puede ser activado o desactivado"
             throw new Error(m)
         }
-        if (nuevoEstado === "disponible") {
+        if (nuevoEstado === "activado") {
 
             const zonaIDV = configuracionApartamento.zonaIDV
             if (zonaIDV !== "privada" && zonaIDV !== "global" && zonaIDV !== "publica") {
-                const error = "No se puede poner en disponible esta configuración porque no es válida. Necesitas establecer la zona de esta configuración de alojamiento en privada, publica o global";
+                const error = "No se puede poner en activado esta configuración porque no es válida. Necesitas establecer la zona de esta configuración de alojamiento en privada, publica o global";
                 throw new Error(error);
             }
 
             const habitacionesPorApartmento = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
             if (habitacionesPorApartmento.length === 0) {
-                const error = "No se puede poner en disponible esta configuración porque no es válida. Necesitas al menos una habitación en esta configuración y este apartamento no la tiene";
+                const error = "No se puede poner en activado esta configuración porque no es válida. Necesitas al menos una habitación en esta configuración y este apartamento no la tiene";
                 throw new Error(error);
             }
 
@@ -82,14 +82,14 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
                 }
                 if (habitacionesSinCama.length > 0) {
                     const funsionArray = habitacionesSinCama.join(", ").replace(/,([^,]*)$/, ' y $1');
-                    const error = `No se puede establecer el estado disponible porque la configuración no es válida. Por favor, revisa las camas asignadas en las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opción. Por favor, asigna la cama`;
+                    const error = `No se puede establecer el estado activado porque la configuración no es válida. Por favor, revisa las camas asignadas en las habitaciones. En las habitaciones ${funsionArray} no hay una sola cama signada como opción. Por favor, asigna la cama`;
                     throw new Error(error);
                 }
             }
 
             const perfilPrecioDelApartamento = await obtenerPerfilPrecioPorApartamentoIDV(apartamentoIDV)
             if (perfilPrecioDelApartamento.length === 0) {
-                const error = "La configuración no es válida. No se puede establecer en disponible porque esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor, establece un perfil de precio para esta configuración.";
+                const error = "La configuración no es válida. No se puede establecer en activado porque esta configuración no tiene asignado un perfil de precio para poder calcular los impuestos. Por favor, establece un perfil de precio para esta configuración.";
                 throw new Error(error);
             }
             if (perfilPrecioDelApartamento.precio <= 0) {

@@ -19,7 +19,7 @@ export const insertarImpuesto = async (data) => {
         "estadoIDV",
         "testingVI"
         )
-        VALUES ($1, $2, $3, $4, $5, $6)
+        VALUES ($1, $2, $3, $4, $5::"tipo_estadosIDV", $6)
         RETURNING *
         `;
         const parametros = [

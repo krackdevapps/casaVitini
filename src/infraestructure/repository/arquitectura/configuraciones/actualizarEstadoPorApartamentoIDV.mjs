@@ -7,7 +7,7 @@ export const actualizarEstadoPorApartamentoIDV = async (data) => {
 
         const consulta = `
         UPDATE "configuracionApartamento"
-        SET "estadoConfiguracionIDV" = $1
+        SET "estadoConfiguracionIDV" = $1::"tipo_estadosIDV"
         WHERE "apartamentoIDV" = $2
         RETURNING 
         *;

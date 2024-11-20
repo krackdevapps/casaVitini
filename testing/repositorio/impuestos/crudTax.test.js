@@ -24,7 +24,7 @@ describe('crud tax', () => {
             tipoImpositivo: "10.00",
             tipoValor: "tasa",
             aplicacionSobre: "totalNeto",
-            estado: "desactivado",
+            estadoIDV: "desactivado",
             testingVI: testingVI,
         })
         nuevoImpuestoUID = response.impuestoUID

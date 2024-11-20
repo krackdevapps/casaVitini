@@ -8,6 +8,7 @@ import { detallesDelMensaje } from '../../../../src/application/administracion/c
 import { moverPosicion } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/moverPosicion.mjs';
 import { obtenerMensajes } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/obtenerMensajes.mjs';
 import { eliminarMensaje } from '../../../../src/application/administracion/configuracion/mensajesEnPortada/eliminarMensaje.mjs';
+import { obtenerTodosLosMensjaes } from '../../../../src/infraestructure/repository/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs';
 
 describe('Frontpage messages system', () => {
     const fakeAdminSession = {
@@ -78,19 +79,20 @@ describe('Frontpage messages system', () => {
     })
 
     test('update position of message with ok', async () => {
-
-        const m_volatil = {
+        const todosLosMensaje = await obtenerTodosLosMensjaes()
+        const totalMensajes = todosLosMensaje.length + 1
+    
+        await crearMensaje({
             body: {
                 mensaje: "Mensaje de prueba para testing",
             },
             session: fakeAdminSession
-        }
-        await crearMensaje(m_volatil)
+        })
 
         const m = {
             body: {
                 mensajeUID,
-                nuevaPosicion: "2"
+                nuevaPosicion: String(totalMensajes)
             },
             session: fakeAdminSession
         }

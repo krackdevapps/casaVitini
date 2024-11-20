@@ -10,7 +10,7 @@ export const actualizarEstadoMensajeDePortada = async (data) => {
         UPDATE 
             "mensajesEnPortada"
         SET
-            "estadoIDV" = $1
+            "estadoIDV" = $1::"tipo_estadosIDV"
         WHERE
             "mensajeUID" = $2
         RETURNING

@@ -219,8 +219,8 @@ const casaVitini = {
                 const menuFinal = (menuID) => {
                     if (menuID === "panelControl") {
                         menu_renderizado.setAttribute("sobreControl", "activo")
-                        return "publico"
-                    } else if (menuID === "publico") {
+                        return "publica"
+                    } else if (menuID === "publica") {
                         menu_renderizado.removeAttribute("sobreControl")
                         return "panelControl"
                     }
@@ -276,11 +276,11 @@ const casaVitini = {
                         usuario: usuario
                     })
 
-                } else if (tipoBarraNavegacion === "publico" && menuRenderizado !== tipoBarraNavegacion) {
+                } else if (tipoBarraNavegacion === "publica" && menuRenderizado !== tipoBarraNavegacion) {
                     panelNavegacion.setAttribute("menuID", tipoBarraNavegacion)
 
                     casaVitini.shell.navegacion.constructorMenuUI({
-                        tipoMenu: "publico",
+                        tipoMenu: "publica",
                         destino: "header [contenedor=intermedio]",
                         usuario: usuario
                     })
@@ -439,7 +439,7 @@ const casaVitini = {
                     return sobreControl
                 }
 
-                if (tipoMenu === "publico") {
+                if (tipoMenu === "publica") {
                     menuPublicoData.forEach((menu) => {
                         const href = menu.href
                         const nombre = menu.nombre
@@ -549,7 +549,7 @@ const casaVitini = {
                     let tipo;
                     const rolIDV = respuestaServidor?.rolIDV;
                     if (rolIDV === "cliente") {
-                        tipo = "publico"
+                        tipo = "publica"
                     }
                     if (rolIDV === "administrador" ||
                         rolIDV === "empleado") {
@@ -696,7 +696,7 @@ const casaVitini = {
                 const rolIDV = IDX?.rolIDV
                 if (estadoIDV === "desconectado" || !estadoIDV) {
                     const navegacion = {
-                        tipo: "publico",
+                        tipo: "publica",
                         estadoIDV: "desconectado",
                         origen: "controlador",
                         estadoIDV: estadoIDV
@@ -718,7 +718,7 @@ const casaVitini = {
 
                 } else if (estadoIDV === "conectado" && rolIDV === "cliente") {
                     const navegacion = {
-                        tipo: "publico",
+                        tipo: "publica",
                         usuario: IDX.usuario,
                         rolIDV: rolIDV,
                         estadoIDV: estadoIDV,
@@ -5268,7 +5268,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             pasaporteTitularUI.classList.add("negrita")
                             pasaporteTitularUI.textContent = pasaporteTitular
                             bloqueDatoTitular.appendChild(pasaporteTitularUI)
-                            contenedorDatosDelTitular.appendChild(bloqueDatoTitular)
+                            //  contenedorDatosDelTitular.appendChild(bloqueDatoTitular)
                             bloqueDatoTitular = document.createElement("div")
                             bloqueDatoTitular.classList.add("plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque")
                             bloqueTituloTitular = document.createElement("div")
@@ -12938,7 +12938,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 if (!porComplemento_selector) {
                                     const contenedor = document.createElement("div")
                                     contenedor.classList.add(
-                                        "padding6",
+
                                         "flexVertical",
                                         "gap6"
                                     )
@@ -13137,7 +13137,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     document.querySelector(destino).querySelector("[contenedor=financiero] [entidad=complementosDelAlojamientos] [contenedor=data]").appendChild(totalesUI)
 
                                     const totalesUITituloBloque = document.createElement("div")
-                                    totalesUITituloBloque.classList.add("reserva_resumen_desglose_pago_titulo")
+                                    totalesUITituloBloque.classList.add("textoCentrado", "negrita", "padding6")
                                     totalesUITituloBloque.textContent = "Totales de los complementos de alojamiento en la reserva (Solo complementos de alojamiento)"
                                     totalesUI.appendChild(totalesUITituloBloque)
 
@@ -16671,11 +16671,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const estadoConfiguracionIDV = apartamentoDisponible.estadoConfiguracionIDV
 
                                 let estadoUI
-                                if (estadoConfiguracionIDV === "disponible") {
-                                    estadoUI = "Disponible"
+                                if (estadoConfiguracionIDV === "activado") {
+                                    estadoUI = "Activado"
                                 }
-                                if (estadoConfiguracionIDV === "nodisponible") {
-                                    estadoUI = "No disponible"
+                                if (estadoConfiguracionIDV === "desactivado") {
+                                    estadoUI = "Desactivado"
                                 }
                                 const apartamentoDetallesUI = document.createElement("div")
                                 apartamentoDetallesUI.classList.add("crearOfertaApartamentoUI")
@@ -19376,7 +19376,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 propuesta.target.parentNode.remove()
                                 casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.fechas.controladorZonaPropuestasCambioFechas()
                             },
-
                         },
                         titular: {
                             desplegarUI: async function (reservaUID) {
@@ -49743,7 +49742,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             if (zonaIDV === "privado") {
                                 zonaDefinicionUI = "Privado - Solo se aplica a la zona de administración"
                             }
-                            if (zonaIDV === "publico") {
+                            if (zonaIDV === "publica") {
                                 zonaDefinicionUI = "Público - Solo se aplica a la zona publica"
                             } if (zonaIDV === "global") {
                                 zonaDefinicionUI = "Global - Se aplica a toda la zona, tando pública como administrativa"
@@ -49915,7 +49914,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         if (zonaIDV === "privado") {
                             zonaDefinicionUI = "Privado - Solo se aplica a la zona de administración"
                         }
-                        if (zonaIDV === "publico") {
+                        if (zonaIDV === "publica") {
                             zonaDefinicionUI = "Público - Solo se aplica a la zona publica"
                         } if (zonaIDV === "global") {
                             zonaDefinicionUI = "Global - Se aplica a toda la zona, tando pública como administrativa"
@@ -49925,10 +49924,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         zonaUI.setAttribute("datoBloqueo", "zonaIDV")
                         zonaUI.setAttribute("datoInicial", zonaIDV)
                         const opcion_publico = document.createElement("option");
-                        if (zonaIDV === "publico") {
+                        if (zonaIDV === "publica") {
                             opcion_publico.selected = true;
                         }
-                        opcion_publico.value = "publico";
+                        opcion_publico.value = "publica";
                         opcion_publico.text = "Público - Zona pública";
                         zonaUI.add(opcion_publico);
                         const opcion_privado = document.createElement("option");
@@ -50769,7 +50768,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     zonaInicio.text = "Seleccionar en que zona se aplica en bloqueo";
                     zonaUI.add(zonaInicio);
                     const opcion_publico = document.createElement("option");
-                    opcion_publico.value = "publico";
+                    opcion_publico.value = "publica";
                     opcion_publico.text = "Público - Zona pública";
                     zonaUI.add(opcion_publico);
                     const opcion_privado = document.createElement("option");
@@ -52077,11 +52076,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const zonaIDV = detalleApartamento.zonaIDV
                                 const estadoConfiguracion = detalleApartamento.estadoConfiguracion
                                 let estadoConfiguracionUI
-                                if (estadoConfiguracion === "disponible") {
-                                    estadoConfiguracionUI = "Disponible"
+                                if (estadoConfiguracion === "activado") {
+                                    estadoConfiguracionUI = "Activado"
                                 }
-                                if (estadoConfiguracion === "nodisponible") {
-                                    estadoConfiguracionUI = "No disponible"
+                                if (estadoConfiguracion === "desactivado") {
+                                    estadoConfiguracionUI = "Desactivado"
                                 }
                                 const zonaUI = {
                                     privada: "Zona privada",
@@ -52185,11 +52184,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const habitaciones = respuestaServidor?.habitaciones
 
                             let estadoConfiguracionUI
-                            if (estadoConfiguracion === "nodisponible") {
-                                estadoConfiguracionUI = "No disponible"
+                            if (estadoConfiguracion === "desactivado") {
+                                estadoConfiguracionUI = "Desactivado"
                             }
-                            if (estadoConfiguracion === "disponible") {
-                                estadoConfiguracionUI = "Disponible"
+                            if (estadoConfiguracion === "activado") {
+                                estadoConfiguracionUI = "Activado"
                             }
                             let zonaUI
                             if (zonaIDV === "publica") {
@@ -52806,13 +52805,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             const estadoActual = data.estadoActual
                             let tituloBoton
                             let nuevoEstado
-                            if (estadoActual === "nodisponible") {
-                                tituloBoton = "Cambiar estado a Disponible"
-                                nuevoEstado = "disponible"
+                            if (estadoActual === "activado") {
+                                tituloBoton = "Cambiar estado a Desactivado"
+                                nuevoEstado = "desactivado"
                             }
-                            if (estadoActual === "disponible") {
-                                tituloBoton = "Cambiar estado a No disponible"
-                                nuevoEstado = "nodisponible"
+                            if (estadoActual === "desactivado") {
+                                tituloBoton = "Cambiar estado a Activado"
+                                nuevoEstado = "activado"
                             }
 
                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
@@ -52862,11 +52861,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const selectorEstadoActualIDV = document.querySelector("[estadoActual]")
                                 selectorEstadoActualIDV.setAttribute("estadoActual", nuevoEstado)
                                 let estadoConfiguracionUI
-                                if (nuevoEstado === "nodisponible") {
-                                    estadoConfiguracionUI = "No disponible"
+                                if (nuevoEstado === "desactivado") {
+                                    estadoConfiguracionUI = "Desactivado"
                                 }
-                                if (nuevoEstado === "disponible") {
-                                    estadoConfiguracionUI = "Disponible"
+                                if (nuevoEstado === "activado") {
+                                    estadoConfiguracionUI = "Activado"
                                 }
                                 const selectorEstadoActualUI = document.querySelector("[componente=estadoActualUI]")
                                 selectorEstadoActualUI.textContent = estadoConfiguracionUI
@@ -56494,9 +56493,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         selectorDias.forEach((dia) => {
                             dia.removeAttribute("eventosContenedor")
                         })
-
-                        for (const detallesDia of Object.entries(eventosMes)) {
-                            const fechaDestino = detallesDia[0].split("-")
+                        for (const [fechaDia, contenedorDia] of Object.entries(eventosMes)) {
+                            const fechaDestino = fechaDia.split("-")
 
                             const diaDestino = fechaDestino[2]
                             const selectorContenedorDia = selectorMesDestino.querySelector(`[dia="${diaDestino}"]`)
@@ -56512,14 +56510,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             }
                             if (diaDestino === 1) {
                                 let posicionesIninical = posicionEvento
-                                for (const eventosDiaActual of detallesDia[1]) {
+                                for (const eventosDiaActual of contenedorDia) {
                                     const reservaUID_diaActual = eventosDiaActual.eventoUID
                                     objetoEventos.eventos[reservaUID_diaActual] = posicionesIninical
                                     posicionesEventosReservadas[posicionesIninical] = "posicionReservada"
                                     posicionesIninical++
                                 }
                             } else {
-                                const numeroDiaAnterior = diaDestino - 1
+                                const numeroDiaAnterior = String(Number(diaDestino - 1)).padStart(2, "0")
                                 const selectorContenedorDiaAnterior = selectorMesDestino
                                     .querySelector(`[dia="${numeroDiaAnterior}"]`)
                                     ?.getAttribute("eventosContenedor") || "{}"
@@ -56527,7 +56525,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const contenedorEventosDiaAnterior = eventosDelDiaAnterior.eventos ? eventosDelDiaAnterior.eventos : {}
 
                                 for (const [eventoAnteriorUID, posicionEventoAnterior] of Object.entries(contenedorEventosDiaAnterior)) {
-                                    for (const eventosDiaActual of detallesDia[1]) {
+                                    for (const eventosDiaActual of contenedorDia) {
                                         const eventoActualUID = eventosDiaActual.eventoUID
                                         if (String(eventoActualUID) === String(eventoAnteriorUID)) {
                                             const posicionDelApartamentoDelDiaAnteior = contenedorEventosDiaAnterior[eventoActualUID]
@@ -56536,13 +56534,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         }
                                     }
                                 }
+
                                 if (posicionColumnaDia === 1) {
                                     let posicionesIninical = posicionEvento
                                     objetoEventos.eventos = {}
                                     Object.keys(posicionesEventosReservadas).forEach((posicion) => {
                                         delete posicionesEventosReservadas[posicion]
                                     })
-                                    for (const eventosDiaActual of detallesDia[1]) {
+                                    for (const eventosDiaActual of contenedorDia) {
                                         const evendoDiaActualUID = eventosDiaActual.eventoUID
                                         objetoEventos.eventos[evendoDiaActualUID] = posicionesIninical
                                         posicionesEventosReservadas[posicionesIninical] = "posicionReservada"
@@ -56551,7 +56550,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 }
                             }
 
-                            for (const eventosDelDia of detallesDia[1]) {
+                            for (const eventosDelDia of contenedorDia) {
                                 const eventoUID = eventosDelDia.eventoUID
                                 if (posicionColumnaDia === 1) {
                                 }
@@ -56569,9 +56568,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         for (const detallesDelEvento of eventosEnDetalle) {
                             const eventoUID = detallesDelEvento.eventoUID
-
-                            //const fechaEntrada = detallesDelEvento.fechaEntrada
-                            //const fechaSalida = detallesDelEvento.fechaSalida
                             const contenedorFechasDelEvento = detallesDelEvento.contenedorFechasDelEvento
                             const tipoEvento = detallesDelEvento.tipoEvento
 
@@ -56613,7 +56609,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 const selectorContenedorDia = selectorMesDestino.querySelector(`[dia="${String(diaEntrada).padStart(2, "0")}"]`)
 
                                 const eventosContenedor = selectorContenedorDia.getAttribute("eventosContenedor")
+
                                 const posicionEventoUI = (JSON.parse(eventosContenedor)).eventos[eventoUID]
+
 
                                 const conteoEventos = Object.keys(JSON.parse(eventosContenedor).eventos).length - 1
                                 const coordenadasDiaInicio = obtenerCoordenadasCeldaGrid(String(diaEntrada).padStart(2, "0"));
@@ -56651,7 +56649,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     finalColumna = diasRestantes >= restoDeCeldas ? (restoDeCeldas) : (diasRestantes)
                                 }
 
-
                                 let filaSiguiente = inicioFila
                                 let alturaFinal
                                 if (posicionEventoUI === 0) {
@@ -56684,7 +56681,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         configuracionEventoUI.css = "administracion_calendario_eventoUI_transicion"
                                     }
                                 }
-
                                 configuracionEventoUI.altura = alturaFinal
                                 configuracionEventoUI.espaciadoInferior = espaciadoInferior
                                 configuracionEventoUI.inicioColumna = inicioColumna

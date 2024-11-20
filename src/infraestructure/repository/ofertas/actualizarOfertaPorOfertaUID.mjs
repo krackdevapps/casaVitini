@@ -19,7 +19,7 @@ export const actualizarOfertaPorOfertaUID = async (data) => {
         "fechaFinal" = COALESCE($4::date, NULL),
         "condicionesArray" = COALESCE($5::jsonb, NULL),
         "descuentosJSON" = COALESCE($6::jsonb, NULL),
-        "zonaIDV" = COALESCE($7::text, NULL)
+        "zonaIDV" = COALESCE($7::"tipo_zonasIDV", NULL)
         WHERE
         "ofertaUID" = $8
         RETURNING

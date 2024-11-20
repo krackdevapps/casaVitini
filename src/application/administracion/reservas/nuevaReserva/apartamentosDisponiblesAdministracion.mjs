@@ -33,7 +33,7 @@ export const apartamentosDisponiblesAdministracion = async (entrada) => {
             tipoVector: "diferente"
         })
         const configuracionesApartamento = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: ["global", "privada"]
         })
         const apartamentosIDV = configuracionesApartamento.map(c => c.apartamentoIDV)
@@ -42,7 +42,7 @@ export const apartamentosDisponiblesAdministracion = async (entrada) => {
             fechaSalida: fechaSalida,
             apartamentosIDV: apartamentosIDV,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
-            zonaBloqueo_array: ["privado", "global"],
+            zonaBloqueo_array: ["privada", "global"],
         });
         const apartamentosDisponibles = apartamentosCribados.apartamentosDisponibles
 

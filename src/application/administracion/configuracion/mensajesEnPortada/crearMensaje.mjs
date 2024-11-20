@@ -38,13 +38,6 @@ export const crearMensaje = async (entrada, salida) => {
         }
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
-            validadoresCompartidos.tipos.cadena({
-                string: testingVI,
-                nombreCampo: "El campo del mensaje",
-                filtro: "strictoConEspacios",
-                sePermiteVacio: "si",
-                limpiezaEspaciosAlrededor: "si",
-            })
             dataNuevoMensaje.testingVI = testingVI
         }
 

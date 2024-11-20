@@ -22,11 +22,12 @@ export const obtenerOfertasPorRangoActualPorEstado = async (data) => {
         WHERE
         ($1 BETWEEN "fechaInicio" AND "fechaFinal")
         AND
-        "estadoIDV" = $2::text
+        "estadoIDV"::text = $2::text
         AND
-        "entidadIDV" = $3::text
+        "entidadIDV"::text = $3::text
         AND
-        "zonaIDV" = ANY($4)
+        "zonaIDV"::text = ANY($4::text[])
+
         ;`
         const parametros = [
             fechaActual,

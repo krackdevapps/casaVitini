@@ -78,7 +78,7 @@ describe('crudEntitiys', () => {
 
             expect(error).toBeInstanceOf(Error);
 
-            expect(error.message).toBe('El campo del apartamentoUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y / ()');
+            expect(error.message).toBe('El campo del apartamentoUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, ., /, (), y %');
         }
     })
 
@@ -118,7 +118,7 @@ describe('crudEntitiys', () => {
 
             expect(error).toBeInstanceOf(Error);
 
-            expect(error.message).toBe('El campo del camaUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, . y / ()');
+            expect(error.message).toBe('El campo del camaUI solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, ., /, (), y %');
         }
     })
 

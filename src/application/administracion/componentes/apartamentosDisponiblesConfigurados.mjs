@@ -12,7 +12,7 @@ export const apartamentosDisponiblesConfigurados = async (entrada) => {
         IDX.control()
 
         const apartamentosDisponiblesConfigurados_ = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: ["publica", "global", "privada"]
         })
 

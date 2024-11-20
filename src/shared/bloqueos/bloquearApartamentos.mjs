@@ -27,8 +27,8 @@ export const bloquearApartamentos = async (metadatos) => {
             const error = "El campo 'tipoBloqueoIDV' solo puede ser rangoTemporal, permanente, sinBloqueo"
             throw new Error(error)
         }
-        if (zonaIDV !== "publico" && zonaIDV !== "privado" && zonaIDV !== "global") {
-            const error = "El campo 'zonaIDV' solo puede ser público, privado, global"
+        if (zonaIDV !== "publica" && zonaIDV !== "privada" && zonaIDV !== "global") {
+            const error = "El campo 'zonaIDV' solo puede ser público, privada, global"
             throw new Error(error)
         }
         if (origen !== "cancelacionDeReserva" && origen !== "eliminacionApartamentoDeReserva") {

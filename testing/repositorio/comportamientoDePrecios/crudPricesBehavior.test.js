@@ -41,7 +41,7 @@ describe('crud prices behavior by range', () => {
         })
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoTest,
-            estadoInicial: "nodisponible",
+            estadoInicial: "desactivado",
             zonaIDV: "global"
         })
 

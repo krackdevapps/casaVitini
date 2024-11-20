@@ -18,7 +18,7 @@ export const obtenerImagenesPorApartamentoIDV = async (entrada) => {
         })
         const configuracionDelApartamento = await obtenerImagenApartamentoPorApartamentoIDV({
             apartamentoIDV,
-            estadoConfiguracionIDV_array: ["disponible"]
+            estadoConfiguracionIDV_array: ["activado"]
         })
 
         const imagenes = await obtenerTodasLasImagenesPorApartamentoIDV(apartamentoIDV)

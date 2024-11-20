@@ -49,7 +49,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
         }
         await eliminarBloqueoCaducado();
         const configuracionesApartamento = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: ["global", "publica"]
         })
         const apartamentosIDV = configuracionesApartamento.map(c => c.apartamentoIDV)
@@ -59,7 +59,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
             fechaSalida: fechaSalida,
             apartamentosIDV: apartamentosIDV,
             zonaConfiguracionAlojamientoArray: ["publica", "global"],
-            zonaBloqueo_array: ["publico", "global"],
+            zonaBloqueo_array: ["publica", "global"],
         })
 
         const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
@@ -115,7 +115,7 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                     delete complemento.testingVI
                     delete complemento.apartamentoIDV
                 });
-                const complementosDelAlojamientosActivos  = complementosDelAlojamientos.filter((c) => c.estadoIDV === "activado")
+                const complementosDelAlojamientosActivos = complementosDelAlojamientos.filter((c) => c.estadoIDV === "activado")
                 estructura.ok.complementosAlojamiento[apartamentoIDV] = complementosDelAlojamientosActivos
             }
         }

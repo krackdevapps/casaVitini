@@ -13,7 +13,7 @@ export const disponibilidadApartamentos = async (data) => {
             fechaSalida: fechaSalida,
             apartamentosIDV: apartamentosIDVArray,
             zonaConfiguracionAlojamientoArray: ["publica", "global"],
-            zonaBloqueo_array: ["publico", "global"],
+            zonaBloqueo_array: ["publica", "global"],
         })
 
         const apartamentosDisponibles = resuelveApartamentosDisponibles?.apartamentosDisponibles
@@ -42,7 +42,7 @@ export const disponibilidadApartamentos = async (data) => {
                 array: apartamentoUIOcupados,
                 articulo: "el"
             })
-          
+
             const contenedorError = {
                 code: "hotingNoAvaible",
                 apartamentosDisponibles,

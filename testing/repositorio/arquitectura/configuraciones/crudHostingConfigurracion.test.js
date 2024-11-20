@@ -63,7 +63,7 @@ describe('crud hosting configuracion', () => {
     test('insert hosting void', async () => {
         const response = await insertarConfiguracionApartamento({
             apartamentoIDV: IDVStart,
-            estadoInicial: "nodisponible",
+            estadoInicial: "desactivado",
             zonaIDV: "global"
         })
         expect(response).not.toBeUndefined();
@@ -114,7 +114,7 @@ describe('crud hosting configuracion', () => {
     test('select images of hostin ', async () => {
         const response = await obtenerImagenApartamentoPorApartamentoIDV({
             apartamentoIDV: IDVStart,
-            estadoConfiguracionIDV_array: ["nodisponible"]
+            estadoConfiguracionIDV_array: ["desactivado"]
         })
 
         expect(response).not.toBeUndefined();
@@ -165,7 +165,7 @@ describe('crud hosting configuracion', () => {
 
     test('update status of hosting configuracion by apartamentoIDV', async () => {
         const response = await actualizarEstadoPorApartamentoIDV({
-            nuevoEstado: "disponible",
+            nuevoEstado: "activado",
             apartamentoIDV: IDVStart
         })
         expect(response).not.toBeUndefined();

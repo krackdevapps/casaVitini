@@ -44,7 +44,7 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
         })
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDV,
-            estadoInicial: "nodisponible",
+            estadoInicial: "desactivado",
             zonaIDV: "privada"
         })
         await insertarPerfilPrecio({

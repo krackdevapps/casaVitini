@@ -23,7 +23,7 @@ export const obtenerOfertasPorRangoActualPorEstadoPorCodigoDescuentoArray = asyn
             WHERE
                 ($1 BETWEEN "fechaInicio" AND "fechaFinal")
                 AND
-                "estadoIDV" = $2::text
+                "estadoIDV" = $2::"tipo_estadosIDV"
                 AND
                 "entidadIDV" = $3::text
                 AND

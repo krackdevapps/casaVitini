@@ -68,7 +68,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
 
 
         const configuracionesDisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: ["publica", "global", "privada"]
         })
         if (configuracionesDisponibles.length === 0) {

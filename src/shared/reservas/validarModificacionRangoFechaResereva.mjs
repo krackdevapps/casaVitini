@@ -37,7 +37,7 @@ export const validarModificacionRangoFechaResereva = async (data) => {
         const apartamentosConConfiguracionDisponible = []
 
         const configuracionesApartamentosSoloDiponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: ["publica", "global", "privada"]
         })
         configuracionesApartamentosSoloDiponibles.forEach((apartamentoConConfiguracionDisponible) => {

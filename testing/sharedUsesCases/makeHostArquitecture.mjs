@@ -109,7 +109,7 @@ export const makeHostArquitecture = async (data) => {
             await cambiarEstadoConfiguracionAlojamiento({
                 body: {
                     apartamentoIDV: apartamentoIDV,
-                    nuevoEstado: "disponible"
+                    nuevoEstado: "activado"
                 },
                 session: fakeAdminSession
             })

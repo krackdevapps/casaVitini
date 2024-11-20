@@ -81,7 +81,7 @@ describe('crud pay links', () => {
     test('update status pay link with reservaUID', async () => {
         const response = await actualizarEstadoEnlaceDePagoPorEnlaceUID({
             enlaceUID: nuevoEnlaceUID,
-            estado: "desactivado"
+            estado: "noPagado"
         });
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');

@@ -65,7 +65,7 @@ export const apartamentosPorRango = async (data) => {
             })
         }
         const configuracionesAlojamientoSoloDisponible = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: zonaConfiguracionAlojamientoArray
         })
         if (configuracionesAlojamientoSoloDisponible.length === 0) {
@@ -73,7 +73,7 @@ export const apartamentosPorRango = async (data) => {
             throw new Error(error)
         }
         const configuracionesAlojamientoNODisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "nodisponible",
+            estadoIDV: "desactivado",
             zonaArray: zonaConfiguracionAlojamientoArray
         })
 

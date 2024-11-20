@@ -11848,7 +11848,7 @@ summary:hover {
 
 [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 0px 0px;
     grid-template-areas:
@@ -11868,12 +11868,12 @@ summary:hover {
 
     [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 0px 0px;
         grid-template-areas:
-            ". ."
-            ". .";
+            ". "
+            ". "
+            ". ";
     }
 }
 
@@ -11969,6 +11969,15 @@ summary:hover {
     flex-direction: column;
     align-content: center;
     align-items: center;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque {
+        flex-direction: column;
+        align-content: flex-start;
+        align-items: flex-start;
+    }
+
 }
 
 [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTotales_TituloTotal {
@@ -12222,7 +12231,7 @@ summary:hover {
 }
 
 .componente_calendario_contenedoCarga_Mes {
-    padding: 12px;
+    padding-bottom: 20px;
     user-select: none;
     cursor: default;
     -webkit-user-select: none;
@@ -14655,7 +14664,7 @@ summary:hover {
 
 
 
- .contenedorImagenVolatil {
+.contenedorImagenVolatil {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -14677,11 +14686,12 @@ summary:hover {
 }
 
 @media (max-width: 850px) {
- .contenedorImagenAmpliada .contenedorBotones {
+    .contenedorImagenAmpliada .contenedorBotones {
         padding: 28px;
     }
 }
- .contenedorImagenAmpliada .marcoEspaciadoContenedorBotones {
+
+.contenedorImagenAmpliada .marcoEspaciadoContenedorBotones {
     display: flex;
 
     top: 0px;
@@ -14708,7 +14718,7 @@ summary:hover {
 }
 
 @media (max-width: 850px) {
-.contenedorImagenAmpliada .contenedorBotones .boton {
+    .contenedorImagenAmpliada .contenedorBotones .boton {
         width: auto;
     }
 }
@@ -16163,6 +16173,12 @@ textarea {
     background: #00000021;
     border-radius: 20px;
     padding: 6px;
+    scale: 1;
+    transition: all 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 [zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .gridImagenes {
@@ -16171,6 +16187,12 @@ textarea {
     grid-gap: 10px;
     padding: 10px;
     width: 100%;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .gridImagenes {
+        grid-template-columns: 1fr;
+    }
 }
 
 [zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .contenedorImagenFondo {
@@ -16204,12 +16226,25 @@ textarea {
     width: 100%;
 }
 
+@media (max-width: 720px) {
+    [zonaCSS="/alojamiento"] .gridImagenes {
+        grid-template-columns: 1fr;
+    }
+}
+
 [zonaCSS="/alojamiento"] .contenedorImagen {
     height: 300px;
     gap: 6px;
     background: #00000021;
     border-radius: 20px;
     overflow: hidden;
+
+    scale: 1;
+    transition: all 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 

@@ -11,7 +11,7 @@ export const actualizarServicioPorServicioUID = async (data) => {
         UPDATE servicios
         SET
         nombre = $1,
-        "zonaIDV" = $2::text,
+        "zonaIDV" = $2::"tipo_zonasIDV",
         contenedor = $3::jsonb
         WHERE
         "servicioUID" = $4

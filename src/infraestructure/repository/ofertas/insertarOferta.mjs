@@ -33,8 +33,8 @@ export const insertarOferta = async (data) => {
                 COALESCE($4::date, NULL),
                 NULLIF($5::jsonb, NULL),
                 NULLIF($6::jsonb, NULL),
-                COALESCE($7::text, NULL),
-                COALESCE($8::text, NULL),
+                COALESCE($7::"tipo_estadosIDV", NULL),
+                COALESCE($8::"tipo_zonasIDV", NULL),
                 COALESCE($9::text, NULL)
 
 

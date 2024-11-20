@@ -26,14 +26,14 @@ export const validadorPasado = async (data) => {
             const error = "El mes de entrada seleccionado no puede ser igual o superior a al mes de fecha de salida de la reserva"
             throw new Error(error)
         }
-  
-        const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV( {
+
+        const bloqueosSeleccionados = await obtenerBloqueosPorRangoPorApartamentoIDV({
             fechaInicio: fechaSeleccionadaParaPasado_ISO,
             fechaFin: fechaEntradaReserva_ISO,
             apartamentosIDV_array: apartamentosReservaActual,
             zonaBloqueo_array: [
                 "global",
-                "privado"
+                "privada"
             ]
         })
         const contenedorBloqueosEncontrados = []

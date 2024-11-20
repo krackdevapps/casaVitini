@@ -451,7 +451,7 @@ export const validarObjetoReservaPublica = async (data) => {
         for (const [apartamentoIDV, contenedor_apartamento] of Object.entries(alojamiento)) {
             try {
                 await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDVPorApartamentosIDV({
-                    estadoConfiguracionIDV: "disponible",
+                    estadoConfiguracionIDV: "activado",
                     zonaArray: ["global", "publica"],
                     apartamentoIDV: apartamentoIDV,
                     errorSi: "noExiste"

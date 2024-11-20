@@ -43,7 +43,7 @@ describe('crud locks for apartments', () => {
         })
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDVInicial,
-            estadoInicial: "nodisponible",
+            estadoInicial: "desactivado",
             zonaIDV: "global"
         })
 
@@ -135,7 +135,7 @@ describe('crud locks for apartments', () => {
             fechaInicio_ISO: fechaInicio_ISO,
             fechaFinal_ISO: fechaFin_ISO,
             apartamentosIDV_array: [apartamentoIDVInicial],
-            zonaBloqueoIDV_array: [tipoRangoTemporal]
+            zonaBloqueoIDV_array: [zonaIDV]
         });
         expect(response).not.toBeUndefined();
         expect(Array.isArray(response)).toBe(true);

@@ -75,7 +75,7 @@ export const eliminarApartamentoReserva = async (entrada) => {
                 tipoBloqueo,
                 fechaEntrada,
                 fechaSalida,
-                zonaIDV: "publico",
+                zonaIDV: "publica",
                 origen: "eliminacionApartamentoDeReserva"
             })
         }

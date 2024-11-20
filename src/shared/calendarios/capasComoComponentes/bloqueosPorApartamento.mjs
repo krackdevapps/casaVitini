@@ -49,7 +49,7 @@ export const bloqueosPorApartamento = async (metadatos) => {
             fechaInicio: fechaObjeto.toISODate(),
             fechaFin: fechaFinRangoObjeto.toISODate(),
             apartamentosIDV_array: apartamentosIDV,
-            zonaBloqueoIDV_array: ["publico", "privado", "global"]
+            zonaBloqueoIDV_array: ["publica", "privada", "global"]
         })
 
         for (const comportamiento of bloqueosPorApartamento) {

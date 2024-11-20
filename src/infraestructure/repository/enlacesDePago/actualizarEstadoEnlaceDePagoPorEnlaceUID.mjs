@@ -7,7 +7,7 @@ export const actualizarEstadoEnlaceDePagoPorEnlaceUID = async (data) => {
         const consulta = `
            UPDATE "enlacesDePago"
            SET 
-           "estadoPagoIDV" = $1
+           "estadoPagoIDV" = $1::"tipo_estadoPagoEnlacesDePago"
            WHERE 
            "enlaceUID" = $2
            RETURNING

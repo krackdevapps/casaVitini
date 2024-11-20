@@ -91,7 +91,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         await eliminarBloqueoCaducado();
 
         const configuracionesDisponibles = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: ["privada", "global"]
         })
         if (configuracionesDisponibles.length === 0) {
@@ -115,7 +115,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
             fechaSalida: fechaSalida,
             apartamentosIDV: apartamentosIDV,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
-            zonaBloqueo_array: ["privado", "global"],
+            zonaBloqueo_array: ["privada", "global"],
         });
         const apartamentosDisponibles = resuelveApartamentosDisponibles.apartamentosDisponibles;
         if (apartamentosDisponibles.length === 0) {

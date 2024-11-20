@@ -38,7 +38,7 @@ describe('select and update calendars', () => {
         })
         await insertarConfiguracionApartamento({
             apartamentoIDV: apartamentoIDVInicial,
-            estadoInicial: "nodisponible",
+            estadoInicial: "desactivado",
             zonaIDV: "global"
         })
 

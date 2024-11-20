@@ -60,7 +60,7 @@ export const cancelarReserva = async (entrada, salida) => {
                 tipoBloqueoIDV: tipoBloqueoIDV,
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,
-                zonaIDV: "publico",
+                zonaIDV: "publica",
                 origen: "cancelacionDeReserva"
             };
             await bloquearApartamentos(metadatos);

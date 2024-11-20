@@ -18,7 +18,7 @@ describe('crud services', () => {
     const estadoIDV = "activado"
     const contenedor = {
         precio: "10.00",
-        definicion: "Este servicio incluye servicio de recogida desde el aeropuerto a Casa Vitini y servicio de vuelva al aeropuerto en transporte privado.\n",
+        definicion: "Este servicio incluye servicio de recogida desde el aeropuerto a Casa Vitini y servicio de vuelva al aeropuerto en transporte privada.\n",
         fechaFinal: "2024-09-28",
         duracionIDV: "rango",
         fechaInicio: "2024-09-18",

@@ -36,7 +36,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
         const fechaEntrada = detallesReserva.fechaEntrada
         const fechaSalida = detallesReserva.fechaSalida
         const configuracionesAlojamiento = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
-            estadoIDV: "disponible",
+            estadoIDV: "activado",
             zonaArray: ["global", "privada"]
         })
         const apartamentosIDV = configuracionesAlojamiento.map(c => c.apartamentoIDV)
@@ -46,7 +46,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             fechaSalida: fechaSalida,
             apartamentosIDV: apartamentosIDV,
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
-            zonaBloqueo_array: ["privado", "global"],
+            zonaBloqueo_array: ["privada", "global"],
         });
         const apartamentosDisponbilesIDV = transactor.apartamentosDisponibles;
         const apartamentosNoDisponiblesIDV = transactor.apartamentosNoDisponibles;
