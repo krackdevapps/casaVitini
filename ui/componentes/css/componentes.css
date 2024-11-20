@@ -12236,6 +12236,11 @@ summary:hover {
     cursor: default;
     -webkit-user-select: none;
     pointer-events: all;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }
 
 .componentes_calendario_contenedorCalentadioIntermedio {

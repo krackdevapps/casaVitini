@@ -36984,7 +36984,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     mensajeUI: (detallesDelMensaje) => {
 
 
-                        const titulo = document.querySelector("main .titulo")
+                        const titulo = document.querySelector("main .tituloGris")
                         titulo.textContent = "Detalles del mensaje"
 
                         const mensajeUID = detallesDelMensaje.mensajeUID
@@ -56024,6 +56024,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 })
                 const contenedorMes = calendarioRenderizado.querySelector(`[componente=marcoMes]`)
                 contenedorMes.style.flex = "0"
+                contenedorMes.style.transition = "all 0s ease-in-out"
+
                 contenedorMes.setAttribute("instanciaUID", instanciaUIDMes)
 
                 const contenedorCarga = document.createElement("div")
@@ -56037,7 +56039,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                 if (!construyendoCalendarioRenderizado) {
                     calendarioRenderizado.appendChild(contenedorCarga)
                 }
-
                 const configuracionCalendario = {
                     tipo: tipo
                 }
@@ -56052,7 +56053,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                 const contenedorMes_enEspera = calendarioRenderizado.querySelector(`[componente=marcoMes][instanciaUID="${instanciaUIDMes}"]`)
                 if (!contenedorMes_enEspera) { return }
-
+                contenedorMes.removeAttribute("style")
                 calendarioResuelto.instanciaUIDMes = instanciaUIDMes
                 casaVitini.administracion.calendario.constructorMesNuevo(calendarioResuelto)
                 return {
@@ -56144,27 +56145,30 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                     instanciaUID_main: instanciaUID_main
                 })
                 const calendarioResuelto = mesRenderizado?.calendarioResuelto
-
-                casaVitini.administracion.calendario.coloreoDias({
-                    ano: calendarioResuelto?.ano,
-                    mes: calendarioResuelto?.mes,
-                    instanciaUIDMes: calendarioResuelto?.instanciaUIDMes,
-                })
-
-                traductorURL.fecha = `${calendarioResuelto.mes}-${calendarioResuelto.ano}`
-
-                const capas = traductorURL.capas || {}
-                if (Object.keys(capas).length > 0) {
-                    casaVitini.administracion.calendario.capas({
-                        instanciaUID_main: instanciaUID_main,
-                        origen: "historial",
-                        traductorURL: traductorURL,
-                        instanciaUIDMes: calendarioResuelto?.instanciaUIDMes
+                if (calendarioResuelto) {
+                    casaVitini.administracion.calendario.coloreoDias({
+                        ano: calendarioResuelto?.ano,
+                        mes: calendarioResuelto?.mes,
+                        instanciaUIDMes: calendarioResuelto?.instanciaUIDMes,
                     })
+
+                    traductorURL.fecha = `${calendarioResuelto.mes}-${calendarioResuelto.ano}`
+
+                    const capas = traductorURL.capas || {}
+                    if (Object.keys(capas).length > 0) {
+                        casaVitini.administracion.calendario.capas({
+                            instanciaUID_main: instanciaUID_main,
+                            origen: "historial",
+                            traductorURL: traductorURL,
+                            instanciaUIDMes: calendarioResuelto?.instanciaUIDMes
+                        })
+
+                    }
+                    return mesRenderizado
 
                 }
 
-                return mesRenderizado
+
             },
             capas: async function (data) {
                 const traductorURL = data.traductorURL
