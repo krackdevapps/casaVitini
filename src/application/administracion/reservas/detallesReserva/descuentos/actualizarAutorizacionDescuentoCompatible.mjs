@@ -2,10 +2,8 @@ import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerOferatPorOfertaUID } from "../../../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
-import { procesador } from "../../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 import { actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
@@ -52,8 +50,8 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             const error = "La reserva está cancelada, no se pueden alterar los descuentos."
             throw new Error(error)
         }
+
         await campoDeTransaccion("iniciar")
-        await obtenerOferatPorOfertaUID(ofertaUID)
         await obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion({
             reservaUID,
             ofertaUID,
@@ -65,7 +63,6 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             nuevaAutorizacion
         })
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
-
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el estado de autorización de la oferta en la reserva",
@@ -76,6 +73,6 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         await campoDeTransaccion("cancelar")
         throw errorCapturado
     } finally {
-        mutex.release()
+        if (mutex) { mutex.release() }
     }
 }

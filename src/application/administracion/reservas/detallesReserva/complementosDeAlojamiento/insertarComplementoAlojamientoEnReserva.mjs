@@ -50,6 +50,12 @@ export const insertarComplementoAlojamientoEnReserva = async (entrada) => {
         const definicion = complemento.definicion
         const tipoPrecio = complemento.tipoPrecio
         const precio = complemento.precio
+        const estadoIDV = complemento.estadoIDV
+        if (estadoIDV === "desactivado") {
+            const m = `El complemento de alojamiento ${complementoUI} esta desactivado. Activalo primero para poder insertarlo en la reserva.`
+            throw new Error(m)
+            
+        }
 
         const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
         const controlApartamento = apartamentosReserva.filter(a => a.apartamentoIDV === apartamentoIDV)

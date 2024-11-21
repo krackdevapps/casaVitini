@@ -68,7 +68,7 @@ export const obtenerDetallesDelPago = async (entrada) => {
                 const estructuraReembolso = {
                     reembolsoUID: reembolsoUID,
                     plataformaDePagoIDV: plataformaDePagoIDV,
-                    cantidad: cantidadDelReembolso,
+                    cantidad: cantidadDelReembolso.toFixed(2),
                     reembolsoUIDPasarela: reembolsoUIDPasarela,
                     estado: estado,
                     fechaCreacionUTC_ISO: fechaCreacionUTC_ISO,

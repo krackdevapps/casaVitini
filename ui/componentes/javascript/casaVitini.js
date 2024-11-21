@@ -1656,7 +1656,7 @@ const casaVitini = {
 
                                 const botonVerImagenes = document.createElement("div")
                                 botonVerImagenes.setAttribute("boton", "verImagenes")
-                                botonVerImagenes.classList.add("flexVertical", "padding12", "borderRadius16", "backgroundGrey1", "blur50", "ocultoInicial")
+                                botonVerImagenes.classList.add("flexVertical", "padding12", "borderRadius16", "backgroundWhite5", "blur50", "ocultoInicial")
                                 botonVerImagenes.addEventListener("click", () => {
                                     casaVitini.ui.vistas.alojamiento.portada.gestionImagenes.ui.arranque({
                                         apartamentoUI,
@@ -2365,8 +2365,6 @@ const casaVitini = {
                                 })
                                 const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_ui}"]`)
                                 if (!instanciaRenderizada) { return }
-                                spinner.remove()
-
                                 if (respuestaServidor?.error) {
                                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
@@ -12018,6 +12016,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                             modoUI,
                             instanciaUID
                         })
+                        this.componentesUI.panelGlobal.botonesControlFlexbile({
+                            destino,
+                            modoUI,
+                            instanciaUID
+                        })
                         this.componentesUI.entidades.hub({
                             destino,
                             entidades,
@@ -12078,6 +12081,51 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         }
 
 
+                    },
+                    panelGlobal: {
+                        botonesControlFlexbile: function (data) {
+
+                            const destino = data.destino
+                            const modoUI = data.modoUI   
+                            const instanciaUID = data.instanciaUID
+                            const selector = document.querySelector(destino).querySelector("[contenedor=financiero]")
+                            const selector_contenedorBotones = selector.querySelector("[contenedor=botonesGlobalesExpansionContracccion]")
+                            if (!selector_contenedorBotones) {
+                                const controladorExpansionCategorias = (e) => {
+                                    const areaContenedorFinanciero = e.target.closest("[contenedor=financiero]")
+                                    const accion = e.target.getAttribute("accion")
+                                    const contenedoresFlexibles = areaContenedorFinanciero.querySelectorAll("details")
+            
+            
+                                    if (accion === "expandir") {
+                                        contenedoresFlexibles.forEach(c => c.open = true)
+                                    } else if (accion === "contraer") {
+                                        contenedoresFlexibles.forEach(c => c.open = false)
+                                    }
+                                }
+            
+                                const contenedorBotones = document.createElement("div")
+                                contenedorBotones.setAttribute("contenedor", "botonesGlobalesExpansionContracccion")
+                                contenedorBotones.classList.add("gridHorizontal2C", "gap6", "borderRadius20")
+                               selector.appendChild(contenedorBotones)
+            
+                                const botonExpandirTodo = document.createElement("div")
+                                botonExpandirTodo.classList.add("botonV1")
+                                botonExpandirTodo.style.borderRadius = "14px"
+                                botonExpandirTodo.setAttribute("accion", "expandir")
+                                botonExpandirTodo.addEventListener("click", controladorExpansionCategorias)
+                                botonExpandirTodo.textContent = "Expandir todo"
+                                contenedorBotones.appendChild(botonExpandirTodo)
+            
+                                const botonContraerTodo = document.createElement("div")
+                                botonContraerTodo.classList.add("botonV1")
+                                botonContraerTodo.style.borderRadius = "14px"
+                                botonContraerTodo.setAttribute("accion", "contraer")
+                                botonContraerTodo.addEventListener("click", controladorExpansionCategorias)
+                                botonContraerTodo.textContent = "Contraer todo"
+                                contenedorBotones.appendChild(botonContraerTodo)
+                            }              
+                        }
                     },
                     navegacion: {
                         ui: function (data) {
@@ -12596,7 +12644,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                 if (!porApartamento_selector) {
                                     const contenedor = document.createElement("div")
                                     contenedor.classList.add("contenedorPorApartamento",
-                                        "padding6",
                                         "flexVertical",
                                         "gap6"
                                     )
@@ -12613,7 +12660,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     tituloContendor.textContent = "Desglose por apartamento"
                                     contenedor.appendChild(tituloContendor)
                                     document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=reserva] [contenedor=data]").appendChild(contenedor)
-
                                 }
                                 const porApartamento_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=reserva] [contenedor=data]").querySelector("[contenedor=porApartamento]")
 
@@ -12689,7 +12735,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     document.querySelector(destino).querySelector("[contenedor=financiero] [entidad=reserva] [contenedor=data]").appendChild(totalesUI)
 
                                     const totalesUITituloBloque = document.createElement("div")
-                                    totalesUITituloBloque.classList.add("reserva_resumen_desglose_pago_titulo")
+                                    totalesUITituloBloque.classList.add("textoCentrado", "negrita", "padding6")
                                     totalesUITituloBloque.textContent = "Totales del alojamiento de la reserva (Solo alojamiento)"
                                     totalesUI.appendChild(totalesUITituloBloque)
 
@@ -13165,7 +13211,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                     const totalReservaNetoUI = document.createElement("div")
 
-                                    totalReservaNetoUI.textContent = "Total servicios neto"
+                                    totalReservaNetoUI.textContent = "Total complementos de alojamiento neto"
                                     contenedorTotalNetoUI.appendChild(totalReservaNetoUI)
 
                                     const totalReservaNetoUI_ = document.createElement("div")
@@ -13206,7 +13252,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                     const totalDescuentosAplicadosUI = document.createElement("div")
 
-                                    totalDescuentosAplicadosUI.textContent = "Descuento total por todas las ofertas aplicadas exclusivamente a los servicios"
+                                    totalDescuentosAplicadosUI.textContent = "Descuento total por todas las ofertas aplicadas exclusivamente a los complementos de alojamiento"
                                     contenedorTotalDescuentosAplicados.appendChild(totalDescuentosAplicadosUI)
 
                                     const totalDescuentosAplicadosUI_ = document.createElement("div")
@@ -13266,7 +13312,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                     const totalImpuestosUI = document.createElement("div")
 
-                                    totalImpuestosUI.textContent = "Total impuestos aplicados exclusivamente a los servicios"
+                                    totalImpuestosUI.textContent = "Total impuestos aplicados exclusivamente a los complementos de alojamiento"
                                     contenedorTotalImpuestosAplicados.appendChild(totalImpuestosUI)
 
                                     const totalImpuestosUI_ = document.createElement("div")
@@ -15277,7 +15323,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         contenedor.classList.add("porApartamento")
                                         contenedor.setAttribute("ofertaUID", ofertaUID)
                                         contenedor.classList.add(
-                                            "padding6",
+                                            "padding10",
                                             "flexVertical",
                                             "borderRadius6",
                                             "backgroundGrey1"
@@ -18728,7 +18774,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         const botonCompAlo = document.createElement("a");
                                         botonCompAlo.setAttribute("class", "administracion_reservas_DetallesReserva_botonCategoria");
                                         botonCompAlo.setAttribute("categoriaReserva", "complementosDeAlojamiento");
-                                        botonCompAlo.setAttribute("href", url + "complemenos_de_alojamiento");
+                                        botonCompAlo.setAttribute("href", url + "complementos_de_alojamiento");
                                         botonCompAlo.addEventListener("click", (e) => {
                                             e.preventDefault()
                                             const metadatos = {
@@ -24292,12 +24338,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         })
                                         constructor.appendChild(spinner)
 
-                                        const transaccion = {
+                                 
+                                        const respuestaServidor = await casaVitini.shell.servidor( {
                                             zona: "administracion/complementosDeAlojamiento/obtenerComplementosPorAlojamiento",
-                                            apartamentoIDV
+                                            apartamentoIDV,
+                                            filtro: "soloActivos"
                                         }
-
-                                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+)
                                         const uiRenderizada = document.querySelectorAll(`[instanciaUID="${instanciaUID_contenedorComplementos}"]`)
                                         if (!uiRenderizada) { return }
                                         if (respuestaServidor?.error) {
@@ -24309,6 +24356,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
 
                                             const complementosPorApartamentoIDV = respuestaServidor.complementosPorApartamentoIDV
+                                            console.log("complementos", complementosPorApartamentoIDV)
 
                                             const contenedor = document.createElement("div")
                                             contenedor.classList.add(
@@ -24345,6 +24393,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                                 const definicion = c.definicion
 
 
+
                                                 const contenedor = document.createElement("div")
                                                 contenedor.setAttribute("complementoUID", complementoUID)
                                                 contenedor.classList.add(
@@ -24367,6 +24416,20 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                                 nombreOfertaUI.classList.add("negrita")
                                                 nombreOfertaUI.textContent = complementoUI
                                                 contenedorGlobal.appendChild(nombreOfertaUI)
+
+
+                                                const precioUI = document.createElement("div")
+                                                precioUI.classList.add("negrita")
+                                                if (tipoPrecio === "porNoche") {
+                                                    precioUI.textContent = precio + "$ Por noche"
+                                                } else if (tipoPrecio === "fijoPorReserva") {
+                                                    precioUI.textContent =  precio + "$ Precio final"
+                                                }
+                                                contenedorGlobal.appendChild(precioUI)
+
+                                                const definicionUI = document.createElement("div")
+                                                definicionUI.textContent = definicion
+                                                contenedorGlobal.appendChild(definicionUI)
 
                                                 const estadoTitulo = document.createElement("div")
                                                 estadoTitulo.textContent = "Estado del complemento"
@@ -25711,7 +25774,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                     bloqueInfo = document.createElement("div")
                                     bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
                                     bloqueInfo.classList.add("negrita")
-                                    bloqueInfo.textContent = "Cantidad cobrada en dolares"
+                                    bloqueInfo.textContent = "Cantidad del pago"
                                     bloqueInfoDato.appendChild(bloqueInfo)
                                     bloqueDato = document.createElement("div")
                                     bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
@@ -25937,7 +26000,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                         bloqueInfo = document.createElement("div")
                                         bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
                                         bloqueInfo.classList.add("negrita")
-                                        bloqueInfo.textContent = "Cantidad cobrada en dolares"
+                                        bloqueInfo.textContent = "Cantidad del pago"
                                         bloqueInfoDato.appendChild(bloqueInfo)
                                         bloqueDato = document.createElement("div")
                                         bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
@@ -26085,6 +26148,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             const plataformaDePagoIDV = detallesDelReembolso.plataformaDePagoIDV
 
                                             const cantidad = detallesDelReembolso.cantidad
+                                            console.log("cantidad", cantidad)
                                             const reembolsoUIDPasarela = detallesDelReembolso.reembolsoUIDPasarela
 
                                             const fechaCreacionUTC_ISO = detallesDelReembolso.fechaCreacionUTC_ISO
@@ -29541,8 +29605,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                                             const campo = document.createElement("input")
                                             campo.placeholder = "Escribe la palabra reconstruir"
                                             campo.classList.add(
-                                                "borderRadius10",
-                                                "padding10"
+                                                "botonV1BlancoIzquierda_noSeleccionable"
                                             )
                                             contenedor.appendChild(campo)
                                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
@@ -33282,7 +33345,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                         const respuestaServidor = await casaVitini.shell.servidor({
                             zona: "administracion/complementosDeAlojamiento/obtenerComplementosPorAlojamiento",
-                            apartamentoIDV
+                            apartamentoIDV,
+                            filtro: "todos"
                         })
                         const ui_enEspera = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         if (!ui_enEspera) {
@@ -33318,8 +33382,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         )
 
                         const dict = {
-                            porNoche: "Precio aplicado a cada noche de la reserva",
-                            fijoPorReserva: "Precio total",
+                            porNoche: "(Por noche de la reserva)",
+                            fijoPorReserva: "(Precio final)",
                             activado: "Activado",
                             desactivado: "Desactivado"
                         }
@@ -33338,11 +33402,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
                         contenedor.appendChild(definicionUI)
 
                         const tipoPrecioUI = document.createElement("p")
-                        tipoPrecioUI.textContent = dict[tipoPrecio]
+                        tipoPrecioUI.classList.add("negrita")
+                        tipoPrecioUI.textContent = "Precio y tipo de aplicación"
                         contenedor.appendChild(tipoPrecioUI)
 
                         const precioUI = document.createElement("p")
-                        precioUI.textContent = `${precio}"$"`
+                        precioUI.textContent = `${precio}$ ${dict[tipoPrecio]}`
                         contenedor.appendChild(precioUI)
                         return contenedor
                     }
@@ -39985,7 +40050,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualziació
 
                                     const transaccion = {
                                         zona: "administracion/complementosDeAlojamiento/obtenerComplementosPorAlojamiento",
-                                        apartamentoIDV
+                                        apartamentoIDV,
+                                        filtro: "soloActivos"
+
                                     }
 
                                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)

@@ -208,6 +208,10 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
                         apartamentosArray: apartamentos,
                         origenSobreControl: "reserva"
                     },
+                    complementosAlojamiento: {
+                        origen: "hubComplementosAlojamiento",
+                        complementosUIDSolicitados: []
+                    },
                     servicios: {
                         origen: "hubServicios",
                         serviciosSolicitados: []

@@ -119,6 +119,7 @@ main[zonaCSS="/"] {
     flex-direction: column;
     align-items: center;
     align-content: center;
+    text-wrap: pre;
 }
 
 .plaza_enlacesDePago_campo {
@@ -1678,7 +1679,7 @@ summary:hover {
     gap: 10px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    background: #ffffff6e;
+    background: rgba(255, 255, 255, 0.5);
 }
 
 [zonaCSS="/alojamiento"] .plaza_alojamiento_contenedorApartmento_contenedorCaracteristicas {
@@ -3234,7 +3235,7 @@ summary:hover {
 [zonaCSS="administracion/reservas/nueva"] .reservaDetallesBloqueFecha {
     background-color: rgba(255, 255, 255, 0.3);
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: 1fr 0.5fr 1fr;
     grid-template-rows: 1fr;
     gap: 6px;
     grid-template-areas: ". . .";
@@ -3246,10 +3247,10 @@ summary:hover {
 }
 
 [zonaCSS="administracion/reservas/nueva"] .bloqueBotones {
-    background-color: rgba(255, 255, 255, 0.3);
+    /* background-color: rgba(255, 255, 255, 0.3); */
     display: flex;
     border-radius: 12px;
-    padding: 6px;
+    /* padding: 6px; */
     justify-content: center;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -3313,7 +3314,7 @@ summary:hover {
 
 [zonaCSS="administracion/reservas/nueva"] .administracionReservaBloqueDual {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -4967,7 +4968,8 @@ summary:hover {
     flex-direction: column;
     align-items: stretch;
     flex-wrap: nowrap;
-    border: 1px solid #80808078;
+    /* border: 1px solid #80808078; */
+    background: color(srgb 0 0 0 / 0.07);
 }
 
 [zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
