@@ -33,7 +33,8 @@ export const detallesReserva = async (data) => {
         validadoresCompartidos.tipos.array({
             array: capas,
             nombreCampo: "El array capas en detallesReserva",
-            filtro: "strictoIDV"
+            filtro: "strictoIDV",
+            sePermiteArrayVacio: "si"
         })
 
         const capasNoIdentificadas = capas.filter(capaIDV => !contenedorCapas.includes(capaIDV));

@@ -66,6 +66,11 @@
     background-repeat: no-repeat;
     background-position: left center;
     background-image: url(/componentes/imagenes/logov.svg);
+
+    scale: 1;
+    @starting-style {
+        scale: 0;
+    }
 }
 
 .imgLogo {

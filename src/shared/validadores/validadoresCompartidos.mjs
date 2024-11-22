@@ -869,7 +869,7 @@ export const validadoresCompartidos = {
                 const sePermiteArrayVacio = configuracion?.sePermiteArrayVacio || "no"
 
                 if (!nombreCampo) {
-                    const mensaje = `EEl validador de arrays, necesita un nombre de campo.`
+                    const mensaje = `El validador de arrays, necesita un nombre de campo.`
                     throw new Error(mensaje)
                 }
                 if (!Array.isArray(array) || array == null || array === undefined) {
@@ -917,6 +917,9 @@ export const validadoresCompartidos = {
                             limpiezaEspaciosAlrededor: "si"
                         })
                     })
+                } else {
+                    const m = "No se reconoce el filtro"
+                    throw new Error(m)
                 }
 
                 const sePermitenDuplicados = configuracion.sePermitenDuplicados

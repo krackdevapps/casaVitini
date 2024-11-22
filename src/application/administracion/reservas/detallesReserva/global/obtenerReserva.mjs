@@ -25,7 +25,7 @@ export const obtenerReserva = async (entrada) => {
         const capas = validadoresCompartidos.tipos.array({
             array: entrada.body.capas,
             nombreCampo: "El campo capas",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no",
             sePermiteArrayVacio: "si"
         })

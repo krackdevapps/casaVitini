@@ -3,6 +3,7 @@ import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mj
 import { controlEstructuraPorJoi } from "../validadores/controlEstructuraPorJoi.mjs"
 export const validarImpuesto = (impuesto) => {
     try {
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
 
         const esquemaBusqueda = Joi.object({
@@ -12,7 +13,9 @@ export const validarImpuesto = (impuesto) => {
             tipoValorIDV: Joi.string(),
             entidadIDV: Joi.string(),
             estadoIDV: Joi.string()
-        }).required()
+        }).required().messages(commonMessages)
+
+        
         controlEstructuraPorJoi({
             schema: esquemaBusqueda,
             objeto: impuesto

@@ -47,7 +47,7 @@ export const crearDesgloseFinanciero = async (data) => {
             apartamentosArray = validadoresCompartidos.tipos.array({
                 array: data.apartamentosArray,
                 nombreCampo: "El array de apartamentos en el procesador de precios",
-                filtro: "soloCadenasIDV",
+                filtro: "strictoIDV",
                 sePermitenDuplicados: "no"
             })
 

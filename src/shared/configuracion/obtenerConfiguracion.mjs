@@ -6,7 +6,7 @@ export const obtenerConfiguracion = async (arrayConfiguracionesUID) => {
         validadoresCompartidos.tipos.array({
             array: arrayConfiguracionesUID,
             nombreCampo: "El sistema de configuracion",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
 

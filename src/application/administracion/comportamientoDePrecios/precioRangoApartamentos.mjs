@@ -21,7 +21,7 @@ export const precioRangoApartamentos = async (entrada, salida) => {
         const apartamentosIDVArreglo = validadoresCompartidos.tipos.array({
             array: entrada.body.apartamentosIDVArreglo,
             nombreCampo: "El apartamentosIDVArreglo",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
 

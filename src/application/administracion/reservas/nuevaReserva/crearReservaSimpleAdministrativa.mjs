@@ -35,7 +35,7 @@ export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
         const apartamentos = validadoresCompartidos.tipos.array({
             array: entrada.body.apartamentos,
             nombreCampo: "El array de apartamentoIDV",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
 

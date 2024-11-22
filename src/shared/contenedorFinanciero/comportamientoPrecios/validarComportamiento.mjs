@@ -142,7 +142,7 @@ export const validarComportamiento = async (comportamiento) => {
             const diasArray = validadoresCompartidos.tipos.array({
                 array: contenedor.dias,
                 nombreCampo: "El diasArray",
-                filtro: "soloCadenasIDV",
+                filtro: "strictoIDV",
                 nombreCompleto: "En diasArray",
                 sePermitenDuplicados: "no"
             })

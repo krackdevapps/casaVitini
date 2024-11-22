@@ -6,7 +6,7 @@ export const obtenerParametroConfiguracion = async (configuracionUID) => {
         const confArrayUIDS = validadoresCompartidos.tipos.array({
             array: configuracionUID,
             nombreCampo: "El array de obtenerParametroConfiguracion",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
         const configuraciones = configuracionesPredeterminadas()

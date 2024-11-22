@@ -26,7 +26,7 @@ export const validarDescuentosPorCodigo = async (data) => {
         validadoresCompartidos.tipos.array({
             array: zonasArray,
             nombreCampo: "El array de zonasArray en el procesador de precios",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
 

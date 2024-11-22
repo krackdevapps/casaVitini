@@ -1,3 +1,9 @@
+main *:not(.sobreControlAnimacionGlobal):not(.sobreControlAnimacionGlobal *) {
+    transition: scale 250ms ease-in-out;
+    @starting-style {
+        scale: 0;
+    }
+}
 select {
     appearance: none;
     outline: none;
@@ -411,7 +417,7 @@ summary:hover {
     grid-template-rows: auto;
     grid-gap: 6px;
     scale: 1;
-    transition: all 250ms ease-in-out;
+    transition: scale 250ms ease-in-out;
 
     @starting-style {
         scale: 0;
@@ -928,7 +934,6 @@ summary:hover {
     text-align: center;
     width: fit-content;
     background-color: rgba(249, 255, 255, 0.252);
-    transform: all 250ms;
     -webkit-backdrop-filter: blur(30px);
     backdrop-filter: blur(30px);
     border-radius: 20px;
@@ -942,7 +947,7 @@ summary:hover {
     gap: 10px;
     max-width: 1280px;
     scale: 1;
-    transition: all 250ms ease-in-out;
+    transition: all 250ms linear;
 
     @starting-style {
         scale: 0;
@@ -963,10 +968,11 @@ summary:hover {
     overflow: auto;
     padding: 30px;
     pointer-events: none;
+
 }
 
 .mostrarSoloEnResponsivo {
-    display: none;
+
     scale: 1;
     transition: scale 500ms ease-in-out;
 
@@ -977,27 +983,33 @@ summary:hover {
 }
 
 
+
+
+
 @media (max-width: 720px),
 (max-height: 600px) {
     .bloqueCalendarioNuevo {
         padding: 0px;
         position: fixed;
         height: 100%;
-        backdrop-filter: blur(50px);
-        -webkit-backdrop-filter: blur(50px);
+        /* backdrop-filter: blur(50px);
+        /* background: rgb(168, 168, 168); */
+       /* -webkit-backdrop-filter: blur(50px); */
     }
 
     .calendarioNuevo {
         border-radius: 0px;
         flex: 1;
-        background: transparent;
-        backdrop-filter: blur(0px);
-        -webkit-backdrop-filter: blur(0px);
+        /* background: transparent; */
+        /* backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px); */
         box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
     }
 
     .calendarioFlotante {
         padding: 0px;
+        /* backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px); */
         top: 0px !important;
 
     }
@@ -1013,8 +1025,12 @@ summary:hover {
 
 }
 
+.campoNombreDia {
+    background: blue;
+}
 .calendarioFlotante {
     transition: all 250ms linear;
+
 }
 
 [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI {
@@ -8754,7 +8770,6 @@ summary:hover {
     display: grid;
     flex-direction: column;
     flex-wrap: wrap;
-    transition: all 1s;
     /* backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px); */
     text-decoration: none;
@@ -8767,7 +8782,6 @@ summary:hover {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    transition: all 1s;
     text-decoration: none;
     color: black;
     cursor: default;
@@ -13355,7 +13369,7 @@ summary:hover {
 
 @media (max-width: 720px) {
     [zonaCSS="/administracion/reservas"] .administracion_portada_contenedorContextual_contenedorBotones {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr ;
     }
 }
 
@@ -14139,7 +14153,7 @@ summary:hover {
     justify-content: space-between;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    border-radius: 20px;
+    border-radius: 22px;
 }
 
 [zonaCSS="administracion/reservas/pendientes_de_revision"] .reservas_pendientesDeRevision .contenedorDatos {
@@ -16143,6 +16157,14 @@ textarea {
 
 .breakWordkAll {
     word-break: break-all;
+}
+
+.efectoAparicionSimple {
+    transition: scale 50ms ease-in-out;
+    scale: 1;
+    @starting-style {
+        scale: 0;
+    }
 }
 
 .efectoAparicion {

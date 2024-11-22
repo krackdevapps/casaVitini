@@ -18,7 +18,7 @@ export const configuracionApartamento = async (entrada) => {
         const apartamentos = validadoresCompartidos.tipos.array({
             array: entrada.body.apartamentos,
             nombreCampo: "El array de apartamentos",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
         const transactor = await configuracionApartamento_(apartamentos);

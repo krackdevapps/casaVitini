@@ -16,7 +16,7 @@ export const insertarDescuentoCompatibleConReserva = async (data) => {
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
             nombreCampo: "El array de apartamentos en el insertarDescuentoCompatibleConReserva",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
         const reservaUID = data.reservaUID

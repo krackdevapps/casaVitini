@@ -13,7 +13,7 @@ export const configuracionApartamento = async (apartamentosIDVArray) => {
         validadoresCompartidos.tipos.array({
             array: apartamentosIDVArray,
             nombreCampo: "El sistema de configuracion",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no",
             sePermiteArrayVacio: "si"
         })

@@ -58,7 +58,7 @@ export const procesadorReserva = async (data) => {
             apartamentosArray = validadoresCompartidos.tipos.array({
                 array: data.apartamentosArray,
                 nombreCampo: "El array de apartamentos en el procesador de precios",
-                filtro: "soloCadenasIDV",
+                filtro: "strictoIDV",
                 sePermitenDuplicados: "no"
             })
             for (const apartamentoIDV of apartamentosArray) {
@@ -76,7 +76,7 @@ export const procesadorReserva = async (data) => {
             const fechaCreacionReservaUTC = reserva.fechaCreacion_simple
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
             const fechaISO_TZ = DateTime.fromISO(fechaCreacionReservaUTC, { zone: "utc" })
-            .setZone(zonaHoraria);
+                .setZone(zonaHoraria);
             fechaActual = fechaISO_TZ
             const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
             apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
@@ -95,7 +95,7 @@ export const procesadorReserva = async (data) => {
             const fechaCreacionSimulacionUTC = simulacion.fechaCreacion_simple
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
             const fechaISO_TZ = DateTime.fromISO(fechaCreacionSimulacionUTC, { zone: "utc" })
-            .setZone(zonaHoraria);
+                .setZone(zonaHoraria);
             fechaActual = fechaISO_TZ
 
             const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)

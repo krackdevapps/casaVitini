@@ -119,8 +119,8 @@ export const realizarReembolso = async (entrada, salida) => {
                 const cantidadDelReembolso = detallesDelReembolso.cantidad;
                 totalReembolsado = new Decimal(totalReembolsado).plus(cantidadDelReembolso);
             });
-            const totalReembolsable = new Decimal(controlTotalPago).minus(totalReembolsado);
-            if (Number(cantidad) >= Number(totalReembolsable)) {
+            const totalReembolsable = new Decimal(controlTotalPago).minus(totalReembolsado).toFixed(2);
+            if (Number(cantidad) > Number(totalReembolsable)) {
                 const error = `El valor del reembolso ${cantidad} supera el valor total reembolsable de este pago (${totalReembolsable}). Recuerda que no puedes realizar un reembolso que supere la cantidad reembolsable del pago. Ten en cuenta el resto de reembolsos a la hora de hacer un reembolso más de este pago.`;
                 throw new Error(error);
             }

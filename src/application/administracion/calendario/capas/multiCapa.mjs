@@ -40,7 +40,7 @@ export const multiCapa = async (entrada) => {
         const capas = validadoresCompartidos.tipos.array({
             array: contenedorCapas?.capas,
             nombreCampo: "El array de capas",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             nombreCompleto: "En el array del calendario multi capa"
         })
 
@@ -426,7 +426,7 @@ export const multiCapa = async (entrada) => {
                 const calendariosUID = validadoresCompartidos.tipos.array({
                     array: contenedorCapas.capasCompuestas.calendariosAirbnb,
                     nombreCampo: "El array de capasCompuesta de los calendarios Airbnbn",
-                    filtro: "soloCadenasIDV",
+                    filtro: "strictoIDV",
                     nombreCompleto: "En el array del calendario multi capa"
                 })
 

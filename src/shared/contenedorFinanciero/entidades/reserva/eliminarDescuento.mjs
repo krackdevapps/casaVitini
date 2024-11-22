@@ -24,7 +24,7 @@ export const eliminarDescuento = async (data) => {
         const apartamentosArray = validadoresCompartidos.tipos.array({
             array: data.apartamentosArray,
             nombreCampo: "El array de apartamentos en el actualizarDesgloseFinanciero",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "no"
         })
         const reservaUID = validadoresCompartidos.tipos.cadena({

@@ -28,7 +28,7 @@ export const aplicarOfertas = async (data) => {
         const descuentosParaRechazar = validadoresCompartidos.tipos.array({
             array: data?.descuentosParaRechazar || [],
             nombreCampo: "descuentosParaRechazar en el procesador de precios",
-            filtro: "soloCadenasIDV",
+            filtro: "strictoIDV",
             sePermitenDuplicados: "si",
             sePermiteArrayVacio: "si"
         })
@@ -40,7 +40,7 @@ export const aplicarOfertas = async (data) => {
             validadoresCompartidos.tipos.array({
                 array: zonasArray,
                 nombreCampo: "El array de zonasArray en el procesador de precios",
-                filtro: "soloCadenasIDV",
+                filtro: "strictoIDV",
                 sePermitenDuplicados: "no"
             })
 

@@ -32,7 +32,6 @@ export const obtenerComplementosPorAlojamiento = async (entrada) => {
         const complementosDeAlojamiento = []
         if (filtro === "soloActivos") {
             const complementosActivos = complementosPorApartamentoIDV.filter(c => c.estadoIDV === "activado")
-            console.log("complementosActivos", complementosActivos)
             complementosDeAlojamiento.push(...complementosActivos)
         } else if (filtro === "todos") {
             complementosDeAlojamiento.push(...complementosPorApartamentoIDV)
