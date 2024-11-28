@@ -3,8 +3,7 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
     const mutex = new Mutex()
@@ -30,12 +29,13 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-        await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
 
         await campoDeTransaccion("confirmar")
         const ok = {
-            ok: "Se ha reconstruido el desglose desde las instantáneas"
+            ok: "Se ha reconstruido el desglose desde las instantáneas",
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

@@ -63,12 +63,13 @@ export const preConfirmarReserva = async (entrada) => {
         })
 
         const servicios = await validarServiciosPubicos(serviciosPorValidar)
+        console.log("servicios", servicios)
         await validarComplementosAlojamiento(reservaPublica)
         const contenedorErrorInfoObsoleta = []
         if (servicios.serviciosNoReconocidos.length > 0) {
             const serviciosNoReconocidos = servicios.serviciosNoReconocidos
             const e = {
-                error: "Lo siguientes servicios han dejado de estar disponbiles",
+                error: "Lo siguientes servicios han dejado de estar disponibles",
                 tipo: "servicios",
                 lista: serviciosNoReconocidos
             }
@@ -86,7 +87,7 @@ export const preConfirmarReserva = async (entrada) => {
         if (codigosDescuentosValidados.codigosDescuentosNoReconocidos.length > 0) {
             const codigosNoReconocidos = codigosDescuentosValidados.codigosDescuentosNoReconocidos
             const e = {
-                error: "Lo siguientes codigos han dejado de estar disponbiles",
+                error: "Las siguientes ofertas seleccionadas por sus códigos de descuentos han dejado de estar disponibles",
                 tipo: "codigosDescuento",
                 lista: codigosNoReconocidos
             }
@@ -118,8 +119,8 @@ export const preConfirmarReserva = async (entrada) => {
         limpiarContenedorFinacieroInformacionPrivada(resolverDetallesReserva)
         const pdf = await generadorPDF(resolverDetallesReserva);
         if (!testingVI) {
-            enviarMailReservaConfirmadaAlCliente(reservaUID)
-            enviarMailDeAvisoPorReservaPublica(reservaUID)
+          //  enviarMailReservaConfirmadaAlCliente(reservaUID)
+           // enviarMailDeAvisoPorReservaPublica(reservaUID)
         }
 
         const ok = {

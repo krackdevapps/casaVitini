@@ -5,7 +5,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructu
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 import { obtenerTodasLasHabitaciones } from "../../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs";
 
-export const listarHabitacionesDisponbilesApartamentoConfiguracion = async (entrada) => {
+export const listarHabitacionesDisponiblesApartamentoConfiguracion = async (entrada) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session)

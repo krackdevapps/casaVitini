@@ -22,6 +22,7 @@ export const preComprobarCodigoDescuento = async (entrada) => {
         const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
             array: entrada.body?.codigoDescuento,
             nombreCampo: "El campo codigoDescuento",
+            filtro: "filtroDesactivado",
             sePermitenDuplicados: "no"
         })
         codigoDescuentoArrayAsci.forEach((codigo) => {
@@ -74,8 +75,10 @@ export const preComprobarCodigoDescuento = async (entrada) => {
 
 
         if (ofertasActivas.length === 0) {
-            const m = "El código introducido no se reconoce"
-            throw new Error(m)
+            throw {
+                error: "El código introducido no se reconoce",
+                code: "badCodeOffer"
+            }
         }
 
         const ofertaAnalizadasPorCondiciones = []

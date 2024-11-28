@@ -6,7 +6,6 @@ export const validarOpcionesDelServicio = async (data) => {
     try {
         const opcionesSeleccionadasDelServicio = data.opcionesSeleccionadasDelServicio || {}
         const servicioExistenteAccesible = data.servicioExistenteAccesible
-
         const contendor = servicioExistenteAccesible.contenedor
         const tituloPublico = contendor.tituloPublico
         const duracionIDV = contendor.duracionIDV

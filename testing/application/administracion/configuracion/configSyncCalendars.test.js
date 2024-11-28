@@ -100,7 +100,8 @@ END:VCALENDAR`
             .reply(200, fakeIcal), {
             'Content-Type': 'text/calendar',
         }
-        const newBehavior = {
+   
+        const response = await actualizarCalendario({
             body: {
                 calendarioUID: String(calendarioUID),
                 nombre: "Calendario para testing",
@@ -108,8 +109,7 @@ END:VCALENDAR`
                 url: "https://airbnb.com/testing/calendario.ical"
             },
             session: fakeAdminSession
-        }
-        const response = await actualizarCalendario(newBehavior)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');

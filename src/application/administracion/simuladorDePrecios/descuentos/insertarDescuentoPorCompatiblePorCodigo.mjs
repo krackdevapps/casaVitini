@@ -8,7 +8,8 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/r
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
+import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
 
 export const insertarDescuentoPorCompatiblePorCodigo = async (entrada) => {
     const mutex = new Mutex()
@@ -47,6 +48,7 @@ export const insertarDescuentoPorCompatiblePorCodigo = async (entrada) => {
         const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
             array: entrada.body.codigosDescuentos,
             nombreCampo: "El campo codigoDescuento",
+            filtro: "filtroDesactivado",
             sePermitenDuplicados: "no"
         })
 
@@ -65,9 +67,17 @@ export const insertarDescuentoPorCompatiblePorCodigo = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-
-        const apartamentosArray = simulacion.apartamentosIDVARRAY
+        const llavesGlobalesFaltantes = await soloFiltroDataGlobal(simulacionUID)
+        if (llavesGlobalesFaltantes.length > 0) {
+            const llavesSring = utilidades.constructorComasEY({
+                array: llavesGlobalesFaltantes,
+                articulo: ""
+            })
+            const m = `No se puede insertar un descuento compatible por codigo en la simulacion, por que faltan los siguientes datos globales de la simulacion: ${llavesSring}`
+            throw new Error(m)
+        }
+        const alojamiento = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
+        const apartamentosArray = alojamiento.map(a => a.apartamentoIDV)
         const zonaIDV = simulacion.zonaIDV
 
         try {
@@ -124,6 +134,7 @@ export const insertarDescuentoPorCompatiblePorCodigo = async (entrada) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
+            simulacionUID,
             desgloseFinanciero
         }
         return ok

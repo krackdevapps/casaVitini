@@ -4,7 +4,7 @@ import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../inf
 import { obtenerCamasDeLaHabitacionPorHabitacionUID } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorHabitacionUID.mjs";
 import { obtenerCamaComoEntidadPorTipoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/cama/obtenerCamaComoEntidadPorTipoIDV.mjs";
 
-export const listarCamasDisponbilesApartamentoConfiguracion = async (entrada, salida) => {
+export const listarCamasDisponiblesApartamentoConfiguracion = async (entrada, salida) => {
     try {
         const session = entrada.session
         const IDX = new VitiniIDX(session, salida)

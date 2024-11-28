@@ -4,11 +4,10 @@ import { validadoresCompartidos } from "../../../../shared/validadores/validador
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { insertarServicioPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/insertarServicioPorSimulacionUID.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
 import { validarObjetoDelServicio } from "../../../../shared/reservas/detallesReserva/servicios/validarObjetoDelServicio.mjs"
 import { obtenerServicioPorCriterioPublicoPorServicioUIDArray } from "../../../../infraestructure/repository/servicios/obtenerServicioPorCriterioPublicoPorServicioUIDArray.mjs"
 import { validarOpcionesDelServicio } from "../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 export const insertarServicioEnSimulacion = async (entrada) => {
     try {
@@ -48,12 +47,20 @@ export const insertarServicioEnSimulacion = async (entrada) => {
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
+        const estadoIDV = servicio.estadoIDV
         contenedorServicio.servicioUID = servicio.servicioUID
+
+        if (estadoIDV !== "activado") {
+            const m = "El servicio no esta activado"
+            throw new Error(m)
+
+        }
 
         const servicioExistenteAccesible = await obtenerServicioPorCriterioPublicoPorServicioUIDArray({
             zonaIDVArray: [
                 "privada",
-                "global"
+                "global",
+                "publica"
             ],
             estadoIDV: "activado",
             serviciosUIDArray: [servicioUID]
@@ -71,13 +78,15 @@ export const insertarServicioEnSimulacion = async (entrada) => {
             contenedor: contenedorServicio,
             opcionesSel: opcionesSeleccionadas
         })
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha insertado el servicio correctamente en la reserva y el contenedor financiero se ha renderizado.",
             servicio: servicioInsertado,
-            desgloseFinanciero: desgloseFinanciero
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

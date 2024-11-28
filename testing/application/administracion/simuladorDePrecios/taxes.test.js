@@ -106,8 +106,7 @@ describe('taxes of simulation', () => {
                 fechaCreacion: "2026-10-10",
                 fechaEntrada: "2026-10-11",
                 fechaSalida: "2026-10-14",
-                zonaIDV: "global",
-                apartamentosIDVARRAY: [apartamentoIDV],
+                zonaIDV: "global"
             },
             session: fakeAdminSession
         }

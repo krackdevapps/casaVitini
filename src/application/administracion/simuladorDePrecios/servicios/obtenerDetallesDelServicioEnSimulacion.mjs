@@ -35,8 +35,6 @@ export const obtenerDetallesDelServicioEnSimulacion = async (entrada) => {
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
         
-        
-        // mertodo para obtner el servicio 
         const servicio = await obtenerServicioEnSimulacionPorServicioUID(servicioUID_enSimulacion)
         const contenedorServicio = servicio.contenedor
         contenedorServicio.servicioUID = servicio.servicioUID

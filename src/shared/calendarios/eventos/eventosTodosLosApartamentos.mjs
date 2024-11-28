@@ -41,9 +41,9 @@ export const eventosTodosLosApartamentos = async (fecha) => {
             const apartamentoIDV = detalles.apartamentoIDV
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
-                errorSi: "noExiste"
+                errorSi: "desactivado"
             })
-            detalles.apartamentoUI = apartamento.apartamentoUI
+            detalles.apartamentoUI = apartamento?.apartamentoUI ||`(${apartamentoIDV}) Apartamento sin configuracion de alojamiento`
             reservasSelecciondas.push(detalles)
         }
         for (const detallesReserva of reservasSelecciondas) {
@@ -69,7 +69,7 @@ export const eventosTodosLosApartamentos = async (fecha) => {
                 const fechaInternaHumana = `${anoFechaInterna}-${String(mesFechaInterna).padStart(2, "0")}-${String(diaFechaInterna).padStart(2, "0")}`
                 const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                     apartamentoIDV: apartamentoIDV,
-                    errorSi: "noExiste"
+                    errorSi: "desactivado"
                 })
                 const estructuraReservaEnDia = {
                     eventoUID: "todosLosApartamentos_" + apartamentoUID,
@@ -78,7 +78,7 @@ export const eventosTodosLosApartamentos = async (fecha) => {
                     fechaEntrada: fechaEntrada,
                     fechaSalida: fechaSalida,
                     apartamentoIDV: apartamentoIDV,
-                    apartamentoUI: apartamento.apartamentoUI
+                    apartamentoUI: apartamento?.apartamentoUI || `(${apartamentoIDV}) Apartamento sin configuracion de alojamiento`
                 }
                 if (calendarioObjeto[fechaInternaHumana]) {
                     calendarioObjeto[fechaInternaHumana].push(estructuraReservaEnDia)

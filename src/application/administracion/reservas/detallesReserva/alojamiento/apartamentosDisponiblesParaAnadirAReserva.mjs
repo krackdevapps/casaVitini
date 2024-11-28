@@ -48,13 +48,13 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             zonaConfiguracionAlojamientoArray: ["privada", "global"],
             zonaBloqueo_array: ["privada", "global"],
         });
-        const apartamentosDisponbilesIDV = transactor.apartamentosDisponibles;
+        const apartamentosDisponiblesIDV = transactor.apartamentosDisponibles;
         const apartamentosNoDisponiblesIDV = transactor.apartamentosNoDisponibles;
         const estructuraFinal = {
             apartamentosDisponibles: [],
             apartamentosNoDisponibles: []
         };
-        for (const apartamentoIDV of apartamentosDisponbilesIDV) {
+        for (const apartamentoIDV of apartamentosDisponiblesIDV) {
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
                 errorSi: "noExiste"

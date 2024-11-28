@@ -132,9 +132,9 @@ describe('critical: hosting locks system', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         const apartamentosDisponibles = response.ok.apartamentosDisponibles
-        const apartamentosIDVDisponbiles = Object.keys(apartamentosDisponibles)
-        expect(apartamentosIDVDisponbiles).toContain(apartamentoIDV);
-        expect(apartamentosIDVDisponbiles).not.toContain(apartamentoIDV_conBloqueo);
+        const apartamentosIDVDisponibles = Object.keys(apartamentosDisponibles)
+        expect(apartamentosIDVDisponibles).toContain(apartamentoIDV);
+        expect(apartamentosIDVDisponibles).not.toContain(apartamentoIDV_conBloqueo);
     })
 
     test('confirm bookin from DMZ with error by locked hosting', async () => {
@@ -172,8 +172,8 @@ describe('critical: hosting locks system', () => {
             expect(error).toHaveProperty('code');
             expect(error.code).toMatch(/hotingNoAvaible/)
             const apartamentosDisponibles = error.apartamentosDisponibles
-            const apartamentosIDVDisponbiles = Object.keys(apartamentosDisponibles)
-            expect(apartamentosIDVDisponbiles).not.toContain(apartamentoIDV_conBloqueo);
+            const apartamentosIDVDisponibles = Object.keys(apartamentosDisponibles)
+            expect(apartamentosIDVDisponibles).not.toContain(apartamentoIDV_conBloqueo);
         }
 
     })
@@ -199,8 +199,8 @@ describe('critical: hosting locks system', () => {
             expect(error.code).toMatch(/hostingNoAvaible/);
 
             const apartamentosDisponibles = error.apartamentosDisponibles
-            const apartamentosIDVDisponbiles = Object.keys(apartamentosDisponibles)
-            expect(apartamentosIDVDisponbiles).not.toContain(apartamentoIDV_conBloqueo);
+            const apartamentosIDVDisponibles = Object.keys(apartamentosDisponibles)
+            expect(apartamentosIDVDisponibles).not.toContain(apartamentoIDV_conBloqueo);
         }
 
     })
@@ -236,8 +236,8 @@ describe('critical: hosting locks system', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
         const apartamentosNoDisponibles = response.ok.apartamentosNoDisponibles
-        const apartamentosIDVNoDisponbiles = apartamentosNoDisponibles.map(a => a.apartamentoIDV)
-        expect(apartamentosIDVNoDisponbiles).toContain(apartamentoIDV_conBloqueo)
+        const apartamentosIDVNoDisponibles = apartamentosNoDisponibles.map(a => a.apartamentoIDV)
+        expect(apartamentosIDVNoDisponibles).toContain(apartamentoIDV_conBloqueo)
 
     })
 

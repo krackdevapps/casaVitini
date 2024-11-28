@@ -1,17 +1,15 @@
 import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
-import { obtenerOferatPorOfertaUID } from "../../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
-import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
-import { selecionarOfertasPorCondicion } from "../../../../shared/ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs"
 import { obtenerOfertasPorRangoActualPorCodigoDescuentoArray } from "../../../../infraestructure/repository/simulacionDePrecios/ofertas/obtenerOfertasPorRangoActualPorCodigoDescuentoArray.mjs"
 import { selectorPorCondicion } from "../../../../shared/ofertas/entidades/reserva/selectorPorCondicion.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
+import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
+import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
 
 export const comprobarCodigosEnSimulacion = async (entrada) => {
     const mutex = new Mutex()
@@ -40,6 +38,7 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
         const codigoDescuentoArrayAsci = validadoresCompartidos.tipos.array({
             array: entrada.body.codigosDescuentos,
             nombreCampo: "El campo codigoDescuento",
+            filtro: "filtroDesactivado",
             sePermitenDuplicados: "no"
         })
 
@@ -59,14 +58,23 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-
+        const llavesGlobalesFaltantes = await soloFiltroDataGlobal(simulacionUID)
+        if (llavesGlobalesFaltantes.length > 0) {
+            const llavesSring = utilidades.constructorComasEY({
+                array: llavesGlobalesFaltantes,
+                articulo: ""
+            })
+            const m = `No se puede comprobar el codigo de descuento en la simulacion, por que faltan los siguientes datos globales de la simulacion: ${llavesSring}`
+            throw new Error(m)
+        }
+        const alojamiento = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
+        const apartamentosArray = alojamiento.map(a => a.apartamentoIDV)
 
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
         const fechaCreacion = simulacion.fechaCreacion
-        const apartamentosArray = simulacion.apartamentosIDVARRAY
         const zonaIDV = simulacion.zonaIDV
+
 
         try {
             for (const apartamentoIDV of apartamentosArray) {
@@ -139,11 +147,14 @@ export const comprobarCodigosEnSimulacion = async (entrada) => {
                 contenedorOferta.enSimulacion = "si"
             }
         }
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
 
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Aqui tienes la lista de oferta procesadas por los codigos enviados",
-            ofertas: ofertasProcesadas
+            ofertas: ofertasProcesadas,
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

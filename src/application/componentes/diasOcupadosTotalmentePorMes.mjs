@@ -75,7 +75,7 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
             const error = "No hay ningún apartamento disponible.";
             //throw new Error(error);
         }
-        const apartamentosDisponbiles = [];
+        const apartamentosDisponibles = [];
         const apartamentosConfiguradosDisponibles = [];
         configuracionesDisponibles.forEach((apartamento) => {
             apartamentosConfiguradosDisponibles.push(apartamento.apartamentoIDV);

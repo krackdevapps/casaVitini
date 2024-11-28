@@ -1,8 +1,7 @@
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { eliminarApartamentoEnSimulacion } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/eliminarApartamentoEnSimulacion.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 
@@ -38,12 +37,12 @@ export const eliminarAlojamientoEnSimulacion = async (entrada) => {
             apartamentoIDV
         })
         await campoDeTransaccion("confirmar")
-       // await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-       // const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         return {
-            ok: "Se ha insertado el apartamento en la simulacion",
+            ok: "Se ha eliminado el apartamento en la simulacion",
+            simulacionUID,
             nuevoApartamento,
-           // desgloseFinanciero
+            ...postProcesadoSimualacion
         }
     } catch (error) {
         await campoDeTransaccion("cancelar")

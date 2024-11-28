@@ -38,6 +38,9 @@ describe('miCasa bookins', () => {
     const fechaInicioVirutal_offer = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 2 }).toISODate();
     const fechaFinalVirtual_offer = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
 
+    const fechaInicioVirutal_service = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 2 }).toISODate();
+    const fechaFinalVirtual_service = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
+
     const fechaInicioVirutal = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 2 }).toISODate();
     const fechaFinalVirtual = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
 
@@ -112,8 +115,8 @@ describe('miCasa bookins', () => {
                 ]
             }
         ],
-        fechaInicio: "2024-11-13",
-        fechaFinal: "2024-11-23"
+        fechaInicio: fechaInicioVirutal_service,
+        fechaFinal: fechaFinalVirtual_service
     }
 
     const fakeService = {
@@ -281,7 +284,8 @@ describe('miCasa bookins', () => {
     test('get complement of hosting', async () => {
         const m = {
             body: {
-                apartamentoIDV: apartamentoIDV
+                apartamentoIDV: apartamentoIDV,
+                filtro: "soloActivos"
             },
             session: fakeAdminSession
         }
@@ -341,7 +345,6 @@ describe('miCasa bookins', () => {
                 }
             }
         }
-
         const response = await preConfirmarReserva(m)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');

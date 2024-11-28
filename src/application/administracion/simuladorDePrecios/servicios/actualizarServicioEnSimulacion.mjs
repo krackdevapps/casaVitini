@@ -3,11 +3,10 @@ import { validarObjetoDelServicio } from "../../../../shared/reservas/detallesRe
 import { validarOpcionesDelServicio } from "../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
 import { actualizarServicioPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/actualizarServicioPorSimulacionUID.mjs"
 import { obtenerServicioEnSimulacionPorServicioUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServicioEnSimulacionPorServicioUID.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 export const actualizarServicioEnSimulacion = async (entrada) => {
     try {
@@ -63,15 +62,13 @@ export const actualizarServicioEnSimulacion = async (entrada) => {
             servicioUID_enSimulacion,
             opcionesSel: opcionesSeleccionadas
         })
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
-
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el servicio correctamente en la simulación y el contenedor financiero se ha renderizado.",
             servicio: servicioEnSimulacion,
-            desgloseFinanciero: desgloseFinanciero
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

@@ -5,8 +5,7 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { obtenerAlojamientoDeLaSimulacionPorApartamentoIDV } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerAlojamientoDeLaSimulacionPorApartamentoIDV.mjs"
 import { insertarComplementoAlojamientoPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/complementosDeAlojamiento/insertarComplementoAlojamientoPorSimulacionUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 
@@ -73,14 +72,13 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
             precio,
             apartamentoUID
         })
-
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         await campoDeTransaccion("confirmar")
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
         return {
             ok: "Se ha insertado el complemento de alojamiento en la simulacion",
             complementoDeAlojamiento,
-            desgloseFinanciero
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
     } catch (error) {
         await campoDeTransaccion("cancelar")

@@ -1,12 +1,10 @@
 import Decimal from "decimal.js"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerNombreComportamientoPorNombreUI } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs"
-import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArray.mjs"
+import {  obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID.mjs"
 import { obtenerComportamientosPorRangoPorCreacionPorTipoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorCreacionPorTipoIDV.mjs"
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
-import { obtenerComportamientosPorTipoIDVPorDiasArray } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs"
 import { obtenerComportamientosPorTipoPorApartamentoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoPorApartamentoIDV.mjs"
-import { obtenerComportamientosDistintosPorTipoPorApartamentoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoPorApartamentoIDV.mjs"
 import { DateTime } from "luxon"
 import { obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray.mjs"
 
@@ -187,9 +185,10 @@ export const evitarDuplicados = async (data) => {
                 comportamientosEnConflicto.push(...comportamientosPorDias)
             }
             if (transaccion === "actualizar") {
-                const comportamientosDistintosPorDiasArray = await obtenerComportamientosDistintosPorTipoIDVPorDiasArray({
+                const comportamientosDistintosPorDiasArray = await obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID({
                     tipoIDV: tipoIDV,
                     diasArray: diasArray,
+                    apartamentosIDVArray: apartamentosIDVArray,
                     comportamientoUID: comportamientoUID,
                 })
                 comportamientosEnConflicto.push(...comportamientosDistintosPorDiasArray)

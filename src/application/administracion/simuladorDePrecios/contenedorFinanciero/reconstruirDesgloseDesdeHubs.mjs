@@ -5,13 +5,14 @@ import { procesador } from "../../../../shared/contenedorFinanciero/procesador.m
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { obtenerServiciosPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs"
 import { insertarServicioPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/insertarServicioPorSimulacionUID.mjs"
 import { obtenerServicioPorServicioUID } from "../../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs"
 import { eliminarServicioEnSimulacionPorServicioUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/eliminarServicioEnSimulacionPorServicioUID.mjs"
 import { actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID.mjs"
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
+import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
+import { utilidades } from "../../../../shared/utilidades.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -65,13 +66,31 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         mutex.acquire()
         await campoDeTransaccion("iniciar")
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         const zonaIDV = simulacion.zonaIDV
         const fechaCreacion_simple = simulacion.fechaCreacion_simple
         const fechaEntrada = simulacion.fechaEntrada
         const fechaSalida = simulacion.fechaSalida
         const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
         const apartamentosArray = alojamientosSimulacion.map(a => a.apartamentoIDV)
+
+        const llavesGlobalesFaltantes = await soloFiltroDataGlobal(simulacionUID)
+        if (llavesGlobalesFaltantes.length > 0) {
+            const dictLlaves = {
+                fechaCreacion: "Falta establecer la fecha de creación simulada",
+                fechaEntrada: "Falta establecer la fecha de entrada",
+                fechaSalida: "Falta establecer la fecha de salida",
+                zonaIDV: "Falta establecer la zona simulada",
+                alojamiento: "Falta insertar algun alojamiento en la simulación"
+            }
+            const llavesUI = llavesGlobalesFaltantes.map(llave=> dictLlaves[llave])
+            const llavesSring = utilidades.constructorComasEY({
+                array:llavesUI,
+                articulo: ""
+            })
+            const m = `No se puede generar el contenedor financiero de la simulacion desde los hubs, por que faltan los siguientes datos globales de la simulacion: ${llavesSring}`
+            throw new Error(m)
+        }
+
         try {
             for (const apartamentoIDV of apartamentosArray) {
                 await obtenerConfiguracionPorApartamentoIDV({
@@ -134,14 +153,16 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
 
         await actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID({
             desgloseFinanciero,
-            simulacionUID
+            simulacionUID,
         })
 
         const instantaneaServiciosActualizada = await obtenerServiciosPorSimulacionUID(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha reconstruido el desglose desde las instantáneas",
-            instantaneaServicios: instantaneaServiciosActualizada
+            instantaneaServicios: instantaneaServiciosActualizada,
+            desgloseFinanciero
+
         }
         return ok
     } catch (errorCapturado) {

@@ -13,6 +13,7 @@ import { eliminarServicioEnSimulacion } from '../../../../src/application/admini
 import { crearServicio } from '../../../../src/application/administracion/servicios/crearServicio.mjs';
 import { actualizarEstadoServicio } from '../../../../src/application/administracion/servicios/actualizarEstadoServicio.mjs';
 import { detallesServicio } from '../../../../src/application/administracion/servicios/detallesServicio.mjs';
+import { DateTime } from 'luxon';
 
 describe('services of simulation', () => {
     const fakeAdminSession = {
@@ -23,6 +24,9 @@ describe('services of simulation', () => {
     let servicioUID
     let servicioUID_enSimulacion
     let servicioTemporal
+    const fechaCreacionVirtual = DateTime.utc().toISO();
+    const fechaInicioVirutal = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 2 }).toISODate();
+    const fechaFinalVirtual = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 2 }).toISODate();
     const nombreServicio = "servicio para testing"
     const zonaIDV = "global"
     const estadoIDV = "activado"
@@ -82,8 +86,8 @@ describe('services of simulation', () => {
                 ]
             }
         ],
-        fechaInicio: "2024-11-13",
-        fechaFinal: "2024-11-23"
+        fechaInicio: fechaInicioVirutal,
+        fechaFinal: fechaFinalVirtual
     }
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
@@ -192,7 +196,6 @@ describe('services of simulation', () => {
                 fechaEntrada: "2026-10-11",
                 fechaSalida: "2026-10-14",
                 zonaIDV: "global",
-                apartamentosIDVARRAY: [apartamentoIDV],
             },
             session: fakeAdminSession
         }

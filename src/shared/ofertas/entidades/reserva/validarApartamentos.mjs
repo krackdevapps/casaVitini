@@ -9,6 +9,7 @@ export const validarApartamentos = async (data) => {
 
         const parametrosConfiguracion = validadoresCompartidos.tipos.array({
             array: parametrosConfiguracion,
+            filtro: "filtroDesactivado",
             nombreCampo: "El campo apartamentosSeleccionados",
         })
 

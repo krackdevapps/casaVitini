@@ -175,6 +175,7 @@ export const validarComportamiento = async (comportamiento) => {
         }
         const apartamentos = validadoresCompartidos.tipos.array({
             array: contenedor.apartamentos,
+            filtro: "filtroDesactivado",
             nombreCampo: "Dentro del contenedor, en apartamentos"
         })
         const controladorIDVRepetidos = {}

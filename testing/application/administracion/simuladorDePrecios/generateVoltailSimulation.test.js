@@ -82,7 +82,6 @@ describe('Generate Voltail Simulation', () => {
                 fechaEntrada: "2026-10-11",
                 fechaSalida: "2026-10-14",
                 zonaIDV: "global",
-                apartamentosIDVARRAY: [apartamentoIDV],
             },
             session: fakeAdminSession
         }

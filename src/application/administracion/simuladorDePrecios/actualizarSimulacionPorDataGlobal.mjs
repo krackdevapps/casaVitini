@@ -1,9 +1,8 @@
 import { Mutex } from "async-mutex";
-import { actualizarSimulacionDesdeDataGlobal } from "../../../shared/contenedorFinanciero/entidades/simulacion/actualizarSimulacionDesdeDataGlobal_obsoleto.mjs";
 import { validarDataGlobalSimulacion } from "../../../shared/contenedorFinanciero/entidades/simulacion/validarDataGlobalSimulacion.mjs";
 import { actualizarRangoFechasPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/actualizarRangoFechasPorSimulacionUID.mjs";
-import { generarDesgloseSimpleGuardarlo } from "../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+import { controladorGeneracionDesgloseFinanciero } from "../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs";
 
 export const actualizarSimulacionPorDataGlobal = async (entrada) => {
     const mutex = new Mutex()
@@ -15,12 +14,14 @@ export const actualizarSimulacionPorDataGlobal = async (entrada) => {
         IDX.control()
 
         mutex.acquire()
-        const dataValidada = await validarDataGlobalSimulacion(entrada.body)
-        const fechaCreacion = dataValidada.fechaCreacion
-        const fechaEntrada = dataValidada.fechaEntrada
-        const fechaSalida = dataValidada.fechaSalida
-        const simulacionUID = dataValidada.simulacionUID
-        const zonaIDV = dataValidada.zonaIDV
+        const data = entrada.body
+
+        await validarDataGlobalSimulacion(data)
+        const fechaCreacion = data.fechaCreacion
+        const fechaEntrada = data.fechaEntrada
+        const fechaSalida = data.fechaSalida
+        const simulacionUID = data.simulacionUID
+        const zonaIDV = data.zonaIDV
 
         await actualizarRangoFechasPorSimulacionUID({
             fechaCreacion,
@@ -29,13 +30,12 @@ export const actualizarSimulacionPorDataGlobal = async (entrada) => {
             simulacionUID,
             zonaIDV
         })
-        //const contenedorSimulacion = entrada.body
-        //const desgloseFinancieroActualizado = await actualizarSimulacionDesdeDataGlobal(contenedorSimulacion)
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         const ok = {
             ok: "Se ha guardado la nueva simulación",
-            simulacionUID: dataValidada.simulacionUID,
-            desgloseFinanciero: desgloseFinanciero
+            simulacionUID: data.simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

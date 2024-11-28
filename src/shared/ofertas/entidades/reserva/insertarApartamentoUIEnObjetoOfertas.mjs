@@ -19,7 +19,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
                     errorSi: "desactivado"
                 }))?.apartamentoUI
             } else {
-                contenedorApartamento.apartamentoUI = `IDV no reconocido 3(${apartamentoIDV})`
+                contenedorApartamento.apartamentoUI = `IDV no reconocido 3 (${apartamentoIDV})`
             }
         }
 
@@ -67,7 +67,7 @@ export const insertarApartamentoUIEnObjetoOfertas = async (contenedorOferta) => 
                             errorSi: "desactivado"
                         }))?.apartamentoUI
                     } else {
-                        contenedorApartamento.apartamentoUI = `IDV no reconocido 1(${apartamentoIDV})`
+                        contenedorApartamento.apartamentoUI = `IDV no reconocido 1 (${apartamentoIDV})`
                     }
 
                 }

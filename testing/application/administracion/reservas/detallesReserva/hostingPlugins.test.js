@@ -7,6 +7,7 @@ import { eliminarImpuestoPorTestingVI } from '../../../../../src/infraestructure
 import { insertarComplementoAlojamientoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/complementosDeAlojamiento/insertarComplementoAlojamientoEnReserva.mjs';
 import { eliminarComplementoDeAlojamientoEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/complementosDeAlojamiento/eliminarComplementoDeAlojamientoEnReserva.mjs';
 import { crearComplementoDeAlojamiento } from '../../../../../src/application/administracion/complementosDeAlojamiento/crearComplementoDeAlojamiento.mjs';
+import { actualizarEstado } from '../../../../../src/application/administracion/complementosDeAlojamiento/actualizarEstado.mjs';
 
 describe('hostin plugin in bookins', () => {
     const fakeAdminSession = {
@@ -79,6 +80,19 @@ describe('hostin plugin in bookins', () => {
         expect(response).toHaveProperty('ok');
         complementoUID = response.nuevoComplementoUID
     })
+    test('update status of hosting plugin with ok', async () => {
+        const response = await actualizarEstado({
+            body: {
+                complementoUID: complementoUID,
+                estadoIDV: "activado"
+            },
+            session: fakeAdminSession
+        })
+        expect(response).not.toBeUndefined();
+        expect(typeof response).toBe('object');
+        expect(response).toHaveProperty('ok');
+    })
+
 
 
     test('insert hostin plugin in booking with ok', async () => {

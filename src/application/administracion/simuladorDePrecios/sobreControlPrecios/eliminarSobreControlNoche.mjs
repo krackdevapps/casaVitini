@@ -1,13 +1,10 @@
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../infraestructure/repository/simulacionDePrecios/sobreControlDePrecios/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
 import { eliminarSobreControlApartamento } from "../../../../infraestructure/repository/simulacionDePrecios/sobreControlDePrecios/eliminarSobreControlApartamento.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
-import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import _ from 'lodash';
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 export const eliminarSobreControlNoche = async (entrada) => {
     try {
@@ -44,7 +41,6 @@ export const eliminarSobreControlNoche = async (entrada) => {
         })
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
 
         const instantaneaNetoApartamento = await obtenerDetalleNochePorFechaNochePorApartamentoIDV({
             simulacionUID,
@@ -57,14 +53,16 @@ export const eliminarSobreControlNoche = async (entrada) => {
             fechaNoche
         })
 
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
 
         const ok = {
-            ok: {
-                ...desgloseFinanciero,
+           
+                ok: "Sobre control eliminado, el precio base se ha restaurado",
                 instantaneaNetoApartamento,
-                ...sobreControlActualizado
-            }
+                simulacionUID,
+                ...sobreControlActualizado,
+                ...postProcesadoSimualacion
+            
         }
         return ok
     } catch (errorCapturado) {

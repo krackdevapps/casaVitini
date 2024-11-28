@@ -2,14 +2,11 @@ import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerOferatPorOfertaUID } from "../../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
-import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { actualizarAutorizacionOfertaPorReservaUIDPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorSimulacionUID.mjs"
-import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
     const mutex = new Mutex()
@@ -49,7 +46,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
         }
         mutex.acquire()
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
+
         await campoDeTransaccion("iniciar")
         await obtenerOferatPorOfertaUID(ofertaUID)
         await obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion({
@@ -62,12 +59,14 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             ofertaUID,
             nuevaAutorizacion
         })
-        await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
 
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el estado de autorización de la oferta en la reserva",
-            autorizacion: nuevaAutorizacion
+            autorizacion: nuevaAutorizacion,
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

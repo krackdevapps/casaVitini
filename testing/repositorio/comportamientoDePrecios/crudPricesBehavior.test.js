@@ -11,7 +11,7 @@ import { actualizarComportamientoDePrecio } from '../../../src/infraestructure/r
 import { obtenerComportamientoDePrecioPorComportamientoUID } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs';
 import { obtenerNombreComportamientoPorNombreUI } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs';
 import { obtenerComportamientosDistintosPorNombreUI } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorNombreUI.mjs';
-import { obtenerComportamientosDistintosPorTipoIDVPorDiasArray } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArray.mjs';
+import { obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID.mjs';
 import { obtenerComportamientosPorRangoPorTipoIDV } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs';
 import { obtenerComportamientosPorTipoIDVPorDiasArray } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArray.mjs';
 import { obtenerComportamientosOrdenadorPorFechaInicio } from '../../../src/infraestructure/repository/comportamientoDePrecios/obtenerTodosComportamientosOrdenadorPorFechaInicio.mjs';
@@ -143,19 +143,8 @@ describe('crud prices behavior by range', () => {
         expect(Array.isArray(response)).toBe(true);
     })
 
-
-
-
-
-
-
-
-
-
-
-
     test('selec price behavior others by tipoIDV and diasArray', async () => {
-        const response = await obtenerComportamientosDistintosPorTipoIDVPorDiasArray({
+        const response = await obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID({
             tipoIDV: porDiasTVI,
             diasArray: ["lunes"],
             comportamientoUID: nuevoComportamientoUID

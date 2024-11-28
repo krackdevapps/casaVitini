@@ -7,6 +7,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/
 import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs";
 import { obtenerComplementosAlojamientoPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/complementosDeAlojamiento/obtenerComplementosAlojamientoPorSimulacionUID.mjs";
+import { controladorGeneracionDesgloseFinanciero } from "../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -73,6 +74,8 @@ export const detallesSimulacion = async (entrada) => {
         await insertarApartamentoUIEnObjetoOfertas(contenedorOfertas)
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
         const complementosDeAlojamientoDeLaSimulacion = await obtenerComplementosAlojamientoPorSimulacionUID(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
+
         const ok = {
             ok: "Aquí tienes los detalles de la simulación",
             nombre,
@@ -84,7 +87,8 @@ export const detallesSimulacion = async (entrada) => {
             apartamentos,
             servicios: serviciosDeLaSimulacion,
             complementosDeAlojamiento: complementosDeAlojamientoDeLaSimulacion,
-            contenedorFinanciero: simulacion
+            //contenedorFinanciero: simulacion,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

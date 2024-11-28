@@ -46,6 +46,7 @@ export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
 
         const ok = {
             ok: "Ofertas compatibles con la reserva",
+            simulacionUID,
             ofertasCompatibles: ofertasSelecionadasPorCondicion
         }
         return ok

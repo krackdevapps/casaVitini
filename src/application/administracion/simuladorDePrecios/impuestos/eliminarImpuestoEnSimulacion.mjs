@@ -5,8 +5,7 @@ import { validadoresCompartidos } from "../../../../shared/validadores/validador
 import { obtenerImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
 import { eliminarImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/eliminarImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 export const eliminarImpuestoEnSimulacion = async (entrada) => {
     const mutex = new Mutex()
@@ -42,8 +41,6 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
 
         mutex.acquire()
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
-
         await obtenerImpuestoPorImpuestoUIDPorSimulacionUID({
             simulacionUID,
             impuestoUID: String(impuestoUID),
@@ -56,11 +53,12 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
             simulacionUID,
             impuestoUID
         })
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
-            contenedorFinanciero: desgloseFinanciero
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

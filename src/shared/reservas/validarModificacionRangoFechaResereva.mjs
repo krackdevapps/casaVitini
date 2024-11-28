@@ -5,6 +5,7 @@ import { validadorFuturo } from './rangoFlexible/futuro.mjs';
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from '../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs';
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs';
 import { validadorPasado } from './rangoFlexible/pasado.mjs';
+import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from '../../infraestructure/repository/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs';
 export const validarModificacionRangoFechaResereva = async (data) => {
     try {
         const mesCalendario = data.mesCalendario.padStart(2, '0');
@@ -50,10 +51,12 @@ export const validarModificacionRangoFechaResereva = async (data) => {
             const arrayStringsPrePresentacionDatos = []
 
             for (const apartamentoIDV of elementosNoComunes) {
-                const apartamentoUI = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                const apartamento = await obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID({
                     apartamentoIDV: apartamentoIDV,
+                    reservaUID: reservaUID,
                     errorSi: "desactivado"
-                }).apartamentoUI
+                })
+                const apartamentoUI = apartamento.apartamentoUI
                 const nombreUI = `${apartamentoUI} (IDV: ${apartamentoIDV})`
                 arrayStringsPrePresentacionDatos.push(nombreUI)
             }

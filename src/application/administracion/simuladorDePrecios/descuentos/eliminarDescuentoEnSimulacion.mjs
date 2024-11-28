@@ -1,12 +1,9 @@
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
-import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID.mjs"
 import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
-import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const eliminarDescuentoEnSimulacion = async (entrada) => {
@@ -60,7 +57,6 @@ export const eliminarDescuentoEnSimulacion = async (entrada) => {
         })
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
         if (origen === "porAdministrador") {
             await eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID({
                 simulacionUID,
@@ -81,13 +77,15 @@ export const eliminarDescuentoEnSimulacion = async (entrada) => {
         }
 
         await campoDeTransaccion("iniciar")
-        await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         await campoDeTransaccion("confirmar")
 
         const ok = {
             ok: "Se ha eliminado correctamente la oferta de la instantánea de la reserva",
             orgien: origen,
-            ofertaUID: ofertaUID
+            ofertaUID: ofertaUID,
+            simulacionUID,
+            ...postProcesadoSimualacion
         }
         return ok
     } catch (errorCapturado) {

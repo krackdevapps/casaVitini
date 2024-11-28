@@ -63,7 +63,7 @@ export const precioReservaPublica = async (entrada) => {
             })
             constructorInformacionObsoleta(ok)
 
-            const complementosSiReonocidosSoloUID = control.map(c => {return c.complementoUID})
+            const complementosSiReonocidosSoloUID = control.map(c => { return c.complementoUID })
 
             ok.control.complementosAlojamiento = {
                 complementosSiReconocidos: control,
@@ -76,7 +76,7 @@ export const precioReservaPublica = async (entrada) => {
         if (servicios.length > 0) {
             const controlServicios = await validarServiciosPubicos(servicios)
             constructorInformacionObsoleta(ok)
-            ok.control.servicios = controlServicios 
+            ok.control.servicios = controlServicios
             serviciosSiReconocidos.push(...controlServicios.serviciosSiReconocidos)
         }
 
@@ -102,8 +102,11 @@ export const precioReservaPublica = async (entrada) => {
                 })
             })
             const cNoReconocidos = controlCodigosDescuentos.codigosDescuentosNoReconocidos
+
+
             cNoReconocidos.forEach((contenedor) => {
                 const codigosUID = contenedor.codigosUID
+
                 codigosUID.forEach((codigo, i) => {
                     const buffer = Buffer.from(codigo, 'base64');
                     codigo = buffer.toString('utf-8');

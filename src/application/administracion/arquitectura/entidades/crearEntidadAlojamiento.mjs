@@ -58,7 +58,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 string: entrada.body.definicionPublica,
                 nombreCampo: "El campo del definicionPublica",
                 filtro: "strictoConEspacios",
-                sePermiteVacio: "no",
+                sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
 

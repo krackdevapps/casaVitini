@@ -26,10 +26,19 @@ export const precioBaseApartamento = async (apartamentoIDV) => {
             precioNetoPorNoche: precioNetoNoche,
             totalBrutoPorNoche: precioNetoNoche
         }
-        const impuestos = await obtenerImpuestosPorEntidadIDV({
+
+        const impuestos = []
+        const impuestosReserva = await obtenerImpuestosPorEntidadIDV({
             entidadIDV: "reserva",
             estadoIDV: "activado"
         })
+        impuestos.push(...impuestosReserva)
+        const impuestosGlobal = await obtenerImpuestosPorEntidadIDV({
+            entidadIDV: "global",
+            estadoIDV: "activado"
+        })
+        impuestos.push(...impuestosGlobal)
+
         if (impuestos.length > 0) {
             let sumaTotalImpuestos = "0.00"
             impuestos.forEach((impuesto) => {
@@ -37,9 +46,12 @@ export const precioBaseApartamento = async (apartamentoIDV) => {
                 const nombreImpuesto = impuesto.nombre
                 const tipoValorIDV = impuesto.tipoValorIDV
                 const impuestoUID = impuesto.impuestoUID
+                const entidadIDV = impuesto.entidadIDV
+
                 const impuestosFinal = {}
 
                 impuestosFinal.nombreImpuesto = nombreImpuesto
+                impuestosFinal.entidadIDV = entidadIDV
                 impuestosFinal.impuestoUID = impuestoUID
                 impuestosFinal.tipoImpositivo = tipoImpositivo
                 impuestosFinal.tipoValorIDV = tipoValorIDV
@@ -55,8 +67,8 @@ export const precioBaseApartamento = async (apartamentoIDV) => {
                 }
                 detallesApartamento.impuestos.push(impuestosFinal)
             })
-            let totalNocheBruto = new Decimal(sumaTotalImpuestos).plus(precioNetoNoche).toDecimalPlaces(2).toString()
-            detallesApartamento.totalImpuestos = new Decimal(sumaTotalImpuestos).toDecimalPlaces(2).toString()
+            let totalNocheBruto = new Decimal(sumaTotalImpuestos).plus(precioNetoNoche).toDecimalPlaces(2).toFixed(2)
+            detallesApartamento.totalImpuestos = new Decimal(sumaTotalImpuestos).toDecimalPlaces(2).toFixed(2)
             detallesApartamento.totalBrutoPorNoche = totalNocheBruto;
         }
         return detallesApartamento

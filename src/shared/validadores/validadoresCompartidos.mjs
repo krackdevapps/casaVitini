@@ -897,6 +897,17 @@ export const validadoresCompartidos = {
                             limpiezaEspaciosAlrededor: "si"
                         })
                     })
+                } else if (filtro === "url") {
+                    array.forEach((item, posicion) => {
+
+                        validadoresCompartidos.tipos.cadena({
+                            string: item,
+                            nombreCampo: `${nombreCampo} es un array que en la posición ${(posicion + 1)} tiene un tipo que no es cadena. Este array solo acepta cadenas.`,
+                            filtro: "url",
+                            sePermiteVacio: "no",
+                            limpiezaEspaciosAlrededor: "si"
+                        })
+                    })
                 } else if (filtro === "strictoConEspacios") {
                     array.forEach((item, posicion) => {
                         validadoresCompartidos.tipos.cadena({
@@ -917,9 +928,10 @@ export const validadoresCompartidos = {
                             limpiezaEspaciosAlrededor: "si"
                         })
                     })
+                } else if (filtro === "filtroDesactivado") {
                 } else {
                     const m = "No se reconoce el filtro"
-                    throw new Error(m)
+                    throw Error(m)
                 }
 
                 const sePermitenDuplicados = configuracion.sePermitenDuplicados
@@ -991,16 +1003,26 @@ export const validadoresCompartidos = {
                 throw new Error(error);
             }
 
+            try {
+                new URL(url)
+            } catch (e) {
+                const error = "La url no cumple con el formato esperado, por favor revisa la url";
+                throw error
+            }
+
             if (arrayDeDominiosPermitidos) {
-                const arrayFiltrado = validadoresCompartidos.tipos.array({
-                    array: arrayDeDominiosPermitidos,
-                    nombreCampo: "El array de dominios permitidos dentro del tipo url",
-                    filtro: "soloCadenasIDV",
-                    sePermitenDuplicados: "no"
+                const filtroDominioSimple = /^[A-Za-z0-9\/:.]*$/;
+                arrayDeDominiosPermitidos.forEach((url, i) => {
+                    if (!filtroDominioSimple.test(url)) {
+                        const error = `En el arrayDeDominiosPermitos, en la posicion ${i} hay una url que no cumple le formato`
+                        throw error
+                    }
                 })
+
                 const controlDominio = new URL(url);
                 const dominiofinal = controlDominio.hostname;
-                if (!arrayFiltrado.includes(dominiofinal)) {
+
+                if (!arrayDeDominiosPermitidos.includes(dominiofinal)) {
                     const error = "La url o el dominio no son los esperados. Revisa el formato de la url y el dominio. Solo se acepta el dominio airbnb.com";
                     throw new Error(error);
                 }

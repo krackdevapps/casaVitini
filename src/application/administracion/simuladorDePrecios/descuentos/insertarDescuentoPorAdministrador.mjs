@@ -4,7 +4,7 @@ import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraes
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarDescuentoPorAdministrador = async (entrada) => {
@@ -38,7 +38,15 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
+        const llavesGlobalesFaltantes = await soloFiltroDataGlobal(simulacionUID)
+        if (llavesGlobalesFaltantes.length > 0) {
+            const llavesSring = utilidades.constructorComasEY({
+                array: llavesGlobalesFaltantes,
+                articulo: ""
+            })
+            const m = `No se puede insertar un descuento administrativo en la simulacion, por que faltan los siguientes datos globales de la simulacion: ${llavesSring}`
+            throw new Error(m)
+        }
         const zonaIDV = simulacion.zonaIDV
 
         await obtenerOferatPorOfertaUID(ofertaUID)
@@ -76,7 +84,8 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
-            contenedorFinanciero: desgloseFinanciero
+            simulacionUID,
+            desgloseFinanciero
         }
         return ok
     } catch (errorCapturado) {

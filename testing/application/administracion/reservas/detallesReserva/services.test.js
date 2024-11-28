@@ -12,6 +12,7 @@ import { actualizarServicioEnReserva } from '../../../../../src/application/admi
 import { obtenerDetallesDelServicioEnReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/servicios/obtenerDetallesDelServicioEnReserva.mjs';
 import { obtenerServiciosDisponibles } from '../../../../../src/application/administracion/reservas/detallesReserva/servicios/obtenerServiciosDisponibles.mjs';
 import { actualizarEstadoServicio } from '../../../../../src/application/administracion/servicios/actualizarEstadoServicio.mjs';
+import { DateTime } from 'luxon';
 
 describe('services in bookins', () => {
     const fakeAdminSession = {
@@ -30,6 +31,9 @@ describe('services in bookins', () => {
     const nombreServicio = "servicio para testing"
     const zonaIDV = "global"
     const estadoIDV = "activado"
+    const fechaCreacionVirtual = DateTime.utc().toISO();
+    const fechaInicioVirtal = DateTime.fromISO(fechaCreacionVirtual).minus({ days: 2 }).toISODate();
+    const fechaFinalVirtual = DateTime.fromISO(fechaCreacionVirtual).plus({ days: 3 }).toISODate();
     const contenedor = {
         duracionIDV: "rango",
         disponibilidadIDV: "constante",
@@ -79,8 +83,8 @@ describe('services in bookins', () => {
                 ]
             }
         ],
-        fechaInicio: "2024-11-13",
-        fechaFinal: "2024-11-23"
+        fechaInicio: fechaInicioVirtal,
+        fechaFinal: fechaFinalVirtual
     }
     let servicioUID
     let servicioUID_enReserva

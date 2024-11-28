@@ -4,8 +4,7 @@ import { actualizarSobreControlDeLaNoche } from "../../../../infraestructure/rep
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { generarDesgloseSimpleGuardarlo } from "../../../../shared/simuladorDePrecios/generarDesgloseSimpleGuardarlo.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 
 export const actualizarSobreControlNoche = async (entrada) => {
@@ -77,7 +76,6 @@ export const actualizarSobreControlNoche = async (entrada) => {
         }
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
 
         const instantaneaNetoApartamento = await obtenerDetalleNochePorFechaNochePorApartamentoIDV({
             simulacionUID,
@@ -96,13 +94,16 @@ export const actualizarSobreControlNoche = async (entrada) => {
             nuevoSobreControl: estructuraSobreControl
         })
 
-        const desgloseFinanciero = await generarDesgloseSimpleGuardarlo(simulacionUID)
+        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
+
         const ok = {
-            ok: {
-                ...desgloseFinanciero,
-                instantaneaNetoApartamento,
-                ...sobreControlActualizado
-            }
+            ok: "Sobre control actualizado",
+            instantaneaNetoApartamento,
+            simulacionUID,
+            ...sobreControlActualizado,
+            ...postProcesadoSimualacion,
+
+
         }
         return ok
     } catch (errorCapturado) {

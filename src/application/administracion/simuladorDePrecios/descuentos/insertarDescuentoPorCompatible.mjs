@@ -8,8 +8,8 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/r
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
-import { validadorCompartidoDataGlobalDeSimulacion } from "../../../../shared/simuladorDePrecios/validadorCompartidoDataGlobalDeSimulacion.mjs"
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
+import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
 
 export const insertarDescuentoPorCompatible = async (entrada) => {
     const mutex = new Mutex()
@@ -64,7 +64,15 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         }
 
         await obtenerOferatPorOfertaUID(ofertaUID)
-        await validadorCompartidoDataGlobalDeSimulacion(simulacionUID)
+        const llavesGlobalesFaltantes = await soloFiltroDataGlobal(simulacionUID)
+        if (llavesGlobalesFaltantes.length > 0) {
+            const llavesSring = utilidades.constructorComasEY({
+                array: llavesGlobalesFaltantes,
+                articulo: ""
+            })
+            const m = `No se puede insertar un descuento compatible en la simulacion, por que faltan los siguientes datos globales de la simulacion: ${llavesSring}`
+            throw new Error(m)
+        }
         await obtenerDesgloseFinancieroPorSimulacionUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion({
             simulacionUID,
             ofertaUID,
@@ -105,7 +113,8 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el conenedorFinanciero",
-            contenedorFinanciero: desgloseFinanciero
+            simulacionUID,
+            desgloseFinanciero
         }
         return ok
     } catch (errorCapturado) {

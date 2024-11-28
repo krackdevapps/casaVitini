@@ -113,7 +113,8 @@ describe('hosting plugins system', () => {
 
         const response = await obtenerComplementosPorAlojamiento({
             body: {
-                apartamentoIDV: apartamentoIDV
+                apartamentoIDV: apartamentoIDV,
+                filtro: "todos"
             },
             session: fakeAdminSession
         })

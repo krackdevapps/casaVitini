@@ -53,6 +53,7 @@ export const validarObjetoOferta = async (data) => {
 
         const condicionesArray = validadoresCompartidos.tipos.array({
             array: oferta.condicionesArray,
+            filtro: "filtroDesactivado",
             nombreCampo: "El array de condicionesArray"
         })
         const descuentosJSON = validadoresCompartidos.tipos.objetoLiteral({
@@ -210,6 +211,7 @@ export const validarObjetoOferta = async (data) => {
                 const apartamentos = condicion.apartamentos
                 validadoresCompartidos.tipos.array({
                     array: apartamentos,
+                    filtro: "filtroDesactivado",
                     nombreCampo: "Array de apartamento en la condición de porApartamentosEspecificos",
                     sePermitenDuplicados: "no"
                 })
@@ -453,6 +455,7 @@ export const validarObjetoOferta = async (data) => {
 
             const apartamentos = validadoresCompartidos.tipos.array({
                 array: descuentosJSON.apartamentos,
+                filtro: "filtroDesactivado",
                 nombreCampo: "El array de descuentoPorDias"
             })
 
@@ -536,6 +539,7 @@ export const validarObjetoOferta = async (data) => {
 
                 const descuentoPorDias = validadoresCompartidos.tipos.array({
                     array: descuentosJSON.descuentoPorDias,
+                    filtro: "filtroDesactivado",
                     nombreCampo: "El array de descuentoPorDias"
                 })
 
@@ -602,6 +606,7 @@ export const validarObjetoOferta = async (data) => {
 
                         const apartamentos = validadoresCompartidos.tipos.array({
                             array: dia.apartamentos,
+                            filtro: "filtroDesactivado",
                             nombreCampo: `El array de apatamentos en el día ${fechaDelDia}`
                         })
                         for (const apartmentoDelDia of apartamentos) {

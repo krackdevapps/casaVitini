@@ -1,44 +1,38 @@
 <arranque administracion="clientes.nuevo.arranque"></arranque>
 <p class="tituloGris">Nuevo cliente</p>
 <div componente="espacioComportamiento" class="marcoElasticoRelativo">
-    <div componente="nuevoClienteEspacio" class="nuevoClienteEspacio">
-        <div class="bloqueHoriontalContenedor gridDivisorHorizontalDOS">
-            <div class="bloqueVerticalInterno">
-                <div class="contenedorTituloYEntradaDAtos">
-                    <p class="nuevoClienteTituloDato">Nombre</p>
-                    <input class="nuevoClienteCampo" campo="nombre" type="text">
-                </div>
-                <div class="contenedorTituloYEntradaDAtos">
-                    <p class="nuevoClienteTituloDato">Primer apellido</p>
-                    <input class="nuevoClienteCampo" campo="primerApellido" type="text">
-                </div>
-                <div class="contenedorTituloYEntradaDAtos">
-                    <p class="nuevoClienteTituloDato">Segundo apellido</p>
-                    <input class="nuevoClienteCampo" campo="segundoApellido" type="text">
-                </div>
+    <div componente="nuevoClienteEspacio" class="flexVertical gap10">
+        <div class="flexVertical gap10">
+            <div class="flexVertical">
+                <p class="padding10 negrita">Nombre</p>
+                <input class="botonV1BlancoIzquierda_campo" campo="nombre" type="text">
             </div>
-            <div class="bloqueVerticalInterno">
-                <div class="contenedorTituloYEntradaDAtos">
-                    <p class="nuevoClienteTituloDato">Pasaporte</p>
-                    <input class="nuevoClienteCampo" campo="pasaporte" type="text">
-                </div>
-                <div class="contenedorTituloYEntradaDAtos">
-                    <p class="nuevoClienteTituloDato">Teléfono</p>
-                    <input class="nuevoClienteCampo" campo="telefono" type="text">
-                </div>
-                <div class="contenedorTituloYEntradaDAtos">
-                    <p class="nuevoClienteTituloDato">Correo electrónico</p>
-                    <input class="nuevoClienteCampo" campo="correoElectronico" type="text">
-                </div>
+            <div class="flexVertical">
+                <p class="padding10 negrita">Primer apellido</p>
+                <input class="botonV1BlancoIzquierda_campo" campo="primerApellido" type="text">
             </div>
-        </div>
-        <div class="bloqueHoriontalContenedor ">
-            <div class="contenedorTituloYEntradaDAtos">
-                <p class="nuevoClienteTituloDato">Notas</p>
-                <textarea class="nuevoClienteCampoAreaTexto" name="" id="" cols="30" rows="10" campo="notas"></textarea>
+            <div class="flexVertical">
+                <p class="padding10 negrita">Segundo apellido</p>
+                <input class="botonV1BlancoIzquierda_campo" campo="segundoApellido" type="text">
             </div>
 
+            <div class="flexVertical">
+                <p class="padding10 negrita">Pasaporte</p>
+                <input class="botonV1BlancoIzquierda_campo" campo="pasaporte" type="text">
+            </div>
+            <div class="flexVertical">
+                <p class="padding10 negrita">Teléfono</p>
+                <input class="botonV1BlancoIzquierda_campo" campo="telefono" type="text">
+            </div>
+            <div class="flexVertical">
+                <p class="padding10 negrita">Correo electrónico</p>
+                <input class="botonV1BlancoIzquierda_campo" campo="correoElectronico" type="text">
+            </div>
         </div>
-        <div class="nuevoClienteBoton" componente="botonCrearCliente">Crear cliente</div>
+        <div class="flexVertical">
+            <p class="padding10 negrita">Notas</p>
+            <textarea class="botonV1BlancoIzquierda_campo" name="" id="" cols="30" rows="10" campo="notas"></textarea>
+        </div>
+        <div class="botonV1BlancoIzquierda" componente="botonCrearCliente">Crear cliente</div>
     </div>
 </div>

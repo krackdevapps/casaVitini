@@ -22,7 +22,6 @@ export const validarDescuentosPorCodigo = async (data) => {
             })
         })
 
-        const ofertasPorCodigoEncontradas = []
         validadoresCompartidos.tipos.array({
             array: zonasArray,
             nombreCampo: "El array de zonasArray en el procesador de precios",
@@ -41,7 +40,7 @@ export const validarDescuentosPorCodigo = async (data) => {
             throw new Error(error)
         }
 
-        const insertarDescuentosPorCondicionPorCodigo = await selecionarOfertasPorCondicion({
+        const ofertasSel = await selecionarOfertasPorCondicion({
             fechaActual,
             fechaEntrada,
             fechaSalida,
@@ -50,14 +49,12 @@ export const validarDescuentosPorCodigo = async (data) => {
             codigoDescuentosArrayBASE64,
             ignorarCodigosDescuentos: "no"
         })
-        ofertasPorCodigoEncontradas.push(...insertarDescuentosPorCondicionPorCodigo)
 
         const control = {
             codigosDescuentosSiReconocidos: [],
             codigosDescuentosNoReconocidos: []
         }
-
-        ofertasPorCodigoEncontradas.forEach((contenedorOferta) => {
+        ofertasSel.forEach((contenedorOferta) => {
             const condiciones = contenedorOferta.oferta.condicionesArray
             const nombreOferta = contenedorOferta.oferta.nombreOferta
             const ofertaUID = contenedorOferta.oferta.ofertaUID
@@ -82,6 +79,7 @@ export const validarDescuentosPorCodigo = async (data) => {
                 control.codigosDescuentosSiReconocidos.push(estructura)
             }
         })
+
         const contenedorUIDValidos = []
         control.codigosDescuentosSiReconocidos.forEach((contenedor) => {
             const codigosUID = contenedor.codigosUID
@@ -89,15 +87,14 @@ export const validarDescuentosPorCodigo = async (data) => {
                 contenedorUIDValidos.push(codigo)
             })
         })
+
         contenedorCodigosDescuento.forEach((contenedor) => {
             const codigosUID = contenedor.codigosUID
-            codigosUID.forEach((codigoUID) => {
-                if (!contenedorUIDValidos.includes(codigoUID)) {
-                    control.codigosDescuentosNoReconocidos.push(contenedor)
-                }
-            })
+            const interruptor = codigosUID.some(c => !contenedorUIDValidos.includes(c))
+            if (interruptor) {
+                control.codigosDescuentosNoReconocidos.push(contenedor)
+            }
         })
-
         return control
     } catch (error) {
         throw error

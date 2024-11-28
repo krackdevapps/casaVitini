@@ -20,6 +20,7 @@ import { actualizarSobreControlNoche as actualizarSobreControlNoche_reserva } fr
 import { actualizarSobreControlNoche as actualizarSobreControlNoche_simulacion } from '../../../src/application/administracion/simuladorDePrecios/sobreControlPrecios/actualizarSobreControlNoche.mjs';
 import { detallesSimulacion } from '../../../src/application/administracion/simuladorDePrecios/detallesSimulacion.mjs';
 import { insertarAlojamientoEnSimulacion } from '../../../src/application/administracion/simuladorDePrecios/alojamiento/insertarAlojamientoEnSimulacion.mjs';
+import { obtenerSimulacionPorSimulacionUID } from '../../../src/infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs';
 
 describe('critical: updating hosting entity with offers existing', () => {
     const testingVI = "testingcritical"
@@ -329,7 +330,6 @@ describe('critical: updating hosting entity with offers existing', () => {
                 fechaEntrada: "2026-10-11",
                 fechaSalida: "2026-10-14",
                 zonaIDV: "global",
-                apartamentosIDVARRAY: [apartamentoIDV],
             },
             session: fakeAdminSession
         }
@@ -635,19 +635,14 @@ describe('critical: updating hosting entity with offers existing', () => {
             },
             session: fakeAdminSession
         }
-        const response = await detallesSimulacion(m)
+        const response = await obtenerSimulacionPorSimulacionUID(simulacionUID)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-        const simulacion = response.ok
-        const contenedorFinanciero = response.contenedorFinanciero
-        const apartamentosIDVARRAY = contenedorFinanciero.apartamentosIDVARRAY
 
-
-        const instantaneaNoches = contenedorFinanciero.instantaneaNoches
-        const instantaneaSobreControlPrecios = contenedorFinanciero.instantaneaSobreControlPrecios
-        const instantaneaOfertasPorAdministrador = contenedorFinanciero.instantaneaOfertasPorAdministrador
-        const instantaneaOfertasPorCondicion = contenedorFinanciero.instantaneaOfertasPorCondicion
+        const instantaneaNoches = response.instantaneaNoches
+        const instantaneaSobreControlPrecios = response.instantaneaSobreControlPrecios
+        const instantaneaOfertasPorAdministrador = response.instantaneaOfertasPorAdministrador
+        const instantaneaOfertasPorCondicion = response.instantaneaOfertasPorCondicion
         const instantaneaOfertas = [
             ...instantaneaOfertasPorAdministrador,
             ...instantaneaOfertasPorCondicion
