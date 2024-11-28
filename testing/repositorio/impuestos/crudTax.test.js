@@ -26,6 +26,7 @@ describe('crud tax', () => {
             aplicacionSobre: "totalNeto",
             estadoIDV: "desactivado",
             testingVI: testingVI,
+            entidadIDV: "reserva"
         })
         nuevoImpuestoUID = response.impuestoUID
         expect(response).not.toBeUndefined();
