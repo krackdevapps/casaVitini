@@ -166,7 +166,7 @@ export const validadorPasado = async (data) => {
             return ok
         }
 
-        const contenedorQueDejanRangoDisponbile = []
+        const contenedorQueDejanRangoDisponible = []
         for (const detallesDelEvento of contenedorGlobal) {
             const fechaInicioEvento_ISO = detallesDelEvento.fechaEntrada
             const fechaFinEvento_ISO = detallesDelEvento.fechaSalida
@@ -180,7 +180,7 @@ export const validadorPasado = async (data) => {
                     tipoLimite: "noIncluido"
                 })
                 if (eventoBloqueanteDeRango) {
-                    contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
+                    contenedorQueDejanRangoDisponible.push(detallesDelEvento)
                 }
             }
             if (tipoElemento === "bloqueo") {
@@ -194,15 +194,15 @@ export const validadorPasado = async (data) => {
                         tipoLimite: "incluido"
                     })
                     if (eventoBloqueanteDeRango) {
-                        contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
+                        contenedorQueDejanRangoDisponible.push(detallesDelEvento)
                     }
                 } else if (tipoBloqueo === "permanete") {
-                    contenedorQueDejanRangoDisponbile.push(detallesDelEvento)
+                    contenedorQueDejanRangoDisponible.push(detallesDelEvento)
                 }
             }
         }
-        if (contenedorQueDejanRangoDisponbile.length) {
-            const eventosOrdenadorPorFechaDeSalida = contenedorQueDejanRangoDisponbile.sort((evento1, evento2) => {
+        if (contenedorQueDejanRangoDisponible.length) {
+            const eventosOrdenadorPorFechaDeSalida = contenedorQueDejanRangoDisponible.sort((evento1, evento2) => {
                 const fechaSalidaA = DateTime.fromISO(evento1.fechaSalida); // Convertir fecha de salida del evento 1 a objeto DateTime
                 const fechaSalidaB = DateTime.fromISO(evento2.fechaSalida); // Convertir fecha de salida del evento 2 a objeto DateTime
 

@@ -7593,6 +7593,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 arranque: () => {
                     document.querySelector("main").style.paddingBottom = "20px"
 
+
                     const loadScript = async (url) => {
                         return new Promise((resolve, reject) => {
                             const script = document.createElement('script');
@@ -17405,7 +17406,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             return parametrosFusion
                         }
                         const navegacionPaginacion = document.createElement("div")
-                        navegacionPaginacion.classList.add("administracionNavegacionPaginacion")
+                        navegacionPaginacion.classList.add("administracionNavegacionPaginacion", "sobreControlAnimacionGlobal")
                         navegacionPaginacion.setAttribute("componenteID", "navegacionPaginacion")
                         navegacionPaginacion.setAttribute("gridUID_enlazado", gridUID)
                         if (moverHaciaAdelanteNavegacion === "Desactivado" && sentidoNavegacion === "Adelante") {
@@ -18426,13 +18427,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         aceptarReserva: async function (data) {
                                             const reservaUID = data.reservaUID
                                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                            pantallaInmersiva.style.justifyContent = "center"
                                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                             const instanciaUID_aceptarReserva = pantallaInmersiva.getAttribute("instanciaUID")
 
                                             const titulo = constructor.querySelector("[componente=titulo]")
                                             titulo.textContent = `Confirmas que aceptas la reserva ${reservaUID}`
                                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                                            mensaje.textContent = "AAl confirmar una reserva pendiente, cambiarás el estado de pendiente.Ha confirmado.La reserva dejará de ser visible desde la sección de reservas confirmadas.Si necesitas volver a poner la reserva en estado pendiente, pulsa en el estado de la reserva para poder cambiarla."
+                                            mensaje.textContent = "Al confirmar una reserva pendiente, cambiarás el estado de pendiente ha confirmado. La reserva dejará de ser visible desde la sección de reservas confirmadas. Si necesitas volver a poner la reserva en estado pendiente, pulsa en el estado de la reserva para poder cambiarla."
 
                                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
                                             botonAceptar.textContent = "Comfirmar y aceptar reserva"
@@ -18451,6 +18453,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         rechazarReserva: async function (data) {
                                             const reservaUID = data.reservaUID
                                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                            pantallaInmersiva.style.justifyContent = "center"
+
 
                                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                             const instanciaUID_aceptarReserva = pantallaInmersiva.getAttribute("instanciaUID")
@@ -18482,7 +18486,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             const titulo = constructor.querySelector("[componente=titulo]")
                                             titulo.textContent = `Confirmas que aceptas la reserva ${reservaUID}`
                                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                                            mensaje.textContent = "Al confirmar una reserva pendiente, cambiarás el estado de pendiente.Ha confirmado.La reserva dejará de ser visible desde la sección de reservas confirmadas.Si necesitas volver a poner la reserva en estado pendiente, pulsa en el estado de la reserva para poder cambiarla"
+                                            mensaje.textContent = "Al confirmar una reserva pendiente, cambiarás el estado de pendiente.Ha confirmado.La reserva dejará de ser visible desde la sección de reservas confirmadas. Si necesitas volver a poner la reserva en estado pendiente, pulsa en el estado de la reserva para poder cambiarla"
 
                                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
                                             botonAceptar.textContent = "Comfirmar y aceptar reserva"
@@ -18552,6 +18556,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             const estadoActual = data.estadoActual
 
                                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+
+                                            pantallaInmersiva.style.justifyContent = "center"
                                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                             const instanciaUID_aceptarReserva = pantallaInmersiva.getAttribute("instanciaUID")
 
@@ -20144,6 +20150,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 const estadoActual = document.querySelector("[contenedor=panelGlobal] [contenedor=estadoReserva] [estadoReservaIDV]").getAttribute("estadoReservaIDV")
 
                                 const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                pantallaInmersiva.style.justifyContent = "center"
                                 const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                 const instanciaUID_aceptarReserva = pantallaInmersiva.getAttribute("instanciaUID")
 
@@ -20369,8 +20376,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     divPernoctantesSinAlojamiento.setAttribute("componente", "espacioPernoctantesSinAlojamiento");
 
                                     const tituloPernoctantesSinHabitacion = document.createElement("div")
-                                    tituloPernoctantesSinHabitacion.classList.add("administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion")
-                                    tituloPernoctantesSinHabitacion.textContent = "Pernoctantes asociados a esta reserva sin habitación asignada"
+                                    tituloPernoctantesSinHabitacion.classList.add("flexVertical", "padding10", "textoCentrado")
+                                    tituloPernoctantesSinHabitacion.textContent = "Pernoctantes en esta reserva sin alojamiento ni habitación asignados"
 
                                     divPernoctantesSinAlojamiento.appendChild(tituloPernoctantesSinHabitacion)
                                     const contenedorPernoctantesSinHabitacion = document.createElement("div")
@@ -20677,6 +20684,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     }
 
                                     const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                    pantallaInmersiva.style.justifyContent = "center"
                                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                                     const titulo = constructor.querySelector("[componente=titulo]")
@@ -20782,7 +20790,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                                     const infoElimiacion = document.createElement("p")
                                     infoElimiacion.classList.add(
-                                        "padding6"
+                                        "padding12"
                                     )
                                     infoElimiacion.textContent = "Opciones de eliminación de la habitación"
                                     contenedor.append(infoElimiacion)
@@ -20928,7 +20936,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         mensajeUI = `¿Confirmas eliminar el ${apartamentoUI} y liberarlo para que esté disponible para reservar públicamente? Los pernoctantes de este apartamento no se eliminarán de la reserva`
                                     }
                                     if (tipoBloqueo === "permanente") {
-                                        mensajeUI = `¿Confirmas eliminar el ${apartamentoUI} y bloquearlo indefinidamente? (Hay desbloquearlo manualmente) Los pernoctantes de este apartamento no se eliminarán de la reserva`
+                                        mensajeUI = `¿Confirmas eliminar el ${apartamentoUI} y bloquearlo indefinidamente? (Hay que desbloquearlo manualmente) Los pernoctantes de este apartamento no se eliminarán de la reserva`
                                     }
                                     if (tipoBloqueo === "rangoTemporal") {
                                         mensajeUI = `¿Confirmas eliminar el ${apartamentoUI} y bloquearlo durante el mismo rango de fechas que esta reserva? Los pernoctantes de este apartamento no se eliminarán de la reserva`
@@ -20947,6 +20955,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
 
                                     const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                    pantallaInmersiva.style.justifyContent = "center"
+
                                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                                     const titulo = constructor.querySelector("[componente=titulo]")
@@ -21496,6 +21506,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         "flexVertical",
                                         "gap6",
                                         "padding2",
+                                        "ratonDefault"
 
                                     )
                                     contenedorCamasUI.setAttribute("contenedor", "camas")
@@ -21619,6 +21630,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const habitacionUID = data.habitacionUID
 
                                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                        pantallaInmersiva.style.justifyContent = "center"
                                         const instanciaUID_pantallaInmersia = pantallaInmersiva.getAttribute("instanciaUID")
                                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
@@ -21656,18 +21668,19 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const instanciaUID_pantallaInmersia = data.instanciaUID_pantallaInmersia
                                         const instanciaUID_pantallaCarga = casaVitini.utilidades.codigoFechaInstancia()
                                         const mensaje = "Eliminado cama..."
-                                        const datosPantallaSuperpuesta = {
+
+                                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
                                             instanciaUID: instanciaUID_pantallaCarga,
                                             mensaje: mensaje
-                                        }
-                                        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                                        const transaccion = {
+                                        })
+                                        await casaVitini.utilidades.ralentizador(2000)
+
+                                        const respuestaServidor = await casaVitini.shell.servidor({
                                             zona: "administracion/reservas/detallesReserva/alojamiento/eliminarCamaFisicaDeHabitacion",
                                             componenteUID: String(componenteUID),
                                             habitacionUI: String(habitacionUI),
                                             reservaUID: String(reservaUID)
-                                        }
-                                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                        })
 
                                         document.querySelector(`[instanciaUID="${instanciaUID_pantallaCarga}"]`)?.remove()
 
@@ -21719,13 +21732,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     })
                                     contenedor.appendChild(spinner)
 
-
-                                    const transaccion = {
+                                    const respuestaServidor = await casaVitini.shell.servidor({
                                         zona: "administracion/reservas/detallesReserva/alojamiento/listarTipoCamasHabitacion",
                                         apartamentoIDV: apartamentoIDV,
                                         habitacionIDV: habitacionIDV
-                                    }
-                                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                    })
 
                                     contenedor.innerHTML = null
                                     if (respuestaServidor?.error) {
@@ -21782,14 +21793,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const contenedorCamasCompartidas = document.createElement("div")
                                         contenedorCamasCompartidas.classList.add(
                                             "flexVertical",
-                                            "gap6",
+                                            "gap10",
 
                                         )
                                         contenedor.appendChild(contenedorCamasCompartidas)
 
                                         const tituloCamasCompartidas = document.createElement("div")
                                         tituloCamasCompartidas.classList.add(
-                                            "padding6"
+                                            "padding12"
                                         )
                                         tituloCamasCompartidas.textContent = "Camas compartidas"
                                         contenedorCamasCompartidas.appendChild(tituloCamasCompartidas)
@@ -21804,16 +21815,25 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             tipoCama.textContent = camaUI
 
                                             tipoCama.addEventListener("click", async () => {
-                                                const instanciaUID_alojamientoRenderizado = document.querySelector("[componente=marcoAlojamiento]").getAttribute("instanciaUID")
-                                                const transaccion = {
+                                                const instanciaUID_localProceso = casaVitini.utilidades.codigoFechaInstancia()
+
+                                                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
+                                                    mensaje: `Estableciendo ${camaUI} en la habitacion...`,
+                                                    instanciaUID: instanciaUID_localProceso,
+                                                })
+                                                await casaVitini.utilidades.ralentizador(2000)
+
+                                                const respuestaServidor = await casaVitini.shell.servidor({
                                                     zona: "administracion/reservas/detallesReserva/alojamiento/gestionarCamasDeHabitacion",
                                                     reservaUID,
                                                     habitacionUID: String(habitacionUID),
                                                     nuevaCamaIDV: camaIDV,
                                                     tipoIDV: "compartida"
-                                                }
-                                                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                                })
                                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                                document.querySelector(`[instanciaUID="${instanciaUID_localProceso}"]`)?.remove()
+
+
 
                                                 if (respuestaServidor?.error) {
                                                     casaVitini.shell.controladoresUI.limpiarTodoElementoFlotante()
@@ -21837,14 +21857,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             const contenedorCamasFisicas = document.createElement("div")
                                             contenedorCamasFisicas.classList.add(
                                                 "flexVertical",
-                                                "gap6",
+                                                "gap10",
 
                                             )
                                             contenedor.appendChild(contenedorCamasFisicas)
 
                                             const tituloCamasFisicas = document.createElement("div")
                                             tituloCamasFisicas.classList.add(
-                                                "padding6"
+                                                "padding12"
                                             )
                                             tituloCamasFisicas.textContent = "Camas físicas"
                                             contenedorCamasFisicas.appendChild(tituloCamasFisicas)
@@ -21857,14 +21877,20 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                 tipoCama.setAttribute("camaIDV", camaIDV)
                                                 tipoCama.textContent = camaUI
                                                 tipoCama.addEventListener("click", async () => {
-                                                    const transaccion = {
+                                                    const instanciaUID_localProceso = casaVitini.utilidades.codigoFechaInstancia()
+                                                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
+                                                        mensaje: `Estableciendo ${camaUI} en la habitacion...`,
+                                                        instanciaUID: instanciaUID_localProceso,
+                                                    })
+                                                    await casaVitini.utilidades.ralentizador(2000)
+                                                    const respuestaServidor = await casaVitini.shell.servidor({
                                                         zona: "administracion/reservas/detallesReserva/alojamiento/gestionarCamasDeHabitacion",
                                                         reservaUID,
                                                         habitacionUID: String(habitacionUID),
                                                         nuevaCamaIDV: String(camaIDV),
                                                         tipoIDV: "fisica"
-                                                    }
-                                                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                                    })
+                                                    document.querySelector(`[instanciaUID="${instanciaUID_localProceso}"]`)?.remove()
                                                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
 
 
@@ -21936,6 +21962,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         "borderRadius8",
                                         "gap6",
                                         "padding10",
+                                        "ratonDefault"
                                     )
                                     if (estadoAlojamiento === "alojado") {
 
@@ -22047,6 +22074,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         mensajeUI = "¿Confirmas la eliminación de este pernoctante de la reserva? Si confirmas la eliminación el pernoctante será eliminado de esta reserva."
                                     }
                                     const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                    pantallaInmersiva.style.justifyContent = "center"
                                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                                     const titulo = constructor.querySelector("[componente=titulo]")
@@ -23491,11 +23519,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                 const buscadorUI = elemento.closest(`[contenedor=buscador]`)
                                                 const instanciaUID = elemento.closest(`[componente=advertenciaInmersiva]`).getAttribute("instanciaUID")
 
-
-                                                const selectorListaResultadosBuscadorRapidoRenderiaza = buscadorUI.querySelectorAll("[componente=buscadorRapidoCliente]")
-                                                selectorListaResultadosBuscadorRapidoRenderiaza.forEach((listaRenderizada) => {
-                                                    listaRenderizada.remove()
-                                                })
                                                 const campoVacio = elemento.value.length
                                                 if (campoVacio === 0) {
                                                     clearTimeout(casaVitini.componentes.temporizador);
@@ -23503,33 +23526,37 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                     return
 
                                                 }
-                                                const listaResultados = document.createElement("div")
-                                                listaResultados.setAttribute("componente", "buscadorRapidoCliente")
-                                                listaResultados.setAttribute("instanciaUIDBuscador", instanciaUIDBuscador)
-                                                listaResultados.style.alignItems = "stretch"
-                                                listaResultados.classList.add(
-                                                    "flexVertical",
-                                                    "gap6",
-                                                    "borderRadius14"
-                                                )
+                                                const listaResultados_r = document.querySelector("[componente=buscadorRapidoCliente]")
 
-                                                listaResultados.textContent = null
-                                                const conntenedorInfo = document.createElement("div")
-                                                conntenedorInfo.setAttribute("componente", "info")
-                                                conntenedorInfo.classList.add(
-                                                    "efectoAparicion",
-                                                    "padding14"
-                                                )
-                                                listaResultados.appendChild(conntenedorInfo)
+                                                if (!listaResultados_r) {
+                                                    const listaResultados = document.createElement("div")
+                                                    listaResultados.setAttribute("componente", "buscadorRapidoCliente")
+                                                    listaResultados.style.alignItems = "stretch"
+                                                    listaResultados.classList.add(
+                                                        "flexVertical",
+                                                        "gap6",
+                                                        "borderRadius14"
+                                                    )
 
-                                                const info = document.createElement("div")
-                                                info.classList.add(
+                                                    buscadorUI.appendChild(listaResultados)
+                                                }
+                                                const listaResultados_s = buscadorUI.querySelector("[componente=buscadorRapidoCliente]")
+                                                listaResultados_s.setAttribute("instanciaUIDBuscador", instanciaUIDBuscador)
 
-                                                )
-                                                info.textContent = "Buscando..."
-                                                conntenedorInfo.appendChild(info)
+                                                const conntenedorInfo_r = buscadorUI.querySelector("[componente=info]")
+                                                if (!conntenedorInfo_r) {
+                                                    listaResultados_s.innerHTML = null
+                                                    const conntenedorInfo = document.createElement("div")
+                                                    conntenedorInfo.setAttribute("componente", "info")
+                                                    conntenedorInfo.classList.add("efectoAparicion", "sobreControlAnimacionGlobal", "padding10")
+                                                    listaResultados_s.appendChild(conntenedorInfo)
 
-                                                buscadorUI.appendChild(listaResultados)
+                                                    const info = document.createElement("div")
+                                                    info.setAttribute("data", "info")
+                                                    conntenedorInfo.appendChild(info)
+                                                }
+                                                const conntenedorInfo_s = buscadorUI.querySelector("[componente=info] [data=info]")
+                                                conntenedorInfo_s.textContent = "Buscando..."
 
                                                 clearTimeout(casaVitini.componentes.temporizador);
                                                 casaVitini.componentes.temporizador = setTimeout(() => {
@@ -23564,12 +23591,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                     return
                                                 }
                                                 if (respuestaServidor?.error) {
-                                                    return listaBuscadorRenderizada.querySelector("[componente=info]").innerHTML = respuestaServidor?.error
+                                                    return listaBuscadorRenderizada.querySelector("[data=info]").innerHTML = respuestaServidor?.error
                                                 }
 
                                                 const resultadosClientes = respuestaServidor?.clientes
                                                 if (resultadosClientes.length === 0) {
-                                                    return listaBuscadorRenderizada.querySelector("[componente=info]").innerHTML = "Nada encontrado"
+                                                    return listaBuscadorRenderizada.querySelector("[data=info]").innerHTML = "Nada encontrado"
                                                 }
                                                 listaBuscadorRenderizada.innerHTML = null
                                                 resultadosClientes.forEach((clienteEncontrado) => {
@@ -23586,9 +23613,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                         "borderRadius14"
                                                     )
                                                     bloqueCliente.setAttribute("componente", "elementoResultadosBuscadorRapido")
+
                                                     bloqueCliente.addEventListener("click", (e) => {
-
-
                                                         return casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                                                             ruta: metodoFinal,
                                                             args: {
@@ -23598,29 +23624,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                                 habitacionUID
                                                             }
                                                         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                                     })
-
-
-
                                                     const filaNombre = document.createElement("p")
                                                     filaNombre.classList.add("administracionReservaDetallesBuscadorRapidoBloqueClienteFilaNombre")
                                                     filaNombre.textContent = `${nombre} ${primerApellido} ${segundoApellido}`
@@ -23634,59 +23638,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                     listaBuscadorRenderizada.appendChild(bloqueCliente)
                                                 })
                                             },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                                             anadirPernoctanteTransaccionDesdeBuscadorRapido: async (data) => {
                                                 const reservaUID = data.reservaUID
@@ -23765,128 +23716,135 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                 const habitacionUID = data?.habitacionUID
 
                                                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                                                const nuevoClienteUI = document.createElement("div")
+                                                const nuevoClienteUI = document.createElement("details")
 
                                                 nuevoClienteUI.classList.add(
                                                     "flexVertical",
                                                     "padding6",
-                                                    "gap6",
                                                     "borderRadius20",
-                                                    "borderGrey1"
+
                                                 )
                                                 nuevoClienteUI.setAttribute("instanciaUID", instanciaUID)
                                                 nuevoClienteUI.setAttribute("formulario", "nuevoCliente")
 
-                                                const info = document.createElement("p")
+                                                const info = document.createElement("summary")
                                                 info.classList.add(
                                                     "negrita",
                                                     "textoCentrado",
-                                                    "padding14"
+                                                    "padding14",
+                                                    "borderRadius14"
 
                                                 )
                                                 info.textContent = tituloUI
                                                 nuevoClienteUI.appendChild(info)
 
+                                                const form = document.createElement("div")
+                                                form.classList.add(
+                                                    "flexVertical",
+                                                    "gap10"
+                                                )
+                                                nuevoClienteUI.appendChild(form)
+
+
                                                 const nombreUI = document.createElement("div")
                                                 nombreUI.classList.add(
                                                     "flexVertical",
-                                                    "padding14"
+                                                    "paddingLateral14"
                                                 )
                                                 nombreUI.textContent = "Nombre (Obligatorio)"
-                                                nuevoClienteUI.appendChild(nombreUI)
+                                                form.appendChild(nombreUI)
 
                                                 const campoNombre = document.createElement("input")
-                                                campoNombre.classList.add("botonV1BlancoIzquierda_noSeleccionable")
+                                                campoNombre.classList.add("botonV1BlancoIzquierda_campo")
                                                 campoNombre.setAttribute("campo", "nombre")
                                                 campoNombre.setAttribute("formulario", "AnadirPernoctante")
                                                 campoNombre.placeholder = "Nombre (obligatiorio)"
-                                                nuevoClienteUI.appendChild(campoNombre)
+                                                form.appendChild(campoNombre)
 
 
                                                 const primerApellidoUI = document.createElement("div")
                                                 primerApellidoUI.classList.add(
                                                     "flexVertical",
-                                                    "padding14"
+                                                    "paddingLateral14"
                                                 )
                                                 primerApellidoUI.textContent = "Primer apellido"
-                                                nuevoClienteUI.appendChild(primerApellidoUI)
+                                                form.appendChild(primerApellidoUI)
 
                                                 const primerApellido = document.createElement("input")
-                                                primerApellido.classList.add("botonV1BlancoIzquierda_noSeleccionable")
+                                                primerApellido.classList.add("botonV1BlancoIzquierda_campo")
                                                 primerApellido.setAttribute("campo", "primerApellido")
                                                 primerApellido.setAttribute("formulario", "AnadirPernoctante")
                                                 primerApellido.placeholder = "Primer apellido"
-                                                nuevoClienteUI.appendChild(primerApellido)
+                                                form.appendChild(primerApellido)
 
                                                 const segundoApellidoUI = document.createElement("div")
                                                 segundoApellidoUI.classList.add(
                                                     "flexVertical",
-                                                    "padding14"
+                                                    "paddingLateral14"
                                                 )
                                                 segundoApellidoUI.textContent = "Segundo apellido"
-                                                nuevoClienteUI.appendChild(segundoApellidoUI)
+                                                form.appendChild(segundoApellidoUI)
 
                                                 const segundoApellido = document.createElement("input")
-                                                segundoApellido.classList.add("botonV1BlancoIzquierda_noSeleccionable")
+                                                segundoApellido.classList.add("botonV1BlancoIzquierda_campo")
                                                 segundoApellido.setAttribute("campo", "segundoApellido")
                                                 segundoApellido.setAttribute("formulario", "AnadirPernoctante")
                                                 segundoApellido.placeholder = "Segundo apellido"
-                                                nuevoClienteUI.appendChild(segundoApellido)
+                                                form.appendChild(segundoApellido)
 
 
                                                 const pasaporteUI = document.createElement("div")
                                                 pasaporteUI.classList.add(
                                                     "flexVertical",
-                                                    "padding14"
+                                                    "paddingLateral14"
                                                 )
                                                 pasaporteUI.textContent = "Pasaporte (Obligatorio)"
-                                                nuevoClienteUI.appendChild(pasaporteUI)
+                                                form.appendChild(pasaporteUI)
 
                                                 const pasaporte = document.createElement("input")
-                                                pasaporte.classList.add("botonV1BlancoIzquierda_noSeleccionable")
+                                                pasaporte.classList.add("botonV1BlancoIzquierda_campo")
                                                 pasaporte.setAttribute("campo", "pasaporte")
                                                 pasaporte.setAttribute("formulario", "AnadirPernoctante")
                                                 pasaporte.placeholder = "Pasaporte (obligatorio)"
-                                                nuevoClienteUI.appendChild(pasaporte)
+                                                form.appendChild(pasaporte)
 
 
                                                 const telefonoUI = document.createElement("div")
                                                 telefonoUI.classList.add(
                                                     "flexVertical",
-                                                    "padding14"
+                                                    "paddingLateral14"
                                                 )
                                                 telefonoUI.textContent = "Telefono"
-                                                nuevoClienteUI.appendChild(telefonoUI)
+                                                form.appendChild(telefonoUI)
 
                                                 const telefono = document.createElement("input")
-                                                telefono.classList.add("botonV1BlancoIzquierda_noSeleccionable")
+                                                telefono.classList.add("botonV1BlancoIzquierda_campo")
                                                 telefono.setAttribute("campo", "telefono")
                                                 telefono.setAttribute("formulario", "AnadirPernoctante")
                                                 telefono.placeholder = "Teléfono"
-                                                nuevoClienteUI.appendChild(telefono)
+                                                form.appendChild(telefono)
 
 
 
                                                 const correoUI = document.createElement("div")
                                                 correoUI.classList.add(
                                                     "flexVertical",
-                                                    "padding14"
+                                                    "paddingLateral14"
                                                 )
                                                 correoUI.textContent = "Mail"
-                                                nuevoClienteUI.appendChild(correoUI)
+                                                form.appendChild(correoUI)
 
                                                 const correoElecotronico = document.createElement("input")
-                                                correoElecotronico.classList.add("botonV1BlancoIzquierda_noSeleccionable")
+                                                correoElecotronico.classList.add("botonV1BlancoIzquierda_campo")
                                                 correoElecotronico.setAttribute("campo", "correoElectronico")
                                                 correoElecotronico.setAttribute("formulario", "AnadirPernoctante")
                                                 correoElecotronico.placeholder = "Correo electrónico"
-                                                nuevoClienteUI.appendChild(correoElecotronico)
+                                                form.appendChild(correoElecotronico)
 
                                                 const botonGuardarNuevoCliente = document.createElement("div")
                                                 botonGuardarNuevoCliente.setAttribute("boton", "crearCliente")
                                                 botonGuardarNuevoCliente.classList.add("botonV1BlancoIzquierda")
                                                 botonGuardarNuevoCliente.textContent = tituloBoton
-
                                                 botonGuardarNuevoCliente.addEventListener("click", (e) => {
                                                     const campos = e.target.closest("[formulario=nuevoCliente]").querySelectorAll("[campo]")
                                                     const datos = {}
@@ -23905,7 +23863,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                         }
                                                     })
                                                 })
-                                                nuevoClienteUI.appendChild(botonGuardarNuevoCliente)
+                                                form.appendChild(botonGuardarNuevoCliente)
                                                 return nuevoClienteUI
                                             },
                                         },
@@ -24007,15 +23965,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                 mensaje: "Creando cliente y asignándolo a la habitación...",
                                                 instanciaUID: instanciaUIDPantallaDeCarga,
                                             })
+                                            await casaVitini.utilidades.ralentizador(2000)
 
-                                            const transaccion = {
+
+                                            const respuestaServidor = await casaVitini.shell.servidor({
                                                 zona: "administracion/reservas/detallesReserva/pernoctantes/crearClienteDesdeReservaYAnadirloAreserva",
                                                 reservaUID: reservaUID,
                                                 habitacionUID: habitacionUID,
                                                 ...datos
                                             }
-
-                                            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                            )
 
                                             const selectorPantallaDeCarga = document.querySelector(`[instanciaUID="${instanciaUIDPantallaDeCarga}"]`)
                                             if (!selectorPantallaDeCarga) {
@@ -24054,7 +24013,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                                                 const pernoctantePasaporteUI = casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.pernoctantePasaporteUI({
                                                     clienteUID: respuestaServidor?.nuevoUIDCliente,
-                                                    pasaporte: transaccion.pasaporte
+                                                    pasaporte: datos.pasaporte
                                                 })
                                                 pernoctanteUI.appendChild(pernoctanteNombreUI)
                                                 pernoctanteUI.appendChild(pernoctantePasaporteUI)
@@ -25915,7 +25874,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     const infoNoPagos = document.createElement("div")
                                     infoNoPagos.classList.add("reservaDetalles_transacciones_textoV1")
                                     infoNoPagos.setAttribute("contenedor", "infoNoPagos")
-                                    infoNoPagos.textContent = "Esta reserva no tiene ningún pago.Los pagos que se realicen por la pasarela de pagos se mostrarán automáticamente aquí.Sin embargo, si ha cobrado esta reserva, por ejemplo, en efectivo o con un TPV, debería de añadir un pago manual.No es obligatorio añadir un pago manual, pero si quiere tener un seguimiento centralizado de todos los pagos en esta reserva, tiene esa opción."
+                                    infoNoPagos.textContent = "Esta reserva no tiene ningún pago. Los pagos que se realicen por la pasarela de pagos se mostrarán automáticamente aquí. Sin embargo, si ha cobrado esta reserva, por ejemplo, en efectivo o con un TPV, debería de añadir un pago manual. No es obligatorio añadir un pago manual, pero si quiere tener un seguimiento centralizado de todos los pagos en esta reserva, tiene esa opción."
                                     return infoNoPagos
                                 }
                             },
@@ -29323,6 +29282,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const reservaUID = document.querySelector("main").querySelector("[reservaUID]").getAttribute("reservaUID")
 
                                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                        pantallaInmersiva.style.justifyContent = "center"
+
                                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                         const instanciaUID_eliminarImpuestoUI = pantallaInmersiva.getAttribute("instanciaUID")
 
@@ -30161,6 +30122,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
 
                                     const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                    pantallaInmersiva.style.justifyContent = "center"
                                     const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                     const instanciaUID = pantallaInmersiva.closest("[instanciaUID]").getAttribute("instanciaUID")
 
@@ -32628,23 +32590,40 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 const bloqueApartamentoUI = document.createElement("div")
                                 bloqueApartamentoUI.classList.add("bloqueApartamentoUI")
                                 bloqueApartamentoUI.setAttribute("apartamentoIDV", apartamentoIDV)
+
                                 const tituloApartamentoUI = document.createElement("p")
-                                tituloApartamentoUI.classList.add("tituloApartamentoUI")
+                                tituloApartamentoUI.classList.add("negrita", "padding10")
                                 tituloApartamentoUI.textContent = apartamentoUI
                                 bloqueApartamentoUI.appendChild(tituloApartamentoUI)
-                                const bloqueHabiaciones = document.createElement("div")
-                                bloqueHabiaciones.classList.add("bloqueHabiaciones")
+
+
+
+
+                                const bloqueHabiaciones = document.createElement("details")
+                                bloqueHabiaciones.classList.add("flexVertical")
+                                bloqueHabiaciones.style.background = "transparent"
                                 bloqueApartamentoUI.appendChild(bloqueHabiaciones)
+
+                                const tituloHabitaciones = document.createElement("summary")
+                                tituloHabitaciones.classList.add("padding10", "margin0")
+                                tituloHabitaciones.textContent = "Habitaciones"
+                                bloqueHabiaciones.appendChild(tituloHabitaciones)
+
+                                const contenedorHabitacionesExpandido = document.createElement("div")
+                                contenedorHabitacionesExpandido.classList.add("flexVertical", "gap6", "paddingLateral24")
+                                bloqueHabiaciones.appendChild(contenedorHabitacionesExpandido)
+
+
                                 for (const [habitacionIDV, detallesHabitacion] of Object.entries(habitaciones)) {
                                     const tituloHabitacion = document.createElement("div")
-                                    tituloHabitacion.classList.add("tituloHabitacion")
+                                    //tituloHabitacion.classList.add("tituloHabitacion")
                                     tituloHabitacion.textContent = detallesHabitacion.habitacionUI
-                                    bloqueHabiaciones.appendChild(tituloHabitacion)
+                                    contenedorHabitacionesExpandido.appendChild(tituloHabitacion)
                                 }
 
 
                                 const contenedorDetalles = document.createElement("details")
-                                contenedorDetalles.classList.add("flexVertical", "gap6")
+                                contenedorDetalles.classList.add("flexVertical")
                                 contenedorDetalles.style.background = "transparent"
                                 bloqueApartamentoUI.appendChild(contenedorDetalles)
 
@@ -32653,18 +32632,22 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 tituloDetalles.textContent = "Detalles del apartamento"
                                 contenedorDetalles.appendChild(tituloDetalles)
 
+                                const contenedorDetallesExpandido = document.createElement("div")
+                                contenedorDetallesExpandido.classList.add("flexVertical", "gap6", "paddingLateral24")
+                                contenedorDetalles.appendChild(contenedorDetallesExpandido)
+
                                 const tituloPublico = document.createElement("p")
-                                tituloPublico.classList.add("padding6")
+                                //tituloPublico.classList.add("padding6")
                                 tituloPublico.textContent = apartamentoUIPublico
-                                contenedorDetalles.appendChild(tituloPublico)
+                                contenedorDetallesExpandido.appendChild(tituloPublico)
 
                                 const tituloDefinicion = document.createElement("p")
-                                tituloDefinicion.classList.add("padding6")
+                                //tituloDefinicion.classList.add("padding6")
                                 tituloDefinicion.textContent = definicionPublica
-                                contenedorDetalles.appendChild(tituloDefinicion)
+                                contenedorDetallesExpandido.appendChild(tituloDefinicion)
 
                                 const botonSeleccionarApartamento = document.createElement("div")
-                                botonSeleccionarApartamento.classList.add("botonSeleccionarApartamento")
+                                botonSeleccionarApartamento.classList.add("botonV1BlancoIzquierda")
                                 botonSeleccionarApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                                 botonSeleccionarApartamento.textContent = "Seleccionar " + apartamentoUI
                                 botonSeleccionarApartamento.addEventListener("click", casaVitini.administracion.reservas.nuevaReserva.seleccionarApartamento)
@@ -33500,7 +33483,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     } else {
                         const botonIrAlEvento = document.createElement("div")
 
-                        botonIrAlEvento.textContent = "Airbnb no proporciona ninguna información sobre este evento.Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma.Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
+                        botonIrAlEvento.textContent = "Airbnb no proporciona ninguna información sobre este evento. Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma, un evento de Airbnbn generado cuando estableces días obligatorios de antelación o un evento generado cuando deshabilitas la disponibilidad de ciertos días en Airbnbn. Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
                         contenedorEvento.appendChild(botonIrAlEvento)
                     }
                     return contenedorEvento
@@ -35851,7 +35834,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                         const informacion = document.createElement("div")
                         informacion.classList.add("administracion_configuracion_informacion")
-                        informacion.textContent = "Determine la configuración global del sistema.Esta configuración se aplica a todo el sistema y a todos los usuarios. "
+                        informacion.textContent = "Determine la configuración global del sistema. Esta configuración se aplica a todo el sistema y a todos los usuarios. "
                         contenedorConfiguracionGlobal.appendChild(informacion)
 
                         let bloqueConfiguracion = document.createElement("div")
@@ -35865,7 +35848,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         descripcionConfiguracion.textContent = "La zona horaria local se aplica sobre el reloj UTC para que pueda ver la hora y las fechas en la zona horaria.Por ejemplo, en el apartado de Situación, en la renderización de los calendarios y etc.La zona horaria debe de configurarse con la misma zona horaria de las instalaciones físicas de pernoctación de Casa Vitini.Entonces, el sistema de Casa Vitini puede implantarse en cualquier ordenador sin importar su reloj en zona horaria local.Es fundamental que la zona horaria del sistema sea la misma que la zona horaria de las instalaciones físicas de pernoctación de Casa Vitini.El motivo de esto es que los pernoctante puedan obtener calendarios locales a la zona horaria de Casa Vitini y realizar las reservas en zona horaria local de Casa Vitini."
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         const listaZonaHoraria = document.createElement("select")
-                        listaZonaHoraria.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        listaZonaHoraria.classList.add("botonV1BlancoIzquierda_campo")
                         listaZonaHoraria.setAttribute("campo", "zonaHoraria")
                         listaZonaHoraria.setAttribute("valorInicial", zonaHoraria)
                         listaZonaHoraria.addEventListener("input", casaVitini.administracion.configuracion.controlCampo)
@@ -35977,7 +35960,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                         const informacion = document.createElement("div")
                         informacion.classList.add("administracion_configuracion_informacion")
-                        informacion.textContent = "Determine la configuración global del sistema.Esta configuración se aplica a todo el sistema y a todos los usuarios. "
+                        informacion.textContent = "Determine la configuración global del sistema. Esta configuración se aplica a todo el sistema y a todos los usuarios. "
                         contenedorConfiguracionGlobal.appendChild(informacion)
 
                         let bloqueConfiguracion = document.createElement("div")
@@ -36006,7 +35989,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         valorConfiguracion.setAttribute("campo", "horaEntradaTZ")
                         valorConfiguracion.setAttribute("valorInicial", horaEntradaTZ)
                         valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
-                        valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        valorConfiguracion.classList.add("botonV1BlancoIzquierda_campo")
                         valorConfiguracion.value = horaEntradaTZ
                         valorConfiguracion.placeholder = "Selecciona una hora de entrada, por ejemplo 17:00"
                         bloqueConfiguracion.appendChild(valorConfiguracion)
@@ -36026,7 +36009,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         valorConfiguracion.setAttribute("campo", "horaSalidaTZ")
                         valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.horaDeEntradaSalida.controlCampo)
                         valorConfiguracion.setAttribute("valorInicial", horaSalidaTZ)
-                        valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        valorConfiguracion.classList.add("botonV1BlancoIzquierda_campo")
                         valorConfiguracion.value = horaSalidaTZ
                         valorConfiguracion.placeholder = "Selecciona una hora de salida, por ejemplo 19:00 "
                         bloqueConfiguracion.appendChild(valorConfiguracion)
@@ -36129,7 +36112,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                     const informacion = document.createElement("div")
                     informacion.classList.add("administracion_configuracion_informacion")
-                    informacion.textContent = "Determine la configuración global del sistema.Esta configuración se aplica a todo el sistema y a todos los usuarios. "
+                    informacion.textContent = "Determine la configuración global del sistema. Esta configuración se aplica a todo el sistema y a todos los usuarios. "
                     contenedorConfiguracionGlobal.appendChild(informacion)
 
                     let bloqueConfiguracion = document.createElement("div")
@@ -36799,7 +36782,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         valorConfiguracion.setAttribute("campo", "diasAntelacionReserva")
                         valorConfiguracion.setAttribute("valorInicial", diasAntelacionReserva)
                         valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
-                        valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        valorConfiguracion.classList.add("botonV1BlancoIzquierda_campo")
                         valorConfiguracion.value = diasAntelacionReserva
                         valorConfiguracion.placeholder = "Determina el numero de días de antelación"
                         bloqueConfiguracion.appendChild(valorConfiguracion)
@@ -36821,7 +36804,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         valorConfiguracion.setAttribute("campo", "diasMaximosReserva")
                         valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
                         valorConfiguracion.setAttribute("valorInicial", diasMaximosReserva)
-                        valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        valorConfiguracion.classList.add("botonV1BlancoIzquierda_campo")
                         valorConfiguracion.value = diasMaximosReserva
                         valorConfiguracion.placeholder = "Selecciona una hora de salida, por ejemplo 19:00 "
                         bloqueConfiguracion.appendChild(valorConfiguracion)
@@ -36840,7 +36823,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         valorConfiguracion.setAttribute("campo", "limiteFuturoReserva")
                         valorConfiguracion.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
                         valorConfiguracion.setAttribute("valorInicial", limiteFuturoReserva)
-                        valorConfiguracion.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        valorConfiguracion.classList.add("botonV1BlancoIzquierda_campo")
                         valorConfiguracion.value = limiteFuturoReserva
                         valorConfiguracion.placeholder = "Determinal el limite futuro en numero de dias"
                         bloqueConfiguracion.appendChild(valorConfiguracion)
@@ -36939,7 +36922,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         contenedor.appendChild(descripcion)
 
                         const campoHora = document.createElement("input")
-                        campoHora.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        campoHora.classList.add("botonV1BlancoIzquierda_campo")
                         campoHora.placeholder = "Escribe la hora en formato 24H, tal que asi 00:00"
                         campoHora.setAttribute("campo", "horaLimiteDelMismoDia")
                         campoHora.addEventListener("input", casaVitini.administracion.configuracion.limitesReservaPublica.controlCampo)
@@ -36997,7 +36980,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         const io_aceptarReservasPublicas_UI = document.createElement("select")
                         io_aceptarReservasPublicas_UI.setAttribute("interruptor", "aceptarReservasPublicas")
-                        io_aceptarReservasPublicas_UI.classList.add("administracion_configuracion_valorConfiguracionInput")
+                        io_aceptarReservasPublicas_UI.classList.add("botonV1BlancoIzquierda_campo")
                         io_aceptarReservasPublicas_UI.setAttribute("valorInicial", aceptarReservasPublicas)
                         io_aceptarReservasPublicas_UI.addEventListener("change", (e) => {
                             const metadatos = {
@@ -38036,7 +38019,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const campo = document.querySelector("[componente=zonaNavegacionPaginadaClientes]")
 
                     const estadoBusquedaUI = document.createElement("div")
-                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+                    estadoBusquedaUI.classList.add("botonV1BlancoIzquierda_noSeleccionable", "textoCentrado")
                     estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
                     estadoBusquedaUI.textContent = "Buscando..."
                     const comRenderizado = document.querySelector("[componente=estadoBusqueda]")
@@ -38051,11 +38034,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
                     const campo = document.querySelector("[componente=zonaNavegacionPaginadaClientes]")
                     const terminoBusqueda = cliente.target.value
-                    document.querySelector("[componente=estadoBusqueda]")?.remove()
+                    //   document.querySelector("[componente=estadoBusqueda]")?.remove()
                     document.querySelector("[areaGrid=gridClientes]")?.remove()
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[contenedor=filtrosOrden]")?.remove()
-                    this.constructorMarcoInfo()
+
+                    const infoBuscandoRenderizado = document.querySelector("[componente=estadoBusqueda]")
+                    if (!infoBuscandoRenderizado) {
+                        this.constructorMarcoInfo()
+                    }
+
 
 
                     const granuladorURL = casaVitini.utilidades.granuladorURL()
@@ -41866,6 +41854,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const simulacionUID = document.querySelector("main").querySelector("[simulacionUID]").getAttribute("simulacionUID")
 
                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                            pantallaInmersiva.style.justifyContent = "center"
                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                             const instanciaUID_eliminarImpuestoUI = pantallaInmersiva.getAttribute("instanciaUID")
 
@@ -41873,7 +41862,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const titulo = constructor.querySelector("[componente=titulo]")
                             titulo.textContent = `Confirmar eliminar impuesto ${nombreImpuesto} de la reserva`
                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                            mensaje.textContent = "Var a eliminar el impuesto de la reserva, ¿Estas de acuerdo ? "
+                            mensaje.textContent = "Detalles del apartamento"
 
                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
                             botonAceptar.textContent = "Comfirmar la eliminacion"
@@ -46230,6 +46219,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     UI: async () => {
 
                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                        pantallaInmersiva.style.justifyContent = "center"
                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                         const titulo = constructor.querySelector("[componente=titulo]")
@@ -48816,6 +48806,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 eliminarComportamiento: {
                     UI: async () => {
                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                        pantallaInmersiva.style.justifyContent = "center"
+
                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                         const titulo = constructor.querySelector("[componente=titulo]")
@@ -50837,6 +50829,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     UI: async () => {
 
                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                        pantallaInmersiva.style.justifyContent = "center"
+
                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                         const titulo = constructor.querySelector("[componente=titulo]")
@@ -52503,6 +52497,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             }
 
                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                            pantallaInmersiva.style.justifyContent = "center"
+
                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                             const titulo = constructor.querySelector("[componente=titulo]")
@@ -52941,12 +52937,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 textoBoton: "Cancelar"
                             })
                             contenedor.appendChild(spinner)
-
+                            // listarHabitacionesDisponiblesApartamentoConfiguracion
                             const transaccion = {
                                 zona: "administracion/arquitectura/configuraciones/listarHabitacionesDisponiblesApartamentoConfiguracion",
                                 apartamentoIDV: apartamentoIDV
                             }
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                            console.log("respuestaServidor", respuestaServidor)
                             const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                             if (!instanciaRenderizada) { return }
                             if (respuestaServidor?.error) {
@@ -52967,7 +52964,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const habitacionIDV = detallesHabitacion.habitacionIDV
                                         const habitacionUI = detallesHabitacion.habitacionUI
                                         const tituloHabitacion = document.createElement("div")
-                                        tituloHabitacion.classList.add("confApartamento_contenedorMenu_tituloApartamento")
+                                        tituloHabitacion.classList.add("botonV1BlancoIzquierda")
                                         tituloHabitacion.setAttribute("habitacionIDV", habitacionIDV)
                                         tituloHabitacion.addEventListener("click", casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.addHabitacion.transactor)
                                         tituloHabitacion.textContent = habitacionUI
@@ -53129,6 +53126,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         UI: async () => {
 
                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                            pantallaInmersiva.style.justifyContent = "center"
+
                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                             const titulo = constructor.querySelector("[componente=titulo]")
@@ -53170,6 +53169,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
 
                                 const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                pantallaInmersiva.style.justifyContent = "center"
+
                                 const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                 const contenedor = constructor.querySelector("[componente=contenedor]")
 
@@ -53303,6 +53304,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const habitacionUI = data.habitacionUI
 
                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                            pantallaInmersiva.style.justifyContent = "center"
+
                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                             const instanciaUID = pantallaInmersiva.getAttribute("instanciaUID")
 
@@ -53435,6 +53438,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             }
 
                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                            pantallaInmersiva.style.justifyContent = "center"
+
                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                             const titulo = constructor.querySelector("[componente=titulo]")
@@ -53450,7 +53455,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 })
                             })
                             const botonCancelar = constructor.querySelector("[boton=cancelar]")
-                            botonCancelar.textContent = "Cancelar el cambio de estado"
+                            botonCancelar.textContent = "Cancelar el cambio de estado y volver"
                             document.querySelector("main").appendChild(pantallaInmersiva)
                         },
                         transactor: async (data) => {
@@ -53502,7 +53507,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
 
                             const t1 = document.createElement("div")
-                            t1.classList.add("tituloGris")
+                            t1.classList.add("tituloGris", "padding10", "textoCentrado")
                             t1.textContent = "Cambiar zona de publicación"
                             contenedor.appendChild(t1)
 
@@ -53517,12 +53522,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
 
                             const t2 = document.createElement("div")
+                            t2.classList.add("padding18")
                             t2.textContent = "La zona de publicación determina dónde se mostrará esta configuración de alojamiento. Existen tres zonas. La zona pública que determina que esta configuración se anuncie solo desde la plaza, para los clientes y fuera de la zona administrativa. La zona privada que establece que esta configuración solo se anuncie dentro de la zona administrativa y, por última, está la zona global, que anuncia esta configuración en toda Casa Vitini"
                             contenedor.appendChild(t2)
 
 
                             const botonZonaPublica = document.createElement("div")
-                            botonZonaPublica.classList.add("boton")
+                            botonZonaPublica.classList.add("botonV1BlancoIzquierda")
                             botonZonaPublica.setAttribute("zona", "publica")
                             botonZonaPublica.textContent = "Cambiar a Zona Pública"
                             botonZonaPublica.addEventListener("click", () => {
@@ -53535,7 +53541,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             contenedor.appendChild(botonZonaPublica)
 
                             const botonZonaPrivada = document.createElement("div")
-                            botonZonaPrivada.classList.add("boton")
+                            botonZonaPrivada.classList.add("botonV1BlancoIzquierda")
                             botonZonaPrivada.setAttribute("zona", "privada")
                             botonZonaPrivada.textContent = "Cambiar a Zona Privada"
                             botonZonaPrivada.addEventListener("click", () => {
@@ -53548,7 +53554,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             contenedor.appendChild(botonZonaPrivada)
 
                             const botonZonaGlobal = document.createElement("div")
-                            botonZonaGlobal.classList.add("boton")
+                            botonZonaGlobal.classList.add("botonV1BlancoIzquierda")
                             botonZonaGlobal.setAttribute("zona", "global")
                             botonZonaGlobal.textContent = "Cambiar a Zona Global"
                             botonZonaGlobal.addEventListener("click", () => {
@@ -54677,12 +54683,17 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     gridUsuarios?.remove()
 
                     const terminoBusqueda = cliente.target.value
-                    document.querySelector("[componente=estadoBusqueda]")?.remove()
+                    //document.querySelector("[componente=estadoBusqueda]")?.remove()
                     document.querySelector("[gridUID=gridUsuarios]")?.remove()
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[contenedor=filtrosOrden]")?.remove()
 
-                    this.constructorMarcoInfo()
+                    const estadoBusqueda = document.querySelector("[componente=estadoBusqueda]")
+                    if (!estadoBusqueda) {
+                        this.constructorMarcoInfo()
+
+                    }
+
 
                     const campoVacio = cliente.target.value.length
                     if (campoVacio === 0) {
@@ -54878,7 +54889,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const campo = document.querySelector("[componente=zonaNavegacionPaginadaUsuarios]")
 
                     const estadoBusquedaUI = document.createElement("div")
-                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+                    estadoBusquedaUI.classList.add("botonV1BlancoIzquierda_noSeleccionable")
                     estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
                     estadoBusquedaUI.textContent = "Buscando usuarios..."
 

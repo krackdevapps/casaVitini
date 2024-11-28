@@ -15,7 +15,7 @@ export const eliminarCamaFisicaDeHabitacion = async (entrada) => {
         IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 2
+            numeroDeLLavesMaximo: 3
         })
         await mutex.acquire();
 

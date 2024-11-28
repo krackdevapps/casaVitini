@@ -74,16 +74,16 @@ export const calendario = async (entrada) => {
         const posicionDia1_primeraFechaDiponible = primerDiaDelMes_primeraFechaDisponible.weekday;
         const numeroDeDiasPorMes_primeraFechaDisponible = primeraFechaDisponible_objeto.daysInMonth;
 
-        const mes_primeraFechaDisponbile = primeraFechaDisponible.month
-        const ano_primeraFechaDisponbile = primeraFechaDisponible.year
+        const mes_primeraFechaDisponible = primeraFechaDisponible.month
+        const ano_primeraFechaDisponible = primeraFechaDisponible.year
 
 
         let tiempo_primeraFechaDisponible = "presente"
-        if (anoPresenteTZ > ano_primeraFechaDisponbile) {
+        if (anoPresenteTZ > ano_primeraFechaDisponible) {
             tiempo_primeraFechaDisponible = "futuro"
-        } else if (anoPresenteTZ === ano_primeraFechaDisponbile && mesPresenteTZ === mes_primeraFechaDisponbile) {
+        } else if (anoPresenteTZ === ano_primeraFechaDisponible && mesPresenteTZ === mes_primeraFechaDisponible) {
             tiempo_primeraFechaDisponible = "presente"
-        } else if (anoPresenteTZ === ano_primeraFechaDisponbile && mesPresenteTZ < mes_primeraFechaDisponbile) {
+        } else if (anoPresenteTZ === ano_primeraFechaDisponible && mesPresenteTZ < mes_primeraFechaDisponible) {
             tiempo_primeraFechaDisponible = "futuro"
         }
 
