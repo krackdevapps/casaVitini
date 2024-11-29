@@ -54,7 +54,6 @@ export const procesadorServicios = async (data) => {
             const m = "La confguracion de servicios en el procesador esta mal configurada, necesita origen en huServicios o instantaneaServiciosEnReserva"
             throw new Error(m)
         }
-
         await constructorInstantaneaServicios({
             estructura,
             servicios,

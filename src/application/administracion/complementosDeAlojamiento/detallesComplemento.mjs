@@ -1,6 +1,7 @@
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerComplementoPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const detallesComplemento = async (entrada, salida) => {
     try {
@@ -23,9 +24,17 @@ export const detallesComplemento = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const complemlento = await obtenerComplementoPorComplementoUID(complementoUID)
+        const apartamentoIDV = complemlento.apartamentoIDV
+        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV: apartamentoIDV,
+            errorSi: "noExiste"
+        })
+        const apartamentoUI = apartamento.apartamentoUI
+
         delete complemlento.testingVI
         const ok = {
-            ok: complemlento
+            ok: complemlento,
+            apartamentoUI
         };
         return ok
     } catch (errorCapturado) {

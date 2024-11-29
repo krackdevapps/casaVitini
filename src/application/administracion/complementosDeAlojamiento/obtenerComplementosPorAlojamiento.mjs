@@ -1,3 +1,4 @@
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerComplementosPorApartamentoIDV } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementosPorApartamentoIDV.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
@@ -28,6 +29,11 @@ export const obtenerComplementosPorAlojamiento = async (entrada) => {
         })
 
         const complementosPorApartamentoIDV = await obtenerComplementosPorApartamentoIDV(apartamentoIDV)
+        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV: apartamentoIDV,
+            errorSi: "noExiste"
+        })
+        const apartamentoUI = apartamento.apartamentoUI
 
         const complementosDeAlojamiento = []
         if (filtro === "soloActivos") {
@@ -43,6 +49,7 @@ export const obtenerComplementosPorAlojamiento = async (entrada) => {
         const ok = {
             ok: "Aquí tienes los complementos",
             apartamentoIDV,
+            apartamentoUI,
             complementosPorApartamentoIDV: complementosDeAlojamiento
         };
         return ok

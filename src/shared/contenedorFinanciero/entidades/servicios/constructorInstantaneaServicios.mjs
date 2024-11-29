@@ -38,14 +38,15 @@ export const constructorInstantaneaServicios = async (data) => {
             const opcionesDelServicioSolicitadas = servicioSoliciado_objeto.opcionesSeleccionadas
 
             for (const [grupoIDV, grupoServicioSolicitado] of Object.entries(opcionesDelServicioSolicitadas)) {
-
                 const opcionesDelGrupo = gruposDeOpciones[grupoIDV].opcionesGrupo || []
                 opcionesDelGrupo.forEach(o => {
-                    const precioDeLaOpcione = o.precioOpcion.length === 0 ? 0.00 : o.precioOpcion
-                    const precioNetoServicio = new Decimal(precioDeLaOpcione)
-                    global.totales.totalNeto = precioNetoServicio.plus(global.totales.totalNeto)
+                    const opcionIDV = o.opcionIDV
+                    if (grupoServicioSolicitado.includes(opcionIDV)) {
+                        const precioDeLaOpcion = o.precioOpcion.length === 0 ? 0.00 : o.precioOpcion
+                        const precioNetoServicio = new Decimal(precioDeLaOpcion)
+                        global.totales.totalNeto = precioNetoServicio.plus(global.totales.totalNeto)
+                    }        
                 })
-
                 desglosePorServicios.push({
                     servicio,
                     opcionesSolicitadasDelservicio: servicioSoliciado_objeto
@@ -54,7 +55,6 @@ export const constructorInstantaneaServicios = async (data) => {
         }
         global.totales.totalNeto = global.totales.totalNeto.toFixed(2)
         global.totales.totalFinal = global.totales.totalNeto
-
     } catch (errorCapturado) {
         throw errorCapturado
     }

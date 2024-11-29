@@ -3431,12 +3431,12 @@ const casaVitini = {
 
 
                         if (reservaNoConfirmada) {
-
-                            const transaccion = {
+                            console.log("reservaNoConfirmada", reservaNoConfirmada)
+                       
+                            const respuestaServidor = await casaVitini.shell.servidor({
                                 zona: "componentes/precioReservaPublica",
                                 reserva: reservaNoConfirmada
-                            }
-                            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                            })
 
                             return respuestaServidor
                         }
@@ -4651,20 +4651,42 @@ const casaVitini = {
                                 }
                             }
 
-                            const servicioUI = document.createElement("div")
+                            const servicioUI = document.createElement("details")
                             servicioUI.setAttribute("servicioUID", servicioUID)
                             servicioUI.classList.add(
                                 "flexVertical",
                                 "padding6",
                                 "backgroundGrey1",
-                                "borderRadius18"
+                                "sobreControlAnimacionGlobal",
+                                "borderRadius18",
 
                             )
-                            const contenedorGlobal = document.createElement("div")
+
+            
+
+                            const contenedorGlobal = document.createElement("summary")
                             contenedorGlobal.classList.add(
-                                "contenedorGlobal"
+                                "contenedorGlobal",
+                               "margin0",
+                               "borderRadius14",
+                               "padding6",
                             )
                             servicioUI.appendChild(contenedorGlobal)
+                            
+
+                            const iconoDetails = document.createElement("div")
+                            iconoDetails.style.display = "list-item"
+                            iconoDetails.style.padding = "0px"
+                            iconoDetails.style.marginTop = "0px"
+                            iconoDetails.style.marginBottom = "0px"
+                            iconoDetails.style.marginLeft = "6px"
+                            iconoDetails.style.marginRight = "0px"
+                            iconoDetails.textContent = ""
+                            iconoDetails.classList.add(
+                                "padding6",
+                            )
+                            contenedorGlobal.appendChild(iconoDetails)
+
 
                             const esferaSeleccionable = document.createElement("div")
                             esferaSeleccionable.classList.add(
@@ -30484,7 +30506,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     return contenedor
                 },
                 grupoDeOpciones: () => {
-                    const c = document.createElement("div")
+                    const c = document.createElement("details")
                     c.setAttribute("componente", "grupo")
                     c.classList.add(
                         "flexVertical",
@@ -30493,10 +30515,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         "borderRadius14"
                     )
 
-                    const titulo = document.createElement("p")
+                    const titulo = document.createElement("summary")
                     titulo.setAttribute("data", "titulo")
                     titulo.classList.add(
-                        "padding6",
+                        "padding10",
                         "negrita",
                         // "textoCentrado"
                     )
@@ -33611,7 +33633,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-
+                        console.log("respuestaServidor", respuestaServidor)
                         const configuracionesAlojamiento = respuestaServidor.ok
                         configuracionesAlojamiento.forEach((conf) => {
                             const apartamentoIDV = conf.apartamentoIDV
@@ -33696,7 +33718,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
+                            console.log("r", respuestaServidor)
                             const complementos = respuestaServidor.complementosPorApartamentoIDV
+                            const apartamentoUI = respuestaServidor.apartamentoUI
+                            
+                            main.querySelector("[data=titulo]").textContent = `Complementos de alojamiento de ${apartamentoUI}`
                             complementos.forEach((com) => {
                                 const tarjetaUI = this.tarjetaComplementoUI(com)
                                 espacio.appendChild(tarjetaUI)
@@ -33753,17 +33779,39 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     }
                 },
                 nuevo: {
-                    arranque: function (apartamentoIDV) {
+                    arranque:async  function (apartamentoIDV) {
                         const main = document.querySelector("main")
+                        const instanciaUID = main.getAttribute("instanciaUID")
                         const espacio = main.querySelector("[componente=espacio]")
 
-                        const ui = casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.componentesUI.complementoUI({
-                            modoUI: "crear",
-                            apartamentoIDV
+                        const respuestaServidor = await casaVitini.shell.servidor({
+                            zona: "administracion/arquitectura/configuraciones/detalleConfiguracionAlojamiento",
+                            apartamentoIDV: apartamentoIDV
                         })
-                        espacio.appendChild(ui)
-                        const botonCrearServicio = casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.componentesUI.botonesCrear()
-                        ui.appendChild(botonCrearServicio)
+                        const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                        if (!seccionRenderizada) { return }
+                        if (respuestaServidor?.error) {
+                            casaVitini.ui.componentes.mensajeSimple({
+                                titulo: "No existe la configuración de alojamiento",
+                                descripcion: respuestaServidor.error
+                            })
+                        }
+                        if (respuestaServidor?.ok) { 
+                            console.log("respuestaSer", respuestaServidor)
+                            const apartamentoUI = respuestaServidor.apartamentoUI
+                            main.querySelector("[data=titulo]").textContent = `Nuevo complemento de alojamiento de ${apartamentoUI}`
+
+                            const ui = casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.componentesUI.complementoUI({
+                                modoUI: "crear",
+                                apartamentoIDV
+                            })
+                            espacio.appendChild(ui)
+                            const botonCrearServicio = casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.componentesUI.botonesCrear()
+                            ui.appendChild(botonCrearServicio)
+                        }
+
+
+                
                     },
                     crear: async function () {
 
@@ -33820,6 +33868,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                             const complemento = respuestaServidor.ok
                             const apartamentoIDV = complemento.apartamentoIDV
+                            const apartamentoUI = respuestaServidor.apartamentoUI
+
+                            main.querySelector("[data=titulo]").textContent = `Detalles del complementos de alojamiento de ${apartamentoUI}`
 
                             espacio.setAttribute("instantanea", JSON.stringify(complemento))
                             espacio.innerHTML = null

@@ -234,20 +234,21 @@ details {
     border-radius: 14px;
 }
 
-details summary {
+details > summary {
     cursor: default;
     transition: all 150ms ease-out !important; 
     user-select: none;
     -webkit-user-select: none;
 }
 
-details[open] summary {
+details[open] > summary {
     margin-bottom: 6px;
 }
 
 summary {
     /* margin-top: 6px; */
     border-radius: 10px;
+    display: list-item;
 }
 
 summary:hover {
@@ -15255,7 +15256,7 @@ summary:hover {
     grid-template-columns: auto 1fr;
     align-items: center;
     border-radius: 10px;
-    transition: background 250ms linear;
+    /* transition: background 250ms linear; */
 }
 
 .contenedorGlobal_hover:hover {
@@ -15279,7 +15280,7 @@ summary:hover {
 
 [zonaCSS="/alojamiento/resumen"] [servicioUID] .contenedorGlobal {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto 1fr !important;
     align-items: center;
 
 }
