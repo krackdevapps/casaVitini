@@ -1,5 +1,4 @@
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
-import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
 import { obtenerOfertaConApartamentos } from "../../../shared/ofertas/obsoleto/obtenerOfertaConApartamentos.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
@@ -23,7 +22,7 @@ export const detallesOferta = async (entrada, salida) => {
             devuelveUnTipoNumber: "si"
         })
         const detallesOferta = await obtenerOfertaConApartamentos(ofertaUID);
-        await insertarApartamentoUIEnObjetoOfertas(detallesOferta)
+
         detallesOferta.condicionesArray.forEach((condicion) => {
             const tipoCondicion = condicion.tipoCondicion
             if (tipoCondicion === "porCodigoDescuento") {

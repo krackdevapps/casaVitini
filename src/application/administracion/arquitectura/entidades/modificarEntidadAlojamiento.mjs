@@ -134,8 +134,6 @@ export const modificarEntidadAlojamiento = async (entrada) => {
 
 
             if (configuracionAlojamiento) {
-
-
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
                 const tiempoZH = DateTime.now().setZone(zonaHoraria);
                 const fechaActual = tiempoZH.toISODate();
@@ -158,7 +156,8 @@ export const modificarEntidadAlojamiento = async (entrada) => {
 
                 await actualizarIDVenOfertas({
                     origenIDV: entidadIDV,
-                    destinoIDV: apartamentoIDV
+                    destinoIDV: apartamentoIDV,
+                    apartamentoUI: apartamentoUI
                 })
 
 
@@ -166,11 +165,14 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 await actualizarIDVenInstantaneasContenedorFinanciero({
                     origenIDV: entidadIDV,
                     destinoIDV: apartamentoIDV,
+                    apartamentoUI: apartamentoUI,
                     reservasUIDArray
                 })
                 await actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion({
                     origenIDV: entidadIDV,
                     destinoIDV: apartamentoIDV,
+                    apartamentoUI: apartamentoUI,
+
                 })
             }
 

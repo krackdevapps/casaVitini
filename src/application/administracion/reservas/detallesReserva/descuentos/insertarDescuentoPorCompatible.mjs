@@ -52,17 +52,7 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             ofertaUID,
             errorSi: "existe"
         })
-        const fechaEntradaReserva = reserva.fechaEntrada
-        const fechaSalidaReserva = reserva.fechaSalida
-        const fechaCreacion_simple = reserva.fechaCreacion_simple
-
-        const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
-        const apartamentosArray = apartamentosReserva.map((detallesApartamento) => {
-            return detallesApartamento.apartamentoIDV
-        })
-
         const desgloseFinanciero = await procesador({
-
             entidades: {
                 reserva: {
                     origen: "hubReservas",

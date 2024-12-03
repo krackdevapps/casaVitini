@@ -133,9 +133,10 @@ describe('taxes of simulation', () => {
         const m = {
             body: {
                 simulacionUID: String(simulacionUID),
-                nombreImpuesto: "tax for testing created",
+                nombre: "tax for testing created",
                 tipoImpositivo: "100.00",
                 tipoValorIDV: "porcentaje",
+                entidadIDV: "reserva"
             },
             session: fakeAdminSession
         }

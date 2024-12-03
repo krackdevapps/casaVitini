@@ -132,6 +132,7 @@ export const procesadorReserva = async (data) => {
         pipe.instantaneaOfertasPorCondicion = instantaneaOfertasPorCondicion || []
         pipe.instantaneaOfertasPorAdministrador = instantaneaOfertasPorAdministrador || []
 
+
         await constructorInstantaneaNoches({
             estructura,
             instantaneaNoches,

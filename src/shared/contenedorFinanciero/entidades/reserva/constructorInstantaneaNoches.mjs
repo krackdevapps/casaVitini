@@ -45,8 +45,6 @@ export const constructorInstantaneaNoches = async (data) => {
             promedioNocheNeto: "0.00",
             promedioNocheNetoConDescuentos: "0.00"
         }
-
-
         if (!reservaEntidad.hasOwnProperty("instantaneaNoches")) {
             reservaEntidad.instantaneaNoches = {}
         }
@@ -85,6 +83,7 @@ export const constructorInstantaneaNoches = async (data) => {
                 delete contenedorInstantaneaNoche[fecha_ISO]
             }
         }
+
         for (const fecha_ISO of diasArray) {
             if (!contenedorInstantaneaNoche.hasOwnProperty(fecha_ISO)) {
                 contenedorInstantaneaNoche[fecha_ISO] = {
@@ -126,6 +125,18 @@ export const constructorInstantaneaNoches = async (data) => {
                 }
             }
         }
+        
+        const ordenarPorFecha = (obj) => {
+            const ordenado = Object.keys(obj)
+                .sort((a, b) => new Date(a) - new Date(b))
+                .reduce((acum, key) => {
+                    acum[key] = obj[key];
+                    return acum;
+                }, {});
+            return ordenado;
+        };
+        reservaEntidad.instantaneaNoches = ordenarPorFecha(contenedorInstantaneaNoche)
+
     } catch (errorCapturado) {
         throw errorCapturado
     }

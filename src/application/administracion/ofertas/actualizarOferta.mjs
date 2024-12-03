@@ -59,7 +59,6 @@ export const actualizarOferta = async (entrada) => {
         await campoDeTransaccion("iniciar")
         const ofertaActualizada = await actualizarOfertaPorOfertaUID(ofertaPorActualizar);
         await insertarApartamentoUIEnObjetoOfertas(ofertaActualizada)
-
         await campoDeTransaccion("confirmar")
 
         ofertaActualizada.condicionesArray.forEach((condicion) => {

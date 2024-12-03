@@ -97,9 +97,10 @@ describe('taxes in bookins', () => {
         const m = {
             body: {
                 reservaUID: String(reservaUID),
-                nombreImpuesto: "tax ad hoc for testing created",
+                nombre: "tax ad hoc for testing created",
                 tipoImpositivo: "100.00",
                 tipoValorIDV: "porcentaje",
+                entidadIDV: "reserva"
             },
             session: fakeAdminSession
         }

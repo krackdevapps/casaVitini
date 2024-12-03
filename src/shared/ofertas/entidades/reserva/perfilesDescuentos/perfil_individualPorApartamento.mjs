@@ -20,20 +20,6 @@ export const perfil_individualPorApartamento = async (data) => {
             const descuentoTotal = descuentoDelApartamento.descuentoTotal
             const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
 
-            const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
-                apartamentoIDV,
-                errorSi: "desactivado"
-            })
-            if (configuracionAlojamiento?.apartamentoIDV) {
-                descuentoDelApartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                    apartamentoIDV,
-                    errorSi: "noExiste"
-                }))?.apartamentoUI
-            } else {
-                const m = `Atención, esta oferta no puede aplicarse porque en "descuentos individuales por apartamento" dentro de esta oferta, se hace referencia al identificador visual IDV (${apartamentoIDV}) y esta configuración de alojamiento no existe. O bien cree la configuración de alojamiento o borre este apartamento de la oferta.  Antes de dar por válida una oferta se recomienda probarla en el simulador de precios para evitar esto. Si simplemente quiere añadir esta oferta ahora mismo a una reserva activa, borre la referencia al configuración de alojamiento dentro de la oferta.`
-                throw new Error(m)
-            }
-
             const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
             if (!totalPorApartametno) {
                 continue

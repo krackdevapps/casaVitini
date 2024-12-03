@@ -1,11 +1,10 @@
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { insertarImpuestoPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/impuestos/insertarImpuestoPorReservaUID.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorReservaUID_simple } from "../../../../../infraestructure/repository/reservas/transacciones/impuestos/obtenerImpuestoPorImpuestoUIDPorReservaUID_simple.mjs"
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
-import { procesador } from "../../../../../shared/contenedorFinanciero/procesador.mjs"
+import { validarImpuesto } from "../../../../../shared/impuestos/validarImpuesto.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
@@ -15,10 +14,7 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
         IDX.administradores()
         IDX.empleados()
         IDX.control()
-        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
-            objeto: entrada.body,
-            numeroDeLLavesMaximo: 4
-        })
+
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
             nombreCampo: "El identificador universal de la reserva (reservaUID)",
@@ -28,29 +24,20 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const tipoImpositivo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoImpositivo,
-            nombreCampo: "El tipoImpositivo",
-            filtro: "cadenaConNumerosConDosDecimales",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "no"
-        })
-        const tipoValorIDV = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoValorIDV,
-            nombreCampo: "El tipoValorIDV",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-        const nombreImpuesto = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreImpuesto,
-            nombreCampo: "El nombreImpuesto",
-            filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
+        const impuesto = entrada.body
+        const impuestoValidado = validarImpuesto(impuesto)
 
+
+        const reserva = await obtenerReservaPorReservaUID(reservaUID)
+        const estadoReserva = reserva.estadoIDV
+        if (estadoReserva === "cancelada") {
+            const error = "La reserva está cancelada, es inmutable."
+            throw new Error(error)
+        }
+        const entidadIDV = impuestoValidado.entidadIDV
+        const nombre = impuestoValidado.nombre
+        const tipoImpositivo = impuestoValidado.tipoImpositivo
+        const tipoValorIDV = impuestoValidado.tipoValorIDV
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = '0123456789';
             let cadenaAleatoria = '';
@@ -61,12 +48,6 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             return cadenaAleatoria;
         };
 
-        const reserva = await obtenerReservaPorReservaUID(reservaUID)
-        const estadoReserva = reserva.estadoIDV
-        if (estadoReserva === "cancelada") {
-            const error = "La reserva está cancelada, es inmutable."
-            throw new Error(error)
-        }
 
         const controlCodigoUnico = async () => {
             const longitudCodigo = 10;
@@ -86,10 +67,10 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
         const codigoGenerado = await controlCodigoUnico();
         const estructura = {
             impuestoUID: codigoGenerado,
-            nombre: nombreImpuesto,
+            nombre: nombre,
             tipoImpositivo: tipoImpositivo,
             tipoValorIDV: tipoValorIDV,
-            entidadIDV: "reserva",
+            entidadIDV:entidadIDV,
             estadoIDV: "activado",
             impuestoTVI: null
         }

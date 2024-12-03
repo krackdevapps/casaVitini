@@ -38,7 +38,7 @@ export const crearOferta = async (entrada) => {
             condicionesArray,
             descuentosJSON,
             estado: estadoInicial,
-        }
+         }
         await validarObjetoOferta({
             oferta: oferta,
             modo: "crearOferta"

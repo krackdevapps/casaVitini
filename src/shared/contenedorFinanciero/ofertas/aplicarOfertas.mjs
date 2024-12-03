@@ -83,6 +83,7 @@ export const aplicarOfertas = async (data) => {
                 descuentosArray: [ofertaUID]
             })
 
+
             instantaneaOfertasPorAdministrador.push(...ofertasSelecionadasPorAdminstrador)
 
         } else if (operacion?.tipo === "insertarDescuentoCompatibleConReserva") {
@@ -110,6 +111,17 @@ export const aplicarOfertas = async (data) => {
             }
             instantaneaOfertasPorCondicion.push(ofertaFormateada)
         }
+
+        const ofertasSeleccionadas = [...instantaneaOfertasPorAdministrador, ...instantaneaOfertasPorCondicion]
+        for (const oferta of ofertasSeleccionadas) {
+
+            // Condicion por apartamentos especificos
+            // 
+        }
+
+
+
+
         await aplicarDescuento({
             origen: "porAdministrador",
             ofertasParaAplicarDescuentos: instantaneaOfertasPorAdministrador,
@@ -124,6 +136,7 @@ export const aplicarOfertas = async (data) => {
             fechaEntradaReserva_ISO: fechaEntrada,
             fechaSalidaReserva_ISO: fechaSalida
         })
+
     } catch (error) {
         throw error
     }

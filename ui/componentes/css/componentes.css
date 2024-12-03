@@ -213,10 +213,19 @@ main[zonaCSS="/"] {
 .marcoElasticoError {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     padding: 6px;
     gap: 6px;
     max-width: 1080px;
+}
+
+.marcoElasticoCarga {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    gap: 6px;
+    max-width: 1080px;
+    align-items: center;
 }
 
 .crearOfertaDescuentoDedicadoListaTipoDescuento {
@@ -4349,9 +4358,8 @@ summary:hover {
 }
 
 .advertenciaInfoFlujoPago {
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
+    padding: 14px;
+    text-align: justify;
 }
 
 .errorBoton {
@@ -7723,9 +7731,8 @@ summary:hover {
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalTipoOfertas {
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-gap: 6px;
+    grid-template-columns: 1fr 1fr 1fr ;
+    grid-gap: 10px;
     padding: 0px;
     justify-items: stretch;
     justify-content: center;
@@ -7741,7 +7748,7 @@ summary:hover {
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .opcionTipoOFerta {
     background: #ffffff8f;
-    padding: 10px;
+    padding: 20px;
     border-radius: 12px;
     margin: 0px;
     cursor: default;
@@ -8501,7 +8508,7 @@ summary:hover {
     padding: 6px;
     gap: 6px;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: #0000001f;
 }
 
 
@@ -8518,7 +8525,7 @@ summary:hover {
     padding: 6px;
     gap: 6px;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: #0000001f;
 }
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaZonaAnadirApartamento {
@@ -8534,7 +8541,7 @@ summary:hover {
     padding: 6px;
     gap: 6px;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: #0000001f;
 }
 
 .crearOfertaApartamentoSeleccionadoUITitulo {
@@ -12394,7 +12401,7 @@ summary:hover {
 [zonaCSS="administracion/simuladorDePrecios/detalles"] .componentes_ui_desloseTotales_contenedor {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 [ui="reservaUI"] .administracion_reserver_detallesReserva_contenedorDesgloseTotal {
@@ -12881,7 +12888,6 @@ summary:hover {
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
-
     padding: 4px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -12889,7 +12895,7 @@ summary:hover {
 }
 
 [zonaCSS=instalaciones] .plaza_servicios_infoGlobal {
-    padding: 40px;
+    padding: 10px;
     border-radius: 10px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -12923,7 +12929,7 @@ summary:hover {
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    gap: 30px;
+    gap: 20px;
 }
 
 @media (max-width: 720px) {
@@ -12936,7 +12942,7 @@ summary:hover {
 }
 
 .plaza_servicios_tituloCaracteristica {
-    font-weight: bold;
+    /* font-weight: bold; */
     margin: 0px;
 }
 
@@ -12960,7 +12966,11 @@ summary:hover {
 }
 
 .plaza_servicios_contenedorCaracteristicaTexto {
-    padding: 20px;
+    padding-left: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 30px;
+
     display: flex;
     gap: 0px;
     flex-direction: column;
@@ -14312,7 +14322,7 @@ summary:hover {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/zonas_comunes/image00009.png");
+    background-image: url("/componentes/imagenes/zonas_comunes/image00009.jpeg");
 
 }
 
@@ -14327,14 +14337,13 @@ summary:hover {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/zonas_comunes/image00006.jpeg");
-}
+    background-image: url("/componentes/imagenes/zonas_comunes/image00023.jpeg");}
 
 [zonaCSS="/conozcanos"] .fondo3 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/zonas_comunes/image00002.jpeg");
+    background-image: url("/componentes/imagenes/exteriores/image00010.jpeg");
 }
 
 [zonaCSS="/conozcanos"] .fondo4 {
@@ -14811,9 +14820,9 @@ summary:hover {
 
 
 [zonaCSS="/conozcanos"] .texto_v2_parallax {
-    font-size: 50px;
+    font-size: 35px;
     font-weight: bold;
-    color: white;
+    color: rgb(255 255 255 / 85%);
     transform: translateX(-50%, -50%);
     z-index: 10;
 
@@ -15279,6 +15288,18 @@ summary:hover {
 }
 
 [zonaCSS="/alojamiento/resumen"] [servicioUID] .contenedorGlobal {
+    display: grid;
+    grid-template-columns: auto auto 1fr !important;
+    align-items: center;
+
+}
+[zonaCSS="administracion/reservas/detallesReserva"] [servicioUID] .contenedorGlobal {
+    display: grid;
+    grid-template-columns: auto auto 1fr !important;
+    align-items: center;
+
+}
+[zonaCSS="administracion/simuladorDePrecios/detalles"] [servicioUID] .contenedorGlobal {
     display: grid;
     grid-template-columns: auto auto 1fr !important;
     align-items: center;
@@ -15915,7 +15936,21 @@ summary:hover {
 .botonTransparenteSeleccionable:hover {
     background: rgb(255 255 255 / 0.8);
 }
+[zonaCSS="instalaciones"] .textoPresentacion {
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: justify;
 
+}
+[zonaCSS="instalaciones"] .cuadradoInicioTexto {
+    text-align: center;
+    padding: 10px;
+    background: #b1afaf66;
+    border-radius: 10px;
+    animation: parpadeoElementoIndicadorGrisInstalaciones 5s infinite linear;
+    font-size: 12px;
+
+}
 
 .limpiezaBotonA {
     text-decoration: none;
@@ -16197,6 +16232,21 @@ a {
     }
 }
 
+@keyframes parpadeoElementoIndicadorGrisInstalaciones {
+    0% {
+        background: transparent;
+    }
+
+    50% {
+        background: #b1afaf66;
+    }
+
+    100% {
+        background: transparent;
+    }
+}
+
+
 .parpadeoFondoAzul {
     animation: parpadeoElementoIndicadorAzul 2s infinite linear;
 }
@@ -16436,3 +16486,4 @@ textarea {
 
     }
 }
+

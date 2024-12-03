@@ -7,6 +7,8 @@ export const validarImpuesto = (impuesto) => {
 
 
         const esquemaBusqueda = Joi.object({
+            reservaUID: Joi.string().optional(),
+            simulacionUID: Joi.string().optional(),
             nombre: Joi.string(),
             impuestoUID: Joi.string(),
             tipoImpositivo: Joi.string(),
@@ -63,7 +65,7 @@ export const validarImpuesto = (impuesto) => {
         ]
 
         if (!entidadesIDV.includes(entidadIDV)) {
-            const m = "En la llave entidadIDV, solo se espera reserva, servicio o global"
+            const m = "En la llave entidadIDV, solo se espera reserva, reserva, servicio o global"
             throw new Error(m)
 
         }

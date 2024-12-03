@@ -3,6 +3,7 @@ import { insertarImpuestoPorSimulacionUID } from "../../../../infraestructure/re
 import { obtenerImpuestoPorImpuestoUIDPorSimulacionUID_simple } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerImpuestoPorImpuestoUIDPorSimulacionUID_simple.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+import { validarImpuesto } from "../../../../shared/impuestos/validarImpuesto.mjs"
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
@@ -14,10 +15,6 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
-        validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
-            objeto: entrada.body,
-            numeroDeLLavesMaximo: 4
-        })
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.simulacionUID,
@@ -28,28 +25,12 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const tipoImpositivo = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoImpositivo,
-            nombreCampo: "El tipoImpositivo",
-            filtro: "cadenaConNumerosConDosDecimales",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "no"
-        })
-        const tipoValorIDV = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.tipoValorIDV,
-            nombreCampo: "El tipoValorIDV",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
-        const nombreImpuesto = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.nombreImpuesto,
-            nombreCampo: "El nombreImpuesto",
-            filtro: "strictoConEspacios",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-        })
+        const impuesto = entrada.body
+        const impuestoValidado = validarImpuesto(impuesto)
+        const entidadIDV = impuestoValidado.entidadIDV
+        const nombre = impuestoValidado.nombre
+        const tipoImpositivo = impuestoValidado.tipoImpositivo
+        const tipoValorIDV = impuestoValidado.tipoValorIDV
 
         const generarCadenaAleatoria = (longitud) => {
             const caracteres = '0123456789';
@@ -80,10 +61,10 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
         const codigoGenerado = await controlCodigoUnico();
         const estructura = {
             impuestoUID: codigoGenerado,
-            nombre: nombreImpuesto,
+            nombre: nombre,
             tipoImpositivo: tipoImpositivo,
             tipoValorIDV: tipoValorIDV,
-            entidadIDV: "reserva",
+            entidadIDV: entidadIDV,
             estadoIDV: "activado",
             impuestoTVI: null
         }

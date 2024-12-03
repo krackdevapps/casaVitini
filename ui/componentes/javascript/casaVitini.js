@@ -1086,13 +1086,7 @@ const casaVitini = {
                     })
 
                     video.addEventListener('progress', () => {
-                        if (video.buffered.length > 0) {
-                            const bufferedEnd = video.buffered.end(video.buffered.length - 1);
-                            const duration = video.duration;
-                            if (bufferedEnd >= duration * 0.01) {
-                                video.style.display = "block"
-                            }
-                        }
+                        video.style.display = "block"
                     });
 
                     document.querySelector("[componente=botonCambiaVistaEnSection]")
@@ -3429,10 +3423,7 @@ const casaVitini = {
                             }
                         }
 
-
                         if (reservaNoConfirmada) {
-                            console.log("reservaNoConfirmada", reservaNoConfirmada)
-                       
                             const respuestaServidor = await casaVitini.shell.servidor({
                                 zona: "componentes/precioReservaPublica",
                                 reserva: reservaNoConfirmada
@@ -4662,17 +4653,17 @@ const casaVitini = {
 
                             )
 
-            
+
 
                             const contenedorGlobal = document.createElement("summary")
                             contenedorGlobal.classList.add(
                                 "contenedorGlobal",
-                               "margin0",
-                               "borderRadius14",
-                               "padding6",
+                                "margin0",
+                                "borderRadius14",
+                                "padding6",
                             )
                             servicioUI.appendChild(contenedorGlobal)
-                            
+
 
                             const iconoDetails = document.createElement("div")
                             iconoDetails.style.display = "list-item"
@@ -6116,7 +6107,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const espacioBotones = document.querySelector("[componente=espacioBotones]")
                             const espacioSessiones = document.querySelector("[componente=espacioSessiones]")
                             const botonCerrarRestoSessiones = document.createElement("div")
-                            botonCerrarRestoSessiones.classList.add("miCasa_sessiones_botonV2")
+                            botonCerrarRestoSessiones.classList.add("botonV1")
                             botonCerrarRestoSessiones.textContent = "Cerrar el resto de sessiones menos esta"
                             botonCerrarRestoSessiones.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.sessionesActivas.cerrarTodasSessioneMenosUna)
                             espacioBotones.appendChild(botonCerrarRestoSessiones)
@@ -6145,7 +6136,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             sessionActual_UI = "(Session actual)"
                                         }
                                         const contenedorSession = document.createElement("div")
-                                        contenedorSession.classList.add("miCasa_sessiones_contenedorSession")
+                                        contenedorSession.classList.add("flexVertical", "gap6", "padding10", "backgroundWhite3", "borderRadius20")
                                         contenedorSession.setAttribute("componente", "contenedorSession")
                                         contenedorSession.setAttribute("sessionIDX", sessionIDX_detallesSession)
                                         contenedorSession.setAttribute("sessionActual", sessionIDX)
@@ -6187,7 +6178,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         contenedorCaducidad.appendChild(tiempoRestante_UI)
                                         contenedorSession.appendChild(contenedorCaducidad)
                                         const botonCerrarSession = document.createElement("div")
-                                        botonCerrarSession.classList.add("miCasa_sessiones_botonCerrarSession")
+                                        botonCerrarSession.classList.add("botonV1BlancoIzquierda")
                                         botonCerrarSession.addEventListener("click", casaVitini.ui.vistas.miCasa.cuenta.sessionesActivas.cerraSessionUnica)
                                         botonCerrarSession.textContent = "Cerrar session"
                                         contenedorSession.appendChild(botonCerrarSession)
@@ -7719,7 +7710,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const main = document.querySelector("main")
                     main.setAttribute("zonaCSS", "instalaciones")
                     document.body.style.backgroundColor = "#fdefd9"
-                    main.style.gap = "20px"
+                    // main.style.gap = "20px"
+                    main.style.paddingTop = "10px"
+
                     main.style.maxWidth = "100%"
                     const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
 
@@ -7729,11 +7722,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     marcoElasticoRelativo.style.paddingRight = "20px"
                     marcoElasticoRelativo.style.maxWidth = "2160px"
 
-                    const enlaceIrAContacto = document.querySelector("[enlace=irAContacto]")
-                    enlaceIrAContacto.classList.add("negrita")
-                    enlaceIrAContacto.setAttribute("href", "/contacto")
-                    enlaceIrAContacto.setAttribute("vista", "/contacto")
-                    enlaceIrAContacto.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                    // const enlaceIrAContacto = document.querySelector("[enlace=irAContacto]")
+                    // enlaceIrAContacto.classList.add("negrita")
+                    // enlaceIrAContacto.setAttribute("href", "/contacto")
+                    // enlaceIrAContacto.setAttribute("vista", "/contacto")
+                    // enlaceIrAContacto.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
 
                     const selectorContenedorTitulo = main.querySelector("[componente=tituloPegajoso]")
@@ -7757,7 +7750,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             selectorTextoTitulo.style.backdropFilter = "blur(50px)"
                             selectorTextoTitulo.style.webkitBackdropFilter = "blur(50px)"
                             selectorTextoTitulo.style.background = ""
-                            selectorTextoTitulo.textContent = "Ir a Apartamentos"
+                            selectorTextoTitulo.textContent = "Ver apartamentos"
                             selectorTextoTitulo.addEventListener("click", this.irAApartamentos)
                         } else {
                             selectorTextoTitulo.style.boxShadow = "0px 0px 0px 0px rgba(0, 0, 0, 0)"
@@ -7911,12 +7904,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             descripcion,
                             estadoInicial: "cargando"
                         })
-                        document.querySelector(`[instanciaUID="${instanciaUID}"] [contenedor=gridImagenes]`).appendChild(contenedor)
-                        this.obtenerImagen({
-                            instanciaUID_destino: contenedor.getAttribute("instanciaUID"),
-                            imagenUID,
-                            apartamentoIDV
-                        })
+
+                        const destino = document.querySelector(`[instanciaUID="${instanciaUID}"] [contenedor=gridImagenes]`)
+                        if (destino) {
+                            destino.appendChild(contenedor)
+                            this.obtenerImagen({
+                                instanciaUID_destino: contenedor.getAttribute("instanciaUID"),
+                                imagenUID,
+                                apartamentoIDV
+                            })
+                        }
                     })
 
 
@@ -8059,7 +8056,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 casaVitini.shell.controladoresUI.limpiarTodoElementoFlotante()
 
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor. Si es por una causa circunstancial de la red, reinténtalo y debería funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos, es probable que el problema esté en el servidor de Casa Vitini."
+                const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor. Si es por una causa circunstancial de la red, reinténtalo y debería funcionar. Comprueba que tienes acceso a la red. El estado de la experiencia se ha detenido, pero no se ha perdido. Los datos que tengas escritos en algún campo de texto o contenido pendiente de envío sigue tras esta pantalla de información."
                 const advertenciaInmersivaUI = document.createElement("div")
                 advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
                 advertenciaInmersivaUI.setAttribute("identificadorVisual", "errorConexion")
@@ -8069,14 +8066,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 const marcoElastico = document.createElement("div")
                 marcoElastico.classList.add("marcoElasticoError")
                 const info = document.createElement("div")
-                info.setAttribute("class", "advertenciaInfoFlujoPago")
+                info.classList.add("advertenciaInfoFlujoPago")
                 info.setAttribute("componente", "mensajeFlujoPasarela")
                 info.textContent = mensaje
                 marcoElastico.appendChild(info)
                 const boton = document.createElement("div")
-                boton.setAttribute("class", "botonV1")
+                boton.classList.add("botonV1")
                 boton.setAttribute("componente", "botonV1")
-                boton.textContent = "Volver"
+                boton.textContent = "Cerrar y volver"
                 boton.addEventListener("click", (e) => {
                     const rama = document.querySelector("main").getAttribute("rama")
                     const controladorZona = {
@@ -8225,28 +8222,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 contenidoAdvertenciaInmersiva.appendChild(boton)
                 document.body.appendChild(advertenciaInmersivaUI)
             },
-            errorConexion_noIvasivo: (advertencia) => {
-                document.body.style.overflow = 'hidden';
-                const advertenciaInmersivaUI = document.createElement("div")
-                advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
-                advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
-                advertenciaInmersivaUI.setAttribute("errorUI", "conexion")
-                const marcoElastico = document.createElement("div")
-                marcoElastico.classList.add("marcoElasticoError")
-                const info = document.createElement("div")
-                info.setAttribute("class", "errorInfo")
-                info.textContent = "No se puede establecer conexión con el servidor. Por favor, verifica que estás conectado y reinténtalo. Se ha producido un error en la red y no se ha podido comunicar con el servidor. Si es por una causa circunstancial de la red, reinténtalo y debería funcionar. Comprueba que tienes acceso a la red. Por ejemplo, comprueba si puedes acceder a google.com o hacer un ping a google.com o a otros sitios conocidos. Si tienes acceso a sitios conocidos, es probable que el problema esté en el servidor de Casa Vitini."
-                marcoElastico.appendChild(info)
-                const boton = document.createElement("div")
-                boton.setAttribute("class", "botonV1")
-                boton.textContent = "Volver"
-                boton.addEventListener("click", (e) => {
-                    e.target.closest("[errorUI=conexion]").remove()
-                })
-                marcoElastico.appendChild(boton)
-                advertenciaInmersivaUI.appendChild(marcoElastico)
-                document.body.appendChild(advertenciaInmersivaUI)
-            },
             pantallaDeCargaSuperPuesta: (metadatos) => {
                 try {
 
@@ -8257,7 +8232,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const iconoSpinner = metadatos.iconoSpinner ? metadatos.iconoSpinner : "si"
                     const textoBoton = metadatos.textoBoton ? metadatos.textoBoton : "Cancelar"
 
-
                     const advertenciaInmersivaUI = document.createElement("div")
                     advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
                     advertenciaInmersivaUI.setAttribute("identificadorVisual", identificadorVisual)
@@ -8265,7 +8239,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
                     advertenciaInmersivaUI.setAttribute("instanciaUID", instanciaUID)
                     const marcoElastico = document.createElement("div")
-                    marcoElastico.classList.add("marcoElasticoError")
+                    marcoElastico.classList.add("marcoElasticoCarga")
                     if (iconoSpinner === "si") {
                         const spinnerContainer = document.createElement('div');
                         spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
@@ -13995,6 +13969,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const porTotal = data.porTotal
                             const entidades = data.entidades
 
+
+
                             const ofertasPorCondicionArray = Object.keys(ofertasPorCondicion)
                             const ofertasPorAdministradorArray = Object.keys(ofertasPorAdministrador)
                             const contenedorFinanciero = document.querySelector(destino).querySelector("[contenedor=financiero]")
@@ -15744,7 +15720,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     "botonV3",
                                     "comportamientoBoton"
                                 )
-                                botonInsertarImpuestoAdHoc.textContent = "Crear e insertar impuesto ad hoc"
+                                botonInsertarImpuestoAdHoc.textContent = "Crear e insertar impuesto dedicado"
                                 botonInsertarImpuestoAdHoc.addEventListener("click", () => {
                                     casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.desgloseTotal.componentesUI.crearImpuestoAdHoc.ui({
                                         instanciaUID_contenedorFinanciero: instanciaUID
@@ -15782,7 +15758,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     "botonV3",
                                     "comportamientoBoton"
                                 )
-                                botonInsertarImpuestoAdHoc.textContent = "Crear e insertar impuesto ad hoc"
+                                botonInsertarImpuestoAdHoc.textContent = "Crear e insertar impuesto dedicado"
                                 botonInsertarImpuestoAdHoc.addEventListener("click", () => {
                                     casaVitini.administracion.simuladorDePrecios.detallesSimulacion.componentesUI.crearImpuestoAdHoc.ui({
                                         instanciaUID_contenedorFinanciero: instanciaUID
@@ -16842,7 +16818,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     estadoUI = "Desactivado"
                                 }
                                 const apartamentoDetallesUI = document.createElement("div")
-                                apartamentoDetallesUI.classList.add("crearOfertaApartamentoUI")
+                                apartamentoDetallesUI.classList.add("flexVertical", "flexAlineacionI", "botonV1BlancoIzquierda")
+                                apartamentoDetallesUI.style.alignItems = "flex-Start"
                                 apartamentoDetallesUI.setAttribute("apartamentoIDV", apartamentoIDV)
                                 apartamentoDetallesUI.setAttribute("apartamentoUI", apartamentoUI)
                                 apartamentoDetallesUI.setAttribute("apartamentoComoOpcion", apartamentoIDV)
@@ -16946,7 +16923,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             apartamentoSeleccionadoUI.appendChild(contenedorPersonalizado)
                         }
                         const botonEliminarApartamento = document.createElement("div")
-                        botonEliminarApartamento.classList.add("crearOfertaBoton")
+                        botonEliminarApartamento.classList.add("botonV1BlancoIzquierda")
+                        botonEliminarApartamento.style.borderRadius = "4px"
                         botonEliminarApartamento.textContent = "Eliminar apartamento"
                         botonEliminarApartamento.addEventListener("click", async (e) => {
 
@@ -16971,54 +16949,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         })
                         apartamentoSeleccionadoUI.appendChild(botonEliminarApartamento)
 
-                        // if (tipoDespliegue === "total") {
-                        //     const cantidadUI = document.createElement("input")
-                        //     cantidadUI.classList.add("crearOferDescuentoDedicadoCantidad")
-                        //     cantidadUI.setAttribute("campoApartamentoSeleccionado", "descuentoTotal")
-                        //     cantidadUI.placeholder = "Inserta la cantidad 1"
-                        //     cantidadUI.value = descuentoTotal
-                        //     apartamentoSeleccionadoUI.appendChild(cantidadUI)
 
-                        //     const tipoDescuento = document.createElement("select")
-                        //     tipoDescuento.classList.add("crearOfertaDescuentoDedicadoListaTipoDescuento")
-                        //     tipoDescuento.setAttribute("campoApartamentoSeleccionado", "tipoDescuento")
-                        //     const opcionPredeterminada = document.createElement("option")
-
-                        //     opcionPredeterminada.disabled = true;
-                        //     opcionPredeterminada.selected = true;
-                        //     opcionPredeterminada.text = "Selecciona el tipo de descuento"
-                        //     tipoDescuento.appendChild(opcionPredeterminada)
-                        //     const tipoDescuentoOpciones = [
-                        //         {
-                        //             nombreUI: "Selecciona el tipo de descuento",
-                        //         },
-                        //         {
-                        //             nombreUI: "Porcentaje",
-                        //             valorIDV: "porcentaje",
-                        //         },
-                        //         {
-                        //             nombreUI: "Cantidad fija",
-                        //             valorIDV: "cantidadFija",
-                        //         }
-                        //     ]
-                        //     tipoDescuentoOpciones.forEach((tipoDescuentoOpcion) => {
-                        //         const valorIDV = tipoDescuentoOpcion?.valorIDV || null
-                        //         const nombreUI = tipoDescuentoOpcion.nombreUI
-
-                        //         const opcion = document.createElement("option");
-                        //         if (seleccionadoInicial === valorIDV) {
-                        //             opcion.selected = true;
-                        //         } else {
-
-                        //         }
-                        //         opcion.value = valorIDV;
-                        //         opcion.text = nombreUI;
-                        //         opcion.setAttribute("tipoDescuentoIDV", valorIDV)
-                        //         tipoDescuento.appendChild(opcion);
-                        //     })
-                        //     apartamentoSeleccionadoUI.appendChild(tipoDescuento)
-
-                        // }
                         return apartamentoSeleccionadoUI
                     },
                     eliminarApartamentoUI: (data) => {
@@ -28986,6 +28917,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const origen = data.origen
 
                                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                        pantallaInmersiva.style.justifyContent = "center"
+
                                         const instanciaUID = pantallaInmersiva.getAttribute("instanciaUID")
                                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
@@ -29385,43 +29318,52 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const instanciaUID_eliminarImpuestoUI = pantallaInmersiva.getAttribute("instanciaUID")
                                         const contenedor = pantallaInmersiva.querySelector("[componente=contenedor]")
 
+
+
+                                        const opcionesEntidad = [
+                                            {
+                                                entidadIDV: "reserva",
+                                                entidadUI: "Reserva"
+                                            },
+                                            {
+                                                entidadIDV: "servicio",
+                                                entidadUI: "Servicios"
+                                            },
+                                            {
+                                                entidadIDV: "global",
+                                                entidadUI: "Global"
+                                            },
+
+                                        ]
+
                                         const titulo = constructor.querySelector("[componente=titulo]")
                                         titulo.textContent = `Crear impuesto dedicado solo para esta reserva`
                                         const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                                        mensaje.textContent = "Rellena el formulario para crear un impuesto solo para esta reserva.Este impuesto creado solo existirá en esta reserva.Si necesitas crear un impuesto que quieras usar para insertar en reservas, pero que no se aplique, crea un impuesto en la sección de impuesto y mantenlo desactivado."
+                                        mensaje.textContent = "Impuesto dedicado solo para esta reserva. Este impuesto solo existirá en esta reserva. Si necesitas crear un impuesto que quieras usar para insertar en reservas, pero que no se aplique, crea un impuesto en el hub de impuestos y mantenlo desactivado."
 
                                         const contenedorFormulario = document.createElement("div")
                                         contenedorFormulario.classList.add(
                                             "flexVertical",
-                                            "gap6"
+                                            "gap10"
                                         )
                                         contenedor.appendChild(contenedorFormulario)
 
 
                                         const campoCraerNuevoImpuesto = document.createElement("input")
-                                        campoCraerNuevoImpuesto.classList.add(
-                                            "padding10",
-                                            "borderRadius10"
-
-                                        )
-                                        campoCraerNuevoImpuesto.setAttribute("comNuevoImpuesto", "nombreImpuesto")
+                                        campoCraerNuevoImpuesto.classList.add("botonV1BlancoIzquierda_campo")
+                                        campoCraerNuevoImpuesto.setAttribute("comNuevoImpuesto", "nombre")
                                         campoCraerNuevoImpuesto.placeholder = "Escribo el nombre del nuevo impuesto"
                                         contenedorFormulario.appendChild(campoCraerNuevoImpuesto)
 
                                         const campoTipoImpositivo = document.createElement("input")
-                                        campoTipoImpositivo.classList.add(
-                                            "padding10",
-                                            "borderRadius10"
+                                        campoTipoImpositivo.classList.add("botonV1BlancoIzquierda_campo"
                                         )
                                         campoTipoImpositivo.setAttribute("comNuevoImpuesto", "tipoImpositivo")
                                         campoTipoImpositivo.placeholder = "0.00"
                                         contenedorFormulario.appendChild(campoTipoImpositivo)
 
                                         const contenedorOpciones = document.createElement("select")
-                                        contenedorOpciones.classList.add(
-                                            "padding10",
-                                            "borderRadius10",
-                                            "selectorLista"
+                                        contenedorOpciones.classList.add("botonV1BlancoIzquierda_campo"
                                         )
                                         contenedorOpciones.setAttribute("comNuevoImpuesto", "tipoValor")
                                         const tipoValorLista = [
@@ -29439,6 +29381,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             },
 
                                         ]
+
                                         tipoValorLista.forEach((contenedorTipoValor) => {
                                             const tipoValorIDV = contenedorTipoValor.tipoValorIDV
                                             const tipoValorUI = contenedorTipoValor.tipoValorUI
@@ -29456,6 +29399,32 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         contenedorFormulario.appendChild(contenedorOpciones)
 
 
+
+                                        const selectorTipoEntidad = document.createElement("select")
+                                        contenedorOpciones.setAttribute("comNuevoImpuesto", "entidadIDV")
+
+                                        selectorTipoEntidad.classList.add("botonV1BlancoIzquierda_campo")
+                                        contenedorFormulario.appendChild(selectorTipoEntidad)
+
+
+                                        const tiopEntidades = document.createElement("option")
+                                        tiopEntidades.selected = "true"
+                                        tiopEntidades.disabled = "true"
+                                        tiopEntidades.value = ""
+                                        tiopEntidades.text = "Selecciona el tipo de entidad"
+                                        selectorTipoEntidad.appendChild(tiopEntidades)
+
+                                        opcionesEntidad.forEach((entidad) => {
+                                            const entidadIDV = entidad.entidadIDV
+                                            const entidadUI = entidad.entidadUI
+                                            const opcion = document.createElement("option");
+                                            opcion.value = entidadIDV;
+                                            opcion.text = entidadUI;
+                                            opcion.setAttribute("opcion", entidadIDV)
+                                            selectorTipoEntidad.add(opcion);
+                                        })
+
+
                                         const botonAceptar = constructor.querySelector("[boton=aceptar]")
                                         botonAceptar.textContent = "Crear impuesto dedicado para esta reserva"
                                         botonAceptar.addEventListener("click", () => {
@@ -29463,9 +29432,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                                 reservaUID,
                                                 instanciaUID_contenedorFinanciero,
                                                 instanciaUID_eliminarImpuestoUI,
-                                                nombreImpuesto: campoCraerNuevoImpuesto.value,
+                                                nombre: campoCraerNuevoImpuesto.value,
                                                 tipoImpositivo: campoTipoImpositivo.value,
-                                                tipoValorIDV: contenedorOpciones.value
+                                                tipoValorIDV: contenedorOpciones.value,
+                                                entidadIDV: selectorTipoEntidad.value
 
                                             })
                                         })
@@ -29477,9 +29447,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     },
                                     confirmarCrearImpuestoAdHoc: async function (data) {
                                         const reservaUID = data.reservaUID
-                                        const nombreImpuesto = data.nombreImpuesto
+                                        const nombre = data.nombre
                                         const tipoImpositivo = data.tipoImpositivo
                                         const tipoValorIDV = data.tipoValorIDV
+                                        const entidadIDV = data.entidadIDV
+
 
                                         const instanciaUID_eliminarImpuestoUI = data.instanciaUID_eliminarImpuestoUI
                                         const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
@@ -29494,9 +29466,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const transaccion = {
                                             zona: "administracion/reservas/detallesReserva/impuestos/insertarImpuestoDedicadoEnReserva",
                                             reservaUID,
-                                            nombreImpuesto,
+                                            nombre,
                                             tipoImpositivo,
                                             tipoValorIDV,
+                                            entidadIDV
                                         }
 
 
@@ -29601,6 +29574,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             const reservaUID = document.querySelector("main").querySelector("[reservaUID]").getAttribute("reservaUID")
 
                                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                            pantallaInmersiva.style.justifyContent = "center"
+
                                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                             const instanciaUID_reconstrucion = pantallaInmersiva.getAttribute("instanciaUID")
 
@@ -29685,7 +29660,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                             const campo = document.createElement("input")
                                             campo.placeholder = "Escribe la palabra reconstruir"
                                             campo.classList.add(
-                                                "botonV1BlancoIzquierda_noSeleccionable"
+                                                "botonV1BlancoIzquierda_campo"
                                             )
                                             contenedor.appendChild(campo)
                                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
@@ -31651,7 +31626,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     buscadorPorPalaba.setAttribute("origenBusqueda", "porTerminos")
                     buscadorPorPalaba.setAttribute("step", "any")
                     buscadorPorPalaba.setAttribute("placeholder", "Escribe para buscar reservas")
-                    buscadorPorPalaba.addEventListener("input", casaVitini.administracion.reservas.buscador.buscadorReservas)
+                    buscadorPorPalaba.addEventListener("input", (e) => { casaVitini.administracion.reservas.buscador.buscadorReservas(e) })
                     espacioReservas.appendChild(buscadorPorPalaba)
                     let buscadorReservasPorFecha = document.createElement("div")
                     buscadorReservasPorFecha.classList.add("adminsitracionReservasBuscador")
@@ -31761,7 +31736,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     botonMostrarReservas.setAttribute("origenBusqueda", "porFecha")
                     botonMostrarReservas.addEventListener("click", casaVitini.administracion.reservas.buscador.mostrarReservasPorRango)
                     buscadorUI.appendChild(bloqueContenedor)
-                    botonMostrarReservas.textContent = "Mostrar reservas"
+                    botonMostrarReservas.textContent = "Buscar"
                     buscadorReservasPorFecha.appendChild(botonMostrarReservas)
                     espacioReservas.appendChild(buscadorUI)
 
@@ -32092,6 +32067,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const selectorEspacio = document.querySelector("[componente=espacioReservas]")
+                    if (!selectorEspacio) {
+                        return
+                    }
                     selectorEspacio.setAttribute("instanciaBusqueda", instanciaUID)
                     delete transaccion.instanciaUID
                     const origen = transaccion.origen
@@ -32374,7 +32352,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                     casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion)
                 },
-                buscadorReservas: (reserva) => {
+                buscadorReservas: function (reserva) {
 
                     const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
                     const buscadorUI = document.querySelector("[componente=navegacionZonaAdministracion]")
@@ -32382,14 +32360,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     document.querySelector("[componente=resultadosSinReservas]")?.remove()
                     document.querySelector("[gridUID=gridReservas")?.remove()
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
-                    document.querySelector("[componente=estadoBusqueda]")?.remove()
                     espacioReservas.innerHTML = null
 
-                    const estadoBusquedaUI = document.createElement("div")
-                    estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
-                    estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
-                    estadoBusquedaUI.textContent = "Buscando..."
-                    buscadorUI.parentNode.insertBefore(estadoBusquedaUI, buscadorUI.nextSibling);
+                    const estadoBusqueda_r = document.querySelector("[componente=estadoBusqueda]")
+                    if (!estadoBusqueda_r) {
+                        this.constructorMarcoInfo()
+                    }
+                    const estadoBusqueda_s = document.querySelector("[componente=estadoBusqueda]")
+                    estadoBusqueda_s.textContent = "Buscando reservas..."
+
+
 
                     casaVitini.administracion.reservas.buscador.limpiarFormularioBusqueda()
                     const terminoBusqueda = reserva.target.value
@@ -32418,6 +32398,19 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         }
                         casaVitini.administracion.reservas.buscador.mostrarReservasResueltas(peticion);
                     }, 1500);
+                },
+                constructorMarcoInfo: () => {
+                    const campo = document.querySelector("[componente=navegacionZonaAdministracion]")
+
+                    const estadoBusquedaUI = document.createElement("div")
+                    estadoBusquedaUI.classList.add("botonV1BlancoIzquierda_noSeleccionable")
+                    estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
+                    estadoBusquedaUI.textContent = "Buscando reservas..."
+
+                    const comRenderizado = document.querySelector("[componente=estadoBusqueda]")
+                    if (!comRenderizado) {
+                        campo.parentNode.insertBefore(estadoBusquedaUI, campo.nextSibling);
+                    }
                 },
                 limpiarFormularioBusqueda: () => {
                     const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
@@ -33633,7 +33626,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-                        console.log("respuestaServidor", respuestaServidor)
+
                         const configuracionesAlojamiento = respuestaServidor.ok
                         configuracionesAlojamiento.forEach((conf) => {
                             const apartamentoIDV = conf.apartamentoIDV
@@ -33718,10 +33711,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
-                            console.log("r", respuestaServidor)
+
                             const complementos = respuestaServidor.complementosPorApartamentoIDV
                             const apartamentoUI = respuestaServidor.apartamentoUI
-                            
+
                             main.querySelector("[data=titulo]").textContent = `Complementos de alojamiento de ${apartamentoUI}`
                             complementos.forEach((com) => {
                                 const tarjetaUI = this.tarjetaComplementoUI(com)
@@ -33779,7 +33772,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     }
                 },
                 nuevo: {
-                    arranque:async  function (apartamentoIDV) {
+                    arranque: async function (apartamentoIDV) {
                         const main = document.querySelector("main")
                         const instanciaUID = main.getAttribute("instanciaUID")
                         const espacio = main.querySelector("[componente=espacio]")
@@ -33796,8 +33789,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 descripcion: respuestaServidor.error
                             })
                         }
-                        if (respuestaServidor?.ok) { 
-                            console.log("respuestaSer", respuestaServidor)
+                        if (respuestaServidor?.ok) {
+
                             const apartamentoUI = respuestaServidor.apartamentoUI
                             main.querySelector("[data=titulo]").textContent = `Nuevo complemento de alojamiento de ${apartamentoUI}`
 
@@ -33811,7 +33804,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         }
 
 
-                
+
                     },
                     crear: async function () {
 
@@ -34327,7 +34320,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     contenedorBotones.classList.add("contenedorBotonesGlobales")
                     contenedorBotones.setAttribute("componente", "contenedorBotonesServicios")
                     const boton = document.createElement("a")
-                    boton.classList.add("botonNuevo")
+                    boton.classList.add("botonV1")
                     boton.textContent = "Crear servicio"
                     boton.setAttribute("href", "/administracion/servicios/nuevo")
                     boton.setAttribute("vista", "/administracion/servicios/nuevo")
@@ -36017,11 +36010,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         let bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                         let tituloConfiguracion = document.createElement("div")
-                        tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                        tituloConfiguracion.classList.add("negrita", "paddingLateral14")
                         tituloConfiguracion.textContent = "Zona horaria de Casa Vitini"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         let descripcionConfiguracion = document.createElement("div")
-                        descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                        descripcionConfiguracion.classList.add("paddingLateral14")
                         descripcionConfiguracion.textContent = "La zona horaria local se aplica sobre el reloj UTC para que pueda ver la hora y las fechas en la zona horaria.Por ejemplo, en el apartado de Situación, en la renderización de los calendarios y etc.La zona horaria debe de configurarse con la misma zona horaria de las instalaciones físicas de pernoctacion de Casa Vitini.Entonces, el sistema de Casa Vitini puede implantarse en cualquier ordenador sin importar su reloj en zona horaria local.Es fundamental que la zona horaria del sistema sea la misma que la zona horaria de las instalaciones físicas de pernoctación de Casa Vitini.El motivo de esto es que los pernoctante puedan obtener calendarios locales a la zona horaria de Casa Vitini y realizar las reservas en zona horaria local de Casa Vitini."
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         contenedorConfiguracionGlobal.appendChild(bloqueConfiguracion)
@@ -36029,11 +36022,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                         tituloConfiguracion = document.createElement("div")
-                        tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                        tituloConfiguracion.classList.add("negrita", "paddingLateral14")
                         tituloConfiguracion.textContent = "Hora de entrada"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         descripcionConfiguracion = document.createElement("div")
-                        descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                        descripcionConfiguracion.classList.add("paddingLateral14")
                         descripcionConfiguracion.textContent = "Hora de entrada en zona horaria.Esta es la hora de entrada en la zona horaria seleccionada.Sirve para determinar la hora de entrada de las reservas en el día de entrada"
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         let valorConfiguracion = document.createElement("input")
@@ -36049,11 +36042,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                         tituloConfiguracion = document.createElement("div")
-                        tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                        tituloConfiguracion.classList.add("negrita", "paddingLateral14")
                         tituloConfiguracion.textContent = "Hora de salida"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         descripcionConfiguracion = document.createElement("div")
-                        descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                        descripcionConfiguracion.classList.add("paddingLateral14")
                         descripcionConfiguracion.textContent = "Hora de salida en zona horaria.Esta es la hora de salida en la zona horaria seleccionada.Sirve para determinar la hora de salida de las reservas en el día de salida "
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         valorConfiguracion = document.createElement("input")
@@ -36314,7 +36307,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         pTituloContenedor.classList.add("tituloContenedor");
                         pTituloContenedor.textContent = "Calendarios sincronizados con Airbnb";
                         const aBotonMas = document.createElement("a");
-                        aBotonMas.classList.add("botonMas");
+                        aBotonMas.classList.add("botonV1");
                         aBotonMas.setAttribute("vista", "/administracion/configuracion/calendarios_sincronizados/crear_calendario");
                         aBotonMas.setAttribute("href", "/administracion/configuracion/calendarios_sincronizados/crear_calendario");
                         aBotonMas.setAttribute("componente", "botonGlobal");
@@ -36426,15 +36419,15 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         const contenedorElimianr = document.createElement("div")
                                         contenedorElimianr.classList.add("contenedorEliminar")
                                         const titulo = document.createElement("div")
-                                        titulo.classList.add("tituloInmersivo")
+                                        titulo.classList.add("tituloGris", "textoCentrado", "padding6")
                                         titulo.textContent = `Eliminar el calendario sincronizado de Airbnb`
                                         contenedorElimianr.appendChild(titulo)
                                         const mensaje = document.createElement("div")
-                                        mensaje.classList.add("mensaje")
+                                        mensaje.classList.add("textoCentrado", "padding6")
                                         mensaje.textContent = `¿Estas de acuerdo en eliminar el calendario con nombre ${nombre} enlazado al ${apartamentoUI}?`
                                         contenedorElimianr.appendChild(mensaje)
                                         const botonEliminar = document.createElement("div")
-                                        botonEliminar.classList.add("boton")
+                                        botonEliminar.classList.add("botonV1BlancoIzquierda")
                                         botonEliminar.textContent = "Eliminar calendario definitivamente"
                                         botonEliminar.addEventListener("click", async () => {
                                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -36466,7 +36459,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                         })
                                         contenedorElimianr.appendChild(botonEliminar)
                                         const botonCancelar = document.createElement("div")
-                                        botonCancelar.classList.add("boton")
+                                        botonCancelar.classList.add("botonV1")
                                         botonCancelar.textContent = "Cancelar y volver a la lista de calendarios"
                                         botonCancelar.addEventListener("click", () => {
                                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -36816,17 +36809,17 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         const contenedorConfiguracionGlobal = document.createElement("div")
                         contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                         const informacion = document.createElement("div")
-                        informacion.classList.add("administracion_configuracion_informacion")
+                        informacion.classList.add("padding14")
                         informacion.textContent = "Determina los límites de las reservas que pre confirman los clientes desde Casa Vitini. A diferencia de las reservas que se confirman en el panel de administración. Las reservas que preconfirman los clientes tienen unos límites. Como unos días de antelación, número de días máximos de duración o un límite futuro para aceptar reservas hasta un punto en el futuro."
                         contenedorConfiguracionGlobal.appendChild(informacion)
                         let bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                         let tituloConfiguracion = document.createElement("div")
-                        tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                        tituloConfiguracion.classList.add("negrita", "padding14")
                         tituloConfiguracion.textContent = "Dias de antelación"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         let descripcionConfiguracion = document.createElement("div")
-                        descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                        descripcionConfiguracion.classList.add("padding14")
                         descripcionConfiguracion.textContent = "Determina el número de días de antelación escribiendo el número de días de antelación.Si, por ejemplo, escribes un mínimo de diez días de antelación, se aceptarán reservas a partir del día número 11 desde el día presente. El día presente cuenta como día 0. Si, por ejemplo quisieras aceptar reservas para el mismo día, entonces establece los días de antelación en 0"
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         let valorConfiguracion = document.createElement("input")
@@ -36844,11 +36837,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                         tituloConfiguracion = document.createElement("div")
-                        tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                        tituloConfiguracion.classList.add("negrita", "padding14")
                         tituloConfiguracion.textContent = "Duración máxima de la reserva"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         descripcionConfiguracion = document.createElement("div")
-                        descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                        descripcionConfiguracion.classList.add("padding14")
                         descripcionConfiguracion.textContent = "Determina el numero maximo de días con noche que puede tener una reserva "
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         valorConfiguracion = document.createElement("input")
@@ -36863,11 +36856,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                         tituloConfiguracion = document.createElement("div")
-                        tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                        tituloConfiguracion.classList.add("negrita", "padding14")
                         tituloConfiguracion.textContent = "Límite futuro para aceptar reservas"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         descripcionConfiguracion = document.createElement("div")
-                        descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                        descripcionConfiguracion.classList.add("padding14")
                         descripcionConfiguracion.textContent = "Determina el número máximo de días en lo que se está dispuesto a aceptar una reserva. Por ejemplo, si no aceptas reservas más allá de un año."
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         valorConfiguracion = document.createElement("input")
@@ -36962,12 +36955,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             "padding6",
                             "gap6",
                             "backgroundGrey1",
-                            "borderRadius12"
+                            "borderRadius20"
                         )
 
                         const descripcion = document.createElement("p")
                         descripcion.classList.add(
-                            "padding6"
+                            "padding14"
                         )
                         descripcion.textContent = `Cuando seleccionas 0 días de antelación, permites aceptar reservas el mismo día presente. Es necesario determinar una hora máxima para aceptar reservas el mismo día. Por ejemplo, puedes no aceptar reservas más tarde de las 11 de la mañana. Escribe la hora en formato 24 H y con los minutos. Por ejemplo, si la hora máxima para hacer una reserva en el mismo día es a las once en punto de la mañana, entonces escribe 11:00. Si es a las nueve de la mañana en punto, entonces escribe 09:00. Siempre escribe los dos dígitos tanto para la hora como para los minutos. Este campo solo es obligatorio rellenarlo cuando los días de antelación son 0, si no puedes dejarlo en blanco.`
                         contenedor.appendChild(descripcion)
@@ -37016,17 +37009,17 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         const contenedorConfiguracionGlobal = document.createElement("div")
                         contenedorConfiguracionGlobal.classList.add("administracion_configuracion_contenedorConfiguracion")
                         const informacion = document.createElement("div")
-                        informacion.classList.add("administracion_configuracion_informacion")
+                        informacion.classList.add("padding14")
                         informacion.textContent = "Los interruptores permiten activar o desactivar funciones específicas. Como, por ejemplo, permitir reservas públicas o no.Puede activar y desactivar los interruptores y tener un control más modular del sistema."
                         contenedorConfiguracionGlobal.appendChild(informacion)
                         bloqueConfiguracion = document.createElement("div")
                         bloqueConfiguracion.classList.add("administracion_configuracion_bloqueConfiguracion")
                         tituloConfiguracion = document.createElement("div")
-                        tituloConfiguracion.classList.add("administracion_configuracion_tituloConfiguracion")
+                        tituloConfiguracion.classList.add("negrita", "paddingLateral14")
                         tituloConfiguracion.textContent = "Permitir reservas públicas"
                         bloqueConfiguracion.appendChild(tituloConfiguracion)
                         descripcionConfiguracion = document.createElement("div")
-                        descripcionConfiguracion.classList.add("administracion_configuracion_descripcion")
+                        descripcionConfiguracion.classList.add("paddingLateral14")
                         descripcionConfiguracion.textContent = "Este interruptor determina si se deben permitir reservas públicas ahora mismo. Si el interruptor está activado, personas en todo el mundo podrán pre confirmar reservas desde Casa Vitini."
                         bloqueConfiguracion.appendChild(descripcionConfiguracion)
                         const io_aceptarReservasPublicas_UI = document.createElement("select")
@@ -37219,7 +37212,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         contenedorBotones.classList.add("contenedorBotones")
 
                         const botonNuevoMensaje = document.createElement("a")
-                        botonNuevoMensaje.classList.add("botonNuevoMensaje")
+                        botonNuevoMensaje.classList.add("botonV1")
                         botonNuevoMensaje.textContent = "Nuevo mensaje en portada"
                         botonNuevoMensaje.setAttribute("href", "/administracion/configuracion/mensajes_en_portada/nuevo")
                         botonNuevoMensaje.setAttribute("vista", "/administracion/configuracion/mensajes_en_portada/nuevo")
@@ -38090,10 +38083,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[contenedor=filtrosOrden]")?.remove()
 
-                    const infoBuscandoRenderizado = document.querySelector("[componente=estadoBusqueda]")
-                    if (!infoBuscandoRenderizado) {
+
+                    const estadoBusqueda_r = document.querySelector("[componente=estadoBusqueda]")
+                    if (!estadoBusqueda_r) {
                         this.constructorMarcoInfo()
                     }
+                    const estadoBusqueda_s = document.querySelector("[componente=estadoBusqueda]")
+                    estadoBusqueda_s.textContent = "Buscando clientes..."
 
 
 
@@ -38136,6 +38132,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 mostrarClientesResueltos: async function (transaccion) {
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const selectorEspacio = document.querySelector("[componente=espacioComportamiento]")
+                    if (!selectorEspacio) {
+                        return
+                    }
                     selectorEspacio.setAttribute("instanciaBusqueda", instanciaUID)
                     delete transaccion.instanciaUID
                     const origen = transaccion.origen
@@ -38317,10 +38316,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             deatallesClienteUI.classList.add("detallesClienteUIBotones")
 
                             let boton = document.createElement("a")
-                            boton.classList.add(
-                                "detallesClienteBoton",
-                                "areaSinDecoracionPredeterminada"
-                            )
+                            boton.classList.add("botonV1BlancoIzquierda")
                             boton.setAttribute("boton", "editar")
                             boton.textContent = "Editar datos"
                             boton.href = `/administracion/clientes/cliente:${clienteUID}/editar`
@@ -41986,40 +41982,49 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const titulo = constructor.querySelector("[componente=titulo]")
                             titulo.textContent = `Crear impuesto dedicado solo para esta reserva`
                             const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                            mensaje.textContent = "Rellena el formulario para crear un impuesto solo para esta reserva.Este impuesto creado solo existirá en esta reserva.Si necesitas crear un impuesto que quieras usar para insertar en reservas, pero que no se aplique, crea un impuesto en la sección de impuesto y mantenlo desactivado."
+                            mensaje.textContent = "Impuesto dedicado solo para esta reserva. Este impuesto solo existirá en esta reserva. Si necesitas crear un impuesto que quieras usar para insertar en reservas, pero que no se aplique, crea un impuesto en el hub de impuestos y mantenlo desactivado."
+
+                            const opcionesEntidad = [
+                                {
+                                    entidadIDV: "reserva",
+                                    entidadUI: "Reserva"
+                                },
+                                {
+                                    entidadIDV: "servicio",
+                                    entidadUI: "Servicios"
+                                },
+                                {
+                                    entidadIDV: "global",
+                                    entidadUI: "Global"
+                                },
+
+                            ]
 
                             const contenedorFormulario = document.createElement("div")
                             contenedorFormulario.classList.add(
                                 "flexVertical",
-                                "gap6"
+                                "gap10"
                             )
                             contenedor.appendChild(contenedorFormulario)
 
 
                             const campoCraerNuevoImpuesto = document.createElement("input")
-                            campoCraerNuevoImpuesto.classList.add(
-                                "padding10",
-                                "borderRadius10"
+                            campoCraerNuevoImpuesto.classList.add(campoCraerNuevoImpuesto.classList.add("botonV1BlancoIzquierda_campo")
 
                             )
-                            campoCraerNuevoImpuesto.setAttribute("comNuevoImpuesto", "nombreImpuesto")
+                            campoCraerNuevoImpuesto.setAttribute("comNuevoImpuesto", "nombre")
                             campoCraerNuevoImpuesto.placeholder = "Escribo el nombre del nuevo impuesto"
                             contenedorFormulario.appendChild(campoCraerNuevoImpuesto)
 
                             const campoTipoImpositivo = document.createElement("input")
-                            campoTipoImpositivo.classList.add(
-                                "padding10",
-                                "borderRadius10"
+                            campoTipoImpositivo.classList.add("botonV1BlancoIzquierda_campo"
                             )
                             campoTipoImpositivo.setAttribute("comNuevoImpuesto", "tipoImpositivo")
                             campoTipoImpositivo.placeholder = "0.00"
                             contenedorFormulario.appendChild(campoTipoImpositivo)
 
                             const contenedorOpciones = document.createElement("select")
-                            contenedorOpciones.classList.add(
-                                "padding10",
-                                "borderRadius10",
-                                "selectorLista"
+                            contenedorOpciones.classList.add("botonV1BlancoIzquierda_campo"
                             )
                             contenedorOpciones.setAttribute("comNuevoImpuesto", "tipoValor")
                             const tipoValorLista = [
@@ -42054,6 +42059,33 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             contenedorFormulario.appendChild(contenedorOpciones)
 
 
+                            const selectorTipoEntidad = document.createElement("select")
+                            contenedorOpciones.setAttribute("comNuevoImpuesto", "entidadIDV")
+
+                            selectorTipoEntidad.classList.add("botonV1BlancoIzquierda_campo")
+                            contenedorFormulario.appendChild(selectorTipoEntidad)
+
+
+                            const tiopEntidades = document.createElement("option")
+                            tiopEntidades.selected = "true"
+                            tiopEntidades.disabled = "true"
+                            tiopEntidades.value = ""
+                            tiopEntidades.text = "Selecciona el tipo de entidad"
+                            selectorTipoEntidad.appendChild(tiopEntidades)
+
+                            opcionesEntidad.forEach((entidad) => {
+                                const entidadIDV = entidad.entidadIDV
+                                const entidadUI = entidad.entidadUI
+                                const opcion = document.createElement("option");
+                                opcion.value = entidadIDV;
+                                opcion.text = entidadUI;
+                                opcion.setAttribute("opcion", entidadIDV)
+                                selectorTipoEntidad.add(opcion);
+                            })
+
+
+
+
                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
                             botonAceptar.textContent = "Crear impuesto dedicado para esta reserva"
                             botonAceptar.addEventListener("click", () => {
@@ -42061,9 +42093,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     simulacionUID,
                                     instanciaUID_contenedorFinanciero,
                                     instanciaUID_eliminarImpuestoUI,
-                                    nombreImpuesto: campoCraerNuevoImpuesto.value,
+                                    nombre: campoCraerNuevoImpuesto.value,
                                     tipoImpositivo: campoTipoImpositivo.value,
-                                    tipoValorIDV: contenedorOpciones.value
+                                    tipoValorIDV: contenedorOpciones.value,
+                                    entidadIDV: selectorTipoEntidad.value
 
                                 })
                             })
@@ -42075,9 +42108,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         },
                         confirmarCrearImpuestoAdHoc: async function (data) {
                             const simulacionUID = data.simulacionUID
-                            const nombreImpuesto = data.nombreImpuesto
+                            const nombre = data.nombre
                             const tipoImpositivo = data.tipoImpositivo
                             const tipoValorIDV = data.tipoValorIDV
+                            const entidadIDV = data.entidadIDV
 
                             const instanciaUID_eliminarImpuestoUI = data.instanciaUID_eliminarImpuestoUI
                             const instanciaUID_contenedorFinanciero = data.instanciaUID_contenedorFinanciero
@@ -42086,15 +42120,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                             const datosPantallaSuperpuesta = {
                                 instanciaUID: instanciaUID_pantallaDeCargaSuperPuesta,
-                                mensaje: "Creando impuesto dedicado e insertando en la reserva..."
+                                mensaje: "Creando impuesto dedicado e insertandolo en la reserva..."
                             }
                             casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
                             const transaccion = {
                                 zona: "administracion/simuladorDePrecios/impuestos/insertarImpuestoDedicadoEnSimulacion",
                                 simulacionUID,
-                                nombreImpuesto,
+                                nombre,
                                 tipoImpositivo,
                                 tipoValorIDV,
+                                entidadIDV
                             }
 
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
@@ -42194,6 +42229,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 const simulacionUID = document.querySelector("main").querySelector("[simulacionUID]").getAttribute("simulacionUID")
 
                                 const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                pantallaInmersiva.style.justifyContent = "center"
+
                                 const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                 const instanciaUID_reconstrucion = pantallaInmersiva.getAttribute("instanciaUID")
 
@@ -42259,6 +42296,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 const simulacionUID = document.querySelector("main").querySelector("[simulacionUID]").getAttribute("simulacionUID")
 
                                 const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                                pantallaInmersiva.style.justifyContent = "center"
+
+                                pantallaInmersiva.style.justifyContent = "center"
+
                                 const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
                                 const instanciaUID_reconstrucion = pantallaInmersiva.getAttribute("instanciaUID")
                                 const contenedor = pantallaInmersiva.querySelector("[componente=contenedor]")
@@ -42276,8 +42317,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 const campo = document.createElement("input")
                                 campo.placeholder = "Escribe la palabra reconstruir"
                                 campo.classList.add(
-                                    "borderRadius10",
-                                    "padding10"
+                                    "botonV1BlancoIzquierda_campo"
                                 )
                                 contenedor.appendChild(campo)
                                 const botonAceptar = constructor.querySelector("[boton=aceptar]")
@@ -45263,25 +45303,25 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                     const selectorEspacioImpuestos = document.querySelector("[componente=espacioImpuestos]")
                     const contenedorNuevoImpuesto = document.createElement("div")
-                    contenedorNuevoImpuesto.classList.add("contenedorNuevoImpuesto")
+                    contenedorNuevoImpuesto.classList.add("flexVertical", "gap10")
                     const bloqueBloqueoApartamentos = document.createElement("div")
-                    bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
+                    bloqueBloqueoApartamentos.classList.add("flexVertical", "gap10")
                     const tituloBloquoApartamentos = document.createElement("div")
-                    tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
+                    tituloBloquoApartamentos.classList.add("textoCentrado", "padding10")
                     tituloBloquoApartamentos.textContent = "Para crear un nuevo impuesto, rellene los datos de este, establece un nombre, una cantidad y seleccione las opciones restantes."
                     bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
                     let campoCraerNuevoImpuesto = document.createElement("input")
-                    campoCraerNuevoImpuesto.classList.add("preciosEImpuestosbotonOpcionCrearNuevoImpuesto")
+                    campoCraerNuevoImpuesto.classList.add("botonV1BlancoIzquierda_campo")
                     campoCraerNuevoImpuesto.setAttribute("comNuevoImpuesto", "nombre")
                     campoCraerNuevoImpuesto.placeholder = "Escribo el nombre del nuevo impuesto"
                     bloqueBloqueoApartamentos.appendChild(campoCraerNuevoImpuesto)
                     campoCraerNuevoImpuesto = document.createElement("input")
-                    campoCraerNuevoImpuesto.classList.add("preciosEImpuestosbotonOpcionCrearNuevoImpuesto")
+                    campoCraerNuevoImpuesto.classList.add("botonV1BlancoIzquierda_campo")
                     campoCraerNuevoImpuesto.setAttribute("comNuevoImpuesto", "tipoImpositivo")
                     campoCraerNuevoImpuesto.placeholder = "0.00"
                     bloqueBloqueoApartamentos.appendChild(campoCraerNuevoImpuesto)
                     let contenedorOpciones = document.createElement("select")
-                    contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
+                    contenedorOpciones.classList.add("botonV1BlancoIzquierda_campo")
                     contenedorOpciones.setAttribute("comNuevoImpuesto", "tipoValorIDV")
 
                     const opTipoValor = document.createElement("option")
@@ -45302,7 +45342,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     })
                     bloqueBloqueoApartamentos.appendChild(contenedorOpciones)
                     contenedorOpciones = document.createElement("select")
-                    contenedorOpciones.classList.add("detalleImpuestoSelectorLista")
+                    contenedorOpciones.classList.add("botonV1BlancoIzquierda_campo")
                     contenedorOpciones.setAttribute("comNuevoImpuesto", "entidadIDV")
 
 
@@ -45326,22 +45366,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                     contenedorNuevoImpuesto.appendChild(bloqueBloqueoApartamentos)
                     const bloqueBotones = document.createElement("div")
-                    bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
+                    bloqueBotones.classList.add("flexVertical")
                     const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("detallesReservaCancelarBoton")
+                    botonCancelar.classList.add("botonV1")
                     botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
                     botonCancelar.textContent = "Crear nuevo impuesto"
                     botonCancelar.addEventListener("click", casaVitini.administracion.impuestos.crearImpuesto.confirmarCrearImpuesto)
                     bloqueBotones.appendChild(botonCancelar)
-                    const botonCancelarProcesoCancelacion = document.createElement("div")
-                    botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                    botonCancelarProcesoCancelacion.textContent = "Cancelar"
-                    botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                        const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
-                        selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
-                            advertenciaInmersiva.remove()
-                        })
-                    })
 
                     contenedorNuevoImpuesto.appendChild(bloqueBotones)
                     selectorEspacioImpuestos.appendChild(contenedorNuevoImpuesto)
@@ -45690,11 +45721,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 crearOfertaConfirmar: async () => {
 
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                    const metadatosPantallaCarga = {
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
                         mensaje: "Creando oferta...",
                         instanciaUID: instanciaUID,
-                    }
-                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
+                    })
                     const transaccion = casaVitini.administracion.gestionDeOfertas.utilidades.constructorObjeto()
                     transaccion.zona = "administracion/ofertas/crearOferta"
                     transaccion.entidadIDV = "reserva"
@@ -45702,10 +45732,14 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                     const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+
                     if (!pantallaDeCargaRenderizada) {
                         return
                     }
-                    if (respuestaServidor?.error) {
+                    pantallaDeCargaRenderizada?.remove()
+                    if (respuestaServidor.ofertasConElMismoCodigo) {
+                        return casaVitini.administracion.gestionDeOfertas.componenteUI.infoCodigosRepeditos(respuestaServidor)
+                    } else if (respuestaServidor?.error) {
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
@@ -46236,24 +46270,24 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const ofertaUID = main.querySelector("[componente=espacioOfertas]").getAttribute("ofertaUID")
 
                     const mensaje = "Actualizando oferta..."
-                    const datosPantallaSuperpuesta = {
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
                         instanciaUID: instanciaUID_pantallaEspera,
                         mensaje: mensaje
-                    }
-                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+                    })
                     const oferta = casaVitini.administracion.gestionDeOfertas.utilidades.constructorObjeto()
-
-                    const transaccion = {
+                    const respuestaServidor = await casaVitini.shell.servidor({
                         zona: "administracion/ofertas/actualizarOferta",
                         ofertaUID: String(ofertaUID),
                         ...oferta
-                    }
-
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                    })
                     document.querySelector(`[instanciaUID="${instanciaUID_pantallaEspera}"]`)?.remove()
-                    if (respuestaServidor?.error) {
+
+                    if (respuestaServidor.ofertasConElMismoCodigo) {
+                        return casaVitini.administracion.gestionDeOfertas.componenteUI.infoCodigosRepeditos(respuestaServidor)
+                    } else if (respuestaServidor?.error) {
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
+
                     if (respuestaServidor?.ok) {
                         const ofertaActualizada = respuestaServidor.ofertaActualizada
 
@@ -46579,9 +46613,17 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
 
                     const titulo = document.createElement("p");
-                    titulo.classList.add("crearOfertaTituloOpcion");
+                    titulo.classList.add("padding14", "whiteSpace");
                     titulo.textContent =
-                        "Determina dónde se aplica el descuento de esta oferta. Este tipo de oferta que has seleccionado se basa en los apartamentos concretos que tiene que escoger el cliente. Es por eso que, aparte de la opción de descuento al neto de la reserva, puedes establecer descuentos individuales por apartamento dedicado.";
+                        `Determina dónde se aplica el descuento de esta oferta.
+                        
+Los descuentos se pueden aplicar a:
+Toda la reserva.
+Apartamentos específicos de la reserva. A diferencia de las condiciones, los descuentos se aplicarán solo a los apartamentos coincidentes.
+A cada apartamento en la reserva. Se aplicará el mismo descuento a cada apartamento.
+
+Por rango de fechas:
+Esta opción permite aplicar descuentos individuales a los netos de los días seleccionados dentro de un rango o a los apartamentos seleccionados dentro de estos días.`;
                     contenedorDescuentos.appendChild(titulo);
 
 
@@ -46708,9 +46750,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const destino = pantallaInmersiva.querySelector("[destino=inyector]")
 
                     const tituloUI = document.createElement("p")
-                    tituloUI.classList.add("tituloGris", "padding6")
+                    tituloUI.classList.add("tituloGris", "textoCentrado")
                     tituloUI.setAttribute("componente", "titulo")
-                    tituloUI.textContent = "Añadir condición"
+                    tituloUI.textContent = "Añadir condición a la oferta"
                     constructor.appendChild(tituloUI)
 
                     const divContenedorHorizontalTipoOfertas = document.createElement("div");
@@ -46720,10 +46762,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const infoReservas = document.createElement("p")
                     infoReservas.classList.add(
                         "negrita",
-                        "padding6"
+                        "padding10"
                     )
                     infoReservas.setAttribute("componente", "titulo")
-                    infoReservas.textContent = "Condiciones para reservas"
+                    infoReservas.textContent = "Condiciones para el alojamiento de las reservas"
                     constructor.appendChild(infoReservas)
 
 
@@ -46805,6 +46847,21 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         divOpcionTipoOferta.appendChild(pDescripcionTipoOferta);
                         divContenedorHorizontalTipoOfertas.appendChild(divOpcionTipoOferta);
                     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     const botonCancelar = document.createElement("div")
                     botonCancelar.classList.add("boton")
@@ -47494,7 +47551,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 nombre: "Determina, dentro del rango seleccionado, cómo se aplica el descuento.",
                                 inicial: "si",
                             }, {
-                                nombre: "AAplicar descuento al total neto de la suma de los días de la reserva dentro del rango.",
+                                nombre: "Aplicar descuento al total neto de la suma de los días de la reserva dentro del rango.",
                                 descuentoIDV: "totalNetoPorRango",
                             }, {
                                 nombre: "Aplicar descuentos individuales a los días de la reserva dentro del rango.",
@@ -47792,17 +47849,19 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         const seleccionadoInicial = data?.seleccionadoInicial || ""
 
                         const ui = document.createElement("div")
-                        ui.classList.add("flexVertical", "gap6", "padding6")
+                        ui.classList.add("flexVertical", "gap6")
 
                         const cantidadUI = document.createElement("input")
-                        cantidadUI.classList.add("crearOferDescuentoDedicadoCantidad")
+                        cantidadUI.classList.add("botonV1BlancoIzquierda_campo")
+                        cantidadUI.style.borderRadius = "4px"
                         cantidadUI.setAttribute("campoApartamentoSeleccionado", "descuentoTotal")
-                        cantidadUI.placeholder = "Inserta la cantidad 1"
+                        cantidadUI.placeholder = "Inserta la cantidad"
                         cantidadUI.value = descuentoTotal
                         ui.appendChild(cantidadUI)
 
                         const tipoDescuento = document.createElement("select")
-                        tipoDescuento.classList.add("crearOfertaDescuentoDedicadoListaTipoDescuento")
+                        tipoDescuento.classList.add("botonV1BlancoIzquierda_campo")
+                        tipoDescuento.style.borderRadius = "4px"
                         tipoDescuento.setAttribute("campoApartamentoSeleccionado", "tipoDescuento")
                         const opcionPredeterminada = document.createElement("option")
 
@@ -47841,6 +47900,66 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         ui.appendChild(tipoDescuento)
                         return ui
                     }
+                },
+                infoCodigosRepeditos: (data) => {
+                    const ofertasConElMismoCodigo = data.ofertasConElMismoCodigo
+                    const main = document.querySelector("main")
+
+                    const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                    pantallaInmersiva.style.justifyContent = "center"
+                    main.appendChild(pantallaInmersiva)
+                    const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+                    const contenedor = constructor.querySelector("[componente=contenedor]")
+
+                    const titulo = constructor.querySelector("[componente=titulo]")
+                    titulo.textContent = `La oferta no se ha actualizado `
+                    const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                    mensaje.textContent = data?.error
+
+
+                    const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                    botonAceptar.remove()
+                    const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                    botonCancelar.textContent = "Volver a la oferta"
+
+                    const contenedorLista = document.createElement("div")
+                    contenedorLista.classList.add(
+                        "flexVertical",
+                        "gap10",
+                        "ratonDefault"
+                    )
+                    contenedor.appendChild(contenedorLista)
+
+
+                    ofertasConElMismoCodigo.forEach(oferta => {
+                        const ofertaUID = oferta.ofertaUID
+                        const nombreOferta = oferta.nombreOferta
+
+                        const ofertaUI = document.createElement("a")
+                        ofertaUI.classList.add(
+                            "borderRadius10",
+                            "areaSinDecoracionPredeterminada",
+                            "backgroundGrey1",
+                            "padding12",
+                            "comportamientoBoton",
+                            "ratonDefault"
+                        )
+                        ofertaUI.setAttribute("href", `/administracion/gestion_de_ofertas/oferta:${ofertaUID}`)
+                        ofertaUI.setAttribute("vista", `/administracion/gestion_de_ofertas/oferta:${ofertaUID}`)
+                        ofertaUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                        contenedorLista.appendChild(ofertaUI)
+
+                        const titulo = document.createElement("div")
+                        titulo.textContent = "Oferta"
+                        ofertaUI.appendChild(titulo)
+
+                        const reservaIdentificador = document.createElement("div")
+                        reservaIdentificador.classList.add(
+                            "negrita"
+                        )
+                        reservaIdentificador.textContent = nombreOferta
+                        ofertaUI.appendChild(reservaIdentificador)
+                    })
                 }
 
             },
@@ -48364,7 +48483,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 }
 
                 const contenedorBotones = document.createElement("div")
-                contenedorBotones.classList.add("flexVertical", "gap6")
+                contenedorBotones.classList.add("flexVertical", "gap10")
                 comportamientoUI.appendChild(contenedorBotones)
 
                 const botonEntrar = document.createElement("a")
@@ -49642,17 +49761,19 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const cantidad = data?.cantidad || ""
 
                     const opcionesUI = document.createElement("div")
-                    opcionesUI.classList.add("flexVertical", "padding6", "gap6")
+                    opcionesUI.classList.add("flexVertical", "gap6")
                     opcionesUI.setAttribute("contenedor", "apartamentoDedicado")
 
                     const cantidadUI = document.createElement("input")
                     cantidadUI.classList.add("botonV1Blanco_izquiera")
+                    cantidadUI.style.borderRadius = "4px"
                     cantidadUI.setAttribute("campo", "cantidad")
                     cantidadUI.placeholder = "Inserta la cantidad"
                     cantidadUI.value = cantidad
                     opcionesUI.appendChild(cantidadUI)
                     const tipoDescuento = document.createElement("select")
-                    tipoDescuento.classList.add("crearOfertaDescuentoDedicadoListaTipoDescuento")
+                    tipoDescuento.classList.add("botonV1BlancoIzquierda_campo")
+                    tipoDescuento.style.borderRadius = "4px"
                     tipoDescuento.setAttribute("campo", "simboloIDV")
 
                     const opcionPredeterminada = document.createElement("option")
@@ -51501,7 +51622,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                 const botonalojamientoUI = document.createElement("a")
                 botonalojamientoUI.classList.add("botonV1BlancoIzquierda")
-                botonalojamientoUI.textContent = "Configuración del alojamiento"
+                botonalojamientoUI.textContent = "Configuraciones del alojamiento"
                 botonalojamientoUI.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones")
                 botonalojamientoUI.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones")
                 botonalojamientoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
@@ -52463,6 +52584,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             mensaje: mensaje
                         }
                         casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+
                         const selectorTipoEntidada = document.querySelector("[tipoEntidad]").getAttribute("tipoEntidad")
                         const entidadIDV = document.querySelector("[entidadIDV]").getAttribute("entidadIDV")
                         const metadatos = {
@@ -52512,9 +52634,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 const contenedorCaracteristicas = document.querySelector("[contenedor=caracteristicas]")
                                 contenedorCaracteristicas.setAttribute("caracteristicasIniciales", JSON.stringify(listaCaracteristicas))
                             }
-
-
-
 
                             const entidadIDV = document.querySelector("[entidadIDV]").getAttribute("entidadIDV")
                             const urlVista = "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/" + selectorTipoEntidada + ":" + entidadIDV;
@@ -52994,7 +53113,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 apartamentoIDV: apartamentoIDV
                             }
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                            console.log("respuestaServidor", respuestaServidor)
+
                             const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                             if (!instanciaRenderizada) { return }
                             if (respuestaServidor?.error) {
@@ -54708,7 +54827,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const contenedorBotones = document.createElement("div")
                     contenedorBotones.classList.add("usuarios_contenedorBotones")
                     const botonCrearCuenta = document.createElement("a")
-                    botonCrearCuenta.classList.add("usuarios_botonV1")
+                    botonCrearCuenta.classList.add("botonV1")
                     botonCrearCuenta.setAttribute("href", "/administracion/usuarios/nuevo")
                     botonCrearCuenta.setAttribute("vista", "/administracion/usuarios/nuevo")
                     botonCrearCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
@@ -54734,17 +54853,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     gridUsuarios?.remove()
 
                     const terminoBusqueda = cliente.target.value
-                    //document.querySelector("[componente=estadoBusqueda]")?.remove()
                     document.querySelector("[gridUID=gridUsuarios]")?.remove()
                     document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
                     document.querySelector("[contenedor=filtrosOrden]")?.remove()
 
-                    const estadoBusqueda = document.querySelector("[componente=estadoBusqueda]")
-                    if (!estadoBusqueda) {
+                    const estadoBusqueda_r = document.querySelector("[componente=estadoBusqueda]")
+                    if (!estadoBusqueda_r) {
                         this.constructorMarcoInfo()
-
                     }
-
+                    const estadoBusqueda_s = document.querySelector("[componente=estadoBusqueda]")
+                    estadoBusqueda_s.textContent = "Buscando usuarios..."
 
                     const campoVacio = cliente.target.value.length
                     if (campoVacio === 0) {
@@ -54780,6 +54898,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 mostrarUsuariosResueltos: async function (transaccion) {
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const selectorEspacio = document.querySelector("[componente=espacioComportamiento]")
+                    if (!selectorEspacio) {
+                        return
+                    }
                     selectorEspacio.setAttribute("instanciaBusqueda", instanciaUID)
                     delete transaccion.instanciaUID
                     const origen = transaccion.origen
@@ -55945,32 +56066,32 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     main.setAttribute("zonaCSS", "administracion/usuarios/nuevo")
                     const espacioUsuario = document.querySelector("[componente=espacioUsuarios]")
                     const contenedorGlobal = document.createElement("div")
-                    contenedorGlobal.classList.add("usuariosCrearCuenta_contenedorGlobal")
+                    contenedorGlobal.classList.add("flexVertical", "gap10")
                     const informacionCuenta = document.createElement("div")
-                    informacionCuenta.classList.add("usuariosCrearCuenta_informacion")
+                    informacionCuenta.classList.add("padding14")
                     informacionCuenta.textContent = `Escriba el nombre de usuario de la nueva cuenta, este será el VitiniID de la nueva cuenta. Luego pulse en el botón crear cuenta y, tras crearse la cuenta, irá al panel de la cuenta creada donde podrá seguir con las modificaciones pertinentes. Una vez establezca la contraseña, deberá activar la cuenta.`
                     contenedorGlobal.appendChild(informacionCuenta)
                     const campoNuevoUsuario = document.createElement("input")
-                    campoNuevoUsuario.classList.add("usuariosCrearCuenta_campoUsuario")
+                    campoNuevoUsuario.classList.add("botonV1BlancoIzquierda_campo")
                     campoNuevoUsuario.setAttribute("campo", "usuarioIDX")
                     campoNuevoUsuario.placeholder = "Escriba el nuevo VitiniID"
                     contenedorGlobal.appendChild(campoNuevoUsuario)
                     const infoPass = document.createElement("div")
-                    infoPass.classList.add("usuariosCrearCuenta_informacion")
+                    infoPass.classList.add("padding14")
                     infoPass.textContent = `Escribe la contraseña de esta cuenta. Una vez creada la cuenta, siempre puedes cambiar la contraseña desde el panel del usuario. Es recomendable escribir una contraseña compleja creada con un generador de contraseñas para que sea irrecordable y usar un gestor de contraseñas para gestionar las contraseñas.  `
                     contenedorGlobal.appendChild(infoPass)
                     const campoClave = document.createElement("input")
-                    campoClave.classList.add("usuariosCrearCuenta_campoUsuario")
+                    campoClave.classList.add("botonV1BlancoIzquierda_campo")
                     campoClave.setAttribute("campo", "clave")
                     campoClave.placeholder = "Escriba una contraseña para este nuevo usuario"
                     campoClave.type = "password"
                     contenedorGlobal.appendChild(campoClave)
                     const informacionRol = document.createElement("div")
-                    informacionRol.classList.add("usuariosCrearCuenta_informacion")
+                    informacionRol.classList.add("padding14")
                     informacionRol.textContent = `Selecciona el rol de la nueva cuenta. Si es una cuenta para un cliente de Casa Vitini escoge el rol Cliente. Si es una cuenta para un Empleado de Casa Vitini escoge el rol Empleado y, si es para un administrador de Casa Vitini escoge el rol Administrador. Cada rol otorga un acceso y autoridad distintos. Por ejemplo, el rol Cliente solo permite administrar la propia cuenta, no da acceso al panel de control de administración. El rol empleado sí da acceso al panel de administración, pero hay ciertas operaciones que no puede hacer, como por ejemplo alterar precios, ofertas o configuraciones de alojamiento. Si puede realizar reservas, modificar reservas, cancelar reservas, pero no eliminarlas. El rol de Administrador puede hacer cualquier cosa.`
                     contenedorGlobal.appendChild(informacionRol)
                     const selectorRol = document.createElement("select")
-                    selectorRol.classList.add("usuariosCrearCuenta_campoUsuario")
+                    selectorRol.classList.add("botonV1BlancoIzquierda_campo")
                     selectorRol.setAttribute("campo", "selectorRol")
                     const opcionInical = document.createElement("option");
                     opcionInical.value = "";
@@ -55993,9 +56114,9 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     contenedorGlobal.appendChild(selectorRol)
                     espacioUsuario.appendChild(contenedorGlobal)
                     const contenedorBotones = document.createElement("div")
-                    contenedorBotones.classList.add("usuariosCrearCuenta_contenedorBotones")
+                    contenedorBotones.classList.add("flexVertical")
                     const botonCrearUsuario = document.createElement("div")
-                    botonCrearUsuario.classList.add("usuarioCrearCuenta_botonV1")
+                    botonCrearUsuario.classList.add("botonV1BlancoIzquierda")
                     botonCrearUsuario.textContent = "Crear nueva cuenta de usuario"
                     botonCrearUsuario.addEventListener("click", this.transactor)
                     contenedorBotones.appendChild(botonCrearUsuario)
@@ -59786,7 +59907,6 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     }
 
                     const cantidadUI = document.createElement("input")
-                    //cantidadUI.classList.add("crearOferDescuentoDedicadoCantidad")
                     cantidadUI.setAttribute("campoApartamentoSeleccionado", "cantidad")
                     cantidadUI.placeholder = "Inserta la cantidad"
                     cantidadUI.value = "0.00"

@@ -32,7 +32,6 @@ export const totalesBasePorRango = async (data) => {
         if (instantaneaNoches) {
             reservaEntidad.desglosePorNoche = _.cloneDeep(instantaneaNoches);
         }
-
         const desglosePorNoche = reservaEntidad.desglosePorNoche
         const desglosePorApartamento = reservaEntidad.desglosePorApartamento
 

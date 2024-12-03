@@ -8,6 +8,8 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
     try {
         const origenIDV = data.origenIDV
         const destinoIDV = data.destinoIDV
+        const apartamentoUI = data.apartamentoUI
+
         const contenedoresFinancierosSimulaciones = await obtenerTodasLasSimulaciones()
         for (const contenedor of contenedoresFinancierosSimulaciones) {
             const simulacionUID = contenedor.simulacionUID
@@ -29,7 +31,8 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
                 actualizaApartamentoIDVEnObjetoOfertas({
                     contenedorOferta: oferta,
                     origenIDV,
-                    destinoIDV
+                    destinoIDV,
+                    apartamentoUI
                 })
             }
 
@@ -38,7 +41,8 @@ export const actualizarIDVenInstantaneasContenedorFinancieroDeSimulacion = async
                 actualizaApartamentoIDVEnObjetoOfertas({
                     contenedorOferta: oferta,
                     origenIDV,
-                    destinoIDV
+                    destinoIDV,
+                    apartamentoUI
                 })
             }
 

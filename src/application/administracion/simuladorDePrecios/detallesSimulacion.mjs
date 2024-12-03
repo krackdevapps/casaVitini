@@ -4,7 +4,6 @@ import { obtenerSimulacionPorSimulacionUID } from "../../../infraestructure/repo
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerServiciosPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/servicios/obtenerServiciosPorSimulacionUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs";
 import { obtenerComplementosAlojamientoPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/complementosDeAlojamiento/obtenerComplementosAlojamientoPorSimulacionUID.mjs";
 import { controladorGeneracionDesgloseFinanciero } from "../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs";
@@ -34,17 +33,7 @@ export const detallesSimulacion = async (entrada) => {
         const zonaIDV = simulacion.zonaIDV
         const fechaCreacion = simulacion.fechaCreacion
         const fechaEntrada = simulacion.fechaEntrada
-        const fechaSalida = simulacion.fechaSalida
-        const contenedorOfertas = simulacion?.desgloseFinanciero?.contenedorOfertas || {}
-        const contenedorOfertasPorAdmimnistrador = contenedorOfertas?.ofertas?.porAdministrador || []
-        for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
-            await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
-        }
-        const contenedorOfertasPorCondicio = contenedorOfertas?.ofertas?.porCondicion || []
-        for (const contenedorOferta of contenedorOfertasPorCondicio) {
-            await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
-        }
-
+        const fechaSalida = simulacion.fechaSalida  
         const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
 
         const apartamentos = []
@@ -71,7 +60,6 @@ export const detallesSimulacion = async (entrada) => {
                 apartamentoUID
             })
         }
-        await insertarApartamentoUIEnObjetoOfertas(contenedorOfertas)
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
         const complementosDeAlojamientoDeLaSimulacion = await obtenerComplementosAlojamientoPorSimulacionUID(simulacionUID)
         const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)

@@ -63,7 +63,7 @@ export const preConfirmarReserva = async (entrada) => {
         })
 
         const servicios = await validarServiciosPubicos(serviciosPorValidar)
-        console.log("servicios", servicios)
+
         await validarComplementosAlojamiento(reservaPublica)
         const contenedorErrorInfoObsoleta = []
         if (servicios.serviciosNoReconocidos.length > 0) {
@@ -119,8 +119,8 @@ export const preConfirmarReserva = async (entrada) => {
         limpiarContenedorFinacieroInformacionPrivada(resolverDetallesReserva)
         const pdf = await generadorPDF(resolverDetallesReserva);
         if (!testingVI) {
-          //  enviarMailReservaConfirmadaAlCliente(reservaUID)
-           // enviarMailDeAvisoPorReservaPublica(reservaUID)
+            //  enviarMailReservaConfirmadaAlCliente(reservaUID)
+            // enviarMailDeAvisoPorReservaPublica(reservaUID)
         }
 
         const ok = {

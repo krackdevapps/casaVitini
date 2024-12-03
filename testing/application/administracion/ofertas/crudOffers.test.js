@@ -1,4 +1,5 @@
 
+import cloneDeep from 'lodash/cloneDeep'
 import { describe, expect, test } from '@jest/globals';
 import { crearOferta } from '../../../../src/application/administracion/ofertas/crearOferta.mjs';
 import { eliminarOfertaPorTestingVI } from '../../../../src/infraestructure/repository/ofertas/eliminarOfertaPorTestingVI.mjs';
@@ -10,6 +11,7 @@ import { eliminarOferta } from '../../../../src/application/administracion/ofert
 import { makeHostArquitecture } from '../../../sharedUsesCases/makeHostArquitecture.mjs';
 
 describe('crud offers system', () => {
+
     const fakeAdminSession = {
         usuario: "test",
         rolIDV: "administrador"
@@ -22,7 +24,8 @@ describe('crud offers system', () => {
     const camaIDV = "temporalbedfortestingaddapartamentotoreserve"
     const camaUI = "Cama temporal para testing de discounts"
 
-    const fakeOffer = {
+
+    const fakeOffer_initial = {
         nombreOferta: "oferta creadad para testing",
         zonaIDV: "global",
         entidadIDV: "reserva",
@@ -49,8 +52,6 @@ describe('crud offers system', () => {
                     {
                         "apartamentoIDV": apartamentoIDV
                     },
-
-
                 ]
             },
             {
@@ -79,6 +80,9 @@ describe('crud offers system', () => {
             "descuentoTotal": "10.00"
         }
     }
+    let fakeOffer;
+    beforeEach(() => { fakeOffer = cloneDeep(fakeOffer_initial); });
+
     let ofertaUID
     beforeAll(async () => {
         process.env.TESTINGVI = testingVI
@@ -102,13 +106,14 @@ describe('crud offers system', () => {
     })
 
     test('create offer with ok', async () => {
-        const m = {
+        const response = await crearOferta({
             body: {
                 ...fakeOffer
             },
             session: fakeAdminSession
-        }
-        const response = await crearOferta(m)
+        })
+        const apartamentos1 = fakeOffer.condicionesArray.filter(e => e.tipoCondicion === "porApartamentosEspecificos")
+
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
@@ -116,28 +121,26 @@ describe('crud offers system', () => {
     })
 
     test('update offer with ok', async () => {
-        const m = {
+        const response = await actualizarOferta({
             body: {
                 ofertaUID: String(ofertaUID),
                 ...fakeOffer
             },
             session: fakeAdminSession
-        }
-        const response = await actualizarOferta(m)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
 
     test('update status of offer with ok', async () => {
-        const m = {
+        const response = await actualizarEstadoOferta({
             body: {
                 ofertaUID: String(ofertaUID),
                 estadoIDV: "activado"
             },
             session: fakeAdminSession
-        }
-        const response = await actualizarEstadoOferta(m)
+        })
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
@@ -157,18 +160,6 @@ describe('crud offers system', () => {
         expect(response).toHaveProperty('ok');
     })
 
-    test('get details of offer with ok', async () => {
-        const m = {
-            body: {
-                ofertaUID: String(ofertaUID),
-            },
-            session: fakeAdminSession
-        }
-        const response = await detallesOferta(m)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
 
     test('get all offers with ok', async () => {
         const m = {

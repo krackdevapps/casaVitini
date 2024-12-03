@@ -23,15 +23,17 @@ export const perfil_porDiasDelRango = async (data) => {
             const apartamentos = descuentoPorDia.apartamentos
             const tipoDescuento = descuentoPorDia.tipoDescuento
             const nocheDeLaReserva = estructura.entidades.reserva.desglosePorNoche[fechaDelDia]
-
+  
             const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
                 fechaAComprobrarDentroDelRango: fechaDelDia,
                 fechaInicioRango_ISO: fechaEntradaReserva_ISO,
                 fechaFinRango_ISO: fechaSalidaReserva_ISO
             })
+
             if (!fechaDentroDelRango || !nocheDeLaReserva) {
                 continue
             }
+
             if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
                 const precioNetoNoche = nocheDeLaReserva.precioNetoNoche
                 contenedorPorDia[fechaDelDia] = {
@@ -46,19 +48,6 @@ export const perfil_porDiasDelRango = async (data) => {
                     const apartamentoIDV = apartamento.apartamentoIDV
                     const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                     const tipoAplicacion = apartamento.tipoAplicacion
-                    const configuracionAlojamiento = await obtenerConfiguracionPorApartamentoIDV({
-                        apartamentoIDV,
-                        errorSi: "desactivado"
-                    })
-                    if (configuracionAlojamiento?.apartamentoIDV) {
-                        apartamento.apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                            apartamentoIDV,
-                            errorSi: "noExiste"
-                        }))?.apartamentoUI
-                    } else {
-                        const m = `Atención, esta oferta no puede aplicarse porque en "descuentos individuales por apartamento dentro del dia ${fechaDelDia}" dentro de esta oferta, se hace referencia al identificador visual IDV (${apartamentoIDV}) y esta configuración de alojamiento no existe. O bien cree la configuración de alojamiento o borre este apartamento de la oferta. Antes de dar por válida una oferta se recomienda probarla en el simulador de precios para evitar esto. Si simplemente quiere añadir esta oferta ahora mismo a una reserva activa, borre la referencia al configuración de alojamiento dentro de la oferta.`
-                        throw new Error(m)
-                    }
 
                     const totalPorApartamento = estructura.entidades.reserva
                         ?.desglosePorNoche

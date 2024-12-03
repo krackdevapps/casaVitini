@@ -191,7 +191,6 @@ export const validarObjetoOferta = async (data) => {
                     throw new Error(m)
                 }
 
-
                 const tipoDeEspecificidad = condicion.tipoDeEspecificidad
                 if (tipoDeEspecificidad !== "exactamente"
                     &&
@@ -217,6 +216,7 @@ export const validarObjetoOferta = async (data) => {
                 })
                 const contenedorControlIDVUnicos = {}
                 for (const contenedorApartamento of apartamentos) {
+
                     if (Object.keys(contenedorApartamento).length > 1) {
                         const m = "El contenedor de apartamentos en la condición porApartamentosEspecificos solo espera una llave."
                         throw new Error(m)
@@ -244,6 +244,12 @@ export const validarObjetoOferta = async (data) => {
                         apartamentoIDV,
                         errorSi: "noExiste"
                     })
+
+                    const entidadAlojamiento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                        apartamentoIDV,
+                        errorSi: "noExiste"
+                    })
+                    contenedorApartamento.apartamentoUI = entidadAlojamiento.apartamentoUI
                 }
             } else if (tipoCondicionIDV === "porDiasDeAntelacion") {
 
@@ -384,7 +390,6 @@ export const validarObjetoOferta = async (data) => {
                 const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID({
                     ofertaUID: oferta.ofertaUID,
                     codigosDescuentosArray: codigosDescuentosBase64DeLaMismaOferta
-
                 })
                 if (ofertasConElMismoCodigo.length > 0) {
                     const e = {
@@ -476,6 +481,19 @@ export const validarObjetoOferta = async (data) => {
                     const error = `Dentro de los descuentos individualPorApartamento, en el contenedor de apartamentos, hay un objeto sin la llave apartamentoIDV`
                     throw new Error(error)
                 }
+
+                await obtenerConfiguracionPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
+
+                const entidadAlojamiento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                    apartamentoIDV,
+                    errorSi: "noExiste"
+                })
+                apartamentoIndividual.apartamentoUI = entidadAlojamiento.apartamentoUI
+
+
                 validadoresCompartidos.tipos.cadena({
                     string: descuentoTotal,
                     nombreCampo: `El campo descuentoTotal en ${tipoDescuento}, en el ${apartamentoIDV} solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
@@ -628,10 +646,12 @@ export const validarObjetoOferta = async (data) => {
                                 apartamentoIDV,
                                 errorSi: "noExiste"
                             })
-                            const apartamentoUI = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                                 apartamentoIDV,
                                 errorSi: "noExiste"
-                            })).apartamentoUI
+                            })
+                            const apartamentoUI = apartamento.apartamentoUI
+                            apartmentoDelDia.apartamentoUI = apartamentoUI
 
                             const tipoAplicacionDentroDelDia = apartmentoDelDia.tipoAplicacion
                             if (tipoAplicacionDentroDelDia !== "porcentaje" && tipoAplicacionDentroDelDia !== "cantidadFija") {

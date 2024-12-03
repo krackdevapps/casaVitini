@@ -1,5 +1,4 @@
 import { obtenerTodasLasOfertas } from "../../../infraestructure/repository/ofertas/obtenerTodasLasOfertas.mjs";
-import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 
 export const listasOfertasAdministracion = async (entrada) => {
@@ -11,9 +10,7 @@ export const listasOfertasAdministracion = async (entrada) => {
         IDX.control()
 
         const listaDeOfertas = await obtenerTodasLasOfertas()
-        for (const contenedorOferta of listaDeOfertas) {
-            await insertarApartamentoUIEnObjetoOfertas(contenedorOferta)
-        }
+     
 
         const ok = {
             ok: listaDeOfertas

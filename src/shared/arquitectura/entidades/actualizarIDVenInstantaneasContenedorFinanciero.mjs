@@ -9,6 +9,7 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
 
         const origenIDV = data.origenIDV
         const destinoIDV = data.destinoIDV
+        const apartamentoUI = data.apartamentoUI
         const reservasUIDArray = data.reservasUIDArray
 
         const contenedoresFinancieros = await obtenerDesglosesFinancierosPorReservaUIDARRAY(reservasUIDArray)
@@ -31,7 +32,8 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
                 actualizaApartamentoIDVEnObjetoOfertas({
                     contenedorOferta: oferta,
                     origenIDV,
-                    destinoIDV
+                    destinoIDV,
+                    apartamentoUI
                 })
             }
 
@@ -40,7 +42,8 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
                 actualizaApartamentoIDVEnObjetoOfertas({
                     contenedorOferta: oferta,
                     origenIDV,
-                    destinoIDV
+                    destinoIDV,
+                    apartamentoUI
                 })
             }
 

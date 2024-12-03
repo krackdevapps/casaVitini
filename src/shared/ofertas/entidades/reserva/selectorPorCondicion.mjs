@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { selectorRangoUniversal } from "../../../selectoresCompartidos/selectorRangoUniversal.mjs";
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const selectorPorCondicion = async (data) => {
     try {
@@ -183,10 +184,12 @@ export const selectorPorCondicion = async (data) => {
                 const contenedorApartamentos = condicion.apartamentos
                 const tipoDeEspecificidad = condicion.tipoDeEspecificidad
                 const apartamentosOferta = []
-                contenedorApartamentos.forEach(contenedor => {
+
+                for (const contenedor of contenedorApartamentos) {
                     const apartamentoIDV = contenedor.apartamentoIDV
                     apartamentosOferta.push(apartamentoIDV)
-                })
+                }
+         
                 if (tipoDeEspecificidad === "exactamente") {
 
                     const comparadorCantidad = apartamentosDeLaReserva.length === apartamentosOferta.length

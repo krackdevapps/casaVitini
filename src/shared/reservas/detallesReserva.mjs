@@ -7,7 +7,6 @@ import { obtenerDesgloseFinancieroPorReservaUID } from "../../infraestructure/re
 import { porcentajeTranscurrido } from "./utilidades/porcentajeTranscurrido.mjs"
 import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mjs"
 import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
-import { insertarApartamentoUIEnObjetoOfertas } from "../ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs"
 import { enlacesDePagoDeLaReserva } from "./detallesReserva/enlacesDePagoDeLaReserva.mjs"
 import { obtenerServiciosPorReservaUID } from "../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs"
 import { obtenerComplementosAlojamientoPorReservaUID } from "../../infraestructure/repository/reservas/complementosAlojamiento/obtenerComplementosAlojamientoPorReservaUID.mjs"
@@ -67,14 +66,6 @@ export const detallesReserva = async (data) => {
         }
         if (capas.includes(contenedorCapas[3])) {
             reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
-            const contenedorOfertasPorAdmimnistrador = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.ofertas.porAdministrador
-            for (const contenedorOferta of contenedorOfertasPorAdmimnistrador) {
-                await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
-            }
-            const contenedorOfertasPorCondicio = reserva.contenedorFinanciero.desgloseFinanciero.contenedorOfertas.ofertas.porCondicion
-            for (const contenedorOferta of contenedorOfertasPorCondicio) {
-                await insertarApartamentoUIEnObjetoOfertas(contenedorOferta.oferta)
-            }
         }
         if (capas.includes(contenedorCapas[4])) {
             reserva.detallesPagos = await detallesPagos(reservaUID)

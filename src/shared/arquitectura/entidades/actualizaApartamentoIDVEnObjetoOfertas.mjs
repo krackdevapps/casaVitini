@@ -4,6 +4,7 @@ export const actualizaApartamentoIDVEnObjetoOfertas = (data) => {
         const contenedorOferta = data.contenedorOferta
         const origenIDV = data.origenIDV
         const destinoIDV = data.destinoIDV
+        const apartamentoUI = data.apartamentoUI
 
         const contenedorDescuentos = contenedorOferta?.descuentosJSON || {}
         const tipoDescuento = contenedorDescuentos.tipoDescuento
@@ -13,6 +14,8 @@ export const actualizaApartamentoIDVEnObjetoOfertas = (data) => {
                 const apartamentoIDV = apartamento.apartamentoIDV
                 if (apartamentoIDV === origenIDV) {
                     apartamento.apartamentoIDV = destinoIDV
+                    apartamento.apartamentoUI = apartamentoUI
+
                 }
             }
         }
@@ -27,6 +30,8 @@ export const actualizaApartamentoIDVEnObjetoOfertas = (data) => {
                         const apartamentoIDV = apartamento.apartamentoIDV
                         if (apartamentoIDV === origenIDV) {
                             apartamento.apartamentoIDV = destinoIDV
+                            apartamento.apartamentoUI = apartamentoUI
+
                         }
                     }
                 }
@@ -42,6 +47,8 @@ export const actualizaApartamentoIDVEnObjetoOfertas = (data) => {
                     const apartamentoIDV = contenedorApartamento.apartamentoIDV
                     if (apartamentoIDV === origenIDV) {
                         contenedorApartamento.apartamentoIDV = destinoIDV
+                        contenedorApartamento.apartamentoUI = apartamentoUI
+
                     }
                 }
             }

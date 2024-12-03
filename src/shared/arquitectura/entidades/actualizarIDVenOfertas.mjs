@@ -7,6 +7,7 @@ export const actualizarIDVenOfertas = async (data) => {
 
     const origenIDV = data.origenIDV
     const destinoIDV = data.destinoIDV
+    const apartamentoUI = data.apartamentoUI
     const todasLasOfertas = await obtenerTodasLasOfertas()
 
     for (const contenedorOferta of todasLasOfertas) {
@@ -22,7 +23,8 @@ export const actualizarIDVenOfertas = async (data) => {
         actualizaApartamentoIDVEnObjetoOfertas({
             contenedorOferta,
             origenIDV,
-            destinoIDV
+            destinoIDV,
+            apartamentoUI
         })
 
         await actualizarOfertaPorOfertaUID({
