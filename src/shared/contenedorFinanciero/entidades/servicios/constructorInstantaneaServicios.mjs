@@ -42,7 +42,7 @@ export const constructorInstantaneaServicios = async (data) => {
                 opcionesDelGrupo.forEach(o => {
                     const opcionIDV = o.opcionIDV
                     if (grupoServicioSolicitado.includes(opcionIDV)) {
-                        const precioDeLaOpcion = o.precioOpcion.length === 0 ? 0.00 : o.precioOpcion
+                        const precioDeLaOpcion = o.precioOpcion.length === 0 || !o.precioOpcion ? 0.00 : o.precioOpcion
                         const precioNetoServicio = new Decimal(precioDeLaOpcion)
                         global.totales.totalNeto = precioNetoServicio.plus(global.totales.totalNeto)
                     }        
