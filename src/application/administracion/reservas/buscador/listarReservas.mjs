@@ -138,15 +138,14 @@ export const listarReservas = async (entrada) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
-            const data = {
+              const resultados = await porTerminos( {
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
                 sentidoColumna: sentidoColumna,
                 nombreColumna: nombreColumna,
                 termino: termino,
             }
-
-            const resultados = await porTerminos(data)
+)
             Object.assign(ok, resultados)
         }
         else {

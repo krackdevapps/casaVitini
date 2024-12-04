@@ -1020,8 +1020,9 @@ const casaVitini = {
                     this.controladoresUI.interrumpirTransicionVistas()
                     const mensaje = respuestaServidor.error
                     casaVitini.ui.componentes.mensajeSimple({
-                        titulo: "No se ha procesado la peticion",
-                        descripcion: mensaje
+                        titulo: "Casa Vitini ahora mismo no esta disponible",
+                        descripcion: mensaje,
+                        mensajeUID: "temporalyNotAvaible"
                     })
                     return
                 } else if (respuestaServidor?.error === "noExisteLaVista") {
@@ -8878,12 +8879,24 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                 const titulo = data?.titulo
                 const descripcion = data?.descripcion
+                const mensajeUID = data?.mensajeUID || ""
+
+                const mensajeUI_rendered = document.querySelector(`main [mensajeUID="${mensajeUID}]`)
+                if (mensajeUI_rendered) {
+                    return
+                }
+                main.removeAttribute("instanciaUID")
+                main.innerHTML = null
 
                 const contenedor = document.createElement("div")
                 contenedor.classList.add("componentes_contenedor_mensajeSimple")
+                contenedor.setAttribute("mensajeUID", mensajeUID)
+                main.appendChild(contenedor)
+
                 const contenedorIntermedio = document.createElement("div")
                 contenedorIntermedio.classList.add("componentes_contenedor_contenedorIntermedio")
                 contenedorIntermedio.setAttribute("espacio", "formularioCrearEnlaceDePago")
+
                 const contenedorBloque = document.createElement("div")
                 contenedorBloque.classList.add("componentes_contenedor_contenido")
 
@@ -8905,9 +8918,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 contenedorIntermedio.appendChild(contenedorBloque)
                 contenedor.appendChild(contenedorIntermedio)
                 const main = document.querySelector("main")
-                main.removeAttribute("instanciaUID")
-                main.innerHTML = null
-                main.appendChild(contenedor)
+
             },
             iconoProceso: () => {
                 const iconoProcesoDiv = document.createElement('div');
@@ -17203,7 +17214,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
                             if (nombreColumna === columnaIDV) {
                                 if (nombreColumna) {
-                                    columna_renderizada.style.background = "grey"
+                                    columna_renderizada.style.background = "#00000047"
                                     columna_renderizada.setAttribute("nombreColumna", columnaIDV)
                                     columna_renderizada.setAttribute("sentidoColumna", sentidoColumna)
 
@@ -17261,11 +17272,16 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             gridUID
                         })
                     },
-                    cambiarPagina: (data) => {
+                    cambiarPagina: async (data) => {
 
                         const gridUID = data.gridUID
                         const metodoSalida = data.metodoSalida
                         const gridEnlazado = document.querySelector(`[gridUID=${gridUID}]`)
+                        const botonOrigen = data.e.target
+
+                        const allButtons = botonOrigen.closest("[componenteID=navegacionPaginacion]").querySelectorAll("[boton]")
+                        allButtons.forEach(aB => aB.classList.remove("parpeoGridSel"))
+                        botonOrigen.classList.add("parpeoGridSel")
 
                         if (!gridEnlazado) {
                             const m = "cambiarPagina no encuentra el grid sobre el que actual"
@@ -17318,10 +17334,11 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             transacccion.sentidoNavegacion = "Atras"
                         }
 
-                        return casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
+                        await casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                             ruta: metodoSalida,
                             args: transacccion
                         })
+                        botonOrigen.classList.remove("parpeoGridSel")
 
                     },
                     paginador: function (metadatos) {
@@ -17380,6 +17397,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const navegacionPaginacionbotonAtras = document.createElement("a")
                             navegacionPaginacionbotonAtras.classList.add("navegacionPaginacion")
                             navegacionPaginacionbotonAtras.classList.add("navegacionPaginacionbotonAtras")
+                            navegacionPaginacionbotonAtras.setAttribute("boton", "atras")
                             navegacionPaginacionbotonAtras.setAttribute("href", constructorURL(granuladoURL, (paginaActual - 1)))
                             navegacionPaginacionbotonAtras.addEventListener("click", (e) => {
                                 e.preventDefault()
@@ -17387,7 +17405,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     gridUID: gridUID,
                                     componenteID: "botonAtrasPaginacion",
                                     paginaTipo: "otra",
-                                    metodoSalida
+                                    metodoSalida,
+                                    e
                                 });
                             })
                             navegacionPaginacionbotonAtras.textContent = "Atras"
@@ -17405,6 +17424,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             const numeroPagina = numRedondeado + ciclo
                             const numeroPaginaElemento = document.createElement("a")
                             numeroPaginaElemento.classList.add("numeroPaginaElemento")
+                            numeroPaginaElemento.setAttribute("boton", "numero")
                             numeroPaginaElemento.setAttribute("href", constructorURL(granuladoURL, numeroPagina))
                             numeroPaginaElemento.setAttribute("posicionRelativa", ciclo + 1)
                             const estructura = {
@@ -17427,6 +17447,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             }
                             numeroPaginaElemento.addEventListener("click", (e) => {
                                 e.preventDefault()
+                                estructura.e = e
                                 return this.cambiarPagina(estructura);
                             })
                             numeroPaginaElemento.textContent = numeroPagina
@@ -17452,7 +17473,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                 componenteID: "numeroPagina",
                                 numeroPagina: e.target.value,
                                 paginaTipo: selectedOption.getAttribute("paginaTipo"),
-                                metodoSalida
+                                metodoSalida,
+                                e
                             });
 
                         })
@@ -17481,6 +17503,7 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         if (paginasTotales > 1 && paginaActual < paginasTotales) {
                             const navegacionPaginacionbotonAdelante = document.createElement("a")
                             navegacionPaginacionbotonAdelante.classList.add("navegacionPaginacion")
+                            navegacionPaginacionbotonAdelante.setAttribute("boton", "adelante")
                             navegacionPaginacionbotonAdelante.classList.add("navegacionPaginacionbotonAdelante")
                             navegacionPaginacionbotonAdelante.setAttribute("href", constructorURL(granuladoURL, (paginaActual + 1)))
                             navegacionPaginacionbotonAdelante.addEventListener("click", (e) => {
@@ -17490,7 +17513,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                                     gridUID: gridUID,
                                     componenteID: "botonAdelantePaginacion",
                                     paginaTipo: "otra",
-                                    metodoSalida
+                                    metodoSalida,
+                                    e
                                 })
                             })
                             navegacionPaginacionbotonAdelante.textContent = "Adelante"
@@ -17510,6 +17534,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         const areaGrid = document.querySelector(`[areaGrid="${gridUID}"]`)
                         const grid = areaGrid.querySelector(`[gridUID="${gridUID}"]`)
 
+                        const allColumns = areaGrid.querySelectorAll("[componenteGrid=celdaTituloColumna]")
+                        allColumns.forEach(aC => { aC.classList.remove("parpeoGridSel") })
+
+                        columna.classList.add("parpeoGridSel")
                         const nombreColumna = columna.getAttribute("nombreColumna")
                         const selectorColumnasentido = columna.getAttribute("sentidoColumna")
                         const numeroPagina = grid.getAttribute("numeroPagina")
@@ -17527,10 +17555,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             transaccion.nombreColumna = nombreColumna
                         }
 
-                        return casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
+                        await casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                             ruta: metodoSalida,
                             args: transaccion
                         })
+                        columna.classList.remove("parpeoGridSel")
+
                     },
                     resolverFila: (transaccion) => {
                         transaccion.preventDefault()
@@ -32152,6 +32182,13 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                     const fechaEntrada = respuestaServidor.fechaEntrada
                     const fechaSalida = respuestaServidor.fechaSalida
 
+
+                    reservas.forEach(r => {
+                        const estadoReservaIDV = r.estadoReservaIDV
+                        r.estadoReservaIDV = estadoReservaIDV.charAt(0).toUpperCase() + estadoReservaIDV.slice(1);
+                    })
+                    console.log("reservas", reservas)
+
                     const columnasGrid = [
                         {
                             columnaUI: "Reserva",
@@ -38132,10 +38169,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                 mostrarClientesResueltos: async function (transaccion) {
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const selectorEspacio = document.querySelector("[componente=espacioComportamiento]")
-                    if (!selectorEspacio) {
-                        return
-                    }
+                    if (!selectorEspacio) { return }
+
                     selectorEspacio.setAttribute("instanciaBusqueda", instanciaUID)
+
                     delete transaccion.instanciaUID
                     const origen = transaccion.origen
                     delete transaccion.origen
@@ -38161,12 +38198,8 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                         pagina: Number(transaccion?.pagina || 1)
                     })
 
-
                     const instanciaRenderizada = document.querySelector(`[instanciaBusqueda="${instanciaUID}"]`)
-                    if (!instanciaRenderizada) {
-                        return
-                    }
-
+                    if (!instanciaRenderizada) { return }
                     if (respuestaServidor?.error) {
                         this.constructorMarcoInfo()
                         document.querySelector("[componente=estadoBusqueda]").textContent = respuestaServidor?.error
@@ -44196,13 +44229,12 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
                             })
                             constructor.appendChild(spinner)
 
-                            const transaccion = {
+                            const respuestaServidor = await casaVitini.shell.servidor({
                                 zona: "administracion/simuladorDePrecios/descuentos/comprobarCodigosEnSimulacion",
                                 simulacionUID,
                                 codigosDescuentos: codigosDescuentosPorVerificar
                             }
-
-                            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                            )
 
 
                             const uiRenderizada = document.querySelectorAll(`[instanciaUID="${instanciaUID_cribadoOfertas}"]`)

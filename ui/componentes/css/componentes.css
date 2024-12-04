@@ -16246,6 +16246,24 @@ a {
     }
 }
 
+@keyframes parpeoColumnaAnimation {
+    0% {
+        background: transparent;
+    }
+
+    50% {
+        background: black;
+        color: white;
+    }
+
+    100% {
+        background: transparent;
+    }
+}
+.parpeoGridSel {
+    animation: parpeoColumnaAnimation 500ms infinite linear;
+}
+
 
 .parpadeoFondoAzul {
     animation: parpadeoElementoIndicadorAzul 2s infinite linear;
