@@ -55461,7 +55461,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         infoModificarIDX.textContent = `Cambia el rol de esta cuenta al rol que quieras. Recuerda que el rol determina el grado de acceso y autoridad dentro del sistema. El rol cliente es el rol que tiene que tener la cuentas de los clientes de casa vitini. Este rolo solo permite acceder a sus datos de usuario. Controlar solo su cuenta y ver sus reservas. El rol empleado permite acceder al panel de administración, pero solo para gestionar reservas y clientes y nada más. No puede, por ejemplo, modificar precios. El rol administrador es el rol de más autoridad y puede hacer cualquier cosa y tener acceso a todo.`
                         contenedorCampos.appendChild(infoModificarIDX)
                         const selectorRoles = document.createElement("select");
-                        selectorRoles.classList.add("detallesUsuario_rol_selector")
+                        selectorRoles.classList.add("otonV1BlancoIzquierda_campo")
                         selectorRoles.setAttribute("selector", "roles")
                         selectorRoles.addEventListener("change", casaVitini.administracion.usuarios.detallesUsuario.rol.guardarCambios)
                         const roles = [
@@ -55667,18 +55667,18 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                             const contenedorCampos = document.createElement("div")
                             contenedorCampos.classList.add("detallesUsuario_contenedorCampos")
                             const infoModificarIDX = document.createElement("div")
-                            infoModificarIDX.classList.add("detallesUsuario_infoModificarIDX")
+                            infoModificarIDX.classList.add("padding14")
                             infoModificarIDX.textContent = `Escriba la nueva clave que quiera establecer`
                             contenedorCampos.appendChild(infoModificarIDX)
 
                             const campoNuevaClave = document.createElement("input")
-                            campoNuevaClave.classList.add("detallesUsuario_campoNuevoIDX")
+                            campoNuevaClave.classList.add("botonV1BlancoIzquierda_campo")
                             campoNuevaClave.setAttribute("campo", "claveNueva")
                             campoNuevaClave.setAttribute("componente", "claveNueva")
                             campoNuevaClave.placeholder = "Escriba la nueva contrasena"
                             contenedorCampos.appendChild(campoNuevaClave)
                             const campoVerificaClave = document.createElement("input")
-                            campoVerificaClave.classList.add("detallesUsuario_campoNuevoIDX")
+                            campoVerificaClave.classList.add("botonV1BlancoIzquierda_campo")
                             campoVerificaClave.setAttribute("campo", "claveNuevaDos")
                             campoVerificaClave.setAttribute("componente", "claveNuevaDos")
                             campoVerificaClave.placeholder = "Escriba de nueva la nueva contrasena"
@@ -55787,6 +55787,8 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
 
 
                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                        pantallaInmersiva.style.justifyContent = "center"
+
                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                         const titulo = constructor.querySelector("[componente=titulo]")
@@ -55962,11 +55964,11 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                             const contenedorCampos = document.createElement("div")
                             contenedorCampos.classList.add("detallesUsuario_contenedorCampos")
                             const infoModificarIDX = document.createElement("div")
-                            infoModificarIDX.classList.add("detallesUsuario_infoModificarIDX")
+                            infoModificarIDX.classList.add("padding14")
                             infoModificarIDX.textContent = `Escriba el nuevo VitiniID para este usuario en el campo de abajo. Recuerde que modificar el IDX deja libre el anterior IDX para que otro usuario, si quiere, lo obtenga.`
                             contenedorCampos.appendChild(infoModificarIDX)
                             const campoNuevoIDX = document.createElement("input")
-                            campoNuevoIDX.classList.add("detallesUsuario_campoNuevoIDX")
+                            campoNuevoIDX.classList.add("botonV1BlancoIzquierda_campo")
                             campoNuevoIDX.setAttribute("campo", "nuevoIDX")
                             campoNuevoIDX.setAttribute("componente", "nuevoIDX")
                             campoNuevoIDX.placeholder = usuariosIDX
