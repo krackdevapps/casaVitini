@@ -2,13 +2,8 @@ import session from 'express-session';
 import pgSession from 'connect-pg-simple';
 import { conexion } from '../src/infraestructure/repository/globales/db.mjs';
 
-
-
 const duracionSessionServidor = 900;
-
-
 const duracionSessionCliente = 7 * 24 * 60 * 60 * 1000;
-
 
 const almacenSessiones = new (pgSession(session))({
   pool: conexion,
@@ -21,7 +16,6 @@ const almacenSessiones = new (pgSession(session))({
   ttl: 1000,
   errorLog: console.error
 });
-
 
 export const configuracionSession = session({
   store: almacenSessiones,
