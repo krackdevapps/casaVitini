@@ -1,11 +1,11 @@
-import fs from 'fs';
+import { existsSync, readFileSync, readFile } from 'fs';
 export const cambiarVista = async (transaccion) => {
     try {
         const vista = transaccion.vista
         const arbol = vista.split("/").filter(n => n)
         const usuarioIDX = transaccion.usuario
         const rolIDV = transaccion.rolIDV
-        let selectorRama = './ui/vistas'
+        let selectorRama = './ui/vistas/public'
         let urlResuelta = "";
         if (arbol.length === 0) {
             const m = "Vista debe tener datos del directorio, pasar solo una barra no es el formato esperado."
@@ -22,15 +22,15 @@ export const cambiarVista = async (transaccion) => {
             if (controlFiltro.test(rama)) {
                 selectorRama = selectorRama + "/" + rama
 
-                if (fs.existsSync(selectorRama)) {
+                if (existsSync(selectorRama)) {
                     const archivoIDX = selectorRama + "/IDX"
-                    if (fs.existsSync(archivoIDX)) {
+                    if (existsSync(archivoIDX)) {
                         if (!usuarioIDX) {
                             portal = "IDX"
                             urlResuelta = ""
                             break
                         }
-                        const roles = fs.readFileSync(archivoIDX, 'utf-8')
+                        const roles = readFileSync(archivoIDX, 'utf-8')
                             .replaceAll(" ", "")
                             .split(",")
                             .filter(espacio => espacio)
@@ -61,29 +61,82 @@ export const cambiarVista = async (transaccion) => {
         parametros = "/" + parametros.join("/")
         parametros = parametros !== "/" ? parametros : ""
         const urlResultaConParametros = urlResuelta + parametros
-        urlResuelta = urlResuelta === "/micasa/portal" ? "" : urlResuelta
-        urlResuelta = urlResuelta === "/micasa/rol" ? "" : urlResuelta
-        let vistaSelector = "./ui/vistas" + urlResuelta + "/vista.ejs"
-        if (urlResuelta === "/micasa") {
-            if (usuarioIDX) {
-                vistaSelector = "./ui/vistas/micasa/portal/portada.ejs"
-            } else {
-                vistaSelector = "./ui/vistas/micasa/portal/vista.ejs"
-            }
-        }
+
+        let vistaSelector = "./ui/vistas/public" + urlResuelta + "/vista.ejs"
+
+        let jsOptionalSelector
+        let cssOptionalSelector
         if (portal === "IDX") {
-            vistaSelector = "./ui/vistas/micasa/portal/vista.ejs"
-        }
-        if (portal === "ROL") {
-            vistaSelector = "./ui/vistas/micasa/rol/vista.ejs"
+            urlResuelta = "/sys/portal/login"
+            vistaSelector = "./ui/vistas/sys/login/vista.ejs"
+
+            jsOptionalSelector = "./ui/vistas/sys/login/ui.js"
+            cssOptionalSelector = ".ui/vistas/sys/login/ui.css"
+        } else if (portal === "ROL") {
+            urlResuelta = "/sys/portal/rol"
+            vistaSelector = "./ui/vistas/sys/rol/vista.ejs"
+
+            jsOptionalSelector = "./ui/vistas/sys/rol/ui.js"
+            cssOptionalSelector = ".ui/vistas/sys/rol/ui.css"
+        } else {
+            jsOptionalSelector = "./ui/vistas/public" + urlResuelta + "/ui.js"
+            cssOptionalSelector = "./ui/vistas/public" + urlResuelta + "/ui.css"
         }
 
-        if (fs.existsSync(vistaSelector)) {
-            const vistaCodigo = fs.readFileSync(vistaSelector, 'utf-8');
+        if (existsSync(vistaSelector)) {
+
+            const html = readFileSync(vistaSelector, 'utf-8');
+
+            let js = ""
+            let css = ""
+            if (existsSync(jsOptionalSelector)) {
+                js = readFileSync(jsOptionalSelector, 'utf-8')
+            }
+            if (existsSync(cssOptionalSelector)) {
+                css = readFileSync(cssOptionalSelector, 'utf-8')
+            }
+
+            let sharedMethods = ""
+            const checkSharedMethods = "./ui/vistas/public" + urlResuelta + "/getSharedMethods.mjs"
+            if (existsSync(checkSharedMethods)) {
+                const sharedMethodsFile = "../../ui/vistas/public" + urlResuelta + "/getSharedMethods.mjs"
+                const sharedMethodsImported = await import(sharedMethodsFile);
+
+                const serializeFunctions = (obj) => {
+                    let cadena = '{';
+                    for (let key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            if (typeof obj[key] === 'function') {
+                                cadena += `${key}: ${obj[key].toString()}, `;
+                            }
+                            else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                                cadena += `${key}: ${serializeFunctions(obj[key])}, `;
+                            }
+                            else {
+                                cadena += `${key}: "${obj[key]}", `;
+                            }
+                        }
+                    }
+                    cadena = cadena.replace(/, $/, '') + '}';
+                    return cadena;
+                }
+
+                const shared = sharedMethodsImported.shared()
+                const serializedMethods = serializeFunctions(shared);
+                const lastFormating = `casaVitini.view.__sharedMethods__ = ${serializedMethods}`
+                sharedMethods = lastFormating;
+            }
+
             const ok = {
+                ok: "Vista encontrada",
                 zona: zona,
                 url: urlResultaConParametros,
-                ok: vistaCodigo
+                urlWithoutPArams: "/" + urlResueltoParseador.join("/"),
+                params: parametros,
+                html: html,
+                js: js,
+                sharedMethods: sharedMethods,
+                css: css
             }
             return ok
         } else {

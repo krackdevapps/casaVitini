@@ -13,6 +13,7 @@ import dotenv from 'dotenv'
 import { configuracionSession } from './middleware/almacenSessiones.mjs';
 import { jsonHeader } from './middleware/jsonHeader.mjs';
 import { antiPrototypePollution } from './middleware/antiPrototypePollution.mjs';
+import compression from 'compression';
 dotenv.config()
 process.on('uncaughtException', (error) => {
   console.error('Alerta! ->>:', error.message);
@@ -38,6 +39,8 @@ app.use(antiPrototypePollution)
 app.use(express.urlencoded({ extended: true }))
 app.use(controlTipoVerbo)
 app.disable('x-powered-by')
+app.use(compression());
+
 app.use('/componentes', express.static(path.join('./ui/componentes')))
 app.use(controlBaseDeDatos)
 app.use(configuracionSession)

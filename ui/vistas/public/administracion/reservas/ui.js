@@ -1,0 +1,50 @@
+casaVitini.view = {
+    start: async function ()  {
+        const main = document.querySelector("main")
+        const granuladoURL = casaVitini.utilidades.granuladorURL()
+        const parametros = granuladoURL.parametros
+
+        main.setAttribute("zonaCSS", "/administracion/reservas")
+        const botones = document.querySelectorAll("[componente=botonAdministracion]")
+        botones.forEach((boton) => {
+            boton.addEventListener("click", (boton) => {
+                boton.preventDefault()
+                const vista = boton.target.getAttribute("vista")
+                const navegacion = {
+                    vista: vista,
+                    tipoOrigen: "menuNavegador"
+                }
+                casaVitini.shell.navegacion.controladorVista(navegacion)
+            })
+        })
+        if (parametros.reserva) {
+            main.innerHTML = null
+            main.setAttribute("zonaCSS", "administracion/reservas/detallesReserva")
+
+            const marcoElastico = document.createElement("div")
+            marcoElastico.classList.add(
+                "marcoElasticoRelativo"
+            )
+            main.appendChild(marcoElastico)
+
+
+            const reservaUID = parametros.reserva
+            const reservaUI = await casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.despliege({
+                reservaUID,
+                configuracionVista: "administrativa"
+            })
+            marcoElastico.appendChild(reservaUI)
+
+            const zonaURL = parametros.zona
+
+            if (zonaURL) {
+                const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zonaURL)
+                casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
+                    origen: "url",
+                    categoria: categoriaGlobalIDV
+                })
+            }
+
+        }
+    }
+}

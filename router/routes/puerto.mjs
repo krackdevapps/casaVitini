@@ -1,12 +1,10 @@
-import fs from 'fs'
-import path from 'path';
+import { existsSync } from 'fs'
 import { filtroError } from '../../src/shared/error/filtroError.mjs';
 
 export const puerto = async (entrada, salida) => {
     try {
 
         const zonaRaw = entrada.body.zona;
-
         delete entrada.body.zona
         if (!zonaRaw) {
             const error = "zonaIndefinida";
@@ -31,52 +29,26 @@ export const puerto = async (entrada, salida) => {
             throw new Error(error);
         }
 
-        const ruta = arbol.join(".")
-        const constructorArbol = async (zonaBusqueda) => {
-            const arbol = {}
-            const cargarModulosDesdeDirectorio = async (rutaActual, arbol) => {
-                const arbolDeLaRuta = await fs.promises.readdir(rutaActual, { withFileTypes: true })
-                for (const ramaDeLaRuta of arbolDeLaRuta) {
-                    const rutaEntrada = path.join(ramaDeLaRuta.parentPath, ramaDeLaRuta.name)
-                    if (ramaDeLaRuta.isDirectory()) {
-                        arbol[ramaDeLaRuta.name] = {}
-                        await cargarModulosDesdeDirectorio(rutaEntrada, arbol[ramaDeLaRuta.name])
-                    } else if (ramaDeLaRuta.isFile() && ramaDeLaRuta.name.endsWith('.mjs')) {
-                        const nombreModulo = ramaDeLaRuta.name.replace('.mjs', '')
-                        const rutaDeImportacion = path.relative('./application/logica', rutaEntrada)
-                        arbol[nombreModulo] = await import(rutaDeImportacion)
-                    }
-                }
-            }
-            await cargarModulosDesdeDirectorio(zonaBusqueda, arbol)
-            return arbol
-        }
+        const directorioRaiz = process.cwd();
+        const pathControllers = directorioRaiz + "/src/application/" + zonaRaw + ".mjs"
 
-        const directorioZonas = './src/application'
-        const zonas = await constructorArbol(directorioZonas)
-        const exploradorArbol = (zonas, ruta) => {
-            const partes = ruta.split('.')
-            let rama = zonas;
-            for (const part of partes) {
-                if (rama && typeof rama === 'object' && rama.hasOwnProperty(part)) {
-                    rama = rama[part]
-                } else {
-                    const error = "No se encuentra la zona."
-                    throw new Error(error)
-                }
-            }
-            return rama
-        }
+        if (existsSync(pathControllers)) {
 
-        const estructura = exploradorArbol(zonas, ruta)
-        const X = estructura[arbol.pop()]
-        if (typeof X !== "function") {
-            const error = "Dentro de esta zona no hay ninguna función."
+            const controllerSelected = await import(pathControllers)
+            const nombreMetodo = arbol.pop();
+            if (typeof controllerSelected[nombreMetodo] === 'function') {
+                const respuesta = await controllerSelected[nombreMetodo](entrada, salida);
+                salida.json(respuesta)
+
+            } else {
+                const error = "Dentro de esta zona no hay ninguna función."
+                throw new Error(error)
+            }
+        } else {
+            const error = "Dentro de esta zona no hay ninguna controlador."
             throw new Error(error)
         }
 
-        const respuesta = await X(entrada, salida)
-        salida.json(respuesta)
     } catch (errorCapturado) {
         console.error("errorCapturado", errorCapturado.stack);
         const errorFinal = filtroError(errorCapturado)

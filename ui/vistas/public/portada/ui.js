@@ -1,0 +1,64 @@
+casaVitini.view = {
+    start: async () => {
+        const video = document.querySelector("[componente=video]")
+        video.addEventListener('loadedmetadata', () => {
+            const tiempos = [
+                "00:00",
+                "00:36",
+                "00:51",
+                // "01:07",
+                // "01:20",
+                "01:51",
+                // "02:07",
+                "02:41",
+                "02:49",
+                "02:58",
+                // "03:09",
+                // "03:35",
+                "03:46",
+                "04:03",
+                "04:13",
+                // "04:28",
+                "04:50",
+                "05:33",
+                "06:03",
+                // "07:03",
+                // "07:48",
+                // "08:05"
+            ];
+
+            const posicionAleatoria = Math.floor(Math.random() * tiempos.length)
+            const tiempoAleatorio = tiempos[posicionAleatoria];
+            const mmssASegundos = (tiempo) => {
+                const [minutos, segundos] = tiempo.split(':').map(Number);
+                return (minutos * 60) + segundos;
+            }
+            video.currentTime = mmssASegundos(tiempoAleatorio);
+            video.play();
+        })
+
+        video.addEventListener('progress', () => {
+            video.style.display = "block"
+        });
+
+        document.querySelector("[componente=botonCambiaVistaEnSection]")
+            .addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+        const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
+        const respuestaServidor = await casaVitini.shell.servidor({
+            zona: "plaza/portada/obtenerMensajes"
+        })
+        const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+        if (!seccionRenderizada) { return }
+        if (respuestaServidor?.ok) {
+            const mensajes = respuestaServidor.ok
+            const titulo = seccionRenderizada.querySelector("[componente=titulo]")
+            for (const detallesDelMensaje of mensajes) {
+                const mensaje = detallesDelMensaje.mensaje
+                const tituloUI = document.createElement("pre")
+                tituloUI.classList.add("tituloUI")
+                tituloUI.textContent = mensaje
+                titulo.insertAdjacentElement("afterend", tituloUI);
+            }
+        }
+    },
+}
