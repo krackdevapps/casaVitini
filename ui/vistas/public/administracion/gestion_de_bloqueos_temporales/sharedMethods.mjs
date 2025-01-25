@@ -1,5 +1,5 @@
 
-export const sharedMethods = {
+export const sharedMethodsTemporalLocks = {
     contructorObjeto: () => {
         const apartamentoIDV = document.querySelector("[datoBloqueo=apartamento]")?.value
         const selectorTipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueoIDV]")
@@ -355,7 +355,7 @@ export const sharedMethods = {
             botonModificiar.classList.add("botonV2_negrita")
             botonModificiar.textContent = "Modificiar bloqueo"
             botonModificiar.addEventListener("click", () => {
-                casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.controladorBotonesGlobales.guardarEliminar()
+               this.controladorBotonesGlobales.guardarEliminar()
             })
             contenedorBotones.appendChild(botonModificiar)
         }
@@ -364,7 +364,7 @@ export const sharedMethods = {
             botonGuardarCambios.classList.add("botonV2_negrita")
             botonGuardarCambios.textContent = "Guardar cambios"
             botonGuardarCambios.addEventListener("click", () => {
-                casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.guardarCambios()
+                casaVitini.view.detallesDelBloqueo.guardarCambios()
             })
             contenedorBotones.appendChild(botonGuardarCambios)
 
@@ -372,8 +372,8 @@ export const sharedMethods = {
             botonCancelarCambios.classList.add("botonV2_negrita")
             botonCancelarCambios.textContent = "Cancelar cambios"
             botonCancelarCambios.addEventListener("click", () => {
-                casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.controladorBotonesGlobales.modificar()
-                casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.cancelarCambios()
+             this.controladorBotonesGlobales.modificar()
+             casaVitini.view.detallesDelBloqueo.cancelarCambios()
             })
             contenedorBotones.appendChild(botonCancelarCambios)
 
@@ -381,7 +381,7 @@ export const sharedMethods = {
             botonEliminarBloqueo.classList.add("botonV2_negrita")
             botonEliminarBloqueo.textContent = "Eliminar bloqueo"
             botonEliminarBloqueo.addEventListener("click", () => {
-                casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.eliminarBloqueo.UI()
+                casaVitini.view.detallesDelBloqueo.eliminarBloqueo.UI()
             })
             contenedorBotones.appendChild(botonEliminarBloqueo)
 

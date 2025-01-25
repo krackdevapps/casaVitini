@@ -1,4 +1,3 @@
-
 export const sharedMethods = {
     complementoUI: (data) => {
         const modoUI = data.modoUI
@@ -206,7 +205,7 @@ export const sharedMethods = {
 
             casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
 
-            const transaccion = casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.utilidades.constructorObjeto()
+            const transaccion = casaVitini.view.__sharedMethods__.complementosDeAlojamiento.complementosPorAlojamiento.utilidades.constructorObjeto()
             transaccion.zona = "administracion/complementosDeAlojamiento/crearComplementoDeAlojamiento"
 
             const respuestaServidor = await casaVitini.shell.servidor(transaccion)

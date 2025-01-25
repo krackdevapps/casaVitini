@@ -325,5 +325,4 @@ casaVitini.view = {
         marcoBotones.appendChild(botonCancelar)
         selectorEspacioCalendarios.appendChild(marcoBotones)
     },
-  
 }

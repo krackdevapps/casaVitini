@@ -138,7 +138,7 @@ casaVitini.view = {
         casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
 
 
-        const bloqueNuevo = casaVitini.administracion.bloqueosTemporales.contructorObjeto()
+        const bloqueNuevo = casaVitini.view.__sharedMethods__.contructorObjeto()
         bloqueNuevo.zona = "administracion/bloqueos/crearNuevoBloqueo"
 
         const respuestaServidor = await casaVitini.shell.servidor(bloqueNuevo)

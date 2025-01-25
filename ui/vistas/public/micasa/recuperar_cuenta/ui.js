@@ -1,5 +1,5 @@
 casaVitini.view = {
-    arranque: async function () {
+    start: async function () {
         const main = document.querySelector("main")
         main.setAttribute("zonaCSS", "/micasa")
         const granuladoURL = casaVitini.utilidades.granuladorURL()
@@ -63,7 +63,7 @@ casaVitini.view = {
             marcoElasticoRelativo.appendChild(marcoElastico);
             secction.appendChild(marcoElasticoRelativo);
         },
-        codigoErroneo: () => {
+        codigoErroneo: function () {
             const marcoElasticoRelatico = document.createElement("div")
             marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
             const marcoElastico = document.createElement("div")
@@ -99,7 +99,7 @@ casaVitini.view = {
             seccion.innerHTML = null
             seccion.appendChild(marcoElasticoRelatico)
         },
-        mensajeEnviado: () => {
+        mensajeEnviado: function () {
             const marcoElasticoRelatico = document.createElement("div")
             marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
             const marcoElastico = document.createElement("div")
@@ -141,7 +141,7 @@ casaVitini.view = {
             seccion.innerHTML = null
             seccion.appendChild(marcoElasticoRelatico)
         },
-        claveRestablecida: () => {
+        claveRestablecida: function () {
             const marcoElasticoRelatico = document.createElement("div")
             marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
             const marcoElastico = document.createElement("div")
@@ -183,7 +183,7 @@ casaVitini.view = {
             seccion.innerHTML = null
             seccion.appendChild(marcoElasticoRelatico)
         },
-        restablecerClave: (codigo) => {
+        restablecerClave: function (codigo) {
 
             const titulo = document.createElement('p');
             titulo.classList.add("tituloGris", "textoCentrado")
@@ -232,7 +232,7 @@ casaVitini.view = {
         },
     },
     transactores: {
-        enviarEnlaceRecuperacion: async () => {
+        enviarEnlaceRecuperacion: async function () {
             const mail = document.querySelector("[campo=mail]").value
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
             const mensaje = "Enviando enlace temporal..."
@@ -256,7 +256,7 @@ casaVitini.view = {
                 return casaVitini.view.ui.mensajeEnviado()
             }
         },
-        restablecerClave: async (codigo) => {
+        restablecerClave: async function (codigo) {
             const clave = document.querySelector("[campo=clave]").value
             const claveConfirmada = document.querySelector("[campo=claveConfirmada]").value
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()

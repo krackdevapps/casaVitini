@@ -114,7 +114,7 @@ casaVitini.view = {
         if (!instanciaRenderizada) { return }
         instanciaRenderizada.remove()
         if (respuestaServidor?.error) {
-            casaVitini.administracion.configuracion.cancelarCambios()
+          this.cancelarCambios()
             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
         }
         if (respuestaServidor?.ok) {

@@ -148,7 +148,7 @@ casaVitini.view = {
                 }
 
 
-                this.buscador.mostrarClientesResueltos(transaccion)
+                this.mostrarClientesResueltos(transaccion)
             }, 1500);
         },
         mostrarClientesResueltos: async function (transaccion) {
@@ -699,7 +699,7 @@ casaVitini.view = {
 
                     const botonAceptar = constructor.querySelector("[boton=aceptar]")
                     botonAceptar.textContent = "Comfirmar la eliminacion del cliente"
-                    botonAceptar.addEventListener("click",() => { casaVitini.view.detallesCliente.portada.eliminarCliente.confirmar()})
+                    botonAceptar.addEventListener("click", () => { casaVitini.view.detallesCliente.portada.eliminarCliente.confirmar() })
                     const botonCancelar = constructor.querySelector("[boton=cancelar]")
                     botonCancelar.textContent = "Cancelar la eliminacion"
 

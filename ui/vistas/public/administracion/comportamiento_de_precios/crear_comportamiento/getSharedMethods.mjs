@@ -1,9 +1,9 @@
 
-import { sharedMethods } from "../sharedMethods.mjs"
+import { sharedMethodsPricesBehavior } from "../sharedMethods.mjs"
 
-export const shared = () => {   
+export const shared = () => {
     return {
-        ...sharedMethods,
+        ...sharedMethodsPricesBehavior,
     }
 }
 

@@ -1,5 +1,5 @@
 
-export const sharedMethods = {
+export const sharedMethodsPricesBehavior = {
     traductorCambioVista: (oferta) => {
         oferta.preventDefault()
         oferta.stopPropagation()
@@ -39,7 +39,7 @@ export const sharedMethods = {
             const botonEstadoOferta = document.createElement("div")
             botonEstadoOferta.classList.add("creatOfertaBotonEstado")
             botonEstadoOferta.setAttribute("componente", "estadoComportamiento")
-            botonEstadoOferta.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.estadoComportamiento)
+            botonEstadoOferta.addEventListener("click", (e) => { casaVitini.view.detallesComportamiento.estadoComportamiento(e) })
             botonEstadoOferta.style.pointerEvents = "all"
             botonEstadoOferta.textContent = "Comportamiento desactivado"
             divContenedorNombreYEstado.appendChild(botonEstadoOferta)
@@ -83,49 +83,55 @@ export const sharedMethods = {
         const divCrearOfertaEpacioBotones_3 = document.createElement("div");
         divCrearOfertaEpacioBotones_3.classList.add("crearOfertaEpacioBotones");
         divCrearOfertaEpacioBotones_3.style.pointerEvents = "all"
+        divPrincipal.appendChild(divCrearOfertaEpacioBotones_3)
+
 
         const pbotonV2_negrita_3 = document.createElement("p");
         pbotonV2_negrita_3.classList.add("botonV2_negrita");
         pbotonV2_negrita_3.setAttribute("tipoOferta", "porApartamentoDedicado");
+        divPrincipal.appendChild(pbotonV2_negrita_3)
+
+
         if (modo === "crearOferta") {
             pbotonV2_negrita_3.setAttribute("componente", "botonCrearOferta");
             pbotonV2_negrita_3.textContent = "Crear comportamiento";
             pbotonV2_negrita_3.addEventListener("click", () => {
-                casaVitini.administracion.comportamientoDePrecios.crearComportamiento.crearComortamientoConfirmar()
+                casaVitini.view.crearComortamientoConfirmar()
             })
         }
         if (modo === "editarOferta") {
             pbotonV2_negrita_3.setAttribute("componente", "botonEditarOferta");
             pbotonV2_negrita_3.textContent = "Editar comportamiento";
             pbotonV2_negrita_3.style.pointerEvents = "all"
-            pbotonV2_negrita_3.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.comportamientoModos)
+            pbotonV2_negrita_3.addEventListener("click", casaVitini.view.detallesComportamiento.comportamientoModos)
+
+            const pBotonGuardarOferta_03 = document.createElement("p");
+            pBotonGuardarOferta_03.classList.add("botonV2_negrita");
+            pBotonGuardarOferta_03.classList.add("elementoOcultoInicialmente");
+            pBotonGuardarOferta_03.setAttribute("componente", "botonGuardarCambios");
+            pBotonGuardarOferta_03.setAttribute("tipoOferta", "porApartamentoDedicado");
+            pBotonGuardarOferta_03.addEventListener("click", casaVitini.view.detallesComportamiento.guardarCambiosComportamiento)
+            pBotonGuardarOferta_03.textContent = "Guardar comportamiento";
+            divCrearOfertaEpacioBotones_3.appendChild(pBotonGuardarOferta_03);
+
+            const pBotonCancelarCambiosOferta_O3 = document.createElement("p");
+            pBotonCancelarCambiosOferta_O3.classList.add("botonV2_negrita");
+            pBotonCancelarCambiosOferta_O3.classList.add("elementoOcultoInicialmente");
+            pBotonCancelarCambiosOferta_O3.setAttribute("componente", "botonCancelarCambios");
+            pBotonCancelarCambiosOferta_O3.setAttribute("tipoOferta", "porApartamentoDedicado");
+            pBotonCancelarCambiosOferta_O3.addEventListener("click", casaVitini.view.detallesComportamiento.comportamientoModos)
+            pBotonCancelarCambiosOferta_O3.textContent = "Cancelar cambios y dejar de editar";
+            divCrearOfertaEpacioBotones_3.appendChild(pBotonCancelarCambiosOferta_O3);
+
+            const pBotonEliminarOferta_O3 = document.createElement("p");
+            pBotonEliminarOferta_O3.classList.add("botonV2_negrita");
+            pBotonEliminarOferta_O3.classList.add("elementoOcultoInicialmente");
+            pBotonEliminarOferta_O3.setAttribute("componente", "botonEliminarOferta");
+            pBotonEliminarOferta_O3.addEventListener("click", casaVitini.view.detallesComportamiento.eliminarComportamiento.UI)
+            pBotonEliminarOferta_O3.textContent = "Eliminar comportamiento";
+            divCrearOfertaEpacioBotones_3.appendChild(pBotonEliminarOferta_O3);
         }
 
-        const pBotonGuardarOferta_03 = document.createElement("p");
-        pBotonGuardarOferta_03.classList.add("botonV2_negrita");
-        pBotonGuardarOferta_03.classList.add("elementoOcultoInicialmente");
-        pBotonGuardarOferta_03.setAttribute("componente", "botonGuardarCambios");
-        pBotonGuardarOferta_03.setAttribute("tipoOferta", "porApartamentoDedicado");
-        pBotonGuardarOferta_03.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.guardarCambiosComportamiento)
-        pBotonGuardarOferta_03.textContent = "Guardar comportamiento";
-        const pBotonCancelarCambiosOferta_O3 = document.createElement("p");
-        pBotonCancelarCambiosOferta_O3.classList.add("botonV2_negrita");
-        pBotonCancelarCambiosOferta_O3.classList.add("elementoOcultoInicialmente");
-        pBotonCancelarCambiosOferta_O3.setAttribute("componente", "botonCancelarCambios");
-        pBotonCancelarCambiosOferta_O3.setAttribute("tipoOferta", "porApartamentoDedicado");
-        pBotonCancelarCambiosOferta_O3.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.comportamientoModos)
-        pBotonCancelarCambiosOferta_O3.textContent = "Cancelar cambios y dejar de editar";
-        const pBotonEliminarOferta_O3 = document.createElement("p");
-        pBotonEliminarOferta_O3.classList.add("botonV2_negrita");
-        pBotonEliminarOferta_O3.classList.add("elementoOcultoInicialmente");
-        pBotonEliminarOferta_O3.setAttribute("componente", "botonEliminarOferta");
-        pBotonEliminarOferta_O3.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.eliminarComportamiento.UI)
-        pBotonEliminarOferta_O3.textContent = "Eliminar comportamiento";
-        divCrearOfertaEpacioBotones_3.appendChild(pBotonGuardarOferta_03);
-        divCrearOfertaEpacioBotones_3.appendChild(pBotonCancelarCambiosOferta_O3);
-        divCrearOfertaEpacioBotones_3.appendChild(pBotonEliminarOferta_O3);
-        divPrincipal.appendChild(pbotonV2_negrita_3)
-        divPrincipal.appendChild(divCrearOfertaEpacioBotones_3)
         return divPrincipal
 
 
@@ -151,7 +157,7 @@ export const sharedMethods = {
             pCrearOFertaBotonAnadirApartamento_31.setAttribute("componente", "botonAnadirApartamentoOferta");
             pCrearOFertaBotonAnadirApartamento_31.textContent = "Añadir apartamento";
             pCrearOFertaBotonAnadirApartamento_31.addEventListener("click", (e) => {
-                casaVitini.administracion.comportamientoDePrecios.crearComportamiento.apartamentosDisponibles({
+                casaVitini.view.apartamentosDisponibles({
                     e: e,
                     destino: `[instanciaUID="${instanciaUID}"] [componente=comportamientoSuperBloque]`
                 })
@@ -179,55 +185,55 @@ export const sharedMethods = {
             return contenedorApartamentos
 
         },
-        insertarComportamientoPorAntelacion: function (data) {
+        // insertarComportamientoPorAntelacion: function (data) {
 
-            const diasAntelacion = data.diasAntelacion
-            if (!diasAntelacion) {
-                const error = "Inserta al menos un numero"
-                return casaVitini.ui.componentes.advertenciaInmersiva(error)
-            }
+        //     const diasAntelacion = data.diasAntelacion
+        //     if (!diasAntelacion) {
+        //         const error = "Inserta al menos un numero"
+        //         return casaVitini.ui.componentes.advertenciaInmersiva(error)
+        //     }
 
-            const selectorPerfilRepedito = document.querySelector(`[perfil=diasAntelacion][diaAntelacion="${diasAntelacion}"]`)
-            if (selectorPerfilRepedito) {
-                const error = `Ya has insertar un perfil para ${diasAntelacion} de antelacion`
-                return casaVitini.ui.componentes.advertenciaInmersiva(error)
-            }
+        //     const selectorPerfilRepedito = document.querySelector(`[perfil=diasAntelacion][diaAntelacion="${diasAntelacion}"]`)
+        //     if (selectorPerfilRepedito) {
+        //         const error = `Ya has insertar un perfil para ${diasAntelacion} de antelacion`
+        //         return casaVitini.ui.componentes.advertenciaInmersiva(error)
+        //     }
 
-            const contenedor = document.createElement("div")
-            contenedor.setAttribute("perfil", "diasAntelacion")
-            contenedor.classList.add(
-                "backgroundGrey1",
-                "padding6"
-            )
-            contenedor.setAttribute("diaAntelacion", diasAntelacion)
+        //     const contenedor = document.createElement("div")
+        //     contenedor.setAttribute("perfil", "diasAntelacion")
+        //     contenedor.classList.add(
+        //         "backgroundGrey1",
+        //         "padding6"
+        //     )
+        //     contenedor.setAttribute("diaAntelacion", diasAntelacion)
 
-            const botonEliminar = document.createElement("div")
-            botonEliminar.classList.add("botonV1")
-            botonEliminar.textContent = "Eliminar comportamiento"
-            botonEliminar.addEventListener("click", (e) => {
-                const contenedorUI = e.target.closest("[perfil=diasAntelacion]")
-                contenedorUI.remove()
-            })
-            contenedor.appendChild(botonEliminar)
+        //     const botonEliminar = document.createElement("div")
+        //     botonEliminar.classList.add("botonV1")
+        //     botonEliminar.textContent = "Eliminar comportamiento"
+        //     botonEliminar.addEventListener("click", (e) => {
+        //         const contenedorUI = e.target.closest("[perfil=diasAntelacion]")
+        //         contenedorUI.remove()
+        //     })
+        //     contenedor.appendChild(botonEliminar)
 
-            const titulo = document.createElement("div")
-            titulo.classList.add(
-                "padding6"
-            )
-            titulo.textContent = `Aplicar comportamiento a los apartamentos cuando se haga una reserva con ${diasAntelacion} o más días de antelación`
-            contenedor.appendChild(titulo)
+        //     const titulo = document.createElement("div")
+        //     titulo.classList.add(
+        //         "padding6"
+        //     )
+        //     titulo.textContent = `Aplicar comportamiento a los apartamentos cuando se haga una reserva con ${diasAntelacion} o más días de antelación`
+        //     contenedor.appendChild(titulo)
 
 
-            const selectorUI = this.contenedorSelectorApartamento()
-            contenedor.appendChild(selectorUI)
+        //     const selectorUI = this.contenedorSelectorApartamento()
+        //     contenedor.appendChild(selectorUI)
 
-            const destino = document.querySelector("[contenedor=comportamientosPorDiasAntelacion]")
-            destino.appendChild(contenedor)
-        },
+        //     const destino = document.querySelector("[contenedor=comportamientosPorDiasAntelacion]")
+        //     destino.appendChild(contenedor)
+        // },
         barraGlobal: () => {
             const selectorBoton = (boton) => {
                 const botonID = boton.target.getAttribute("botonTipo")
-                casaVitini.administracion.comportamientoDePrecios.detallesComportamiento.controladoresUI.opcionesTipo(botonID)
+                casaVitini.view.__sharedMethods__.controladoresUI.opcionesTipo(botonID)
             }
             const selectorTipoComportamiento = document.createElement("div")
             selectorTipoComportamiento.classList.add("selectorTipoComportamiento")
@@ -304,7 +310,7 @@ export const sharedMethods = {
                         }
                     },
                     opcionesUI: {
-                        ui: casaVitini.administracion.comportamientoDePrecios.compomentesUI.opcionesApartamentoUI
+                        ui: casaVitini.view.__sharedMethods__.compomentesUI.opcionesApartamentoUI
                     }
                 })
 
@@ -372,7 +378,7 @@ export const sharedMethods = {
                 const contenedorApartamentos = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: "Añade apartamentos para determinar el comportamiento de precio.",
                     opcionesUI: {
-                        ui: casaVitini.administracion.comportamientoDePrecios.compomentesUI.opcionesApartamentoUI
+                        ui: casaVitini.view.__sharedMethods__.compomentesUI.opcionesApartamentoUI
                     }
                 })
 
@@ -456,7 +462,7 @@ export const sharedMethods = {
                 const contenedorApartamentos = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: "Añade apartamentos para determinar el comportamiento de precio.",
                     opcionesUI: {
-                        ui: casaVitini.administracion.comportamientoDePrecios.compomentesUI.opcionesApartamentoUI
+                        ui: casaVitini.view.__sharedMethods__.compomentesUI.opcionesApartamentoUI
                     }
                 })
                 comportamientoPorDias.appendChild(contenedorApartamentos);
@@ -513,13 +519,6 @@ export const sharedMethods = {
                 comportamientoPorAntelacion.appendChild(contenedorPerfilDiasAntelacion)
                 return comportamientoPorAntelacion
             }
-
-
-
-
-
-
-
         },
         comportamientosEnClonfictoUI: (data) => {
             const comportamientosEnConflicto = data.comportamientosEnConflicto
@@ -765,6 +764,48 @@ export const sharedMethods = {
         return contenedorGlobal
 
 
-    }
+    },
+    controladoresUI: {
+        opcionesTipo: function(tipo)  {
+            const selectorBotones = document.querySelectorAll("[botonTipo]")
+            selectorBotones.forEach((boton) => {
+                boton.removeAttribute("style")
+                boton.removeAttribute("estado")
 
+            })
+            const botonSeleccionado = document.querySelector(`[botonTipo="${tipo}"]`)
+            if (botonSeleccionado) {
+                botonSeleccionado.style.background = "blue"
+                botonSeleccionado.style.color = "white"
+                botonSeleccionado.setAttribute("estado", "activado")
+
+            }
+
+            const selectoresContenedoresTipo = document.querySelectorAll(`[contenedor_tipobloqueo]`)
+            selectoresContenedoresTipo.forEach((contenedor) => {
+                contenedor.removeAttribute("style")
+            })
+
+            const contenedorSeleccionado = document.querySelector(`[contenedor_tipobloqueo="${tipo}"]`)
+            if (contenedorSeleccionado) {
+                document.querySelector("[contenedor=tipoComportamientos]").classList.remove("ocultoInicial")
+
+                contenedorSeleccionado.style.display = "flex"
+            }
+        },
+        selectorDiasSemana: function (diasArray)  {
+            const selectorDias = document.querySelectorAll("[componente=diaUI]")
+            selectorDias.forEach((dia) => {
+                dia.removeAttribute("style")
+                dia.removeAttribute("estado")
+            })
+
+            for (const diaIDV of diasArray) {
+                const selectorDia = document.querySelector(`[componente=diaUI][diaIDV="${diaIDV}"]`)
+                selectorDia.setAttribute("estado", "activado")
+                selectorDia.style.background = "blue"
+                selectorDia.style.color = "white"
+            }
+        }
+    },
 }

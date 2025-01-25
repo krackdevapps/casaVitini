@@ -189,9 +189,7 @@ casaVitini.view = {
                     const bloqueBloqueoUI = document.createElement("div")
                     bloqueBloqueoUI.classList.add("listaBloqueos_bloqueBloqueoUI")
                     bloqueBloqueoUI.setAttribute("bloqueoUID", bloqueoUID)
-                    // bloqueBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
-                    // bloqueBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
-                    //bloqueBloqueoUI.addEventListener("click", casaVitini.administracion.bloqueosTemporales.bloqueosPorApartamento.traductorCambioVista)
+
                     let tipoBloqueoDefinicion
                     if (tipoBloqueoIDV === "rangoTemporal") {
                         tipoBloqueoDefinicion = "Rango temporal"
@@ -513,7 +511,6 @@ casaVitini.view = {
             const componente = calendario.target.closest("[calendario]")
             this.constructorCalendario(componente)
         },
-    
         guardarCambios: async function () {
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
             const mensaje = "Actualizando bloqueo..."

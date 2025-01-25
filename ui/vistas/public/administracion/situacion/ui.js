@@ -272,7 +272,7 @@ casaVitini.view = {
             contenedorZonaPublicacion.querySelector("[data=dataUI]").style.fontWeight = "bold"
             contenedorInfoGlobal.appendChild(contenedorZonaPublicacion)
 
-            const calendariosListaAirnbnb = await casaVitini.administracion.calendario.obtenerCalendariosSincronizados.airbnb()
+            const calendariosListaAirnbnb = await casaVitini.view.__sharedMethods__.obtenerCalendariosSincronizados.airbnb()
 
             const calendariosAirbnb = []
             calendariosListaAirnbnb.forEach(c => {

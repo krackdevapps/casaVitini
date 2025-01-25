@@ -235,7 +235,7 @@ casaVitini.view = {
                     const selectorInstantena = document.querySelector("[instantanea]").getAttribute("instantanea")
                     const instantanea = JSON.parse(selectorInstantena)
                     const instanciaUID_destino = document.querySelector(`main[instanciaUID]`).getAttribute("instanciaUID")
-                    casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.detallesComplemento.aplicaData({
+                    this.aplicaData({
                         complemento: instantanea,
                         instanciaUID_destino: instanciaUID_destino,
                     })
@@ -246,7 +246,7 @@ casaVitini.view = {
                 botonEliminar.classList.add("botonV1");
                 botonEliminar.setAttribute("componente", "botonEliminarOferta");
                 botonEliminar.addEventListener("click", () => {
-                    casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.detallesComplemento.eliminar.ui()
+                  this.eliminar.ui()
                 })
                 botonEliminar.textContent = "Eliminar complemento";
                 contenedor.appendChild(botonGuardar);
@@ -305,7 +305,7 @@ casaVitini.view = {
                     mensaje: mensaje
                 }
                 casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                const complementoObjeto = casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.utilidades.constructorObjeto()
+                const complementoObjeto = casaVitini.view.__sharedMethods__.constructorObjeto()
 
                 const respuestaServidor = await casaVitini.shell.servidor({
                     zona: "administracion/complementosDeAlojamiento/actualizarComplemento",
@@ -323,7 +323,7 @@ casaVitini.view = {
 
                     const complementoUID = document.querySelector("[componente=complementoUI]")
                     complementoUID.setAttribute("instantanea", JSON.stringify(complementoActualizado))
-                    casaVitini.administracion.complementosDeAlojamiento.complementosPorAlojamiento.detallesComplemento.aplicaData({
+                  this.aplicaData({
                         complemento: complementoActualizado,
                         instanciaUID_destino: instanciaUID
                     })

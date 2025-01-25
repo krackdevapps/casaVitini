@@ -223,7 +223,7 @@ casaVitini.view = {
                 botonEstadoApartamento.addEventListener("click", (e) => {
                     const estadoActual = e.target.closest("[estadoActual]").getAttribute("estadoActual")
 
-                    casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.actualizarEstadoConfiguracion.UI({
+                    this.actualizarEstadoConfiguracion.UI({
                         estadoActual
                     })
                 })
@@ -244,7 +244,7 @@ casaVitini.view = {
                 botonZonaPublicacion.setAttribute("data", "zonaPublicacion")
                 botonZonaPublicacion.textContent = zonaUI
                 botonZonaPublicacion.addEventListener("click", () => {
-                    casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.gestionZona.ui({
+                    this.gestionZona.ui({
                         apartamentoIDV
                     })
                 })
@@ -292,7 +292,7 @@ casaVitini.view = {
                     contenedorCamas.classList.add("arquitecturaConfApartamento_contenedorCamas")
                     if (camas.length === 0) {
 
-                        const infoNoCamas = casaVitini.administracion.arquitecturaDelAlojamiento.configuraciones.detallesConfiguracion.componentesUI.noCamaInfoUI()
+                        const infoNoCamas = this.componentesUI.noCamaInfoUI()
                         contenedorHabitacionUI.appendChild(infoNoCamas)
                     }
                     if (camas.length > 0) {

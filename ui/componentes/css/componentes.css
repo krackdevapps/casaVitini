@@ -14984,18 +14984,16 @@ summary:hover {
     min-height: 100%;
     width: auto;
     height: auto;
-    display: none;
+    display: block;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
-    transition: opacity 2s linear;
-    opacity: 1;
+    /* transition: opacity 2s linear; */
+    opacity: 0;
+ 
 
-    @starting-style {
-        opacity: 0;
-    }
 }
 
 [zonaCSS="administracion/reservas/detallesReserva"] .barraProgresso {
@@ -15008,7 +15006,7 @@ summary:hover {
     }
 }
 
-[zonaCSS="/micasa"] .videoPresentacion {
+/* [zonaCSS="/micasa"] .videoPresentacion {
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -15019,7 +15017,7 @@ summary:hover {
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: -1;
-}
+} */
 
 
 [zonaCSS="/"] .videoPresentacion::-webkit-media-controls-start-playback-button {

@@ -27,7 +27,7 @@ export const sharedMethods = {
         const tipoApartamentoUI = document.createElement("select")
         tipoApartamentoUI.classList.add("listaApartamentos")
         tipoApartamentoUI.setAttribute("campo", "apartamentoIDV")
-        tipoApartamentoUI.addEventListener("change", casaVitini.administracion.bloqueosTemporales.detallesDelBloqueo.controladorSelectorRangoTemporalUI)
+        tipoApartamentoUI.addEventListener("change", casaVitini.view.__sharedMethods__.sharedMethodsTemporalLocks.controladorSelectorRangoTemporalUI)
         const tipoApartamentoInicio = document.createElement("option");
         tipoApartamentoInicio.value = "";
         tipoApartamentoInicio.selected = true;

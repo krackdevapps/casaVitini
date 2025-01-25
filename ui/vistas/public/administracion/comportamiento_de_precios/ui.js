@@ -1,5 +1,5 @@
 casaVitini.view = {
-    start: async function ()  {
+    start: async function () {
         const main = document.querySelector("main")
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -79,7 +79,7 @@ casaVitini.view = {
             }
         }
     },
-    comportamientosUI: function(data)  {
+    comportamientosUI: function (data) {
         const contenedor = data.contenedor
         const tipo = contenedor.tipo
         const comportamientoUID = data.comportamientoUID
@@ -107,10 +107,6 @@ casaVitini.view = {
 
         const comportamientoUI = document.createElement("div")
         comportamientoUI.classList.add("comportamientoUI")
-        // comportamientoUI.setAttribute("comportamientoUI", comportamientoUID)
-        // comportamientoUI.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
-        // comportamientoUI.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
-        // comportamientoUI.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.traductorCambioVista)
 
         const contenedorTituloEstado = document.createElement("div")
         contenedorTituloEstado.classList.add("contenedorTituloEstado")
@@ -320,7 +316,7 @@ casaVitini.view = {
         return comportamientoUI
     },
     detallesComportamiento: {
-        UI: async function (comportamientoUID)  {
+        UI: async function (comportamientoUID) {
             const main = document.querySelector("main")
             const instanciaUID = main.getAttribute("instanciaUID")
 
@@ -365,10 +361,10 @@ casaVitini.view = {
                     selectorEstadoComportamiento.style.background = "#00ff006e"
                     selectorEstadoComportamiento.innerHTML = "Comportamiento activado"
                 }
-             this.imprimirDatosEnUI()
+                this.imprimirDatosEnUI()
             }
         },
-        guardarCambiosComportamiento: async function()  {
+        guardarCambiosComportamiento: async function () {
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
             const mensaje = "Actualizando comportamiento de precio..."
             const datosPantallaSuperpuesta = {
@@ -378,7 +374,7 @@ casaVitini.view = {
             casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
             const main = document.querySelector("main")
             const comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
-            const contenedorComportamiento = this.constructorObjeto()
+            const contenedorComportamiento = casaVitini.view.__sharedMethods__.constructorObjeto()
 
             const transaccion = {
                 zona: "administracion/comportamientoDePrecios/actualizarComportamiento",
@@ -429,11 +425,11 @@ casaVitini.view = {
                 const modo = {
                     modo: "botonCancelarCambios"
                 }
-                casaVitini.view.__sharedMethods__.detallesComportamiento.comportamientoModos(modo)
+                casaVitini.view.detallesComportamiento.comportamientoModos(modo)
 
             }
         },
-        comportamientoModos: function (modo)  {
+        comportamientoModos: function (modo) {
             let botonModo
             if (modo.target) {
                 botonModo = modo.target.getAttribute("componente")
@@ -483,10 +479,10 @@ casaVitini.view = {
                 document.querySelector("[componente=espacioCrearOferta]").classList.add("eventosDesactivadosInicialmente")
                 document.querySelector("[componente=soloLecturaInfo]").classList.remove("elementoOcultoInicialmente")
 
-                casaVitini.view.__sharedMethods__.detallesComportamiento.imprimirDatosEnUI()
+                casaVitini.view.detallesComportamiento.imprimirDatosEnUI()
             }
         },
-        estadoComportamiento: async function (estadoOferta)  {
+        estadoComportamiento: async function (estadoOferta) {
             let comportamientoUID = document.querySelector("[comportamientoUID]").getAttribute("comportamientoUID")
             let selectorEstadoComportamientoUI = document.querySelector("[componente=estadoComportamiento]")
             let estadoActualMemoriaVolatil = selectorEstadoComportamientoUI.textContent
@@ -528,7 +524,7 @@ casaVitini.view = {
             }
         },
         eliminarComportamiento: {
-            UI: async function ()  {
+            UI: async function () {
                 const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
                 pantallaInmersiva.style.justifyContent = "center"
 
@@ -542,7 +538,7 @@ casaVitini.view = {
                 const botonAceptar = constructor.querySelector("[boton=aceptar]")
                 botonAceptar.textContent = "Comfirmar la eliminacion"
                 botonAceptar.addEventListener("click", () => {
-                   this.eliminarComportamiento.confirmar()
+                    this.eliminarComportamiento.confirmar()
                 })
                 const botonCancelar = constructor.querySelector("[boton=cancelar]")
                 botonCancelar.textContent = "Cancelar la eliminacion"
@@ -550,7 +546,7 @@ casaVitini.view = {
                 document.querySelector("main").appendChild(pantallaInmersiva)
 
             },
-            confirmar: async function ()  {
+            confirmar: async function () {
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const mensaje = "Eliminado el comportamiento del precio..."
                 const datosPantallaSuperpuesta = {
@@ -584,50 +580,49 @@ casaVitini.view = {
                 }
             }
         },
-        controladoresUI: {
-            opcionesTipo: function(tipo)  {
-                const selectorBotones = document.querySelectorAll("[botonTipo]")
-                selectorBotones.forEach((boton) => {
-                    boton.removeAttribute("style")
-                    boton.removeAttribute("estado")
+        // controladoresUI: {
+        //     opcionesTipo: function(tipo)  {
+        //         const selectorBotones = document.querySelectorAll("[botonTipo]")
+        //         selectorBotones.forEach((boton) => {
+        //             boton.removeAttribute("style")
+        //             boton.removeAttribute("estado")
 
-                })
-                const botonSeleccionado = document.querySelector(`[botonTipo="${tipo}"]`)
-                if (botonSeleccionado) {
-                    botonSeleccionado.style.background = "blue"
-                    botonSeleccionado.style.color = "white"
-                    botonSeleccionado.setAttribute("estado", "activado")
+        //         })
+        //         const botonSeleccionado = document.querySelector(`[botonTipo="${tipo}"]`)
+        //         if (botonSeleccionado) {
+        //             botonSeleccionado.style.background = "blue"
+        //             botonSeleccionado.style.color = "white"
+        //             botonSeleccionado.setAttribute("estado", "activado")
 
-                }
+        //         }
 
-                const selectoresContenedoresTipo = document.querySelectorAll(`[contenedor_tipobloqueo]`)
-                selectoresContenedoresTipo.forEach((contenedor) => {
-                    contenedor.removeAttribute("style")
-                })
+        //         const selectoresContenedoresTipo = document.querySelectorAll(`[contenedor_tipobloqueo]`)
+        //         selectoresContenedoresTipo.forEach((contenedor) => {
+        //             contenedor.removeAttribute("style")
+        //         })
 
-                const contenedorSeleccionado = document.querySelector(`[contenedor_tipobloqueo="${tipo}"]`)
-                if (contenedorSeleccionado) {
-                    document.querySelector("[contenedor=tipoComportamientos]").classList.remove("ocultoInicial")
+        //         const contenedorSeleccionado = document.querySelector(`[contenedor_tipobloqueo="${tipo}"]`)
+        //         if (contenedorSeleccionado) {
+        //             document.querySelector("[contenedor=tipoComportamientos]").classList.remove("ocultoInicial")
 
-                    contenedorSeleccionado.style.display = "flex"
-                }
-            },
-            selectorDiasSemana: function (diasArray)  {
-                const selectorDias = document.querySelectorAll("[componente=diaUI]")
-                selectorDias.forEach((dia) => {
-                    dia.removeAttribute("style")
-                    dia.removeAttribute("estado")
-                })
+        //             contenedorSeleccionado.style.display = "flex"
+        //         }
+        //     },
+        //     selectorDiasSemana: function (diasArray)  {
+        //         const selectorDias = document.querySelectorAll("[componente=diaUI]")
+        //         selectorDias.forEach((dia) => {
+        //             dia.removeAttribute("style")
+        //             dia.removeAttribute("estado")
+        //         })
 
-                for (const diaIDV of diasArray) {
-                    const selectorDia = document.querySelector(`[componente=diaUI][diaIDV="${diaIDV}"]`)
-                    selectorDia.setAttribute("estado", "activado")
-                    selectorDia.style.background = "blue"
-                    selectorDia.style.color = "white"
-                }
-            }
-
-        },
+        //         for (const diaIDV of diasArray) {
+        //             const selectorDia = document.querySelector(`[componente=diaUI][diaIDV="${diaIDV}"]`)
+        //             selectorDia.setAttribute("estado", "activado")
+        //             selectorDia.style.background = "blue"
+        //             selectorDia.style.color = "white"
+        //         }
+        //     }
+        // },
         imprimirDatosEnUI: function () {
             const datos = JSON.parse(document.querySelector("[valoresIniciales]").getAttribute("valoresIniciales"))
             const nombreComportamiento = datos.nombreComportamiento
@@ -638,7 +633,7 @@ casaVitini.view = {
             const campoNombre = document.querySelector("[campoOferta=nombreOferta]")
             campoNombre.value = nombreComportamiento
 
-            this.controladoresUI.opcionesTipo(tipo)
+            casaVitini.view.__sharedMethods__.controladoresUI.opcionesTipo(tipo)
             const areaContenedor = document.querySelector(`[contenedor_tipobloqueo="${tipo}"]`)
 
             if (tipo === "porRango") {
@@ -662,7 +657,7 @@ casaVitini.view = {
                 selectorFechaFinUI.textContent = fechaFinal
             } else if (tipo === "porDias") {
                 const diasArray = contenedor.dias
-                this.controladoresUI.selectorDiasSemana(diasArray)
+                casaVitini.view.__sharedMethods__.controladoresUI.selectorDiasSemana(diasArray)
             } else if (tipo === "porCreacion") {
                 const selectorFechaInicio = areaContenedor.querySelector("[calendario=entrada]")
                 const selectorFechaFin = areaContenedor.querySelector("[calendario=salida]")
@@ -705,7 +700,7 @@ casaVitini.view = {
                     apartamentoIDV,
                     apartamentoUI,
                     opcionesUI: {
-                        ui: casaVitini.administracion.comportamientoDePrecios.compomentesUI.opcionesApartamentoUI,
+                        ui: casaVitini.view.__sharedMethods__.compomentesUI.opcionesApartamentoUI,
                         data: {
                             simboloIDV: simboloIDV,
                             cantidad: cantidad

@@ -1,0 +1,7 @@
+{
+    "mode": "private",
+    "roles": [
+        "administrador",
+        "empleado"
+    ]
+}

@@ -1,7 +1,17 @@
 casaVitini.view = {
     start: async () => {
-        const video = document.querySelector("[componente=video]")
-        video.addEventListener('loadedmetadata', () => {
+        const main = document.querySelector("main")
+
+        const video = main.querySelector("[componente=video]")
+        console.clear()
+        console.log("video", video)
+
+        const mmssASegundos = (tiempo) => {
+            const [minutos, segundos] = tiempo.split(':').map(Number);
+            return (minutos * 60) + segundos;
+        }
+
+        video.addEventListener('loadeddata', () => {
             const tiempos = [
                 "00:00",
                 "00:36",
@@ -26,29 +36,35 @@ casaVitini.view = {
                 // "07:48",
                 // "08:05"
             ];
-
             const posicionAleatoria = Math.floor(Math.random() * tiempos.length)
             const tiempoAleatorio = tiempos[posicionAleatoria];
-            const mmssASegundos = (tiempo) => {
-                const [minutos, segundos] = tiempo.split(':').map(Number);
-                return (minutos * 60) + segundos;
-            }
+            console.log("tiempoAleeatorio", tiempoAleatorio)
             video.currentTime = mmssASegundos(tiempoAleatorio);
+
+        })
+        video.addEventListener('canplaythrough', () => {
             video.play();
         })
 
         video.addEventListener('progress', () => {
-            video.style.display = "block"
+            setTimeout(() => {
+                if (video) {
+                    video.style.opacity = "1"
+                    video.style.transition = "opacity 2s linear"
+                }
+            }, 1000);
         });
 
         document.querySelector("[componente=botonCambiaVistaEnSection]")
             .addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+
         const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
         const respuestaServidor = await casaVitini.shell.servidor({
             zona: "plaza/portada/obtenerMensajes"
         })
         const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
         if (!seccionRenderizada) { return }
+
         if (respuestaServidor?.ok) {
             const mensajes = respuestaServidor.ok
             const titulo = seccionRenderizada.querySelector("[componente=titulo]")

@@ -398,7 +398,7 @@ export const sharedMethods = {
         boton.classList.add("botonV1");
         boton.textContent = "Crear servicio";
         boton.setAttribute("boton", "crearServucui");
-        boton.addEventListener("click", casaVitini.administracion.servicios.nuevo.crearServicio)
+        boton.addEventListener("click", casaVitini.view.crearServicio)
         return boton
     },
     botonesModificar: function () {
@@ -408,7 +408,7 @@ export const sharedMethods = {
         boton.setAttribute("contenedor", "botones");
 
         boton.addEventListener("click", () => {
-            casaVitini.administracion.servicios.componentesUI.modosUI("modoEditar")
+            this.modosUI("modoEditar")
         })
         boton.textContent = "Modificar servicio";
         return boton
@@ -457,12 +457,12 @@ export const sharedMethods = {
         const contenedorBotones = document.querySelector("[componente=servicioUI]")
         contenedorBotones.querySelector("[contenedro=botones]")?.remove()
         if (modo === "modoEditar") {
-            const botones = casaVitini.administracion.servicios.componentesUI.botonesDuranteModificacion()
+            const botones =this.botonesDuranteModificacion()
             contenedorBotones.appendChild(botones)
             document.querySelector("[componente=soloLecturaInfo]")?.classList.remove("elementoOcultoInicialmente")
         }
         if (modo === "modoCancelar") {
-            const botones = casaVitini.administracion.servicios.componentesUI.botonesModificar()
+            const botones =this.botonesModificar()
             contenedorBotones.appendChild(botones)
             document.querySelector("[componente=soloLecturaInfo]")?.classList.remove("elementoOcultoInicialmente")
         }

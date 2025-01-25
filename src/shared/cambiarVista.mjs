@@ -23,21 +23,51 @@ export const cambiarVista = async (transaccion) => {
                 selectorRama = selectorRama + "/" + rama
 
                 if (existsSync(selectorRama)) {
-                    const archivoIDX = selectorRama + "/IDX"
+
+                    const archivoIDX = selectorRama + "/IDX.json"
+                    console.log("archivoIDX", archivoIDX)
                     if (existsSync(archivoIDX)) {
-                        if (!usuarioIDX) {
-                            portal = "IDX"
-                            urlResuelta = ""
-                            break
+
+                        const secFile = readFileSync(archivoIDX, 'utf-8')
+                        const secConf = JSON.parse(secFile)
+                        const mode = secConf?.mode ?? "private"
+
+                        const modes = [
+                            "private",
+                            "public"
+                        ]
+                        if (!modes.includes(mode)) {
+                            return {
+                                error: "mode en IDX mal configurado"
+                            }
                         }
-                        const roles = readFileSync(archivoIDX, 'utf-8')
-                            .replaceAll(" ", "")
-                            .split(",")
-                            .filter(espacio => espacio)
-                        if (roles.length > 0 && !roles.includes(rolIDV)) {
-                            portal = "ROL"
-                            urlResuelta = ""
-                            break
+                        if (mode === "public") {
+                            portal = null
+                            urlResuelta + "/" + rama
+
+                        } else if (mode === "private") {
+                            const roles = secConf?.roles
+
+                            const rolesVal = [
+                                "administrador",
+                                "empleado",
+                                "cliente"
+                            ]
+
+                            const controlRol = roles.some(r => !rolesVal.includes(r));
+                            if (controlRol || roles.length === 0) {
+                                return {
+                                    error: "rol en IDX mal configurado"
+                                }
+                            }
+
+                            if (!usuarioIDX) {
+                                portal = "IDX"
+                                urlResuelta = ""
+                            } else if (roles.length > 0 && !roles.includes(rolIDV)) {
+                                portal = "ROL"
+                                urlResuelta = ""
+                            }
                         }
                     }
                 } else {

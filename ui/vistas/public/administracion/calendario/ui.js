@@ -1710,37 +1710,37 @@ casaVitini.view = {
             return estructuraFinal
         }
     },
-    obtenerCalendariosSincronizados: {
-        airbnb: async function () {
-            const transaccion = {
-                zona: "administracion/calendario/obtenerNombresCalendarios/airbnb"
-            }
-            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-            if (respuestaServidor?.error) {
-                casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-            }
-            if (respuestaServidor?.ok) {
-                const estructuraFinal = []
-                const calendariosSincronizados = respuestaServidor?.calendariosSincronizados
-                if (calendariosSincronizados.length > 0) {
-                    for (const detallesDelCalendario of calendariosSincronizados) {
-                        const apartamentoIDV = detallesDelCalendario.apartamentoIDV
-                        const apartamentoUI = detallesDelCalendario.apartamentoUI
-                        const nombre = detallesDelCalendario.nombre
-                        const calendarioUID = detallesDelCalendario.calendarioUID
-                        const detallesApartamento = {
-                            apartamentoIDV: apartamentoIDV,
-                            apartamentoUI: apartamentoUI,
-                            nombre: nombre,
-                            calendarioUID: calendarioUID
-                        }
-                        estructuraFinal.push(detallesApartamento)
-                    }
-                }
-                return estructuraFinal
-            }
-        }
-    },
+    // obtenerCalendariosSincronizados: {
+    //     airbnb: async function () {
+    //         const transaccion = {
+    //             zona: "administracion/calendario/obtenerNombresCalendarios/airbnb"
+    //         }
+    //         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+    //         if (respuestaServidor?.error) {
+    //             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+    //         }
+    //         if (respuestaServidor?.ok) {
+    //             const estructuraFinal = []
+    //             const calendariosSincronizados = respuestaServidor?.calendariosSincronizados
+    //             if (calendariosSincronizados.length > 0) {
+    //                 for (const detallesDelCalendario of calendariosSincronizados) {
+    //                     const apartamentoIDV = detallesDelCalendario.apartamentoIDV
+    //                     const apartamentoUI = detallesDelCalendario.apartamentoUI
+    //                     const nombre = detallesDelCalendario.nombre
+    //                     const calendarioUID = detallesDelCalendario.calendarioUID
+    //                     const detallesApartamento = {
+    //                         apartamentoIDV: apartamentoIDV,
+    //                         apartamentoUI: apartamentoUI,
+    //                         nombre: nombre,
+    //                         calendarioUID: calendarioUID
+    //                     }
+    //                     estructuraFinal.push(detallesApartamento)
+    //                 }
+    //             }
+    //             return estructuraFinal
+    //         }
+    //     }
+    // },
     componentesUI: {
         capas: async function () {
 
@@ -2185,7 +2185,7 @@ casaVitini.view = {
                 }
                 contenedorTodosLosApartamentos.appendChild(contenedorListaPorApartamento)
             }
-            const calendariosListaAirnbnb = await casaVitini.view.obtenerCalendariosSincronizados.airbnb() || []
+            const calendariosListaAirnbnb = await casaVitini.view.__sharedMethods__.obtenerCalendariosSincronizados.airbnb() || []
             if (calendariosListaAirnbnb.length > 0) {
                 const grupoAirbnb = document.createElement("details")
                 grupoAirbnb.classList.add("contenedorGrupoFondo", "sobreControlAnimacionGlobal")
@@ -3813,7 +3813,7 @@ casaVitini.view = {
             document.querySelector(`[instanciaUID="${instanciaUID_pantallaDeCarga}"]`)?.remove()
             if (respuestaServidor?.error) {
                 if (respuestaServidor.comportamientosEnConflicto) {
-                    const comportamientosEnConflictoUI = casaVitini.administracion.comportamientoDePrecios.compomentesUI.comportamientosEnClonfictoUI(respuestaServidor)
+                    const comportamientosEnConflictoUI = casaVitini.view.__sharedMethods__.compomentesUI.comportamientosEnClonfictoUI(respuestaServidor)
                     const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
                     document.querySelector("main").appendChild(ui)
                     const constructor = ui.querySelector("[componente=constructor]")
@@ -4082,7 +4082,7 @@ casaVitini.view = {
             } else {
                 botonSel.setAttribute("tipoSel", valor)
             }
-            casaVitini.administracion.usuarios.detallesUsuario.configuracion.actualizarConfiguracion({
+            casaVitini.view.__sharedMethods__.configuracion.actualizarConfiguracion({
                 configuracionIDV: "calendario.tipoSeleccion",
                 valor: valor
             })
@@ -4113,7 +4113,7 @@ casaVitini.view = {
             botonHorizontal.textContent = "Visión horizontal"
             botonHorizontal.addEventListener("click", async () => {
 
-                casaVitini.administracion.usuarios.detallesUsuario.configuracion.actualizarConfiguracion({
+                casaVitini.view.__sharedMethods__.configuracion.actualizarConfiguracion({
                     configuracionIDV: "calendario.tipoVision",
                     valor: "horizontal"
                 })
@@ -4130,7 +4130,7 @@ casaVitini.view = {
             botonVertical.classList.add("botonV1BlancoIzquierda")
             botonVertical.textContent = "Visión vertical"
             botonVertical.addEventListener("click", async () => {
-                casaVitini.administracion.usuarios.detallesUsuario.configuracion.actualizarConfiguracion({
+                casaVitini.view.__sharedMethods__.configuracion.actualizarConfiguracion({
                     configuracionIDV: "calendario.tipoVision",
                     valor: "vertical"
                 })

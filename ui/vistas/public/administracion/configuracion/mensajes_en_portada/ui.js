@@ -201,7 +201,7 @@ casaVitini.view = {
         botonModificar.textContent = "Modificar mensaje"
         botonModificar.setAttribute("href", "/administracion/configuracion/mensajes_en_portada/" + mensajeUID)
         botonModificar.setAttribute("vista", "/administracion/configuracion/mensajes_en_portada/" + mensajeUID)
-        botonModificar.addEventListener("click", casaVitini.administracion.gestionDeOfertas.traductorCambioVista)
+        botonModificar.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotonesMensaje.appendChild(botonModificar)
 
         const botonEliminar = document.createElement("div")

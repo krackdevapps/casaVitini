@@ -112,7 +112,7 @@ const casaVitini = {
                     transaccion.vista = "politicas/privacidad"
                 }
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                console.log("resp", respuestaServidor)
+          
                 const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (contenedorVista) {
                     const selectorPantallaCargaRenderizdaPostPeticion = document.querySelector("[ui=pantallaDeCarga]")
@@ -156,10 +156,12 @@ const casaVitini = {
                         contenedorVista.innerHTML = html
 
                         const jsContainer = document.createElement("script")
+                        jsContainer.defer = true;
                         jsContainer.textContent = js
                         contenedorVista.appendChild(jsContainer)
 
                         const sharedMethodsContainer = document.createElement("script")
+                        sharedMethodsContainer.defer = true;
                         sharedMethodsContainer.textContent = sharedMethods
                         contenedorVista.appendChild(sharedMethodsContainer)
 
@@ -206,10 +208,6 @@ const casaVitini = {
                         const granuladorURL = casaVitini.utilidades.granuladorURL()
                         const directoriosFusion = granuladorURL.directoriosFusion
                         contenedorVista.setAttribute("zonaCSS", directoriosFusion)
-
-
-
-
 
                         const viewStart = casaVitini?.view?.start
                         if (typeof viewStart === "function") {

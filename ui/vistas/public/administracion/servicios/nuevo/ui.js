@@ -26,7 +26,7 @@ casaVitini.view = {
             instanciaUID: instanciaUID,
         }
         casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
-        const transaccion = casaVitini.administracion.servicios.utilidades.constructorObjeto()
+        const transaccion = casaVitini.view.__sharedMethods__.constructorObjeto()
         transaccion.zona = "administracion/servicios/crearServicio"
 
 

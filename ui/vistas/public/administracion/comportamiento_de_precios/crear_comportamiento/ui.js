@@ -1,5 +1,5 @@
 casaVitini.view = {
-    start: () => {
+    start: function () {
         const main = document.querySelector("main")
         main.setAttribute("zonaCSS", "administracion/comportamiento_de_precios/comportamientoUI")
         const selector = document.querySelector("[componente=espacioComportamiento]")
@@ -7,7 +7,7 @@ casaVitini.view = {
         casaVitini.view.__sharedMethods__.detalleUI("crearOferta")
 
     },
-    desplegarOpcionesOferta: (opcionOferta) => {
+    desplegarOpcionesOferta: function (opcionOferta) {
         const tipoOferta = opcionOferta.target.closest("[tipoOferta]").getAttribute("tipoOferta")
         const selectorZonaOferta = document.querySelectorAll("[zonaOferta]")
         selectorZonaOferta.forEach((zonaOferta) => {
@@ -80,120 +80,120 @@ casaVitini.view = {
             casaVitini.shell.navegacion.controladorVista(navegacion)
         }
     },
-    apartamentosDisponibles: async (data) => {
+    // apartamentosDisponibles: async function (data) {
 
 
-        const apartamento = data.e
-        const destino = data.destino
+    //     const apartamento = data.e
+    //     const destino = data.destino
 
-        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-        apartamento.stopPropagation()
-        const selectorMenuObsoleto = document.querySelector("[comMenu=menuVolatilApartamentoDisponibles]")
+    //     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+    //     apartamento.stopPropagation()
+    //     const selectorMenuObsoleto = document.querySelector("[comMenu=menuVolatilApartamentoDisponibles]")
 
-        if (selectorMenuObsoleto) {
-            selectorMenuObsoleto.remove()
+    //     if (selectorMenuObsoleto) {
+    //         selectorMenuObsoleto.remove()
 
-        }
-        const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-        const alturaDinamica = apartamento.target.getBoundingClientRect().bottom;
-        const horizontalDinamico = apartamento.target.getBoundingClientRect().left;
-        const anchoDinamico = apartamento.target.getBoundingClientRect().width;
-        document.addEventListener("click", () => { this.ocultarMenusVolatiles() })
-        const apartamentosUI = document.createElement("div")
-        apartamentosUI.classList.add("crearOfertaMenuVolatilAnadirApartamento")
-        apartamentosUI.setAttribute("comMenu", "menuVolatilApartamentoDisponibles")
-        apartamentosUI.setAttribute("componente", "menuVolatil")
-        apartamentosUI.setAttribute("instanciaUID", instanciaUID)
-        apartamentosUI.style.top = (alturaDinamica + 6) + "px"
-        apartamentosUI.style.left = (horizontalDinamico) + "px"
-        apartamentosUI.style.maxWidth = 500 + "px"
-        apartamentosUI.textContent = "Obteniendo apartamentos..."
-        document.querySelector("main").appendChild(apartamentosUI)
-        const transaccion = {
-            zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
-        }
-        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-        const instanciaRenderizada = document.querySelector(`[componente=menuVolatil][instanciaUID="${instanciaUID}"]`)
-        if (!instanciaRenderizada) { return }
-        if (respuestaServidor?.error) {
-            instanciaRenderizada.remove()
-            casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-        }
-        if (respuestaServidor?.ok) {
-            instanciaRenderizada.innerHTML = null
-            const apartamentosDisponibles = respuestaServidor?.ok
-            apartamentosDisponibles.forEach((apartamentoDisponible) => {
-                const apartamentoIDV = apartamentoDisponible.apartamentoIDV
-                const apartamentoUI = apartamentoDisponible.apartamentoUI
-                const estadoUI = apartamentoDisponible.estadoUI
-                const apartamentoDetallesUI = document.createElement("div")
-                apartamentoDetallesUI.classList.add("crearOfertaApartamentoUI")
-                apartamentoDetallesUI.addEventListener("click", (e) => {
-                    casaVitini.administracion.comportamientoDePrecios.crearComportamiento.insertarApartamento({
-                        e,
-                        destino: destino
-                    })
-                })
-                apartamentoDetallesUI.setAttribute("apartamentoIDV", apartamentoIDV)
-                apartamentoDetallesUI.setAttribute("apartamentoUI", apartamentoUI)
-                apartamentoDetallesUI.setAttribute("apartamentoComoOpcion", apartamentoIDV)
-                const apartamentoTitulo = document.createElement("p")
-                apartamentoTitulo.classList.add("crearOfertaApartamentoTItulo")
-                apartamentoTitulo.textContent = apartamentoUI
-                apartamentoDetallesUI.appendChild(apartamentoTitulo)
-                const apartamentoEstadoUI = document.createElement("p")
-                apartamentoEstadoUI.classList.add("crearOfertaApartamentoEstado")
-                apartamentoEstadoUI.setAttribute("estadouI", estadoUI)
-                apartamentoEstadoUI.textContent = estadoUI
-                apartamentoDetallesUI.appendChild(apartamentoEstadoUI)
-                instanciaRenderizada.appendChild(apartamentoDetallesUI)
-            })
-            const selectorApartamentoYaRenderizado = document.querySelectorAll(`[apartamentoComoOpcion]`)
-            if (selectorApartamentoYaRenderizado.length === 0) {
-                const info = document.createElement("p")
-                info.classList.add("crearApartamentoInfoSinApartamento")
-                info.setAttribute("componente", "infoSinApartamento")
-                info.textContent = "Todos los apartamentos disponibles están insertados en la oferta."
-                instanciaRenderizada.appendChild(info)
-            }
-        }
-    },
-    ocultarMenusVolatiles: (menuVolatil) => {
+    //     }
+    //     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+    //     const alturaDinamica = apartamento.target.getBoundingClientRect().bottom;
+    //     const horizontalDinamico = apartamento.target.getBoundingClientRect().left;
+    //     const anchoDinamico = apartamento.target.getBoundingClientRect().width;
+    //     document.addEventListener("click", () => { this.ocultarMenusVolatiles() })
+    //     const apartamentosUI = document.createElement("div")
+    //     apartamentosUI.classList.add("crearOfertaMenuVolatilAnadirApartamento")
+    //     apartamentosUI.setAttribute("comMenu", "menuVolatilApartamentoDisponibles")
+    //     apartamentosUI.setAttribute("componente", "menuVolatil")
+    //     apartamentosUI.setAttribute("instanciaUID", instanciaUID)
+    //     apartamentosUI.style.top = (alturaDinamica + 6) + "px"
+    //     apartamentosUI.style.left = (horizontalDinamico) + "px"
+    //     apartamentosUI.style.maxWidth = 500 + "px"
+    //     apartamentosUI.textContent = "Obteniendo apartamentos..."
+    //     document.querySelector("main").appendChild(apartamentosUI)
+    //     const transaccion = {
+    //         zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
+    //     }
+    //     const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+    //     const instanciaRenderizada = document.querySelector(`[componente=menuVolatil][instanciaUID="${instanciaUID}"]`)
+    //     if (!instanciaRenderizada) { return }
+    //     if (respuestaServidor?.error) {
+    //         instanciaRenderizada.remove()
+    //         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+    //     }
+    //     if (respuestaServidor?.ok) {
+    //         instanciaRenderizada.innerHTML = null
+    //         const apartamentosDisponibles = respuestaServidor?.ok
+    //         apartamentosDisponibles.forEach((apartamentoDisponible) => {
+    //             const apartamentoIDV = apartamentoDisponible.apartamentoIDV
+    //             const apartamentoUI = apartamentoDisponible.apartamentoUI
+    //             const estadoUI = apartamentoDisponible.estadoUI
+    //             const apartamentoDetallesUI = document.createElement("div")
+    //             apartamentoDetallesUI.classList.add("crearOfertaApartamentoUI")
+    //             apartamentoDetallesUI.addEventListener("click", (e) => {
+    //                 this.insertarApartamento({
+    //                     e,
+    //                     destino: destino
+    //                 })
+    //             })
+    //             apartamentoDetallesUI.setAttribute("apartamentoIDV", apartamentoIDV)
+    //             apartamentoDetallesUI.setAttribute("apartamentoUI", apartamentoUI)
+    //             apartamentoDetallesUI.setAttribute("apartamentoComoOpcion", apartamentoIDV)
+    //             const apartamentoTitulo = document.createElement("p")
+    //             apartamentoTitulo.classList.add("crearOfertaApartamentoTItulo")
+    //             apartamentoTitulo.textContent = apartamentoUI
+    //             apartamentoDetallesUI.appendChild(apartamentoTitulo)
+    //             const apartamentoEstadoUI = document.createElement("p")
+    //             apartamentoEstadoUI.classList.add("crearOfertaApartamentoEstado")
+    //             apartamentoEstadoUI.setAttribute("estadouI", estadoUI)
+    //             apartamentoEstadoUI.textContent = estadoUI
+    //             apartamentoDetallesUI.appendChild(apartamentoEstadoUI)
+    //             instanciaRenderizada.appendChild(apartamentoDetallesUI)
+    //         })
+    //         const selectorApartamentoYaRenderizado = document.querySelectorAll(`[apartamentoComoOpcion]`)
+    //         if (selectorApartamentoYaRenderizado.length === 0) {
+    //             const info = document.createElement("p")
+    //             info.classList.add("crearApartamentoInfoSinApartamento")
+    //             info.setAttribute("componente", "infoSinApartamento")
+    //             info.textContent = "Todos los apartamentos disponibles están insertados en la oferta."
+    //             instanciaRenderizada.appendChild(info)
+    //         }
+    //     }
+    // },
+    ocultarMenusVolatiles: function (menuVolatil) {
         let componente = menuVolatil?.target.getAttribute("componente")
         if (componente === "menuDesplegable") {
 
         }
         if (componente !== "menuVolatil") {
             let selectorMenusVolatiles = document.querySelectorAll("[componente=menuVolatil]")
-            document.removeEventListener("click", ()=> {this.ocultarMenusVolatiles()})
+            document.removeEventListener("click", () => { this.ocultarMenusVolatiles() })
             selectorMenusVolatiles.forEach(menuVolatil => {
                 menuVolatil.remove()
             })
         }
     },
-    insertarApartamento: (data) => {
-        const apartamento = data.e
-        const destino = data.destino
-        const apartamentoIDV = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoIDV")
-        const apartamentoUI = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoUI")
-        const detallesApartamento = {
-            apartamentoIDV: apartamentoIDV,
-            apartamentoUI: apartamentoUI
-        }
+    // insertarApartamento: function (data) {
+    //     const apartamento = data.e
+    //     const destino = data.destino
+    //     const apartamentoIDV = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoIDV")
+    //     const apartamentoUI = apartamento.target.closest("[apartamentoIDV]").getAttribute("apartamentoUI")
+    //     const detallesApartamento = {
+    //         apartamentoIDV: apartamentoIDV,
+    //         apartamentoUI: apartamentoUI
+    //     }
 
-        const opciones = {
-            apartamentoIDV: apartamentoIDV,
-            apartamentoUI: apartamentoUI
-        }
-        const descuentoDedicadoUI = casaVitini.administracion.comportamientoDePrecios.crearComportamiento.insertarOpcionesApartamento(opciones)
+    //     const opciones = {
+    //         apartamentoIDV: apartamentoIDV,
+    //         apartamentoUI: apartamentoUI
+    //     }
+    //     const descuentoDedicadoUI = casaVitini.administracion.comportamientoDePrecios.crearComportamiento.insertarOpcionesApartamento(opciones)
 
 
-        const zonaDescuentoDedicados = document.querySelector(destino)
+    //     const zonaDescuentoDedicados = document.querySelector(destino)
 
-        zonaDescuentoDedicados.style.display = "grid"
-        zonaDescuentoDedicados.appendChild(descuentoDedicadoUI)
-    },
-    insertarApartamentoUI: async (detallesApartmento) => {
+    //     zonaDescuentoDedicados.style.display = "grid"
+    //     zonaDescuentoDedicados.appendChild(descuentoDedicadoUI)
+    // },
+    insertarApartamentoUI: async function (detallesApartmento) {
         let apartamentoIDV = detallesApartmento.apartamentoIDV
         let apartamentoUI = detallesApartmento.apartamentoUI
         let apartamentoSeleccionadoUI = document.createElement("div")
@@ -206,17 +206,16 @@ casaVitini.view = {
         let botonEliminarApartamento = document.createElement("div")
         botonEliminarApartamento.classList.add("crearOfertaBoton")
         botonEliminarApartamento.textContent = "Eliminar apartamento333"
-        botonEliminarApartamento.addEventListener("click", casaVitini.administracion.comportamientoDePrecios.crearComportamiento.eliminarApartamenro)
+        botonEliminarApartamento.addEventListener("click", (e) => { this.eliminarApartamenro(e) })
         apartamentoSeleccionadoUI.appendChild(botonEliminarApartamento)
         return apartamentoSeleccionadoUI
     },
-    contenedorTest: () => {
+    contenedorTest: function () {
         const ui = document.createElement("div")
         ui.textContent = "test contenedor"
         return ui
     },
-
-    eliminarApartamenro: (apartamento) => {
+    eliminarApartamenro: function (apartamento) {
         let apartamentoIDV = apartamento.target.parentNode.getAttribute("apartamentoSeleccionado")
         apartamento.target.parentNode.remove()
         let conteoDescuentoDedicados = document.querySelector("[componente=comportamientoSuperBloque]").querySelectorAll("[descuentoDedicadoUI]")
@@ -225,7 +224,7 @@ casaVitini.view = {
             document.querySelector("[componente=comportamientoSuperBloque]").style.display = "flex"
         }
     },
-    opcionesOferta: (opcion) => {
+    opcionesOferta: function (opcion) {
         let opciones = opcion.target.value
 
         let selectorOpciones = document.querySelectorAll("[controladorDesliegue]")

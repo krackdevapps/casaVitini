@@ -9,7 +9,7 @@ casaVitini.view = {
             return this.portadaUI()
         } else {
             if (parametros.enlace) {
-                casaVitini.administracion.enlacesDePago.detallesEnlace.UI(parametros.enlace)
+                this.detallesEnlace.UI(parametros.enlace)
             }
         }
         const info = {

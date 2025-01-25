@@ -157,7 +157,7 @@ casaVitini.view = {
                 botonCrearEntidad.classList.add("botonV1BlancoIzquierda_campo")
                 botonCrearEntidad.textContent = "Editar apartamento como entidad"
                 botonCrearEntidad.addEventListener("click", () => {
-                    casaVitini.administracion.arquitecturaDelAlojamiento.entidades.editarEntidad.controladorModoEditar("editar")
+                    this.controladorModoEditar("editar")
                 })
                 contenedorBotones.appendChild(botonCrearEntidad)
                 contenedorEntidad.appendChild(contenedorBotones)
