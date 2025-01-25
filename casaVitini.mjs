@@ -14,6 +14,7 @@ import { configuracionSession } from './middleware/almacenSessiones.mjs';
 import { jsonHeader } from './middleware/jsonHeader.mjs';
 import { antiPrototypePollution } from './middleware/antiPrototypePollution.mjs';
 import compression from 'compression';
+import { csp } from './middleware/csp.mjs';
 dotenv.config()
 process.on('uncaughtException', (error) => {
   console.error('Alerta! ->>:', error.message);
@@ -39,6 +40,7 @@ app.use(antiPrototypePollution)
 app.use(express.urlencoded({ extended: true }))
 app.use(controlTipoVerbo)
 app.disable('x-powered-by')
+app.use(csp);
 app.use(compression());
 
 app.use('/componentes', express.static(path.join('./ui/componentes')))
