@@ -518,7 +518,7 @@ casaVitini.view = {
             const totalImpuestos = propuestaDetalles.totalImpuestos
             const totalBrutoPorNoche = propuestaDetalles.totalBrutoPorNoche
 
-            console.log("respuestaServidor", respuestaServidor)
+
 
             const areaApartamento = document.querySelector(`[apartamentoIDV="${selectorApartamentoIDV}"]`)
 

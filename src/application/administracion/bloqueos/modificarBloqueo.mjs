@@ -55,6 +55,16 @@ export const modificarBloqueo = async (entrada, salida) => {
         let fechaInicio_ISO = null;
         let fechaFin_ISO = null;
         await obtenerBloqueoPorBloqueoUID(bloqueoUID)
+
+        if (tipoBloqueoIDV !== "permanente" && tipoBloqueoIDV !== "rangoTemporal") {
+            const error = "tipoBloqueoIDV solo puede ser permanente o rangoTemporal";
+            throw new Error(error);
+        }
+        if (zonaIDV !== "global" && zonaIDV !== "publica" && zonaIDV !== "privada") {
+            const error = "zona solo puede ser global, publico o privada";
+            throw new Error(error);
+        }
+
         if (tipoBloqueoIDV === "rangoTemporal") {
 
             const detallesDelBloquoe = await obtenerBloqueoPorBloqueoUID(bloqueoUID)

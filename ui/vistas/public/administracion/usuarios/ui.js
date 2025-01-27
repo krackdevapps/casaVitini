@@ -387,12 +387,12 @@ casaVitini.view = {
                     const opcionCambiarEstado = document.createElement("a")
                     opcionCambiarEstado.classList.add("detallesUsuario_opcionInformacion")
                     opcionCambiarEstado.setAttribute("estadoCuenta", estadoCuenta)
-                    opcionCambiarEstado.addEventListener("click", () => { this.cambiarEstadoCuenta.UI() })
+                    opcionCambiarEstado.addEventListener("click", () => { casaVitini.view.detallesUsuario.cambiarEstadoCuenta.UI() })
                     opcionCambiarEstado.textContent = estadoCuentaUI
                     contenedorOpciones.appendChild(opcionCambiarEstado)
                     const opcionEliminarCuenta = document.createElement("a")
                     opcionEliminarCuenta.classList.add("detallesUsuario_opcionInformacion")
-                    opcionEliminarCuenta.addEventListener("click", () => { this.eliminarCuenta.UI() })
+                    opcionEliminarCuenta.addEventListener("click", () => { casaVitini.view.detallesUsuario.eliminarCuenta.UI() })
                     opcionEliminarCuenta.textContent = "Eliminar su cuenta"
                     contenedorOpciones.appendChild(opcionEliminarCuenta)
                     espacioUsuario.appendChild(contenedorOpciones)
@@ -431,7 +431,7 @@ casaVitini.view = {
                         usuarioIDX: usuarioIDX,
                         rol: rol
                     }
-                    const contenedorUsuarioIDX = this.componentes.bannerIDX(datosBanner)
+                    const contenedorUsuarioIDX = casaVitini.view.detallesUsuario.componentes.bannerIDX(datosBanner)
                     contenedorDetallesUsuario.appendChild(contenedorUsuarioIDX)
                     espacioUsuario.appendChild(contenedorDetallesUsuario)
                     const contenedorDatosUsuario = document.createElement("div")
@@ -445,6 +445,7 @@ casaVitini.view = {
                     const campoNombre = document.createElement("input")
                     campoNombre.classList.add("botonV1BlancoIzquierda_campo")
                     campoNombre.setAttribute("campo", "nombre")
+                    campoNombre.setAttribute("valor", nombre)
                     campoNombre.value = nombre
                     nombreUI.appendChild(campoNombre)
                     contenedorDatosUsuario.appendChild(nombreUI)
@@ -457,6 +458,7 @@ casaVitini.view = {
                     const campoPrimerApellido = document.createElement("input")
                     campoPrimerApellido.classList.add("botonV1BlancoIzquierda_campo")
                     campoPrimerApellido.setAttribute("campo", "primerApellido")
+                    campoPrimerApellido.setAttribute("valor", primerApellido)
                     campoPrimerApellido.value = primerApellido
                     primerApellidoUI.appendChild(campoPrimerApellido)
                     contenedorDatosUsuario.appendChild(primerApellidoUI)
@@ -469,6 +471,7 @@ casaVitini.view = {
                     const campoSegundoApellido = document.createElement("input")
                     campoSegundoApellido.classList.add("botonV1BlancoIzquierda_campo")
                     campoSegundoApellido.setAttribute("campo", "segundoApellido")
+                    campoSegundoApellido.setAttribute("valor", segundoApellido)
                     campoSegundoApellido.value = segundoApellido
                     segundoApellidoUI.appendChild(campoSegundoApellido)
                     contenedorDatosUsuario.appendChild(segundoApellidoUI)
@@ -481,6 +484,7 @@ casaVitini.view = {
                     const campoPasaporte = document.createElement("input")
                     campoPasaporte.classList.add("botonV1BlancoIzquierda_campo")
                     campoPasaporte.setAttribute("campo", "pasaporte")
+                    campoPasaporte.setAttribute("valor", pasaporte)
                     campoPasaporte.value = pasaporte
                     pasaporteUI.appendChild(campoPasaporte)
                     contenedorDatosUsuario.appendChild(pasaporteUI)
@@ -493,6 +497,7 @@ casaVitini.view = {
                     const campoTelefono = document.createElement("input")
                     campoTelefono.classList.add("botonV1BlancoIzquierda_campo")
                     campoTelefono.setAttribute("campo", "telefono")
+                    campoTelefono.setAttribute("valor", telefono)
                     campoTelefono.value = telefono
                     telefonoUI.appendChild(campoTelefono)
                     contenedorDatosUsuario.appendChild(telefonoUI)
@@ -505,6 +510,7 @@ casaVitini.view = {
                     const campomail = document.createElement("input")
                     campomail.classList.add("botonV1BlancoIzquierda_campo")
                     campomail.setAttribute("campo", "mail")
+                    campomail.setAttribute("valor", mail)
                     campomail.value = mail
                     mailUI.appendChild(campomail)
                     contenedorDatosUsuario.appendChild(mailUI)
@@ -570,7 +576,8 @@ casaVitini.view = {
             cancelarCambios: function () {
                 const campos = document.querySelectorAll("[campo]")
                 campos.forEach((campo) => {
-                    campo.value = null
+                    const valorInicial = campo.getAttribute("valor")
+                    campo.value = valorInicial
                 })
                 const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
                 selectorContenedorBotones.removeAttribute("style")
@@ -613,6 +620,8 @@ casaVitini.view = {
                     campos.forEach((campo) => {
                         const campoID = campo.getAttribute("campo")
                         campo.value = detallesUsuario[campoID]
+                        campo.setAttribute("valor", detallesUsuario[campoID])
+
                     })
                     const selectorContenedorBotones = document.querySelector("[componente=contenedorBotones]")
                     selectorContenedorBotones.removeAttribute("style")
@@ -742,6 +751,7 @@ casaVitini.view = {
                 let valorBoton
                 let textoDescriptivo
                 let tituloInformativo
+
                 if (estadoCuentaActual === "activado") {
                     tituloBoton = "Desactivar cuenta"
                     tituloInformativo = "Confirma la desactivacion de la cuenta"
@@ -754,44 +764,27 @@ casaVitini.view = {
                     textoDescriptivo = "¿Quieres Aactivar esta cuenta? El usuario de esta cuenta no podra volver a logearse con ella. Sus implicaciones son inmediatas"
                     valorBoton = "activado"
                 }
-                const advertenciaInmersivaIU = document.createElement("div")
-                advertenciaInmersivaIU.setAttribute("class", "advertenciaInmersiva")
-                advertenciaInmersivaIU.setAttribute("componente", "advertenciaInmersiva")
-                const contenedorAdvertenciaInmersiva = document.createElement("div")
-                contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
-                const tituloCancelarReserva = document.createElement("p")
-                tituloCancelarReserva.classList.add("detallesReservaTituloCancelarReserva")
-                tituloCancelarReserva.textContent = tituloInformativo
-                contenedorAdvertenciaInmersiva.appendChild(tituloCancelarReserva)
-                const bloqueBloqueoApartamentos = document.createElement("div")
-                bloqueBloqueoApartamentos.classList.add("detallesReservaCancelarReservaBloqueBloqueoApartamentos")
-                const tituloBloquoApartamentos = document.createElement("div")
-                tituloBloquoApartamentos.classList.add("detallesReservaCancelarReservaTituloBloquoApartamentos")
-                tituloBloquoApartamentos.textContent = textoDescriptivo
-                bloqueBloqueoApartamentos.appendChild(tituloBloquoApartamentos)
-                contenedorAdvertenciaInmersiva.appendChild(bloqueBloqueoApartamentos)
-                const bloqueBotones = document.createElement("div")
-                bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
-                const botonCancelar = document.createElement("div")
-                botonCancelar.classList.add("detallesReservaCancelarBoton")
-                botonCancelar.setAttribute("componente", "botonConfirmarCancelarReserva")
-                botonCancelar.textContent = tituloBoton
-                botonCancelar.setAttribute("nuevoEstado", valorBoton)
-                botonCancelar.addEventListener("click", (e) => { this.transactor(e) })
-                bloqueBotones.appendChild(botonCancelar)
-                const botonCancelarProcesoCancelacion = document.createElement("div")
-                botonCancelarProcesoCancelacion.classList.add("detallesReservaCancelarBoton")
-                botonCancelarProcesoCancelacion.textContent = "Cancelar el cambio de estado"
-                botonCancelarProcesoCancelacion.addEventListener("click", () => {
-                    let selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
-                    selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
-                        advertenciaInmersiva.remove()
-                    })
-                })
-                bloqueBotones.appendChild(botonCancelarProcesoCancelacion)
-                contenedorAdvertenciaInmersiva.appendChild(bloqueBotones)
-                advertenciaInmersivaIU.appendChild(contenedorAdvertenciaInmersiva)
-                document.querySelector("main").appendChild(advertenciaInmersivaIU)
+
+                const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                pantallaInmersiva.style.justifyContent = "center"
+                const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+
+
+
+                const titulo = constructor.querySelector("[componente=titulo]")
+                titulo.textContent = tituloInformativo
+                const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                mensaje.textContent = textoDescriptivo
+
+                const botonAceptar = constructor.querySelector("[boton=aceptar]")
+                botonAceptar.textContent = tituloBoton
+                botonAceptar.setAttribute("nuevoEstado", valorBoton)
+                botonAceptar.addEventListener("click", (e) => { this.transactor(e) })
+     
+                const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                botonCancelar.textContent = "Cancelar el cambio de estado y volver"
+                document.querySelector("main").appendChild(pantallaInmersiva)
+
             },
             transactor: async function (nuevoEstado) {
                 const nuevoEstado_ = nuevoEstado.target.getAttribute("nuevoEstado")
@@ -956,91 +949,7 @@ casaVitini.view = {
                 selectorContenedorBotones.removeAttribute("style")
             },
         },
-        cambiarEstadoCuenta: {
-            UI: async function () {
-                const estadoCuentaActual = document.querySelector("[estadoCuenta]").getAttribute("estadoCuenta")
-                let tituloBoton
-                let valorBoton
-                let textoDescriptivo
-                let tituloInformativo
-                if (estadoCuentaActual === "activado") {
-                    tituloBoton = "Desactivar cuenta"
-                    tituloInformativo = "Confirma la desactivación de la cuenta"
-                    textoDescriptivo = "¿Quieres desactivar esta cuenta? El usuario de esta cuenta podría volver a loguearse con ella. Sus implicaciones son inmediatas."
-                    valorBoton = "desactivado"
-                }
-                if (estadoCuentaActual === "desactivado") {
-                    tituloBoton = "Activar cuenta"
-                    tituloInformativo = "Confirma la activación de la cuenta"
-                    textoDescriptivo = "¿Quieres activar esta cuenta? El usuario de esta cuenta no podrá volver a loguearse con ella. Sus implicaciones son inmediatas."
-                    valorBoton = "activado"
-                }
 
-
-                const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
-                pantallaInmersiva.style.justifyContent = "center"
-
-                const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
-
-                const titulo = constructor.querySelector("[componente=titulo]")
-                titulo.textContent = tituloInformativo
-                const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                mensaje.textContent = textoDescriptivo
-
-                const botonAceptar = constructor.querySelector("[boton=aceptar]")
-                botonAceptar.textContent = tituloBoton
-                botonAceptar.setAttribute("nuevoEstado", valorBoton)
-                botonAceptar.addEventListener("click", (e) => { this.transactor(e) })
-                const botonCancelar = constructor.querySelector("[boton=cancelar]")
-                botonCancelar.textContent = "Cancelar y volver"
-
-                document.querySelector("main").appendChild(pantallaInmersiva)
-            },
-            transactor: async function (nuevoEstado) {
-                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const mensaje = "Actualizando estado del VitiniIDX..."
-                const datosPantallaSuperpuesta = {
-                    instanciaUID: instanciaUID,
-                    mensaje: mensaje
-                }
-                casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                const nuevoEstado_ = nuevoEstado.target.getAttribute("nuevoEstado")
-                const usuarioIDX = document.querySelector("[usuarioIDX]").getAttribute("usuarioIDX")
-                const transaccion = {
-                    zona: "administracion/usuarios/actualizarEstadoCuentaDesdeAdministracion",
-                    "usuarioIDX": usuarioIDX,
-                    "nuevoEstado": nuevoEstado_
-                }
-                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                if (!instanciaRenderizada) { return }
-                instanciaRenderizada.remove()
-                if (respuestaServidor?.error) {
-                    const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
-                    selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
-                        advertenciaInmersiva.remove()
-                    })
-                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-                }
-                if (respuestaServidor?.ok) {
-                    const estadoActual = respuestaServidor?.estadoCuenta
-                    let estadoCuentaUI
-                    if (estadoActual === "activado") {
-                        estadoCuentaUI = "Desactivar cuenta"
-                    }
-                    if (estadoActual === "desactivado") {
-                        estadoCuentaUI = "Activar cuenta"
-                    }
-                    const selectorEstadoCuentaUI = document.querySelector("[estadoCuenta]")
-                    selectorEstadoCuentaUI.textContent = estadoCuentaUI
-                    selectorEstadoCuentaUI.setAttribute("estadoCuenta", estadoActual)
-                    const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
-                    selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
-                        advertenciaInmersiva.remove()
-                    })
-                }
-            }
-        },
         eliminarCuenta: {
             UI: async function () {
 

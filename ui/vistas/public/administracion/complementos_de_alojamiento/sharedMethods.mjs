@@ -21,7 +21,7 @@ export const sharedMethods = {
             const botonEstadoOferta = document.createElement("div")
             botonEstadoOferta.classList.add("creatOfertaBotonEstado")
             botonEstadoOferta.setAttribute("componente", "estado")
-            botonEstadoOferta.addEventListener("click", (e) => {casaVitini.view.complementosPorAlojamiento.detallesComplemento.estadoUIControlador(e)})
+            botonEstadoOferta.addEventListener("click", (e) => { casaVitini.view.complementosPorAlojamiento.detallesComplemento.estadoUIControlador(e) })
             botonEstadoOferta.textContent = "Servicio desactivado"
             contenedorNombreEstado.appendChild(botonEstadoOferta)
 
@@ -161,6 +161,8 @@ export const sharedMethods = {
     },
     nuevo: {
         arranque: async function (apartamentoIDV) {
+
+
             const main = document.querySelector("main")
             const instanciaUID = main.getAttribute("instanciaUID")
             const espacio = main.querySelector("[componente=espacio]")
@@ -205,7 +207,7 @@ export const sharedMethods = {
 
             casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(metadatosPantallaCarga)
 
-            const transaccion = casaVitini.view.__sharedMethods__.complementosDeAlojamiento.complementosPorAlojamiento.utilidades.constructorObjeto()
+            const transaccion = casaVitini.view.__sharedMethods__.constructorObjeto()
             transaccion.zona = "administracion/complementosDeAlojamiento/crearComplementoDeAlojamiento"
 
             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
@@ -231,7 +233,7 @@ export const sharedMethods = {
         boton.classList.add("botonV1");
         boton.textContent = "Crear complemento";
         boton.setAttribute("boton", "crear");
-        boton.addEventListener("click", () => { this.crear() })
+        boton.addEventListener("click", () => { casaVitini.view.__sharedMethods__.nuevo.crear() })
         return boton
     },
 

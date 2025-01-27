@@ -345,7 +345,7 @@ export const sharedMethodsTemporalLocks = {
             botonCrear.classList.add("botonV2_negrita")
             botonCrear.textContent = "Crear bloqueo"
             botonCrear.addEventListener("click", () => {
-                casaVitini.view.crearBloqueo.transactor()
+                casaVitini.view.transactor()
             })
             contenedorBotones.appendChild(botonCrear)
         }
@@ -410,14 +410,14 @@ export const sharedMethodsTemporalLocks = {
         },
         modificar: function () {
             const selectorContendorGlobal = document.querySelector("[componente=contenedorGlobal]")
-            const botonesGlobalesUI = this.botonesDetallesBloqueoUI("modificar")
+            const botonesGlobalesUI = casaVitini.view.__sharedMethods__.botonesDetallesBloqueoUI("modificar")
             selectorContendorGlobal.append(botonesGlobalesUI)
             const selectorContendorBloqueo = document.querySelector("[componente=contenedorDelBloqueo]")
             selectorContendorBloqueo.style.pointerEvents = "none"
         },
         guardarEliminar: function () {
             const selectorContendorGlobal = document.querySelector("[componente=contenedorGlobal]")
-            const botonesGlobalesUI = this.botonesDetallesBloqueoUI("guardarEliminar")
+            const botonesGlobalesUI = casaVitini.view.__sharedMethods__.botonesDetallesBloqueoUI("guardarEliminar")
             selectorContendorGlobal.append(botonesGlobalesUI)
             const selectorContendorBloqueo = document.querySelector("[componente=contenedorDelBloqueo]")
             selectorContendorBloqueo.style.pointerEvents = "all"

@@ -30,11 +30,11 @@ export const eliminarMensaje = async (entrada, salida) => {
         await eliminarMensajeEnPortada(mensajeUID)
         await actualizaOrdenDePosiciones(posicion)
         await campoDeTransaccion("confirmar")
-        const ok = {
+
+        return {
             ok: "Se ha eliminado correctamente el mensaje de portada",
             mensajeUID: mensajeUID
         };
-        return ok
 
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")

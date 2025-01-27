@@ -50,7 +50,7 @@ export const sharedMethods = {
             const pBotonEliminarOferta_O1 = document.createElement("p");
             pBotonEliminarOferta_O1.classList.add("botonV1");
             pBotonEliminarOferta_O1.setAttribute("componente", "botonEliminarOferta");
-            pBotonEliminarOferta_O1.addEventListener("click", casaVitini.view.detallesOferta.eliminarOferta.UI)
+            pBotonEliminarOferta_O1.addEventListener("click", () => {casaVitini.view.detallesOferta.eliminarOferta.UI()})
             pBotonEliminarOferta_O1.textContent = "Eliminar oferta";
             divBotones_O1.appendChild(pBotonGuardarOferta_O1);
             divBotones_O1.appendChild(pBotonCancelarCambiosOferta_O1);

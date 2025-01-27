@@ -85,8 +85,6 @@ casaVitini.view = {
             mensajesEnPortada.sort((a, b) => a.posicion - b.posicion);
             const numeroTotalMensajes = mensajesEnPortada.length
 
-
-            let posicionContenedor = 0
             for (const detallesDelMensaje of mensajesEnPortada) {
 
                 const mensajeUID = detallesDelMensaje.mensajeUID
@@ -94,19 +92,17 @@ casaVitini.view = {
                 const estadoIDV = detallesDelMensaje.estadoIDV
                 const posicion = detallesDelMensaje.posicion
 
-                const configuracionMensaje = {
+                const mensajeUI = this.mensajeUI({
                     mensajeUID: mensajeUID,
                     mensaje: mensaje,
                     estadoIDV: estadoIDV,
                     posicion: posicion,
                     numeroTotalMensajes: numeroTotalMensajes
-                }
-                const mensajeUI = this.mensajeUI(configuracionMensaje)
-                posicionContenedor = posicionContenedor + 1
+                })
 
                 const contenedorDePosicion = document.createElement("div")
                 contenedorDePosicion.classList.add("contenedorDePosicion")
-                contenedorDePosicion.setAttribute("posicion", posicionContenedor)
+                contenedorDePosicion.setAttribute("posicion", posicion)
 
                 contenedorDePosicion.appendChild(mensajeUI)
                 contenedorListaMensajes.appendChild(contenedorDePosicion)
@@ -332,7 +328,7 @@ casaVitini.view = {
             botonAceptar.textContent = "Comfirmar la eliminacion del mensaje"
             botonAceptar.addEventListener("click", () => {
                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                this.eliminarMensaje.confirmar(mensajeUID)
+                this.confirmar(mensajeUID)
             })
             const botonCancelar = constructor.querySelector("[boton=cancelar]")
             botonCancelar.textContent = "Cancelar la eliminación"
@@ -368,7 +364,7 @@ casaVitini.view = {
                 if (!instanciaMainRenderizada) { }
                 const mensajeUID = respuestaServidor.mensajeUID
                 instanciaMainRenderizada.querySelector(`[mensajeUID="${mensajeUID}"]`)?.remove()
-                this.portadaUI()
+                casaVitini.view.portadaUI()
             }
         }
     },

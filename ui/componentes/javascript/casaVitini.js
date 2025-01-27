@@ -1047,7 +1047,7 @@ const casaVitini = {
                     casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
                     return
                 } else if (respuestaServidor.codigo === "mantenimiento") {
-                    console.log("man")
+
                     casaVitini.shell.controladoresUI.limpiarMain()
                     this.controladoresUI.interrumpirTransicionVistas()
                     const mensaje = respuestaServidor.error
@@ -1933,7 +1933,7 @@ const casaVitini = {
 
                 const contenedorBloque = document.createElement("div")
                 contenedorBloque.classList.add("componentes_contenedor_contenido")
-                console.log("e")
+
 
                 if (titulo) {
                     const tituloUI = document.createElement("div")

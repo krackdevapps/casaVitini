@@ -26,7 +26,7 @@ casaVitini.view = {
         const tipoApartamentoUI = document.createElement("select")
         tipoApartamentoUI.classList.add("administracion_bloqueos_detallesBloqueo_listaSelec")
         tipoApartamentoUI.setAttribute("datoBloqueo", "apartamento")
-        tipoApartamentoUI.addEventListener("change",() => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI()})
+        tipoApartamentoUI.addEventListener("change",(e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e)})
         const tipoApartamentoInicio = document.createElement("option");
         tipoApartamentoInicio.value = "";
         tipoApartamentoInicio.selected = true;
@@ -63,7 +63,7 @@ casaVitini.view = {
         const tipoBloqueoUI = document.createElement("select")
         tipoBloqueoUI.classList.add("administracion_bloqueos_detallesBloqueo_listaSelec")
         tipoBloqueoUI.setAttribute("datoBloqueo", "tipoBloqueoIDV")
-        tipoBloqueoUI.addEventListener("change", () => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI()})
+        tipoBloqueoUI.addEventListener("change", (e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e)})
         const tipoBloqueoInicio = document.createElement("option");
         tipoBloqueoInicio.value = "";
         tipoBloqueoInicio.selected = true;
@@ -101,7 +101,7 @@ casaVitini.view = {
         opcion_publico.text = "Público - Zona pública";
         zonaUI.add(opcion_publico);
         const opcion_privado = document.createElement("option");
-        opcion_privado.value = "privado";
+        opcion_privado.value = "privada";
         opcion_privado.text = "Privado - Zona administrativa";
         zonaUI.add(opcion_privado);
         const opcion_global = document.createElement("option");

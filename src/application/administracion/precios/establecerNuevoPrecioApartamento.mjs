@@ -106,7 +106,7 @@ export const establecerNuevoPrecioApartamento = async (entrada) => {
                 }
                 (detallesApartamento.impuestos).push(impuestosFinal);
             });
-            console.log("sumaTotalImpuestos", sumaTotalImpuestos)
+
             let totalNocheBruto = Number(sumaTotalImpuestos) + Number(precioNetoApartamentoPorNoche);
             totalNocheBruto = totalNocheBruto.toFixed(2);
             detallesApartamento.totalImpuestos = sumaTotalImpuestos.toFixed(2);

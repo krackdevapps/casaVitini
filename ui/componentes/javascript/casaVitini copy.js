@@ -43377,7 +43377,7 @@ const casaVitini = {
 
                                     const botonInsertar = document.createElement("div")
                                     botonInsertar.classList.add("botonV1BlancoIzquierda")
-                                    botonInsertar.textContent = "Insertar servicio en simulacion"
+                                    botonInsertar.textContent = "Insertar servicio en simulacion 1"
                                     botonInsertar.setAttribute("boton", "volver")
                                     botonInsertar.addEventListener("click", (e) => {
                                         const servicioUI_selector = e.target.closest("[componente=contenedor]").querySelector("[servicioUID]")
@@ -43707,7 +43707,7 @@ const casaVitini = {
 
                             const botonEliminar = document.createElement("div")
                             botonEliminar.classList.add("botonV6")
-                            botonEliminar.textContent = "Eliminar servicio de la simulación"
+                            botonEliminar.textContent = "Eliminar servicio de la simulación 2"
                             botonEliminar.addEventListener("click", () => {
                                 casaVitini
                                     .administracion

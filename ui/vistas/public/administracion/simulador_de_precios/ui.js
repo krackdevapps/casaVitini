@@ -356,8 +356,6 @@ casaVitini.view = {
                 const selectorsApartamentos = simulacionUI.querySelector("[contenedor=apartamentosSeleccianados]")
                 const instanciaUID_contenedorApartamentos = selectorsApartamentos.querySelector("[instanciaUID]").getAttribute("instanciaUID")
 
-
-
                 const hubFecha = (fecha) => {
                     if (fecha) {
                         return casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fecha)
@@ -2836,8 +2834,6 @@ casaVitini.view = {
             contenedorFechaCreacion.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
             contenedor.appendChild(contenedorFechaCreacion);
 
-
-
             const contenedorZonaIDV = document.createElement("div")
             contenedorZonaIDV.classList.add(
                 "flexVertical"
@@ -2902,7 +2898,7 @@ casaVitini.view = {
                     contenedorOrigenIDV: "[calendario=unico]",
                     instanciaUID_contenedorFechas,
                     rangoIDV: "unico",
-                    metodoSelectorDia: "administracion.simuladorDePrecios.componentes.pasarelaSelectorDia",
+                    metodoSelectorDia: "view.componentes.pasarelaSelectorDia",
                     tituloCalendario: "Selecciona la fecha de creación simulada de la reserva",
 
                 })
@@ -2950,7 +2946,7 @@ casaVitini.view = {
             contenedor.appendChild(botonResetearFechas)
 
             const selectorRangoSimulado = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
-                metodoSelectorDia: "administracion.simuladorDePrecios.componentes.pasarelaSelectorDia",
+                metodoSelectorDia: "view.componentes.pasarelaSelectorDia",
                 nombreContenedor: "rangoDeSimulacion",
                 modo: "administracion",
                 seleccionableDiaLimite: "no",
@@ -3285,8 +3281,7 @@ casaVitini.view = {
                 botonCrearPagoManual.classList.add("detallesReserva_transacciones_botonV1")
                 botonCrearPagoManual.textContent = "Insertar un servicio"
                 botonCrearPagoManual.addEventListener("click", () => {
-                    casaVitini.view.componentes.servicios.componentesUI.insertarServicio.ui({
-                    })
+                    casaVitini.view.componentes.servicios.componentesUI.insertarServicio.ui({})
                 })
                 bloqueBotones.appendChild(botonCrearPagoManual)
                 contenedorInformacionGlobal.appendChild(bloqueBotones)
@@ -3529,7 +3524,7 @@ casaVitini.view = {
 
                             const botonInsertar = document.createElement("div")
                             botonInsertar.classList.add("botonV1BlancoIzquierda")
-                            botonInsertar.textContent = "Insertar servicio en simulacion"
+                            botonInsertar.textContent = "Insertar servicio en simulacion 2"
                             botonInsertar.setAttribute("boton", "volver")
                             botonInsertar.addEventListener("click", (e) => {
                                 const servicioUI_selector = e.target.closest("[componente=contenedor]").querySelector("[servicioUID]")
@@ -3613,7 +3608,7 @@ casaVitini.view = {
                             const servicioUID_enSimulacion = servicioData.servicioUID
                             const opcionesSel = servicioData.opcionesSel
 
-                            const servicioUI = casaVitini.view.__sharedMethods__.servicioUI({
+                            const servicioUI =  casaVitini.view.componentes.servicios.componentesUI.servicioUI({
                                 servicioUID_enSimulacion: servicioUID_enSimulacion,
                                 instanciaUID_contenedorServicios: "contenedorServicios",
                                 nombreInterno: nombreInterno,
@@ -3859,11 +3854,10 @@ casaVitini.view = {
 
                     const botonEliminar = document.createElement("div")
                     botonEliminar.classList.add("botonV6")
-                    botonEliminar.textContent = "Eliminar servicio de la simulación"
+                    botonEliminar.textContent = "Eliminar servicio de la simulación 1"
                     botonEliminar.addEventListener("click", () => {
                         casaVitini
-                            .administracion
-                            .simuladorDePrecios
+                            .view
                             .componentes
                             .servicios
                             .componentesUI.
@@ -3952,8 +3946,7 @@ casaVitini.view = {
                             const selectorContenedoresDeServiciosRenderizados = simulacionUIRenderizada.querySelectorAll("[servicioUID_enSimulacion]")
                             if (selectorContenedoresDeServiciosRenderizados.length === 0) {
                                 const infoSinEnlaces = casaVitini
-                                    .administracion
-                                    .simuladorDePrecios
+                                    .view
                                     .componentes
                                     .servicios
                                     .componentesUI
@@ -4121,7 +4114,7 @@ casaVitini.view = {
                                 return
                             }
 
-                            const servicioUI = casaVitini.view.__sharedMethods__.servicioUI({
+                            const servicioUI = casaVitini.view.componentes.servicios.componentesUI.servicioUI({
                                 servicioUID_enSimulacion: servicioUID_enSimulacion,
                                 instanciaUID_contenedorServicios: "contenedorServicios",
                                 nombreInterno: nombreInterno,
@@ -4180,8 +4173,6 @@ casaVitini.view = {
 
 
             },
-
-
         },
         contenedorCodigosDescuento: {
             infoInit: function () {

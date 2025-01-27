@@ -115,7 +115,7 @@ casaVitini.view = {
                 bloqueApartamentoUI.setAttribute("apartamentoIDV", apartamentoIDV)
                 bloqueApartamentoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV)
                 bloqueApartamentoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV)
-                bloqueApartamentoUI.addEventListener("click",() => { this.traductorCambioVista()})
+                bloqueApartamentoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 selectorEspacioBloqueos.appendChild(bloqueApartamentoUI)
 
                 const tituloApartamentoUI = document.createElement("div")
@@ -130,16 +130,6 @@ casaVitini.view = {
 
             })
         }
-    },
-    traductorCambioVista: function (apartamento) {
-        apartamento.preventDefault()
-        apartamento.stopPropagation()
-        const vista = apartamento.target.closest("[vista]").getAttribute("vista")
-        const entrada = {
-            vista: vista,
-            tipoOrigen: "menuNavegador"
-        }
-        casaVitini.shell.navegacion.controladorVista(entrada)
     },
     bloqueosPorApartamento: {
         UI: async function (apartamento) {
@@ -399,7 +389,7 @@ casaVitini.view = {
                 tipoBloqueoUI.setAttribute("datoBloqueo", "tipoBloqueoIDV")
                 tipoBloqueoUI.setAttribute("datoInicial", tipoBloqueoIDV)
                 tipoBloqueoUI.textContent = tipoBloqueoDefinicion
-                tipoBloqueoUI.addEventListener("change", () => {casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI()})
+                tipoBloqueoUI.addEventListener("change", (e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e) })
                 const opcion_permamente = document.createElement("option");
                 opcion_permamente.value = "permanente";
                 if (tipoBloqueoIDV === "permanente") {
@@ -425,7 +415,7 @@ casaVitini.view = {
                 tituloZonaUI.textContent = "Contexto de aplicación"
                 contenedorZonaUI.appendChild(tituloZonaUI)
                 let zonaDefinicionUI
-                if (zonaIDV === "privado") {
+                if (zonaIDV === "privada") {
                     zonaDefinicionUI = "Privado - Solo se aplica a la zona de administración"
                 }
                 if (zonaIDV === "publica") {
@@ -445,10 +435,10 @@ casaVitini.view = {
                 opcion_publico.text = "Público - Zona pública";
                 zonaUI.add(opcion_publico);
                 const opcion_privado = document.createElement("option");
-                if (zonaIDV === "privado") {
+                if (zonaIDV === "privada") {
                     opcion_privado.selected = true;
                 }
-                opcion_privado.value = "privado";
+                opcion_privado.value = "privada";
                 opcion_privado.text = "Privado - Zona administrativa";
                 zonaUI.add(opcion_privado);
                 const opcion_global = document.createElement("option");
@@ -473,7 +463,7 @@ casaVitini.view = {
                     const metadatosconstructorRangoTemporalUI = {
                         modo: "estadoInicial"
                     }
-                    const selectorRangoUI =  casaVitini.view.__sharedMethods__.selectorRangoTemporalUI(metadatosconstructorRangoTemporalUI)
+                    const selectorRangoUI = casaVitini.view.__sharedMethods__.selectorRangoTemporalUI(metadatosconstructorRangoTemporalUI)
                     bloqueBloqueoUI.appendChild(selectorRangoUI)
                 }
 
@@ -523,7 +513,7 @@ casaVitini.view = {
             const bloqueUID = selectorBloqueUID.getAttribute("bloqueoUID")
             const selectorTipoBloqueo = document.querySelector("[datoBloqueo=tipoBloqueoIDV]")
             const selectorZona = document.querySelector("[datoBloqueo=zonaIDV]")
-            const bloqueoParaActualizar = casaVitini.view.contructorObjeto()
+            const bloqueoParaActualizar = casaVitini.view.__sharedMethods__.contructorObjeto()
             bloqueoParaActualizar.zona = "administracion/bloqueos/modificarBloqueo"
             bloqueoParaActualizar.bloqueoUID = String(bloqueUID)
             const selectorMotivo = document.querySelector("[datoBloqueo=motivoUI]")
@@ -596,7 +586,7 @@ casaVitini.view = {
 
                 const botonAceptar = constructor.querySelector("[boton=aceptar]")
                 botonAceptar.textContent = "Confirmar la eliminación"
-                botonAceptar.addEventListener("click",() => { this.confirmar()})
+                botonAceptar.addEventListener("click", () => { this.confirmar() })
                 const botonCancelar = constructor.querySelector("[boton=cancelar]")
                 botonCancelar.textContent = "Cancelar la eliminación"
 
