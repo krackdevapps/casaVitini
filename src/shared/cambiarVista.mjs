@@ -25,7 +25,7 @@ export const cambiarVista = async (transaccion) => {
                 if (existsSync(selectorRama)) {
 
                     const archivoIDX = selectorRama + "/IDX.json"
-                    console.log("archivoIDX", archivoIDX)
+
                     if (existsSync(archivoIDX)) {
 
                         const secFile = readFileSync(archivoIDX, 'utf-8')
@@ -63,10 +63,10 @@ export const cambiarVista = async (transaccion) => {
 
                             if (!usuarioIDX) {
                                 portal = "IDX"
-                                urlResuelta = ""
+                                //  urlResuelta = ""
                             } else if (roles.length > 0 && !roles.includes(rolIDV)) {
                                 portal = "ROL"
-                                urlResuelta = ""
+                                //  urlResuelta = ""
                             }
                         }
                     }
@@ -161,7 +161,7 @@ export const cambiarVista = async (transaccion) => {
                 ok: "Vista encontrada",
                 zona: zona,
                 url: urlResultaConParametros,
-                urlWithoutPArams: "/" + urlResueltoParseador.join("/"),
+                urlWithoutParams: "/" + urlResueltoParseador.join("/"),
                 params: parametros,
                 html: html,
                 js: js,

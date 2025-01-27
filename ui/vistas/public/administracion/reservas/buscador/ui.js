@@ -14,7 +14,7 @@ casaVitini.view = {
         } else if (Object.keys(granuladoURL.parametros).length > 0) {
 
             main.setAttribute("zonaCSS", "administracion/reservas/buscador")
-           this.buscadorUI()
+            this.buscadorUI()
 
 
             const parametrosFormatoURL = granuladoURL.parametros
@@ -34,7 +34,7 @@ casaVitini.view = {
             })
             this.contructorMarcoInfo()
             parametrosFormatoIDV.termino = decodeURI(parametrosFormatoIDV.termino)
-           this.mostrarReservasResueltas(parametrosFormatoIDV)
+            this.mostrarReservasResueltas(parametrosFormatoIDV)
         } else {
             casaVitini.ui.componentes.urlDesconocida()
         }
@@ -72,7 +72,7 @@ casaVitini.view = {
         const botonVerHoy = document.createElement("a")
         botonVerHoy.classList.add("administracion_reservas_contenedorBotonesGlobales")
         botonVerHoy.setAttribute("boton", "botonVerHoy")
-        botonVerHoy.addEventListener("click", () =>{this.verReservasHoy()})
+        botonVerHoy.addEventListener("click", () => { this.verReservasHoy() })
         botonVerHoy.textContent = "Ver entradas hoy"
         contenedorBotonesGlobales.appendChild(botonVerHoy)
         const botonReservasPendientes = document.createElement("a")
@@ -178,7 +178,7 @@ casaVitini.view = {
         opcionRango.setAttribute("selectorRango", "cualquieraQueCoincida")
         opcionRango.textContent = "Cualquiera que coincida"
         opcionRango.addEventListener("click", () => {
-           this.seleccionarRango("cualquieraQueCoincida")
+            this.seleccionarRango("cualquieraQueCoincida")
         })
         selectorRango.appendChild(opcionRango)
         opcionRango = document.createElement("p")
@@ -186,7 +186,7 @@ casaVitini.view = {
         opcionRango.setAttribute("selectorRango", "soloDentroDelRango")
         opcionRango.textContent = "Solo dentro del rango"
         opcionRango.addEventListener("click", () => {
-           this.seleccionarRango("soloDentroDelRango")
+            this.seleccionarRango("soloDentroDelRango")
         })
         selectorRango.appendChild(opcionRango)
         opcionRango = document.createElement("p")
@@ -194,7 +194,7 @@ casaVitini.view = {
         opcionRango.setAttribute("selectorRango", "porFechaDeEntrada")
         opcionRango.textContent = "Por fecha de entradas"
         opcionRango.addEventListener("click", () => {
-           this.seleccionarRango("porFechaDeEntrada")
+            this.seleccionarRango("porFechaDeEntrada")
         })
         selectorRango.appendChild(opcionRango)
         opcionRango = document.createElement("p")
@@ -202,7 +202,7 @@ casaVitini.view = {
         opcionRango.setAttribute("selectorRango", "porFechaDeSalida")
         opcionRango.textContent = "Por fecha de salida"
         opcionRango.addEventListener("click", () => {
-           this.seleccionarRango("porFechaDeSalida")
+            this.seleccionarRango("porFechaDeSalida")
         })
         selectorRango.appendChild(opcionRango)
         buscadorReservasPorFecha.appendChild(selectorRango)
@@ -210,7 +210,7 @@ casaVitini.view = {
         botonMostrarReservas.classList.add("botonMostrarDisponibilidad")
         botonMostrarReservas.setAttribute("boton", "mostrarReservas")
         botonMostrarReservas.setAttribute("origenBusqueda", "porFecha")
-        botonMostrarReservas.addEventListener("click", () =>{this.mostrarReservasPorRango()})
+        botonMostrarReservas.addEventListener("click", () => { this.mostrarReservasPorRango() })
         buscadorUI.appendChild(bloqueContenedor)
         botonMostrarReservas.textContent = "Buscar"
         buscadorReservasPorFecha.appendChild(botonMostrarReservas)
@@ -633,7 +633,7 @@ casaVitini.view = {
             const estadoReservaIDV = r.estadoReservaIDV
             r.estadoReservaIDV = estadoReservaIDV.charAt(0).toUpperCase() + estadoReservaIDV.slice(1);
         })
-        console.log("reservas", reservas)
+
 
         const columnasGrid = [
             {
@@ -724,7 +724,7 @@ casaVitini.view = {
         }
 
         casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
-            metodoSalida: "administracion.reservas.buscador.mostrarReservasResueltas",
+            metodoSalida: "view.mostrarReservasResueltas",
             configuracionGrid: {
                 filas: reservas,
                 almacen: constructorAlmacen,
@@ -754,7 +754,7 @@ casaVitini.view = {
             EstadoInternoZona: "estado",
             tipoCambio: "parcial",
             componenteExistente: "navegacionZonaAdministracion",
-            funcionPersonalizada: "administracion.reservas.buscador.mostrarReservasResueltas",
+            funcionPersonalizada: "view.mostrarReservasResueltas",
             args: transaccion
         }
 
@@ -786,7 +786,7 @@ casaVitini.view = {
         document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
         document.querySelector("[contenedor=filtrosOrden]")?.remove()
         espacioReservas.innerHTML = null
-       this.limpiarFormularioBusqueda()
+        this.limpiarFormularioBusqueda()
         const estadoBusquedaUI = document.createElement("div")
         estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
         estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
@@ -800,7 +800,7 @@ casaVitini.view = {
             instanciaUID: instanciaUID,
             tipoCoincidencia: "porFechaEntrada"
         }
-       this.mostrarReservasResueltas(peticion)
+        this.mostrarReservasResueltas(peticion)
     },
     mostrarReservasPorRango: function () {
         const fechaEntrada = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
@@ -833,7 +833,7 @@ casaVitini.view = {
             origen: "botonMostrarReservas",
         }
 
-       this.mostrarReservasResueltas(peticion)
+        this.mostrarReservasResueltas(peticion)
     },
     buscadorReservas: function (reserva) {
 
@@ -854,7 +854,7 @@ casaVitini.view = {
 
 
 
-       this.limpiarFormularioBusqueda()
+        this.limpiarFormularioBusqueda()
         const terminoBusqueda = reserva.target.value
         if (terminoBusqueda.length === 0) {
             clearTimeout(casaVitini.componentes.temporizador);
@@ -879,7 +879,7 @@ casaVitini.view = {
                 termino: terminoBusqueda,
                 origen: "botonMostrarReservas",
             }
-           this.mostrarReservasResueltas(peticion);
+            this.mostrarReservasResueltas(peticion);
         }, 1500);
     },
     constructorMarcoInfo: function () {

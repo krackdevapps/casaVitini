@@ -160,7 +160,7 @@ casaVitini.view = {
             const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
 
             casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
-                metodoSalida: "administracion.simuladorDePrecios.portada.mostrarSimulacionesResueltas",
+                metodoSalida: "view.portada.mostrarSimulacionesResueltas",
                 configuracionGrid: {
                     filas: simulaciones,
                     sentidoColumna: sentidoColumna,
@@ -189,7 +189,7 @@ casaVitini.view = {
                 EstadoInternoZona: "estado",
                 tipoCambio: "parcial",
                 componenteExistente: "contenedorBotonesSimulador",
-                funcionPersonalizada: "administracion.simuladorDePrecios.portada.mostrarSimulacionesResueltas",
+                funcionPersonalizada: "view.portada.mostrarSimulacionesResueltas",
                 args: transaccion
             }
             if (origen === "url" || origen === "botonMostrarClientes") {
@@ -3519,7 +3519,7 @@ casaVitini.view = {
                             const servicioUID = servicio.servicioUID
                             const contenedor = servicio.contenedor
 
-                            const servicioUI = casaVitini.ui.vistas.alojamiento.resumen.servicios.servicioUI({
+                            const servicioUI = casaVitini.view.__sharedMethods__.servicioUI({
                                 servicioUID,
                                 contenedor
 
@@ -3838,8 +3838,7 @@ casaVitini.view = {
                     botonModificar.addEventListener("click", () => {
 
                         casaVitini
-                            .administracion
-                            .simuladorDePrecios
+                            .view
                             .componentes
                             .servicios
                             .componentesUI.acutalizarServicioEnSimulacion.ui({

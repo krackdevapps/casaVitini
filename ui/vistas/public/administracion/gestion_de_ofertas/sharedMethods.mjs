@@ -1429,7 +1429,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 const botonEstadoOferta = document.createElement("div")
                 botonEstadoOferta.classList.add("creatOfertaBotonEstado")
                 botonEstadoOferta.setAttribute("componente", "estadoOferta")
-                botonEstadoOferta.addEventListener("click", (e) => {this.detallesOferta.estadoOferta(e)})
+                botonEstadoOferta.addEventListener("click", (e) => {casaVitini.view.detallesOferta.estadoOferta(e)})
                 botonEstadoOferta.textContent = "Oferta desactivada"
                 divContenedorNombreYEstado.appendChild(botonEstadoOferta)
     

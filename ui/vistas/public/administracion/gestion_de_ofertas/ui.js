@@ -812,7 +812,7 @@ casaVitini.view = {
                 const espacioOfertasGlobal = document.querySelector("[componente=espacioOfertas]")
                 espacioOfertasGlobal.setAttribute("instantanea", JSON.stringify(ofertaActualizada))
 
-                await casaVitini.view.__sharedMethods__.detallesOferta.aplicaData({
+                await casaVitini.view.detallesOferta.aplicaData({
                     oferta: ofertaActualizada,
                     instanciaUID_destino: instanciaUID
                 })

@@ -76,7 +76,7 @@ casaVitini.view = {
                 const totalImpuestos = detalleApartamento.totalImpuestos
                 const totalNocheBruto = detalleApartamento.totalNocheBruto
                 const bloqueApartamento = document.createElement("div")
-                bloqueApartamento.classList.add("flexVertical", "gap6", "padding6", "borderRadius20", "backgroundGrey1")
+                bloqueApartamento.classList.add("flexVertical", "gap6", "padding6", "borderRadius20", "backgroundGrey1", "elementosExpandidos")
 
                 const tituloApartamento = document.createElement("p")
                 tituloApartamento.classList.add("padding16", "negrita")
@@ -517,6 +517,8 @@ casaVitini.view = {
             const precioNetoPorNoche = propuestaDetalles.precioNetoPorNoche
             const totalImpuestos = propuestaDetalles.totalImpuestos
             const totalBrutoPorNoche = propuestaDetalles.totalBrutoPorNoche
+
+            console.log("respuestaServidor", respuestaServidor)
 
             const areaApartamento = document.querySelector(`[apartamentoIDV="${selectorApartamentoIDV}"]`)
 

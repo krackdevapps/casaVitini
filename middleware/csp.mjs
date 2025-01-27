@@ -6,7 +6,7 @@ export const csp = helmet.contentSecurityPolicy({
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:'],
-      frameSrc: ["'self'"],
+      frameSrc: ["'self'", 'https://www.google.com'],
       // Puedes añadir más directivas según tus necesidades
     }
   })

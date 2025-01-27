@@ -382,7 +382,7 @@ casaVitini.view = {
 
 
         const listaCodigosInternacionales = await this.listaCodigosInternacionalUI()
-        console.log("listaCodigosInternacionales", listaCodigosInternacionales)
+
         listaCodigosInternacionales.value = "+1"
         contenedorNumero.appendChild(listaCodigosInternacionales)
 

@@ -4,7 +4,7 @@ casaVitini.view = {
 
         const video = main.querySelector("[componente=video]")
         console.clear()
-        console.log("video", video)
+
 
         const mmssASegundos = (tiempo) => {
             const [minutos, segundos] = tiempo.split(':').map(Number);
@@ -38,7 +38,7 @@ casaVitini.view = {
             ];
             const posicionAleatoria = Math.floor(Math.random() * tiempos.length)
             const tiempoAleatorio = tiempos[posicionAleatoria];
-            console.log("tiempoAleeatorio", tiempoAleatorio)
+
             video.currentTime = mmssASegundos(tiempoAleatorio);
 
         })

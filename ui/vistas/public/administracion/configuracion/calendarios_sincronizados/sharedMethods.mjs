@@ -34,7 +34,7 @@ export const sharedMethods = {
         tipoApartamentoInicio.disabled = true;
         tipoApartamentoInicio.text = "Seleccionar el apartamento a enlazar";
         tipoApartamentoUI.add(tipoApartamentoInicio);
-        const apartamentosArray = await casaVitini.view.__sharedMethods.componentes.obtenerApartamentos()
+        const apartamentosArray = await casaVitini.view.__sharedMethods__.componentes.obtenerApartamentos()
         if (apartamentosArray.length === 0) {
             const opcion = document.createElement("option");
             opcion.value = "";

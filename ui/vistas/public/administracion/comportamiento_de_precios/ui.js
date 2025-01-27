@@ -538,7 +538,7 @@ casaVitini.view = {
                 const botonAceptar = constructor.querySelector("[boton=aceptar]")
                 botonAceptar.textContent = "Comfirmar la eliminacion"
                 botonAceptar.addEventListener("click", () => {
-                    this.eliminarComportamiento.confirmar()
+                    casaVitini.view.detallesComportamiento.eliminarComportamiento.confirmar()
                 })
                 const botonCancelar = constructor.querySelector("[boton=cancelar]")
                 botonCancelar.textContent = "Cancelar la eliminacion"

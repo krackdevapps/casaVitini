@@ -352,7 +352,7 @@ casaVitini.view = {
             const sectionRenderizada = document.querySelector("main")
             const instanciaUID_main = sectionRenderizada.getAttribute("instanciaUID")
 
-            const calendarioResuelto = await casaVitini.view.resolverCalendarioNuevo({
+            const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
                 tipo: "rangoAnualDesdeFecha",
                 ano: Number(anoInicial),
                 mes: Number(mesInicial)

@@ -66,12 +66,19 @@ export const establecerNuevoPrecioApartamento = async (entrada) => {
         detallesApartamento.totalBrutoPorNoche = precioNetoApartamentoPorNoche;
         detallesApartamento.impuestos = [];
 
+        const listaImpuestos = []
 
-        const listaImpuestos = await obtenerImpuestosPorEntidadIDV({
+        const impuestosReserva = await obtenerImpuestosPorEntidadIDV({
             entidadIDV: "reserva",
             estadoIDV: "activado"
         })
+        listaImpuestos.push(...impuestosReserva)
 
+        const impuestosGlobal = await obtenerImpuestosPorEntidadIDV({
+            entidadIDV: "global",
+            estadoIDV: "activado"
+        })
+        listaImpuestos.push(...impuestosGlobal)
 
         if (listaImpuestos.length > 0) {
 
@@ -88,17 +95,18 @@ export const establecerNuevoPrecioApartamento = async (entrada) => {
                     tipoValorIDV,
                     impuestoUID
                 };
+
                 if (tipoValorIDV === "porcentaje") {
                     const resultadoApliacado = (precioNetoApartamentoPorNoche * (tipoImpositivo / 100)).toFixed(2);
                     sumaTotalImpuestos += parseFloat(resultadoApliacado);
                     impuestosFinal.totalImpuesto = resultadoApliacado;
-                }
-                if (tipoValorIDV === "tasa") {
+                } else if (tipoValorIDV === "tasa") {
                     sumaTotalImpuestos += parseFloat(tipoImpositivo);
                     impuestosFinal.totalImpuesto = tipoImpositivo;
                 }
                 (detallesApartamento.impuestos).push(impuestosFinal);
             });
+            console.log("sumaTotalImpuestos", sumaTotalImpuestos)
             let totalNocheBruto = Number(sumaTotalImpuestos) + Number(precioNetoApartamentoPorNoche);
             totalNocheBruto = totalNocheBruto.toFixed(2);
             detallesApartamento.totalImpuestos = sumaTotalImpuestos.toFixed(2);

@@ -67,13 +67,13 @@ casaVitini.view = {
                     for (const detallesReservas of reservas) {
                         detallesReservas.horaEntrada = horaEntrada
                         detallesReservas.horaSalida = horaSalida
-                        const contenedorReserva = this.componentesUI.tarjetaReservaUI(detallesReservas)
+                        const contenedorReserva = casaVitini.view.componentesUI.tarjetaReservaUI(detallesReservas)
                         apartamentoUI.appendChild(contenedorReserva)
                     }
                     if (calendariosSincronizados.airbnb) {
                         const eventosAirbnb = calendariosSincronizados.airbnb.eventos
                         for (const detallesDelEvento of eventosAirbnb) {
-                            const contenedorEvento = this.componentesUI.tarjetaEventoUI(detallesDelEvento)
+                            const contenedorEvento = casaVitini.view.componentesUI.tarjetaEventoUI(detallesDelEvento)
                             apartamentoUI.appendChild(contenedorEvento)
                         }
                     }
@@ -145,7 +145,7 @@ casaVitini.view = {
                     detallesReservas.reservaUID = reservaUID
                     detallesReservas.horaEntrada = horaEntrada
                     detallesReservas.horaSalida = horaSalida
-                    const contenedorReserva = this.componentesUI.tarjetaReservaUI(detallesReservas)
+                    const contenedorReserva = casaVitini.view.componentesUI.tarjetaReservaUI(detallesReservas)
                     marcoElastico.appendChild(contenedorReserva)
 
                     if (habitaciones.length > 0) {
@@ -157,7 +157,7 @@ casaVitini.view = {
                         for (const detallesHabitacion of habitaciones) {
                             const habitacionUI = detallesHabitacion.habitacionUI
                             const habitacionUID = detallesHabitacion.componenteUID
-                            const habitacionBloque = this.componentesUI.tarjetaHabitacionUI({
+                            const habitacionBloque = casaVitini.view.componentesUI.tarjetaHabitacionUI({
                                 habitacionUI,
                                 habitacionUID
                             })
@@ -173,14 +173,14 @@ casaVitini.view = {
                             if (!habitacionDestino) {
                                 continue
                             }
-                            const pernoctanteUI = this.componentesUI.tarjetaPernotanteUI(pernoctante)
+                            const pernoctanteUI = casaVitini.view.componentesUI.tarjetaPernotanteUI(pernoctante)
                             habitacionDestino.appendChild(pernoctanteUI)
                         }
                     }
                 }
                 const eventosAirbnb = calendariosSincronizados.airbnb.eventos
                 for (const detallesDelEvento of eventosAirbnb) {
-                    const contenedorEvento = this.componentesUI.tarjetaEventoUI(detallesDelEvento)
+                    const contenedorEvento = casaVitini.view.componentesUI.tarjetaEventoUI(detallesDelEvento)
                     espacioEventosAirbnb.appendChild(contenedorEvento)
                 }
                 marcoElastico.appendChild(espacioEventosAirbnb)
