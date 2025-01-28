@@ -13926,7 +13926,7 @@ summary:hover {
     display: flex;
     gap: 10px;
     padding: 10px;
-
+    align-items: center;
 }
 
 .contenedorMenuCapas {

@@ -19,12 +19,14 @@ export const conectar = async (entrada) => {
             const m = "No se esperan mas de dos llaves en el objeto de identificacion"
             throw new Error(m)
         }
-        const usuario = entrada.body.usuario;
+        const usuarioRaw = entrada.body.usuario;
         const clave = entrada.body.clave;
         validador({
-            usuario,
+            usuario: usuarioRaw,
             clave
         })
+        const usuario = usuarioRaw.toLowerCase();
+
 
         const intentosMaximos = 10;
         const controladorIntentos = {
@@ -61,7 +63,6 @@ export const conectar = async (entrada) => {
         }
 
         const cuentaUsuario = await obtenerIDX(usuario)
-
         const rolIDV = cuentaUsuario.rolIDV;
         const sal = cuentaUsuario.sal;
         const claveHash = cuentaUsuario.clave;
