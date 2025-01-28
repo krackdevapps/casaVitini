@@ -417,6 +417,7 @@ casaVitini.view = {
                     });
                     if (mesConMayorVisibilidad && mesConMayorVisibilidad !== mesVisibleActual) {
                         mesVisibleActual = mesConMayorVisibilidad;
+                        console.log("casaVitini", casaVitini)
                         const traductorURL = casaVitini.view.traductorURL();
                         const [mes, ano] = mesVisibleActual.split("-");
                         const fechaUI = `${nombreMes[mes - 1]} ${ano}`;

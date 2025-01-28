@@ -243,14 +243,14 @@ details {
     border-radius: 14px;
 }
 
-details > summary {
+details>summary {
     cursor: default;
-    transition: all 150ms ease-out !important; 
+    transition: all 150ms ease-out !important;
     user-select: none;
     -webkit-user-select: none;
 }
 
-details[open] > summary {
+details[open]>summary {
     margin-bottom: 6px;
 }
 
@@ -2069,22 +2069,27 @@ summary:hover {
     padding-left: 10px;
     padding-right: 10px;
 }
+
 .paddingLateral14 {
     padding-left: 14px;
     padding-right: 14px;
 }
+
 .paddingLateral20 {
     padding-left: 20px;
     padding-right: 20px;
 }
+
 .paddingLateral22 {
     padding-left: 22px;
     padding-right: 22px;
 }
+
 .paddingLateral24 {
     padding-left: 24px;
     padding-right: 24px;
 }
+
 [zonaCSS="/micasa"] .botonID:hover {
     background-color: rgba(0, 0, 0, 0.6);
 }
@@ -7731,7 +7736,7 @@ summary:hover {
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalTipoOfertas {
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr ;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 10px;
     padding: 0px;
     justify-items: stretch;
@@ -14337,7 +14342,8 @@ summary:hover {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/componentes/imagenes/zonas_comunes/image00023.jpeg");}
+    background-image: url("/componentes/imagenes/zonas_comunes/image00023.jpeg");
+}
 
 [zonaCSS="/conozcanos"] .fondo3 {
     background-position: center center;
@@ -14992,7 +14998,7 @@ summary:hover {
     pointer-events: none;
     /* transition: opacity 2s linear; */
     opacity: 0;
- 
+
 
 }
 
@@ -15291,12 +15297,14 @@ summary:hover {
     align-items: center;
 
 }
+
 [zonaCSS="administracion/reservas/detallesReserva"] [servicioUID] .contenedorGlobal {
     display: grid;
     grid-template-columns: auto auto 1fr !important;
     align-items: center;
 
 }
+
 [zonaCSS="administracion/simuladorDePrecios/detalles"] [servicioUID] .contenedorGlobal {
     display: grid;
     grid-template-columns: auto auto 1fr !important;
@@ -15935,12 +15943,14 @@ summary:hover {
 .botonTransparenteSeleccionable:hover {
     background: rgb(255 255 255 / 0.8);
 }
+
 [zonaCSS="instalaciones"] .textoPresentacion {
     padding-left: 20px;
     padding-right: 20px;
     text-align: justify;
 
 }
+
 [zonaCSS="instalaciones"] .cuadradoInicioTexto {
     text-align: center;
     padding: 10px;
@@ -16259,6 +16269,7 @@ a {
         background: transparent;
     }
 }
+
 .parpeoGridSel {
     animation: parpeoColumnaAnimation 500ms infinite linear;
 }
@@ -16503,4 +16514,3 @@ textarea {
 
     }
 }
-

@@ -1,5 +1,5 @@
 casaVitini.view = {
-    arranque: async () => {
+    start: async () => {
         const main = document.querySelector("main")
         main.setAttribute("zonaCSS", "privacidad/zonaCompartida")
         main.style.paddingLeft = "20px"
