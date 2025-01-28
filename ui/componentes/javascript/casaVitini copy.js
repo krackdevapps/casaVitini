@@ -651,7 +651,7 @@ const casaVitini = {
 
                 elemento.style.cssText = propiedadesFiltradas;
             },
-            controlHorizotnalVetana: () => {
+            controlHorizontalVentana: () => {
                 const currentWidth = window.innerWidth;
                 const previousWidth = casaVitini.componentes.controladores.anchoActualVentanad
 
@@ -800,7 +800,7 @@ const casaVitini = {
             },
             ocultarMenusVolatiles: (menuVolatil) => {
 
-                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
 
@@ -852,7 +852,7 @@ const casaVitini = {
                 })
                 window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatilesSimple)
-                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
 
@@ -1004,7 +1004,7 @@ const casaVitini = {
                 window.removeEventListener("resize", casaVitini.view?.volatilObservers?.parallaxControlador?.resizeIsDone);
                 window.removeEventListener('scroll', casaVitini.view?.scrollHandler);
                 window.removeEventListener('scroll', casaVitini.view?.controladorIconoMouse);
-                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
                 document.querySelectorAll("html, #uiLogo, body, header, [componente=contenedorMenu], [componente=botonMenuResponsivo]")
                     .forEach((e) => {

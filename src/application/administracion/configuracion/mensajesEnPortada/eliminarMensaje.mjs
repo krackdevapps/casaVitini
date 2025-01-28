@@ -1,6 +1,5 @@
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
-
 import { obtenerMensajePorMensajeUID } from "../../../../infraestructure/repository/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 import { eliminarMensajeEnPortada } from "../../../../infraestructure/repository/configuracion/mensajesPortada/elminarMensajeEnPortada.mjs";
 import { actualizaOrdenDePosiciones } from "../../../../infraestructure/repository/configuracion/mensajesPortada/actualizarOrdenDePosiciones.mjs";

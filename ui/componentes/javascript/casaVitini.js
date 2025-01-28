@@ -42,6 +42,9 @@ const casaVitini = {
             },
             controladorVista: async (data) => {
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+
+
+
                 const objetoOrigen = data.objetoOrigen?.target
                 const selectorMenuRenderizado = document.querySelector("header [estructura=menu]")
                 const tipoOrigen = data.tipoOrigen
@@ -122,9 +125,8 @@ const casaVitini = {
                         await casaVitini.shell.controladoresUI.controladorEstadoIDX()
                         contenedorVista.innerHTML = null
                         casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
-
                         casaVitini.shell.controladoresUI.limpiezaUI()
-
+                        casaVitini.view = {}
                         const marcoError = document.createElement("div")
                         marcoError.classList.add("plaza_marcoError_seccion")
                         marcoError.textContent = respuestaServidor.error
@@ -648,7 +650,7 @@ const casaVitini = {
 
                 elemento.style.cssText = propiedadesFiltradas;
             },
-            controlHorizotnalVetana: () => {
+            controlHorizontalVentana: () => {
                 const currentWidth = window.innerWidth;
                 const previousWidth = casaVitini.componentes.controladores.anchoActualVentanad
 
@@ -797,7 +799,7 @@ const casaVitini = {
             },
             ocultarMenusVolatiles: (menuVolatil) => {
 
-                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
 
@@ -849,7 +851,7 @@ const casaVitini = {
                 })
                 window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 window.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatilesSimple)
-                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
                 window.removeEventListener("resize", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
                 document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarMenusVolatiles)
 
@@ -998,10 +1000,19 @@ const casaVitini = {
                 const main = document.querySelector("main")
                 const zonaDestino = data?.zonaDestino
                 casaVitini.view?.volatilObservers?.parallaxControlador?.destroy()
+
+
+                const observersObserving = casaVitini?.view?.__observers__ || {};
+                Object.keys(observersObserving).forEach(o => {
+
+                    casaVitini.view.__observers__[o].disconnect()
+                })
+
                 window.removeEventListener("resize", casaVitini.view?.volatilObservers?.parallaxControlador?.resizeIsDone);
                 window.removeEventListener('scroll', casaVitini.view?.scrollHandler);
                 window.removeEventListener('scroll', casaVitini.view?.controladorIconoMouse);
-                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizotnalVetana)
+                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
+
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
                 document.querySelectorAll("html, #uiLogo, body, header, [componente=contenedorMenu], [componente=botonMenuResponsivo]")
                     .forEach((e) => {

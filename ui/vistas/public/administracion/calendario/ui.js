@@ -1,43 +1,59 @@
 casaVitini.view = {
     start: async function () {
         try {
-            const html = document.querySelector("html")
-            html.style.height = "100%"
 
             const main = document.querySelector("main")
             main.setAttribute("zonaCSS", "administracion/calendario")
+            const instanciaUID = main.getAttribute("instanciaUID")
+            const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
 
-            const sectionRenderizada = document.querySelector("main")
-            sectionRenderizada.style.maxWidth = "100%"
+            if (instanciaRenderizada) {
+                const html = document.querySelector("html")
+                html.style.height = "100%"
 
-            const contenedorBotonesGlobales = this.contenedorBotonesGlobales()
-            main.appendChild(contenedorBotonesGlobales)
+                const sectionRenderizada = document.querySelector("main")
+                sectionRenderizada.style.maxWidth = "100%"
 
-            const configuracionUI = await casaVitini.view.__sharedMethods__.configuracion.obtenerConfiguracion({
-                paresConfIDV: [
-                    "calendario.tipoSeleccion",
-                    "calendario.tipoVision"
-                ]
-            })
+                const contenedorBotonesGlobales = this.contenedorBotonesGlobales()
+                main.appendChild(contenedorBotonesGlobales)
 
-            const vision = configuracionUI.paresConfiguracion["calendario.tipoVision"]
-            const tipoSeleccion = configuracionUI.paresConfiguracion["calendario.tipoSeleccion"]
-            const botonSel = main.querySelector("[panel=botonesGlobales] [boton=tipoSel]")
+                const configuracionUI = await casaVitini.view.__sharedMethods__.configuracion.obtenerConfiguracion({
+                    paresConfIDV: [
+                        "calendario.tipoSeleccion",
+                        "calendario.tipoVision"
+                    ]
+                })
+                const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
 
-            if (!tipoSeleccion) {
-                botonSel.setAttribute("tipoSel", "porDiasIndividual")
-            } else {
-                botonSel.setAttribute("tipoSel", tipoSeleccion)
+                if (instanciaRenderizada) {
+
+
+
+
+                    const vision = configuracionUI.paresConfiguracion["calendario.tipoVision"]
+                    const tipoSeleccion = configuracionUI.paresConfiguracion["calendario.tipoSeleccion"]
+                    const botonSel = main.querySelector("[panel=botonesGlobales] [boton=tipoSel]")
+
+                    if (!tipoSeleccion) {
+                        botonSel?.setAttribute("tipoSel", "porDiasIndividual")
+                    } else {
+                        botonSel?.setAttribute("tipoSel", tipoSeleccion)
+                    }
+                    if (!vision || vision === "horizontal") {
+                        return this?.vision?.visionHorizontal()
+                    } else if (vision === "vertical") {
+                        return this?.vision?.visionVertical({
+                            instanciaUID
+                        })
+                    }
+                }
             }
-            if (!vision || vision === "horizontal") {
-                return this.vision.visionHorizontal()
-            } else if (vision === "vertical") {
-                return this.vision.visionVertical()
-            }
+
         } catch (error) {
             console.error("error", error)
         }
     },
+    __observers__: {},
     traductorURL: function () {
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const parametros = granuladoURL.parametros
@@ -349,146 +365,160 @@ casaVitini.view = {
         arranque: async function (data) {
             const mesInicial = String(data.mes).padStart(2, "0")
             const anoInicial = data.ano
-            const sectionRenderizada = document.querySelector("main")
-            const instanciaUID_main = sectionRenderizada.getAttribute("instanciaUID")
+
+            const instanciaUID_main = data.instanciaUID
 
             const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
                 tipo: "rangoAnualDesdeFecha",
                 ano: Number(anoInicial),
                 mes: Number(mesInicial)
             })
-            const main = document.querySelector("main")
-            main.style.overflow = "hidden"
+            const calendarioRenderizado = document.querySelector(`[instanciaUID_calendarioVertical="${instanciaUID_main}"]`)
+            if (!calendarioRenderizado) {
 
-            const contenedor = document.createElement("div")
-            contenedor.setAttribute("componente", "calendarioGlobal")
-            contenedor.classList.add("flexVertical", "sobreControlAnimacionGlobal")
-            contenedor.style.overflow = "hidden"
-            contenedor.setAttribute("vision", "vertical")
-            contenedor.style.width = "100%"
+                const main = document.querySelector("main")
+                main.style.overflow = "hidden"
 
-            main.appendChild(contenedor)
+                const contenedor = document.createElement("div")
+                contenedor.setAttribute("instanciaUID_calendarioVertical", instanciaUID_main)
 
-            const tituloMesGlobal = document.createElement("div")
-            tituloMesGlobal.classList.add("flexVertical", "padding6", "textoCentrado")
-            tituloMesGlobal.setAttribute("data", "fechaActual1")
-            tituloMesGlobal.textContent = "Esperando al servidor..."
-            contenedor.appendChild(tituloMesGlobal)
+                contenedor.setAttribute("componente", "calendarioGlobal")
+                contenedor.classList.add("flexVertical", "sobreControlAnimacionGlobal")
+                contenedor.style.overflow = "hidden"
+                contenedor.setAttribute("vision", "vertical")
+                contenedor.style.width = "100%"
 
-            const diasSemana = document.createElement("div")
-            diasSemana.classList.add("diasSemana_calendarioVertical")
-            diasSemana.style.borderBottom = "1px solid grey"
-            contenedor.appendChild(diasSemana)
+                main.appendChild(contenedor)
 
-            const dias = [
-                "L",
-                "M",
-                "X",
-                "J",
-                "V",
-                "S",
-                "D"
-            ]
-            const nombreMes = ["Enero", "Febrero", "Marzo", "Abrir", "Mayo", "Junio", "Julio", "Agost", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-            dias.forEach((d) => {
-                const dia = document.createElement("p")
-                dia.classList.add("textoCentrado")
-                dia.textContent = d
-                diasSemana.appendChild(dia)
-            })
+                const tituloMesGlobal = document.createElement("div")
+                tituloMesGlobal.classList.add("flexVertical", "padding6", "textoCentrado")
+                tituloMesGlobal.setAttribute("data", "fechaActual1")
+                tituloMesGlobal.textContent = "Esperando al servidor..."
+                contenedor.appendChild(tituloMesGlobal)
 
-            const mesesUI = this.contructorMes(calendarioResuelto)
-            contenedor.appendChild(mesesUI)
-            const container = document.querySelector("[contenedor=meses]");
+                const diasSemana = document.createElement("div")
+                diasSemana.classList.add("diasSemana_calendarioVertical")
+                diasSemana.style.borderBottom = "1px solid grey"
+                contenedor.appendChild(diasSemana)
 
-            let mesVisibleActual = null;
-            const visibilidadMeses = new Map();
-            const observer_titulo = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const mesIDV = entry.target.getAttribute('mesIDV');
-                    visibilidadMeses.set(mesIDV, entry.intersectionRatio);
-                    let mesConMayorVisibilidad = null;
-                    let maxPorcentajeVisibilidad = 0;
-                    visibilidadMeses.forEach((porcentaje, mes) => {
-                        if (porcentaje > maxPorcentajeVisibilidad) {
-                            maxPorcentajeVisibilidad = porcentaje;
-                            mesConMayorVisibilidad = mes;
+                const dias = [
+                    "L",
+                    "M",
+                    "X",
+                    "J",
+                    "V",
+                    "S",
+                    "D"
+                ]
+                const nombreMes = ["Enero", "Febrero", "Marzo", "Abrir", "Mayo", "Junio", "Julio", "Agost", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+                dias.forEach((d) => {
+                    const dia = document.createElement("p")
+                    dia.classList.add("textoCentrado")
+                    dia.textContent = d
+                    diasSemana.appendChild(dia)
+                })
+
+                const mesesUI = this.contructorMes(calendarioResuelto)
+                contenedor.appendChild(mesesUI)
+                const container = document.querySelector("[contenedor=meses]");
+
+                let mesVisibleActual = null;
+                const contextoVerical = document.querySelector('[componente=calendarioGlobal][vision=vertical]');
+
+                const visibilidadMeses = new Map();
+                casaVitini.view.__observers__.observer_titulo = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+
+                        const contenedorMesExistente = entry.target
+                        if (!contenedorMesExistente) {
+                            observer.disconnect();
+                        } else {
+                            const mesIDV = entry.target.getAttribute('mesIDV');
+                            visibilidadMeses.set(mesIDV, entry.intersectionRatio);
+                            let mesConMayorVisibilidad = null;
+                            let maxPorcentajeVisibilidad = 0;
+                            visibilidadMeses.forEach((porcentaje, mes) => {
+                                if (porcentaje > maxPorcentajeVisibilidad) {
+                                    maxPorcentajeVisibilidad = porcentaje;
+                                    mesConMayorVisibilidad = mes;
+                                }
+                            });
+
+                            if (mesConMayorVisibilidad && mesConMayorVisibilidad !== mesVisibleActual) {
+                                mesVisibleActual = mesConMayorVisibilidad;
+
+                                const traductorURL = casaVitini.view.traductorURL();
+                                const [mes, ano] = mesVisibleActual.split("-");
+                                const fechaUI = `${nombreMes[mes - 1]} ${ano}`;
+                                const tituloMesGlobal = document.querySelector("[data=fechaActual1]");
+                                if (tituloMesGlobal) {
+                                    tituloMesGlobal.textContent = fechaUI;
+                                    tituloMesGlobal.setAttribute("mesVisible", mesVisibleActual);
+                                    traductorURL.fecha = `${Number(mes)}-${ano}`;
+                                }
+
+                                setTimeout(() => {
+                                    if (casaVitini?.view?.controladorRegistros) {
+                                        casaVitini.view.controladorRegistros({
+                                            tipoRegistro: "actualizar",
+                                            traductorURL: traductorURL,
+                                        });
+                                    }
+
+                                }, 700);
+                            }
                         }
                     });
-                    if (mesConMayorVisibilidad && mesConMayorVisibilidad !== mesVisibleActual) {
-                        mesVisibleActual = mesConMayorVisibilidad;
-                        console.log("casaVitini", casaVitini)
-                        const traductorURL = casaVitini.view.traductorURL();
-                        const [mes, ano] = mesVisibleActual.split("-");
-                        const fechaUI = `${nombreMes[mes - 1]} ${ano}`;
-                        const tituloMesGlobal = document.querySelector("[data=fechaActual1]");
-                        if (tituloMesGlobal) {
-                            tituloMesGlobal.textContent = fechaUI;
-                            tituloMesGlobal.setAttribute("mesVisible", mesVisibleActual);
-                            traductorURL.fecha = `${Number(mes)}-${ano}`;
+                }, {
+                    root: container,
+                    threshold: Array.from(Array(101).keys(), n => n / 100), // Umbrales del 0% al 100%
+                });
+
+                casaVitini.view.__observers__.observer_data = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        const contenedorMesExistente = entry.target
+                        if (!contenedorMesExistente) {
+                            observer.disconnect()
+                        } else if (entry.isIntersecting) {
+                            const traductorURL = casaVitini.view.traductorURL()
+                            const contenedorMes = entry.target
+                            const mesIDV = contenedorMes.getAttribute('mesIDV')
+                            const fecha = mesIDV.split("-")
+
+                            const mes = fecha[0]
+                            const ano = fecha[1]
+                            this.renderizaDataEnMes({
+                                configuracionCalendario: {
+                                    tipo: "personalizado",
+                                    ano: Number(ano),
+                                    mes: Number(mes),
+                                },
+                                instanciaUID_main,
+                                traductorURL
+                            })
                         }
-
-                        setTimeout(() => {
-                            casaVitini.view.controladorRegistros({
-                                tipoRegistro: "actualizar",
-                                traductorURL: traductorURL,
-                            });
-                        }, 700);
-
-
-                    }
+                    });
+                }, {
+                    root: container, // El contenedor de los meses con scroll
+                    //  threshold: 0.1   // 60% del mes debe estar visible para considerarlo "visible"
                 });
-            }, {
-                root: container,
-                threshold: Array.from(Array(101).keys(), n => n / 100), // Umbrales del 0% al 100%
-            });
 
-
-
-            const observer_data = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-
-                    if (entry.isIntersecting) {
-                        const traductorURL = casaVitini.view.traductorURL()
-                        const contenedorMes = entry.target
-                        const mesIDV = contenedorMes.getAttribute('mesIDV')
-                        const fecha = mesIDV.split("-")
-
-                        const mes = fecha[0]
-                        const ano = fecha[1]
-                        this.renderizaDataEnMes({
-                            configuracionCalendario: {
-                                tipo: "personalizado",
-                                ano: Number(ano),
-                                mes: Number(mes),
-                            },
-                            instanciaUID_main,
-                            traductorURL
-                        })
-                    }
+                const months = contextoVerical.querySelectorAll('[mesIDV]');
+                months.forEach(month => {
+                    casaVitini.view.__observers__.observer_titulo.observe(month)
+                    casaVitini.view.__observers__.observer_data.observe(month)
                 });
-            }, {
-                root: container, // El contenedor de los meses con scroll
-                //  threshold: 0.1   // 60% del mes debe estar visible para considerarlo "visible"
-            });
-
-            // Observar cada mes dentro del contenedor
-            const months = document.querySelectorAll('[mesIDV]');
-            months.forEach(month => {
-                observer_titulo.observe(month)
-                observer_data.observe(month)
-            });
-            const fechaInicial = document.querySelector(`[mesIDV="${mesInicial}-${anoInicial}"]`).closest("[contenedor=mes]");
-            if (fechaInicial) {
-                fechaInicial.scrollIntoView({ behavior: "instant" });
-            }
-            const correctorIOS = () => {
+                const fechaInicial = document.querySelector(`[mesIDV="${mesInicial}-${anoInicial}"]`).closest("[contenedor=mes]");
                 if (fechaInicial) {
                     fechaInicial.scrollIntoView({ behavior: "instant" });
                 }
+                const correctorIOS = () => {
+                    if (fechaInicial) {
+                        fechaInicial.scrollIntoView({ behavior: "instant" });
+                    }
+                }
+                //   setTimeout(correctorIOS, 350);
             }
-            //   setTimeout(correctorIOS, 350);
-
         },
         renderizaDataEnMes: async function (data) {
 
@@ -4184,8 +4214,10 @@ casaVitini.view = {
                 await this.visionHorizontal()
             }
         },
-        visionVertical: async function () {
-            const sectionRenderizada = document.querySelector("main")
+        visionVertical: async function (data) {
+            const main = document.querySelector("main")
+            const instanciaUID = data.instanciaUID
+
             const traductorURL = casaVitini.view.traductorURL()
             const configuracionCalendario = {}
 
@@ -4203,17 +4235,22 @@ casaVitini.view = {
             }
 
             const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(configuracionCalendario)
-            await casaVitini.view.calendarioVertical.arranque({
-                ano: calendarioResuelto.ano,
-                mes: calendarioResuelto.mes,
+            const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+            if (instanciaRenderizada) {
 
-            })
-            traductorURL.fecha = `${calendarioResuelto.mes}-${calendarioResuelto.ano}`
+                await casaVitini.view.calendarioVertical.arranque({
+                    ano: calendarioResuelto.ano,
+                    mes: calendarioResuelto.mes,
+                    instanciaUID
 
-            casaVitini.view.controladorRegistros({
-                tipoRegistro: "actualizar",
-                traductorURL: traductorURL,
-            });
+                })
+
+                traductorURL.fecha = `${calendarioResuelto.mes}-${calendarioResuelto.ano}`
+                casaVitini.view.controladorRegistros({
+                    tipoRegistro: "actualizar",
+                    traductorURL: traductorURL,
+                });
+            }
         },
         visionHorizontal: async function (data) {
 

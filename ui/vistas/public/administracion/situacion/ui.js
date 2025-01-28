@@ -27,6 +27,10 @@ casaVitini.view = {
         arranque: async function () {
 
             const marcoElastico = document.querySelector("[componente=marcoElastico]")
+            if (!marcoElastico) {
+
+                return
+            }
             const spinner = casaVitini.ui.componentes.spinnerSimple()
             marcoElastico.appendChild(spinner)
             const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
@@ -34,53 +38,61 @@ casaVitini.view = {
                 zona: "administracion/situacion/obtenerSituacion"
             })
             const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-            if (!instanciaRenderizada) { return }
+            if (instanciaRenderizada) {
 
-            const botonIrACalendario = document.createElement("a")
-            botonIrACalendario.setAttribute("href", '/administracion/calendario/capa:todas_las_reservas/capa:todas_las_reservas_por_apartamento/capa:todos_los_bloqueos/capa:todo_airbnb')
-            botonIrACalendario.setAttribute("vista", '/administracion/calendario/capa:todas_las_reservas/capa:todas_las_reservas_por_apartamento/capa:todos_los_bloqueos/capa:todo_airbnb')
-            botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-            botonIrACalendario.classList.add("botonV1BlancoIzquierda")
-            botonIrACalendario.textContent = "Ver la situación global de todos los eventos pernoctativos y la disponibilidad de alojamiento en el calendario."
-            marcoElastico.appendChild(botonIrACalendario)
-            spinner.remove()
-            if (respuestaServidor?.error) {
-                casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
-                const titulo = document.querySelector(".tituloGris")
-                titulo.textContent = respuestaServidor.error
 
-            }
-            if (respuestaServidor?.ok) {
-                const situacion = respuestaServidor?.ok
+                const botonIrACalendario = document.createElement("a")
+                botonIrACalendario.setAttribute("href", '/administracion/calendario/capa:todas_las_reservas/capa:todas_las_reservas_por_apartamento/capa:todos_los_bloqueos/capa:todo_airbnb')
+                botonIrACalendario.setAttribute("vista", '/administracion/calendario/capa:todas_las_reservas/capa:todas_las_reservas_por_apartamento/capa:todos_los_bloqueos/capa:todo_airbnb')
+                botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                botonIrACalendario.classList.add("botonV1BlancoIzquierda")
+                botonIrACalendario.textContent = "Ver la situación global de todos los eventos pernoctativos y la disponibilidad de alojamiento en el calendario."
+                marcoElastico.appendChild(botonIrACalendario)
+                spinner.remove()
 
-                const horaEntrada = respuestaServidor.horaEntrada
-                const horaSalida = respuestaServidor.horaSalida
-                const espacioSituacion = document.createElement("div")
-                espacioSituacion.classList.add("espacioSituacion")
-                espacioSituacion.setAttribute("componente", "espacioSituacion")
-                for (const [apartamentoIDV, detallesApartamento] of Object.entries(situacion)) {
-                    const reservas = detallesApartamento.reservas
-                    detallesApartamento.apartamentoIDV = apartamentoIDV
-                    const calendariosSincronizados = detallesApartamento?.calendariosSincronizados || {}
+                const instanciaRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+                if (instanciaRenderizada) {
+                    if (respuestaServidor?.error) {
+                        casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
+                        const titulo = document.querySelector(".tituloGris")
+                        titulo.textContent = respuestaServidor.error
 
-                    const apartamentoUI = await casaVitini.view.componentesUI.tarjetaApartamentoUI(detallesApartamento)
-                    for (const detallesReservas of reservas) {
-                        detallesReservas.horaEntrada = horaEntrada
-                        detallesReservas.horaSalida = horaSalida
-                        const contenedorReserva = casaVitini.view.componentesUI.tarjetaReservaUI(detallesReservas)
-                        apartamentoUI.appendChild(contenedorReserva)
                     }
-                    if (calendariosSincronizados.airbnb) {
-                        const eventosAirbnb = calendariosSincronizados.airbnb.eventos
-                        for (const detallesDelEvento of eventosAirbnb) {
-                            const contenedorEvento = casaVitini.view.componentesUI.tarjetaEventoUI(detallesDelEvento)
-                            apartamentoUI.appendChild(contenedorEvento)
+                    if (respuestaServidor?.ok) {
+                        const situacion = respuestaServidor?.ok
+
+                        const horaEntrada = respuestaServidor.horaEntrada
+                        const horaSalida = respuestaServidor.horaSalida
+                        const espacioSituacion = document.createElement("div")
+                        espacioSituacion.classList.add("espacioSituacion")
+                        espacioSituacion.setAttribute("componente", "espacioSituacion")
+                        for (const [apartamentoIDV, detallesApartamento] of Object.entries(situacion)) {
+                            const reservas = detallesApartamento.reservas
+                            detallesApartamento.apartamentoIDV = apartamentoIDV
+                            const calendariosSincronizados = detallesApartamento?.calendariosSincronizados || {}
+
+                            const apartamentoUI = await casaVitini.view.componentesUI.tarjetaApartamentoUI(detallesApartamento)
+                            for (const detallesReservas of reservas) {
+                                detallesReservas.horaEntrada = horaEntrada
+                                detallesReservas.horaSalida = horaSalida
+                                const contenedorReserva = casaVitini.view.componentesUI.tarjetaReservaUI(detallesReservas)
+                                apartamentoUI.appendChild(contenedorReserva)
+                            }
+                            if (calendariosSincronizados.airbnb) {
+                                const eventosAirbnb = calendariosSincronizados.airbnb.eventos
+                                for (const detallesDelEvento of eventosAirbnb) {
+                                    const contenedorEvento = casaVitini.view.componentesUI.tarjetaEventoUI(detallesDelEvento)
+                                    apartamentoUI.appendChild(contenedorEvento)
+                                }
+                            }
+                            espacioSituacion.appendChild(apartamentoUI)
                         }
+                        marcoElastico.appendChild(espacioSituacion)
                     }
-                    espacioSituacion.appendChild(apartamentoUI)
                 }
-                marcoElastico.appendChild(espacioSituacion)
             }
+
+
         },
         obtenerFecha: async function () {
             const respuestaServidor = await casaVitini.shell.servidor({
@@ -184,7 +196,6 @@ casaVitini.view = {
                     espacioEventosAirbnb.appendChild(contenedorEvento)
                 }
                 marcoElastico.appendChild(espacioEventosAirbnb)
-
             }
         }
     },
