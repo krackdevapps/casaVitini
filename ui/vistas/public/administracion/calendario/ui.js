@@ -40,7 +40,9 @@ casaVitini.view = {
                         botonSel?.setAttribute("tipoSel", tipoSeleccion)
                     }
                     if (!vision || vision === "horizontal") {
-                        return this?.vision?.visionHorizontal()
+                        return this?.vision?.visionHorizontal({
+                            instanciaUID
+                        })
                     } else if (vision === "vertical") {
                         return this?.vision?.visionVertical({
                             instanciaUID
@@ -4122,8 +4124,11 @@ casaVitini.view = {
     vision: {
         controladorVision: function () {
             const main = document.querySelector("main")
+            
             const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
             main.appendChild(ui)
+          
+
             const contenedor = ui.querySelector("[componente=contenedor]")
 
             const titulo = document.createElement("div")
@@ -4166,7 +4171,8 @@ casaVitini.view = {
                     valor: "vertical"
                 })
                 await this.cambiarVision({
-                    visionSel: "vertical"
+                    visionSel: "vertical",
+                 
                 })
             })
 
@@ -4208,10 +4214,13 @@ casaVitini.view = {
             selectorCalendario?.remove()
             const main = document.querySelector("main")
             main.removeAttribute("style")
+            const instanciaUID = main.getAttribute("instanciaUID")
+
+
             if (visionSel === "vertical") {
-                await this.visionVertical()
+                await this.visionVertical({instanciaUID})
             } else if (visionSel === "horizontal") {
-                await this.visionHorizontal()
+                await this.visionHorizontal({instanciaUID})
             }
         },
         visionVertical: async function (data) {
@@ -4254,8 +4263,7 @@ casaVitini.view = {
         },
         visionHorizontal: async function (data) {
 
-            const sectionRenderizada = document.querySelector("main")
-            const instanciaUID_main = sectionRenderizada.getAttribute("instanciaUID")
+            const instanciaUID_main = data.instanciaUID
 
             const configuracionCalendario = {}
             const traductorURL = casaVitini.view.traductorURL()
@@ -4274,25 +4282,27 @@ casaVitini.view = {
                 configuracionCalendario.ano = ano
                 configuracionCalendario.mes = mes
             }
+            const calendarioRenderizado = document.querySelector(`[instanciaUID_calendarioVertical="${instanciaUID_main}"]`)
+            if (!calendarioRenderizado) {
 
-            casaVitini.view.constructorCalendarioNuevo({
-                almacenamientoCalendarioID: "calendarioGlobal",
-                instanciaUID_main: instanciaUID_main
-            })
+                casaVitini.view.constructorCalendarioNuevo({
+                    almacenamientoCalendarioID: "calendarioGlobal",
+                    instanciaUID_main: instanciaUID_main
+                })
 
+                const mesRenderizado = await casaVitini.view.irAFecha({
+                    ...configuracionCalendario,
+                    instanciaUID_main: instanciaUID_main,
+                    traductorURL: traductorURL,
 
-            const mesRenderizado = await casaVitini.view.irAFecha({
-                ...configuracionCalendario,
-                instanciaUID_main: instanciaUID_main,
-                traductorURL: traductorURL,
+                })
 
-            })
+                casaVitini.view.controladorRegistros({
+                    tipoRegistro: "actualizar",
+                    traductorURL: traductorURL,
 
-            casaVitini.view.controladorRegistros({
-                tipoRegistro: "actualizar",
-                traductorURL: traductorURL,
-
-            })
+                })
+            }
         }
     }
 }
