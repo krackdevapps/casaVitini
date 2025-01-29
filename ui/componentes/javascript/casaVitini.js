@@ -3591,7 +3591,7 @@ const casaVitini = {
                                 sentidoRango: "futuro"
                             }
                             const resolverLimiteFuturo = await casaVitini.shell.servidor(controlLimiteFuturo)
-                            console.log("resolverLimiteFuturo", resolverLimiteFuturo)
+
 
                             if (resolverLimiteFuturo.error) {
 
@@ -16634,7 +16634,7 @@ const casaVitini = {
                                                 }
                                                 if (respuestaServidor?.error) {
                                                     return listaBuscadorRenderizada.querySelector("[data=info]").innerHTML = respuestaServidor?.error
-                                                }else if (respuestaServidor?.tipo === "ROL") {
+                                                } else if (respuestaServidor?.tipo === "ROL") {
                                                     return
                                                 }
 

@@ -55,14 +55,10 @@ export const obtenerReservasComoLista = async (data) => {
             numeroPorPagina,
             paginaActualSQL
         ];
-        console.log("raw", [
-            reservasUIDArray,
-            numeroPorPagina,
-            paginaActualSQL
-        ])
+
 
         const resuelve = await conexion.query(consulta, parametros);
-        console.log("resueelve", resuelve.rows)
+
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
