@@ -92,6 +92,7 @@ export const reservasDelCliente = async (entrada) => {
                 comoPernoctantePreProcesado.push(reservaUID);
             });
         }
+
         const encontrarRepetidosEliminar = (comoTitular, comoPernoctante) => {
             const set1 = new Set(comoTitular);
             const set2 = new Set(comoPernoctante);
@@ -105,6 +106,7 @@ export const reservasDelCliente = async (entrada) => {
             };
             return estructuraFinal;
         };
+        
         const reservasEstructuradas = encontrarRepetidosEliminar(comoTitularPreProcesado, comoPernoctantePreProcesado);
         const UIDSreservasComoTitular = reservasEstructuradas.comoTitular;
         const UIDSreservasComoPernoctante = reservasEstructuradas.comoPernoctante;

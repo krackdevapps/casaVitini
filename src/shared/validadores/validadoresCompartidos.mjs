@@ -22,7 +22,7 @@ export const validadoresCompartidos = {
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "no",
                     limpiezaEspaciosAlrededor: "si",
-                    limpiezaEspaciosInternos: "si",
+                    limpiezaEspaciosInternos: "no",
                     soloMayusculas: "si"
                 })
                 const primerApellido = validadoresCompartidos.tipos.cadena({
@@ -31,7 +31,7 @@ export const validadoresCompartidos = {
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
-                    limpiezaEspaciosInternos: "si",
+                    limpiezaEspaciosInternos: "no",
                     soloMayusculas: "si"
                 })
                 const segundoApellido = validadoresCompartidos.tipos.cadena({
@@ -40,7 +40,7 @@ export const validadoresCompartidos = {
                     filtro: "strictoConEspacios",
                     sePermiteVacio: "si",
                     limpiezaEspaciosAlrededor: "si",
-                    limpiezaEspaciosInternos: "si",
+                    limpiezaEspaciosInternos: "no",
                     soloMayusculas: "si"
                 })
                 const pasaporte = validadoresCompartidos.tipos.cadena({

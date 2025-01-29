@@ -35,8 +35,8 @@ export const obtenerReservasDelCliente = async (data) => {
             SELECT 
                 'Titular' AS como,
                 "reservaUID"::text,
-                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada", 
-                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida"
+                 to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
+                 to_char("fechaSalida" , 'YYYY-MM-DD') as "fechaSalida"
             FROM 
                 reservas 
             WHERE 
@@ -47,8 +47,8 @@ export const obtenerReservasDelCliente = async (data) => {
             SELECT 
                 'Pernoctante' AS como,
                 "reservaUID"::text,
-                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada", 
-                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida"
+                 to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
+                 to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida"
             FROM 
                 reservas 
             WHERE 
@@ -59,8 +59,8 @@ export const obtenerReservasDelCliente = async (data) => {
             SELECT 
                 'Ambos' AS como,
                 "reservaUID"::text,
-                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada", 
-                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida"
+                 to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada", 
+                 to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida"
             FROM 
                 reservas 
             WHERE 
