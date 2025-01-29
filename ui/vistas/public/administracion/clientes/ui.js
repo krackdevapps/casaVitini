@@ -601,7 +601,7 @@ casaVitini.view = {
                     EstadoInternoZona: "estado",
                     tipoCambio: "parcial",
                     componenteExistente: "clienteUID" + clienteUID,
-                    funcionPersonalizada: "administracion.clientes.detallesCliente.portada.mostrarReservasDelClienteResueltas",
+                    funcionPersonalizada: "view.detallesCliente.portada.mostrarReservasDelClienteResueltas",
                     args: transaccion
                 }
                 if (origen === "url" || origen === "botonMostrarClientes") {

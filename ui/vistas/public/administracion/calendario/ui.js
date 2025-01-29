@@ -2386,6 +2386,7 @@ casaVitini.view = {
                         const capasSimplesEnCapaCompuesta = composicionCapaCompuesta[capaPorVeriticar]
                         for (const capaSimpleEnCapaCompuesta of capasSimplesEnCapaCompuesta) {
                             const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"][${capaPorVeriticar}="${capaSimpleEnCapaCompuesta}"]`
+                            // posible error extraño
                             const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
                             selectorCapaRenderizada.setAttribute("estado", "seleccionado")
                             selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
@@ -2899,6 +2900,7 @@ casaVitini.view = {
                     }
                 }
             }
+            
             const selectorCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")
             selectorCapas.forEach((selector) => {
                 selector.addEventListener("click", controladorSelectoresCapas)
