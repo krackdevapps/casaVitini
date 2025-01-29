@@ -209,8 +209,8 @@ casaVitini.view = {
 
             const dic = {
                 estadoApartamento: {
-                    disponible: "Disponible",
-                    nodisponible: "No dispobile",
+                    activado: "Activada",
+                    desactivado: "Desactivada",
 
                 },
                 estadoPernoctacion: {
