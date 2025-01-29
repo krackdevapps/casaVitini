@@ -10065,6 +10065,10 @@ summary:hover {
     display: flex;
     justify-content: flex-end;
 }
+[zonaCSS="administracion/clientes/buscador"] .clientes_contenedorBotones {
+    display: flex;
+    justify-content: flex-end;
+}
 
 [zonaCSS="administracion/usuarios/buscador"] .usuarios_botonV1 {
     background: rgba(255, 255, 255, 0.3);

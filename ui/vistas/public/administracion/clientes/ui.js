@@ -70,6 +70,18 @@ casaVitini.view = {
     buscador: {
         buscadorUI: function () {
             const espacioClientes = document.querySelector("[componente=espacioClientes]")
+
+            const contenedorBotones = document.createElement("div")
+            contenedorBotones.classList.add("clientes_contenedorBotones")
+            const botonCrearCuenta = document.createElement("a")
+            botonCrearCuenta.classList.add("botonV1")
+            botonCrearCuenta.setAttribute("href", "/administracion/clientes/nuevo")
+            botonCrearCuenta.setAttribute("vista", "/administracion/clientes/nuevo")
+            botonCrearCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            botonCrearCuenta.textContent = "Crear nuevo cliente"
+            contenedorBotones.appendChild(botonCrearCuenta)
+            espacioClientes.appendChild(contenedorBotones)
+
             const campoBuscador = document.createElement("input")
             campoBuscador.classList.add("botonV1BlancoIzquierda_campo")
             campoBuscador.setAttribute("componente", "zonaNavegacionPaginadaClientes")
