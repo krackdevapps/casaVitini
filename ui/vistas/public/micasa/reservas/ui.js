@@ -187,7 +187,7 @@ casaVitini.view = {
 
             const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
             casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
-                metodoSalida: "casaVitini.view.listaReservas.mostrarReservasResueltas",
+                metodoSalida: "view.listaReservas.mostrarReservasResueltas",
                 configuracionGrid: {
                     filas: misReservas,
                     almacen: {
@@ -219,7 +219,7 @@ casaVitini.view = {
                 EstadoInternoZona: "estado",
                 tipoCambio: "parcial",
                 componenteExistente: "espacioMisReservas",
-                funcionPersonalizada: "casaVitini.view.listaReservas.mostrarReservasResueltas",
+                funcionPersonalizada: "view.listaReservas.mostrarReservasResueltas",
                 args: transaccion
             }
 

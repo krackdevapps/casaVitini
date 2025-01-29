@@ -23519,6 +23519,8 @@ const casaVitini = {
                                                 }
                                                 if (respuestaServidor?.error) {
                                                     return listaBuscadorRenderizada.querySelector("[data=info]").innerHTML = respuestaServidor?.error
+                                                } else if (respuestaServidor?.tipo === "ROL") {
+                                                    return
                                                 }
 
                                                 const resultadosClientes = respuestaServidor?.clientes

@@ -1,20 +1,16 @@
 casaVitini.view = {
-
-    arranque: async function () {
+    start: async function () {
 
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const parametros = granuladoURL.parametros
 
         if (Object.keys(parametros).length === 1 && parametros.hasOwnProperty("reserva")) {
 
-
-            const preconfirmarReserva = {
+             const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "componentes/resolverQR",
                 codigoIDV: "reserva",
                 reservaUID: parametros.reserva
-            }
-            const respuestaServidor = await casaVitini.shell.servidor(preconfirmarReserva)
-
+            })
 
             if (respuestaServidor?.error) {
                 return this.errorUI(respuestaServidor.error)
@@ -29,7 +25,7 @@ casaVitini.view = {
             this.campoUI()
         }
     },
-    parametroNoReconocido: () => {
+    parametroNoReconocido: function () {
 
 
         const main = document.querySelector("main")
@@ -59,7 +55,7 @@ casaVitini.view = {
         main.appendChild(boton)
 
     },
-    campoUI: () => {
+    campoUI: function () {
 
         const titulo = document.createElement('p');
         titulo.className = 'titulo';
@@ -82,7 +78,7 @@ casaVitini.view = {
         marcoElasticoRelativo.appendChild(marcoElastico);
         secction.appendChild(marcoElasticoRelativo);
     },
-    errorUI: (mensaje) => {
+    errorUI: function (mensaje) {
 
         const titulo = document.createElement('p');
         titulo.className = 'titulo';

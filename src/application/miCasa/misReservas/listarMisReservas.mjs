@@ -80,7 +80,8 @@ export const listarMisReservas = async (entrada) => {
             validadoresCompartidos.filtros.sentidoColumna(sentidoColumna)
         }
 
-        const paginaActualSQL = Number((paginaActual - 1));
+
+        const paginaActualSQL = Number((paginaActual - 1) + "0");
         const numeroPorPagina = 10;
 
         const datosDelUsuario = await obtenerDatosPersonales(usuario)

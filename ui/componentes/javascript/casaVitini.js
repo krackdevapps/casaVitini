@@ -1051,12 +1051,13 @@ const casaVitini = {
                     this.controladoresUI.interrumpirTransicionVistas()
                     return casaVitini.ui.componentes.errorUI()
                 } else if (respuestaServidor.tipo === "IDX") {
-                    return casaVitini.componentes.loginUI()
+                    casaVitini.componentes.loginUI()
+                    return respuestaServidor
                 } else if (respuestaServidor.tipo === "ROL") {
                     this.controladoresUI.interrumpirTransicionVistas()
                     const mensaje = "Tu VitiniID no esta autorizado a realizar esta operación."
                     casaVitini.ui.componentes.advertenciaInmersiva(mensaje)
-                    return
+                    return respuestaServidor
                 } else if (respuestaServidor.codigo === "mantenimiento") {
 
                     casaVitini.shell.controladoresUI.limpiarMain()
@@ -1075,8 +1076,6 @@ const casaVitini = {
                 } else {
                     return respuestaServidor
                 }
-
-
             } catch (errorCapturado) {
                 this.controladoresUI.interrumpirTransicionVistas()
 
@@ -3401,16 +3400,13 @@ const casaVitini = {
                             }
                             const resolverLimitePasado = await casaVitini.shell.servidor(controlLimitePasado)
                             if (resolverLimitePasado.error) {
+                                casaVitini.shell.controladoresUI.limpiarTodoElementoFlotante()
                                 const selectorCalendarioRenderizados = document.querySelectorAll("[componente=bloqueCalendario]")
                                 selectorCalendarioRenderizados.forEach((calendario) => {
                                     calendario.remove()
                                 })
                                 return casaVitini.ui.componentes.advertenciaInmersiva(resolverLimitePasado.error)
-                            }
-                            const fechaLimitePasado = {}
-                            const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
-
-                            if (resolverLimitePasado.ok === "rangoPasadoLibre") {
+                            } else if (resolverLimitePasado.ok === "rangoPasadoLibre") {
                                 infoCalendario.textContent = "Todo el mes disponible para seleccionar la nueva fecha de entrada de esta reserva"
                             } else if (resolverLimitePasado.limitePasado) {
                                 const fechaLimitePasado_Array = resolverLimitePasado.limitePasado.split("-")
@@ -3426,7 +3422,16 @@ const casaVitini = {
                                     fechaLimitePasado.mes = parseInt(fechaLimitePasado_Array[1], 10)
                                     fechaLimitePasado.ano = parseInt(fechaLimitePasado_Array[0], 10)
                                 }
+                            } else if (resolverLimitePasado.tipo === "ROL") {
+                                const selectorCalendarioRenderizados = document.querySelectorAll("[componente=bloqueCalendario]")
+                                selectorCalendarioRenderizados.forEach((calendario) => {
+                                    calendario?.remove()
+                                })
+                                return
                             }
+                            const fechaLimitePasado = {}
+                            const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
+
                             marcoCalendario.setAttribute("perfilMes", perfilMes)
                             for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
                                 const diaFinal_decimal = parseInt(numeroDia + 1, 10);
@@ -3586,10 +3591,13 @@ const casaVitini = {
                                 sentidoRango: "futuro"
                             }
                             const resolverLimiteFuturo = await casaVitini.shell.servidor(controlLimiteFuturo)
+                            console.log("resolverLimiteFuturo", resolverLimiteFuturo)
+
                             if (resolverLimiteFuturo.error) {
+
                                 const selectorCalendarioRenderizados = document.querySelectorAll("[componente=bloqueCalendario]")
                                 selectorCalendarioRenderizados.forEach((calendario) => {
-                                    calendario.remove()
+                                    calendario?.remove()
                                 })
                                 return casaVitini.ui.componentes.advertenciaInmersiva(resolverLimiteFuturo.error)
                             }
@@ -3610,6 +3618,12 @@ const casaVitini = {
                                     fechaLimiteFuturo.mes = parseInt(fechaLimiteFuturo_Array[1], 10)
                                     fechaLimiteFuturo.ano = parseInt(fechaLimiteFuturo_Array[0], 10)
                                 }
+                            } else if (resolverLimiteFuturo.tipo === "ROL") {
+                                const selectorCalendarioRenderizados = document.querySelectorAll("[componente=bloqueCalendario]")
+                                selectorCalendarioRenderizados.forEach((calendario) => {
+                                    calendario?.remove()
+                                })
+                                return
                             }
                             marcoCalendario?.setAttribute("perfilMes", perfilMes)
 
@@ -12631,7 +12645,7 @@ const casaVitini = {
                                         })
                                     }
                                     if (!tipoTitularIDV) {
-                                        const titulo = "Añadir titular a la reserva 11"
+                                        const titulo = "Añadir titular a la reserva"
                                         const info = "Esta reserva ahora mismo no tiene ningún titular asignado.Para añadir un titular a la reserva, puedes buscar con el campo de búsqueda inferior un cliente existente para asociarlo como titular.También puedes crear un cliente nuevo rellenando el formulario para crear un cliente y añadirlo como titular a esta reserva."
 
                                         contenedor.appendChild(tituloUI(titulo))
@@ -16620,6 +16634,8 @@ const casaVitini = {
                                                 }
                                                 if (respuestaServidor?.error) {
                                                     return listaBuscadorRenderizada.querySelector("[data=info]").innerHTML = respuestaServidor?.error
+                                                }else if (respuestaServidor?.tipo === "ROL") {
+                                                    return
                                                 }
 
                                                 const resultadosClientes = respuestaServidor?.clientes

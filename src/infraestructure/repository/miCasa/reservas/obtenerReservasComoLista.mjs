@@ -4,9 +4,9 @@ export const obtenerReservasComoLista = async (data) => {
         const reservasUIDArray = data.reservasUIDArray
         const numeroPorPagina = data.numeroPorPagina
         const paginaActualSQL = data.paginaActualSQL
-
         const sentidoColumna = data.sentidoColumna
         const nombreColumna = data?.nombreColumna
+
 
         const sentidoColumnaSQLFiltro = (sentidoColumna) => {
             if (sentidoColumna === "ascendente") {
@@ -35,11 +35,11 @@ export const obtenerReservasComoLista = async (data) => {
         const consulta = `
         SELECT 
                 "reservaUID",
-                to_char("fechaEntrada", 'DD/MM/YYYY') as "fechaEntrada",
-                to_char("fechaSalida", 'DD/MM/YYYY') as "fechaSalida",
+                to_char("fechaEntrada", 'YYYY-MM-DD') as "fechaEntrada",
+                to_char("fechaSalida", 'YYYY-MM-DD') as "fechaSalida",
                 "estadoReservaIDV", 
                 "estadoPagoIDV", 
-                to_char("fechaCreacion", 'DD/MM/YYYY') as "fechaCreacion",
+                to_char("fechaCreacion", 'YYYY-MM-DD') as "fechaCreacion",
                 COUNT(*) OVER() as total_filas
         FROM
                 reservas
@@ -55,8 +55,14 @@ export const obtenerReservasComoLista = async (data) => {
             numeroPorPagina,
             paginaActualSQL
         ];
+        console.log("raw", [
+            reservasUIDArray,
+            numeroPorPagina,
+            paginaActualSQL
+        ])
 
         const resuelve = await conexion.query(consulta, parametros);
+        console.log("resueelve", resuelve.rows)
         return resuelve.rows
     } catch (errorCapturado) {
         throw errorCapturado
