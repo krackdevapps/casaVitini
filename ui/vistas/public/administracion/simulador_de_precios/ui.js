@@ -257,11 +257,13 @@ casaVitini.view = {
 
                 const selectorTitulo = document.querySelector(".tituloGris")
                 selectorTitulo.classList.add(
-                    "padding5"
+                    "padding5",
+                    "titulo"
                 )
-                selectorTitulo.style.position = "sticky"
-                selectorTitulo.style.top = "20px"
-                selectorTitulo.style.zIndex = "2"
+                // selectorTitulo.style.position = "sticky"
+                // selectorTitulo.style.top = "20px"
+                // selectorTitulo.style.zIndex = "2"
+                // selectorTitulo.style.transition = "all 750ms linear !important"
 
                 const controladorAlturaTituloDinamico = (e) => {
                     const selectorInstanciaActual = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -272,21 +274,9 @@ casaVitini.view = {
                     const altura = window.scrollY;
 
                     if (altura > 20) {
-                        selectorTitulo.style.boxShadow = "0px 0px 28px 0px rgba(0, 0, 0, 0.5)"
-                        selectorTitulo.style.backdropFilter = "blur(50px)"
-                        selectorTitulo.style.webkitBackdropFilter = "blur(50px)"
-                        selectorTitulo.style.position = "sticky"
-                        selectorTitulo.style.top = "20px"
-                        selectorTitulo.style.zIndex = "2"
-                        selectorTitulo.style.background = "#rgb(255 255 255/25%)"
-                        selectorTitulo.style.paddingRight = "20px"
-                        selectorTitulo.style.borderRadius = "42px"
-                        selectorTitulo.style.paddingLeft = "20px"
-                        selectorTitulo.style.paddingTop = "5px"
-                        selectorTitulo.style.paddingBottom = "5px"
-                        selectorTitulo.style.color = "black"
+                        selectorTitulo.classList.add("titulo_sticky")
                     } else {
-                        selectorTitulo.removeAttribute("style")
+                        selectorTitulo.classList.remove("titulo_sticky")
                     }
                 }
                 document.addEventListener("scroll", controladorAlturaTituloDinamico)
@@ -3608,7 +3598,7 @@ casaVitini.view = {
                             const servicioUID_enSimulacion = servicioData.servicioUID
                             const opcionesSel = servicioData.opcionesSel
 
-                            const servicioUI =  casaVitini.view.componentes.servicios.componentesUI.servicioUI({
+                            const servicioUI = casaVitini.view.componentes.servicios.componentesUI.servicioUI({
                                 servicioUID_enSimulacion: servicioUID_enSimulacion,
                                 instanciaUID_contenedorServicios: "contenedorServicios",
                                 nombreInterno: nombreInterno,

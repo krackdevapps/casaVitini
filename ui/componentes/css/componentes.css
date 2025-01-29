@@ -10065,6 +10065,7 @@ summary:hover {
     display: flex;
     justify-content: flex-end;
 }
+
 [zonaCSS="administracion/clientes/buscador"] .clientes_contenedorBotones {
     display: flex;
     justify-content: flex-end;
@@ -15307,6 +15308,28 @@ summary:hover {
     grid-template-columns: auto auto 1fr !important;
     align-items: center;
 
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .titulo {
+    position: sticky;
+    top: 20px;
+    z-index: 2;
+    transition: all 500ms linear !important;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .titulo_sticky {
+    top: 20px;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    z-index: 2;
+    box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.5);
+    background: rgb(255 255 255/25%);
+    padding-right: 20px;
+    border-radius: 42px;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: black;
 }
 
 [zonaCSS="administracion/simuladorDePrecios/detalles"] [servicioUID] .contenedorGlobal {
