@@ -2090,6 +2090,11 @@ summary:hover {
     padding-right: 24px;
 }
 
+.paddingVertical14 {
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
 [zonaCSS="/micasa"] .botonID:hover {
     background-color: rgba(0, 0, 0, 0.6);
 }

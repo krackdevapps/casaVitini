@@ -18054,21 +18054,19 @@ const casaVitini = {
                                         infoSinEnlaces.setAttribute("componente", "contenedorInfoSinEnlaces")
                                         infoSinEnlaces.textContent = "No hay ningún enlace de pago generado"
                                         contenedorDinamico.appendChild(infoSinEnlaces)
-                                    }
-                                    if (enlacesDePagoGenerados.length > 0) {
+                                    } else if (enlacesDePagoGenerados.length > 0) {
                                         const contenedorEnlacesDePago = instanciaDestino.querySelector(`[componente=contenedorListaEnlacesDePago]`)
 
                                         for (const detallesDelEnlace of enlacesDePagoGenerados) {
 
-                                            const metadatos = {
+                                            const enlaceUI = casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.enlacesDePago.enlaceUI({
                                                 enlaceUID: detallesDelEnlace.enlaceUID,
                                                 nombreEnlace: detallesDelEnlace.nombreEnlace,
                                                 enlace: detallesDelEnlace.enlace,
                                                 cantidad: detallesDelEnlace.cantidad,
                                                 estadoPago: detallesDelEnlace.estadoPagoIDV,
                                                 instanciaUID: instanciaUID
-                                            }
-                                            const enlaceUI = casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.enlacesDePago.enlaceUI(metadatos)
+                                            })
                                             contenedorEnlacesDePago.appendChild(enlaceUI)
                                         }
                                     }
@@ -18339,6 +18337,15 @@ const casaVitini = {
                                 const contenedorDatosEnlace = document.createElement("div")
                                 contenedorDatosEnlace.classList.add("administracion_reservas_detallesReservas_enlacesDePago_contenedorDatosEnlace")
 
+                                const dict = {
+                                    enlacesDePago: {
+                                        estados: {
+                                            noPagado: "No pagado",
+                                            pagado: "Pagado"
+                                        }
+                                    }
+                                }
+
                                 let bloqueInfoDato = document.createElement("div")
                                 bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueDato")
                                 let bloqueInfo = document.createElement("div")
@@ -18387,7 +18394,7 @@ const casaVitini = {
                                 bloqueInfoDato.appendChild(bloqueInfo)
                                 bloqueDato = document.createElement("div")
                                 bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                                bloqueDato.textContent = estadoPago
+                                bloqueDato.textContent = dict.enlacesDePago.estados[estadoPago]
                                 bloqueInfoDato.appendChild(bloqueDato)
                                 contenedorDatosEnlace.appendChild(bloqueInfoDato)
                                 bloqueDatosGenerales.appendChild(contenedorDatosEnlace)

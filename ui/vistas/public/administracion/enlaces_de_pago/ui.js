@@ -71,46 +71,53 @@ casaVitini.view = {
                         noPagado: "Enlace no pagado"
                     }
                     const descripcionFinalUI = descripcion ? descripcion : "Este enlace no tiene descripción"
+
                     const enlaceUI = document.createElement("a")
-                    enlaceUI.classList.add("enlaceUI")
+                    enlaceUI.classList.add("flexVertical", "gap6", "padding6", "borderRadius20", "backgroundGrey1", "elementosExpandidos")
                     enlaceUI.setAttribute("enlaceUID", enlaceUID)
+                    espacioEnlacesRenderizados.appendChild(enlaceUI)
+
+
+       
+
+                    const enlaceUIContenedor = document.createElement("div")
+                    enlaceUIContenedor.classList.add("paddingLateral14", "flexVertical", "gap14", "paddingVertical14")
+                    enlaceUI.appendChild(enlaceUIContenedor)
+
 
                     const tituloEnlace = document.createElement("p")
-                    tituloEnlace.classList.add("ofertaUITituloOferta")
+                    tituloEnlace.classList.add("negrita")
                     tituloEnlace.setAttribute("valorInicial", nombreEnlace)
                     tituloEnlace.textContent = nombreEnlace
-                    enlaceUI.appendChild(tituloEnlace)
+                    enlaceUIContenedor.appendChild(tituloEnlace)
+                    
                     const precioUI = document.createElement("p")
-                    precioUI.classList.add("ofertaUITituloOferta")
                     precioUI.textContent = totalReserva + "$ " + estadoPagoUI[estadoPagoIDV]
-                    enlaceUI.appendChild(precioUI)
+                    enlaceUIContenedor.appendChild(precioUI)
+
+
+                    const datoFechaFin = document.createElement("div")
+                    //datoFechaFin.classList.add("ofertaUIDatoFecha")
+                    datoFechaFin.setAttribute("valorInicial", descripcion)
+                    datoFechaFin.textContent = descripcionFinalUI
+                    enlaceUIContenedor.appendChild(datoFechaFin)
+
                     const tituloReserva = document.createElement("a")
-                    tituloReserva.classList.add("enlaceUIContenedor_vinculo")
+                    tituloReserva.classList.add("botonV1BlancoIzquierda")
                     tituloReserva.setAttribute("href", "/administracion/reservas/reserva:" + reservaUID + "/enlaces_de_pago")
                     tituloReserva.setAttribute("vista", "/administracion/reservas/reserva:" + reservaUID + "/enlaces_de_pago")
                     tituloReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     tituloReserva.textContent = `Reserva ${reservaUID} (Ir a la reserva)`
                     enlaceUI.appendChild(tituloReserva)
+
                     const irAlEnlace = document.createElement("a")
-                    irAlEnlace.classList.add("enlaceUIContenedor_vinculo")
+                    irAlEnlace.classList.add("botonV1BlancoIzquierda")
                     irAlEnlace.setAttribute("href", "/pagos/" + enlaceUID)
                     irAlEnlace.setAttribute("vista", "/pagos/" + enlaceUID)
                     irAlEnlace.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     irAlEnlace.textContent = "Ir al enlace"
                     enlaceUI.appendChild(irAlEnlace)
-                    const enlaceUIContenedor = document.createElement("div")
-                    enlaceUIContenedor.classList.add("enlaceUIContenedor")
-                    const descripcionUI = document.createElement("div")
-                    descripcionUI.classList.add("ofertaUITituloFecha")
-                    descripcionUI.textContent = "Descripción del enlace"
-                    enlaceUIContenedor.appendChild(descripcionUI)
-                    const datoFechaFin = document.createElement("div")
-                    datoFechaFin.classList.add("ofertaUIDatoFecha")
-                    datoFechaFin.setAttribute("valorInicial", descripcion)
-                    datoFechaFin.textContent = descripcionFinalUI
-                    enlaceUIContenedor.appendChild(datoFechaFin)
-                    enlaceUI.appendChild(enlaceUIContenedor)
-                    espacioEnlacesRenderizados.appendChild(enlaceUI)
+
                 })
             }
         }

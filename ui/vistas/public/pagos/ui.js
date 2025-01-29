@@ -1,10 +1,10 @@
 casaVitini.view = {
-    arranque: async () => {
+    start: async function () {
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
         const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
         if (comandoInicial === "pagos") {
-            return casaVitini.ui.vistas.pagos.pantallaInicial()
+            return this.pantallaInicial()
         }
         const contenedorEnlaceDePago = document.querySelector("main")
         const transaccion = {
@@ -29,9 +29,6 @@ casaVitini.view = {
             const reservaUID = detallesDelPago.reserva
             const totales = detallesDelPago.totales
             const detallesPagoParcial = detallesDelPago.pagoParcial
-
-
-
 
             const tituloGlobal = document.createElement("div")
             tituloGlobal.classList.add("tituloGris")
@@ -150,7 +147,7 @@ casaVitini.view = {
             }
         }
     },
-    pagoConfirmado: (detalles) => {
+    pagoConfirmado: function (detalles) {
         const pagoUID = detalles?.pagoUID
         const contenedorEnlaceDePago = document.querySelector("section")
         contenedorEnlaceDePago.innerHTML = null
@@ -184,7 +181,7 @@ casaVitini.view = {
         marcoElasticoRelativo.appendChild(marcoElastico)
         contenedorEnlaceDePago.appendChild(marcoElasticoRelativo)
     },
-    pantallaInicial: (metadatos) => {
+    pantallaInicial: function (metadatos) {
         const error = metadatos?.error
         const codigo = metadatos?.codigo ? metadatos.codigo : ""
         const contenedorEnlaceDePago = document.querySelector("section")
@@ -198,7 +195,6 @@ casaVitini.view = {
         marcoElastico.classList.add("marcoElastico")
         marcoElastico.style.gap = "6px"
         marcoElastico.style.alignItems = "flex-start"
-
 
         const marcoPago = document.createElement("div")
         marcoPago.classList.add("plaza_enlacesDePago_marcoPago")
