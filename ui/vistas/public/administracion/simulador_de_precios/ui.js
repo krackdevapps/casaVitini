@@ -260,10 +260,7 @@ casaVitini.view = {
                     "padding5",
                     "titulo"
                 )
-                // selectorTitulo.style.position = "sticky"
-                // selectorTitulo.style.top = "20px"
-                // selectorTitulo.style.zIndex = "2"
-                // selectorTitulo.style.transition = "all 750ms linear !important"
+     
 
                 const controladorAlturaTituloDinamico = (e) => {
                     const selectorInstanciaActual = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -273,7 +270,7 @@ casaVitini.view = {
                     }
                     const altura = window.scrollY;
 
-                    if (altura > 20) {
+                    if (altura > 78) {
                         selectorTitulo.classList.add("titulo_sticky")
                     } else {
                         selectorTitulo.classList.remove("titulo_sticky")
