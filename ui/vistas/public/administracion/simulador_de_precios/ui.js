@@ -272,8 +272,11 @@ casaVitini.view = {
 
                     if (altura > 78) {
                         selectorTitulo.classList.add("titulo_sticky")
+                        selectorTitulo.textContent = "Esto es una simulación"
                     } else {
                         selectorTitulo.classList.remove("titulo_sticky")
+                        selectorTitulo.textContent = "Simulador de precios"
+
                     }
                 }
                 document.addEventListener("scroll", controladorAlturaTituloDinamico)
