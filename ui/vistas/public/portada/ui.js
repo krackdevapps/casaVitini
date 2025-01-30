@@ -50,7 +50,7 @@ casaVitini.view = {
             setTimeout(() => {
                 if (video) {
                     video.style.opacity = "1"
-                    video.style.transition = "opacity 2s linear"
+                    video.style.transition = "opacity 500ms linear"
                 }
             }, 1000);
         });
