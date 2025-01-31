@@ -63,7 +63,7 @@ casaVitini.view = {
             }
 
             configuracionDeAlojamientoPublicas.forEach(cA => {
-                console.log("2")
+
                 this.contenedorApartmentoUI({
                     cA,
                     contenedorApartamento

@@ -454,7 +454,7 @@ casaVitini.view = {
                     zona: "administracion/arquitectura/configuraciones/listarCamasDisponiblesApartamentoConfiguracion",
                     habitacionUID: String(habitacionUID)
                 }
-                console.log("t", transaccion)
+
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                 const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) { return }
@@ -1781,10 +1781,10 @@ casaVitini.view = {
                                         contenedorImagen.style.backgroundImage = `url(data:image/png;base64,${contenidoBase64})`;
                                         document.getElementById("campoEntrada").remove()
                                         casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.opcionesImagen()
-                                        console.log("test", contenedorImagen)
-                                        contenedorImagen.removeEventListener("click",   casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
-                                        console.log("www")
-                                        contenedorImagen.addEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
+
+                                        contenedorImagen.removeEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
+
+                                        contenedorImagen.addEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
                                     }
                                 }
                                 lector.readAsArrayBuffer(archivoSeleccionado);
@@ -1826,13 +1826,13 @@ casaVitini.view = {
                                 const imagenBase64 = respuestaServidor?.imagen
                                 if (!imagenBase64) {
                                     contenedorImagen.textContent = "Haz click para añadir una imagen del apartamento"
-                                    contenedorImagen.addEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
-                                    contenedorImagen.removeEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
+                                    contenedorImagen.addEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
+                                    contenedorImagen.removeEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
                                 } else {
                                     casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.opcionesImagen()
 
                                     contenedorImagen.removeEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
-                                    contenedorImagen.addEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
+                                    contenedorImagen.addEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
 
                                     const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
                                     contenedorImagen.style.backgroundImage = `url(data:image/${tipoDeImagen};base64,${imagenBase64})`;
@@ -1885,7 +1885,7 @@ casaVitini.view = {
                             iconoProceso.style.webkitBackdropFilter = "blur(20px)"
                             iconoProceso.style.backdropFilter = "blur(20px)"
                             contenedorImagen.appendChild(iconoProceso)
-                            
+
                             const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
                             selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
@@ -1894,7 +1894,7 @@ casaVitini.view = {
                                 zona: "administracion/arquitectura/configuraciones/eliminarImagenConfiguracionApartamento",
                                 apartamentoIDV: apartamentoIDV
                             }
-                            
+
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                             const mainSel = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                             if (mainSel) {
@@ -1917,7 +1917,7 @@ casaVitini.view = {
                         }
                     },
                     opcionesImagen: function () {
-                        console.log("io")
+
                         const contenedorImagen = document.querySelector("[componente=contenedorImagenConfiguracion]")
                         // contenedorImagen.removeEventListener("click", (e) => { casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen(e) })
                         // contenedorImagen.addEventListener("click", (e) => { casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones(e) })

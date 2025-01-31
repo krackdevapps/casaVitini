@@ -49,7 +49,7 @@ casaVitini.view = {
                             video.style.transition = "opacity 500ms linear"
                         }
                     }, 1000);
-                    console.log("se reproducee+")
+
                 })
                     .catch(error => {
                     });

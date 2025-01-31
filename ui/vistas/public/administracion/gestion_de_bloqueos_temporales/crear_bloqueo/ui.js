@@ -42,7 +42,7 @@ casaVitini.view = {
             zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
         })
 
-        console.log("respuestaServidor", respuestaServidor)
+
         if (respuestaServidor?.error) {
             const info = document.createElement("div")
             info.classList.add("textoCentrado", "negrita")
