@@ -10,7 +10,6 @@ import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../..
 import { DateTime } from "luxon"
 import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 
-
 export const procesadorReserva = async (data) => {
     try {
         const estructura = data.estructura

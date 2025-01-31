@@ -54,22 +54,17 @@ casaVitini.view = {
             advertenciaInmersivaUI.setAttribute("componente", "advertenciaIntegrada")
             const marcoElastico = document.createElement("div")
             marcoElastico.classList.add("marcoElasticoError")
-            const spinnerContainer = document.createElement("div");
-            spinnerContainer.setAttribute("componente", "iconoCargaEnlace");
-            spinnerContainer.classList.add("lds", "spinner");
-            for (let i = 0; i < 12; i++) {
-                const div = document.createElement("div");
-                spinnerContainer.appendChild(div);
-            }
+ 
+            const spinnerSimple = casaVitini.ui.componentes.spinnerSimple()
 
-            marcoElastico.appendChild(spinnerContainer)
+            marcoElastico.appendChild(spinnerSimple)
             const info = document.createElement("div")
             info.setAttribute("class", "advertenciaInfoFlujoPago")
             info.setAttribute("componente", "mensajeFlujoPasarela")
             info.textContent = "Buscando alojamiento..."
             marcoElastico.appendChild(info)
             const boton = document.createElement("div")
-            boton.setAttribute("class", "errorBoton")
+            boton.setAttribute("class", "botonV1Blanco")
             boton.textContent = "Cancelar"
             boton.addEventListener("click", (e) => {
                 selectorBloqueEspacioApartamentos.classList.add("elementoOcultoInicialmente")
@@ -79,13 +74,12 @@ casaVitini.view = {
             marcoElastico.appendChild(boton)
             advertenciaInmersivaUI.appendChild(marcoElastico)
             selectorBloqueEspacioApartamentos.appendChild(advertenciaInmersivaUI)
-
-            const transaccion = {
+            
+            const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "administracion/reservas/nuevaReserva/apartamentosDisponiblesAdministracion",
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida
-            }
-            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+            })
             const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
             if (!instanciaRenderizada) {
                 return

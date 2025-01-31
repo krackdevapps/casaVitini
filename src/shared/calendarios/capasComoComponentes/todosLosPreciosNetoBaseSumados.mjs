@@ -1,7 +1,4 @@
 import { DateTime } from "luxon";
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { obtenerReservasPorApartamentoIDVPorMesPorAno } from "../../../infraestructure/repository/reservas/selectoresDeReservas/obtenerReservasPorPlataformaIDV.mjs";
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { procesador } from "../../contenedorFinanciero/procesador.mjs";
 import { codigoZonaHoraria } from "../../configuracion/codigoZonaHoraria.mjs";
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
@@ -36,38 +33,44 @@ export const todosLosPreciosNetoBaseSumados = async (metadatos) => {
 
         const configuracionesAlojamiento = await obtenerTodasLasConfiguracionDeLosApartamento()
         const apartamentosIDV = configuracionesAlojamiento.map(c => c.apartamentoIDV)
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "externo",
-                    fechaEntrada: fechaObjeto.toISODate(),
-                    fechaSalida: fechaObjetoFin.plus({ days: 1 }).toISODate(),
-                    fechaActual: fechaActual_ISO,
-                    apartamentosArray: apartamentosIDV,
-                    origenSobreControl: "reserva",
-                    obtenerComportamientosPorFechaCracionIgnorandoFechaActual: "si"
 
-                },
-                servicios: {
-                    origen: "hubServicios",
-                    serviciosSolicitados: []
-                },
-            },
-            capas: {
-                ofertas: {
-                    zonasArray: ["global", "privada"],
-                    operacion: {
-                        tipo: "noAplicarOfertas"
+        if (apartamentosIDV.length > 0) {
+            const desgloseFinanciero = await procesador({
+                entidades: {
+                    reserva: {
+                        origen: "externo",
+                        fechaEntrada: fechaObjeto.toISODate(),
+                        fechaSalida: fechaObjetoFin.plus({ days: 1 }).toISODate(),
+                        fechaActual: fechaActual_ISO,
+                        apartamentosArray: apartamentosIDV,
+                        origenSobreControl: "reserva",
+                        obtenerComportamientosPorFechaCracionIgnorandoFechaActual: "si"
+
                     },
-                    ignorarCodigosDescuentos: "si"
+                    servicios: {
+                        origen: "hubServicios",
+                        serviciosSolicitados: []
+                    },
                 },
-                impuestos: {
-                    origen: "hubImuestos"
+                capas: {
+                    ofertas: {
+                        zonasArray: ["global", "privada"],
+                        operacion: {
+                            tipo: "noAplicarOfertas"
+                        },
+                        ignorarCodigosDescuentos: "si"
+                    },
+                    impuestos: {
+                        origen: "hubImuestos"
+                    }
                 }
-            }
-        })
+            })
+            return desgloseFinanciero.entidades.reserva.desglosePorNoche
+        } else {
+            return {}
+        }
 
-        return desgloseFinanciero.entidades.reserva.desglosePorNoche
+
 
     } catch (errorCapturado) {
         throw errorCapturado

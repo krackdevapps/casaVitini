@@ -70,7 +70,7 @@ casaVitini.view = {
                     contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                     contenedorApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
                     contenedorApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
-                    contenedorApartamento.addEventListener("click", (e) => {this.traductorCambioVista(e)})
+                    contenedorApartamento.addEventListener("click", (e) => { this.traductorCambioVista(e) })
                     const contenedorTitulo = document.createElement("div")
                     contenedorTitulo.classList.add("arquitecturaConfAlojamiento_configuracionesTitulo")
                     contenedorTitulo.classList.add("negrita")
@@ -325,13 +325,16 @@ casaVitini.view = {
                 const botonEliminarConfiguracion = document.createElement("div")
                 botonEliminarConfiguracion.classList.add("botonV1")
                 botonEliminarConfiguracion.textContent = "Eliminar configuración del apartamento"
-                botonEliminarConfiguracion.addEventListener("click",() => { this.eliminarConfiguracion.UI()})
+                botonEliminarConfiguracion.addEventListener("click", () => { this.eliminarConfiguracion.UI() })
                 contenedorBotonesGlobalesInferiores.appendChild(botonEliminarConfiguracion)
                 const selectorEspacioGlobalConfiguracion = document.querySelector("[componente=espacioConfiguracionDelAlojamiento]")
                 //    selectorEspacioGlobalConfiguracion.appendChild(contenedorBotonesGlobalesInferiores)
 
 
-                this.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.obtenerImgen(apartamentoIDV)
+                this.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.obtenerImgen({
+                    apartamentoIDV,
+                    instanciaUID
+                })
 
             }
         },
@@ -378,7 +381,7 @@ casaVitini.view = {
                             const tituloHabitacion = document.createElement("div")
                             tituloHabitacion.classList.add("botonV1BlancoIzquierda")
                             tituloHabitacion.setAttribute("habitacionIDV", habitacionIDV)
-                            tituloHabitacion.addEventListener("click", (e) => {this.transactor(e)})
+                            tituloHabitacion.addEventListener("click", (e) => { this.transactor(e) })
                             tituloHabitacion.textContent = habitacionUI
                             contenedor.appendChild(tituloHabitacion)
                         }
@@ -451,6 +454,7 @@ casaVitini.view = {
                     zona: "administracion/arquitectura/configuraciones/listarCamasDisponiblesApartamentoConfiguracion",
                     habitacionUID: String(habitacionUID)
                 }
+                console.log("t", transaccion)
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                 const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                 if (!instanciaRenderizada) { return }
@@ -548,7 +552,7 @@ casaVitini.view = {
                 mensaje.textContent = "Confirmar la eliminación de toda la configuración del apartamento. Esto implica la configuración del apartamento, el perfil de precios y los bloqueos vigentes. Si este apartamento aparece en un comportamiento de precios, será eliminado el apartamento del comportamiento de precios, pero el resto del comportamiento seguirá vigente a no ser que sea el único apartamento en algún comportamiento de precios. Sus implicaciones serán inmediatas. Si esta configuración de alojamiento aparece en alguna reserva activa, no se podrá eliminar por temas de integridad. Si necesita editar la configuración de alojamiento, puede hacerlo libremente. Si esta configuración de alojamiento aparece en alguna simulación u oferta, no se eliminará de estas. Tendrá que revisar las ofertas. Si elimina este apartamento y aparece en alguna oferta, no podrá insertar esa oferta en ninguna simulación o reserva hasta que no elimine la referencia en esa oferta. Si esta configuración de alojamiento aparece en alguna reserva no activa, como son las reservas canceladas o reservas del pasado, esta referencia no se eliminara porque las reservas mantiene su información en instantáneas propias."
                 const botonAceptar = constructor.querySelector("[boton=aceptar]")
                 botonAceptar.textContent = "Comfirmar la eliminación"
-                botonAceptar.addEventListener("click", ()=> {this.confirmar()})
+                botonAceptar.addEventListener("click", () => { this.confirmar() })
                 const botonCancelar = constructor.querySelector("[boton=cancelar]")
                 botonCancelar.textContent = "Cancelar la eliminación"
                 document.querySelector("main").appendChild(pantallaInmersiva)
@@ -1031,7 +1035,6 @@ casaVitini.view = {
                 }
             }
         },
-
         componentesUI: {
             habitacionUI: function (metadatos) {
                 const habitacionUI = metadatos.habitacionUI
@@ -1778,6 +1781,10 @@ casaVitini.view = {
                                         contenedorImagen.style.backgroundImage = `url(data:image/png;base64,${contenidoBase64})`;
                                         document.getElementById("campoEntrada").remove()
                                         casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.opcionesImagen()
+                                        console.log("test", contenedorImagen)
+                                        contenedorImagen.removeEventListener("click",   casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
+                                        console.log("www")
+                                        contenedorImagen.addEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
                                     }
                                 }
                                 lector.readAsArrayBuffer(archivoSeleccionado);
@@ -1789,8 +1796,10 @@ casaVitini.view = {
                         }
                         document.getElementById("campoEntrada").click()
                     },
-                    obtenerImgen: async function (IDV) {
-                        const apartamentoIDV = IDV || document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
+                    obtenerImgen: async function (data) {
+
+                        const apartamentoIDV = data.apartamentoIDV
+                        const instanciaUID = data.instanciaUID
                         const contenedorImagen = document.querySelector("[componente=contenedorImagenConfiguracion]")
                         contenedorImagen.innerHTML = null
                         const transaccion = {
@@ -1806,24 +1815,28 @@ casaVitini.view = {
                         iconoProceso.style.backdropFilter = "blur(20px)"
                         contenedorImagen.appendChild(iconoProceso)
                         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                        const mainSel = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        if (mainSel) {
+                            iconoProceso?.remove()
+                            if (respuestaServidor?.error) {
+                                return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                            }
+                            if (respuestaServidor?.ok) {
 
-                        iconoProceso?.remove()
-                        if (respuestaServidor?.error) {
+                                const imagenBase64 = respuestaServidor?.imagen
+                                if (!imagenBase64) {
+                                    contenedorImagen.textContent = "Haz click para añadir una imagen del apartamento"
+                                    contenedorImagen.addEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
+                                    contenedorImagen.removeEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
+                                } else {
+                                    casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.opcionesImagen()
 
-                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-                        }
-                        if (respuestaServidor?.ok) {
+                                    contenedorImagen.removeEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen)
+                                    contenedorImagen.addEventListener("click",  casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
 
-                            const imagenBase64 = respuestaServidor?.imagen
-                            if (!imagenBase64) {
-                                contenedorImagen.textContent = "Haz click para añadir una imagen del apartamento"
-                                contenedorImagen.addEventListener("click", (e) => {casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen(e)})
-                                contenedorImagen.removeEventListener("click", (e) => {casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones(e)})
-                            } else {
-
-                                const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
-                                contenedorImagen.style.backgroundImage = `url(data:image/${tipoDeImagen};base64,${imagenBase64})`;
-                                casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.opcionesImagen()
+                                    const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
+                                    contenedorImagen.style.backgroundImage = `url(data:image/${tipoDeImagen};base64,${imagenBase64})`;
+                                }
                             }
                         }
                     },
@@ -1831,9 +1844,6 @@ casaVitini.view = {
                         const contenedorOpcionesImagen = document.querySelector("[componente=contenedorOpcionesImagen]")
                         const estadoVision = contenedorOpcionesImagen.style?.display
                         const componente = e.target.getAttribute("componente")
-                        if (componente === "opcionImagen") {
-
-                        }
                         if (estadoVision === "none" || !estadoVision) {
                             contenedorOpcionesImagen.style.display = "flex"
                         } else {
@@ -1842,8 +1852,12 @@ casaVitini.view = {
                     },
                     eliminarImagen: {
                         UI: async function () {
+                            const main = document.querySelector("main")
+                            const instanciaUID = main.getAttribute("instanciaUID")
 
                             const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                            pantallaInmersiva.classList.add("flextJustificacion_center")
+
                             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
                             const titulo = constructor.querySelector("[componente=titulo]")
@@ -1853,15 +1867,16 @@ casaVitini.view = {
 
                             const botonAceptar = constructor.querySelector("[boton=aceptar]")
                             botonAceptar.textContent = `Confirmar y eliminar la imagen`
-                            botonAceptar.addEventListener("click", this.confirmar)
+                            botonAceptar.addEventListener("click", () => { this.confirmar({ instanciaUID }) })
                             const botonCancelar = constructor.querySelector("[boton=cancelar]")
                             botonCancelar.textContent = "Cancelar y volver"
                             document.querySelector("main").appendChild(pantallaInmersiva)
                         },
-                        confirmar: async function () {
+                        confirmar: async function (data) {
+                            const instanciaUID = data.instanciaUID
+
                             const apartamentoIDV = document.querySelector("[apartamentoIDV]").getAttribute("apartamentoIDV")
                             const contenedorImagen = document.querySelector("[componente=contenedorImagenConfiguracion]")
-                            contenedorImagen.innerHTML = null
                             const iconoProceso = casaVitini.ui.componentes.spinnerSimple()
                             iconoProceso.style.background = "white"
                             iconoProceso.style.paddingLeft = "4px"
@@ -1870,6 +1885,7 @@ casaVitini.view = {
                             iconoProceso.style.webkitBackdropFilter = "blur(20px)"
                             iconoProceso.style.backdropFilter = "blur(20px)"
                             contenedorImagen.appendChild(iconoProceso)
+                            
                             const selectorAdvertenciaInmersiva = document.querySelectorAll("[componente=advertenciaInmersiva]")
                             selectorAdvertenciaInmersiva.forEach((advertenciaInmersiva) => {
                                 advertenciaInmersiva.remove()
@@ -1878,34 +1894,44 @@ casaVitini.view = {
                                 zona: "administracion/arquitectura/configuraciones/eliminarImagenConfiguracionApartamento",
                                 apartamentoIDV: apartamentoIDV
                             }
+                            
                             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                            if (respuestaServidor?.error) {
-                                iconoProceso?.remove()
-                                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                                casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-                            }
-                            if (respuestaServidor?.ok) {
-                                iconoProceso.remove()
-                                contenedorImagen.removeAttribute("style")
-                                casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.obtenerImgen(apartamentoIDV)
+                            const mainSel = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                            if (mainSel) {
+                                if (respuestaServidor?.error) {
+                                    iconoProceso?.remove()
+                                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                                } else if (respuestaServidor?.ok) {
+                                    contenedorImagen.removeEventListener("click", casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones)
+                                    contenedorImagen.innerHTML = null
+                                    iconoProceso.remove()
+                                    contenedorImagen.removeAttribute("style")
+                                    document.querySelector("[componente=contenedorOpcionesImagen]")?.remove()
+                                    casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.obtenerImgen({
+                                        apartamentoIDV,
+                                        instanciaUID
+                                    })
+                                }
                             }
                         }
                     },
                     opcionesImagen: function () {
+                        console.log("io")
                         const contenedorImagen = document.querySelector("[componente=contenedorImagenConfiguracion]")
-                        contenedorImagen.removeEventListener("click", (e) => {casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen(e)})
-                        contenedorImagen.addEventListener("click", (e) => {casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones(e)})
+                        // contenedorImagen.removeEventListener("click", (e) => { casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen(e) })
+                        // contenedorImagen.addEventListener("click", (e) => { casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.mostrarOpciones(e) })
                         const contenedorOpciones = document.createElement("div")
                         contenedorOpciones.classList.add("arquitecturaConfApartamento_contenedorImg_opciones")
                         contenedorOpciones.setAttribute("componente", "contenedorOpcionesImagen")
                         const actualizarImagen = document.createElement("div")
-                        actualizarImagen.classList.add("arquitecturaConfApartamento_contenedorImg_opcion")
+                        actualizarImagen.classList.add("botonV1BlancoIzquierda", "blur")
                         actualizarImagen.setAttribute("componente", "opcionImagen")
                         actualizarImagen.textContent = "Actualizar imagen"
-                        actualizarImagen.addEventListener("click", () => {casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen()})
+                        actualizarImagen.addEventListener("click", () => { casaVitini.view.detallesConfiguracion.zonas.gestionDeImagenes.gestionImagenPrinpicialDelAlojamiento.subirImagen() })
                         contenedorOpciones.appendChild(actualizarImagen)
                         const eliminarImagen = document.createElement("div")
-                        eliminarImagen.classList.add("arquitecturaConfApartamento_contenedorImg_opcion")
+                        eliminarImagen.classList.add("botonV1BlancoIzquierda", "blur")
                         eliminarImagen.setAttribute("componente", "opcionImagen")
                         eliminarImagen.textContent = "Eliminar imagen"
                         eliminarImagen.addEventListener("click", () => {

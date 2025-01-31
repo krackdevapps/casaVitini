@@ -40,7 +40,15 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             zonaArray: ["global", "privada"]
         })
         const apartamentosIDV = configuracionesAlojamiento.map(c => c.apartamentoIDV)
+        if (apartamentosIDV.length === 0) {
+            const error = "No hay ninguna configuración de alojamiento disponible. Por favor cree una configuración de alojamiento desde arquitectura de alojamiento";
+            throw new Error(error);
+        }
 
+        const estructuraFinal = {
+            apartamentosDisponibles: [],
+            apartamentosNoDisponibles: []
+        };
         const transactor = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
@@ -50,10 +58,7 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
         });
         const apartamentosDisponiblesIDV = transactor.apartamentosDisponibles;
         const apartamentosNoDisponiblesIDV = transactor.apartamentosNoDisponibles;
-        const estructuraFinal = {
-            apartamentosDisponibles: [],
-            apartamentosNoDisponibles: []
-        };
+
         for (const apartamentoIDV of apartamentosDisponiblesIDV) {
             const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
                 apartamentoIDV,
@@ -77,11 +82,10 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             };
             estructuraFinal.apartamentosNoDisponibles.push(detalleApartamento);
         }
-        const ok = {
+
+        return {
             ok: estructuraFinal
         }
-        return ok
-
 
     } catch (errorCapturado) {
         throw errorCapturado

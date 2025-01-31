@@ -1,18 +1,22 @@
 casaVitini.view = {
-    start: function()  {
+    start: function () {
         this.UI()
         const main = document.querySelector("main")
         main.setAttribute("zonaCSS", "administracion/gestion_de_bloqueos/bloqueoUI")
     },
-    UI: async function ()  {
+    UI: async function () {
         const selectorEspacioBloqueos = document.querySelector("[componente=bloqueosTemporales]")
         const contenedorGlobal = document.createElement("div")
         contenedorGlobal.classList.add("detallesBloqueos_contenedorGlobal")
         contenedorGlobal.setAttribute("componente", "contenedorGlobal")
+        selectorEspacioBloqueos.appendChild(contenedorGlobal)
+
 
         const bloqueBloqueoUI = document.createElement("div")
         bloqueBloqueoUI.classList.add("detallesBloqueos_bloqueBloqueoUI")
         bloqueBloqueoUI.setAttribute("componente", "contenedorDelBloqueo")
+        contenedorGlobal.appendChild(bloqueBloqueoUI)
+
 
         const contenedorOpcionesTroncales = document.createElement("div")
         contenedorOpcionesTroncales.classList.add("detallesloqueos_contenedorBloquesGlobales")
@@ -26,31 +30,44 @@ casaVitini.view = {
         const tipoApartamentoUI = document.createElement("select")
         tipoApartamentoUI.classList.add("administracion_bloqueos_detallesBloqueo_listaSelec")
         tipoApartamentoUI.setAttribute("datoBloqueo", "apartamento")
-        tipoApartamentoUI.addEventListener("change",(e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e)})
+        tipoApartamentoUI.addEventListener("change", (e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e) })
         const tipoApartamentoInicio = document.createElement("option");
         tipoApartamentoInicio.value = "";
         tipoApartamentoInicio.selected = true;
         tipoApartamentoInicio.disabled = true;
         tipoApartamentoInicio.text = "Seleccionar el apartamento";
         tipoApartamentoUI.add(tipoApartamentoInicio);
-        const apartamentosArray = await this.obtenerApartamentos()
-        if (apartamentosArray.length === 0) {
-            const opcion = document.createElement("option");
-            opcion.value = "";
-            opcion.disabled = true;
-            opcion.text = "No hay ningun apartamento disponible";
-            tipoApartamentoUI.add(opcion);
-        }
-        if (apartamentosArray.length > 0) {
-            apartamentosArray.forEach((detallesApartamento) => {
-                const apartamentoIDV = detallesApartamento.apartamentoIDV
-                const aparatmentoUI = detallesApartamento.apartamentoUI
+
+        const respuestaServidor = await casaVitini.shell.servidor({
+            zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
+        })
+
+        console.log("respuestaServidor", respuestaServidor)
+        if (respuestaServidor?.error) {
+            const info = document.createElement("div")
+            info.classList.add("textoCentrado", "negrita")
+            info.textContent = respuestaServidor?.error
+            contenedorGlobal.appendChild(info)
+            return
+        } else if (respuestaServidor?.ok) {
+            if (respuestaServidor?.length === 0) {
                 const opcion = document.createElement("option");
-                opcion.value = apartamentoIDV;
-                opcion.text = aparatmentoUI;
+                opcion.value = "";
+                opcion.disabled = true;
+                opcion.text = "No hay ningun apartamento disponible";
                 tipoApartamentoUI.add(opcion);
-            })
+            } else if (respuestaServidor?.length > 0) {
+                apartamentosArray.forEach((detallesApartamento) => {
+                    const apartamentoIDV = detallesApartamento.apartamentoIDV
+                    const aparatmentoUI = detallesApartamento.apartamentoUI
+                    const opcion = document.createElement("option");
+                    opcion.value = apartamentoIDV;
+                    opcion.text = aparatmentoUI;
+                    tipoApartamentoUI.add(opcion);
+                })
+            }
         }
+
         contenedorApartamentosV2.appendChild(tipoApartamentoUI)
         contenedorOpcionesTroncales.appendChild(contenedorApartamentosV2)
         const contenedorTipoBloqueoV2 = document.createElement("div")
@@ -63,7 +80,7 @@ casaVitini.view = {
         const tipoBloqueoUI = document.createElement("select")
         tipoBloqueoUI.classList.add("administracion_bloqueos_detallesBloqueo_listaSelec")
         tipoBloqueoUI.setAttribute("datoBloqueo", "tipoBloqueoIDV")
-        tipoBloqueoUI.addEventListener("change", (e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e)})
+        tipoBloqueoUI.addEventListener("change", (e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e) })
         const tipoBloqueoInicio = document.createElement("option");
         tipoBloqueoInicio.value = "";
         tipoBloqueoInicio.selected = true;
@@ -124,11 +141,9 @@ casaVitini.view = {
         motivoUI.rows = 10
         motivoUI.placeholder = "Escriba una breve descripción de por qué existe este bloqueo. Esto ayudará a recordar rápidamente por qué existe este bloqueo, no es obligatorio pero sí recomendable."
         bloqueBloqueoUI.appendChild(motivoUI)
-        contenedorGlobal.appendChild(bloqueBloqueoUI)
-        selectorEspacioBloqueos.appendChild(contenedorGlobal)
         casaVitini.view.__sharedMethods__.controladorBotonesGlobales.crear()
     },
-    transactor: async function()  {
+    transactor: async function () {
         const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
         const mensaje = "Creando bloqueo..."
         const datosPantallaSuperpuesta = {
@@ -160,13 +175,13 @@ casaVitini.view = {
             casaVitini.shell.navegacion.controladorVista(navegacion)
         }
     },
-    obtenerApartamentos: async function()  {
+    obtenerApartamentos: async function () {
         const transaccion = {
             zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
         }
         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
         if (respuestaServidor?.error) {
-            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+            return respuestaServidor.error
         }
         if (respuestaServidor?.ok) {
             return respuestaServidor?.ok

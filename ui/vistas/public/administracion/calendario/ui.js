@@ -1891,9 +1891,12 @@ casaVitini.view = {
             botonContraerTodo.textContent = "Contraer todo"
             contenedorVista.appendChild(botonContraerTodo)
 
-            contenedorMenuCapas.appendChild(info("Las capas Precio de la noche por apartamento no muestra eventos, muestra el precio de la noche final neto. Es decir, le precio base más el comportamiento de precio aplicado a esa noche. Cuando escoges varios apartamentos, se muestra el precio sumado de la noche de los apartamentos escogidos. Cuando delante del precio hay una M mayúscula, indica Múltiples apartamentos seleccionados."))
 
             if (apartamentosLista.length > 0) {
+
+                contenedorMenuCapas.appendChild(info("Las capas Precio de la noche por apartamento no muestra eventos, muestra el precio de la noche final neto. Es decir, le precio base más el comportamiento de precio aplicado a esa noche. Cuando escoges varios apartamentos, se muestra el precio sumado de la noche de los apartamentos escogidos. Cuando delante del precio hay una M mayúscula, indica Múltiples apartamentos seleccionados."))
+
+
                 const contenedorTodosLosApartamentos = document.createElement("details")
                 contenedorTodosLosApartamentos.classList.add("contenedorGrupoFondo", "sobreControlAnimacionGlobal")
                 contenedorTodosLosApartamentos.setAttribute("grupo", "campo")
@@ -2386,14 +2389,15 @@ casaVitini.view = {
                         const capasSimplesEnCapaCompuesta = composicionCapaCompuesta[capaPorVeriticar]
                         for (const capaSimpleEnCapaCompuesta of capasSimplesEnCapaCompuesta) {
                             const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"][${capaPorVeriticar}="${capaSimpleEnCapaCompuesta}"]`
-                            // posible error extraño
                             const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
+                            if (!selectorCapaRenderizada) { continue }
                             selectorCapaRenderizada.setAttribute("estado", "seleccionado")
                             selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
                         }
                     } else {
                         const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"]`
                         const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
+                        if (!selectorCapaRenderizada) { continue }
                         selectorCapaRenderizada.setAttribute("estado", "seleccionado")
                         selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
                         const tipoRolGrupo = selectorCapaRenderizada.getAttribute("grupo")
@@ -2882,12 +2886,14 @@ casaVitini.view = {
                         for (const capaSimpleEnCapaCompuesta of capasSimplesEnCapaCompuesta) {
                             const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"][${capaPorVeriticar}="${capaSimpleEnCapaCompuesta}"]`
                             const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
+                            if (!selectorCapaRenderizada) { continue }
                             selectorCapaRenderizada.setAttribute("estado", "seleccionado")
                             selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
                         }
                     } else {
                         const capaUIDConstructor = `[capaUID="${capaPorVeriticar}"]`
                         const selectorCapaRenderizada = contenedorMenuCapasRenderizado.querySelector(capaUIDConstructor)
+                        if (!selectorCapaRenderizada) { continue }
                         selectorCapaRenderizada.setAttribute("estado", "seleccionado")
                         selectorCapaRenderizada.querySelector("[componente=icono]").style.background = "blue"
                         const tipoRolGrupo = selectorCapaRenderizada.getAttribute("grupo")
@@ -2900,7 +2906,7 @@ casaVitini.view = {
                     }
                 }
             }
-            
+
             const selectorCapas = document.querySelectorAll("[componente=contenedorMenuCapas] [capaUID]")
             selectorCapas.forEach((selector) => {
                 selector.addEventListener("click", controladorSelectoresCapas)
@@ -3671,6 +3677,20 @@ casaVitini.view = {
             })
             contenedor.appendChild(botonCancelar)
 
+            const numeroApartamentosSel = Object.keys(apartamentos).length
+
+            if (numeroApartamentosSel === 0) {
+                ui.classList.remove("flextJustificacion_arriba")
+                ui.classList.add("flextJustificacion_center")
+
+                const infoDeSel = document.createElement("p")
+                infoDeSel.classList.add("padding10", "textoCentrado")
+                infoDeSel.textContent = "No se ha selecionado ningun apartamentos dentro de los dias selecccionados. Cerciorese que existen configuraciones de alojamiento disponibles."
+                contenedor.appendChild(infoDeSel)
+                return 
+            }
+
+
 
 
             const infoDeSel = document.createElement("p")
@@ -4126,10 +4146,10 @@ casaVitini.view = {
     vision: {
         controladorVision: function () {
             const main = document.querySelector("main")
-            
+
             const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
             main.appendChild(ui)
-          
+
 
             const contenedor = ui.querySelector("[componente=contenedor]")
 
@@ -4174,7 +4194,7 @@ casaVitini.view = {
                 })
                 await this.cambiarVision({
                     visionSel: "vertical",
-                 
+
                 })
             })
 
@@ -4220,9 +4240,9 @@ casaVitini.view = {
 
 
             if (visionSel === "vertical") {
-                await this.visionVertical({instanciaUID})
+                await this.visionVertical({ instanciaUID })
             } else if (visionSel === "horizontal") {
-                await this.visionHorizontal({instanciaUID})
+                await this.visionHorizontal({ instanciaUID })
             }
         },
         visionVertical: async function (data) {

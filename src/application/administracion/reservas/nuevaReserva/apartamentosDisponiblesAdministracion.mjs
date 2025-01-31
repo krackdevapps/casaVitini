@@ -37,21 +37,30 @@ export const apartamentosDisponiblesAdministracion = async (entrada) => {
             zonaArray: ["global", "privada"]
         })
         const apartamentosIDV = configuracionesApartamento.map(c => c.apartamentoIDV)
-        const apartamentosCribados = await apartamentosPorRango({
-            fechaEntrada: fechaEntrada,
-            fechaSalida: fechaSalida,
-            apartamentosIDV: apartamentosIDV,
-            zonaConfiguracionAlojamientoArray: ["privada", "global"],
-            zonaBloqueo_array: ["privada", "global"],
-        });
-        const apartamentosDisponibles = apartamentosCribados.apartamentosDisponibles
 
-        const configuracionesAlojamiento = await configuracionApartamento(apartamentosDisponibles);
-        const ok = {
-            ok: apartamentosCribados,
-            configuracionesAlojamiento: configuracionesAlojamiento.configuracionApartamento
+        const res = {
+            ok: {
+                apartamentosDisponibles: []
+            },
+            configuracionesAlojamiento: {}
         }
-        return ok
+
+        if (apartamentosIDV.length > 0) {
+            const apartamentosCribados = await apartamentosPorRango({
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
+                apartamentosIDV: apartamentosIDV,
+                zonaConfiguracionAlojamientoArray: ["privada", "global"],
+                zonaBloqueo_array: ["privada", "global"],
+            });
+            const apartamentosDisponibles = apartamentosCribados.apartamentosDisponibles
+            const configuracionesAlojamiento = await configuracionApartamento(apartamentosDisponibles);
+
+            res.ok.apartamentosDisponibles.push(...apartamentosDisponibles)
+            res.configuracionesAlojamiento = configuracionesAlojamiento.configuracionApartamento
+        }
+
+        return res
     } catch (errorCapturado) {
         throw errorCapturado
     }

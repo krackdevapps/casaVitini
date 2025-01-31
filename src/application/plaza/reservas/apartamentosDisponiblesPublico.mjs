@@ -53,70 +53,69 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
             zonaArray: ["global", "publica"]
         })
         const apartamentosIDV = configuracionesApartamento.map(c => c.apartamentoIDV)
-
-        const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango({
-            fechaEntrada: fechaEntrada,
-            fechaSalida: fechaSalida,
-            apartamentosIDV: apartamentosIDV,
-            zonaConfiguracionAlojamientoArray: ["publica", "global"],
-            zonaBloqueo_array: ["publica", "global"],
-        })
-
-        const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
         const estructura = {
-            ok: {}
-        };
-        if (apartamentosDisponiblesEncontrados.length === 0) {
-            estructura.ok = {
+            ok: {
                 apartamentosDisponibles: []
             }
-        }
-        if (apartamentosDisponiblesEncontrados.length > 0) {
-            const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
-            estructura.ok = {
-                contenedorFinanciero: {},
-                complementosAlojamiento: {},
-                apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
-            }
-            for (const apartamentoIDV of apartamentosDisponiblesEncontrados) {
-                const desgloseFinanciero = await procesador({
-                    entidades: {
-                        reserva: {
-                            origen: "externo",
-                            fechaEntrada: fechaEntrada,
-                            fechaSalida: fechaSalida,
-                            fechaActual: fechaCreacion_simple,
-                            apartamentosArray: [apartamentoIDV],
-                            origenSobreControl: "reserva"
-                        },
-                        servicios: {
-                            origen: "hubServicios",
-                            serviciosSolicitados: []
-                        },
-                    },
-                    capas: {
-                        ofertas: {
-                            zonasArray: ["global", "publica"],
-                            operacion: {
-                                tipo: "insertarDescuentosPorCondicionPorCodigo",
-                            },
-                            codigoDescuentosArrayBASE64: [],
-                            ignorarCodigosDescuentos: "no"
+        };
+        if (apartamentosIDV.length > 0) {
 
+            const resuelveApartametnoDisponiblesPublico = await apartamentosPorRango({
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida,
+                apartamentosIDV: apartamentosIDV,
+                zonaConfiguracionAlojamientoArray: ["publica", "global"],
+                zonaBloqueo_array: ["publica", "global"],
+            })
+
+            const apartamentosDisponiblesEncontrados = resuelveApartametnoDisponiblesPublico.apartamentosDisponibles;
+            if (apartamentosDisponiblesEncontrados.length > 0) {
+                const configuracionesApartamentosVerificadas = await configuracionApartamento(apartamentosDisponiblesEncontrados);
+                estructura.ok = {
+                    contenedorFinanciero: {},
+                    complementosAlojamiento: {},
+                    apartamentosDisponibles: configuracionesApartamentosVerificadas.configuracionApartamento
+                }
+                for (const apartamentoIDV of apartamentosDisponiblesEncontrados) {
+                    const desgloseFinanciero = await procesador({
+                        entidades: {
+                            reserva: {
+                                origen: "externo",
+                                fechaEntrada: fechaEntrada,
+                                fechaSalida: fechaSalida,
+                                fechaActual: fechaCreacion_simple,
+                                apartamentosArray: [apartamentoIDV],
+                                origenSobreControl: "reserva"
+                            },
+                            servicios: {
+                                origen: "hubServicios",
+                                serviciosSolicitados: []
+                            },
                         },
-                        impuestos: {
-                            origen: "hubImuestos"
+                        capas: {
+                            ofertas: {
+                                zonasArray: ["global", "publica"],
+                                operacion: {
+                                    tipo: "insertarDescuentosPorCondicionPorCodigo",
+                                },
+                                codigoDescuentosArrayBASE64: [],
+                                ignorarCodigosDescuentos: "no"
+
+                            },
+                            impuestos: {
+                                origen: "hubImuestos"
+                            }
                         }
-                    }
-                })
-                estructura.ok.contenedorFinanciero[apartamentoIDV] = desgloseFinanciero
-                const complementosDelAlojamientos = await obtenerComplementosPorApartamentoIDV(apartamentoIDV)
-                complementosDelAlojamientos.forEach(complemento => {
-                    delete complemento.testingVI
-                    delete complemento.apartamentoIDV
-                });
-                const complementosDelAlojamientosActivos = complementosDelAlojamientos.filter((c) => c.estadoIDV === "activado")
-                estructura.ok.complementosAlojamiento[apartamentoIDV] = complementosDelAlojamientosActivos
+                    })
+                    estructura.ok.contenedorFinanciero[apartamentoIDV] = desgloseFinanciero
+                    const complementosDelAlojamientos = await obtenerComplementosPorApartamentoIDV(apartamentoIDV)
+                    complementosDelAlojamientos.forEach(complemento => {
+                        delete complemento.testingVI
+                        delete complemento.apartamentoIDV
+                    });
+                    const complementosDelAlojamientosActivos = complementosDelAlojamientos.filter((c) => c.estadoIDV === "activado")
+                    estructura.ok.complementosAlojamiento[apartamentoIDV] = complementosDelAlojamientosActivos
+                }
             }
         }
 

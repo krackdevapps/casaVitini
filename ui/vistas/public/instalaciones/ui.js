@@ -2,59 +2,18 @@ casaVitini.view = {
     start: function () {
         const main = document.querySelector("main")
         main.setAttribute("zonaCSS", "instalaciones")
-        document.body.style.backgroundColor = "#fdefd9"
-        // main.style.gap = "20px"
-        main.style.paddingTop = "10px"
+        const instanciaUID = main.getAttribute("instanciaUID")
 
+        document.body.style.backgroundColor = "#fdefd9"
+        main.style.paddingTop = "10px"
         main.style.maxWidth = "100%"
-        const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
 
         const marcoElasticoRelativo = main.querySelector("[contenedor=marcoElasticoRelativo]")
         marcoElasticoRelativo.style.gap = "20px"
         marcoElasticoRelativo.style.paddingLeft = "20px"
         marcoElasticoRelativo.style.paddingRight = "20px"
         marcoElasticoRelativo.style.maxWidth = "2160px"
-
-        // const enlaceIrAContacto = document.querySelector("[enlace=irAContacto]")
-        // enlaceIrAContacto.classList.add("negrita")
-        // enlaceIrAContacto.setAttribute("href", "/contacto")
-        // enlaceIrAContacto.setAttribute("vista", "/contacto")
-        // enlaceIrAContacto.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-
-
-        const selectorContenedorTitulo = main.querySelector("[componente=tituloPegajoso]")
-        const selectorTextoTitulo = selectorContenedorTitulo.querySelector("[componente=tituloTextoApartamentos]")
-        const destino = document.querySelector("[componente=destinoScroll]")
-
-        const controladorAlturaTituloDinamico = (e) => {
-            const selectorInstanciaActual = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-            if (!selectorInstanciaActual) {
-                document.removeEventListener("scroll", controladorAlturaTituloDinamico)
-            }
-            const boundingRect1 = destino.getBoundingClientRect();
-            const boundingRect = selectorContenedorTitulo.getBoundingClientRect();
-            const stickyTop = 80;
-            selectorContenedorTitulo.style.position = "sticky"
-            selectorContenedorTitulo.style.bottom = "20px"
-            selectorContenedorTitulo.style.zIndex = "2"
-
-            if (boundingRect1.bottom >= (window.innerHeight - stickyTop)) {
-                selectorTextoTitulo.style.boxShadow = "0px 0px 28px 0px rgba(0, 0, 0, 0.5)"
-                selectorTextoTitulo.style.backdropFilter = "blur(50px)"
-                selectorTextoTitulo.style.webkitBackdropFilter = "blur(50px)"
-                selectorTextoTitulo.style.background = ""
-                selectorTextoTitulo.textContent = "Ver apartamentos"
-                selectorTextoTitulo.addEventListener("click", this.irAApartamentos)
-            } else {
-                selectorTextoTitulo.style.boxShadow = "0px 0px 0px 0px rgba(0, 0, 0, 0)"
-                selectorTextoTitulo.style.background = "transparent"
-                selectorTextoTitulo.textContent = "Apartamentos"
-                selectorTextoTitulo.removeEventListener("click", this.irAApartamentos)
-
-            }
-        }
-        document.addEventListener("scroll", controladorAlturaTituloDinamico)
-        controladorAlturaTituloDinamico({ target: destino })
+        main.appendChild(marcoElasticoRelativo)
 
         const imagenesAmpliablesEstaticas = marcoElasticoRelativo.querySelectorAll("[componente=fotoAmpliable]")
         imagenesAmpliablesEstaticas.forEach(iA =>
@@ -62,17 +21,10 @@ casaVitini.view = {
                 casaVitini.ui.componentes.componentesComplejos.ampliadorDeImagen.ampliarImagen(e)
             })
         )
-        const contenedorApartamento = document.createElement("div")
-        contenedorApartamento.classList.add("flexVertical", "gap20")
-        contenedorApartamento.setAttribute("contenedor", "apartamentos")
-        marcoElasticoRelativo.appendChild(contenedorApartamento)
 
         return this.obtenerApartmentosIDV({
-            contenedorApartamento
+            instanciaUID
         })
-
-
-
     },
     irAApartamentos: (e) => {
         e.preventDefault()
@@ -82,20 +34,36 @@ casaVitini.view = {
 
     },
     obtenerApartmentosIDV: async function (data) {
-        const contenedorApartamento = data.contenedorApartamento
+        const instanciaUID = data.instanciaUID
+        const mainSel = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+        if (!mainSel) { return }
         const spinner = casaVitini.ui.componentes.spinnerSimple()
-        contenedorApartamento.appendChild(spinner)
+        mainSel.appendChild(spinner)
 
         const respuestaServidor = await casaVitini.shell.servidor({
             zona: "componentes/obtenerTodoApartamentoIDVPublico"
         })
         spinner?.remove()
+
         if (respuestaServidor?.error) {
             contenedorApartamento.textContent(respuestaServidor.error)
         }
         if (respuestaServidor?.ok) {
             const configuracionDeAlojamientoPublicas = respuestaServidor.configuracionDeAlojamientoPublicas
+
+            const marcoElasticoRelativo = mainSel.querySelector("[contenedor=marcoElasticoRelativo]")
+
+            const contenedorApartamento = document.createElement("div")
+            contenedorApartamento.classList.add("flexVertical", "gap20")
+            contenedorApartamento.setAttribute("contenedor", "apartamentos")
+
+            if (configuracionDeAlojamientoPublicas.length > 0) {
+                this.renderizaTituloPegajoso({ instanciaUID })
+                marcoElasticoRelativo.appendChild(contenedorApartamento)
+            }
+
             configuracionDeAlojamientoPublicas.forEach(cA => {
+                console.log("2")
                 this.contenedorApartmentoUI({
                     cA,
                     contenedorApartamento
@@ -148,7 +116,6 @@ casaVitini.view = {
         gridImagenes.setAttribute("contenedor", "gridImagenes")
         ui.appendChild(gridImagenes)
 
-
         caracteristicas.forEach(c => {
             const caracteristicaUI = c.caracteristicaUI
 
@@ -157,8 +124,6 @@ casaVitini.view = {
             contenedorCaracteristicas.appendChild(cUI)
 
         })
-
-
         const respuestaServidor = await casaVitini.shell.servidor({
             zona: "componentes/obtenerTodoImagenUIDPorApartamentoIDVPublico",
             apartamentoIDV
@@ -173,8 +138,6 @@ casaVitini.view = {
                 instanciaUID
             })
         }
-
-
 
     },
     redenderizaContenedorImagen: async function (data) {
@@ -208,8 +171,6 @@ casaVitini.view = {
                 })
             }
         })
-
-
     },
     obtenerImagen: async function (data) {
 
@@ -284,5 +245,70 @@ casaVitini.view = {
 
         }
         return contenedor
+    },
+    renderizaTituloPegajoso: function (data) {
+        const instanciaUID = data.instanciaUID
+
+        const mainSel = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+        if (!mainSel) { return }
+
+        const z = mainSel.querySelector("[z=instalaciones]")
+        const destinoScroll = document.createElement("div")
+        destinoScroll.setAttribute("componente", "destinoScroll")
+        z.appendChild(destinoScroll)
+
+        const tituloPegajoso = document.createElement("div")
+        tituloPegajoso.setAttribute("componente", "tituloPegajoso")
+        tituloPegajoso.classList.add(
+            "flexVertical",
+            "flexAHCentrad"
+        )
+        z.appendChild(tituloPegajoso)
+
+        const titulo = document.createElement("p")
+        titulo.classList.add(
+            "tituloGris",
+            "textoCentrado",
+            "paddinVertical10",
+            "borderRadius20",
+            "paddinHorizontal40",
+            "backgroundWhite5",
+            "transitionAll500",
+            "ratonDefault",
+            "noSelecionable"
+        )
+        titulo.setAttribute("componenete", "tituloTextoApartamentos")
+        titulo.textContent = "Apartamentos"
+        tituloPegajoso.appendChild(titulo)
+
+        const controladorAlturaTituloDinamico = () => {
+            const selectorInstanciaActual = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+            if (!selectorInstanciaActual) {
+                document.removeEventListener("scroll", controladorAlturaTituloDinamico)
+            }
+            const boundingRect1 = destinoScroll.getBoundingClientRect();
+            const boundingRect = tituloPegajoso.getBoundingClientRect();
+            const stickyTop = 80;
+            tituloPegajoso.style.position = "sticky"
+            tituloPegajoso.style.bottom = "20px"
+            tituloPegajoso.style.zIndex = "2"
+
+            if (boundingRect1.bottom >= (window.innerHeight - stickyTop)) {
+                titulo.style.boxShadow = "0px 0px 28px 0px rgba(0, 0, 0, 0.5)"
+                titulo.style.backdropFilter = "blur(50px)"
+                titulo.style.webkitBackdropFilter = "blur(50px)"
+                titulo.style.background = ""
+                titulo.textContent = "Ver apartamentos"
+                titulo.addEventListener("click", this.irAApartamentos)
+            } else {
+                titulo.style.boxShadow = "0px 0px 0px 0px rgba(0, 0, 0, 0)"
+                titulo.style.background = "transparent"
+                titulo.textContent = "Apartamentos"
+                titulo.removeEventListener("click", this.irAApartamentos)
+
+            }
+        }
+        document.addEventListener("scroll", controladorAlturaTituloDinamico)
+        controladorAlturaTituloDinamico()
     }
 }

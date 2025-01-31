@@ -1438,7 +1438,6 @@ export const validadoresCompartidos = {
                 'array.base': '{{#label}} debe ser un array',
                 'object.base': '{{#label}} debe ser un objeto',
                 'array.includesRequiredUnknowns': '{{#label}} debe contener al menos 1 valor requerido',
-
             }
         }
     },
