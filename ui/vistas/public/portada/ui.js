@@ -2,15 +2,12 @@ casaVitini.view = {
     start: async () => {
         const main = document.querySelector("main")
 
-        const video = main.querySelector("[componente=video]")
-        console.clear()
-
-
         const mmssASegundos = (tiempo) => {
             const [minutos, segundos] = tiempo.split(':').map(Number);
             return (minutos * 60) + segundos;
         }
 
+        const video = main.querySelector("[componente=video]")
         video.addEventListener('loadeddata', () => {
             const tiempos = [
                 "00:00",
@@ -43,17 +40,22 @@ casaVitini.view = {
 
         })
         video.addEventListener('canplaythrough', () => {
-            video.play();
+            const playProm = video.play();
+            if (playProm !== undefined) {
+                playProm.then(_ => {
+                    setTimeout(() => {
+                        if (video) {
+                            video.style.opacity = "1"
+                            video.style.transition = "opacity 500ms linear"
+                        }
+                    }, 1000);
+                    console.log("se reproducee+")
+                })
+                    .catch(error => {
+                    });
+            }
         })
 
-        video.addEventListener('progress', () => {
-            setTimeout(() => {
-                if (video) {
-                    video.style.opacity = "1"
-                    video.style.transition = "opacity 500ms linear"
-                }
-            }, 1000);
-        });
 
         document.querySelector("[componente=botonCambiaVistaEnSection]")
             .addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
