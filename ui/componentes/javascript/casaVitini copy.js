@@ -59058,7 +59058,7 @@ const casaVitini = {
 
                             })
                         })
-                        selectorHorizontal.textContent = "Vision horizontal"
+                        selectorHorizontal.textContent = "Visión horizontal"
                         contenedorSelectorVision.appendChild(selectorHorizontal)
 
 
@@ -59072,7 +59072,7 @@ const casaVitini = {
 
                             })
                         })
-                        selectorVertical.textContent = "Vision vertical"
+                        selectorVertical.textContent = "Visión vertical"
                         contenedorSelectorVision.appendChild(selectorVertical)
 
 
