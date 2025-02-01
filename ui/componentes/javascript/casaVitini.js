@@ -2432,7 +2432,7 @@ const casaVitini = {
                         botonNavegacionMesAtras.setAttribute("class", "botonNavegacionMes")
                         botonNavegacionMesAtras.setAttribute("id", "botonAtras")
                         botonNavegacionMesAtras.setAttribute("sentido", "atras")
-                        botonNavegacionMesAtras.textContent = "Atras"
+                        botonNavegacionMesAtras.textContent = "Atrás"
                         botonNavegacionMesAtras.addEventListener("click", casaVitini.ui.componentes.calendario.navegacionCalendarioNuevo)
                         navegacionMes.appendChild(botonNavegacionMesAtras)
                         const navegacionMesReferencia = document.createElement("div")
@@ -23449,7 +23449,7 @@ const casaVitini = {
 
                         const botonAtras = document.createElement("div")
                         botonAtras.classList.add("botonV1Blanco", "blur50")
-                        botonAtras.textContent = "Atras"
+                        botonAtras.textContent = "Atrás"
                         botonAtras.addEventListener("click", (e) => {
                             this.cambiarImagen({
                                 sentido: "imagenAnterior",

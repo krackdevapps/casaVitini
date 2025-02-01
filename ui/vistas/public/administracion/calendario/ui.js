@@ -175,7 +175,7 @@ casaVitini.view = {
         botonNavegacionMesAtras.setAttribute("class", "administracion_calendario_botonNavegacion")
         botonNavegacionMesAtras.setAttribute("id", "botonAtras")
         botonNavegacionMesAtras.setAttribute("sentido", "atras")
-        botonNavegacionMesAtras.textContent = "Atras"
+        botonNavegacionMesAtras.textContent = "Atrás"
         botonNavegacionMesAtras.addEventListener("click", async () => {
             await this.navegacionCalendarioNuevo({
                 sentido: "atras",
@@ -1894,7 +1894,7 @@ casaVitini.view = {
 
             if (apartamentosLista.length > 0) {
 
-                contenedorMenuCapas.appendChild(info("Las capas Precio de la noche por apartamento no muestra eventos, muestra el precio de la noche final neto. Es decir, le precio base más el comportamiento de precio aplicado a esa noche. Cuando escoges varios apartamentos, se muestra el precio sumado de la noche de los apartamentos escogidos. Cuando delante del precio hay una M mayúscula, indica Múltiples apartamentos seleccionados."))
+                contenedorMenuCapas.appendChild(info("Las capas de 'Precio de la noche por apartamento' no muestran eventos, muestran el precio de la noche final neto. Es decir, el precio base más el comportamiento de precio aplicado a esa noche. Cuando escoges varios apartamentos, se muestra el precio sumado de la noche de los apartamentos escogidos. Cuando delante del precio hay una M mayúscula, indica múltiples apartamentos seleccionados.Precio de la noche por apartamento"))
 
 
                 const contenedorTodosLosApartamentos = document.createElement("details")
@@ -1964,7 +1964,7 @@ casaVitini.view = {
             contenedorMenuCapas.appendChild(contenedorCapasEntrelazadas)
 
 
-            contenedorCapasEntrelazadas.appendChild(info("La capa global son todas las capas juntas en el calendario menos la capa Precio de la nochen por Apartmento. Esto le proporciona una rápida visión global de la cronologia."))
+            contenedorCapasEntrelazadas.appendChild(info("La capa global son todas las capas juntas en el calendario, menos la capa 'Precio de la noche por Apartamento'. Esto le proporciona una rápida visión global de la cronología."))
 
             const grupoGlobalCapas = document.createElement("div")
             grupoGlobalCapas.classList.add("contenedorGrupoSinFondo")
@@ -2094,7 +2094,7 @@ casaVitini.view = {
                 }
                 contenedorTodosLosApartamentos.appendChild(contenedorListaPorApartamento)
             }
-            contenedorCapasEntrelazadas.appendChild(info("La capa Bloqueos por apartamentos muestra los comportamientos de precio complejos y simples como eventos para tener una visual más clara de cuando se están aplicando. Esta capa también activa la posibilidad de seleccionar días por rango o por selección para gestionar los comportamientos de precio simples. Para gestionar los comportamientos de precio complejos deberá entrar en el comportamiento de precio haciendo clic en él y operar desde el menú de comportamiento de precio complejo. Un comportamiento de precio complejo es aquel que tiene más de un apartamento dentro de él."))
+            contenedorCapasEntrelazadas.appendChild(info("La capa Bloqueos por apartamentos muestra los comportamientos de precio complejos y simples como eventos para tener una visual más clara de cuándo se están aplicando. Esta capa también activa la posibilidad de seleccionar días por rango o por selección para gestionar los comportamientos de precio simples. Para gestionar los comportamientos de precio complejos, deberá entrar en el comportamiento de precio haciendo clic en él y operar desde el menú de comportamiento de precio complejo. Un comportamiento de precio complejo es aquel que tiene más de un apartamento dentro de él."))
 
             if (apartamentosLista.length > 0) {
                 const contenedorTodosLosApartamentos = document.createElement("details")
