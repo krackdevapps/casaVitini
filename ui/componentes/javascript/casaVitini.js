@@ -24571,7 +24571,7 @@ const casaVitini = {
                     }
                 }
             }
-        }
+        },
     },
     view: {}
 }

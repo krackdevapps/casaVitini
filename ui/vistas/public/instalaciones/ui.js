@@ -132,7 +132,7 @@ casaVitini.view = {
             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
         }
         if (respuestaServidor?.ok) {
-            return this.redenderizaContenedorImagen({
+               return this.redenderizaContenedorImagen({
                 respuestaServidor,
                 gridImagenes,
                 instanciaUID
@@ -146,6 +146,7 @@ casaVitini.view = {
         const apartamentoIDV = rS.apartamentoIDV
         const imagenes = rS.imagenes
         imagenes.sort((a, b) => a.posicion - b.posicion);
+
         imagenes.forEach(imagen => {
             const imagenUID = imagen?.imagenUID
             const posicion = imagen?.posicion
@@ -164,7 +165,7 @@ casaVitini.view = {
             const destino = document.querySelector(`[instanciaUID="${instanciaUID}"] [contenedor=gridImagenes]`)
             if (destino) {
                 destino.appendChild(contenedor)
-                this.obtenerImagen({
+                casaVitini.view.obtenerImagen({
                     instanciaUID_destino: contenedor.getAttribute("instanciaUID"),
                     imagenUID,
                     apartamentoIDV
