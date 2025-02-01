@@ -4079,7 +4079,7 @@ casaVitini.view = {
             const infoSel = document.createElement("p")
             infoSel.classList.add("textoCentrado")
 
-            infoSel.textContent = "Determine el tipo de selección que se usara en los calendarios para seleccionarn dias. La visión por día individual le permite selecciona días individualmente y es más granular. La visión basada en rango  hace más cómodo seleccionar rangos de días, pero no es tan granular como la visión basada en días individuales. "
+            infoSel.textContent = "Determine el tipo de selección que se usará en los calendarios para seleccionar los días. La visión por día individual le permite seleccionar días individualmente y es más granular. La visión basada en rango  hace más cómodo seleccionar rangos de días, pero no es tan granular como la visión basada en días individuales.  "
             contenedor.appendChild(infoSel)
 
             const botonHorizontal = document.createElement("div")
