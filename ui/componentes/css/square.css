@@ -1,7 +1,7 @@
 .payment-form {
   padding: 50px 0px 50px 0px;
   width: 100%;
-  
+
   display: flex;
   justify-content: center;
   border-radius: 12px;
@@ -13,11 +13,7 @@
 }
 
 @media (max-width: 1050px) {
-  .payment-form {
-    
-    
-    
-  }
+  .payment-form {}
 }
 
 @media (max-width: 600px) {
@@ -131,6 +127,6 @@
   color: #fff;
   border-radius: 8px;
   border: none;
-  font-family: vitiniFuente, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: defaultFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 }

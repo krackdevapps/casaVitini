@@ -4,15 +4,11 @@ casaVitini.view = {
         main.setAttribute("zonaCSS", "instalaciones")
         const instanciaUID = main.getAttribute("instanciaUID")
 
-        document.body.style.backgroundColor = "#fdefd9"
+        document.body.style.backgroundColor = "rgb(255 188 0 / 0.14)"
         main.style.paddingTop = "10px"
         main.style.maxWidth = "100%"
 
         const marcoElasticoRelativo = main.querySelector("[contenedor=marcoElasticoRelativo]")
-        marcoElasticoRelativo.style.gap = "20px"
-        marcoElasticoRelativo.style.paddingLeft = "20px"
-        marcoElasticoRelativo.style.paddingRight = "20px"
-        marcoElasticoRelativo.style.maxWidth = "2160px"
         main.appendChild(marcoElasticoRelativo)
 
         const imagenesAmpliablesEstaticas = marcoElasticoRelativo.querySelectorAll("[componente=fotoAmpliable]")
@@ -299,12 +295,14 @@ casaVitini.view = {
                 titulo.style.backdropFilter = "blur(50px)"
                 titulo.style.webkitBackdropFilter = "blur(50px)"
                 titulo.style.background = ""
+                //titulo.style.fontSize = "13px"
                 titulo.textContent = "Ver apartamentos"
                 titulo.addEventListener("click", this.irAApartamentos)
             } else {
                 titulo.style.boxShadow = "0px 0px 0px 0px rgba(0, 0, 0, 0)"
                 titulo.style.background = "transparent"
-                titulo.textContent = "Apartamentos"
+               // titulo.style.fontSize = "40px"
+                titulo.textContent = "Nuestros apartamentos"
                 titulo.removeEventListener("click", this.irAApartamentos)
 
             }

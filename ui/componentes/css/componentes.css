@@ -1,3 +1,9 @@
+@font-face {
+    font-family: opensans-semibold;
+    src: url(/componentes/fuentes/Open_Sans/static/OpenSans-SemiBold.ttf) format('truetype');
+    font-style: normal;
+}
+
 main *:not(.sobreControlAnimacionGlobal):not(.sobreControlAnimacionGlobal *) {
     transition: scale 250ms ease-in-out;
 
@@ -4758,7 +4764,7 @@ summary:hover {
 }
 
 .calendarioDiaNoDisponiblePorAntelacion {
-    background: rgb(246, 116, 116) !important;
+    background: rgba(155, 155, 155, 0.7) !important;
     border: 3px solid transparent;
     color: black !important;
     pointer-events: none;
@@ -12919,17 +12925,67 @@ summary:hover {
 
 [zonaCSS=instalaciones] .bloqueCaracteristicas {
     padding: 0px;
-    border-radius: 30px;
+    border-radius: 15px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     height: 400px;
     -webkit-overflow-scrolling: touch;
+    box-shadow: 0px 0px 20px 5px rgb(0 0 0 / 15%);
+    transition: all 2s ease-in-out !important;
+    padding: 14px;
+
+}
+
+[zonacss="instalaciones"] main * {
+    font-family: opensans-semibold !important;
+}
+
+[zonacss="instalaciones"] .marcoElasticoRelativo {
+    padding-left: 80px;
+    padding-right: 80px;
+    max-width: 2160px;
+    gap: 20px;
+    transition: padding 1s linear, scale 250ms ease-in-out !important;
+}
+
+[zonacss="instalaciones"] .marcoElasticoRelativo>* {
+    transition: scale 250ms ease-in-out !important;
+
+}
+
+@media (max-width: 720px) {
+    [zonaCSS=instalaciones] .bloqueCaracteristicas {
+        align-items: center;
+        transition: all 250ms ease-in-out !important;
+        padding: 0px;
+
+    }
+
+    [zonacss="instalaciones"] .marcoElasticoRelativo {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    [zonacss="instalaciones"] .imagenBancoBambu {
+        background-position: 80% center !important;
+    }
 }
 
 [zonaCSS=instalaciones] .imagenPortada {
     height: 80vh;
+    padding: 14px;
+    background-position: center 30% !important;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS=instalaciones] .imagenPortada {
+        padding-right: 0px;
+        padding-left: 0px;
+        padding-bottom: 0px;
+        padding-top: 14px;
+    }
 }
 
 [zonaCSS=instalaciones] .plaza_servicios_superBloque {
@@ -12956,7 +13012,7 @@ summary:hover {
     }
 }
 
-.plaza_servicios_tituloCaracteristica {
+[zonacss="instalaciones"] .plaza_servicios_tituloCaracteristica {
     /* font-weight: bold; */
     margin: 0px;
 }
@@ -12976,22 +13032,40 @@ summary:hover {
         background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/AcaxUIAAAAASUVORK5CYII=');
     }
 
-
-
 }
+
+
 
 .plaza_servicios_contenedorCaracteristicaTexto {
     padding-left: 30px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-right: 30px;
-
+    border-radius: 100px;
     display: flex;
     gap: 0px;
     flex-direction: column;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    color: rgb(255 255 255 / 0.85);
+    font-family: opensans-semibold;
+    /* text-align: center; */
+    width: fit-content;
+    transition: all 1s ease-in-out !important;
+}
+
+@media (max-width: 720px) {
+    .plaza_servicios_contenedorCaracteristicaTexto {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 12px;
+        border-radius: 0px;
+        width: 100%;
+    }
+
 }
 
 .plaza_servicios_iconoCaractaristica {
@@ -13040,9 +13114,12 @@ summary:hover {
 }
 
 .infoCaracteristicaTest {
-    width: 100%;
+    /* width: fit-content; */
     margin-top: -60px;
+
 }
+
+
 
 .imagenTerraza {
     background-image: url("/componentes/imagenes/fotos/image00015.jpeg");
@@ -15977,11 +16054,25 @@ summary:hover {
 }
 
 [zonaCSS="instalaciones"] .textoPresentacion {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 120px;
+    padding-right: 120px;
     text-align: justify;
-
+    font-family: opensans-semibold;
+    font-size: 13px;
+    color: #8D6E63;
+    padding-top: 30px;
 }
+
+@media (max-width: 720px) {
+    [zonaCSS="instalaciones"] .textoPresentacion {
+        padding-left: 20px;
+        padding-right: 20px;
+
+        padding-top: 30px;
+    }
+}
+
+
 
 [zonaCSS="instalaciones"] .cuadradoInicioTexto {
     text-align: center;
