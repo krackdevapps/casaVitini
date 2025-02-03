@@ -1,6 +1,6 @@
 casaVitini.view = {
     start: async function () {
-        
+
         document.body.style.backgroundColor = "rgb(214, 192, 157)"
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
@@ -11,7 +11,7 @@ casaVitini.view = {
         return this.buscarAlojamientoUI()
 
         // if (directorios === "alojamiento") {
-            
+
         //     return this.buscarAlojamientoUI()
         // } else if (directorios === "reserva_confirmada") {
         //     const reservaConfirmada = JSON.parse(localStorage.getItem("reservaConfirmada")) || null
@@ -26,7 +26,7 @@ casaVitini.view = {
         //     }
         // }
     },
-    buscarAlojamientoUI: async function ()  {
+    buscarAlojamientoUI: async function () {
         try {
 
             document.querySelector("html").style.height = "100%"
@@ -35,7 +35,10 @@ casaVitini.view = {
             const reservaEnCache = localStorage.getItem("reservaConfirmada");
             const reservaConfirmadaLocal = reservaEnCache ? JSON.parse(reservaEnCache) : null;
             const main = document.querySelector("main")
-            main.style.padding = "6px"
+            main.style.paddingLeft = "6px"
+            main.style.paddingRight = "6px"
+            main.style.paddingBottom = "6px"
+
             const metodoSelectorPasarela = "view.metodoSelectorPasarela"
             const tituloUI = document.createElement("p")
             tituloUI.classList.add("tituloGris")
@@ -82,7 +85,7 @@ casaVitini.view = {
 
                     const contenedorBanner = document.createElement("div")
                     contenedorBanner.classList.add("bannerTiempoRestante")
-                    contenedorBanner.textContent =this.__sharedMethods__.mensajeNoAceptacion({
+                    contenedorBanner.textContent = this.__sharedMethods__.mensajeNoAceptacion({
                         horaLimite: horaLimiteDelMismoDia,
                         zonaHoraria: zonaHoraria
                     })
@@ -286,14 +289,14 @@ casaVitini.view = {
         }
 
     },
-    metodoSelectorPasarela: async function(e)  {
+    metodoSelectorPasarela: async function (e) {
         const estadoDia = e.target.getAttribute("estadoDia")
         casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia(e)
         if (estadoDia !== "seleccionado") {
             this.asistenteCalendarios()
         }
     },
-    asistenteCalendarios: async function ()  {
+    asistenteCalendarios: async function () {
         const contenedorAlojamiento = document.querySelector("[contenedor=alojamiento]")
         const contenedorEntrada = contenedorAlojamiento.querySelector("[calendario=entrada]")
         const contenedorSalida = contenedorAlojamiento.querySelector("[calendario=salida]")
@@ -342,7 +345,7 @@ casaVitini.view = {
             })
         }
     },
-    buscarApartamentosDisponibles: async function ()  {
+    buscarApartamentosDisponibles: async function () {
 
         document.removeEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
         const fechaEntradaVolatil_Humana = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
@@ -611,7 +614,7 @@ casaVitini.view = {
                 contenedorTotalYOfertas.appendChild(contenedorOfertasUI)
 
 
-               this.aplicaPrecioAlApartamento({
+                this.aplicaPrecioAlApartamento({
                     apartamentoIDV: apartamentoIDV,
                     contenedorOfertas: contenedorOFertasPorCondicion,
                     total: totalInicial
@@ -674,7 +677,7 @@ casaVitini.view = {
                                     habitacionIDV: habitacionIDV,
                                     camaIDV: camaIDV
                                 }
-                               this.seleccionarCama(datosCama)
+                                this.seleccionarCama(datosCama)
                             })
                         }
                         bloqueHabitacionCamas.appendChild(bloqueCama)
@@ -688,7 +691,7 @@ casaVitini.view = {
                     apartamentoIDV: apartamentoIDV,
                     instanciaUID: instanciaUID,
                 }
-               this.obtenerImagenApartamento(metadatos)
+                this.obtenerImagenApartamento(metadatos)
 
             }
 
@@ -709,7 +712,7 @@ casaVitini.view = {
             botonResumenReserva.setAttribute("componente", "botonIrAResumenReserva")
 
             botonResumenReserva.addEventListener("click", () => {
-              this.iraResumenReserva()
+                this.iraResumenReserva()
             })
             marcoBotonFlotanteIrAResumenReserva.append(botonResumenReserva)
 
@@ -728,7 +731,7 @@ casaVitini.view = {
         }
 
     },
-    obtenerImagenApartamento: async function(metadatos) {
+    obtenerImagenApartamento: async function (metadatos) {
         const apartamentoIDV = metadatos.apartamentoIDV
         const instanciaUIDDestino = metadatos.instanciaUID
 
@@ -788,7 +791,7 @@ casaVitini.view = {
             tipoOrigen: "menuNavegador"
         })
     },
-    componenteSelectorCamas: async function(metadatos)  {
+    componenteSelectorCamas: async function (metadatos) {
         let capacidadPernoctativa = metadatos.getAttribute("capacidadPernoctativa")
         let habitacionIDV = metadatos.getAttribute("habitacionIDV")
         let habitacionUI = metadatos.getAttribute("habitacionUI")
@@ -860,14 +863,14 @@ casaVitini.view = {
             BotonResumenReserva.setAttribute("class", "botonResumenReserva")
             BotonResumenReserva.textContent = "Ir al resumen de la reserva"
             BotonResumenReserva.addEventListener("click", () => {
-               this.iraResumenReserva()
+                this.iraResumenReserva()
             })
             bloqueBotonResumenReserva.appendChild(BotonResumenReserva)
             let bloquePasosReserva = document.querySelector(".bloquePasosReservaNuevo")
             bloquePasosReserva.appendChild(bloqueBotonResumenReserva)
         }
     },
-    actualizarPreciosPorSeleccion: async function ()  {
+    actualizarPreciosPorSeleccion: async function () {
         const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
         const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
 
@@ -898,7 +901,7 @@ casaVitini.view = {
                 const apartamentoIDV = apartamento.getAttribute("apartamentoIDV")
                 const totalInicial = apartamento.querySelector("[componente=valorTotal]").getAttribute("totalInicial")
                 const contenedorOfertasInicial = JSON.parse(apartamento.querySelector("[componente=valorTotal]").getAttribute("contenedorOfertasInicial")) || []
-            this.aplicaPrecioAlApartamento({
+                this.aplicaPrecioAlApartamento({
                     apartamentoIDV: apartamentoIDV,
                     contenedorOfertas: contenedorOfertasInicial,
                     total: totalInicial
@@ -955,7 +958,7 @@ casaVitini.view = {
                     const selectorContenedorApartamento = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"][instanciaUID="${instanciaUID}"]`)
                     if (selectorContenedorApartamento) {
                         const valorFinalUI = preciosPorSeleccion[apartamentoIDV].precioEnBaseASeleccion
-                       this.aplicaPrecioAlApartamento({
+                        this.aplicaPrecioAlApartamento({
                             apartamentoIDV,
                             contenedorOfertas: contenedorOFertasPorCondicion,
                             total: valorFinalUI
@@ -965,7 +968,7 @@ casaVitini.view = {
             }
         }
     },
-    aplicaPrecioAlApartamento: async function(data) {
+    aplicaPrecioAlApartamento: async function (data) {
         const apartamentoIDV = data.apartamentoIDV
         const total = data.total
         const contenedorOfertas = data.contenedorOfertas

@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import { vitiniCrypto } from "../../shared/VitiniIDX/vitiniCrypto.mjs";
-import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
 import { actualizarIntentoLogin } from "../../infraestructure/repository/usuarios/actualizarIntentoLogin.mjs";
 import { obtenerIDX } from "../../infraestructure/repository/usuarios/obtenerIDX.mjs";
 import { eliminarSessionPorRolPorCaducidad } from "../../infraestructure/repository/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
@@ -19,6 +18,7 @@ export const conectar = async (entrada) => {
             const m = "No se esperan mas de dos llaves en el objeto de identificacion"
             throw new Error(m)
         }
+        
         const usuarioRaw = entrada.body.usuario;
         const clave = entrada.body.clave;
         validador({

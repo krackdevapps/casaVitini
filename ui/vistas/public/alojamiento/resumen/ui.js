@@ -11,6 +11,7 @@ casaVitini.view = {
         })
         if (Object.keys(reservaLocal).length === 0) {
             const ui = this.uiConReserva()
+            console.log("ui", ui)
             main.appendChild(ui)
         } else {
             const fechaEntrada = reservaLocal.fechaEntrada
@@ -50,7 +51,7 @@ casaVitini.view = {
         }
 
     },
-    uiConReserva: async function () {
+    uiConReserva:  function () {
         const reservaConfirmada = JSON.parse(sessionStorage.getItem("reservaConfirmada"))
 
         const contenedor = document.createElement("div")
@@ -60,9 +61,15 @@ casaVitini.view = {
             "padding14"
         )
         contenedor.setAttribute("componente", "espacioConfirmarReserva")
+
+        const info = document.createElement("p")
+        info.classList.add("padding14")
+        info.textContent = "Estás en la pantalla de resumen de tu reserva, pero no has seleccionado apartamentos. Por favor, dirígete e al inicio del proceso de la reserva."
+        contenedor.appendChild(info)
+
         if (reservaConfirmada) {
             const botonIrAReservaConfirmada = document.createElement("a")
-            botonIrAReservaConfirmada.classList.add("plaza_reservas_reservaConfirmada_banner")
+            botonIrAReservaConfirmada.classList.add("botonV1BlancoIzquierda")
             botonIrAReservaConfirmada.textContent = "Tienes una reserva guardada en la cache de tu navegador. Esta reserva se ha guardado tras confirmar tu reserva. Para ver los detalles de la confirmación pulsa aquí. Si borras la cache de tu navegador esta información desaparecerá. Si quieres un acceso persistente puedes crear un VitiniID desde MiCasa."
             botonIrAReservaConfirmada.setAttribute("href", "/alojamiento/reserva_confirmada")
             botonIrAReservaConfirmada.setAttribute("vista", "/alojamiento/reserva_confirmada")
@@ -72,7 +79,7 @@ casaVitini.view = {
 
 
         const botonIrAlInicioDelProcesoDeReserva = document.createElement("a")
-        botonIrAlInicioDelProcesoDeReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
+        botonIrAlInicioDelProcesoDeReserva.classList.add("botonV1BlancoIzquierda")
         botonIrAlInicioDelProcesoDeReserva.textContent = "Ir al incio del proceso de la reserva"
         botonIrAlInicioDelProcesoDeReserva.setAttribute("href", "/alojamiento")
         botonIrAlInicioDelProcesoDeReserva.setAttribute("vista", "/alojamiento")

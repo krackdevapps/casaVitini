@@ -3391,6 +3391,8 @@ const casaVitini = {
                                 const fechaMesAno = new Date(anoActual, mesActual - 1);
                                 return fechaMesAno >= inicioMesAno && fechaMesAno <= finMesAno;
                             };
+                            const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
+
                             const controlLimitePasado = {
                                 zona: "administracion/reservas/detallesReserva/global/obtenerElasticidadDelRango",
                                 reservaUID: String(reservaUID),
@@ -3399,6 +3401,8 @@ const casaVitini = {
                                 sentidoRango: "pasado"
                             }
                             const resolverLimitePasado = await casaVitini.shell.servidor(controlLimitePasado)
+                            const fechaLimitePasado = {}
+
                             if (resolverLimitePasado.error) {
                                 casaVitini.shell.controladoresUI.limpiarTodoElementoFlotante()
                                 const selectorCalendarioRenderizados = document.querySelectorAll("[componente=bloqueCalendario]")
@@ -3429,8 +3433,6 @@ const casaVitini = {
                                 })
                                 return
                             }
-                            const fechaLimitePasado = {}
-                            const infoCalendario = selectorCalendarioRenderizado.querySelector("[componente=infoCalendario]")
 
                             marcoCalendario.setAttribute("perfilMes", perfilMes)
                             for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {

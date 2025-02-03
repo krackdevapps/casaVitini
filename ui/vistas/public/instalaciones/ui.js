@@ -302,7 +302,7 @@ casaVitini.view = {
                 titulo.style.boxShadow = "0px 0px 0px 0px rgba(0, 0, 0, 0)"
                 titulo.style.background = "transparent"
                // titulo.style.fontSize = "40px"
-                titulo.textContent = "Nuestros apartamentos"
+                titulo.textContent = "Apartamentos"
                 titulo.removeEventListener("click", this.irAApartamentos)
 
             }

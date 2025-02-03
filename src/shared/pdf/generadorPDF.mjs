@@ -595,7 +595,7 @@ export const generadorPDF = async (reserva) => {
         }
         docDefinition.content.push(mensaje1)
         const mensaje2 = {
-            text: 'Si necesita ponerse en contacto con nosotros, puede enviarnos un mail a casavitini@casavitini.com, tambien puede encontrar mas métodos de contacto en https://casavitini.com/contacto.',
+            text: 'Si necesita ponerse en contacto con nosotros, puede encontrar mas métodos de contacto en https://casavitini.com/contacto.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje2)
@@ -608,7 +608,7 @@ export const generadorPDF = async (reserva) => {
         }
         docDefinition.content.push(mensaje3)
         const mensaje4 = {
-            text: 'Este documento es meramente informativo. Para realizar el check-in, es necesario presentar algún tipo de documento identificativo, como un pasaporte o un documento nacional de identidad.',
+            text: 'Este documento es meramente informativo. Para realizar el check-in, es necesario presentar algún documento identificativo, como un pasaporte o un documento nacional de identidad.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje4)

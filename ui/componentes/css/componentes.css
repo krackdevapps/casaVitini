@@ -7460,8 +7460,8 @@ summary:hover {
 
 @media (max-width: 620px) {
     [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorPorDias {
-    display: flex;
-    flex-direction: column;
+        display: flex;
+        flex-direction: column;
     }
 
 }
@@ -8865,8 +8865,8 @@ summary:hover {
 }
 
 @media (max-width: 720px) {
-    [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesloqueos_contenedorBloquesGlobales { 
-        grid-template-columns:  1fr !important;
+    [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesloqueos_contenedorBloquesGlobales {
+        grid-template-columns: 1fr !important;
     }
 }
 
@@ -11068,7 +11068,7 @@ summary:hover {
 
 [zonaCSS="administracion/configuracion"] .administracion_configuracion_informacion {
     border-radius: 12px;
-    padding: 6px;
+    padding: 12px;
     display: flex;
     justify-content: center;
 }
@@ -13061,16 +13061,12 @@ summary:hover {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center center;
-    border-radius: 12px;
     transition: background-image 500ms linear;
 
     @starting-style {
         background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/AcaxUIAAAAASUVORK5CYII=');
     }
-
 }
-
-
 
 .plaza_servicios_contenedorCaracteristicaTexto {
     padding-left: 30px;
