@@ -7458,6 +7458,14 @@ summary:hover {
     grid-template-columns: repeat(7, 1fr);
 }
 
+@media (max-width: 620px) {
+    [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorPorDias {
+    display: flex;
+    flex-direction: column;
+    }
+
+}
+
 
 [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI {
     background: rgba(255, 255, 255, 0.3);
@@ -7537,6 +7545,15 @@ summary:hover {
     align-items: stretch;
 }
 
+@media (max-width: 520px) {
+    [zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontalV2 {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+/* 
 [zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontalV2 {
 
     display: grid;
@@ -7548,7 +7565,7 @@ summary:hover {
     justify-content: center;
     align-content: center;
     align-items: stretch;
-}
+} */
 
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalModoCrear {
@@ -7608,6 +7625,13 @@ summary:hover {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 6px
+}
+
+@media (max-width: 520px) {
+    [zonaCSS="/administracion/servicios/servicioUI"] .contenedorSelectoresGlobales {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorZonaOferta {
@@ -8831,7 +8855,6 @@ summary:hover {
 [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesloqueos_contenedorBloquesGlobales {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     grid-gap: 0px;
     grid-auto-rows: minmax(auto, auto);
     padding: 0px;
@@ -8839,6 +8862,12 @@ summary:hover {
     gap: 6px;
     justify-content: center;
     align-content: center;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesloqueos_contenedorBloquesGlobales { 
+        grid-template-columns:  1fr !important;
+    }
 }
 
 [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorTipoBloqueoV2 {
@@ -9402,6 +9431,13 @@ summary:hover {
 @media (max-width: 550px) {
     [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
         grid-template-columns: 1fr 1fr;
+
+    }
+}
+
+@media (max-width:390px) {
+    [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
+        grid-template-columns: 1fr;
 
     }
 }
@@ -12456,7 +12492,7 @@ summary:hover {
     justify-content: center;
 }
 
-[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .administracion_bloqueos_listaBloqueos_titutloTipoBloqueo {
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .fechaDatoUI {
     display: flex;
     justify-content: flex-start;
 }
@@ -15621,6 +15657,10 @@ summary:hover {
     flex-direction: row;
 }
 
+.flexHorizontal_wrap {
+    flex-wrap: wrap;
+}
+
 
 .elementosExpandidos {
     justify-content: space-between;
@@ -16441,8 +16481,19 @@ textarea {
 [zonaCSS="/alojamiento"] .botonOfertaEnApartamento:hover {
     background: rgba(0, 0, 0, 0.8);
     color: white;
+}
 
 
+[zonaCSS="/alojamiento"] .contenedorNumeroTituar {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="/alojamiento"] .contenedorNumeroTituar {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
 .breakWordkAll {

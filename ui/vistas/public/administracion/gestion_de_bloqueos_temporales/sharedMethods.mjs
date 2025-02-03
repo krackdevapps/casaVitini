@@ -355,7 +355,7 @@ export const sharedMethodsTemporalLocks = {
             botonModificiar.classList.add("botonV2_negrita")
             botonModificiar.textContent = "Modificiar bloqueo"
             botonModificiar.addEventListener("click", () => {
-               this.controladorBotonesGlobales.guardarEliminar()
+                this.controladorBotonesGlobales.guardarEliminar()
             })
             contenedorBotones.appendChild(botonModificiar)
         }
@@ -372,8 +372,8 @@ export const sharedMethodsTemporalLocks = {
             botonCancelarCambios.classList.add("botonV2_negrita")
             botonCancelarCambios.textContent = "Cancelar cambios"
             botonCancelarCambios.addEventListener("click", () => {
-             this.controladorBotonesGlobales.modificar()
-             casaVitini.view.detallesDelBloqueo.cancelarCambios()
+                this.controladorBotonesGlobales.modificar()
+                casaVitini.view.detallesDelBloqueo.cancelarCambios()
             })
             contenedorBotones.appendChild(botonCancelarCambios)
 
@@ -395,12 +395,12 @@ export const sharedMethodsTemporalLocks = {
             if (selectorContenedorFechas) {
                 selectorContenedorFechas.style.display = "none"
             }
-        }
-        if (tipoBloqueo === "rangoTemporal") {
-            if (selectorContenedorFechas) {
-                selectorContenedorFechas.style.display = "flex"
+        } else
+            if (tipoBloqueo === "rangoTemporal") {
+                if (selectorContenedorFechas) {
+                    selectorContenedorFechas.style.display = "flex"
+                }
             }
-        }
     },
     controladorBotonesGlobales: {
         crear: function () {
@@ -441,8 +441,7 @@ export const sharedMethodsTemporalLocks = {
         if (modo === "estadoConDatos") {
             fechaInicioUI = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaInicio)
             fechaFinUI = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaFin)
-        }
-        if (modo === "estadoInicial") {
+        } else if (modo === "estadoInicial") {
             fechaInicioUI = "(Seleccionar fecha de inicio)"
             fechaFinUI = "(Seleccionar fecha de fin)"
         }
@@ -521,7 +520,223 @@ export const sharedMethodsTemporalLocks = {
         contenedorFechaSalida.appendChild(salidaUI)
         contenedorFecha.appendChild(contenedorFechaSalida)
         return contenedorFecha
-    },     
+    },
+    bloqueoUI: async function (data) {
+
+        const modoUI = data.modoUI
+
+        const selectorEspacioBloqueos = document.querySelector("[componente=bloqueosTemporales]")
+
+        const contenedorGlobal = document.createElement("div")
+        contenedorGlobal.setAttribute("componente", "contenedorGlobal")
+        contenedorGlobal.classList.add("detallesBloqueos_contenedorGlobal")
+        selectorEspacioBloqueos.appendChild(contenedorGlobal)
+
+        const bloqueBloqueoUI = document.createElement("div")
+        bloqueBloqueoUI.classList.add("detallesBloqueos_bloqueBloqueoUI")
+        bloqueBloqueoUI.setAttribute("componente", "contenedorDelBloqueo")
+
+        contenedorGlobal.appendChild(bloqueBloqueoUI)
+
+        const contenedorTipoBloqueo = document.createElement("div")
+        contenedorTipoBloqueo.classList.add("detallesloqueos_contenedorBloquesGlobales")
+        contenedorTipoBloqueo.setAttribute("componente", "globalData")
+        bloqueBloqueoUI.appendChild(contenedorTipoBloqueo)
+
+        const contenedorApartamentosV2 = document.createElement("div")
+        contenedorApartamentosV2.classList.add("detallesBloqueo_contenedorTipoBloqueoV2")
+        contenedorTipoBloqueo.appendChild(contenedorApartamentosV2)
+
+        const tipoApartamentoTituloUI = document.createElement("div")
+        tipoApartamentoTituloUI.classList.add("listaBloqueos_titulo")
+        tipoApartamentoTituloUI.classList.add("negrita")
+        tipoApartamentoTituloUI.textContent = "Apartamento: "
+        contenedorApartamentosV2.appendChild(tipoApartamentoTituloUI)
+
+        const contenedorTipoBloqueoV2 = document.createElement("div")
+        contenedorTipoBloqueoV2.classList.add("detallesBloqueo_contenedorTipoBloqueoV2")
+        contenedorTipoBloqueo.appendChild(contenedorTipoBloqueoV2)
+
+        const tipoBloqueoTituloUI = document.createElement("div")
+        tipoBloqueoTituloUI.classList.add("listaBloqueos_titulo")
+        tipoBloqueoTituloUI.classList.add("negrita")
+        tipoBloqueoTituloUI.textContent = "Tipo bloqueo"
+        contenedorTipoBloqueoV2.appendChild(tipoBloqueoTituloUI)
+
+        const tipoBloqueoUI = document.createElement("select")
+        tipoBloqueoUI.classList.add("botonV1BlancoIzquierda_campo")
+        tipoBloqueoUI.setAttribute("datoBloqueo", "tipoBloqueoIDV")
+        tipoBloqueoUI.addEventListener("change", (e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e) })
+        contenedorTipoBloqueoV2.appendChild(tipoBloqueoUI)
+
+        const opcion_permamente = document.createElement("option");
+        opcion_permamente.value = "permanente";
+        opcion_permamente.text = "Permanente";
+        tipoBloqueoUI.add(opcion_permamente);
+
+        const opcion_rangoTemporal = document.createElement("option");
+        opcion_rangoTemporal.value = "rangoTemporal";
+        opcion_rangoTemporal.text = "Rango temporal";
+        tipoBloqueoUI.add(opcion_rangoTemporal);
 
 
+        const contenedorZonaUI = document.createElement("div")
+        contenedorZonaUI.classList.add("detallesBloqueo_contenedorZonaUI")
+        const tituloZonaUI = document.createElement("div")
+        tituloZonaUI.classList.add("listaBloqueos_titulo")
+        tituloZonaUI.classList.add("negrita")
+        tituloZonaUI.textContent = "Contexto de aplicación"
+        contenedorZonaUI.appendChild(tituloZonaUI)
+
+        const zonaUI = document.createElement("select")
+        zonaUI.classList.add("botonV1BlancoIzquierda_campo")
+        zonaUI.setAttribute("datoBloqueo", "zonaIDV")
+        const opcion_publico = document.createElement("option");
+
+        opcion_publico.value = "publica";
+        opcion_publico.text = "Público - Zona pública";
+        zonaUI.add(opcion_publico);
+        const opcion_privado = document.createElement("option");
+
+        opcion_privado.value = "privada";
+        opcion_privado.text = "Privado - Zona administrativa";
+        zonaUI.add(opcion_privado);
+        const opcion_global = document.createElement("option");
+
+        opcion_global.value = "global";
+        opcion_global.text = "Global - Zona pública y administrativa";
+        zonaUI.add(opcion_global);
+        contenedorZonaUI.appendChild(zonaUI)
+        contenedorTipoBloqueo.appendChild(contenedorZonaUI)
+
+        const motivoUI = document.createElement("textarea")
+        motivoUI.classList.add("botonV1BlancoIzquierda_campo")
+        motivoUI.setAttribute("componente", "contenedorMotivo")
+        motivoUI.setAttribute("datoBloqueo", "motivoUI")
+        motivoUI.rows = 10
+
+        bloqueBloqueoUI.appendChild(motivoUI)
+
+        if (modoUI === "editar") {
+            const bloqueoData = data.bloqueoData
+            const apartamentoIDV = bloqueoData?.apartamentoIDV
+            const apartamentoUI = bloqueoData?.apartamentoUI
+            const detallesDelBloqueo = bloqueoData?.ok
+
+            const tipoBloqueoIDV = detallesDelBloqueo.tipoBloqueoIDV
+            const fechaInicio = detallesDelBloqueo.fechaInicio
+            const fechaFin = detallesDelBloqueo.fechaFin
+            const motivo = detallesDelBloqueo.motivo
+            const zonaIDV = detallesDelBloqueo.zonaIDV
+            const bloqueoUID = detallesDelBloqueo.bloqueoUID
+
+            bloqueBloqueoUI.setAttribute("bloqueoUID", bloqueoUID)
+            bloqueBloqueoUI.setAttribute("apartamentoIDV", apartamentoIDV)
+            bloqueBloqueoUI.style.pointerEvents = "none"
+            contenedorTipoBloqueo.style.gridTemplateColumns = "1fr 1fr"
+
+            tipoBloqueoUI.setAttribute("datoInicial", tipoBloqueoIDV)
+            zonaUI.setAttribute("datoInicial", zonaIDV)
+
+            contenedorApartamentosV2.style.display = "none"
+
+            let selectorData
+            if (tipoBloqueoIDV === "rangoTemporal") {
+                opcion_rangoTemporal.selected = true;
+                selectorData = {
+                    modo: "estadoConDatos",
+                    fechaInicio: fechaInicio,
+                    fechaFin: fechaFin
+                }
+
+            } else if (tipoBloqueoIDV === "permanente") {
+                opcion_permamente.selected = true;
+                selectorData = {
+                    modo: "estadoInicial",
+                }
+            }
+
+            const selectorRangoUI = casaVitini.view.__sharedMethods__.selectorRangoTemporalUI(selectorData)
+            contenedorTipoBloqueo.insertAdjacentElement('afterend', selectorRangoUI);
+
+            let zonaDefinicionUI
+            if (zonaIDV === "privada") {
+                zonaDefinicionUI = "Privado - Solo se aplica a la zona de administración"
+                opcion_privado.selected = true;
+
+            } else if (zonaIDV === "publica") {
+                zonaDefinicionUI = "Público - Solo se aplica a la zona publica"
+                opcion_publico.selected = true;
+
+            } else if (zonaIDV === "global") {
+                zonaDefinicionUI = "Global - Se aplica a toda la zona, tando pública como administrativa"
+                opcion_global.selected = true;
+            }
+
+            if (motivo === null) {
+                motivoUI.setAttribute("datoInicial", "")
+            } else {
+                motivoUI.setAttribute("datoInicial", motivo)
+            }
+            if (motivo === null) {
+                motivoUI.placeholder = "Este bloqueo no tiene ningún motivo definido, sería recomendable definir un motivo para poder identificar rápidamente porque existe este bloqueo"
+            }
+            motivoUI.textContent = motivo
+            casaVitini.view.__sharedMethods__.controladorBotonesGlobales.modificar()
+
+        } else if (modoUI === "crear") {
+
+            contenedorTipoBloqueo.style.gridTemplateColumns = "1fr 1fr 1fr"
+
+            const tipoApartamentoUI = document.createElement("select")
+            tipoApartamentoUI.classList.add("botonV1BlancoIzquierda_campo")
+            tipoApartamentoUI.setAttribute("datoBloqueo", "apartamento")
+            tipoApartamentoUI.addEventListener("change", (e) => { casaVitini.view.__sharedMethods__.controladorSelectorRangoTemporalUI(e) })
+            contenedorApartamentosV2.appendChild(tipoApartamentoUI)
+
+            const tipoApartamentoInicio = document.createElement("option");
+            tipoApartamentoInicio.value = "";
+            tipoApartamentoInicio.selected = true;
+            tipoApartamentoInicio.disabled = true;
+            tipoApartamentoInicio.text = "Seleccionar el apartamento";
+            tipoApartamentoUI.add(tipoApartamentoInicio);
+
+
+            const selectorRangoUI = casaVitini.view.__sharedMethods__.selectorRangoTemporalUI({
+                modo: "estadoInicial"
+            })
+            contenedorTipoBloqueo.insertAdjacentElement('afterend', selectorRangoUI);
+
+            const respuestaServidor = await casaVitini.shell.servidor({
+                zona: "administracion/componentes/apartamentosDisponiblesConfigurados"
+            })
+
+            if (respuestaServidor?.error) {
+                const info = document.createElement("div")
+                info.classList.add("textoCentrado", "negrita")
+                info.textContent = respuestaServidor?.error
+                contenedorGlobal.appendChild(info)
+                return
+            } else if (respuestaServidor?.ok) {
+                const apartamentos = respuestaServidor.ok
+                if (apartamentos?.length === 0) {
+                    const opcion = document.createElement("option");
+                    opcion.value = "";
+                    opcion.disabled = true;
+                    opcion.text = "No hay ningun apartamento disponible";
+                    tipoApartamentoUI.add(opcion);
+                } else if (apartamentos?.length > 0) {
+                    apartamentos.forEach((detallesApartamento) => {
+                        const apartamentoIDV = detallesApartamento.apartamentoIDV
+                        const aparatmentoUI = detallesApartamento.apartamentoUI
+                        const opcion = document.createElement("option");
+                        opcion.value = apartamentoIDV;
+                        opcion.text = aparatmentoUI;
+                        tipoApartamentoUI.add(opcion);
+                    })
+                }
+            }
+            casaVitini.view.__sharedMethods__.controladorBotonesGlobales.crear()
+        }
+    }
 }

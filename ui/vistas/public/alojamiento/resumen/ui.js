@@ -44,7 +44,7 @@ casaVitini.view = {
                 selectorOfertasComprobadas.appendChild(spinner)
                 await this.descuentos.contenedorCodigoDescuentos.recuperarOfertasPorArrayDeCodigos()
             }
-            await this.actualizarPrecioEnUI({
+            await casaVitini.view.actualizarPrecioEnUI({
                 aplicarUIData: "no"
             })
         }
@@ -376,7 +376,8 @@ casaVitini.view = {
 
         const contenedorNumero = document.createElement("div")
         contenedorNumero.classList.add(
-            "gridHorizontal2C_personalizado",
+            "flexVertical",
+            "gap10"
         )
         contenedorTitular.appendChild(contenedorNumero)
 
@@ -387,10 +388,10 @@ casaVitini.view = {
         contenedorNumero.appendChild(listaCodigosInternacionales)
 
         const campoTelefonoTitular = document.createElement("input")
-        campoTelefonoTitular.style.borderBottomLeftRadius = "0px"
-        campoTelefonoTitular.style.borderTopLeftRadius = "0px"
-        campoTelefonoTitular.style.borderBottomRightRadius = "14px"
-        campoTelefonoTitular.style.borderTopRightRadius = "14px"
+        // campoTelefonoTitular.style.borderBottomLeftRadius = "0px"
+        // campoTelefonoTitular.style.borderTopLeftRadius = "0px"
+        // campoTelefonoTitular.style.borderBottomRightRadius = "14px"
+        // campoTelefonoTitular.style.borderTopRightRadius = "14px"
         campoTelefonoTitular.classList.add(
             "campoTitular"
         )
@@ -785,7 +786,7 @@ casaVitini.view = {
 
                 const errorUI = this.errorUI(respuestaServidor?.contenedorErrorInfoObsoleta)
                 contenedor.appendChild(errorUI)
-                this.actualizarPrecioEnUI({
+                casaVitini.view.actualizarPrecioEnUI({
                     aplicarUIData: "si"
                 })
             } else {
@@ -1504,7 +1505,7 @@ casaVitini.view = {
                     })
                     sessionStorage.setItem("preReservaLocal", JSON.stringify(reservaLocal))
                 }
-                await this.actualizarPrecioEnUI({
+                await casaVitini.view.actualizarPrecioEnUI({
                     aplicarUIData: "si"
                 })
             },
@@ -1595,7 +1596,7 @@ casaVitini.view = {
                     delete reservaLocal?.codigosDescuento
                 }
                 sessionStorage.setItem("preReservaLocal", JSON.stringify(reservaLocal))
-                await this.actualizarPrecioEnUI({
+                await casaVitini.view.actualizarPrecioEnUI({
                     aplicarUIData: "si"
                 })
             },
@@ -1971,7 +1972,7 @@ casaVitini.view = {
                 servicioUI.setAttribute("estado", "activado")
                 selectorIndicador.style.background = "#00ff00"
             }
-            this.actualizarPrecioEnUI({
+            casaVitini.view.actualizarPrecioEnUI({
                 aplicarUIData: "si"
             })
 
@@ -2408,10 +2409,10 @@ Servicios que usted habia seleccionado y que han experimentado una actualizació
 
         const s = document.createElement("select")
         //s.classList.add("claseapraahroa")
-        s.style.borderBottomLeftRadius = "14px"
-        s.style.borderTopLeftRadius = "14px"
-        s.style.borderBottomRightRadius = "0px"
-        s.style.borderTopRightRadius = "0px"
+        // s.style.borderBottomLeftRadius = "14px"
+        // s.style.borderTopLeftRadius = "14px"
+        // s.style.borderBottomRightRadius = "0px"
+        // s.style.borderTopRightRadius = "0px"
 
         s.setAttribute("campo", "codigoInternacional")
         const titulo = document.createElement("option");

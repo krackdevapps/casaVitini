@@ -2529,7 +2529,7 @@ casaVitini.view = {
 
                     const marcoMenuResponsivo = document.createElement("div");
                     marcoMenuResponsivo.setAttribute("class", "menuGlobalSimuiacion_responsivo");
-                    marcoMenuResponsivo.textContent = "Menú reserva"
+                    marcoMenuResponsivo.textContent = "Menú simulación"
                     marcoMenuResponsivo.addEventListener("click", () => {
                         document.body.style.overflow = "hidden";
                         this.desplegarMenuResponsivo({
