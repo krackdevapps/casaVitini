@@ -238,16 +238,16 @@ casaVitini.view = {
                     const contenedorZonaUI = document.createElement("div")
                     contenedorZonaUI.classList.add("listaBloqueo_contenedorZonaUI")
                     const tituloZonaUI = document.createElement("div")
-                    tituloZonaUI.classList.add("negrita", "textoCentrado")
+                    tituloZonaUI.classList.add("negrita")
                     tituloZonaUI.textContent = "Contexto de aplicación"
                     contenedorZonaUI.appendChild(tituloZonaUI)
                     let zonaDefinicionUI
-                    if (zonaIDV === "privado") {
+                    console.group("zonaIDV", zonaIDV)
+                    if (zonaIDV === "privada") {
                         zonaDefinicionUI = "Privado - Solo se aplica a la zona de administración"
-                    }
-                    if (zonaIDV === "publica") {
+                    } else if (zonaIDV === "publica") {
                         zonaDefinicionUI = "Público - Solo se aplica a la zona publica"
-                    } if (zonaIDV === "global") {
+                    } else if (zonaIDV === "global") {
                         zonaDefinicionUI = "Global - Se aplica a toda la zona, tando pública como administrativa"
                     }
                     const zonaUI = document.createElement("div")
@@ -270,7 +270,7 @@ casaVitini.view = {
                     motivoBloqueoTituloUI.classList.add("negrita")
                     motivoBloqueoTituloUI.textContent = "Motivo del bloqueo"
                     contenedorMotivoBloqueo.appendChild(motivoBloqueoTituloUI)
-                    const motivoUI = document.createElement("div")
+                    const motivoUI = document.createElement("pre")
                     motivoUI.classList.add("listaBloqueos_motivo")
                     motivoUI.textContent = motivoFinal
                     contenedorMotivoBloqueo.appendChild(motivoUI)
@@ -362,7 +362,7 @@ casaVitini.view = {
                     modoUI: "editar",
                     bloqueoData: respuestaServidor
                 })
-              
+
                 // const contenedorGlobal = document.createElement("div")
                 // contenedorGlobal.classList.add("detallesBloqueos_contenedorGlobal")
                 // contenedorGlobal.setAttribute("componente", "contenedorGlobal")

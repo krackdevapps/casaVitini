@@ -4,6 +4,12 @@
     font-style: normal;
 }
 
+
+@font-face {
+    font-family: opensans-variable;
+    src: url(/componentes/fuentes/Open_Sans/OpenSans-variable.ttf) format('truetype');
+}
+
 main *:not(.sobreControlAnimacionGlobal):not(.sobreControlAnimacionGlobal *) {
     transition: scale 250ms ease-in-out;
 
@@ -8773,6 +8779,7 @@ summary:hover {
 
 [zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_motivo {
     padding: 0px;
+    white-space: pre-wrap;
 }
 
 .listaBloqueo_contenedorFecha {
@@ -12971,6 +12978,7 @@ summary:hover {
     box-shadow: 0px 0px 20px 5px rgb(0 0 0 / 15%);
     transition: all 2s ease-in-out !important;
     padding: 14px;
+    /* align-items: center; */
 
 }
 
@@ -13012,7 +13020,9 @@ summary:hover {
 [zonaCSS=instalaciones] .imagenPortada {
     height: 80vh;
     padding: 14px;
-    background-position: center 30% !important;
+    margin-left: 100px;
+    margin-right: 100px;
+    background-position: center center !important;
 }
 
 @media (max-width: 720px) {
@@ -13021,6 +13031,8 @@ summary:hover {
         padding-left: 0px;
         padding-bottom: 0px;
         padding-top: 14px;
+        margin-left: 0px;
+        padding-right: 0px;
     }
 }
 
@@ -13051,6 +13063,8 @@ summary:hover {
 [zonacss="instalaciones"] .plaza_servicios_tituloCaracteristica {
     /* font-weight: bold; */
     margin: 0px;
+    font-family: opensans-variable;
+    font-weight: 600;
 }
 
 [zonaCSS="/alojamiento"] .fondoAlojamiento {
@@ -13068,6 +13082,65 @@ summary:hover {
     }
 }
 
+[zonacss="instalaciones"] .photoContainer {
+    width: 100%;
+    max-width: 100%;
+    overflow: scroll;
+    padding-bottom: 8px;
+    /* z-index: 10; */
+    /* display: flex;
+    justify-content: center; */
+
+}
+
+[zonacss="instalaciones"] .photoContainer::-webkit-scrollbar {
+    /* display: none; */
+}
+
+/* [zonacss="instalaciones"] .photoGrid {
+    display: grid;
+    height: 300px;
+    transition: all 2s ease-in-out !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    scrollbar-width: none; 
+} */
+[zonacss="instalaciones"] .overridePiscina {
+    background-position: center 75% !important;
+
+}
+
+[zonacss="instalaciones"] .photoGrid {
+    display: grid;
+    height: 300px;
+    transition: all 2s ease-in-out !important;
+    grid-gap: 10px;
+    /* scrollbar-width: none;  */
+    padding: 0px;
+    height: 150px;
+    grid-template-rows: 1fr;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 150px;
+}
+
+@media (max-width: 720px) {
+    [zonacss="instalaciones"] .photoGrid {
+        padding: 0px;
+        height: 150px;
+        grid-template-rows: 1fr;
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: 150px;
+    }
+}
+
+[zonacss="instalaciones"] .photoInGrid {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
 .plaza_servicios_contenedorCaracteristicaTexto {
     padding-left: 30px;
     padding-top: 10px;
@@ -13077,8 +13150,8 @@ summary:hover {
     display: flex;
     gap: 0px;
     flex-direction: column;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     background: rgba(255, 255, 255, 0.1);
     color: rgb(255 255 255 / 0.85);
     font-family: opensans-semibold;
@@ -13148,7 +13221,7 @@ summary:hover {
 .infoCaracteristicaTest {
     /* width: fit-content; */
     margin-top: -60px;
-
+    text-align: center;
 }
 
 
@@ -14672,6 +14745,12 @@ summary:hover {
     background: transparent;
 }
 
+
+[zonaCSS=instalaciones] .contenedorImagenesInstalaciones {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
 [zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento {
     background: #f6e1af;

@@ -28,7 +28,7 @@ casaVitini.view = {
         contenedorBotones.classList.add("gestionDeOfertasContenedorBotones", "gap6")
 
         const botonIrAlCalendario = document.createElement("a")
-        botonIrAlCalendario.classList.add("gestionDeOfertasBotonCrearOferta")
+        botonIrAlCalendario.classList.add("botonV1Blanco")
         botonIrAlCalendario.textContent = "Ver comportamientos en el calendario"
         botonIrAlCalendario.setAttribute("href", "/administracion/calendario/capa:todos_los_comportamientos_de_precio/capa:todos_los_precios_sumados")
         botonIrAlCalendario.setAttribute("vista", "/administracion/calendario/capa:todos_los_comportamientos_de_precio/capa:todos_los_precios_sumados")
@@ -37,7 +37,7 @@ casaVitini.view = {
 
 
         const botonCrearOfertas = document.createElement("a")
-        botonCrearOfertas.classList.add("gestionDeOfertasBotonCrearOferta")
+        botonCrearOfertas.classList.add("botonV1Blanco")
         botonCrearOfertas.textContent = "Crear un comportamiento de precios"
         botonCrearOfertas.setAttribute("href", "/administracion/comportamiento_de_precios/crear_comportamiento")
         botonCrearOfertas.setAttribute("vista", "/administracion/comportamiento_de_precios/crear_comportamiento")

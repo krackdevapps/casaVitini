@@ -40,7 +40,7 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
         let motivo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.motivo || "",
             nombreCampo: "El campo del motivo",
-            filtro: "strictoConEspacios",
+            filtro: "transformaABase64",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })

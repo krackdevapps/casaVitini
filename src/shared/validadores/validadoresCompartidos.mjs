@@ -7,6 +7,7 @@ import { obtenerNombreColumnaPorTabla } from "../../infraestructure/repository/g
 import { obtenerDatosPersonalesPorMailIgnorandoUsuario } from "../../infraestructure/repository/usuarios/obtenerDatosPersonalesPorMailIgnorandoUsuario.mjs"
 import { obtenerClientesPorPasaporteIgnorandoClienteUID } from "../../infraestructure/repository/clientes/obtenerClientesPorPasaporteIgnorandoClienteUID.mjs"
 import validator from "validator"
+
 export const validadoresCompartidos = {
     clientes: {
         validarCliente: async (data) => {
@@ -552,7 +553,7 @@ export const validadoresCompartidos = {
                 }
             } else if (filtro === "strictoConEspacios") {
                 try {
-                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA()%$%]+$/g;
+                    const filtro = /^[a-zA-Z0-9_\s\-\/\.,:\u00F1ñ\+@\u00E1ç\u00E9\u00ED\u00F3\u00FA\u00C1\u00C9\u00CD\u00D3\u00DA()%$%]+$/g;
 
                     if (!filtro.test(string)) {
                         const mensaje = `${nombreCampo} solo acepta una cadena de mayúsculas, minúsculas, números, vocales acentuadas, espacios y los siguientes caracteres: _, -, ., /, (), y %`

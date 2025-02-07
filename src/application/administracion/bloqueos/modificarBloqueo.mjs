@@ -36,7 +36,7 @@ export const modificarBloqueo = async (entrada, salida) => {
         let motivo = validadoresCompartidos.tipos.cadena({
             string: entrada.body.motivo || "",
             nombreCampo: "El campo del motivo",
-            filtro: "strictoConEspacios",
+            filtro: "transformaABase64",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
@@ -91,15 +91,17 @@ export const modificarBloqueo = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-        const dataActualizarBloqueoPorBloqueoUID = {
+        const bloqueActualizado = await actualizarBloqueoPorBloqueoUID({
             tipoBloqueoIDV,
             fechaInicio_ISO,
             fechaFin_ISO,
             motivo,
             zonaIDV,
             bloqueoUID
-        }
-        const bloqueActualizado = await actualizarBloqueoPorBloqueoUID(dataActualizarBloqueoPorBloqueoUID)
+        })
+        const bufferObjPreDecode = Buffer.from(bloqueActualizado.motivo, "base64");
+        bloqueActualizado.motivo = bufferObjPreDecode.toString("utf8");
+
         const ok = {
             ok: "Se ha actualizado el bloqueo correctamente",
             bloqueo: bloqueActualizado

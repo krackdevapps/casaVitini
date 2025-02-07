@@ -13556,7 +13556,7 @@ const casaVitini = {
                                             contenedorData.appendChild(contenedorNombreInterno)
 
                                             const tituluNombreInternoUI = document.createElement("p")
-                                            tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                                            tituluNombreInternoUI.textContent = `Nombre administrativo`
                                             contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                                             const nombreInternoUI = document.createElement("p")
@@ -24599,7 +24599,7 @@ const casaVitini = {
                                     }
 
                                     const tituluNombreInternoUI = document.createElement("p")
-                                    tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                                    tituluNombreInternoUI.textContent = `Nombre administrativo`
                                     contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                                     const nombreInternoUI = document.createElement("p")
@@ -27811,7 +27811,7 @@ const casaVitini = {
                                     }
 
                                     const tituluNombreInternoUI = document.createElement("p")
-                                    tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                                    tituluNombreInternoUI.textContent = `Nombre administrativo`
                                     contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                                     const nombreInternoUI = document.createElement("p")
@@ -43531,7 +43531,7 @@ const casaVitini = {
                             contenedorInterno.appendChild(contenedorNombreInterno)
 
                             const tituluNombreInternoUI = document.createElement("p")
-                            tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                            tituluNombreInternoUI.textContent = `Nombre administrativo`
                             contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                             const nombreInternoUI = document.createElement("p")

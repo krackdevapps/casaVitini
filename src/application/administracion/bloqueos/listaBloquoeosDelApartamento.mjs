@@ -45,6 +45,12 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
         if (bloqueosDelApartamento.length > 0) {
             const bloqueosDelApartamentoEntonctrado = [];
             bloqueosDelApartamento.forEach((bloqueoDelApartamento) => {
+
+
+                const bufferObjPreDecode = Buffer.from(bloqueoDelApartamento.motivo, "base64");
+                bloqueoDelApartamento.motivo = bufferObjPreDecode.toString("utf8");
+        
+
                 const bloqueoUID = bloqueoDelApartamento.bloqueoUID;
                 const tipoBloqueoIDV = bloqueoDelApartamento.tipoBloqueoIDV;
                 const fechaInicio = bloqueoDelApartamento.fechaInicio;

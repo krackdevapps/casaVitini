@@ -6673,7 +6673,7 @@ const casaVitini = {
                                             contenedorData.appendChild(contenedorNombreInterno)
 
                                             const tituluNombreInternoUI = document.createElement("p")
-                                            tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                                            tituluNombreInternoUI.textContent = `Nombre administrativo`
                                             contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                                             const nombreInternoUI = document.createElement("p")
@@ -16538,7 +16538,7 @@ const casaVitini = {
 
                                                 const campoBuscador = document.createElement("input")
                                                 campoBuscador.classList.add("botonV1BlancoIzquierda_noSeleccionable")
-                                                campoBuscador.placeholder = "Buscar un cliente existente 3"
+                                                campoBuscador.placeholder = "Buscar un cliente existente"
                                                 campoBuscador.setAttribute("campo", "buscador")
                                                 campoBuscador.addEventListener("input", (e) => {
                                                     this.listaResultadosUI({
@@ -17716,7 +17716,7 @@ const casaVitini = {
                                     }
 
                                     const tituluNombreInternoUI = document.createElement("p")
-                                    tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                                    tituluNombreInternoUI.textContent = `Nombre administrativo`
                                     contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                                     const nombreInternoUI = document.createElement("p")
@@ -20934,7 +20934,7 @@ const casaVitini = {
                                     }
 
                                     const tituluNombreInternoUI = document.createElement("p")
-                                    tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                                    tituluNombreInternoUI.textContent = `Nombre administrativo`
                                     contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                                     const nombreInternoUI = document.createElement("p")

@@ -4,6 +4,13 @@ export const controlEstructuraPorJoi = (data) => {
         const schema = data.schema
         const objeto = data.objeto
    
+        if (Object.keys(objeto).length === 0) {
+            throw {
+                error: "objetoVacio",
+                errorUI: "El objeto esta vacio"
+            };
+        }
+
         const { error } = schema.validate(objeto);
         const errorTipo = error?.details[0].type
         if (errorTipo === "object.unknown") {

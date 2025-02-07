@@ -984,7 +984,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                     contenedorDescuento.appendChild(titulo);
 
                     const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
-                        metodoSelectorDia: "view.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia",
+                        metodoSelectorDia: "view.__sharedMethods__.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia",
                         nombreContenedor: "totalNetoPorRango",
                         modo: "administracion",
                         seleccionableDiaLimite: "si"
@@ -1598,7 +1598,6 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
     
             return divPrincipal
         }
-
     },
     utilidades: {
         constructorObjeto: () => {

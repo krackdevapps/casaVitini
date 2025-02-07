@@ -295,13 +295,13 @@ casaVitini.view = {
                 titulo.style.backdropFilter = "blur(50px)"
                 titulo.style.webkitBackdropFilter = "blur(50px)"
                 titulo.style.background = ""
-                //titulo.style.fontSize = "13px"
+                titulo.style.fontSize = "13px"
                 titulo.textContent = "Ver apartamentos"
                 titulo.addEventListener("click", this.irAApartamentos)
             } else {
                 titulo.style.boxShadow = "0px 0px 0px 0px rgba(0, 0, 0, 0)"
                 titulo.style.background = "transparent"
-               // titulo.style.fontSize = "40px"
+                titulo.style.fontSize = "40px"
                 titulo.textContent = "Apartamentos"
                 titulo.removeEventListener("click", this.irAApartamentos)
 

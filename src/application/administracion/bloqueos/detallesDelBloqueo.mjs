@@ -42,6 +42,10 @@ export const detallesDelBloqueo = async (entrada) => {
         const apartamentoUI = apartamento.apartamentoUI
         const detallesDelBloqueo = await obtenerBloqueoPorBloqueoUID(bloqueoUID)
 
+        const bufferObjPreDecode = Buffer.from(detallesDelBloqueo.motivo, "base64");
+        detallesDelBloqueo.motivo = bufferObjPreDecode.toString("utf8");
+
+
         const tipoBloqueoIDV = detallesDelBloqueo.tipoBloqueoIDV;
         const fechaInicio = detallesDelBloqueo.fechaInicio;
         const fechaFin = detallesDelBloqueo.fechaFin;

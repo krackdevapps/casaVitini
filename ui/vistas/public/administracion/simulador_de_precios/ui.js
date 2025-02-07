@@ -260,7 +260,7 @@ casaVitini.view = {
                     "padding5",
                     "titulo"
                 )
-     
+
 
                 const controladorAlturaTituloDinamico = (e) => {
                     const selectorInstanciaActual = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -3667,7 +3667,7 @@ casaVitini.view = {
                     contenedorInterno.appendChild(contenedorNombreInterno)
 
                     const tituluNombreInternoUI = document.createElement("p")
-                    tituluNombreInternoUI.textContent = `Nombre adminitrativo`
+                    tituluNombreInternoUI.textContent = `Nombre administrativo`
                     contenedorNombreInterno.appendChild(tituluNombreInternoUI)
 
                     const nombreInternoUI = document.createElement("p")
