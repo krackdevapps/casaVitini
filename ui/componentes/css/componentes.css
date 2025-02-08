@@ -13059,12 +13059,14 @@ summary:hover {
         align-items: stretch;
     }
 }
-
+[zonacss="instalaciones"] .fontForImg {
+    font-family: opensans-variable;
+    font-weight: 600;
+}
 [zonacss="instalaciones"] .plaza_servicios_tituloCaracteristica {
     /* font-weight: bold; */
     margin: 0px;
-    font-family: opensans-variable;
-    font-weight: 600;
+  
 }
 
 [zonaCSS="/alojamiento"] .fondoAlojamiento {
@@ -13154,8 +13156,6 @@ summary:hover {
     -webkit-backdrop-filter: blur(30px);
     background: rgba(255, 255, 255, 0.1);
     color: rgb(255 255 255 / 0.85);
-    font-family: opensans-semibold;
-    /* text-align: center; */
     width: fit-content;
     transition: all 1s ease-in-out !important;
 }
@@ -16172,7 +16172,6 @@ summary:hover {
     padding-left: 120px;
     padding-right: 120px;
     text-align: justify;
-    font-family: opensans-semibold;
     font-size: 13px;
     color: #8D6E63;
     padding-top: 30px;
