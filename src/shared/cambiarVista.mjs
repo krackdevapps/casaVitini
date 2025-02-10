@@ -120,11 +120,11 @@ export const cambiarVista = async (transaccion) => {
             if (existsSync(jsOptionalSelector)) {
                 js = readFileSync(jsOptionalSelector, 'utf-8')
             }
-            console.log("cssOptionalSelector", cssOptionalSelector)
+
             if (existsSync(cssOptionalSelector)) {
                 css = readFileSync(cssOptionalSelector, 'utf-8')
             }
-            console.log("css", css)
+
 
             let sharedMethods = ""
             const checkSharedMethods = "./ui/vistas/public" + urlResuelta + "/getSharedMethods.mjs"

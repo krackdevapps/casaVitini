@@ -22,7 +22,7 @@ casaVitini.view = {
         const bloqueNuevo = casaVitini.view.__sharedMethods__.contructorObjeto()
         bloqueNuevo.zona = "administracion/bloqueos/crearNuevoBloqueo"
 
-        console.log("bloqueNuevo", bloqueNuevo)
+
         const respuestaServidor = await casaVitini.shell.servidor(bloqueNuevo)
         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
         if (!instanciaRenderizada) { return }

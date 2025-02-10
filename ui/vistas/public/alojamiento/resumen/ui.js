@@ -11,7 +11,7 @@ casaVitini.view = {
         })
         if (Object.keys(reservaLocal).length === 0) {
             const ui = this.uiConReserva()
-            console.log("ui", ui)
+
             main.appendChild(ui)
         } else {
             const fechaEntrada = reservaLocal.fechaEntrada

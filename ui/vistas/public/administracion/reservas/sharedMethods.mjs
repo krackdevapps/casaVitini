@@ -44,7 +44,7 @@ export const reservaComponentes = {
                     const estadoReservaIDV = global.estadoReservaIDV
                     const contenedor = this.componentesUI.contenedor(reservaUID)
                     const css = await this.css()
-                    console.log("css", css)
+
                     contenedor.appendChild(css)
                     const estadoPendienteUI = this.componentesUI.estadoPendienteUI.despliege({
                         estadoReservaIDV,
