@@ -671,7 +671,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 descripcionCondicion.textContent = "Aplicar esta oferta cuando la fecha de entrada de una reserva está dentro de un rango de fechas.";
                 contenedor.appendChild(descripcionCondicion);
 
-                const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                const contenedorFechasUI = casaVitini.view.__sharedMethods__.contenedorFechasUI({
                     modo: "administracion",
                     sobreControlConfiguracion: {
                         configuracionInicio: {
@@ -717,7 +717,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 descripcionCondicion.textContent = "Aplicar esta oferta cuando la fecha de salida de una reserva está dentro de un rango de fechas.";
                 contenedor.appendChild(descripcionCondicion);
 
-                const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                const contenedorFechasUI = casaVitini.view.__sharedMethods__.contenedorFechasUI({
                     modo: "administracion",
                     sobreControlConfiguracion: {
                         configuracionInicio: {
@@ -763,7 +763,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 descripcionCondicion.textContent = "Aplicar esta oferta cuando se realiza una reserva cuyo rango determinado por la fecha de entrada y la fecha de salida se cruza con el rango de duración determinado en esta condición.";
                 contenedor.appendChild(descripcionCondicion);
 
-                const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                const contenedorFechasUI = casaVitini.view.__sharedMethods__.contenedorFechasUI({
                     modo: "administracion",
                     seleccionableDiaLimite: "si"
 
@@ -852,7 +852,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
 
                 const texto = "Añade apartamentos a esta condición para determinar qué apartamentos en concreto tienen que estar en una reserva para acceder a esta oferta."
 
-                const selectorApartamentosEspecificosUI = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+                const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: texto,
 
                 })
@@ -873,7 +873,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                     "Añade qué apartamentos en concreto debe de seleccionar el cliente para que se aplique esta oferta.";
                 contenedorDescuento.appendChild(titulo);
 
-                const selectorApartamentosEspecificosUI = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+                const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: "No hay ningún apartamento dentro de esta reserva.Pulse el botón Añadir apartamento para añadir apartamentos en específico.",
                     opcionesUI: {
                         ui: casaVitini.view.__sharedMethods__.componenteUI.compartidos.opcionesContenedorApartamentoUI
@@ -983,7 +983,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         "Determina el rango de aplicación del descuento.Una vez selecciones el rango.Podrás determinar si aplicar un descuento al neto total de la reserva que esté dentro de ese rango.Es decir, los días de la reserva con noche que estén dentro de ese rango.También puedes aplicar un descuento personalizado dentro de cada día con noche.Determinando si el descuento se aplica al neto de un día o a apartamentos específicos dentro de un día.";
                     contenedorDescuento.appendChild(titulo);
 
-                    const contenedorFechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                    const contenedorFechasUI = casaVitini.view.__sharedMethods__.contenedorFechasUI({
                         metodoSelectorDia: "view.__sharedMethods__.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia",
                         nombreContenedor: "totalNetoPorRango",
                         modo: "administracion",
@@ -1099,7 +1099,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         const contenedorOpcionNetoDia = document.createElement("div")
                         contenedorOpcionNetoDia.classList.add(
                             "estadoInicialInvisible",
-                            "contenedorVertical",
+                            "flexVertical",
                             "gap6"
                         )
                         contenedorOpcionNetoDia.setAttribute("contenedorDelDia", "netoPorDia")
@@ -1142,7 +1142,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         const contenedorPorApartamento = document.createElement("div")
                         contenedorPorApartamento.classList.add(
                             "estadoInicialInvisible",
-                            "contenedorVertical",
+                            "flexVertical",
                             "gap6"
                         )
                         contenedorPorApartamento.setAttribute("contenedorDelDia", "netoPorApartamentoDelDia")
@@ -1153,12 +1153,12 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         titulo.textContent =
                             "AAñade qué apartamentos en concreto debe de seleccionar el cliente para que se aplique esta oferta.";
                         contenedorPorApartamento.appendChild(titulo);
-                        // const selectorApartamentosEspecificosUI = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+                        // const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                         //     textoContenedorVacio: "Añade apartamentos a esta condición para determinar qué apartamentos en concreto tienen que estar en una reserva para acceder a esta oferta.",
                         //     tipoDespliegue: "total"
                         // })
 
-                        const selectorApartamentosEspecificosUI = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+                        const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                             textoContenedorVacio: "Añade apartamentos a esta condición para determinar qué apartamentos en concreto tienen que estar en una reserva para acceder a esta oferta.",
                             opcionesUI: {
                                 ui: casaVitini.view.__sharedMethods__.componenteUI.compartidos.opcionesContenedorApartamentoUI

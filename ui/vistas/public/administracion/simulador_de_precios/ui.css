@@ -1,0 +1,172 @@
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .selectorZonas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion_responsivo {
+    display: none;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 8px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .menuCategoria {
+    text-decoration: none;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: default;
+    border-radius: 10px;
+    transition: all 250ms linear;
+    padding: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoUI {
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoUI:hover {
+    color: white;
+    background: black;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoTItulo {
+    font-weight: bold;
+    margin: 0px;
+    padding: 2px;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .crearOfertaApartamentoEstado {
+    margin: 0px;
+    padding: 2px;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .detallesReserva_transacciones_botonV1 {
+    display: flex;
+    padding: 10px;
+    border-radius: 11px;
+    text-decoration: none;
+    cursor: default;
+    background: rgba(255, 255, 255, 0.6);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .contenedorServicios {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .listaServicios {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .componentes_ui_desloseTotales_contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .titulo {
+    position: sticky;
+    top: 20px;
+    z-index: 2;
+    transition: all 500ms linear !important;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] .titulo_sticky {
+    top: 20px;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    z-index: 2;
+    box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.5);
+    background: yellow;
+    padding-right: 20px;
+    border-radius: 42px;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: black;
+}
+
+[zonaCSS="administracion/simuladorDePrecios/detalles"] [servicioUID] .contenedorGlobal {
+    display: grid;
+    grid-template-columns: auto auto 1fr !important;
+    align-items: center;
+
+}
+
+
+
+@media (max-width: 720px) {
+
+    [zonaCSS="administracion/simulador_de_precios"] [areaGrid="gridSimuladorDePrecios"] [gridUID="gridSimuladorDePrecios"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/simulador_de_precios"] [areaGrid="gridSimuladorDePrecios"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="administracion/simulador_de_precios"] [areaGrid="gridSimuladorDePrecios"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
+}
+
+
+@media screen and (max-width: 968px) {
+
+    [zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion {
+        display: none;
+    }
+
+    [zonaCSS="administracion/simuladorDePrecios/detalles"] .menuGlobalSimuiacion_responsivo {
+        display: flex;
+
+    }
+}

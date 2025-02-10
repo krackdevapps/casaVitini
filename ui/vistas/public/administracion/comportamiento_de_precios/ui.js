@@ -696,7 +696,7 @@ casaVitini.view = {
                 const cantidad = detalleApartamento.cantidad
                 const simboloIDV = detalleApartamento.simboloIDV
 
-                const cApartamento = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.apartamentoUI({
+                const cApartamento = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                     apartamentoIDV,
                     apartamentoUI,
                     opcionesUI: {

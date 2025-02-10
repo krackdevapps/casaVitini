@@ -1,0 +1,84 @@
+.plaza_enlacesDePago_campo {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.plaza_enlacesDePago_botonV1 {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    width: fit-content;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: all 500ms;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.plaza_enlacesDePago_botonV1:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.pagoPorEnlace_titutlo {
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+}
+
+.plaza_enlacesDePago_marcoPago {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 6px;
+    border-radius: 16px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+
+
+.enlaceDePago_contendorReservaUID {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+.enlaceDePago_valorTotal {
+    font-size: 23px;
+}
+
+.pagoPorEnlace_info {
+    margin: 0px;
+    padding: 6px;
+}
+
+.plaza_enlacesDePago_obtenerPago_contenedorPagoGlobal {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-gap: 6px;
+}
+
+.plaza_enlacesDePago_obtenerPago_contenedor {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}

@@ -1,0 +1,295 @@
+@media (max-width: 1300px) {
+
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] {
+        grid-template-columns: auto auto auto auto !important;
+    }
+
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="pasaporte"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="pasaporte"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="telefono"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="telefono"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="mail"],
+    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="mail"] {
+        display: none
+    }
+
+    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+}
+
+
+@media (max-width: 720px) {
+
+    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [gridUID="gridClientes"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [gridUID="grisReservasDelCliente"] {
+        display: none;
+    }
+
+    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
+}
+
+[zonaCSS="administracion/clientes/buscador"] .clientes_contenedorBotones {
+    display: flex;
+    justify-content: flex-end;
+}
+[zonaCSS="administracion/clientes/detalles"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesClienteUI {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+    justify-content: center;
+    padding: 0px;
+    gap: 6px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontal {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 20px;
+    background: #dbdbdb;
+    padding: 16px;
+    border-radius: 20px;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontalNotas {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 6px;
+    align-content: center;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueVertical {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    width: 100%;
+    border-radius: 6px;
+    gap: 20px;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueDato {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesClienteTituloDato {
+
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .detallesClienteUIBotones {
+    display: flex;
+    gap: 6px;
+    border-radius: 10px;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+}
+
+[zonaCSS="administracion/clientes/detalles"] .estadoInicialInvisible {
+    display: none;
+}
+
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteUIBotones {
+    display: flex;
+    gap: 6px;
+    border-radius: 10px;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueHorizontal {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 10px;
+}
+@media (max-width: 720px) {
+    [zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontal {
+        flex-direction: column;
+    }
+}
+
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueDato {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteUI {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+    justify-content: center;
+    padding: 0px;
+    gap: 6px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/clientes/editar"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueVertical {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    width: 100%;
+    border-radius: 6px;
+    gap: 20px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteTituloDato {
+
+    font-weight: bold;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueHorizontalNotas {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 6px;
+    align-content: center;
+    padding: 12px;
+}
+
+[zonaCSS="administracion/clientes/editar"] .detallesClienteDatoCampo {
+    resize: none;
+}
+[zonaCSS="administracion/clientes/buscador"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/clientes/buscador"] .campoBuscadorClientes {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgb(255 255 255 / 0.3);
+
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin-right: 0px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+
+[zonaCSS="administracion/clientes/buscador"] .campoBuscadorClientes::placeholder {
+    color: black;
+}

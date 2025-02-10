@@ -219,8 +219,8 @@ casaVitini.view = {
                     "padding6",
                 )
                 const definicionCondicion = casaVitini
-                    .ui
-                    .componentes
+                    .view
+                    .__sharedMethods__
                     .contenedorFinanciero
                     .componentesUI
                     .ofertas
@@ -258,8 +258,8 @@ casaVitini.view = {
             contenedorDescuentos.appendChild(tituloContendor)
 
             const desfinicionDescuento = casaVitini
-                .ui
-                .componentes
+                .view
+                .__sharedMethods__
                 .contenedorFinanciero
                 .componentesUI
                 .ofertas
@@ -482,7 +482,7 @@ casaVitini.view = {
                         const selectorZonaApartamentos = descuentoUI.querySelector("[componente=zonaAnadirApartamento]")
 
 
-                        const cApartamento = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.apartamentoUI({
+                        const cApartamento = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                             apartamentoIDV,
                             apartamentoUI,
                         })
@@ -550,7 +550,7 @@ casaVitini.view = {
                     infoSinApartamento.style.display = "none"
 
 
-                    const cApartamento = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.apartamentoUI({
+                    const cApartamento = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                         apartamentoIDV,
                         apartamentoUI,
                         opcionesUI: {
@@ -658,7 +658,7 @@ casaVitini.view = {
                                 const infoSinApartamento = contenedorDia.querySelector("[componente=infoSinApartamento]")
                                 infoSinApartamento.style.display = "none"
 
-                                // const selectorApartamentoUI = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.apartamentoUI({
+                                // const selectorApartamentoUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                                 //     apartamentoIDV,
                                 //     apartamentoUI,
                                 //     instanciaUID: fecha,
@@ -668,7 +668,7 @@ casaVitini.view = {
                                 // })
 
 
-                                const cApartamento = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.apartamentoUI({
+                                const cApartamento = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                                     apartamentoIDV,
                                     apartamentoUI,
                                     opcionesUI: {

@@ -1,0 +1,419 @@
+  [zonaCSS="/alojamiento/resumen"] .bloqueSeccion {
+      margin: 10px;
+      border-radius: 8px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .tituloBloqueSeccion {
+      font-size: 14px;
+      font-weight: bold;
+      margin: 0px;
+      text-align: center;
+      padding: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .bloqueResumenDia {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-content: center;
+      align-items: stretch;
+      justify-content: center;
+      border-radius: 12px;
+      font-weight: bold;
+      padding: 10px;
+      gap: 4px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .diaTipo {
+      padding: 0px;
+      margin: 0px;
+      text-align: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .diaParrafo {
+      padding: 0px;
+      margin: 0px;
+      text-align: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .bloqueApartamenteo {
+      border-radius: 16px;
+      background-color: rgba(255, 255, 255, 0.3);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .tituloMedia {
+      font-size: 14px;
+      font-weight: bold;
+      padding: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .tituloBloqueHabitacion {
+      color: grey;
+      font-weight: bold;
+      padding: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .bloqueConjuntoApartamentos {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      align-items: stretch;
+
+      gap: 16px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .bloqueHorizontal {
+      border-radius: 14px;
+      background-color: rgb(255 255 255 / 30%);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: space-around;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_contenedorTitualPago {
+      border-radius: 13px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .ressumenReservaBloquePago {
+      width: 100%;
+      display: grid;
+
+      grid-gap: 4px;
+      grid-auto-rows: minmax(auto, auto);
+      padding: 0px;
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .resumenReservaInfoPago {
+      display: none;
+      background-color: rgba(255, 255, 255, 0.3);
+      border-radius: 13px;
+      padding: 4px;
+      gap: 4px;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-content: center;
+      justify-content: center;
+      align-items: stretch;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .infoResumenReserva {
+      margin: 16px;
+      font-weight: normal;
+      text-align: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .infoPrivacidad {
+      text-align: center;
+      user-select: none;
+      -webkit-user-select: none;
+      text-decoration: none;
+      font-weight: bold;
+      color: black;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_bloque {
+      padding: 6px;
+      border-radius: 12px;
+      gap: 6px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_porNoche {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+      padding: 0px;
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_titulo {
+      padding: 4px;
+      font-weight: bold;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .contenedorDiaConNoche {
+
+      padding: 10px;
+      border-radius: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
+      padding: 2px;
+      border-radius: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .reserva_resumen_desglose_pago_elemento {
+      padding: 2px;
+      border-radius: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .contenedorApartamento {
+      background-color: #ffffff73;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      align-content: column;
+      gap: 2px;
+      flex-direction: column;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .textoDetallesPorApartamento {
+      padding: 0px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .detalleDelTotal {
+      border-radius: 10px;
+      padding: 6px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .detallesReservaCancelarBoton {
+      background: #00000036;
+      padding: 8px;
+      border-radius: 8px;
+      border-radius: 8px;
+      text-align: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .detallesReservaCancelarBoton:hover {
+      color: white;
+      background: #0040ff;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .selectorCama {
+      border-radius: 10px;
+      padding: 10px;
+      border: none;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.3);
+      transition: background 250ms linear;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .selectorCama:hover {
+      background: rgba(255, 255, 255, 0.7);
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .campoTitular {
+      padding: 20px;
+      border-radius: 16px;
+      /* border-bottom-left-radius: 0px !important;
+       border-top-left-radius: 0px !important;
+       border-bottom-right-radius: 14px !important;
+       border-top-right-radius: 14px !important; */
+      outline: none;
+      border: none;
+      background: rgba(255, 255, 255, 0.3);
+      transition: background 250ms linear;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .campoTitular:hover {
+      background: rgba(255, 255, 255, 0.7);
+      color: black;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .campoTitular::selection {
+      background: rgba(255, 255, 255);
+      color: black;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_titular_contenedor {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+      padding: 14px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .plaza_alojamiento_resumenReserva_titular_informacion {
+      display: flex;
+      justify-content: center;
+      font-weight: bold;
+      padding: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .bannerTiempoRestante {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 16px;
+      gap: 6px;
+      user-select: none;
+      -webkit-user-select: none;
+      text-decoration: none;
+      color: black;
+      cursor: default;
+      transition: all 500ms;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .plaza_reservas_reservaConfirmada_banner {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      user-select: none;
+      -webkit-user-select: none;
+      text-decoration: none;
+      color: black;
+      cursor: default;
+      transition: all 500ms;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .plaza_alojamiento_resumenReserva_camaUnicaInfo {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+  [zonaCSS="/alojamiento/resumen"] .plaza_reservas_reservaConfirmada_banner:hover {
+      background: rgba(255, 255, 255, 0.8);
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .componentes_ui_desloseTotales_contenedor {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .plaza_resumenReserva_contenedorTotalAPagar {
+      margin: 13px;
+      padding: 10px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-content: center;
+      align-items: center;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .botonDespliegueDesgloseTotal {
+      margin: 0px;
+      font-weight: normal;
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background 250ms linear;
+      padding: 10px;
+      border-radius: 16px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .botonDespliegueDesgloseTotal:hover {
+      background: rgba(255, 255, 255, 0.7);
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .plaza_resumenReserva_totalFinal {
+      font-weight: bold;
+      margin: 0px;
+      font-size: 16px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar {
+      background: rgba(255, 255, 255, 0.3);
+      padding: 20px;
+      outline: none;
+      border: none;
+      border-radius: 12px;
+      margin: 14px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
+      transition: background 250ms linear;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: default;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .bloqueResumenReservaGlobal .botonConfirmar:hover {
+      background: blue;
+      color: white;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .reserva_resumen_apartamentoIUTitulo {
+      padding-left: 6px;
+      padding-right: 6px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] .contenedorTextoOferta {
+      padding: 4px;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] [complementoUID] .contenedorGlobal {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+
+  }
+
+  [zonaCSS="/alojamiento/resumen"] [complementoUID] .esferaSeleccionable {
+      margin: 5px;
+      height: 24px;
+      width: 24px;
+      border: 2px solid #373737;
+      border-radius: 100%;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] [complementoUID] .indicadorDeSeleccion {
+      margin: 3px;
+      height: 14px;
+      width: 14px;
+      border-radius: 100%;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] [servicioUID] .contenedorGlobal {
+      display: grid;
+      grid-template-columns: auto auto 1fr !important;
+      align-items: center;
+
+  }
+
+  [zonaCSS="/alojamiento/resumen"] [servicioUID] .esferaSeleccionable {
+      margin: 5px;
+      height: 24px;
+      width: 24px;
+      border: 2px solid #373737;
+      border-radius: 100%;
+  }
+
+  [zonaCSS="/alojamiento/resumen"] [servicioUID] .indicadorDeSeleccion {
+      margin: 3px;
+      height: 14px;
+      width: 14px;
+      border-radius: 100%;
+  }
+
+  .blackgroundWhite30O {
+    background-color: rgb(255 255 255 / 30%);
+}

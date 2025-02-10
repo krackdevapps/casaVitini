@@ -723,7 +723,7 @@ casaVitini.view = {
             constructorAlmacen.fechaSalida = fechaSalida
         }
 
-        casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+        casaVitini.view.__sharedMethods__.grid.despliegue({
             metodoSalida: "view.mostrarReservasResueltas",
             configuracionGrid: {
                 filas: reservas,

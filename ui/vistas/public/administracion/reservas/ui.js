@@ -1,5 +1,5 @@
 casaVitini.view = {
-    start: async function ()  {
+    start: async function () {
         const main = document.querySelector("main")
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const parametros = granuladoURL.parametros
@@ -29,7 +29,7 @@ casaVitini.view = {
 
 
             const reservaUID = parametros.reserva
-            const reservaUI = await casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.despliege({
+            const reservaUI = await this.__sharedMethods__.detallesReservaUI.reservaUI.despliege({
                 reservaUID,
                 configuracionVista: "administrativa"
             })
@@ -39,7 +39,7 @@ casaVitini.view = {
 
             if (zonaURL) {
                 const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zonaURL)
-                casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
+                this.__sharedMethods__.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
                     origen: "url",
                     categoria: categoriaGlobalIDV
                 })

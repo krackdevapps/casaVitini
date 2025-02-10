@@ -1,0 +1,54 @@
+.vitiniIdLogin {
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: stretch;
+    align-items: stretch;
+    gap: 6px;
+}
+
+.botonID {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background-color: rgba(0, 0, 0, 0.2);
+    margin: 0px;
+    padding: 8px;
+    color: white;
+    cursor: default;
+    user-select: none;
+    transition: all 100ms linear;
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.botonID:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.bloqueRespuesta {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    color: transparent;
+    padding: 14px;
+    border-radius: 16px;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    gap: 12px;
+    transition: opacity 250ms linear;
+}
+
+ .bloqueBotonesID {
+    display: flex;
+    visibility: hidden;
+    pointer-events: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+}

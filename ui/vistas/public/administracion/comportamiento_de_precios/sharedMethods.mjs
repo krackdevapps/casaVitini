@@ -286,7 +286,7 @@ export const sharedMethodsPricesBehavior = {
                 )
                 info.textContent = "Seleccionar el rango de días en los cuales se aplicará el comportamiento de precio de los apartamentos."
                 contenedorTipoPorRango.appendChild(info)
-                const fechasRangoAplicacion = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                const fechasRangoAplicacion = casaVitini.view.__sharedMethods__.contenedorFechasUI({
                     nombreContenedor: "rangoComportamiento",
                     modo: "administracion",
                     sobreControlConfiguracion: {
@@ -302,7 +302,7 @@ export const sharedMethodsPricesBehavior = {
                 })
                 contenedorTipoPorRango.appendChild(fechasRangoAplicacion);
 
-                const contenedorApartamentos = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+                const contenedorApartamentos = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: "Añade apartamentos para determinar el comportamiento de precio.",
                     sobreControlConfiguracion: {
                         configuracionFin: {
@@ -333,7 +333,7 @@ export const sharedMethodsPricesBehavior = {
                 )
                 info.textContent = "Seleccionar el rango de días en los cuales se aplicará el comportamiento de precio de los apartamentos."
                 contenedorTipoPorCreacion.appendChild(info)
-                const fechasRangoAplicacion = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                const fechasRangoAplicacion = casaVitini.view.__sharedMethods__.contenedorFechasUI({
 
                     nombreContenedor: "rangoComportamiento",
                     modo: "administracion",
@@ -356,7 +356,7 @@ export const sharedMethodsPricesBehavior = {
                 )
                 info1.textContent = "Selecciona el rango en el cual tiene que estar la fecha de creación de la reserva para aplicarse este comportamiento."
                 contenedorTipoPorCreacion.appendChild(info1)
-                const fechasRangoCreacion = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                const fechasRangoCreacion = casaVitini.view.__sharedMethods__.contenedorFechasUI({
 
                     nombreContenedor: "rangoReservaCreacion",
                     modo: "administracion",
@@ -375,7 +375,7 @@ export const sharedMethodsPricesBehavior = {
                 contenedorTipoPorCreacion.appendChild(fechasRangoCreacion);
 
 
-                const contenedorApartamentos = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+                const contenedorApartamentos = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: "Añade apartamentos para determinar el comportamiento de precio.",
                     opcionesUI: {
                         ui: casaVitini.view.__sharedMethods__.compomentesUI.opcionesApartamentoUI
@@ -459,7 +459,7 @@ export const sharedMethodsPricesBehavior = {
                 }
                 comportamientoPorDias.appendChild(contenedorTipoPorDias);
 
-                const contenedorApartamentos = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+                const contenedorApartamentos = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: "Añade apartamentos para determinar el comportamiento de precio.",
                     opcionesUI: {
                         ui: casaVitini.view.__sharedMethods__.compomentesUI.opcionesApartamentoUI
@@ -480,7 +480,7 @@ export const sharedMethodsPricesBehavior = {
                 )
 
                 contenedorTipoComportamiento.appendChild(comportamientoPorAntelacion);
-                const fechasUI = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+                const fechasUI = casaVitini.view.__sharedMethods__.contenedorFechasUI({
                     modo: "administracion",
                     seleccionableDiaLimite: "si"
                 })
@@ -766,7 +766,7 @@ export const sharedMethodsPricesBehavior = {
 
     },
     controladoresUI: {
-        opcionesTipo: function(tipo)  {
+        opcionesTipo: function (tipo) {
             const selectorBotones = document.querySelectorAll("[botonTipo]")
             selectorBotones.forEach((boton) => {
                 boton.removeAttribute("style")
@@ -793,7 +793,7 @@ export const sharedMethodsPricesBehavior = {
                 contenedorSeleccionado.style.display = "flex"
             }
         },
-        selectorDiasSemana: function (diasArray)  {
+        selectorDiasSemana: function (diasArray) {
             const selectorDias = document.querySelectorAll("[componente=diaUI]")
             selectorDias.forEach((dia) => {
                 dia.removeAttribute("style")

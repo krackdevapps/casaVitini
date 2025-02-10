@@ -1,0 +1,108 @@
+.administracionGridReservas {
+    background-color: rgba(255, 255, 255, 0.3);
+    display: grid;
+    gap: 0px;
+    text-align: center;
+    border-radius: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    overflow: hidden;
+}
+
+.administracionReservasColumnaTitulo {
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    padding: 10px;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.icononombreColumna {
+    height: 10px;
+}
+
+[areaGRID] .administracionReservasFila {
+    display: contents;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    cursor: default;
+}
+
+[areaGRID] .administracionReservasFila:hover>div {
+    background-color: #0040ff;
+    color: white;
+}
+
+.administracionCeldaEstiloCompartido {
+    background-color: #8ac4ff00;
+    padding: 10px;
+    align-content: center;
+    justify-content: center;
+    white-space: nowrap;
+    align-items: stretch;
+    text-overflow: ellipsis;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+.parpeoGridSel {
+    animation: parpeoColumnaAnimation 500ms infinite linear;
+}
+
+.administracionNavegacionPaginacion {
+    display: flex;
+    user-select: none;
+    cursor: default;
+    border-radius: 12px;
+    -webkit-user-select: none;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+}
+
+.navegacionPaginacion {
+    text-decoration: none;
+    color: black;
+    background: rgb(187, 187, 187);
+    padding: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 10px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.navegacionPaginacionBotonAtras {
+    margin-right: 0px;
+}
+
+.navegacionPaginacionBotonAdelante {
+    margin-right: 0px;
+}
+
+.numeroPaginaElemento {
+    text-decoration: none;
+    color: black;
+    background: rgb(187, 187, 187);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 10px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 10px;
+}

@@ -1,0 +1,1244 @@
+[ui="reservaUI"] .reservaDetalles_transacciones_enlacesDePago_infoSinEnlaces {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+}
+
+[ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria {
+    text-decoration: none;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: default;
+    border-radius: 10px;
+    padding-left: 13px;
+    margin: 0px;
+    transition: all 250ms linear;
+    padding-right: 13px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+[ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[ui="reservaUI"] .reservaDetallesBloqueGeneral {
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 4fr));
+    grid-gap: 4px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+[ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuExpandido_horizontal {
+    width: 100%;
+    display: grid;
+    grid-gap: 4px;
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 0.4fr;
+    grid-template-rows: 1fr;
+    grid-auto-flow: row;
+    grid-template-areas:
+        ". . . . . .";
+}
+
+[ui="reservaUI"] .miCasa_reserva_detallesReserva_marcoMenuExpandido_horizontal {
+    width: 100%;
+    display: grid;
+    grid-gap: 4px;
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: 1fr 1fr 1fr 0.3fr;
+    grid-template-rows: 1fr;
+    grid-auto-flow: row;
+    grid-template-areas:
+        ". . . .";
+}
+
+[ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: none;
+    padding: 8px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto 50px;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo:hover {
+    background: #0040ff;
+    color: white;
+}
+
+[ui="reservaUI"] .reservaDetallesBloqueAlojamineto {
+    border-radius: 12px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .reservaDetallesBloqueFecha {
+
+    display: flex;
+    border-radius: 12px;
+    padding: 4px;
+    justify-content: space-around;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[ui="reservaUI"] .administracionReservaDetallesBloqueContendioAlojamiento {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0px;
+    flex-wrap: nowrap;
+    gap: 4px;
+}
+
+[ui="reservaUI"] .administracionReservaBloqueDual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorReservaUID {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+    overflow: hidden;
+}
+
+[ui="reservaUI"] .contenedroTextoEspansivo {
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . . . . .";
+}
+
+[ui="reservaUI"] .contenedorInternoGlobal {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . . . .";
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_panel_bloqueTitular {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+    cursor: default;
+    background: 6px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+[ui="reservaUI"] .bloqueGlobalInerte {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+    cursor: default;
+    background: 6px;
+    border-radius: 10px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_panel_bloqueTitular:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBloqueApartamento {
+
+    margin: 0px;
+    display: block;
+    flex-direction: column;
+    align-content: flex-start;
+    flex-wrap: nowrap;
+
+
+    padding: 6px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    border: 1px solid #0000003b;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .tituloApartamento:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+[ui="reservaUI"] .tituloApartamento,
+.tituloApartamento_noSel {
+    padding: 10px;
+    font-weight: bold;
+
+    border-radius: 7px;
+    cursor: default;
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBloqueHabitacion {
+    overflow: hidden;
+    background: #00000014;
+
+    border-radius: 10px;
+    padding: 6px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+[ui="reservaUI"] .tituloHabitacion,
+[ui="reservaUI"] .tituloHabitacion_noSel {
+
+    padding: 10px;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: default;
+    color: rgb(62, 62, 62);
+}
+
+[ui="reservaUI"] .tituloHabitacion:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: black;
+}
+
+[ui="reservaUI"] .administfcomportamientoBotonracionReservasDetallesTituloTipoCama {
+    background: rgba(0, 0, 0, 0.2);
+    user-select: none;
+    cursor: default;
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBloquePernoctantes {
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 10px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+[ui="reservaUI"] .pernoctanteUIInerte {
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 10px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBloquePernoctantesNoAlojado {
+    background: rgba(0, 0, 0, 0.139);
+    user-select: none;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
+    gap: 4px
+}
+
+[ui="reservaUI"] .bloquePernoctanteNoAlojadoInerte {
+    background: rgba(0, 0, 0, 0.139);
+    user-select: none;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
+    gap: 4px
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBloquePernoctantesNoAlojado:hover {
+    background-color: rgba(1, 1, 1, 0.3);
+}
+
+[ui="reservaUI"] .administracionReservasDetallesNombrePernoctante {
+    font-weight: bold;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_tituloCheckIn {
+    color: rgb(0, 140, 40);
+}
+
+[ui="reservaUI"] .letraRoja {
+    color: red;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_tituloPendienteComprobacion {
+    pointer-events: none;
+    color: rgb(0 11 168);
+}
+
+[ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
+    display: grid;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+}
+
+[ui="reservaUI"] .adminsitracionReservasTituloNombre {
+    font-weight: bold;
+    text-align: center;
+}
+
+[ui="reservaUI"] .adminsitracion_reservas_detallesReserva_contenedorDatoGlobal {
+    text-align: center;
+}
+
+[ui="reservaUI"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
+    border-radius: 12px;
+
+    display: grid;
+    grid-template-columns: 1fr 7fr;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBloquePernoctantes:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBloqueOpcionesCliente {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: nowrap;
+    padding-bottom: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+    margin-top: 4px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    position: absolute;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBotonOpcionCliente {
+    padding: 10px;
+    border-radius: 10px;
+    cursor: default;
+    user-select: none;
+    text-decoration: none;
+    color: black;
+    -webkit-user-select: none;
+}
+
+[ui="reservaUI"] .administracionReservasDetallesBotonOpcionCliente:hover {
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+[ui="reservaUI"] .fechaEntradaElemento,
+[ui="reservaUI"] .fechaSalidaElemento {
+    border-radius: 7px;
+    padding: 8px;
+}
+
+[ui="reservaUI"] .fechaEntradaElemento:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[ui="reservaUI"] .fechaSalidaElemento:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[ui="reservaUI"] .componenteFechaEntrada:hover~.fechaSalidaElemento {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[ui="reservaUI"] .panelOpcionesCambioCama {
+    background: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    border-radius: 8px 8px 8px 8px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-top: 0px;
+    overflow: hidden;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+}
+
+[ui="reservaUI"] .opcionCambioCama {
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 12px;
+    user-select: none;
+    cursor: default;
+    border-radius: 12px;
+}
+
+[ui="reservaUI"] .errorCategorialGlobal {
+    margin: 4px;
+    padding: 8px;
+    user-select: none;
+    cursor: default;
+    padding-left: 10px;
+    text-align: center;
+    border-radius: 6px;
+}
+
+[ui="reservaUI"] .opcionDeInformacion {
+    margin: 4px;
+    padding: 8px;
+    user-select: none;
+    cursor: default;
+    padding-left: 10px;
+    border-radius: 6px;
+}
+
+[ui="reservaUI"] .opcionCambioCama:hover {
+    background: #0040ff;
+    color: white;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_menuAnadirApartamento {
+    position: absolute;
+    width: 100%;
+    display: grid;
+    background: rgb(255 255 255 / 0.3);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 0px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 14px;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.3);
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_menuAnadirApartamento .infoCargando {
+    padding: 10px;
+    text-align: center;
+}
+
+[ui="reservaUI"] .reservaDetalles_menu_apartamentosDipsonbiles {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+[ui="reservaUI"] .reservaDetalles_menu_apartamentosNoDipsonbiles {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+[ui="reservaUI"] .menuFlotanteOpcionApartamentoNoDisponible {
+    background-color: rgb(255 255 255 / 0.3);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 6px;
+    border-radius: 10px;
+}
+
+[ui="reservaUI"] .reservaDetalles_menu_titutloapartamentosDisponibles {
+    padding: 10px;
+    font-weight: bold;
+}
+
+[ui="reservaUI"] .resertaDetallesPernoctantesSinalojamiento {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    margin: 0px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    gap: 0px;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
+    display: flex;
+    padding: 4px;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
+    padding: 6px;
+    border-radius: 12px;
+    max-width: 1920px;
+    display: grid;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .resertaDetallesPropuestaCambioFechaReserva {
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    margin: 0px;
+    max-width: 1920px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: none;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: stretch;
+    gap: 4px;
+}
+
+[ui="reservaUI"] .desactivaEventos {
+    pointer-events: none;
+}
+
+[ui="reservaUI"] .reserva_resumen_apartamentoIUTitulo {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+[ui="reservaUI"] .contenedorDiaConNoche {
+
+    padding: 6px;
+    border-radius: 14px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    background: color(srgb 0 0 0 / 0.07);
+}
+
+[ui="reservaUI"] .reserva_resumen_desglose_pago_elemento {
+    border-radius: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+[ui="reservaUI"] .detalleDelTotal {
+    border-radius: 10px;
+    padding: 00px;
+}
+
+[ui="reservaUI"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    background: #0000001a;
+    padding: 6px;
+}
+
+[ui="reservaUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[ui="reservaUI"] .detallesReservaCancelarReservabloqueBotones {
+
+    display: flex;
+    gap: 10px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] [espacio=formularioCrearPagoManual] .info {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+[ui="reservaUI"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_check_botonConfirmar {
+    background: #00000036;
+    padding: 8px;
+    pointer-events: none;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_check_botonConfirmar:hover {
+    background: green;
+    color: white;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
+    color: white;
+    background: red;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
+[ui="reservaUI"] .elementoOcultoInicialmente {
+    display: none;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorCategoriasGlobales {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] .compomentes_ui_totales_ofertas_contenedorConjuntoOferta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[ui="reservaUI"] .usuariosCrearCuenta_campoUsuario {
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+[ui="reservaUI"] .detallesReserva_campoNombreEnlace {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_tituloGlobal {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_campoConfirmacion {
+    padding: 9px;
+    outline: none;
+    border: none;
+    border-radius: 6px;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_bloqueInterno_campoConfiramcion {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorEmitirReembolso {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    padding: 6px;
+    border-radius: 10px;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_campo {
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+}
+
+[ui="reservaUI"] .detallesReserva_reemboldo_bloqueEmitirReembolso {
+    gap: 6px;
+    row-gap: 6px;
+    column-gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_texto {
+    padding: 4px;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_contenedorBotones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 2fr));
+    gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_botonTipoReembolso {
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+    border-radius: 10px;
+    gap: 4px;
+    align-content: center;
+    align-items: center;
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_emitirReembolso_contenedorTipoReembolsos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorDiamicoTipo {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 0px;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorPorCantidad {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 0px;
+    gap: 4px;
+}
+
+[ui="reservaUI"] .detallesReserva_rembolso_contenedorPorPorcentaje {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 0px;
+    gap: 4px;
+}
+
+[ui="reservaUI"] .detallesReserva_transacciones_bloqueGlobal {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    border-radius: 7px;
+    gap: 6px;
+    align-content: center;
+    align-items: stretch;
+}
+
+[ui="reservaUI"] .detallesReserva_enlacesDePago_bloqueDatosGenerales {
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 6px;
+    border-radius: 11px;
+    gap: 4px;
+    align-items: stretch;
+    align-content: flex-start;
+    justify-content: space-between;
+}
+
+[ui="reservaUI"] .detallesReserva_transacciones_bloqueDatosGenerales {
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 10px;
+    border-radius: 11px;
+    gap: 4px;
+    align-items: stretch;
+    align-content: flex-start;
+    justify-content: space-between;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_botonV1 {
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    border-radius: 11px;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_botonV1:hover {
+    background: white;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_botonCopiarPulsacion:active {
+    background: black;
+    color: white;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_contenedorBotones {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] .detallesReserva_transacciones_bloqueBotones {
+    display: flex;
+    justify-items: end;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 0px;
+}
+
+[ui="reservaUI"] .detallesReserva_enlacesDePago_bloqueBotones {
+    display: flex;
+    justify-items: end;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 0px;
+}
+
+[ui="reservaUI"] .detallesReserva_transacciones_botonV1 {
+    display: flex;
+    padding: 10px;
+    border-radius: 11px;
+    text-decoration: none;
+    cursor: default;
+    background: rgba(255, 255, 255, 0.6);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[ui="reservaUI"] .detallesReserva_transacciones_botonV1:hover {
+    background: white;
+}
+
+[ui="reservaUI"] .reservaDetalles_transacciones_bloqueDetallesDelPago {
+    padding: 10px;
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 4px;
+    background: #0000001c;
+}
+
+[ui="reservaUI"] .reservaDetalles_transacciones_bloque_miCasa {
+    padding: 10px;
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 4px;
+    background: #0000001c;
+}
+
+[ui="reservaUI"] .reservaDetalles_transacciones_bloqueDetallesDelPago:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorDinamico {
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[ui="reservaUI"] .infoBuscando {
+    padding: 10px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorListaDePagos {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion {
+    cursor: default;
+    user-select: none;
+    text-decoration: none;
+    -webkit-user-select: none;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 500ms linear;
+    display: flex;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserfa_miscelanea_botonOpcion:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+[ui="reservaUI"] .detallesReserva_reembolso_infoGlobal {
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_enlacesDePago_contenedorDatosEnlace {
+    display: flex;
+    gap: 10px;
+    padding: 4px;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_tituloReembolso {
+    margin: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle_bloque {
+    margin: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_reembolsos_contenedorReembolsoEnDetalle {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    gap: 6px;
+    overflow-wrap: anywhere;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorReembolso {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorCrearReembolso {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_bloqueDetallePago {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 14px;
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 10px;
+}
+
+[ui="reservaUI"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_tituloDetallesPago {
+    margin: 0px;
+    padding: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_reservaDetalles_transacciones_reembolsos_bloqueTitulo {
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_contenedorBotones {
+    border-radius: 12px;
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1 {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+[ui="reservaUI"] .boton_opciones_reembolso_v2 {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_botonV1:hover {
+    background: white;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_reembolsos_detallesReembolso_contenedorBotones {
+    border-radius: 12px;
+    gap: 6px;
+    display: flex;
+    justify-content: left;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_transacciones_contenedorListaDePagos {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_pagoManual_contenedorTipoPago {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_infoTitular_contenedorGlobal {
+    background: rgb(255 255 255 / 0.3);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_checkin_infoTitular_contenedorGlobal {
+    background: rgb(255 255 255 / 0.3);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .reservaDetalles_transacciones_textoV1 {
+    padding: 6px;
+    text-align: center;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReserva_transacciones_eliminarPagoManual {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    background: rgb(255 0 0 / 0.3);
+    padding: 6px;
+    border-radius: 10px;
+}
+
+[ui="reservaUI"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
+    text-decoration: none;
+    background: rgb(255 255 255 / 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    user-select: none;
+    cursor: default;
+    -webkit-user-select: none;
+    color: black;
+    transition: all 500ms;
+}
+
+[ui="reservaUI"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
+    background: white;
+}
+
+[ui="reservaUI"] .administracion_calendario_contenedorCalentadioIntermedio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex: 1;
+}
+
+[ui="reservaUI"] .componentes_ui_desloseTotales_contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[ui="reservaUI"] .administracion_reserver_detallesReserva_contenedorDesgloseTotal {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[ui="reservaUI"] .administracion_reservas_detallesReservas_check_contenedor {
+    padding: 10px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[ui="reservaUI"] .administracion_reserva_detallesReserva_cancelarReserva_eliminarReserva_campo {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgb(255 255 255 / 72%);
+    color: red;
+}
+
+[ui="reservaUI"] .detallesReservaCancelarBoton:hover {
+    color: white;
+    background: #0040ff;
+}
+
+[ui="reservaUI"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
+[ui="reservaUI"] .contenedorPendiente {
+    display: grid;
+    flex: 1;
+    grid-template-columns: auto auto;
+}

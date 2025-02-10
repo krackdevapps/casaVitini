@@ -1,0 +1,54 @@
+[zonaCSS="administracion/usuarios/nuevo"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_contenedorGlobal {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 6px;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_informacion {
+    padding: 6px;
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_campoUsuario {
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .usuariosCrearCuenta_contenedorBotones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .usuarioCrearCuenta_botonV1 {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/usuarios/nuevo"] .usuarioCrearCuenta_botonV1:hover {
+    background: rgba(255, 255, 255, 0.6);
+}

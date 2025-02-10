@@ -35,7 +35,7 @@ casaVitini.view = {
 
 
     },
-    marcoUI: function()  {
+    marcoUI: function () {
         const main = document.querySelector("main")
 
         const marcoElasticoRelatico = document.createElement("div")
@@ -186,7 +186,7 @@ casaVitini.view = {
 
 
             const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
-            casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+            casaVitini.view.__sharedMethods__.grid.despliegue({
                 metodoSalida: "view.listaReservas.mostrarReservasResueltas",
                 configuracionGrid: {
                     filas: misReservas,
@@ -251,7 +251,7 @@ casaVitini.view = {
             }
         },
     },
-    detallesReserva: async function (reservaUID)  {
+    detallesReserva: async function (reservaUID) {
 
         const main = document.querySelector("main")
         const instanciaUID = main.getAttribute("instanciaUID")
@@ -277,7 +277,7 @@ casaVitini.view = {
                 "marcoElasticoRelativo"
             )
             main.appendChild(marcoElastico)
-            const reservaUI = await casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.despliege({
+            const reservaUI = await casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.despliege({
                 reservaUID,
                 configuracionVista: "publica"
             })
@@ -289,7 +289,7 @@ casaVitini.view = {
 
             if (zonaURL) {
                 const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zonaURL)
-                casaVitini.ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
+                casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
                     origen: "url",
                     categoria: categoriaGlobalIDV
                 })

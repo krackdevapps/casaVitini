@@ -12,7 +12,7 @@ casaVitini.view = {
         };
         const arranqueParallax = async () => {
             try {
-                const scriptElement = await loadScript("/componentes/javascript/simpleParallax.js");
+                const scriptElement = await loadScript("/activos/javascript/simpleParallax.js");
                 const grupoImagenesPalarax = document.querySelectorAll('[imagenParalaje=imagen]');
 
                 this.volatilObservers.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {

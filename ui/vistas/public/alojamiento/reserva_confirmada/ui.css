@@ -1,0 +1,284 @@
+[zonaCSS="/alojamiento/reserva_confirmada"] .reserva_resumen_desglose_porNoche {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .reserva_resumen_desglose_pago_titulo {
+    padding: 4px;
+    font-weight: bold;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .reserva_resumen_desglose_pago_elemento {
+    background-color: #ffffff73;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_cancelarReserva_contenedorCancelacion {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1 {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
+    color: white;
+    background: red;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorTotales {
+    display: flex;
+    padding: 16px;
+    gap: 10px;
+    flex-direction: column;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoGlobal {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoIngreso {
+    text-align: justify;
+    display: flex;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    justify-content: center;
+    font-weight: bold;
+    flex-direction: column;
+    align-content: center;
+    white-space: pre-wrap;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedor {
+    background: white;
+    border-radius: 16px;
+    display: flex;
+    background: rgba(255, 255, 255, 0.3);
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 4px;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha {
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorFechas_contenedorFecha_fecha {
+    font-size: 20px;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . . .";
+}
+@media (max-width: 720px) {
+    [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            ". "
+            ". "
+            ". ";
+    }
+}
+
+@media (max-width: 480px) {
+    [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            "."
+            "."
+            "."
+            ".";
+    }
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque {
+        flex-direction: column;
+        align-content: flex-start;
+        align-items: flex-start;
+    }
+}
+
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_infoTitular {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_botonV1 {
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    transition: all 500ms ease;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_botonV1:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_botonV1:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorReservaUID {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReservas_contenedorResevaUID_UID {
+    font-size: 20px;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTitular_contenedorDatosDelTitular_bloque {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedorTotales_TituloTotal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 6px;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF {
+    text-decoration: none;
+    background: rgb(255 255 255 / 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    user-select: none;
+    cursor: default;
+    -webkit-user-select: none;
+    color: black;
+    transition: all 500ms;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .plaza_alojamiento_reservaConfirmada_botoDescargaPDF:hover {
+    background: white;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .componentes_ui_desloseTotales_contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaCancelarBoton:hover {
+    color: white;
+    background: #0040ff;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    align-content: center;
+    gap: 10px;
+    text-align: center;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal .tituloContenedor {
+    color: black;
+    font-weight: bold;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal .totalReserva {
+    margin: 0px;
+    font-weight: bold;
+}
+
+[zonaCSS="/alojamiento/reserva_confirmada"] [contenedor="reservaconfirmada"] .contenedorTotal .info {
+    margin: 0px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 17%);
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}

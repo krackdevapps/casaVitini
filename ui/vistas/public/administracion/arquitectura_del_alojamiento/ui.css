@@ -1,0 +1,42 @@
+
+
+[zonaCSS="administracion/arquitectura_de_alojamiento"] .confAlojamiento_botonPortadaUI {
+    background: rgba(253, 253, 253, 0.3);
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    padding-top: 40px;
+    padding-right: 40px;
+    cursor: default;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: all 500ms;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento"] .confAlojamiento_botonPortadaUI:hover {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+[zonaCSS="administracion/arquitectura_de_alojamiento"] .confAlojamiento_contenedor {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}

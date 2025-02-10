@@ -1,0 +1,82 @@
+.servicioUI {
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 12px;
+    gap: 6px;
+}
+
+.contenedorSelectoresGlobales {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px
+}
+
+@media (max-width: 520px) {
+    .contenedorSelectoresGlobales {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.crearOfertaContenedorHorizontalModoCrear {
+    display: flex;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: column;
+}
+ .administracion_ofertas_crearOfertas_contenedorFecha {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: none;
+}
+
+.crearOfertaContenedorHorizontal {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+.contenedorFecha {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    border-radius: 12px;
+    padding: 10px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}

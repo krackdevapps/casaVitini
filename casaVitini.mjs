@@ -34,6 +34,7 @@ app.use(express.json({
   extended: true,
   strict: true
 }))
+
 app.use(controlJSON)
 app.use(antiPrototypePollution)
 
@@ -43,7 +44,7 @@ app.disable('x-powered-by')
 app.use(csp);
 app.use(compression());
 
-app.use('/componentes', express.static(path.join('./ui/componentes')))
+app.use('/activos', express.static(path.join('./ui/activos')))
 app.use(controlBaseDeDatos)
 app.use(configuracionSession)
 app.use(router)

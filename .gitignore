@@ -4,8 +4,8 @@
 node_modules
 campo_pruebas
 
-ui/componentes/videos/*
-!ui/componentes/videos/
+ui/activos/videos/*
+!ui/activos/videos/
 
 certificados_ssl/*
 !certificados_ssl/

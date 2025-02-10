@@ -1,0 +1,17 @@
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI,
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoUI:hover,
+[zonaCSS="administracion/simuladorPrecios/nuevaSimulacion"] .crearOfertaApartamentoTItulo {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+    gap: 6px;
+    border-radius: 10px;
+    background: #0000001f;
+}

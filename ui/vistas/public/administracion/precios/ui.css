@@ -1,0 +1,249 @@
+[zonaCSS="administracion/precios/detalles"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/precios/detalles"] .detallesReservaCancelarReservabloqueBotones {
+
+    display: flex;
+    gap: 4px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/precios/detalles"].detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/precios/detalles"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/precios/detalles"] .elementoOcultoInicialmente {
+    display: none;
+}
+
+[zonaCSS="administracion/precios/detalles"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin: 10px
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoBloqueHorizontal {
+    display: flex;
+    grid-gap: 6px;
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoBloqueHorizontal {
+        flex-direction: column;
+    }
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesApartmento {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    flex-wrap: nowrap;
+    border-radius: 16px;
+    flex: 1;
+    padding: 6px;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    height: fit-content;
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoTituloApartamento {
+    margin: 0px;
+    padding: 6px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesBloqueDato {
+    gap: 6px;
+    border: 1px solid rgb(0 0 0 / 13%);
+    border-radius: 12px;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesBloqueDatoImpuesto {
+    padding: 10px;
+    border-radius: 10px;
+    background: rgb(255 255 255 /0.3);
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDatoNumero {
+    margin: 6px;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesTituloDato {
+    font-weight: bold;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesBloqueImpuesto {
+    display: flex;
+    gap: 6px;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesTituloImpuesto {
+    padding: 6px;
+}
+
+[zonaCSS="administracion/precios/detalles"] .preciosEImpuestosDetalleApartamentoDetallesBloqueBotones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+[zonaCSS="administracion/precios/detalles"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/precios"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/precios"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/precios"] .precioEImpuestosBloqueHorizotnal {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 10px;
+    border-radius: 10px;
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+[zonaCSS="administracion/precios"] .preciosEImpuestosBloqueApartamento {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    border-radius: 12px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: stretch;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 6px;
+    gap: 10px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+
+[zonaCSS="administracion/precios"] .preciosEImpuestosTituloApartamento {
+    margin: 0px;
+    padding: 4px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/precios"] .precioEImpuestosOpcionApartamentoTitulo {
+    margin: 0px;
+    padding-left: 4px;
+    padding-right: 4px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+[zonaCSS="administracion/precios"] .precioEImpuestosOpcionApartamentoDato {
+    font-weight: bold;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 20px;
+}
+
+[zonaCSS="administracion/precios"] .preciosEImpuestosBloqueTitulo {
+    margin: 0px;
+
+    padding: 6px;
+    font-weight: bold;
+    display: flex;
+    align-content: flex-end;
+    align-items: flex-end;
+}
+
+[zonaCSS="administracion/precios"] .precioEImpuestosBloqueHorizotnalImpuestos {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+[zonaCSS="administracion/precios"] .preciosEImpuestosTituloYOpciones {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+[zonaCSS="administracion/precios"] .preciosEImpuestosBloqueGlobal {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}

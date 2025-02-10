@@ -1,0 +1,78 @@
+[zonaCSS="administracion/impuestos/nuevo"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/impuestos/nuevo"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/impuestos/nuevo"] .detallesReservaCancelarReservabloqueBotones {
+
+    display: flex;
+    gap: 4px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/impuestos/nuevo"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+[zonaCSS="administracion/impuestos/nuevo"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/impuestos/nuevo"] .detalleImpuestoSelectorLista {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    appearance: none;
+}
+
+[zonaCSS="administracion/impuestos/nuevo"] .preciosEImpuestosbotonOpcionCrearNuevoImpuesto {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    appearance: none;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/impuestos/nuevo"] .contenedorNuevoImpuesto {
+    display: flex;
+    align-content: stretch;
+    gap: 6px;
+    flex-direction: column;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: stretch;
+}

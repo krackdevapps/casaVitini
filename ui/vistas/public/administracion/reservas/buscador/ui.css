@@ -1,0 +1,270 @@
+[zonaCSS="administracion/reservas/buscador"] .fechaNuevo {
+    pointer-events: none;
+    user-select: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: center;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .botonMostrarDisponibilidad {
+    background-color: rgb(225 225 225 / 70%);
+    padding: 10px;
+    user-select: none;
+    cursor: default;
+    -webkit-user-select: none;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .botonMostrarDisponibilidad:hover {
+    background: #8ac4ff;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .navegacionZonaAdministracion {
+    display: flex;
+    background-color: rgb(0 0 0 / 10%);
+    justify-content: flex-start;
+    align-content: stretch;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 16px;
+    margin-right: 0px;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+}
+
+[zonaCSS="administracion/reservas/buscador"] .adminsitracionReservasBuscador {
+
+    display: grid;
+    flex-direction: row;
+    align-items: stretch;
+
+    gap: 6px;
+    border-radius: 10px;
+    grid-template-areas: ". . .";
+    align-content: center;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .selectorRango {
+    border-radius: 12px;
+
+    user-select: none;
+    -webkit-user-select: none;
+    padding: 4px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .selectorRangoOpcion {
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 6px;
+    margin: 0px;
+    border-radius: 8px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    padding-left: 12px;
+    padding-right: 12px;
+    transition: all 250ms linear;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .AdministracionFormatoBloqueDiaNuevo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    background: #838383;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all 250ms linear;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .adminsitracionBloqueSelecionDias {
+    display: grid;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 4px;
+    grid-template-areas: ". .";
+    align-content: center;
+}
+
+
+.campoBuscadorIdReservas {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    -webkit-appearance: none;
+    appearance: none;
+    padding: 12px;
+    border-radius: 15px;
+    border: none;
+    background: rgb(255 255 255 / 0.3);
+    outline: none;
+    margin-right: 0px;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .campoBuscadorIdReservas::placeholder {
+    text-align: center;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .diaEntradaNuevoAdministracion {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow: hidden;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding: 8px;
+    align-content: center;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .textoDiaNuevoAdministracion {
+    font-weight: bold;
+
+
+    pointer-events: none;
+    user-select: none;
+    transition: all 250ms linear;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    padding: 2px;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .buscadorClientesEstadoBusqueda {
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/reservas/buscador"] .reservasBloqueContenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .administracion_reservas_espacioReservas {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/reservas/buscador"] .administracion_reservas_contenedorBotonesGlobales {
+    display: grid;
+    gap: 6px;
+    grid-template-areas: ". . .";
+}
+
+[zonaCSS="administracion/reservas/buscador"] .administracion_reservas_contenedorBotonesGlobales {
+    color: black;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: all 500ms;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.administracion_reservas_contenedorBotonesGlobales:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.selectorRangoOpcion:hover {
+    background: #8ac4ff;
+}
+
+
+.administracionFormatoBloqueDiaNuevo:hover {
+    background: #8ac4ff;
+}
+
+
+@media screen and (max-width: 1000px) {
+    [zonaCSS="administracion/reservas/buscador"] .adminsitracionReservasBuscador {
+        grid-template-areas:
+            "."
+            "f";
+    }
+
+    [zonaCSS="administracion/reservas/buscador"] .adminsitracionBloqueSelecionDias {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr;
+        grid-gap: 6px;
+    }
+}
+
+@media (max-width: 1300px) {
+
+    [zonaCSS="administracion/reservas/buscador"] [gridUID="gridBuscadorReservas"] {
+        grid-template-columns: auto auto auto auto auto !important;
+    }
+
+    [zonaCSS="administracion/reservas/buscador"] [nombreColumna="nombreCompleto"],
+    [zonaCSS="administracion/reservas/buscador"] [celdaIDV="nombreCompleto"],
+    [zonaCSS="administracion/reservas/buscador"] [nombreColumna="pasaporteTitular"],
+    [zonaCSS="administracion/reservas/buscador"] [celdaIDV="pasaporteTitular"],
+    [zonaCSS="administracion/reservas/buscador"] [nombreColumna="mailTitular"],
+    [zonaCSS="administracion/reservas/buscador"] [celdaIDV="mailTitular"] {
+        display: none
+    }
+
+    [zonaCSS="administracion/reservas/buscador"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+}
+
+
+
+
+@media (max-width: 720px) {
+    [areaGrid="gridBuscadorReservas"] [gridUID="gridBuscadorReservas"] {
+        display: none;
+    }
+
+    [areaGrid="gridBuscadorReservas"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+}

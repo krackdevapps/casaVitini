@@ -1,0 +1,81 @@
+.tituloBlanco {
+    color: white;
+}
+
+
+[zonaCSS="/contacto"] .plaza_contacto_gridContacto {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    gap: 18px;
+    padding: 18px;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS="/contacto"] .plaza_contacto_gridContacto {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+[zonaCSS="/contacto"] .plaza_contacto_tituloInfo {
+    margin: 0px;
+    padding: 6px;
+    color: white;
+    font-weight: bold;
+}
+
+[zonaCSS="/contacto"] .plaza_contacto_tituloContenedor {
+    color: white;
+    margin: 0px;
+}
+
+[zonaCSS="/contacto"] .plaza_contacto_datoContenedor {
+    font-size: 16px;
+    color: white;
+    margin: 0px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+[zonaCSS="/contacto"] .plaza_contacto_contenedorInformacion {
+    padding: 6px;
+}
+
+[zonaCSS="/contacto"] .plaza_contacto_cuadrado {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 18px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    max-width: 1920px;
+    top: 120px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+.espaciado10px {
+    padding: 10px;
+}
+
+[zonaCSS="/contacto"] .marcoParaGoogleMaps {
+    overflow: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100%;
+}
+
+[zonaCSS="/contacto"] .frameGoogleMaps {
+    height: 100%;
+    border-radius: 20px;
+}

@@ -1,0 +1,71 @@
+[zonaCSS="privacidad"] .botonPrivacidad {
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    background: white;
+    width: 100%;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+[zonaCSS="privacidad"] .botonPrivacidad:hover {
+    background: blue;
+    color: white;
+}
+
+[zonaCSS="privacidad"] .contenedorBotonesInicial {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: column;
+    align-content: center;
+    max-width: 720px;
+}
+
+[zonaCSS="privacidad"] .contenedorDecision {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    align-content: center;
+}
+
+[zonaCSS="privacidad"] .contenedorDecision {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    align-content: center;
+}
+
+[zonaCSS="privacidad"] .contenedorRevocar {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    padding: 10px;
+    flex-direction: row;
+    align-content: center;
+    max-width: 720px;
+    flex-wrap: wrap;
+}
+
+[zonaCSS="privacidad/zonaCompartida"] .tituloBloque {
+    text-align: left;
+    font-weight: bold;
+    width: 100%;
+}
+
+[zonaCSS="privacidad/zonaCompartida"] .textoBloque {
+    color: black;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 20px;
+}

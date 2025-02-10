@@ -1,0 +1,534 @@
+[zonaCSS=instalaciones] .plaza_servicios_infoGlobal {
+    padding: 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    text-align: justify;
+}
+
+[zonaCSS=instalaciones] .bloqueCaracteristicas {
+    padding: 0px;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 400px;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0px 0px 20px 5px rgb(0 0 0 / 25%);
+    transition: all 2s ease-in-out !important;
+    padding: 14px;
+    /* align-items: center; */
+
+}
+
+
+[zonaCSS=instalaciones] main * {
+    font-family: opensans-semibold !important;
+}
+
+[zonaCSS=instalaciones] .marcoElasticoRelativo {
+    padding-left: 80px;
+    padding-right: 80px;
+    max-width: 2160px;
+    gap: 20px;
+    transition: padding 1s linear, scale 250ms ease-in-out !important;
+}
+
+[zonaCSS=instalaciones] .marcoElasticoRelativo>* {
+    transition: scale 250ms ease-in-out !important;
+
+}
+
+@media (max-width: 720px) {
+    [zonaCSS=instalaciones] .bloqueCaracteristicas {
+        align-items: center;
+        transition: all 250ms ease-in-out !important;
+        padding: 0px;
+
+    }
+
+    [zonaCSS=instalaciones] .marcoElasticoRelativo {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    [zonaCSS=instalaciones] .imagenBancoBambu {
+        background-position: 80% center !important;
+    }
+}
+
+[zonaCSS=instalaciones] .imagenPortada {
+    height: 80vh;
+    padding: 14px;
+    margin-left: 100px;
+    margin-right: 100px;
+    background-position: center center !important;
+}
+
+@media (max-width: 920px) {
+    [zonaCSS=instalaciones] .imagenPortada {
+        padding-right: 0px;
+        padding-left: 0px;
+        padding-bottom: 0px;
+        padding-top: 14px;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
+
+[zonaCSS=instalaciones] .plaza_servicios_superBloque {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+[zonaCSS=instalaciones] .fontForImg {
+    font-family: opensans-variable !important;
+    font-weight: 600;
+}
+
+[zonaCSS=instalaciones] .plaza_servicios_tituloCaracteristica {
+    /* font-weight: bold; */
+    margin: 0px;
+}
+
+
+[zonaCSS=instalaciones] .photoSuperContainer {
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: min-content 100% min-content;
+}
+
+[zonaCSS=instalaciones] .photoContainer {
+    width: 100%;
+    max-width: 100%;
+    overflow: scroll;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    scrollbar-width: none;
+    border-radius: 20px;
+    padding: 10px;
+    background: #80808029;
+}
+
+
+
+[zonaCSS=instalaciones] .photoContainer .button {
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    background: hsl(0deg 0% 100% / 50%);
+    z-index: 2;
+    position: absolute;
+    padding: 10px;
+    /* padding-left: 2px; */
+    border-radius: 20px;
+    font-size: 20px;
+    display: flex;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+
+
+}
+
+[zonaCSS=instalaciones] .photoContainer .butonStart {
+    margin-left: 10px;
+    padding-right: 12px;
+
+}
+
+[zonaCSS=instalaciones] .photoContainer .butonEnd {
+    padding-left: 12px;
+    right: calc(0% + 100px);
+}
+
+[zonaCSS=instalaciones] .triangleL {
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 6px 12px 6px;
+    border-color: transparent transparent black transparent;
+    transform: rotate(270deg);
+    pointer-events: none;
+}
+
+[zonaCSS=instalaciones] .triangleR {
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 6px 12px 6px;
+    border-color: transparent transparent black transparent;
+    transform: rotate(90deg);
+    pointer-events: none;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS=instalaciones] .photoContainer .button {
+        display: none;
+
+
+    }
+}
+
+[zonaCSS=instalaciones] .photoContainer::-webkit-scrollbar {
+    display: none;
+}
+
+/* [zonaCSS=instalaciones] .photoGrid {
+    display: grid;
+    height: 300px;
+    transition: all 2s ease-in-out !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+    scrollbar-width: none; 
+} */
+[zonaCSS=instalaciones] .overridePiscina {
+    background-position: center 75% !important;
+
+}
+
+[zonaCSS=instalaciones] .photoGrid {
+    display: grid;
+    height: 300px;
+    transition: all 2s ease-in-out !important;
+    grid-gap: 10px;
+    padding: 0px;
+    height: 150px;
+    grid-template-rows: 1fr;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 350px;
+
+
+}
+
+@media (max-width: 720px) {
+    [zonaCSS=instalaciones] .photoGrid {
+        padding: 0px;
+        height: 150px;
+        grid-template-rows: 1fr;
+        grid-template-columns: none;
+        grid-auto-flow: column;
+        grid-auto-columns: 150px;
+    }
+}
+
+[zonaCSS=instalaciones] .photoInGrid {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+[zonaCSS=instalaciones] .posicionImagen {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    transition: all 150ms linear;
+}
+
+[zonaCSS=instalaciones] .apliarImagen:hover {
+
+    box-shadow: 0px 0px 20px 0px #0000007a;
+}
+
+
+[zonaCSS=instalaciones] .contenedorImagenesInstalaciones {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento {
+    background: #f6e1af;
+    margin-right: 30px;
+    margin-left: 30px;
+    border-radius: 30px;
+    padding: 15px;
+
+}
+
+[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .titulo {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0px;
+    text-align: center;
+}
+
+[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .descripcion {
+    padding: 30px;
+    text-align: center;
+}
+
+[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .contenedorImagenes {
+    margin: 0px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 15px 15px;
+    align-items: center;
+    align-content: center;
+    justify-items: stretch;
+
+}
+
+[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .imagenContenedor {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 200px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius: 18px;
+    transition: all 100ms linear;
+}
+
+@media (min-width: 850px) {
+    .plaza_servicios_superBloque .contenedorApartamento .imagenContenedor:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 0px 20px 0px #0000007a;
+    }
+}
+
+
+[zonaCSS=instalaciones] .apartamento_5_imagen1 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image1.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_5_imagen2 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image2.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_5_imagen3 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image3.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_5_imagen4 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image4.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_5_imagen5 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image5.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_5_imagen6 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image6.jpeg");
+}
+
+
+
+[zonaCSS=instalaciones] .apartamento_6_imagen1 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image1.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_6_imagen2 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image2.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_6_imagen3 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image3.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_6_imagen4 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image4.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_6_imagen5 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image5.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_6_imagen6 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image6.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_6_imagen7 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image7.jpeg");
+}
+
+
+
+[zonaCSS=instalaciones] .apartamento_7_imagen1 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image1.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_7_imagen2 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image2.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_7_imagen3 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image3.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_7_imagen4 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image4.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_7_imagen5 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image5.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_7_imagen6 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image6.jpeg");
+}
+
+[zonaCSS=instalaciones] .apartamento_7_imagen7 {
+    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image7.jpeg");
+}
+
+
+[zonaCSS=instalaciones] [animacion="contenedorImagen"] {
+    view-timeline-name: --image;
+    view-timeline-axis: block;
+    animation-timeline: --image;
+    animation-name: show;
+    animation-range: entry 0 cover 30%;
+    animation-fill-mode: both;
+}
+
+
+[zonaCSS=instalaciones] .textoPresentacion {
+    padding-left: 120px;
+    padding-right: 120px;
+    text-align: justify;
+    font-size: 13px;
+    color: #8D6E63;
+    padding-top: 30px;
+}
+
+@media (max-width: 720px) {
+    [zonaCSS=instalaciones] .textoPresentacion {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 30px;
+    }
+}
+
+
+
+[zonaCSS=instalaciones] .cuadradoInicioTexto {
+    text-align: center;
+    padding: 10px;
+    background: #b1afaf66;
+    border-radius: 10px;
+    animation: parpadeoElementoIndicadorGrisInstalaciones 5s infinite linear;
+    font-size: 12px;
+
+}
+
+[zonaCSS=instalaciones] .contenedorImagen {
+    height: 200px;
+    gap: 6px;
+    background: #00000021;
+    border-radius: 14px;
+    overflow: hidden;
+
+    scale: 1;
+    transition: all 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+
+[zonaCSS=instalaciones] .contenedorImagenFondo {
+    background-size: cover;
+    background-position: center center;
+    flex: 1;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: color(srgb 0 0 0 / 0);
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/AcaxUIAAAAASUVORK5CYII=');
+    transition: background-image 250ms linear !important;
+}
+
+[zonaCSS=instalaciones] .gridImagenesApartamento {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 10px;
+}
+
+[zonaCSS=instalaciones] .contenedorInfoGlobal {
+    position: sticky;
+    top: 10px;
+    width: 400px;
+}
+
+@media (max-width: 990px) {
+    [zonaCSS=instalaciones] .gridImagenesApartamento {
+        grid-template-columns: 1fr;
+    }
+
+    [zonaCSS=instalaciones] .contenedorInfoGlobal {
+        position: relative;
+        width: 100%;
+        top: auto;
+
+
+    }
+}
+
+.plaza_servicios_contenedorCaracteristicas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    gap: 20px;
+}
+
+@media (max-width: 720px) {
+    .plaza_servicios_contenedorCaracteristicas {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+}
+
+.plaza_servicios_definicionCaracteristica {
+    margin: 0px;
+}
+
+
+
+
+.infoCaracteristicaTest {
+    margin-top: -60px;
+    text-align: center;
+}
+
+
+.plaza_servicios_contenedorCaracteristicaTexto {
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 30px;
+    border-radius: 100px;
+    display: flex;
+    gap: 0px;
+    flex-direction: column;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    background: rgba(255, 255, 255, 0.1);
+    color: rgb(255 255 255 / 0.85);
+    width: fit-content;
+    transition: all 1s ease-in-out !important;
+}
+
+
+@media (max-width: 720px) {
+    .plaza_servicios_contenedorCaracteristicaTexto {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 12px;
+        border-radius: 0px;
+        width: 100%;
+    }
+
+}

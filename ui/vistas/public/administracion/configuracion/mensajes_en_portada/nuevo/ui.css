@@ -1,0 +1,45 @@
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .contenedorDelMensaje {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .textoDelMensaje {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    min-height: 100px;
+    height: 100px;
+    width: 100%;
+    resize: vertical;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .contenedorBotones {
+    display: flex;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .contenedorBotones .boton {
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    cursor: default;
+    user-select: none;
+    transition: background 250ms linear;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/nuevo"] .contenedorBotones .boton:hover {
+    background: rgba(255, 255, 255, 0.6);
+}

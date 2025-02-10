@@ -1,0 +1,618 @@
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportameintoEspacioBotones {
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-content: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+      border-radius: 12px;
+      gap: 4px;
+      row-gap: 4px;
+      column-gap: 4px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+      margin: 0px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarReservabloqueBotones {
+
+      display: flex;
+      gap: 4px;
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+      border-radius: 12px;
+      flex-direction: column;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaCancelarBoton {
+      background: #00000036;
+      padding: 8px;
+      border-radius: 8px;
+      border-radius: 8px;
+      text-align: center;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espaciadoInterno {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .elementoOcultoInicialmente {
+      display: none;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espacioComportamiento {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      align-content: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: 6px;
+      border-radius: 10px;
+      padding: 6px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .espacioBloqueos {
+      display: flex;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+      padding: 0px;
+      justify-items: center;
+      justify-content: center;
+      align-content: center;
+      flex-direction: column;
+      align-items: stretch;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .preciosEImpuestosbotonOpcionCrearNuevoImpuesto {
+      outline: none;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      appearance: none;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .selectorTipoComportamiento {
+      outline: none;
+      border: none;
+      padding: 6px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.1);
+      appearance: none;
+      backdrop-filter: blur(50px);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+
+  }
+
+  @media (max-width: 720px) {
+      [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .selectorTipoComportamiento {
+          grid-template-columns: 1fr;
+      }
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonTipoComportamiento {
+      outline: none;
+      border: none;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.3);
+      appearance: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 250ms linear;
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonTipoComportamiento:hover {
+      background: rgba(255, 255, 255, 0.6);
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaConentenedor {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      border-radius: 13px;
+      display: flex;
+      flex-direction: column;
+      align-content: flex-start;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 6px;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportameintoContendorFechas {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      border-radius: 13px;
+      flex-direction: column;
+      align-content: flex-start;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 6px;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      display: none;
+
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorPorDias {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      border-radius: 13px;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      gap: 6px;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      flex-direction: row;
+      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+  }
+
+  @media (max-width: 620px) {
+      [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorPorDias {
+          display: flex;
+          flex-direction: column;
+      }
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 13px;
+      flex-direction: row;
+      align-content: center;
+      align-items: center;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 6px;
+      backdrop-filter: blur(50px);
+      display: flex;
+      padding: 12px;
+      transition: background 250ms linear;
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .diaUI:hover {
+      background: rgba(255, 255, 255, 0.6);
+
+  }
+
+  .crearComportamientoConentenedor {
+      margin: 0px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .ofertaUITituloFecha {
+      font-weight: bold;
+      text-align: center;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .ofertaUITituloOferta {
+      padding: 0px;
+      margin: 0px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .contenedorTituloEstado {
+      padding: 10px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .comportamientoUIFechaContenedor {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-content: center;
+      justify-content: center;
+      flex-wrap: wrap;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .diaSeleciconadoCelda {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-content: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-weight: bold;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSeleccionados {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-content: center;
+      justify-content: center;
+      flex-wrap: wrap;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .comportamintoDePreciosSuperBloque {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      justify-content: center;
+      align-content: center;
+      gap: 6px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .ofertaUIContenedorComportamiento {
+      display: grid;
+      padding: 0;
+      margin: 0;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+      align-items: stretch;
+      flex-direction: column;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .contenedorDiasSelecionados {
+      display: grid;
+      padding: 0;
+      margin: 0;
+      gap: 10px;
+      justify-items: stretch;
+      justify-content: flex-start;
+      align-content: center;
+      align-items: stretch;
+      flex-direction: row;
+      flex-wrap: wrap;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .comportamientoUI {
+      background: rgba(255, 255, 255, 0.3);
+      padding: 10px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: black;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      cursor: default;
+      transition: all 500ms;
+      gap: 10px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearComportamientoConentenedor__ {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+      padding: 6px;
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontalV2 {
+
+      display: grid;
+      grid-template-columns: 0.25fr 1fr;
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+      padding: 0px;
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+      align-items: stretch;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontal_modoCrear {
+      display: flex;
+      grid-template-columns: 0.25fr 1fr;
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+      padding: 0px;
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+      align-items: stretch;
+      flex-direction: column;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .creatOfertaBotonEstado {
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      border-radius: 12px;
+      padding: 6px;
+      font-weight: bold;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      padding: 10px;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaContenedorHorizontal {
+
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+      padding: 0px;
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+      align-items: stretch;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .contenedorFecha {
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+      flex-wrap: nowrap;
+      border-radius: 12px;
+      padding: 10px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .tituloFecha {
+      font-weight: bold;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
+      display: flex;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 6px;
+      grid-auto-rows: minmax(auto, auto);
+      justify-items: stretch;
+      justify-content: center;
+      align-content: center;
+      align-items: start;
+      border-radius: 16px;
+  }
+
+  @media (max-width: 720px) {
+      [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .administracion_comportamientoPreciso_crearComportameinto_espacioContenedorApartamentos {
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      }
+  }
+
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaEpacioBotones {
+
+      display: grid;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 6px;
+      grid-template-columns: repeat(3, 1fr);
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonV2_negrita {
+      margin: 0px;
+      font-weight: bold;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .botonV2_negrita:hover {
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOFertaBotonAnadirApartamento {
+      margin: 0px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaMenuVolatilAnadirApartamento {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
+      display: flex;
+      background: rgba(245, 245, 245, 0.3);
+      position: absolute;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      align-content: center;
+      justify-content: center;
+      padding: 6px;
+      gap: 6px;
+      border-radius: 10px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoUI {
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      align-content: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 6px;
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoUI:hover {
+      color: white;
+      background: black;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoTItulo {
+      font-weight: bold;
+      margin: 0px;
+      padding: 2px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaApartamentoEstado {
+      margin: 0px;
+      padding: 2px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearOfertaZonaAnadirApartamento {
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      display: flex;
+
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      align-content: center;
+      justify-content: center;
+      padding: 6px;
+      gap: 6px;
+      border-radius: 10px;
+      background: #0000001f;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .crearApartamentoInfoSinApartamento {
+      padding: 6px;
+      margin: 0px;
+      text-align: center;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .editarOfertaSoloLecturaUI {
+      border-radius: 14px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-content: center;
+      justify-content: center;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .editarOfertaSoloLecutraInfo {
+      margin: 0px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios/comportamientoUI"] .detallesReservaTituloCancelarReserva {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 4px;
+      text-align: center;
+  }
+
+
+  @media (max-width: 720px) {
+      [zonaCSS="administracion/comportamiento_de_precios"] .crearOfertaContenedorHorizontalV2 {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: nowrap;
+          align-content: stretch;
+          align-items: stretch;
+      }
+  }
+
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .gestionDeOfertasContenedor {
+      border-radius: 26px;
+      padding: 0px;
+      display: flex;
+      flex-direction: column;
+      align-content: flex-start;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 6px;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .gestionDeOfertasBotonCrearOferta {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 14px;
+      padding: 10px;
+      text-decoration: none;
+      transition: all 500ms linear;
+      color: black;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .gestionDeOfertasBotonCrearOferta:hover {
+      background: rgba(255, 255, 255, 0.6);
+  }
+
+  [zonaCSS="administracion/comportamiento_de_precios"] .gestionDeOfertasContenedorBotones {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      align-content: center;
+  }
+  [zonaCSS="administracion/comportamiento_de_precios"] .crearOFertaBotonAnadirApartamento:hover {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}

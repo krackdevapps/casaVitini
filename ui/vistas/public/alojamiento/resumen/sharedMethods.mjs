@@ -115,7 +115,7 @@ export const sharedMethods_resumen = {
         definicionUI.textContent = definicion
         servicioUI.appendChild(definicionUI)
 
-        const componentesUI = casaVitini.ui.componentes.serviciosUI
+        const componentesUI = casaVitini.view.__sharedMethods__.serviciosUI
         const cgdoUI = componentesUI.contenedor_gruposDeOpciones()
         servicioUI.appendChild(cgdoUI)
 

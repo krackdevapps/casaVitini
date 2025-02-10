@@ -1,0 +1,538 @@
+@font-face {
+    font-family: defaultFont;
+    src: url(/activos/fuentes/segoe/Segoe_UI.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: defaultFont;
+    src: url(/activos/fuentes/segoe/Segoe_UI_Bold.ttf) format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: opensans-semibold;
+    src: url(/activos/fuentes/Open_Sans/static/OpenSans-SemiBold.ttf) format('truetype');
+    /* font-style: normal; */
+}
+
+@font-face {
+    font-family: opensans-bold;
+    src: url(/activos/fuentes/Open_Sans/static/OpenSans-Bold.ttf) format('truetype');
+    font-style: normal;
+}
+
+* {
+    font-family: defaultFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+.uiPanelGlobal {
+    background-color: rgba(161, 161, 161, 0);
+    padding: 10px;
+    display: grid;
+    gap: 10px;
+    flex-wrap: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    grid-template-columns: 1fr max-content auto;
+    align-items: center;
+    flex: 1;
+}
+
+[componente=iconos] {
+    display: flex;
+    align-content: center;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.fondo {
+    background: rgb(97, 97, 97);
+    height: 100vh;
+    width: 100%;
+    position: static;
+    z-index: 0;
+    object-fit: cover;
+    transition: all 250ms;
+    margin: 0px;
+}
+
+#uiLogo {
+    height: 70px;
+    width: 171px;
+    color: rgba(0, 0, 0, 0.9);
+    cursor: default;
+    transition: all 500ms linear;
+    z-index: 10;
+    background-size: contain;
+    /* background-size: contain; */
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-image: url(/activos/imagenes/logov.svg);
+    scale: 1;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+.imgLogo {
+    background: transparent;
+    pointer-events: none;
+    scale: 1;
+    transition: all .500s ease-in-out;
+    width: 100%;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+.contenedorTest {
+    background: blue;
+    overflow: hidden;
+    width: 100%;
+    transition: all 5s linear;
+}
+
+.elipsisIDX {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 180px;
+    display: block;
+    white-space: nowrap;
+}
+
+.uiCategoriaMenu {
+    border: 0px none;
+    text-align: center;
+    font-size: 14px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 5px;
+    transition: background 250ms, color 250ms;
+    cursor: default;
+    pointer-events: none;
+}
+
+.iconoMenu {
+    width: 20px;
+    height: 20px;
+}
+
+body {
+    background: rgb(206 206 206);
+    background-image: url(/activos/imagenes/transparente.png);
+    transition: background 700ms linear;
+    flex-wrap: nowrap;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+main {
+    display: flex;
+    align-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    max-width: 2160px;
+    width: 100%;
+}
+
+header {
+    width: 100%;
+    z-index: 10;
+}
+
+header .simulador {
+    pointer-events: none;
+    overflow: hidden;
+    position: absolute;
+}
+
+header .estructura {
+    display: flex;
+    padding: 6px;
+    gap: 6px;
+    transition: all 250ms linear;
+    border-radius: 30px;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    gap: 6px;
+    background-color: rgba(255, 255, 255, 0.3);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.estructuraVertical {
+    display: flex;
+    gap: 6px;
+    transition: all 250ms linear;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+header .contenedorIntermedio {
+    display: grid;
+    grid-template-columns: 1fr;
+    transition: all 250ms linear;
+    overflow: hidden;
+    justify-items: center;
+}
+
+header .contenedorIntermedio>div {
+    overflow: hidden;
+}
+
+header .zonas {
+    display: flex;
+    grid-template-columns: repeat(auto);
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+}
+
+@keyframes AnimacionSueave {
+    0% {
+        transform: scale(0)
+    }
+
+    100% {
+        transform: scale(1)
+    }
+}
+
+.contenedorFondo {
+    background-image: url(/activos/imagenes/fotos/2.jpeg);
+    transition: all 500ms;
+    z-index: -1;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-attachment: scroll
+}
+
+.esferaUI {
+    height: 16px;
+    width: 16px;
+    border-radius: 100%;
+    background: rgba(0, 0, 0, 0.317);
+    padding: 10px;
+}
+
+.tintadoVinculo {
+    color: black;
+    border-radius: 20px;
+    padding: 0px;
+    margin: 5px;
+    text-decoration: none;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.marcoVinculoLogo {
+    color: black;
+    text-decoration: none;
+    outline: none;
+    cursor: default;
+    border-radius: 20px;
+    margin: 8px;
+    pointer-events: all;
+    z-index: 1000;
+}
+
+.marcoNavegacion {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+    width: 100%;
+    z-index: 200;
+    background: transparent;
+    transition: all 2s linear;
+}
+
+@media (max-width: 720px) {
+    .globa_marcoNavegacion_desenfoque {
+        -webkit-backdrop-filter: blur(50px);
+        backdrop-filter: blur(50px);
+        background: rgba(255, 255, 255, 0.4);
+    }
+}
+
+.uiMenu {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    height: 100%;
+    width: 100%;
+    padding: 6px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    transition: all 1s linear;
+}
+
+.ocultoInicial {
+    display: none;
+}
+
+.contenedorMenus {
+    display: grid;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-direction: row;
+    pointer-events: all;
+    grid-template-areas: ". .";
+    transition: all 250ms linear;
+    overflow: hidden;
+    padding: 6px;
+    gap: 6px;
+    scale: 1;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+.menuDesplegado {
+    border-radius: 30px;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    gap: 6px;
+    overflow: hidden;
+    padding: 6px;
+    transition: all 250ms linear;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.uiCategoria {
+    border: 0px none;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin: 0px;
+    border-radius: 20px;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    cursor: default;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 33px;
+    width: 100%;
+    transition: background 250ms linear, color 250ms linear, scale 250ms ease-in-out;
+    justify-content: flex-start;
+    scale: 1;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+.uiCategoria:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.botonMenuResponsivo {
+    transition: all 250ms linear;
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    border-radius: 10px;
+    height: 40px;
+    width: 0px;
+    margin-right: 0px;
+    cursor: default;
+    display: flex;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    background-position: center center;
+    background-image: url(/activos/iconos/menu5.svg);
+    background-size: cover;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    scale: 0;
+}
+
+.esferaUI_flotante {
+    display: flex;
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+    background: rgb(0 0 0 / 50%);
+    padding: 10px;
+    backdrop-filter: blur(50px);
+    scale: 1;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+.esferaUI_flotante_responsiva {
+    display: flex;
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: scale 250ms ease-in-out;
+    -webkit-backdrop-filter: blur(50px);
+    padding: 13px;
+    transition: scale 250ms ease-in-out;
+    scale: 1;
+    top: -19px;
+    position: absolute;
+    left: -24px;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+}
+
+.botonMenuResponsivo:hover {
+    color: white;
+}
+
+@media (max-width: 1080px) {
+    header .contenedorIntermedio {
+        grid-template-columns: 0fr;
+        border-radius: 30px;
+        opacity: 0;
+    }
+
+    header .estructura {
+        padding: 0px;
+    }
+
+    .botonMenuResponsivo {
+        width: 50px;
+        margin-right: 12px;
+        scale: 1;
+    }
+
+    .contenedorTest {
+        background: red;
+    }
+
+    .contenedorMenu {
+        grid-template-columns: 0% 100%;
+    }
+
+    .imgLogo {
+        width: 140px;
+    }
+
+    #uiLogo {
+        /* width: 140px;   */
+        height: 56px;
+    }
+
+    .uiPanelGlobal {
+        align-items: center;
+    }
+}
+
+@keyframes desaparecMenu {
+    from {
+        zoom: 100%;
+    }
+
+    to {
+        zoom: .01%;
+        display: none;
+    }
+}
+
+@keyframes apareceMenu {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.uiMenuGlobalResponsivo {
+    display: flex;
+    transition: all 250ms;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 17px;
+    align-content: center;
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    position: absolute;
+    gap: 6px;
+    top: 70px;
+    right: 25px;
+    position: fixed;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+    padding: 6px;
+    z-index: 1000;
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+.enlaceInvisibleMenu {
+    text-decoration: none;
+    text-decoration-line: none;
+    text-decoration-color: white;
+}
+
+.enlaceInvisibleMenu:visited {
+    text-decoration: none;
+    text-decoration-line: none;
+    color: white;
+    text-decoration-color: white;
+}
+
+#errorVista {
+    margin-top: 100px;
+}

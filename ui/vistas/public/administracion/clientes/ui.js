@@ -266,7 +266,7 @@ casaVitini.view = {
             }
 
             const constructorURLFinal = encodeURI(granuladoURL.directoriosFusion + parametrosURLFInal)
-            casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+            casaVitini.view.__sharedMethods__.grid.despliegue({
                 metodoSalida: "view.buscador.mostrarClientesResueltos",
                 configuracionGrid: {
                     filas: clientes,
@@ -580,7 +580,7 @@ casaVitini.view = {
 
                 const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
 
-                casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+                casaVitini.view.__sharedMethods__.grid.despliegue({
                     metodoSalida: "view.detallesCliente.portada.mostrarReservasDelClienteResueltas",
                     configuracionGrid: {
                         filas: reservasDelCliente,

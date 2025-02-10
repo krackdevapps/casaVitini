@@ -1,0 +1,185 @@
+@media (max-width: 720px) {
+
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [gridUID="gridServicios"] {
+        display: none;
+    }
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [zonaCSS="/administracion/servicios"] [areaGrid="gridServicios"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
+
+
+}
+
+[zonaCSS="/administracion/servicios"] .botonNuevo {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    color: black;
+}
+
+[zonaCSS="/administracion/servicios"] .contenedorBotonesGlobales {
+    display: flex;
+    justify-content: flex-end;
+}
+
+[zonaCSS="/administracion/servicios"] .botonNuevo:hover {
+    background: white;
+}
+
+
+[zonaCSS="/administracion/servicios/servicioUI"] .servicioUI {
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 12px;
+    gap: 6px;
+}
+
+[zonaCSS="/administracion/servicios/servicioUI"] .administracion_ofertas_crearOfertas_contenedorFecha {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: none;
+}
+
+[zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontalV2 {
+
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+@media (max-width: 520px) {
+    [zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontalV2 {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalV2 {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: stretch;
+        align-items: stretch;
+    }
+}
+
+
+
+[zonaCSS="/administracion/servicios/servicioUI"] .crearOfertaContenedorHorizontal {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+[zonaCSS="/administracion/servicios/servicioUI"] .contenedorSelectoresGlobales {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px
+}
+
+@media (max-width: 520px) {
+    [zonaCSS="/administracion/servicios/servicioUI"] .contenedorSelectoresGlobales {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+
+[zonaCSS="/administracion/servicios/servicioUI"] .creatOfertaBotonEstado {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    border-radius: 12px;
+    padding: 6px;
+    font-weight: bold;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="/administracion/servicios/servicioUI"] .contenedorFecha {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    border-radius: 12px;
+    padding: 10px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="/administracion/servicios/servicioUI"] .contenedorBotones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    justify-content: center;
+    align-items: stretch;
+    align-content: center;
+    flex-direction: column;
+    gap: 6px;
+}

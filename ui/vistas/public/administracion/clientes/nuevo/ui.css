@@ -1,0 +1,95 @@
+
+[zonaCSS="administracion/clientes/nuevo"] .bloqueHoriontalContenedor {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .gridDivisorHorizontalDOS {
+    display: grid;
+    grid-gap: 4px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .bloqueVerticalInterno {
+
+    padding: 6px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .nuevoClienteEspacio {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    padding: 4px;
+    border-radius: 14px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .contenedorTituloYEntradaDAtos {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: flex-start;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .nuevoClienteTituloDato {
+    padding: 10px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .nuevoClienteCampo {
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    background: rgb(255 255 255 / 0.5);
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .nuevoClienteCampoAreaTexto {
+    outline: none;
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    resize: none;
+    background: rgb(255 255 255 / 0.5);
+    margin: 8px;
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .nuevoClienteBoton {
+    background: #ffffff6e;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 8px;
+    font-weight: bold;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+[zonaCSS="administracion/clientes/nuevo"] .nuevoClienteBoton:hover {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}

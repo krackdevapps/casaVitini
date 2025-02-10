@@ -4,6 +4,7 @@ casaVitini.view = {
         main.setAttribute("zonaCSS", "instalaciones")
         const instanciaUID = main.getAttribute("instanciaUID")
 
+
         document.body.style.backgroundColor = "rgb(255 188 0 / 0.14)"
         main.style.paddingTop = "10px"
         main.style.maxWidth = "100%"
@@ -17,7 +18,7 @@ casaVitini.view = {
                 casaVitini.ui.componentes.componentesComplejos.ampliadorDeImagen.ampliarImagen(e)
             })
         )
-
+        this.photoGrid.start()
         return this.obtenerApartmentosIDV({
             instanciaUID
         })
@@ -87,7 +88,7 @@ casaVitini.view = {
         contenedorApartamento.appendChild(ui)
 
         const contenedorInfoGlobal = document.createElement("div")
-        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "backgroundWhite5", "padding18", "contenedorInfoGlobal", "gap6")
+        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "backgroundWhite5", "padding18", "contenedorInfoGlobal", "gap6", "fontForImg")
         ui.appendChild(contenedorInfoGlobal)
 
         const infoGlobalAlojamiento = document.createElement("div")
@@ -100,7 +101,8 @@ casaVitini.view = {
         infoGlobalAlojamiento.appendChild(tituloPublico)
 
         const definicionPublicaUI = document.createElement("p")
-        definicionPublicaUI.textContent = definicionPublica
+        definicionPublicaUI.style.fontWeight = "normal"
+        definicionPublicaUI.textContent = definicionPublica +"+++++++"
         infoGlobalAlojamiento.appendChild(definicionPublicaUI)
 
         const contenedorCaracteristicas = document.createElement("div")
@@ -116,6 +118,7 @@ casaVitini.view = {
             const caracteristicaUI = c.caracteristicaUI
 
             const cUI = document.createElement("p")
+            cUI.style.fontWeight = "normal"
             cUI.textContent = caracteristicaUI
             contenedorCaracteristicas.appendChild(cUI)
 
@@ -128,7 +131,7 @@ casaVitini.view = {
             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
         }
         if (respuestaServidor?.ok) {
-               return this.redenderizaContenedorImagen({
+            return this.redenderizaContenedorImagen({
                 respuestaServidor,
                 gridImagenes,
                 instanciaUID
@@ -272,8 +275,11 @@ casaVitini.view = {
             "backgroundWhite5",
             "transitionAll500",
             "ratonDefault",
-            "noSelecionable"
+            "noSelecionable",
+            "fontForImg"
+            
         )
+        titulo.style.color = "#8D6E63"
         titulo.setAttribute("componenete", "tituloTextoApartamentos")
         titulo.textContent = "Apartamentos"
         tituloPegajoso.appendChild(titulo)
@@ -309,5 +315,39 @@ casaVitini.view = {
         }
         document.addEventListener("scroll", controladorAlturaTituloDinamico)
         controladorAlturaTituloDinamico()
+    },
+    photoGrid: {
+        start: function () {
+            const main = document.querySelector("main")
+            const photoGrid = main.querySelector("[com=photoGrid]")
+            const botonAtras = photoGrid.querySelector("[com=atras]")
+            botonAtras.addEventListener("click", (e) => {
+                this.moverFotos(e)
+            })
+            const botonAdelante = photoGrid.querySelector("[com=adelante]")
+            botonAdelante.addEventListener("click", (e) => {
+                this.moverFotos(e)
+            })
+
+        },
+        moverFotos: function (e) {
+            const main = document.querySelector("main")
+            const photoGrid = main.querySelector("[com=photoGrid]")
+            const botonSel = e.target.getAttribute("com")
+
+            const horizontalPhoyo = photoGrid.querySelector("[contenedor=imagenBase64]")
+            const elementWidth = horizontalPhoyo.getBoundingClientRect().width;
+            if (botonSel === "adelante") {
+                photoGrid.scrollTo({
+                    left: photoGrid.scrollLeft + elementWidth,
+                    behavior: 'smooth'
+                });
+            } else if (botonSel === "atras") {
+                photoGrid.scrollTo({
+                    left: photoGrid.scrollLeft - elementWidth,
+                    behavior: 'smooth'
+                });
+            }
+        }
     }
 }

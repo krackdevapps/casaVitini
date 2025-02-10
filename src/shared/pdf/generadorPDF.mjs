@@ -59,8 +59,8 @@ export const generadorPDF = async (reserva) => {
         const __dirname = path.dirname(__filename);
         const fonts = {
             Roboto: {
-                normal: require.resolve('../../../componentes/pdf/fuentes/roboto-regular.ttf'),
-                bold: require.resolve('../../../componentes/pdf/fuentes/roboto-bold.ttf'),
+                normal: require.resolve('../../../activos/pdf/fuentes/roboto-regular.ttf'),
+                bold: require.resolve('../../../activos/pdf/fuentes/roboto-bold.ttf'),
             },
         };
         const docDefinition = {
@@ -73,7 +73,7 @@ export const generadorPDF = async (reserva) => {
                     body: [
                         [
                             {
-                                image: require.resolve('../../../componentes/pdf/logo.png'),
+                                image: require.resolve('../../../activos/pdf/logo.png'),
                                 width: 100,
                             },
                             {
@@ -288,7 +288,7 @@ export const generadorPDF = async (reserva) => {
                 columnGap: 0
             }
         };
-        const totalesPorApartamento = contenedorFinanciero.desgloseFinanciero.entidades.reserva?.desglosePorApartamento || {}
+        const totalesPorApartamento = contenedorFinanciero.desgloseFinanciero.entidades.reserva?.desglosePorApartamento || {}
         if (Object.entries(totalesPorApartamento).length > 0) {
             const tablaFormatoPDFMake = {
                 style: 'tablaTotales',

@@ -165,7 +165,7 @@ export const sharedMethods = {
         })
 
         const pFechaInicio = document.createElement("p");
-        pFechaInicio.classList.add("tituloFecha");
+        pFechaInicio.classList.add("negrita");
         pFechaInicio.textContent = "Fecha de inicio";
 
         const pFechaInicioSeleccionada = document.createElement("p");
@@ -196,7 +196,7 @@ export const sharedMethods = {
         })
 
         const pFechaFin = document.createElement("p");
-        pFechaFin.classList.add("tituloFecha");
+        pFechaFin.classList.add("negria");
         pFechaFin.textContent = "Fecha fin";
 
         const pFechaFinSeleccionada = document.createElement("p");

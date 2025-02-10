@@ -1,0 +1,131 @@
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedor {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorBotones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .botonNuevoMensaje {
+    display: flex;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 10px;
+    columns: black;
+    color: black;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorListaMensajes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje {
+    display: grid;
+    grid-template-columns: auto 200px;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    background: #d9dada;
+    margin: 0px;
+    border-radius: 16px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .textoDelMensaje {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .selector {
+    display: flex;
+    background: #ffffff5c;
+    flex-direction: column;
+    appearance: none;
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .contenedorBotonesMensaje {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .contenedorBotonesMensaje .boton {
+    display: flex;
+    background: #ffffff5c;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada"] .contenedorMensaje .contenedorBotonesMensaje .boton:hover {
+    background: white;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorDelMensaje {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .textoDelMensaje {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    min-height: 100px;
+    height: 100px;
+    width: 100%;
+    resize: vertical;
+}
+
+
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorBotones {
+    display: flex;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorBotones .boton {
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    cursor: default;
+    user-select: none;
+    transition: background 250ms linear;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/configuracion/mensajesEnPortada/detallesDelMensaje"] .contenedorBotones .boton:hover {
+    background: rgba(255, 255, 255, 0.6);
+}

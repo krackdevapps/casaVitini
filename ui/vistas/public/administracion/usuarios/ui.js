@@ -234,7 +234,7 @@ casaVitini.view = {
 
             const constructorURLFinal = encodeURI(granuladoURL.directoriosFusion + parametrosURLFInal)
 
-            casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+            casaVitini.view.__sharedMethods__.grid.despliegue({
                 metodoSalida: "view.portada.mostrarUsuariosResueltos",
                 configuracionGrid: {
                     filas: usuarios,
@@ -780,7 +780,7 @@ casaVitini.view = {
                 botonAceptar.textContent = tituloBoton
                 botonAceptar.setAttribute("nuevoEstado", valorBoton)
                 botonAceptar.addEventListener("click", (e) => { this.transactor(e) })
-     
+
                 const botonCancelar = constructor.querySelector("[boton=cancelar]")
                 botonCancelar.textContent = "Cancelar el cambio de estado y volver"
                 document.querySelector("main").appendChild(pantallaInmersiva)

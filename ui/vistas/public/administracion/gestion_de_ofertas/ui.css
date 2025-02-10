@@ -1,0 +1,514 @@
+[zonaCSS="administracion/ofertas"] .ofertaUIContenedorDetalles {
+    display: flex;
+    align-content: stretch;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 6px;
+    flex-direction: column;
+    padding: 6px;
+    border: 0px solid rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+}
+
+[zonaCSS="administracion/ofertas"] .gestionDeOfertasContenedor {
+    border-radius: 26px;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/ofertas"] .gestionDeOfertasBotonCrearOferta {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    padding: 10px;
+    text-decoration: none;
+    transition: all 500ms linear;
+    color: black;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/ofertas"] .gestionDeOfertasContenedorBotones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    align-content: center;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUI {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 6px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: black;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUIContenedorPropiedades {
+    display: flex;
+    gap: 6px;
+    padding: 9px;
+    justify-items: stretch;
+    justify-content: space-between;
+    align-content: center;
+    border-radius: 14px;
+    align-items: stretch;
+    background: rgba(255, 255, 255, 0.3);
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+[zonaCSS="administracion/ofertas"] .gestionDeOfertasContedorOfertas {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    gap: 6px;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUIContenedorGlobalOferta {
+    display: grid;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    gap: 6px;
+    grid-template-columns: 0.3fr 0.5fr 1.1fr;
+
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+@media (max-width: 720px) {
+    [zonaCSS="administracion/ofertas"] .ofertaUIContenedorGlobalOferta {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUITituloOferta {
+    padding: 12px;
+    margin: 0px;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUIBloqueOpcion {
+    border-radius: 8px;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUIFechaContenedor {
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUITituloFecha {
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/ofertas"] .informacionOfertaUI {
+    padding: 6px;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUITituloDefinicion {
+    margin: 0;
+    padding: 0px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/ofertas"] .ofertaUIDefinicionOferta {
+    margin: 0;
+    padding: 0px;
+}
+
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorCondicion {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #ffffff54;
+    padding: 6px;
+    border-radius: 16px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorCondiciones {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 16px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorBotonesGlobal {
+    display: flex;
+    flex-direction: row;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .espaciadoInterno {
+    display: flex;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorDescuento {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #ffffff54;
+    padding: 6px;
+    border-radius: 16px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .elementoOcultoInicialmente {
+    display: none;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .espacioClientes {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .preciosEImpuestosbotonOpcionCrearNuevoImpuesto {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    appearance: none;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .preciosEImpuestosbotonOpcionCrearNuevoImpuesto {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    appearance: none;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaConentenedor {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorInternoPorRango {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorDia {
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    background: rgb(37, 149, 246);
+    padding: 6px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .administracion_ofertas_crearOfertas_contenedorFecha {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalV2 {
+
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalModoCrear {
+    display: flex;
+    grid-template-columns: 0.25fr 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontal {
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorZonaOferta {
+    display: flex;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .creatOfertaBotonEstado {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    border-radius: 12px;
+    padding: 6px;
+    font-weight: bold;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalTipoOfertas {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+@media (max-width: 720px) {
+    [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalTipoOfertas {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    }
+}
+
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .opcionTipoOFerta {
+    background: #ffffff8f;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 0px;
+    cursor: default;
+    user-select: none;
+    transition: background 250ms linear;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .opcionTipoOFerta:hover {
+    background: #ffffffbc;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaTitulo {
+    margin: 0px;
+    padding: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaTituloTipoOferta {
+    margin: 0px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaDescripcionTipoOferta {
+    margin: 0px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaTituloOpcion {
+    margin: 0px;
+    padding: 6px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorFecha {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    border-radius: 12px;
+    padding: 10px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .tituloFecha {
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfeartaEspacioOpciones {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    border-radius: 16px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaEpacioBotones {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    align-content: center;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOFertaBotonAnadirApartamento {
+    margin: 0px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOFertaBotonAnadirApartamento:hover {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaMenuVolatilAnadirApartamento {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    box-shadow: 0px 0px 20px 0px rgb(0 0 0 / 35%);
+    display: flex;
+    background: rgba(245, 245, 245, 0.3);
+    position: absolute;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+    gap: 6px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoUI {
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoUI:hover {
+    color: white;
+    background: black;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoTItulo {
+    font-weight: bold;
+    margin: 0px;
+    padding: 2px;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoEstado,
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaZonaAnadirApartamento {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    padding: 10px;
+    gap: 6px;
+    border-radius: 10px;
+    background: #0000001f;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .crearApartamentoInfoSinApartamento {
+    padding: 6px;
+    margin: 0px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .estadoInicialInvisible {
+    display: none;
+}
+
+[zonaCSS="administracion/ofertas/ofertaUI"] .editarOfertaSoloLecturaUI {
+    border-radius: 14px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    padding: 6px;
+}

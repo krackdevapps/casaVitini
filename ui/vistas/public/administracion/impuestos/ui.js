@@ -189,7 +189,7 @@ casaVitini.view = {
 
         const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
 
-        casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+        casaVitini.view.__sharedMethods__.grid.despliegue({
             metodoSalida: "view.mostrarImpuestosResueltos",
             configuracionGrid: {
                 filas: impuestos,

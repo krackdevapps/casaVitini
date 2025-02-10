@@ -3779,7 +3779,6 @@ casaVitini.view = {
             contenedor.appendChild(infoCom)
 
             const tipoDescuento = document.createElement("select")
-            // tipoDescuento.classList.add("crearOfertaDescuentoDedicadoListaTipoDescuento")
             tipoDescuento.setAttribute("campoApartamentoSeleccionado", "simboloIDV")
             contenedor.appendChild(tipoDescuento)
 

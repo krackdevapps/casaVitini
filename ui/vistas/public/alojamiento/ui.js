@@ -272,7 +272,7 @@ casaVitini.view = {
 
 
             const img = document.createElement("div")
-            img.style.backgroundImage = 'url("/componentes/imagenes/test/image00061.jpeg")';
+            img.style.backgroundImage = 'url("/activos/imagenes/test/image00061.jpeg")';
             img.style.flex = "1"
             img.style.padding = "12px"
             img.style.borderRadius = "15px"

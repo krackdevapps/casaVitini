@@ -1,0 +1,89 @@
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .espacioBotonesGlobales {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: end;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .arquitecturaConfCrearConfiguracion_contenedor {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 6px;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .arquitecturaConfCrearConfiguracion_titulo {
+    display: flex;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .arquitecturaConfCrearConfiguracion_selectorApartamento {
+    appearance: none;
+    padding: 10px;
+    outline: none;
+    border: 0px solid grey;
+    outline: none;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .arquitecturaConfCrearConfiguracion_botonCrearConfiguracion {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .arquitecturaConfCrearConfiguracion_botonCrearConfiguracion:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .espacioConfiguracionesAlojamiento {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-content: center;
+    align-content: center;
+    justify-items: stretch;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/nuevo"] .enlace {
+    display: flex;
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    color: black;
+    text-decoration: none;
+    cursor: default;
+    align-items: stretch;
+    background-color: #ffffff80;
+    padding: 10px;
+    border-radius: 14px;
+    user-select: none;
+    -webkit-user-select: none;
+}

@@ -1,0 +1,437 @@
+.conozcanos_contenedorInterno {
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.contactos_bannerGlobal {
+    width: 100%;
+    height: 400px;
+}
+
+.contactos_bannerTexto {
+    font-size: 16px;
+    text-align: justify;
+    background: white;
+    height: fit-content;
+    padding: 30px;
+    margin: 30px;
+    border-radius: 20px;
+    z-index: 10;
+}
+
+
+
+.contactos_bannerTextoInterno {
+    font-size: 16px;
+    text-align: justify;
+    background-color: white;
+    height: fit-content;
+    padding: 30px;
+    margin: 30px;
+    border-radius: 20px;
+}
+
+.contactos_bannerTextoInternoUltimo {
+    font-size: 16px;
+
+    text-align: justify;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    height: fit-content;
+    padding: 30px;
+
+
+    margin: 30px;
+    border-radius: 20px;
+    background: white;
+}
+
+
+.conteactos_posicionadorBannerInterno {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+
+.plaza_conozcanos_primerBanner {
+    background-image: url("/activos/imagenes/leonciudad.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center center;
+}
+
+.plaza_conozcanos_segundoBannerPalarax {
+    background-image: url("/activos/imagenes/fotos/image00004.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.plaza_conozcanos_segundoBannerPalarax2 {
+    background-image: url("/activos/imagenes/fotos/image00016.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.plaza_conozcanos_segundoBannerPalarax3 {
+    background-image: url("/activos/imagenes/fotos/image00014.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+
+[zonaCSS="/conozcanos"] .texto111 {
+    transform: translateY(0) translateZ(0) !important;
+}
+
+[zonaCSS="/conozcanos"] .fondoInicio {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/zonas_comunes/image00009.jpeg");
+}
+
+[zonaCSS="/conozcanos"] .fondo1 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/fotos/zonas_comunes/image00004.jpeg");
+}
+
+[zonaCSS="/conozcanos"] .fondo2 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/zonas_comunes/image00023.jpeg");
+}
+
+[zonaCSS="/conozcanos"] .fondo3 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/exteriores/image00010.jpeg");
+}
+
+[zonaCSS="/conozcanos"] .fondo4 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/montana.jpg");
+}
+
+[zonaCSS="/conozcanos"] .fondo5 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/f5.jpeg");
+}
+
+[zonaCSS="/conozcanos"] .fondo6 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/nic.jpeg");
+}
+
+[zonaCSS="/conozcanos"] .fondo7 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/fotos/image00016.jpeg");
+}
+
+[zonaCSS="/conozcanos"] .fondo8 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/montana.jpg");
+}
+
+[zonaCSS="/conozcanos"] .fondo8 {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("/activos/imagenes/leonciudad.jpg");
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax {
+
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-perspective: 300px;
+    perspective: 300px;
+    -webkit-perspective-origin-x: 100%;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .texto {
+    z-index: 2;
+    padding: 40px;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax::-webkit-scrollbar {
+    width: 0px;
+
+    height: 0px;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax__group {
+    position: relative;
+    height: 500px;
+
+    height: 100vh;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    -webkit-transform-origin-x: 100%;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .rojo {
+
+    background: grey;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .azul {
+    background: blue;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .turquesa {
+    background: turquoise;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .capaFondoFinal {
+    background-color: cornflowerblue;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -10;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--fore {
+    -webkit-transform: translateZ(90px) scale(.7);
+    transform: translateZ(90px) scale(.7);
+    z-index: 1;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--base {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    z-index: 4;
+    height: 100vh;
+    top: 100vh;
+    overflow: hidden;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--back {
+    -webkit-transform: translateZ(-300px) scale(2);
+    transform: translateZ(-300px) scale(2);
+    z-index: 3;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--deep {
+    -webkit-transform: translateZ(-600px) scale(3);
+    transform: translateZ(-600px) scale(3);
+    z-index: 2;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .title {
+    color: white;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 95vw;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 15px;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .textoAnterior {
+    top: -50vh;
+    color: white;
+    font-size: 30px;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .ultimoTexto {
+    top: 225vh;
+    color: white;
+    font-size: 30px;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group1 {
+    z-index: 10;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group2 {
+    z-index: 11;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group3 {
+    z-index: 9;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group4 {
+    z-index: 11;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group5 {
+    z-index: 3;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group6 {
+    z-index: 4;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group7 {
+    z-index: 2;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos #group8 {
+    z-index: 3;
+}
+
+[zonaCSS="/conozcanos"] .conozcanos .transparente {
+    background: transparent;
+}
+
+[zonaCSS="/conozcanos"] .texto_v2_parallax {
+    font-size: 35px;
+    font-weight: bold;
+    color: rgb(255 255 255 / 85%);
+    transform: translateX(-50%, -50%);
+    z-index: 10;
+
+    pointer-events: none;
+    position: absolute;
+    transition: all 500ms linear;
+    z-index: 101;
+}
+
+[zonaCSS="/conozcanos"] [animacion="contenedorTexto"] {
+    view-timeline-name: --text;
+    view-timeline-axis: block;
+    animation-timeline: --text;
+    animation-name: appear;
+    animation-range: entry 0% cover 50%;
+    animation-fill-mode: both;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax {
+    display: flex;
+    flex-direction: column;
+    max-width: 2160px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .parallax {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .primera_imagen {
+    transition: all 1ms linear;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .parallax img {
+    max-width: none;
+    width: auto;
+    height: 100%;
+
+    top: 0;
+    left: 50%;
+    background-size: cover;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .imagenParalaje {
+    max-width: none;
+    width: auto;
+    height: 100vh;
+    width: 100vw;
+
+    top: 0;
+    left: 50%;
+    background-size: cover;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .parallax_comenzado {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+[zonaCSS="/conozcanos"] .contenedorImagenNecesario {
+    overflow: hidden;
+    border-radius: 40px;
+    z-index: 100;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .texto_animado {
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
+    transform: translateX(-50%, -50%);
+    z-index: 10;
+    position: absolute;
+    bottom: 40px;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll,
+[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll {
+    pointer-events: none;
+    width: 40px;
+    height: 70px;
+    bottom: 100px;
+    box-shadow: inset 0 0 0 3px #fff;
+    border-radius: 25px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: opacity 500ms linear;
+    transform: translateY(-50%, -50%);
+    -webkit-transform: translateY(-50%, -50%);
+    position: absolute;
+}
+
+[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll:before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    margin-left: -4px;
+    top: 8px;
+    left: 20px;
+    border-radius: 4px;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: scroll;
+    animation-name: scroll;
+    z-index: 200;
+    position: absolute;
+}

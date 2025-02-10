@@ -63,10 +63,8 @@ export const cambiarVista = async (transaccion) => {
 
                             if (!usuarioIDX) {
                                 portal = "IDX"
-                                //  urlResuelta = ""
                             } else if (roles.length > 0 && !roles.includes(rolIDV)) {
                                 portal = "ROL"
-                                //  urlResuelta = ""
                             }
                         }
                     }
@@ -92,22 +90,22 @@ export const cambiarVista = async (transaccion) => {
         parametros = parametros !== "/" ? parametros : ""
         const urlResultaConParametros = urlResuelta + parametros
 
-        let vistaSelector = "./ui/vistas/public" + urlResuelta + "/vista.ejs"
+        let vistaSelector = "./ui/vistas/public" + urlResuelta + "/ui.ejs"
 
         let jsOptionalSelector
         let cssOptionalSelector
         if (portal === "IDX") {
             urlResuelta = "/sys/portal/login"
-            vistaSelector = "./ui/vistas/sys/login/vista.ejs"
+            vistaSelector = "./ui/vistas/sys/login/ui.ejs"
 
             jsOptionalSelector = "./ui/vistas/sys/login/ui.js"
-            cssOptionalSelector = ".ui/vistas/sys/login/ui.css"
+            cssOptionalSelector = "./ui/vistas/sys/login/ui.css"
         } else if (portal === "ROL") {
             urlResuelta = "/sys/portal/rol"
-            vistaSelector = "./ui/vistas/sys/rol/vista.ejs"
+            vistaSelector = "./ui/vistas/sys/rol/ui.ejs"
 
             jsOptionalSelector = "./ui/vistas/sys/rol/ui.js"
-            cssOptionalSelector = ".ui/vistas/sys/rol/ui.css"
+            cssOptionalSelector = "./ui/vistas/sys/rol/ui.css"
         } else {
             jsOptionalSelector = "./ui/vistas/public" + urlResuelta + "/ui.js"
             cssOptionalSelector = "./ui/vistas/public" + urlResuelta + "/ui.css"
@@ -122,9 +120,11 @@ export const cambiarVista = async (transaccion) => {
             if (existsSync(jsOptionalSelector)) {
                 js = readFileSync(jsOptionalSelector, 'utf-8')
             }
+            console.log("cssOptionalSelector", cssOptionalSelector)
             if (existsSync(cssOptionalSelector)) {
                 css = readFileSync(cssOptionalSelector, 'utf-8')
             }
+            console.log("css", css)
 
             let sharedMethods = ""
             const checkSharedMethods = "./ui/vistas/public" + urlResuelta + "/getSharedMethods.mjs"

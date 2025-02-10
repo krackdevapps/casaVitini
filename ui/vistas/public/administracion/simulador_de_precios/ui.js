@@ -159,7 +159,7 @@ casaVitini.view = {
 
             const constructorURLFinal = granuladoURL.directoriosFusion + parametrosURLFInal
 
-            casaVitini.ui.componentes.componentesComplejos.grid.despliegue({
+            casaVitini.view.__sharedMethods__.grid.despliegue({
                 metodoSalida: "view.portada.mostrarSimulacionesResueltas",
                 configuracionGrid: {
                     filas: simulaciones,
@@ -386,7 +386,7 @@ casaVitini.view = {
                     const infoSinApartamento = document.querySelector("[componente=infoSinApartamento]")
                     infoSinApartamento.style.display = "none"
 
-                    const cApartamento = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.apartamentoUI({
+                    const cApartamento = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                         apartamentoIDV,
                         apartamentoUI,
                         metodoEliminarApartamento: {
@@ -417,7 +417,7 @@ casaVitini.view = {
                 casaVitini.view.componentes.postProcesamientoTransaccion(simulacionData)
 
                 // if (contenedorFinanciero?.desgloseFinanciero) {
-                //     casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                //    casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                 //         destino: `[contenedor=simulacion]`,
                 //         contenedorFinanciero,
                 //         modoUI: "simulador"
@@ -481,7 +481,7 @@ casaVitini.view = {
                         contenedorLista.appendChild(cComplementoDeAlojamientoUI)
                         const selectorZonaApartamentos = document.querySelector(`[instanciaUID="${instancciaUID_destinoSelectorApartamentos}"][componente=selectorApartamentos] [componente=zonaAnadirApartamento]`)
                         if (selectorZonaApartamentos) {
-                            const cApartamento = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.apartamentoUI({
+                            const cApartamento = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                                 apartamentoIDV,
                                 apartamentoUI,
                                 metodoEliminarApartamento: {
@@ -524,7 +524,7 @@ casaVitini.view = {
                     if (respuestaServidor?.ok) {
                         const alojamiento = respuestaServidor.ok
                         casaVitini.view.componentes.postProcesamientoTransaccion(respuestaServidor)
-                        casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.eliminarApartamentoUI({
+                        casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.eliminarApartamentoUI({
                             e
                         })
 
@@ -2474,7 +2474,7 @@ casaVitini.view = {
                             casaVitini.view.componentes.servicios.actualizarContenedor({ servicios })
 
                             const desgloseFinanciero = respuestaServidor.desgloseFinanciero
-                            casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                           casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                                 destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                                 contenedorFinanciero: { desgloseFinanciero },
                                 modoUI: "simulador"
@@ -2503,7 +2503,7 @@ casaVitini.view = {
                 if (respuestaServidor?.ok) {
 
                     const contenedorFinanciero = respuestaServidor.contenedorFinanciero
-                    casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                   casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                         destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                         contenedorFinanciero,
                         modoUI: "simulador"
@@ -2935,7 +2935,7 @@ casaVitini.view = {
             })
             contenedor.appendChild(botonResetearFechas)
 
-            const selectorRangoSimulado = casaVitini.ui.componentes.componentesComplejos.contenedorFechasUI({
+            const selectorRangoSimulado = casaVitini.view.__sharedMethods__.contenedorFechasUI({
                 metodoSelectorDia: "view.componentes.pasarelaSelectorDia",
                 nombreContenedor: "rangoDeSimulacion",
                 modo: "administracion",
@@ -2985,7 +2985,7 @@ casaVitini.view = {
             tituloApartamentos.textContent = "Apartamentos de la simulación"
             porApartamentoDedicado.appendChild(tituloApartamentos)
 
-            const selectorApartamentosEspecificosUI = casaVitini.ui.componentes.componentesComplejos.selectorApartamentosEspecificosUI.despliegue({
+            const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                 textoContenedorVacio: "Añade apartamentos a la simulación",
                 contenedorMetodosPersonalizados: {
                     insertarApartamento: {
@@ -3242,7 +3242,7 @@ casaVitini.view = {
             } else if (desgloseFinanciero) {
 
                 document.querySelector(`[simulacionUID="${simulacionUID}"] [contenedor=simulacion] [info=llavesFaltantes]`)?.remove()
-                casaVitini.ui.componentes.contenedorFinanciero.constructor({
+               casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                     destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                     contenedorFinanciero: { desgloseFinanciero },
                     modoUI: "simulador"
@@ -4122,7 +4122,7 @@ casaVitini.view = {
 
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             if (desgloseFinanciero) {
-                                casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                               casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                                     destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                                     contenedorFinanciero: { desgloseFinanciero },
                                     modoUI: "simulador"
@@ -4610,7 +4610,7 @@ casaVitini.view = {
                                 const desgloseFinanciero = respuestaServidor?.desgloseFinanciero
 
                                 if (desgloseFinanciero) {
-                                    casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                                   casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                                         destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                                         contenedorFinanciero: { desgloseFinanciero },
                                         modoUI: "simulador"

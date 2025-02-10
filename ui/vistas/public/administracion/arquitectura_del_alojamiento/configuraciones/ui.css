@@ -1,0 +1,436 @@
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaCancelarReservabloqueBotones {
+
+    display: flex;
+    gap: 4px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedor {
+    border-radius: 18px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+    max-width: 100%;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorHabitacion {
+    padding: 6px;
+    border-radius: 12px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+    background: #00000014;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_titulo {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_tituloHabitacion {
+    padding: 6px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorHabitaciones {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorImg {
+    background: rgba(255, 255, 255, 0.1);
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    transition: all 1000ms linear;
+    background-image: url(/activos/imagenes/transparente.png);
+
+
+    background-position: center center;
+    border-radius: 12px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorTituloYBotones {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_boton {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    color: black;
+    cursor: default;
+    text-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_boton:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_eliminarConfiguracionApartamento {
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_eliminarConfiguracionApartamento:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_espacioEliminarConfiguracionApartamento {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .confApartamento_contenedorMenuAddApartamentos {
+    position: absolute;
+    padding: 6px;
+    border-radius: 14px;
+    display: flex;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
+    cursor: default;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .textoCargando {
+    padding: 20px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .aquitecturaConfApartamento_barraHerrameintas {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    align-content: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_barraHerramientas_contenedorBotones {
+    display: flex;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_botonV2 {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    cursor: default;
+    color: black;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_botonV2:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_botonV3 {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorCamaInfo {
+    padding-left: 6px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 6px;
+    padding: 0px;
+    justify-items: stretch;
+    align-content: center;
+    align-items: center;
+    transition: all 250ms linear;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorImg_opciones {
+    padding: 10px;
+    border-radius: 10px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    align-content: center;
+    display: none;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorImg_opcion {
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorImg_opcion:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .contenedorImagen {
+    height: 300px;
+    gap: 6px;
+    background: #00000021;
+    border-radius: 20px;
+    padding: 6px;
+    scale: 1;
+    transition: all 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
+}
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .gridImagenes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 10px;
+    width: 100%;
+}
+@media (max-width: 720px) {
+    [zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .gridImagenes {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .contenedorImagenFondo {
+    background-size: cover;
+    background-position: center center;
+    flex: 1;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    background-color: color(srgb 0 0 0 / 0.14);
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgAB/AcaxUIAAAAASUVORK5CYII=');
+    transition: background-image 250ms linear !important;
+}
+
+
+
+
+
+
+[zonaCSS="/administracion/arquitectura_del_alojamiento/configuraciones"] .contenedorImagenFondoFlotante {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    height: 300px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfApartamento_infoEstadoV {
+    margin: 0px;
+    font-size: 10px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfApartamento_infoEstado {
+    margin: 0px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfApartamento_portada_boton {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    text-decoration: none;
+    cursor: default;
+    color: black;
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfApartamento_portada_boton:hover {
+    background: rgba(255, 255, 255, 0.6);
+    cursor: default;
+    text-decoration: none;
+    color: black;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .espacioBotonesGlobales {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: end;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .adminsitracion_arquitectura_configruaciones_portada_contenedorCongfiguraciones {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-content: center;
+    align-content: center;
+    justify-items: stretch;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfiguracionesAlojamiento_contenedorConfiguracion {
+    text-decoration: none;
+    color: black;
+    padding: 20px;
+    cursor: default;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: all 500ms linear;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfiguracionesAlojamiento_contenedorConfiguracion:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfApartamento_contenedorCamas {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 10px;
+    border-radius: 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .arquitecturaConfApartamento_contenedorCama {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 6px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .confApartamento_contenedorMenu_tituloApartamento {
+    background: #f5f5f578;
+    padding: 10px;
+    border-radius: 10px;
+    text-wrap: nowrap;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones"] .confApartamento_contenedorMenu_tituloApartamento:hover {
+    background: rgb(212, 14, 14);
+    color: white
+}
+
+@media (max-width: 820px) {
+    [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+    [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width:390px) {
+    [zonaCSS="administracion/arquitectura_de_alojamiento/configuraciones/detalles"] .arquitecturaConfApartamento_contenedorBotonesGlobales {
+        grid-template-columns: 1fr;
+    }
+}

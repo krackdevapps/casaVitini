@@ -1,0 +1,455 @@
+.espacioSituacion .contenedorEvento {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgb(255 255 255 / 45%);
+    padding: 10px;
+    border-radius: 16px;
+    gap: 4px;
+}
+
+.espacioSituacion .tituloPlataformaOrigen {
+    margin: 0px;
+    padding: 0px;
+    font-weight: bold;
+}
+
+.espacioSituacion .descripcionEvento {
+    margin: 0px;
+    padding: 0px;
+}
+
+.espacioSituacion .sinInfo {
+    margin: 0px;
+    padding: 4px;
+}
+
+.espacioSituacion .contenedorFecha_ {
+    background: #80808042;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.espacioSituacion .botonIrAlEvento {
+    background: #80808042;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    border-radius: 4px;
+}
+
+.espacioSituacion .botonIrAlEvento:hover {
+    background: #808080a6;
+}
+
+.espacioSituacion .contenedorFechas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    gap: 4px;
+}
+
+.espacioSituacion .fechaDatoUI {
+    margin: 0px;
+    padding: 0px;
+}
+
+.espacioSituacion .contenedorTitulo {
+    padding: 4px;
+}
+
+.espacioEventosAirbnb .sinInfo {
+    padding: 16px;
+}
+
+
+
+[zonaCSS="administracion/situacion"] .administracion_reservas_detallesReserva_tituloCheckIn {
+    color: rgb(0, 140, 40);
+}
+
+[zonaCSS="administracion/situacion"] .letraRoja {
+    color: red;
+}
+
+[zonaCSS="administracion/situacion"] .situacionApartamentoUI {
+    background: rgb(255 255 255 / 0.4);
+    border-radius: 20px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    text-decoration: none;
+}
+
+[zonaCSS="administracion/situacion"] .espacioSituacion {
+    display: grid;
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+    width: 100%;
+}
+@media (max-width: 1000px) {
+    [zonaCSS="administracion/situacion"] .espacioSituacion {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+[zonaCSS="administracion/situacion"] .situacionApartamentoTitutlo {
+    padding-right: 14px;
+    margin: 0px;
+    border-radius: 15px;
+    font-weight: bold;
+    padding: 14px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+
+[zonaCSS="administracion/situacion"] .situacionApartamentoTitutlo:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/situacion"] .situacionApartamentoEstado {
+    margin: 0px;
+    padding-right: 4px;
+    padding-left: 10px;
+    color: rgb(0 0 0 / 0.4);
+}
+
+[zonaCSS="administracion/situacion"] .situacionApartamentoEstadoPernoctacion {
+    background: #b8b8b88f;
+    margin: 0;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+[zonaCSS="administracion/situacion"] .situacionApartamentoEstadoReserva {
+    background: rgb(0 0 0 / 20%);
+    height: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    align-content: center;
+    overflow: hidden;
+}
+
+[zonaCSS="administracion/situacion"] .situacionBarraProgressoReserva {
+    background: #505050;
+    transition: width 500ms ease-in-out;
+
+    @starting-style {
+        width: 0;
+    }
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetallesGenerales {
+
+    gap: 6px;
+    padding: 20px;
+    border-radius: 16px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    gap: 4px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetallesbloqueApartamentoUI {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetallesApartmentoTitulo {
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 6px;
+    height: 100%;
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetalleTituloBloqueSimple {
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetalleBloqueSimpleInterno {
+    padding: 10px;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 0.4);
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetalleBloqueSimpleExterno {
+    padding: 10px;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetallesEstadoApartamento {
+
+    color: black;
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetallesReserva {
+    background: rgb(255 255 255 / 0.4);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 6px;
+    border-radius: 16px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 6px;
+}
+
+[zonaCSS="administracion/situacion"] .sitaucionDetallesEspacioHabitaciones {
+    display: grid;
+    grid-gap: 4px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: start;
+    border-radius: 10px;
+    width: 100%;
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetallesHabitacionBloque {
+    border-radius: 10px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+[zonaCSS="administracion/situacion"] .situacionDetallestituloHabitacion {
+    background: #dadada;
+    margin: 0px;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_nombrePernoctante {
+    margin: 0px;
+    font-weight: bold;
+    padding: 0px;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_tipoCliente {
+    margin: 0px;
+    padding: 0px;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorReserva {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgb(255 255 255 / 45%);
+    padding: 6px;
+    border-radius: 16px;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_portada_bloqueEntidad {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 12px;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+[zonaCSS="administracion/situacion"] .adminsitracion_situacion_portada_datoEntidad {
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorSelecccionable:hover {
+    background: rgba(0, 0, 0, 0.1);
+    cursor: default;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorFechas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorFechas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situracion_detallesApartamento_bloqueReserva {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situracion_detallesApartamento_reservaUI {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situracion_detallesApartamento_reservaUI:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorCliente {
+    display: flex;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    border-radius: 6px;
+    flex-direction: column;
+    padding: 6px;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorCliente:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorHabitacion {
+    border-radius: 10px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorFecha {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    padding: 10px;
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorEvento {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgb(255 255 255 / 45%);
+    padding: 6px;
+    border-radius: 20px;
+    gap: 4px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .tituloPlataformaOrigen {
+    margin: 0px;
+    padding: 12px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .descripcionEvento {
+    margin: 0px;
+    padding: 12px;
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorFechas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    gap: 8px;
+    padding: 12px;
+
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .fechaDatoUI {
+    margin: 0px;
+    padding: 0px;
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .botonIrAlEvento {
+    background: #80808042;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    border-radius: 4px;
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .botonIrAlEvento:hover {
+    background: #808080a6;
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorFecha_ {
+    background: #80808042;
+    padding: 10px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorTitulo {
+    padding: 4px;
+}
