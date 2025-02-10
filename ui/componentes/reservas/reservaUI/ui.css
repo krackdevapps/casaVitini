@@ -1242,3 +1242,17 @@
     flex: 1;
     grid-template-columns: auto auto;
 }
+
+[ui="reservaUI"] .administracion_reservas_detallesReseerva_iconoMiscelanea {
+    background: #00000075;
+    height: 4px;
+    width: 100%;
+    border-radius: 100px;
+}
+
+[servicioUID] .contenedorGlobal {
+    display: grid;
+    grid-template-columns: auto auto 1fr !important;
+    align-items: center;
+
+}

@@ -38,49 +38,67 @@ casaVitini.view = {
                     contenedorSession.setAttribute("componente", "contenedorSession")
                     contenedorSession.setAttribute("sessionIDX", sessionIDX_detallesSession)
                     contenedorSession.setAttribute("sessionActual", sessionIDX)
+                    espacioSessiones.appendChild(contenedorSession)
+
+                    const contenedorData = document.createElement("div")
+                    contenedorData.classList.add("flexVertical", "gap6", "padding18")
+                    contenedorSession.appendChild(contenedorData)
+
+
                     const contenedorSessionID = document.createElement("div")
                     contenedorSessionID.classList.add("miCasa_sessiones_contenedorBloque")
+                    contenedorData.appendChild(contenedorSessionID)
+
+
                     const sessionInfo = document.createElement("div")
                     sessionInfo.classList.add("miCasa_sessiones_texto")
                     sessionInfo.classList.add("negrita")
                     sessionInfo.textContent = "Vitini IDX " + sessionActual_UI
                     contenedorSessionID.appendChild(sessionInfo)
+
                     const sessionIDX_UI = document.createElement("div")
                     sessionIDX_UI.classList.add("miCasa_sessiones_texto")
                     sessionIDX_UI.textContent = sessionIDX_detallesSession
                     contenedorSessionID.appendChild(sessionIDX_UI)
-                    contenedorSession.appendChild(contenedorSessionID)
+
                     const ipSessionUI = document.createElement("div")
                     ipSessionUI.classList.add("miCasa_sessiones_textoIP")
                     ipSessionUI.textContent = ip
-                    contenedorSession.appendChild(ipSessionUI)
+                    contenedorData.appendChild(ipSessionUI)
+
                     const userAgentUI = document.createElement("div")
                     userAgentUI.classList.add("miCasa_sessiones_textoIP")
                     userAgentUI.textContent = userAgent
-                    contenedorSession.appendChild(userAgentUI)
+                    contenedorData.appendChild(userAgentUI)
+
                     const contenedorCaducidad = document.createElement("div")
                     contenedorCaducidad.classList.add("miCasa_sessiones_contenedorBloque")
+                    contenedorData.appendChild(contenedorCaducidad)
+
+
                     const caducidadInfo = document.createElement("div")
                     caducidadInfo.classList.add("miCasa_sessiones_texto")
                     caducidadInfo.textContent = "Caducidad de la información de sesión local en hora UTC si no se produce una nueva petición:"
                     contenedorCaducidad.appendChild(caducidadInfo)
+
                     const caducidadESP_UI = document.createElement("div")
                     caducidadESP_UI.classList.add("miCasa_sessiones_texto")
                     caducidadESP_UI.classList.add("negrita")
                     caducidadESP_UI.textContent = caducidadUTC
                     contenedorCaducidad.appendChild(caducidadESP_UI)
+
                     const tiempoRestante_UI = document.createElement("div")
                     tiempoRestante_UI.classList.add("miCasa_sessiones_texto")
                     tiempoRestante_UI.classList.add("negrita")
                     tiempoRestante_UI.textContent = tiempoRestante
                     contenedorCaducidad.appendChild(tiempoRestante_UI)
-                    contenedorSession.appendChild(contenedorCaducidad)
+
                     const botonCerrarSession = document.createElement("div")
                     botonCerrarSession.classList.add("botonV1BlancoIzquierda")
                     botonCerrarSession.addEventListener("click", (e) => { this.cerraSessionUnica(e) })
                     botonCerrarSession.textContent = "Cerrar session"
                     contenedorSession.appendChild(botonCerrarSession)
-                    espacioSessiones.appendChild(contenedorSession)
+
                 })
             }
         }

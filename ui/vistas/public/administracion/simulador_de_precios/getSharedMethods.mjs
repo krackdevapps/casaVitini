@@ -2,6 +2,7 @@ import { contenedorFechasUI } from "../../../sharedMethodsAsUIComponents/contene
 import { contenedorFinanciero } from "../../../sharedMethodsAsUIComponents/contenedorFinanciero.mjs"
 import { grid } from "../../../sharedMethodsAsUIComponents/grid.mjs"
 import { selectorApartamentosEspecificosUI } from "../../../sharedMethodsAsUIComponents/selectorApartamentosEspecificosUI.mjs"
+import { serviciosUI } from "../../../sharedMethodsAsUIComponents/serviciosUI.mjs"
 import { sharedMethods_resumen } from "../../alojamiento/resumen/sharedMethods.mjs"
 
 export const shared = () => {   
@@ -10,7 +11,8 @@ export const shared = () => {
         ...grid,
         ...contenedorFechasUI,
         ...selectorApartamentosEspecificosUI,
-        ...contenedorFinanciero
+        ...contenedorFinanciero,
+        ...serviciosUI
     }
 }
 

@@ -43,6 +43,7 @@
       display: flex;
       flex-direction: column;
       gap: 0px;
+      justify-content: space-between;
   }
 
   [zonaCSS="/alojamiento/resumen"] .tituloMedia {
@@ -416,4 +417,10 @@
 
   .blackgroundWhite30O {
     background-color: rgb(255 255 255 / 30%);
+}
+
+.plaza_alojamiento_resumenReserva_bloqueHabitacion {
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
 }

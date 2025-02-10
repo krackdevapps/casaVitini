@@ -104,8 +104,8 @@ casaVitini.view = {
 
                     const tituloReserva = document.createElement("a")
                     tituloReserva.classList.add("botonV1BlancoIzquierda")
-                    tituloReserva.setAttribute("href", "/administracion/reservas/reserva:" + reservaUID + "/enlaces_de_pago")
-                    tituloReserva.setAttribute("vista", "/administracion/reservas/reserva:" + reservaUID + "/enlaces_de_pago")
+                    tituloReserva.setAttribute("href", "/administracion/reservas/reserva:" + reservaUID + "/zona:enlaces_de_pago")
+                    tituloReserva.setAttribute("vista", "/administracion/reservas/reserva:" + reservaUID + "/zona:enlaces_de_pago")
                     tituloReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     tituloReserva.textContent = `Reserva ${reservaUID} (Ir a la reserva)`
                     enlaceUI.appendChild(tituloReserva)

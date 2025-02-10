@@ -1786,13 +1786,12 @@ summary:hover {
     }
 }
 
-.contenedorGlobal {
+/* .contenedorGlobal {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
     border-radius: 10px;
-    /* transition: background 250ms linear; */
-}
+} */
 
 .contenedorGlobal_hover:hover {
     background: hsl(0deg 0% 0% / 10%);

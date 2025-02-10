@@ -51,7 +51,8 @@
     border-radius: 8px;
     border-radius: 8px;
     text-align: center;
-}
+} 
+
 
 [zonaCSS="/alojamiento/reserva_confirmada"] .administracion_reservas_detallesReserva_cancelarReserva_botonV1:hover {
     color: white;
