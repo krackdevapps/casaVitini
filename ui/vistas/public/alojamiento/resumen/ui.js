@@ -51,7 +51,7 @@ casaVitini.view = {
         }
 
     },
-    uiConReserva:  function () {
+    uiConReserva: function () {
         const reservaConfirmada = JSON.parse(sessionStorage.getItem("reservaConfirmada"))
 
         const contenedor = document.createElement("div")
@@ -1186,7 +1186,7 @@ casaVitini.view = {
         contenedor.appendChild(botonCerrar)
         const desgloseFinanciero = JSON.parse(document.querySelector("[contenedorFinanciero]").getAttribute("contenedorFinanciero"))
 
-        casaVitini.ui.componentes.contenedorFinanciero.constructor({
+        casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
             destino: `[instanciaUID="${instanciaUID}"] [componente=contenedor]`,
             contenedorFinanciero: { desgloseFinanciero },
             modoUI: "plaza"

@@ -10394,7 +10394,7 @@ export const reservaComponentes = {
                             const contenedorFinanciero = respuestaServidor.ok.contenedorFinanciero
                             const totalFinal = contenedorFinanciero.desgloseFinanciero.global.totales.totalFinal
                             totalGlobal.textContent = totalFinal
-                            casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                            casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                                 destino: `[reservaUID="${reservaUID}"] [componente=contenedorDesgloseTotal]`,
                                 contenedorFinanciero,
                                 modoUI: "administracion"

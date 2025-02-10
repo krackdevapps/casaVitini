@@ -182,13 +182,12 @@ casaVitini.view = {
             botonBorrarReserva.classList.add("plaza_reservas_reservaConfirmada_botonV1")
             botonBorrarReserva.textContent = "Borrar la información de esta reserva de la cache de mi navegador "
             botonBorrarReserva.addEventListener("click", () => {
-               this.borrarReservaLocal()
+                this.borrarReservaLocal()
             })
             marcoElastico.appendChild(botonBorrarReserva)
             marcoElasticoRelatico.appendChild(marcoElastico)
             const seccion = document.querySelector("main")
-
-            seccion.innerHTML = null
+            //seccion.innerHTML = null
             seccion.appendChild(marcoElasticoRelatico)
 
             const contenedorTotal = document.createElement("div")
@@ -235,7 +234,7 @@ casaVitini.view = {
                 })
                 contenedor.appendChild(botonCerrar)
 
-                casaVitini.ui.componentes.contenedorFinanciero.constructor({
+                casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                     destino: `[instanciaUID="${instanciaUID}"] [componente=contenedor]`,
                     contenedorFinanciero: contenedorFinanciero,
                     modoUI: "plaza"
