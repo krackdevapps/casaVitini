@@ -1,0 +1,353 @@
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_contenedorConfiguracion {
+    border-radius: 16px;
+    display: flex;
+
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 6px;
+    align-items: stretch;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_informacion {
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_bloqueConfiguracion {
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 6px;
+    text-decoration: none;
+    cursor: default;
+    color: black;
+    transition: background 250ms linear;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_tituloConfiguracion {
+    font-weight: bold;
+    padding: 4px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_descripcion {
+    padding: 4px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_valorConfiguracionInput {
+    padding: 10px;
+    border-radius: 10px;
+    appearance: none;
+    border: none;
+    outline: none;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_contenedorBotones {
+    display: none;
+    justify-content: center;
+    gap: 4px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_boton {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 10px;
+    align-items: stretch;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_boton:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorAirBnb {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 20px;
+    padding: 6px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .barraHerramientas {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .tituloContenedor {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    padding-left: 6px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .tituloInfo {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .botonMas {
+    margin: 0px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 13px;
+    cursor: default;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarios {
+    margin: 0px;
+    padding: 0px;
+
+    border-radius: 16px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual {
+    display: grid;
+    grid-template-columns: auto 200px;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    background: #d9dada;
+    margin: 0px;
+    padding: 6px;
+    border-radius: 16px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .tituloDatoCalendario {
+    margin: 0px;
+    padding: 0px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .contenedorDatosCalendario {
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .nombreCalendario {
+    margin: 0px;
+    font-weight: bold;
+    padding: 0px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .apartamentoEnlazado {
+    margin: 0px;
+    padding: 0px;
+    font-weight: bold;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .urlCalendario {
+    margin: 0px;
+    font-weight: bold;
+    padding: 0px;
+    word-break: break-all;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .contenedorBotonesCalendario {
+    margin: 0px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .botonCalendario {
+    margin: 0px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #b7b7b7;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    transition: background 250ms linear;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .botonCalendario:hover {
+    background: #8e8e8e;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .formularioUI .nombreCalendario {
+    padding: 10px;
+    border-radius: 12px;
+    outline: none;
+    border: none;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .formularioUI .listaApartamentos {
+    padding: 10px;
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    appearance: none;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .formularioUI .definicion {
+    padding: 10px;
+    margin: 0px;
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    appearance: none;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .formularioUI .plataforma {
+    padding: 10px;
+    margin: 0px;
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    appearance: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .espacioFormulario_Airbnb {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 16px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .formularioUI {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    border-radius: 14px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .botonCrearCalendario {
+    padding: 10px;
+    font-size: 13;
+    outline: none;
+    border: none;
+    border-radius: 14px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .marcoError {
+    padding: 0px;
+    border: none;
+    display: flex;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .errorInfoCalendarios {
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: none;
+    border-radius: 14px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .marcoBotones {
+    border: none;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+[zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .botonCrearCalendario:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+@media (max-width: 720px) {
+    [zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual {
+        margin: 0px;
+        padding: 6px;
+        background: #d9dada;
+        display: flex;
+        border-radius: 16px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+}
+
+
+@media (max-width: 720px) {
+    [zonaCSS="administracion/configuracion"] .administracion_configuracion_calendariosSincronizados .contenedorCalendarioIndividual .contenedorBotonesCalendario {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+}
+
+
+

@@ -1372,7 +1372,7 @@ casaVitini.view = {
                 contenedor.setAttribute("componente", "fotoAmpliable")
                 contenedor.setAttribute("apartamentoIDV", apartamentoIDV)
                 contenedor.addEventListener("click", (e) => {
-                    casaVitini.ui.componentes.componentesComplejos.ampliadorDeImagen.ampliarImagen(e)
+                    casaVitini.view.__sharedMethods__.ampliadorDeImagen.ampliarImagen(e)
                 })
 
                 const cImagen = document.createElement("div")

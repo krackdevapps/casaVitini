@@ -1845,6 +1845,10 @@ summary:hover {
     outline: none;
 }
 
+.selectorRojo {
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
 .textCentrado {
     text-align: center;
 }

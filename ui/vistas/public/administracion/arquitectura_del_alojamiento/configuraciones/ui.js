@@ -1330,7 +1330,7 @@ casaVitini.view = {
                             cImagen.setAttribute("descripcion", descripcion)
                             cImagen.setAttribute("contenedor", "imagenBase64")
                             cImagen.addEventListener("click", (e) => {
-                                casaVitini.ui.componentes.componentesComplejos.ampliadorDeImagen.ampliarImagen(e)
+                                casaVitini.view.__sharedMethods__.ampliadorDeImagen.ampliarImagen(e)
                             })
                             if (imagenBase64.length > 0) {
                                 const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);

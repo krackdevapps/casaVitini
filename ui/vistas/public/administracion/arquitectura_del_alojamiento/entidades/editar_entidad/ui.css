@@ -1,0 +1,231 @@
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_botonAnadir {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    width: fit-content;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: all 500ms;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_filaCaracteristica {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_contenedorCaracteristicas {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .administracion_arquitectura_entidades_detallesEntidad_botonBorrarFila {
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    width: fit-content;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: all 500ms;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_contenedorEntidad {
+    border-radius: 10px;
+    padding: 6px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_editarEntidad_contenedorEntidadDatos {
+    pointer-events: none;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_bloqueTitulo {
+    border-radius: 10px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .contenedorCaracteristicas {
+    border-radius: 19px;
+    padding: 6px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    background: color(srgb 0 0 0 / 0.12);
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_info {
+    padding: 6px;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_campoEntrada {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_crearEntidad_contenedorBotones {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_createEntiad_boton {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .confAlojamiento_entidades_createEntiad_boton:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+
+
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_contenedor {
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    border-radius: 14px;
+    overflow: hidden;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 6px;
+    gap: 6px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_contenedorBotones {
+    display: flex;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_botonContenedor {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_botonContenedor:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_contenedorEntidades {
+    gap: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_contenedorDetalles {
+    background: rgba(255, 255, 255, 0.3);
+    padding-left: 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+    padding-right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 14px;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_contenedorDetalles:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .confAlojamiento_entidades_contenedorGlobal {
+    padding: 6px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitecturaDelAlojamiento/entidades/entidadUI"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/arquitectura_de_alojamiento/entidades"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+

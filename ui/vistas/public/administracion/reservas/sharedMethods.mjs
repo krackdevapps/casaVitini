@@ -68,19 +68,18 @@ export const reservaComponentes = {
                             contenedorOrigenIDV: "[calendario=entrada]",
                             perfilMes: "calendario_entrada_asistido_detallesReserva_conPasado",
                             mensajeInfo: "Selecciona la fecha de entrada que quieras actualizar en esta reserva",
-                            metodoSelectorDia: "ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.fechas.seleccionarDia",
+                            metodoSelectorDia: "view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.seleccionarDia",
                             seleccionableDiaLimite: "no"
                         },
                         configuracionCalendarioFinal: {
                             rangoIDV: "finalRango",
                             contenedorOrigenIDV: "[calendario=salida]",
                             perfilMes: "calendario_salida_asistido_detallesReserva_conPasado",
-                            metodoSelectorDia: "ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.fechas.seleccionarDia",
+                            metodoSelectorDia: "view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.seleccionarDia",
                             mensajeInfo: "Selecciona la fecha de salida que quieras actualizar en esta reserva.",
                             seleccionableDiaLimite: "no"
                         }
                     })
-                    casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.seleccionarDia
                     contenedor.appendChild(contenedorFechasUI);
                     const calendarioEntrada = contenedorFechasUI.querySelector("[calendario=entrada]")
                     const calendarioSalida = contenedorFechasUI.querySelector("[calendario=salida]")
@@ -1085,7 +1084,7 @@ export const reservaComponentes = {
                             const categoriaActual = document.querySelector("[estadoCategoria=actual]")?.getAttribute("categoriaReserva")
                             this.limpiarMenusCategorias()
                             selectorBotonCategoriaRenderizado.setAttribute("estadoCategoria", "actual")
-                            const funcionPersonalizada = `ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias`
+                            const funcionPersonalizada = `view.__sharedMethods__.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias`
                             let url
                             if (configuracionVista === "publica") {
                                 url = "/micasa/reservas/reserva:" + reservaUID + "/zona:"
@@ -1535,12 +1534,12 @@ export const reservaComponentes = {
                         const buscadorUI = (reservaUID) => {
                             return casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.gestionPernoctante.componentes.buscadorRapido.UI({
                                 reservaUID: reservaUID,
-                                metodoFinal: "ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.titular.componentes.transacciones.asociarTitularConLaReserva"
+                                metodoFinal: "view.__sharedMethods__.detallesReservaUI.reservaUI.titular.componentes.transacciones.asociarTitularConLaReserva"
                             })
                         }
                         const formularioNuevoTitular = (reservaUID) => {
                             return casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.gestionPernoctante.componentes.nuevoClienteOTitular.UI({
-                                metodoFinal: "ui.componentes.componentesComplejos.detallesReservaUI.reservaUI.titular.componentes.transacciones.transactorCrearClienteComoTitular",
+                                metodoFinal: "view.__sharedMethods__.detallesReservaUI.reservaUI.titular.componentes.transacciones.transactorCrearClienteComoTitular",
                                 tituloUI: "Crear nuevo cliente e insertarlo en la reserva como titular",
                                 tituloBoton: "Crear cliente y insertarlo como titular de la reserva",
                                 reservaUID: reservaUID
@@ -3754,7 +3753,7 @@ export const reservaComponentes = {
                                 mensajeInfo: "Selecciona el día de checkin",
                                 alturaDinamica: "10",
                                 instanciaUID: instanciaUID_Calendario,
-                                metodoSelectorDia: "ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.checkin.seleccionarDia"
+                                metodoSelectorDia: "view.__sharedMethods__.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.checkin.seleccionarDia"
                             }
                             const calendarioIncrustado = casaVitini.ui.componentes.calendario.constructorCalendarioIncrustado(metadatosCalendario)
                             contenedor.appendChild(calendarioIncrustado)
@@ -4017,7 +4016,7 @@ export const reservaComponentes = {
                                 mensajeInfo: "Selecciona el día de checkout adelantado",
                                 alturaDinamica: "10",
                                 instanciaUID: instanciaUID_Calendario,
-                                metodoSelectorDia: "ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.checkout.seleccionarDia"
+                                metodoSelectorDia: "view.__sharedMethods__.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.checkout.seleccionarDia"
                             }
                             const calendarioIncrustado = casaVitini.ui.componentes.calendario.constructorCalendarioIncrustado(metadatosCalendario)
                             contenedor.appendChild(calendarioIncrustado)
@@ -4942,11 +4941,11 @@ export const reservaComponentes = {
                             const buscadorUI = this.componentes.buscadorRapido.UI({
                                 reservaUID: reservaUID,
                                 habitacionUID: habitacionUID,
-                                metodoFinal: "ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.gestionPernoctante.componentes.buscadorRapido.anadirPernoctanteTransaccionDesdeBuscadorRapido"
+                                metodoFinal: "view.__sharedMethods__.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.gestionPernoctante.componentes.buscadorRapido.anadirPernoctanteTransaccionDesdeBuscadorRapido"
                             })
                             contenedor.appendChild(buscadorUI)
                             const nuevoClienteUI = this.componentes.nuevoClienteOTitular.UI({
-                                metodoFinal: "ui.componentes.componentesComplejos.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.gestionPernoctante.componentes.guardarNuevoClienteYAnadirloComoPernoctnante",
+                                metodoFinal: "view.__sharedMethods__.detallesReservaUI.categoriasGlobales.alojamiento.pernoctantes.gestionPernoctante.componentes.guardarNuevoClienteYAnadirloComoPernoctnante",
                                 habitacionUID: habitacionUID,
                                 reservaUID: reservaUID,
                                 tituloBoton: "Crear nuevo cliente e insertarlo en la habitación",

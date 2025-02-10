@@ -1,0 +1,294 @@
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+    border-radius: 12px;
+    gap: 4px;
+    row-gap: 4px;
+    column-gap: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+    margin: 0px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarReservabloqueBotones {
+
+    display: flex;
+    gap: 4px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    border-radius: 12px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaCancelarBoton {
+    background: #00000036;
+    padding: 8px;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .administracion_bloqueos_detallesBloqueo_listaSelec {
+    background: rgba(253, 253, 253, 0.3);
+    display: flex;
+    padding: 10px;
+    border-radius: 6px;
+    outline: none;
+    border: none;
+    appearance: none;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesDelBloqueo_contenedorFecha {
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detalleBloqueos_motivo {
+    resize: vertical;
+    border-radius: 6px;
+    min-height: 200px;
+    border: none;
+    background: rgba(253, 253, 253, 0.3);
+    padding: 10px;
+    outline: none;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueos_contenedorGlobal {
+    /* background: rgba(255, 255, 255, 0.3); */
+    padding: 6px;
+    border-radius: 10px;
+    gap: 6px;
+    display: grid;
+    flex-direction: column;
+    flex-wrap: wrap;
+    /* backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px); */
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueos_bloqueBloqueoUI {
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesloqueos_contenedorBloquesGlobales {
+    width: 100%;
+    display: grid;
+    grid-gap: 0px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    gap: 6px;
+    justify-content: center;
+    align-content: center;
+}
+@media (max-width: 720px) {
+    [zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesloqueos_contenedorBloquesGlobales {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorTipoBloqueoV2 {
+    border-radius: 6px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorZonaUI {
+    border-radius: 6px;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaEntrada {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .listaBloqueos_fecha {
+    display: flex;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaEntrada:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaSalida {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorFechaSalida:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_contenedorBotones {
+    display: grid;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 6px;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesBloqueo_botonV1 {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .listaBloqueos_titulo {
+    display: flex;
+    justify-content: center;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/bloqueoUI"] .detallesReservaTituloCancelarReserva {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 4px;
+    text-align: center;
+}
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .fechaDatoUI {
+    display: flex;
+    justify-content: flex-start;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos"] .portadaBloqueos_espacioBotones {
+    display: flex;
+    text-decoration: none;
+    color: black;
+    justify-content: flex-end;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos"] .portadaBloqueos_botonV1 {
+    background: rgba(253, 253, 253, 0.3);
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    cursor: default;
+    border-radius: 10px;
+    transition: all 500ms;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos"] .portadaBloqueos_botonV1:hover {
+    background: rgba(253, 253, 253, 0.8);
+}
+
+
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueo_contenedorZonaUI {
+    padding: 6px;
+    border-radius: 6px;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_tipoBloqueo {
+    border-radius: 4px;
+    appearance: none;
+    outline: none;
+    border: none;
+}
+
+
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_bloqueBloqueoUI {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 6px;
+    border-radius: 20px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    transition: all 1s;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_contenedorTipoBloqueo {
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .listaBloqueos_motivo {
+    padding: 0px;
+    white-space: pre-wrap;
+}
+[zonaCSS="administracion/gestion_de_bloqueos"] .gestionBloqueoApartamento_bloqueApartamentoUI {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 12px;
+    border-radius: 10px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    transition: all 1s;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+}
+[zonaCSS="administracion/gestion_de_bloqueos/por_apartamento"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+[zonaCSS="administracion/gestion_de_bloqueos"] .espacioBloqueos {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+

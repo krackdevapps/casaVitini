@@ -1,3 +1,4 @@
+import { ampliadorDeImagen } from "../../sharedMethodsAsUIComponents/ampliadorDeImagen.mjs";
 import { otrosMetodos } from "./secondSharedMethods.mjs";
 import { sharedMethods } from "./sharedMethods.mjs";
 
@@ -6,7 +7,8 @@ import { sharedMethods } from "./sharedMethods.mjs";
 export const shared = () => {   
     return {
         ...sharedMethods,
-        ...otrosMetodos 
+        ...otrosMetodos,
+        ...ampliadorDeImagen
     }
 }
 

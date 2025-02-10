@@ -5282,6 +5282,7 @@ const casaVitini = {
         ejecutarFuncionPorNombreDinamicoConContexto: async function (data) {
             try {
                 const ruta = data.ruta;
+                console.log("ruta", ruta)
                 const args = data.args;
                 const partes = ruta.split('.');
                 const contexto = partes.slice(0, -1).reduce((acc, parte) => acc[parte], casaVitini);
