@@ -102,7 +102,7 @@ casaVitini.view = {
 
         const definicionPublicaUI = document.createElement("p")
         definicionPublicaUI.style.fontWeight = "normal"
-        definicionPublicaUI.textContent = definicionPublica +"+++++++"
+        definicionPublicaUI.textContent = definicionPublica
         infoGlobalAlojamiento.appendChild(definicionPublicaUI)
 
         const contenedorCaracteristicas = document.createElement("div")

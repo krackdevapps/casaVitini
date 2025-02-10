@@ -1,3 +1,7 @@
+main * {
+    font-family: opensans-variable !important;
+}
+
 .conozcanos_contenedorInterno {
 
     display: flex;
@@ -171,10 +175,6 @@
     -webkit-perspective-origin-x: 100%;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .texto {
-    z-index: 2;
-    padding: 40px;
-}
 
 [zonaCSS="/conozcanos"] .conozcanos .parallax::-webkit-scrollbar {
     width: 0px;
@@ -401,6 +401,13 @@
     overflow: hidden;
 }
 
+[zonaCSS="/conozcanos"] .contenedorParalax .texto {
+    padding: 50px;
+    z-index: 2;
+    color: #8D6E63;
+    font-weight: 550;
+}
+
 [zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll,
 [zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll {
     pointer-events: none;
@@ -434,4 +441,49 @@
     animation-name: scroll;
     z-index: 200;
     position: absolute;
+}
+
+.containerFirst {
+    display: grid;
+    grid-template-columns: 1.5fr auto;
+    grid-gap: 20px;
+    padding: 40px;
+    align-items: center;
+}
+
+.textoFirst {
+    padding: 50px;
+    color: #8D6E63;
+    font-weight: 550;
+
+
+}
+
+@media (max-width: 1080px) {
+    .containerFirst {
+        display: grid;
+        grid-template-columns: none;
+        grid-template-rows: auto auto;
+        grid-gap: 8px;
+    }
+
+    .textoFirst {
+        padding: 20px;
+    }
+}
+
+.questions {
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.lista {
+    list-style-type: circle;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-weight: 550;
+    color: #8D6E63;
+
+
 }
