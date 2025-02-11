@@ -26,6 +26,14 @@
     justify-content: center;
 }
 
+@media (max-width: 720px) {
+    [ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria {
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+}
+
+
 [ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria:hover {
     background: rgba(255, 255, 255, 0.6);
 }
@@ -95,6 +103,16 @@
     display: grid;
     grid-template-columns: auto auto auto auto auto auto auto 50px;
     gap: 6px;
+}
+
+@media screen and (max-width: 968px) {
+    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+        display: none;
+    }
+
+    [ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
+        display: flex;
+    }
 }
 
 [ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo:hover {
@@ -167,6 +185,31 @@
         ". . . . . .";
 }
 
+@media screen and (max-width: 1200px) {
+    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
+        grid-auto-columns: 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            ". . ."
+            ". . .";
+    }
+}
+
+@media screen and (max-width: 600px) {
+    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
+        grid-auto-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            ". ."
+            ". ."
+            ". .";
+    }
+}
+
 [ui="reservaUI"] .contenedorInternoGlobal {
     display: grid;
     grid-auto-columns: 1fr;
@@ -213,11 +256,8 @@
     flex-direction: column;
     align-content: flex-start;
     flex-wrap: nowrap;
-
-
     padding: 6px;
     border-radius: 12px;
-
     display: flex;
     align-items: stretch;
     justify-content: flex-start;
@@ -241,7 +281,6 @@
 [ui="reservaUI"] .administracionReservasDetallesBloqueHabitacion {
     overflow: hidden;
     background: #00000014;
-
     border-radius: 10px;
     padding: 6px;
     gap: 6px;
@@ -254,7 +293,6 @@
 
 [ui="reservaUI"] .tituloHabitacion,
 [ui="reservaUI"] .tituloHabitacion_noSel {
-
     padding: 10px;
     border-radius: 7px;
     font-weight: bold;
@@ -353,6 +391,18 @@
     align-items: start;
 }
 
+@media screen and (max-width: 1280px) {
+    [ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 720px) {
+    [ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
 [ui="reservaUI"] .adminsitracionReservasTituloNombre {
     font-weight: bold;
     text-align: center;
@@ -362,18 +412,6 @@
     text-align: center;
 }
 
-[ui="reservaUI"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
-    border-radius: 12px;
-
-    display: grid;
-    grid-template-columns: 1fr 7fr;
-    grid-auto-rows: minmax(auto, auto);
-    justify-items: stretch;
-    justify-content: center;
-    align-content: center;
-    padding: 6px;
-    background: rgba(255, 255, 255, 0.3);
-}
 
 [ui="reservaUI"] .administracionReservasDetallesBloquePernoctantes:hover {
     background: rgba(255, 255, 255, 0.6);
@@ -395,6 +433,26 @@
     -webkit-backdrop-filter: blur(50px);
     position: absolute;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+}
+
+[ui="reservaUI"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
+    border-radius: 12px;
+
+    display: grid;
+    grid-template-columns: 1fr 7fr;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+@media screen and (max-width: 720px) {
+    [ui="reservaUI"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 [ui="reservaUI"] .administracionReservasDetallesBotonOpcionCliente {
@@ -871,6 +929,11 @@
     align-content: flex-start;
     justify-content: space-between;
 }
+@media (max-width: 720px) {
+    [ui="reservaUI"] .detallesReserva_enlacesDePago_bloqueDatosGenerales {
+        flex-direction: column;
+    }
+}
 
 [ui="reservaUI"] .detallesReserva_transacciones_bloqueDatosGenerales {
     background: rgba(255, 255, 255, 0.4);
@@ -1254,5 +1317,12 @@
     display: grid;
     grid-template-columns: auto auto 1fr !important;
     align-items: center;
+}
 
+[cancelarReservaTipoBloqueo=rangoTemporal], [cancelarReservaTipoBloqueo=permanente] {
+    color: red;
+}
+
+[cancelarReservaTipoBloqueo=sinBloqueo] {
+    color: green;
 }

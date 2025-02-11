@@ -11,7 +11,7 @@ casaVitini.view = {
         formularioUI.setAttribute("instanciaUID", instanciaUID)
         selectorEspacioFormulario.appendChild(formularioUI)
         const botonCrearCalendario = document.createElement("div")
-        botonCrearCalendario.classList.add("botonCrearCalendario")
+        botonCrearCalendario.classList.add("botonV1BlancoIzquierda_campo")
         botonCrearCalendario.textContent = "Crear perfil del calenadrio sincronizado"
         botonCrearCalendario.addEventListener("click", async () => {
             const transaccion = {

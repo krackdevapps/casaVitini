@@ -12,30 +12,31 @@ casaVitini.view = {
         const mail = document.querySelector("[campo=mail]").value
         const claveNueva = document.querySelector("[campo=claveNueva]").value
         const claveConfirmada = document.querySelector("[campo=claveConfirmada]").value
-        const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-        const mensaje = "Creando tu VitiniID..."
-        const datosPantallaSuperpuesta = {
-            instanciaUID: instanciaUID,
-            mensaje: mensaje
-        }
-        casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-        const transaccion = {
+        const main = document.querySelector("main")
+
+        const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+        const contenedor = ui.querySelector("[componente=contenedor]")
+        main.appendChild(ui)
+
+        const spinner = casaVitini.ui.componentes.spinnerSimple()
+        contenedor.appendChild(spinner)
+        const respuestaServidor = await casaVitini.shell.servidor({
             zona: "miCasa/crearCuentaDesdeMiCasa",
             usuarioIDX: usuarioIDX,
             mail: mail,
             claveNueva: claveNueva,
             claveConfirmada: claveConfirmada
-        }
-        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-        const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-        if (!pantallaDeCargaRenderizada) { return }
-        if (respuestaServidor?.error) {
-            pantallaDeCargaRenderizada.remove()
-            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-        }
-        if (respuestaServidor?.ok) {
-            this.ui()
+        })
 
+        if (!ui) { return }
+        if (respuestaServidor?.error) {
+            contenedor.innerHTML = null
+            const errorUI = casaVitini.ui.componentes.errorUI_respuestaInmersiva({
+                errorUI: respuestaServidor.error
+            })
+            contenedor.appendChild(errorUI)
+        } else if (respuestaServidor?.ok) {
+            this.ui()
         }
     },
     ui: () => {

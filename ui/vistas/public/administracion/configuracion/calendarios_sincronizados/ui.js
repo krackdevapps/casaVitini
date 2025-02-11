@@ -78,7 +78,7 @@ casaVitini.view = {
                         const datosCalendario = document.createElement("div")
                         datosCalendario.classList.add("contenedorDatosCalendario")
                         const nombreCalendario = document.createElement("div")
-                        nombreCalendario.classList.add("nombreCalendario")
+                        nombreCalendario.classList.add("botonV1BlancoIzquierda_campo")
                         nombreCalendario.textContent = nombre
                         datosCalendario.appendChild(nombreCalendario)
                         titulo = document.createElement("p")
@@ -269,7 +269,7 @@ casaVitini.view = {
         const marcoBotones = document.createElement("div")
         marcoBotones.classList.add("marcoBotones")
         const botonCrearCalendario = document.createElement("div")
-        botonCrearCalendario.classList.add("botonCrearCalendario")
+        botonCrearCalendario.classList.add("botonV1BlancoIzquierda_campo")
         botonCrearCalendario.textContent = "Guardar cambios"
         botonCrearCalendario.addEventListener("click", async () => {
             const transaccion = {
@@ -314,7 +314,7 @@ casaVitini.view = {
         })
         marcoBotones.appendChild(botonCrearCalendario)
         const botonCancelar = document.createElement("div")
-        botonCancelar.classList.add("botonCrearCalendario")
+        botonCancelar.classList.add("botonV1BlancoIzquierda_campo")
         botonCancelar.textContent = "Restablecer cambios"
         botonCancelar.addEventListener("click", async () => {
             document.querySelectorAll("[campo]").forEach((campo) => {

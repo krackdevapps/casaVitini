@@ -51,7 +51,7 @@ casaVitini.view = {
             botonEnviar.addEventListener("click", () => {
                 casaVitini.view.transactores.enviarEnlaceRecuperacion()
             })
-            botonEnviar.textContent = 'Enviar mensaje de recuperación a mi buzón';
+            botonEnviar.textContent = 'Enviar mensaje de recuperación o verificación';
 
             const secction = document.querySelector("main")
             secction.appendChild(titulo);
@@ -234,51 +234,58 @@ casaVitini.view = {
     transactores: {
         enviarEnlaceRecuperacion: async function () {
             const mail = document.querySelector("[campo=mail]").value
-            const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-            const mensaje = "Enviando enlace temporal..."
-            const datosPantallaSuperpuesta = {
-                instanciaUID: instanciaUID,
-                mensaje: mensaje
-            }
-            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-            const transacccion = {
+            const main = document.querySelector("main")
+
+            const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+            const contenedor = ui.querySelector("[componente=contenedor]")
+            main.appendChild(ui)
+
+            const spinner = casaVitini.ui.componentes.spinnerSimple()
+            contenedor.appendChild(spinner)
+
+
+            const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "miCasa/recuperarCuenta/enviarCorreo",
                 mail: mail.trim()
-            }
-            const respuestaServidor = await casaVitini.shell.servidor(transacccion)
-            if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
-                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-            }
-            if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
+            })
+            if (!ui) { return }
+
+            if (respuestaServidor?.error) {
+                contenedor.innerHTML = null
+                const errorUI = casaVitini.ui.componentes.errorUI_respuestaInmersiva({
+                    errorUI: respuestaServidor.error
+                })
+                contenedor.appendChild(errorUI)
+            } else if (respuestaServidor?.ok) {
                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                 return casaVitini.view.ui.mensajeEnviado()
             }
         },
         restablecerClave: async function (codigo) {
+            const main = document.querySelector("main")
+
             const clave = document.querySelector("[campo=clave]").value
             const claveConfirmada = document.querySelector("[campo=claveConfirmada]").value
-            const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-            const mensaje = "Reestableciendo la contraseña..."
-            const datosPantallaSuperpuesta = {
-                instanciaUID: instanciaUID,
-                mensaje: mensaje
-            }
-            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-            const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-            const transacccion = {
+
+            const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+            const contenedor = ui.querySelector("[componente=contenedor]")
+            main.appendChild(ui)
+            const spinner = casaVitini.ui.componentes.spinnerSimple()
+            contenedor.appendChild(spinner)
+
+            const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "miCasa/recuperarCuenta/restablecerClave",
                 codigo: codigo,
                 clave: clave,
                 claveConfirmada: claveConfirmada
-            }
-            const respuestaServidor = await casaVitini.shell.servidor(transacccion)
-            if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
-                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-            }
-            if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
+            })
+            if (respuestaServidor?.error) {
+                contenedor.innerHTML = null
+                const errorUI = casaVitini.ui.componentes.errorUI_respuestaInmersiva({
+                    errorUI: respuestaServidor.error
+                })
+                contenedor.appendChild(errorUI)
+            } else if (respuestaServidor?.ok) {
                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                 return casaVitini.view.ui.claveRestablecida()
             }

@@ -3319,10 +3319,12 @@ const casaVitini = {
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+
                             if (mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal) {
                                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 0
                                 selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "none"
-                            } else if (mesActual_decimal === fechaLimiteFuturo.mes && anoActual_decimal === fechaLimiteFuturo.ano) {
+                            }
+                            if (mesActual_decimal === fechaLimiteFuturo.mes && anoActual_decimal === fechaLimiteFuturo.ano) {
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 0
                                 selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "none"
                             }
@@ -4621,6 +4623,26 @@ const casaVitini = {
                     return contenedor
                 }
             },
+            errorUI_respuestaInmersiva: (data) => {
+
+                const errorUI = data.errorUI
+
+                const ui = document.createElement("div")
+                ui.classList.add("flexVertical", "gap10")
+
+                const errorInfo = document.createElement("p")
+                errorInfo.classList.add("textoCentrado")
+                errorInfo.textContent = errorUI
+                ui.appendChild(errorInfo)
+
+                const botonAceptar = document.createElement("div")
+                botonAceptar.classList.add("botonV1Blanco")
+                botonAceptar.textContent = "Aceptar y volver"
+                botonAceptar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
+                ui.appendChild(botonAceptar)
+
+                return ui
+            }
         }
     },
     componentes: {

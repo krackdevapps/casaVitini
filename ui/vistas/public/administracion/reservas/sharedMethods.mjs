@@ -1,4 +1,3 @@
-
 export const reservaComponentes = {
     detallesReservaUI: {
         reservaUI: {
@@ -96,354 +95,6 @@ export const reservaComponentes = {
                     const contenedorDinamico = this.componentesUI.contenedorDinamico()
                     contenedor.appendChild(contenedorDinamico);
                     return contenedor
-                },
-                despliege_antiguo: async function (data) {
-                    const detallesReserva = data.detallesReserva
-                    const granuladoURL = casaVitini.utilidades.granuladorURL()
-                    const posicionReservaUID = granuladoURL.directorios.findIndex(directorio => directorio === "reservas") + 1;
-                    const categoriaGlobalInicial = granuladoURL.rawArray[3]
-                    const global = detallesReserva.global
-                    const detallesTitular = detallesReserva?.titular
-                    const contenedorFinanciero = detallesReserva.contenedorFinanciero
-                    const reservaUID = global.reservaUID
-                    const porcentajeTranscurrido = global.porcentajeTranscurrido
-                    const detallesDeLaReserva = respuestaServidor.reserva
-                    const estadoReservaIDV = global.estadoReservaIDV
-                    const estadoPagoIDV = global.estadoPagoIDV
-                    const fechaCreacion = global.fechaCreacion
-                    const origenIDV = global.origenIDV
-                    const fechaEntrada = global.fechaEntrada
-                    const fechaSalida = global.fechaSalida
-                    const totalReserva = contenedorFinanciero?.desgloseFinanciero?.global?.totales?.totalFinal ?? "Sin información"
-                    const fechaInicio_humana = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaEntrada)
-                    const fechaFinal_humana = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaSalida)
-                    const titulo = document.querySelector(".tituloGris")
-                    titulo?.remove()
-                    let estadoReservaUI
-                    if (estadoReservaIDV === "cancelada") {
-                        estadoReservaUI = "Cancelada"
-                    }
-                    if (estadoReservaIDV === "confirmada") {
-                        estadoReservaUI = "Confirmada"
-                    }
-                    if (estadoReservaIDV === "pendiente") {
-                        estadoReservaUI = "Pendiente"
-                    }
-                    let estadoPagoUI
-                    if (estadoPagoIDV === "pagado") {
-                        estadoPagoUI = "Pagado"
-                    }
-                    if (estadoPagoIDV === "noPagado") {
-                        estadoPagoUI = "No pagado"
-                    }
-                    if (estadoPagoIDV === "pagadoParcialmente") {
-                        estadoPagoUI = "Pagado parcialmente"
-                    }
-                    if (estadoPagoIDV === "pagadoSuperadamente") {
-                        estadoPagoUI = "Pagado superadamente"
-                    }
-                    let nombreCompletoTitular = "(Níngun titular asignado)"
-                    if (detallesTitular.nombreTitular) {
-                        nombreCompletoTitular = detallesTitular.nombreTitular
-                    }
-                    let origenUI
-                    if (origenIDV === "cliente") {
-                        origenUI = "Cliente"
-                    }
-                    if (origenIDV === "administracion") {
-                        origenUI = "Adminitración"
-                    }
-                    const marcoElastico = document.createElement("div")
-                    marcoElastico.classList.add("marcoElasticoRelativo")
-                    marcoElastico.setAttribute("componente", "marcoElastico")
-                    const divPrincipal = document.createElement("div");
-                    divPrincipal.setAttribute("reservaUID", reservaUID)
-                    divPrincipal.setAttribute("componente", "detalleReserva");
-                    divPrincipal.classList.add(
-                        "flexVertical",
-                        "gap6"
-                    )
-                    marcoElastico.appendChild(divPrincipal);
-                    const contenedorPendiente = document.createElement("div")
-                    if (estadoReservaIDV !== "pendiente") {
-                        contenedorPendiente.style.display = "none"
-                    }
-                    contenedorPendiente.setAttribute("contenedor", "pendiente")
-                    contenedorPendiente.classList.add(
-                        "gap6",
-                        "borderRadius8",
-                        "contenedorPendiente"
-                    )
-                    divPrincipal.appendChild(contenedorPendiente);
-                    const botonAceptar = document.createElement("div")
-                    botonAceptar.classList.add(
-                        "botonV1",
-                        "comportamientoBoton"
-                    )
-                    botonAceptar.textContent = "Aceptar reserva"
-                    botonAceptar.addEventListener("click", () => {
-                        this.estado.aceptarReserva({
-                            reservaUID
-                        })
-                    })
-                    contenedorPendiente.appendChild(botonAceptar);
-                    const botonRechazar = document.createElement("div")
-                    botonRechazar.classList.add(
-                        "botonV1",
-                        "comportamientoBoton"
-                    )
-                    botonRechazar.textContent = "Rechazar reserva"
-                    botonRechazar.addEventListener("click", () => {
-                        casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.estado.rechazarReserva({
-                            reservaUID
-                        })
-                    })
-                    contenedorPendiente.appendChild(botonRechazar);
-                    const divBloqueGeneral = document.createElement("div");
-                    divBloqueGeneral.setAttribute("class", "reservaDetallesBloqueGeneral");
-                    const divInformacionGeneral = document.createElement("div");
-                    divInformacionGeneral.setAttribute("class", "administracionReservasDetalesMarcoEnvolventeInformacionGeneral");
-                    const contenedorReseervaUID = document.createElement("div");
-                    contenedorReseervaUID.setAttribute("class", "administracion_reservas_detallesReserva_contenedorReservaUID");
-                    const pTitulo1 = document.createElement("p");
-                    pTitulo1.setAttribute("class", "adminsitracionReservasTituloNombre marginCeroparaP");
-                    pTitulo1.textContent = "Reserva";
-                    const pDato1 = document.createElement("p");
-                    pDato1.classList.add(
-                        "contenedroTextoEspansivo"
-                    ); adm
-                    pDato1.setAttribute("dataReserva", "reservaID");
-                    pDato1.setAttribute("componente", "reservaUID_" + reservaUID)
-                    pDato1.textContent = reservaUID;
-                    contenedorReseervaUID.appendChild(pTitulo1);
-                    contenedorReseervaUID.appendChild(pDato1);
-                    const contenedorRestoGlobal = document.createElement("div")
-                    contenedorRestoGlobal.classList.add("administracion_reservas_detallesReserva_contenedorRestoGlobal")
-                    const bloqueTitular = document.createElement("div");
-                    bloqueTitular.setAttribute("class", "administracion_reservas_detallesReserva_panel_bloqueTitular");
-                    bloqueTitular.setAttribute("contenedor", "titularUID")
-                    bloqueTitular.addEventListener("click", this.titular.desplegarUI)
-                    if (detallesTitular?.tipoTitularIDV === "titularCliente") {
-                        bloqueTitular.setAttribute("titularUID", detallesTitular.clienteUID)
-                    }
-                    if (detallesTitular) {
-                        bloqueTitular.setAttribute("tipoTitular", detallesTitular.tipoTitularIDV)
-                    }
-                    const tituloTitular = document.createElement("p");
-                    tituloTitular.setAttribute("class", "adminsitracionReservasTituloNombre marginCeroparaP");
-                    tituloTitular.textContent = "Titular de la reserva";
-                    const nombreTitular = document.createElement("p");
-                    nombreTitular.setAttribute("class", "marginCeroparaP");
-                    nombreTitular.classList.add("contenedroTextoEspansivo");
-                    nombreTitular.setAttribute("dataReserva", "nombreTitular");
-                    nombreTitular.textContent = nombreCompletoTitular;
-                    bloqueTitular.appendChild(tituloTitular);
-                    bloqueTitular.appendChild(nombreTitular);
-                    const divBloqueDual2 = document.createElement("div");
-                    divBloqueDual2.setAttribute("class", "administracionReservaBloqueDual");
-                    const pTitulo2 = document.createElement("p");
-                    pTitulo2.setAttribute("class", "adminsitracionReservasTituloNombre marginCeroparaP");
-                    pTitulo2.textContent = "Fecha de creación UTC";
-                    const pDato2 = document.createElement("p");
-                    pDato2.setAttribute("class", "marginCeroparaP");
-                    pDato2.setAttribute("dataReserva", "nada");
-                    pDato2.classList.add("adminsitracion_reservas_detallesReserva_contenedorDatoGlobal");
-                    pDato2.textContent = fechaCreacion;
-                    divBloqueDual2.appendChild(pTitulo2);
-                    divBloqueDual2.appendChild(pDato2);
-                    const divBloqueDual3 = document.createElement("div");
-                    divBloqueDual3.setAttribute("class", "administracionReservaBloqueDual");
-                    const pTitulo3 = document.createElement("p");
-                    pTitulo3.setAttribute("class", "adminsitracionReservasTituloNombre marginCeroparaP");
-                    pTitulo3.textContent = "Origen de la reserva";
-                    const pDato3 = document.createElement("p");
-                    pDato3.setAttribute("class", "marginCeroparaP");
-                    pDato3.setAttribute("dataReserva", "origen");
-                    pDato3.classList.add("adminsitracion_reservas_detallesReserva_contenedorDatoGlobal");
-                    pDato3.textContent = origenUI;
-                    divBloqueDual3.appendChild(pTitulo3);
-                    divBloqueDual3.appendChild(pDato3);
-                    const divBloqueDual4 = document.createElement("div");
-                    divBloqueDual4.setAttribute("class", "administracion_reservas_detallesReserva_panel_bloqueTitular");
-                    divBloqueDual4.setAttribute("contenedor", "estadoReservaIDV")
-                    const pTitulo4 = document.createElement("p");
-                    pTitulo4.setAttribute("class", "adminsitracionReservasTituloNombre marginCeroparaP");
-                    pTitulo4.textContent = "Estado de la reserva";
-                    const pDato4 = document.createElement("p");
-                    pDato4.setAttribute("class", "marginCeroparaP");
-                    pDato4.setAttribute("dataReserva", "estado");
-                    pDato4.setAttribute("estadoReservaIDV", estadoReservaIDV);
-                    pDato4.classList.add("adminsitracion_reservas_detallesReserva_contenedorDatoGlobal");
-                    pDato4.textContent = estadoReservaUI;
-                    divBloqueDual4.addEventListener("click", (e) => {
-                        this.estado.panelExpandidoUI({
-                            reservaUID,
-                            estadoActual: e.target.closest("[contenedor=estadoReservaIDV]")
-                                .querySelector("[estadoReservaIDV]")
-                                .getAttribute("estadoReservaIDV")
-                        })
-                    })
-                    divBloqueDual4.appendChild(pTitulo4);
-                    divBloqueDual4.appendChild(pDato4);
-                    const divBloqueDual5 = document.createElement("div");
-                    divBloqueDual5.setAttribute("class", "administracionReservaBloqueDual");
-                    const pTitulo5 = document.createElement("p");
-                    pTitulo5.setAttribute("class", "adminsitracionReservasTituloNombre marginCeroparaP");
-                    pTitulo5.textContent = "Estado del pago";
-                    const pDato5 = document.createElement("p");
-                    pDato5.setAttribute("class", "marginCeroparaP");
-                    pDato5.setAttribute("dataReserva", "estadoPago");
-                    pDato5.classList.add("adminsitracion_reservas_detallesReserva_contenedorDatoGlobal");
-                    pDato5.textContent = estadoPagoUI;
-                    divBloqueDual5.appendChild(pTitulo5);
-                    divBloqueDual5.appendChild(pDato5);
-                    const divBloqueDual6 = document.createElement("div");
-                    divBloqueDual6.setAttribute("class", "administracionReservaBloqueDual");
-                    const pTitulo6 = document.createElement("p");
-                    pTitulo6.setAttribute("class", "adminsitracionReservasTituloNombre marginCeroparaP");
-                    pTitulo6.textContent = "Total";
-                    const pDato6 = document.createElement("p");
-                    pDato6.setAttribute("class", "marginCeroparaP");
-                    pDato6.setAttribute("dataReserva", "totalReservaConImpuestos");
-                    pDato6.classList.add("adminsitracion_reservas_detallesReserva_contenedorDatoGlobal");
-                    pDato6.textContent = totalReserva;
-                    divBloqueDual6.appendChild(pTitulo6);
-                    divBloqueDual6.appendChild(pDato6);
-                    divInformacionGeneral.appendChild(contenedorReseervaUID);
-                    contenedorRestoGlobal.appendChild(bloqueTitular);
-                    contenedorRestoGlobal.appendChild(divBloqueDual2);
-                    contenedorRestoGlobal.appendChild(divBloqueDual3);
-                    contenedorRestoGlobal.appendChild(divBloqueDual4);
-                    contenedorRestoGlobal.appendChild(divBloqueDual5);
-                    contenedorRestoGlobal.appendChild(divBloqueDual6);
-                    divInformacionGeneral.appendChild(contenedorRestoGlobal);
-                    divBloqueGeneral.appendChild(divInformacionGeneral);
-                    divPrincipal.appendChild(divBloqueGeneral);
-                    const nombreClaseDinamica = `barraProgresso-anchoDinamico-${reservaUID}`;
-                    if (!document.querySelector(`.${nombreClaseDinamica}`)) {
-                        const style = document.createElement('style');
-                        style.innerHTML = `
-                            .${nombreClaseDinamica} {
-                                width: ${porcentajeTranscurrido}%;
-                        `;
-                        document.querySelector("main").appendChild(style);
-                    }
-                    const contenedorProgreso = document.createElement("div")
-                    contenedorProgreso.classList.add(
-                        "backgroundGrey1",
-                        "borderRadius8",
-                    )
-                    contenedorProgreso.style.height = "20px"
-                    contenedorProgreso.style.overflow = "hidden"
-                    divPrincipal.appendChild(contenedorProgreso);
-                    const barraProgresso = document.createElement("div")
-                    barraProgresso.setAttribute("componente", "progreso")
-                    barraProgresso.classList.add(
-                        "barraProgresso",
-                        nombreClaseDinamica
-                    )
-                    contenedorProgreso.appendChild(barraProgresso);
-                    casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.seleccionarDia
-                    const contenedorFechasUI = casaVitini.view.__sharedMethods__.contenedorFechasUI({
-                        nombreContenedor: "rangoReserva",
-                        modo: "administracion",
-                        nombreFechaEntrada: "Fecha entrada",
-                        nombreSalidaEntrada: "Fecha salida",
-                        configuracionCalendarioInicio: {
-                            rangoIDV: "inicioRango",
-                            contenedorOrigenIDV: "[calendario=entrada]",
-                            perfilMes: "calendario_entrada_asistido_detallesReserva_conPasado",
-                            mensajeInfo: "Selecciona la fecha de entrada que quieras actualizar en esta reserva",
-                            metodoSelectorDia: "administracion.reservas.detallesReserva.reservaUI.fechas.seleccionarDia",
-                            seleccionableDiaLimite: "no"
-                        },
-                        configuracionCalendarioFinal: {
-                            rangoIDV: "finalRango",
-                            contenedorOrigenIDV: "[calendario=salida]",
-                            perfilMes: "calendario_salida_asistido_detallesReserva_conPasado",
-                            metodoSelectorDia: "administracion.reservas.detallesReserva.reservaUI.fechas.seleccionarDia",
-                            mensajeInfo: "Selecciona la fecha de salida que quieras actualizar en esta reserva.",
-                            seleccionableDiaLimite: "no"
-                        }
-                    })
-                    divPrincipal.appendChild(contenedorFechasUI);
-                    const selectorEntrada = contenedorFechasUI.querySelector("[calendario=entrada]")
-                    const selectorSalida = contenedorFechasUI.querySelector("[calendario=salida]")
-                    selectorEntrada.setAttribute("memoriaVolatil", fechaEntrada)
-                    selectorSalida.setAttribute("memoriaVolatil", fechaSalida)
-                    const fechaEntradaUI = selectorEntrada.querySelector("[fechaUI=fechaInicio]")
-                    const fechaSalidaUI = selectorSalida.querySelector("[fechaUI=fechaFin]")
-                    fechaEntradaUI.textContent = fechaInicio_humana
-                    fechaSalidaUI.textContent = fechaFinal_humana
-                    const divPropuestaCambioFecha = document.createElement("div");
-                    divPropuestaCambioFecha.setAttribute("class", "resertaDetallesPropuestaCambioFechaReserva");
-                    divPropuestaCambioFecha.setAttribute("componente", "espacioPropuestaCambioFechaReserva");
-                    divPrincipal.appendChild(divPropuestaCambioFecha);
-                    const contenedorCategoriasGlobales = document.createElement("div")
-                    contenedorCategoriasGlobales.classList.add("administracion_reservas_detallesReserva_contenedorCategoriasGlobales")
-                    const contenedorMenuExpandido = document.createElement("div")
-                    contenedorMenuExpandido.classList.add("administracion_reservas_detallesReserva_contenedorMenuExpandido")
-                    const contenedorBotones = this.categorias.categoriasGlobalesBotonesUI({
-                        rectangularidad: "horizontal",
-                        reservaUID: reservaUID
-                    })
-                    contenedorMenuExpandido.appendChild(contenedorBotones);
-                    const marcoMenuResponsivo = document.createElement("div");
-                    marcoMenuResponsivo.setAttribute("class", "administracion_reserva_detallesReserva_marcoMenuResponsivo");
-                    marcoMenuResponsivo.textContent = "Menú reserva"
-                    marcoMenuResponsivo.addEventListener("click", () => {
-                        document.body.style.overflow = "hidden";
-                        this.categorias.desplegarMenuResponsivo(reservaUID)
-                    })
-                    contenedorCategoriasGlobales.appendChild(marcoMenuResponsivo);
-                    contenedorCategoriasGlobales.appendChild(contenedorMenuExpandido);
-                    divPrincipal.appendChild(contenedorCategoriasGlobales);
-                    const contenedorDinamico = document.createElement("div")
-                    contenedorDinamico.classList.add("administracion_reservas_detallesReserva_contenedorDinamico")
-                    contenedorDinamico.setAttribute("componente", "contenedorDinamico")
-                    divPrincipal.appendChild(contenedorDinamico)
-                    const reservaDetallesBloqueAlojamineto = document.createElement("div");
-                    reservaDetallesBloqueAlojamineto.setAttribute("class", "reservaDetallesBloqueAlojamineto");
-                    reservaDetallesBloqueAlojamineto.setAttribute("componente", "marcoAlojamiento");
-                    const divEspacioTotales = document.createElement("div");
-                    divEspacioTotales.setAttribute("class", "resertaDtallesEspacioTotales");
-                    divEspacioTotales.setAttribute("componente", "espacioTotalesReserva");
-                    const seccion = document.querySelector("main:not([estado=obsoleto])")
-                    seccion.appendChild(marcoElastico)
-                    if (categoriaGlobalInicial) {
-                        const categoriaCammelCase = categoriaGlobalInicial.replace(/_([a-z])/g, (match, group) => group.toUpperCase());
-                        const metadatos = {
-                            categoria: categoriaCammelCase,
-                            origen: "url",
-                            reservaUID: reservaUID
-                        }
-                        await this.categorias.controladorCategorias(metadatos)
-                    } else {
-                        const directoriosFusionLimpios = []
-                        granuladoURL.directorios.forEach((directorio, indice) => {
-                            if (indice <= posicionReservaUID) {
-                                directoriosFusionLimpios.push(directorio)
-                            }
-                        })
-                        const categoriaAGuardarURL = (categoriaGlobalInicial) => {
-                            if (categoriaGlobalInicial) {
-                                return "/" + categoriaGlobalInicial
-                            } else {
-                                return ""
-                            }
-                        }
-                        const directoriosFusion = "/administracion/reservas/reserva:" + reservaUID + categoriaAGuardarURL(categoriaGlobalInicial)
-                        const componentesExistenteUID = "reservaUID_" + reservaUID
-                        const titulo = "Casa Vitini"
-                        const estado = {
-                            zona: directoriosFusion,
-                            EstadoInternoZona: "estado",
-                            tipoCambio: "parcial",
-                            componenteExistente: componentesExistenteUID,
-                            funcionPersonalizada: "administracion.reservas.detallesReserva.reservaUI.categorias.limpiarMenusCategorias"
-                        }
-                        window.history.replaceState(estado, titulo, directoriosFusion);
-                    }
                 },
                 css: async function () {
                     const respuestaServidor = await casaVitini.shell.servidor({
@@ -860,6 +511,7 @@ export const reservaComponentes = {
                             contenedorBotonesExpandidos.classList.add("administracion_reservas_detallesReserva_contenedorMenuExpandido")
                             contenedorBotonesExpandidos.setAttribute("contenedor", "botonesExpandidos")
                             if (configuracionVista === "publica") {
+                                contenedorBotonesExpandidos.style.gridTemplateColumns = "auto auto auto auto 50px"
                             } else {
                             }
                             contenedor.appendChild(contenedorBotonesExpandidos)
@@ -10485,6 +10137,7 @@ export const reservaComponentes = {
                             opcionBloqueoPorLiberacion.setAttribute("cancelarReservatipoBloqueo", "sinBloqueo")
                             opcionBloqueoPorLiberacion.addEventListener("click", casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.cancelarReserva.seleccionarOpcionBloqueoApartametos)
                             opcionBloqueoPorLiberacion.textContent = "Liberar los apartamentos de esta reserva tras la cancelación para que pasen a estar disponibles para su reserva."
+
                             bloqueBloqueoApartamentos.appendChild(opcionBloqueoPorLiberacion)
                             const bloqueBotones = document.createElement("div")
                             bloqueBotones.classList.add("detallesReservaCancelarReservabloqueBotones")
@@ -10493,7 +10146,8 @@ export const reservaComponentes = {
                             entradaPalabraCancelar.placeholder = "Escriba la palabra cancelar"
                             const infoBotonCancelar = document.createElement("div")
                             infoBotonCancelar.classList.add("padding12")
-                            infoBotonCancelar.textContent = "Para que se habilite el botón, tienes que seleccionar una de las tres opciones de arriba.Confirmar y cancelar la reserva."
+                            infoBotonCancelar.setAttribute("com", "infoBoton")
+                            infoBotonCancelar.textContent = "Para que se habilite el botón, tienes que seleccionar una de las tres opciones de arriba. Confirmar y cancelar la reserva."
                             bloqueBloqueoApartamentos.appendChild(infoBotonCancelar)
                             const botonCancelar = document.createElement("div")
                             botonCancelar.classList.add("botonV1BlancoIzquierda")
@@ -10515,7 +10169,7 @@ export const reservaComponentes = {
                         if (estadoReservaIDV === "cancelada") {
                             infoEliminarReserva.textContent = "La reserva está cancelada. Por lo tanto, ya no tiene vigencia pernoctaría. Si lo prefieres puedes eliminar la reserva completamente. Esta operación borra toda la información dentro de la reserva, como el alojamiento, complementos de alojamiento, ofertas y servicios. Esta información solo se borra de dentro de la reserva."
                         } else {
-                            infoEliminarReserva.textContent = "También puedes eliminar irreversiblemente una reserva.La eliminación irreversible de una reserva borra la información de la reserva, así como los pagos asociados a la reserva y toda la información relacionada con la reserva, menos los datos de los clientes y titulares que permanecen disponibles para otras reservas.A diferencia de la cancelación, los datos de la reserva dejarán de estar disponibles."
+                            infoEliminarReserva.textContent = "También puedes eliminar irreversiblemente una reserva. La eliminación irreversible de una reserva borra la información de la reserva, así como los pagos asociados a la reserva y toda la información relacionada con la reserva, menos los datos de los clientes y titulares que permanecen disponibles para otras reservas. A diferencia de la cancelación, los datos de la reserva dejarán de estar disponibles."
                         }
                         const botonEliminarReserva = document.createElement("div")
                         botonEliminarReserva.classList.add("botonV1BlancoIzquierda")
@@ -10527,14 +10181,20 @@ export const reservaComponentes = {
                     }
                 },
                 seleccionarOpcionBloqueoApartametos: function (opcion) {
-                    let selectorOpciones = document.querySelectorAll("[componente=cancelarReservaOpcionBloqueo]")
-                    let opcionBloqueo = opcion.target
-                    let botonCancelar = document.querySelector("[componente=botonConfirmarCancelarReserva]")
+                    const selectorOpciones = document.querySelectorAll("[componente=cancelarReservaOpcionBloqueo]")
+                    const opcionBloqueo = opcion.target
+                    const botonCancelar = document.querySelector("[componente=botonConfirmarCancelarReserva]")
+                    const contenedor = opcionBloqueo.closest("[componente=contenedor]")
+                    const info = contenedor.querySelector("[com=infoBoton]")
+
                     if (opcionBloqueo.getAttribute("estado") === "activo") {
                         opcionBloqueo.removeAttribute("estado")
                         botonCancelar.style.pointerEvents = "none"
                         botonCancelar.style.color = "#313131"
                         opcionBloqueo.removeAttribute("style")
+                        info.textContent = "Para que se habilite el botón, tienes que seleccionar una de las tres opciones de arriba. Confirmar y cancelar la reserva."
+
+                        return
                     }
                     selectorOpciones.forEach((opcionBloqueo) => {
                         opcionBloqueo.removeAttribute("style")
@@ -10544,6 +10204,7 @@ export const reservaComponentes = {
                     opcionBloqueo.style.color = "white"
                     opcionBloqueo.setAttribute("estado", "activo")
                     botonCancelar.removeAttribute("style")
+                    info.textContent = "Opcion de selecionada, confirma operación"
                 },
                 confirmaCancelacion: async function (data) {
                     const instanciaUID_pantallaEspera = casaVitini.utilidades.codigoFechaInstancia()

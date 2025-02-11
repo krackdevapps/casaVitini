@@ -16,7 +16,7 @@ export const sharedMethods = {
         definicion.textContent = "Define un nombre para el calendario.Utiliza este nombre en el futuro para poder recordar algo descriptivo de este calendario.Pon el nombre que creas más recordativo."
         formularioUI.appendChild(definicion)
         const nombreCalendario = document.createElement("input")
-        nombreCalendario.classList.add("nombreCalendario")
+        nombreCalendario.classList.add("botonV1BlancoIzquierda_campo")
         nombreCalendario.setAttribute("campo", "nombre")
         nombreCalendario.placeholder = "Escribe un nombre para este calendario"
         formularioUI.appendChild(nombreCalendario)
@@ -25,7 +25,7 @@ export const sharedMethods = {
         definicion.textContent = "Selecciona el apartamento con el que vas a enlazar este calendario.Los calendarios de Airbnb se enlazan por apartamento.Cada calendario de airbnb es un apartamento"
         formularioUI.appendChild(definicion)
         const tipoApartamentoUI = document.createElement("select")
-        tipoApartamentoUI.classList.add("listaApartamentos")
+        tipoApartamentoUI.classList.add("botonV1BlancoIzquierda_campo")
         tipoApartamentoUI.setAttribute("campo", "apartamentoIDV")
         tipoApartamentoUI.addEventListener("change", casaVitini.view.__sharedMethods__.sharedMethodsTemporalLocks.controladorSelectorRangoTemporalUI)
         const tipoApartamentoInicio = document.createElement("option");
@@ -102,7 +102,7 @@ export const sharedMethods = {
             definicion.textContent = "Copia aquí la url del calendario de Airbnb, la url debe de ser la que comparte Airbnb para sincronizar calendarios en formato iCal, la url debe de estar en https"
             formularioUI.appendChild(definicion)
             const urlCalendario = document.createElement("input")
-            urlCalendario.classList.add("nombreCalendario")
+            urlCalendario.classList.add("botonV1BlancoIzquierda_campo")
             urlCalendario.setAttribute("campo", "url")
             urlCalendario.placeholder = "Escribe la url del calendario"
             formularioUI.appendChild(urlCalendario)

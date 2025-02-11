@@ -23,7 +23,7 @@ casaVitini.view = {
         }
     },
     ui: {
-        portadaUI: () => {
+        portadaUI: function () {
             const titulo = document.createElement('p');
             titulo.className = 'titulo';
             titulo.textContent = 'Verifica tu cuenta con tu dirección de correo electrónico';
@@ -34,25 +34,25 @@ casaVitini.view = {
             marcoElastico.style.alignItems = "stretch"
             marcoElastico.style.gap = "4px"
             const botonRecuperarCuenta = document.createElement("a")
-            botonRecuperarCuenta.classList.add("plaza_reservas_reservaConfirmada_banner")
+            botonRecuperarCuenta.classList.add("botonV1BlancoIzquierda")
             botonRecuperarCuenta.textContent = "Ir a recuperar mi cuenta para mandar un enlace de verificación a mi correo"
             botonRecuperarCuenta.setAttribute("href", "/micasa/recuperar_cuenta")
             botonRecuperarCuenta.setAttribute("vista", "/micasa/recuperar_cuenta")
             botonRecuperarCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             const contenedorCrearCuenta = document.createElement('div');
-            contenedorCrearCuenta.className = 'miCasa_crearCuenta_contenedorCrearCuenta';
+            contenedorCrearCuenta.classList.add('flexVertical', "gap6")
             const texto = document.createElement('p');
-            texto.className = 'texto padding6';
+            texto.className = 'padding14';
             texto.textContent = 'Cuando creas una cuenta en Casa Vitini, debes verificar tu VitiniID. Para ello, debes acceder desde el enlace que se te envió al buzón de correo electrónico. Si ya no dispones de este enlace, puedes solicitar otro enlace de verificación. Para hacerlo, ve al portal de inicio de sesión y haz clic en "Recuperar tu cuenta". Si tu cuenta no está verificada, se te enviará un correo electrónico de verificación. Cuando recibas el mensaje con los enlaces de verificación, puedes hacer clic en los enlaces o escribir aquí el código de verificación.';
             const input = document.createElement('input');
             input.type = 'text';
-            input.className = 'miCasa_crearCuenta_campo';
+            input.className = 'botonV1BlancoIzquierda_campo';
             input.setAttribute('campo', 'codigoVerificacion');
             input.placeholder = 'Escribo aquí tu código de verificación';
             const contenedorBotones = document.createElement('div');
             contenedorBotones.className = 'miCuenta_cambioClave_contenedorBotones';
             const botonEnviar = document.createElement('div');
-            botonEnviar.className = 'miCuenta_cambiarClave_botonV1';
+            botonEnviar.className = 'botonV1BlancoIzquierda';
             botonEnviar.setAttribute('componente', 'botonVerificarCodigo');
             botonEnviar.addEventListener("click", () => {
                 casaVitini.view.transactores.verificarCodigo()
@@ -70,35 +70,44 @@ casaVitini.view = {
             marcoElasticoRelativo.appendChild(marcoElastico);
             secction.appendChild(marcoElasticoRelativo);
         },
-        codigoErroneo: () => {
+        codigoErroneo: function () {
             const marcoElasticoRelatico = document.createElement("div")
             marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
             const marcoElastico = document.createElement("div")
-            marcoElastico.classList.add("marcoElastico")
+            marcoElastico.classList.add("marcoElastico", "gap6")
             marcoElastico.style.alignItems = "stretch"
-            marcoElastico.style.gap = "4px"
+            marcoElasticoRelatico.appendChild(marcoElastico)
+
             const titulo = document.createElement("div")
             titulo.classList.add("tituloGris", "textoCentrado")
             titulo.textContent = "El código de verificación es erróneo"
             marcoElastico.appendChild(titulo)
 
             const contenedorBanner = document.createElement("a")
-            contenedorBanner.classList.add("textoCentrado", "padding14")
-            contenedorBanner.textContent = "El código de verificación es erróneo. Revisa el código introducido."
+            contenedorBanner.classList.add("padding12")
+            contenedorBanner.textContent = "El código de la URL es erróneo porque no está asociado a ninguna cuenta pendiente de verificación. Si estás intentando verificar tu cuenta, recuerda que los códigos de verificación caducan pasado un tiempo. Si necesitas enviar otro código de verificación, pulsa en el botón de abajo para volver a generar un código de verificación"
             marcoElastico.appendChild(contenedorBanner)
             const botonIniciarReserva = document.createElement("a")
-            botonIniciarReserva.classList.add("botonV1")
+            botonIniciarReserva.classList.add("botonV1BlancoIzquierda")
             botonIniciarReserva.textContent = "Ir a generar un nuevo código de verificación"
             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
             botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
             botonIniciarReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIniciarReserva)
-            marcoElasticoRelatico.appendChild(marcoElastico)
+        
+            const irALogin = document.createElement("a")
+            irALogin.classList.add("botonV1BlancoIzquierda")
+            irALogin.textContent = "Ir a la pantalla de login"
+            irALogin.setAttribute("href", "/micasa")
+            irALogin.setAttribute("vista", "/micasa")
+            irALogin.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoElastico.appendChild(irALogin)
+
             const seccion = document.querySelector("main")
             seccion.innerHTML = null
             seccion.appendChild(marcoElasticoRelatico)
         },
-        cuentaVerificada: () => {
+        cuentaVerificada: function () {
             const marcoElasticoRelatico = document.createElement("div")
             marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
             const marcoElastico = document.createElement("div")
@@ -136,27 +145,26 @@ casaVitini.view = {
         },
     },
     transactores: {
-        verificarCodigo: async () => {
+        verificarCodigo: async function () {
             const codigo = document.querySelector("[campo=codigoVerificacion]").value
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
             const mensaje = "Comprobando código de verificación..."
-            const datosPantallaSuperpuesta = {
+
+            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
                 instanciaUID: instanciaUID,
                 mensaje: mensaje
-            }
-            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
+            })
             const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-            const transacccion = {
+            
+            const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "miCasa/verificarCuenta",
                 codigo: codigo.trim()
-            }
-            const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+            })
             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
 
             if (respuestaServidor?.error && pantallaDeCargaRenderizada) {
                 return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
-            }
-            if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
+            } else if (respuestaServidor?.ok && pantallaDeCargaRenderizada) {
                 return casaVitini.view.ui.cuentaVerificada()
             }
 

@@ -433,12 +433,7 @@ summary:hover {
     justify-content: center;
 }
 
-@media (max-width: 720px) {
-    [ui="reservaUI"] .administracion_reservas_DetallesReserva_botonCategoria {
-        padding-top: 18px;
-        padding-bottom: 18px;
-    }
-}
+
 
 [contenedor="filtrosOrden"] {
     display: grid;
@@ -494,59 +489,9 @@ summary:hover {
     color: white;
 }
 
-@media screen and (max-width: 968px) {
-    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
-        display: none;
-    }
 
-    [ui="reservaUI"] .administracion_reserva_detallesReserva_marcoMenuResponsivo {
-        display: flex;
-    }
-}
 
-@media screen and (max-width: 1200px) {
-    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
-        grid-auto-columns: 1fr;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        gap: 0px 0px;
-        grid-template-areas:
-            ". . ."
-            ". . .";
-    }
-}
 
-@media screen and (max-width: 600px) {
-    [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorRestoGlobal {
-        grid-auto-columns: 1fr;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-        gap: 0px 0px;
-        grid-template-areas:
-            ". ."
-            ". ."
-            ". .";
-    }
-}
-
-@media screen and (max-width: 1280px) {
-    [ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media screen and (max-width: 720px) {
-    [ui="reservaUI"] .reservasDetallesBloqueAlojamiennto {
-        grid-template-columns: repeat(1, 1fr);
-    }
-}
-
-@media screen and (max-width: 720px) {
-    [ui="reservaUI"] .administracionReservasDetalesMarcoEnvolventeInformacionGeneral {
-        display: flex;
-        flex-direction: column;
-    }
-}
 
 /*c*/
 .administracionReservaDetallesBuscadorRapidoBloqueCliente {
@@ -1235,11 +1180,7 @@ summary:hover {
     }
 }
 
-@media (max-width: 720px) {
-    [ui="reservaUI"] .detallesReserva_enlacesDePago_bloqueDatosGenerales {
-        flex-direction: column;
-    }
-}
+
 
 .reservaDetalles_transacciones_bloqueListaDePagos {
     display: flex;
@@ -1785,13 +1726,6 @@ summary:hover {
         transform: translateY(46px);
     }
 }
-
-/* .contenedorGlobal {
-    display: grid;
-    grid-template-columns: auto auto 1fr;
-    align-items: center;
-    border-radius: 10px;
-} */
 
 .contenedorGlobal_hover:hover {
     background: hsl(0deg 0% 0% / 10%);

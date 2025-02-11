@@ -36,14 +36,14 @@
 }
 
 
-[zonaCSS="/micasa/reservas"] [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+.administracion_reservas_detallesReserva_contenedorMenuExpandido {
     display: grid;
-    grid-template-columns: auto auto auto auto 50px;
+    grid-template-columns: auto auto auto auto 50px !important;
     gap: 6px;
 }
 
 @media screen and (max-width: 968px) {
-    [zonaCSS="/micasa/reservas"] [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
+.administracion_reservas_detallesReserva_contenedorMenuExpandido {
         display: none;
     }
 }
