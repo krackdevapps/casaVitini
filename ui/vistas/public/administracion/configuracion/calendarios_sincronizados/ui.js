@@ -78,7 +78,7 @@ casaVitini.view = {
                         const datosCalendario = document.createElement("div")
                         datosCalendario.classList.add("contenedorDatosCalendario")
                         const nombreCalendario = document.createElement("div")
-                        nombreCalendario.classList.add("botonV1BlancoIzquierda_campo")
+                        nombreCalendario.classList.add("negrita", "paddingVertical14")
                         nombreCalendario.textContent = nombre
                         datosCalendario.appendChild(nombreCalendario)
                         titulo = document.createElement("p")

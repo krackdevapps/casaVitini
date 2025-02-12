@@ -724,7 +724,7 @@ export const validadoresCompartidos = {
             }
             if (typeof number !== "number") {
                 const mensaje = `${nombreCampo} debe de ser un número.`
-                throw new Error(mensaje)
+                throw  new Error(mensaje)
             }
             if (typeof sePermiteVacio !== "string" &&
                 (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {

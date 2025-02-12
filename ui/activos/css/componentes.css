@@ -2588,6 +2588,10 @@ textarea {
     grid-template-areas: ". . . ";
 }
 
+.grid4Columnas {
+    grid-template-areas: ". . . . ";
+}
+
 .fondoNaranja {
     background: rgb(214, 192, 157);
 }

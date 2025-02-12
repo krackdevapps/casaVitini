@@ -7,6 +7,7 @@ import { validadorBusqueda } from "../../../../shared/reservas/buscador/validarB
 import { controlEstructuraPorJoi } from "../../../../shared/validadores/controlEstructuraPorJoi.mjs";
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+import { todo } from "../../../../shared/reservas/buscador/todo.mjs";
 
 export const listarReservas = async (entrada) => {
     try {
@@ -138,14 +139,23 @@ export const listarReservas = async (entrada) => {
                 limpiezaEspaciosAlrededor: "si",
             })
 
-              const resultados = await porTerminos( {
+            const resultados = await porTerminos({
                 numeroPorPagina: numeroPorPagina,
                 numeroPagina: numeroPagina,
                 sentidoColumna: sentidoColumna,
                 nombreColumna: nombreColumna,
                 termino: termino,
             }
-)
+            )
+            Object.assign(ok, resultados)
+        } else if (tipoConsulta === "todo") {
+            validadorBusqueda(configuracionValidador)
+            const resultados = await todo({
+                numeroPorPagina: numeroPorPagina,
+                numeroPagina: numeroPagina,
+                sentidoColumna: sentidoColumna,
+                nombreColumna: nombreColumna
+            })
             Object.assign(ok, resultados)
         }
         else {

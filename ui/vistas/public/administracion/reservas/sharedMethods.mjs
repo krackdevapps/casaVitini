@@ -826,6 +826,7 @@ export const reservaComponentes = {
             },
             fechas: {
                 seleccionarDia: function (dia_) {
+
                     const diaSeleccionado = dia_.target.getAttribute("dia").padStart(2, "0")
                     const diaSeleccionadoComoElemento = dia_.target;
                     const calendario = diaSeleccionadoComoElemento.closest("[componente=marcoCalendario]")
@@ -857,14 +858,25 @@ export const reservaComponentes = {
                     const mesSeleccionado = document.querySelector("[componente=mesReferencia]").getAttribute("mes").padStart(2, "0")
                     const selectorPropuestaCambioFecha = document.querySelector("[componente=espacioPropuestaCambioFechaReserva]")
                     const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
+
+                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+
+                    const propuestaUI = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                    const instanciaUID = propuestaUI.getAttribute("instanciaUID")
+                    const contenedor = propuestaUI.querySelector("[componente=contenedor]")
+
+                    document.querySelector("main").appendChild(propuestaUI)
+
                     if (calendarioIO === "entrada") {
-                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+
                         const contenedorPropuesta = document.createElement("div")
                         contenedorPropuesta.classList.add(
                             "contenedorPropuesta",
                             "flexVertical",
                             "gap6"
                         )
+                        contenedor.appendChild(contenedorPropuesta)
+
                         const tituloPropuesta = document.createElement("p")
                         tituloPropuesta.classList.add(
                             "tituloGris",
@@ -884,34 +896,32 @@ export const reservaComponentes = {
                         contenedorPropuesta.appendChild(infoPropuesta)
                         const informacionImplicacion = document.createElement("div")
                         informacionImplicacion.classList.add("padding14")
-                        informacionImplicacion.textContent = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
+                        informacionImplicacion.textContent = `Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de checkin y checkout de los pernoctantes.`
                         contenedorPropuesta.appendChild(informacionImplicacion)
                         const botonAceptarPropuesta = document.createElement("div")
                         botonAceptarPropuesta.classList.add("botonV1BlancoIzquierda")
                         botonAceptarPropuesta.setAttribute("componente", "botonConfirmarCancelarReserva")
                         botonAceptarPropuesta.textContent = "Confirmar propuesta y aplicar nueva fecha de entrada a la reserva"
                         botonAceptarPropuesta.addEventListener("click", () => {
-                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                            const nuevaFecha = {
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.confirmarCambioFecha({
                                 fechaSolicitada_ISO: `${anoSeleccionado}-${mesSeleccionado}-${diaSeleccionado}`,
                                 reservaUID: reservaUID,
-                                sentidoRango: "pasado"
-                            }
-                            casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.confirmarCambioFecha(nuevaFecha)
+                                sentidoRango: "pasado",
+                                contenedor: contenedor
+                            })
                         })
                         contenedorPropuesta.appendChild(botonAceptarPropuesta)
-                        const propuestaUI = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
-                        propuestaUI.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorPropuesta)
-                        document.querySelector("main").appendChild(propuestaUI)
+
                     }
                     if (calendarioIO === "salida") {
-                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                         const contenedorPropuesta = document.createElement("div")
                         contenedorPropuesta.classList.add(
                             "contenedorPropuesta",
                             "flexVertical",
                             "gap6"
                         )
+                        contenedor.appendChild(contenedorPropuesta)
+
                         const tituloPropuesta = document.createElement("p")
                         tituloPropuesta.classList.add(
                             "tituloGris",
@@ -931,62 +941,58 @@ export const reservaComponentes = {
                         contenedorPropuesta.appendChild(infoPropuesta)
                         const informacionImplicacion = document.createElement("div")
                         informacionImplicacion.classList.add("padding14")
-                        informacionImplicacion.textContent = `Aviso importante: Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de check-in y checkout de los pernoctantes.`
+                        informacionImplicacion.textContent = `Cuando se quitan días a una reserva, si luego se vuelven a añadir esos días, los precios se insertan al precio actual del mercado establecido en el hub de precios base y de comportamientos. Siempre puede alterar los precios de la reserva mediante el sistema de sobre control. Si hay pernoctantes con fechas de checkin que queden fuera del nuevo rango de fechas de la reserva, se eliminarán las fechas de checkin y checkout de los pernoctantes.`
                         contenedorPropuesta.appendChild(informacionImplicacion)
                         const botonAceptarPropuesta = document.createElement("div")
                         botonAceptarPropuesta.classList.add("botonV1BlancoIzquierda")
                         botonAceptarPropuesta.setAttribute("componente", "botonConfirmarCancelarReserva")
                         botonAceptarPropuesta.textContent = "Confirmar propuesta y aplicar nueva fecha de salida a la reserva"
                         botonAceptarPropuesta.addEventListener("click", () => {
-                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                            const nuevaFecha = {
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.confirmarCambioFecha({
                                 fechaSolicitada_ISO: `${anoSeleccionado}-${mesSeleccionado}-${diaSeleccionado}`,
                                 reservaUID: reservaUID,
-                                sentidoRango: "futuro"
-                            }
-                            casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.fechas.confirmarCambioFecha(nuevaFecha)
+                                sentidoRango: "futuro",
+                                contenedor: contenedor
+                            })
                         })
                         contenedorPropuesta.appendChild(botonAceptarPropuesta)
-                        const propuestaUI = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
-                        propuestaUI.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorPropuesta)
-                        document.querySelector("main").appendChild(propuestaUI)
                     }
                 },
                 confirmarCambioFecha: async function (propuesta) {
-                    const instanciaUID_pantallaDeCarga = casaVitini.utilidades.codigoFechaInstancia()
                     const sentidoRango = propuesta.sentidoRango
                     const reservaUID = propuesta.reservaUID
                     const fechaSolicitada_ISO = propuesta.fechaSolicitada_ISO
-                    const transaccion = {
+                    const contenedor = propuesta.contenedor
+
+                    const mensajes = {
+                        pasado: [
+                            "Confirmando la nueva fecha de entrada, por favor espere...",
+                            "No se puede establecer la fecha de entrada porque los apartamentos de esta reserva están en otro evento que ocurre al mismo tiempo. A continuación tienes una lista de los eventos que entran en conflicto.",
+                        ],
+                        futuro: [
+                            "Confirmando la nueva fecha de salida, por favor espere...",
+                            "No se puede establecer la fecha de salida porque los apartamentos de esta reserva están en otro evento que ocurre al mismo tiempo. A continuación tienes una lista de los eventos que entran en conflicto."
+                        ]
+                    }
+
+                    const spinner = casaVitini.ui.componentes.spinner({
+                        mensaje: mensajes[sentidoRango][0],
+                        visibilidadBoton: "no"
+                    })
+                    contenedor.innerHTML = null
+                    contenedor.appendChild(spinner)
+
+                    const respuestaServidor = await casaVitini.shell.servidor({
                         zona: "administracion/reservas/detallesReserva/global/confirmarModificarFechaReserva",
                         reservaUID: String(reservaUID),
                         sentidoRango: sentidoRango,
                         fechaSolicitada_ISO: fechaSolicitada_ISO
-                    }
-                    const mensajes = {
-                        pasado: [
-                            "Confirmando la nueva fecha de entrada, por favor espere...",
-                            "No se puede establecer la fecha de entrada porque los apartamentos de esta reserva están en otro evento que ocurre al mismo tiempo.A continuación tienes una lista de los eventos que entran en conflicto.",
-                        ],
-                        futuro: [
-                            "Confirmando la nueva fecha de salida, por favor espere...",
-                            "No se puede establecer la fecha de salida porque los apartamentos de esta reserva están en otro evento que ocurre al mismo tiempo.A continuación tienes una lista de los eventos que entran en conflicto."
-                        ]
-                    }
-                    const datosPantallaSuperpuesta = {
-                        instanciaUID: instanciaUID_pantallaDeCarga,
-                        mensaje: mensajes[sentidoRango][0]
-                    }
-                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-                    const respuestaServidor = await casaVitini.shell.servidor(transaccion)
-                    const pantallaDeCargaRenderizada = document.querySelector(`[componente=advertenciaInmersiva][instanciaUID="${instanciaUID_pantallaDeCarga}"]`)
-                    if (!pantallaDeCargaRenderizada) {
-                        return
-                    }
+                    })
+
+                    if (!contenedor) { return }
                     if (respuestaServidor?.error) {
                         const eventos = respuestaServidor.eventos
                         if (eventos) {
-                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             const contenedorError = document.createElement("div")
                             contenedorError.classList.add("contenedorErrorPropuesta")
                             const tituloPropuesta = document.createElement("p")
@@ -1080,17 +1086,18 @@ export const reservaComponentes = {
                                     contenedorEvento.appendChild(botonIrAlEvento)
                                 }
                             }
-                            const mensajeError = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
-                            mensajeError.querySelector("[contenedor=contenidoAdvertenciaInmersiva]").appendChild(contenedorError)
-                            document.querySelector("main").appendChild(mensajeError)
-                            pantallaDeCargaRenderizada.remove()
-                            // casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+
+                            contenedor.innerHTML = null
+                            contenedor.appendChild(contenedorError)
+
                         } else {
-                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                            casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
+                            contenedor.innerHTML = null
+                            const errorUI = casaVitini.ui.componentes.errorUI_respuestaInmersiva({
+                                errorUI: respuestaServidor.error
+                            })
+                            contenedor.appendChild(errorUI)
                         }
                     } else if (respuestaServidor?.ok) {
-                        pantallaDeCargaRenderizada?.remove()
                         const sentidoRangoRespueata = respuestaServidor.sentidoRango
                         const fecha_ISO = respuestaServidor.fecha_ISO
                         const fechaArray_ISO = fecha_ISO.split("-")

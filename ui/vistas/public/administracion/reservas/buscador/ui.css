@@ -42,16 +42,37 @@
 }
 
 [zonaCSS="administracion/reservas/buscador"] .adminsitracionReservasBuscador {
-
     display: grid;
     flex-direction: row;
     align-items: stretch;
-
     gap: 6px;
     border-radius: 10px;
     grid-template-areas: ". . .";
     align-content: center;
 }
+
+[zonaCSS="administracion/reservas/buscador"] .contenedorBototesGlobales {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 6px;
+}
+
+@media (max-width: 720px) {
+
+    [zonaCSS="administracion/reservas/buscador"] .contenedorBototesGlobales {
+        grid-template-columns: 1fr 1fr;
+        padding-bottom: 12px;
+    }
+}
+
+
+@media (max-width: 500px) {
+    [zonaCSS="administracion/reservas/buscador"] .contenedorBototesGlobales {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 
 [zonaCSS="administracion/reservas/buscador"] .selectorRango {
     border-radius: 12px;
@@ -203,6 +224,7 @@
     justify-content: center;
 
 }
+
 .administracion_reservas_contenedorBotonesGlobales:hover {
     background: rgba(255, 255, 255, 0.6);
 }

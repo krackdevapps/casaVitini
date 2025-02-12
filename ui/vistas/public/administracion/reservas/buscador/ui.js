@@ -8,14 +8,12 @@ casaVitini.view = {
         const directorios = granuladoURL.directorios
 
         if (Object.keys(granuladoURL.parametros).length === 0) {
-
             main.setAttribute("zonaCSS", "administracion/reservas/buscador")
             this.buscadorUI()
         } else if (Object.keys(granuladoURL.parametros).length > 0) {
 
             main.setAttribute("zonaCSS", "administracion/reservas/buscador")
             this.buscadorUI()
-
 
             const parametrosFormatoURL = granuladoURL.parametros
             const parametrosFormatoIDV = {}
@@ -63,18 +61,22 @@ casaVitini.view = {
         espacioReservas.setAttribute("componente", "espacioReservas")
         espacioReservas.classList.add("administracion_reservas_espacioReservas")
         const contenedorBotonesGlobales = document.createElement("div")
-        contenedorBotonesGlobales.classList.add(
-            "grid",
-            "grid3Columnas",
-            "borderRadius16",
-            "gap6"
-        )
+        contenedorBotonesGlobales.classList.add("contenedorBototesGlobales")
+
         const botonVerHoy = document.createElement("a")
         botonVerHoy.classList.add("administracion_reservas_contenedorBotonesGlobales")
         botonVerHoy.setAttribute("boton", "botonVerHoy")
         botonVerHoy.addEventListener("click", () => { this.verReservasHoy() })
         botonVerHoy.textContent = "Ver entradas hoy"
         contenedorBotonesGlobales.appendChild(botonVerHoy)
+
+        const botonVerTodo = document.createElement("a")
+        botonVerTodo.classList.add("administracion_reservas_contenedorBotonesGlobales")
+        botonVerTodo.setAttribute("boton", "botonVerTodo")
+        botonVerTodo.addEventListener("click", () => { this.verTodasLasReservas() })
+        botonVerTodo.textContent = "Ver todo"
+        contenedorBotonesGlobales.appendChild(botonVerTodo)
+
         const botonReservasPendientes = document.createElement("a")
         botonReservasPendientes.classList.add("administracion_reservas_contenedorBotonesGlobales")
         botonReservasPendientes.textContent = "Reservas pendientes de revisión"
@@ -546,6 +548,8 @@ casaVitini.view = {
         if (!selectorEspacio) {
             return
         }
+        console.log("transaccion entrada mostrarReservasResuelvas", transaccion)
+
         selectorEspacio.setAttribute("instanciaBusqueda", instanciaUID)
         delete transaccion.instanciaUID
         const origen = transaccion.origen
@@ -568,7 +572,7 @@ casaVitini.view = {
                 nombreColumnaURL = casaVitini.utilidades.cadenas.camelToSnake(nombreColumna)
             }
         transaccion.pagina = Number(transaccion?.pagina || 1)
-        const tipoConsulta_entrada = transaccion.tipoConsulta || almacen?.tipoConsulta
+        const tipoConsulta_entrada = transaccion.tipoConsulta //|| almacen?.tipoConsulta
         const peticion = {
             zona: "administracion/reservas/buscador/listarReservas",
             tipoConsulta: tipoConsulta_entrada
@@ -579,15 +583,16 @@ casaVitini.view = {
             peticion.sentidoColumna = transaccion.sentidoColumna
             peticion.pagina = transaccion.pagina
 
-        }
-
-        if (tipoConsulta_entrada === "hoy") {
+        } else if (tipoConsulta_entrada === "hoy") {
             peticion.tipoCoincidencia = transaccion.tipoCoincidencia
             peticion.pagina = transaccion.pagina
 
-        }
+        } else if (tipoConsulta_entrada === "todo") {
+            peticion.pagina = transaccion.pagina
+            peticion.nombreColumna = transaccion.nombreColumna
+            peticion.sentidoColumna = transaccion.sentidoColumna
 
-        if (tipoConsulta_entrada === "rango") {
+        } else if (tipoConsulta_entrada === "rango") {
             peticion.tipoCoincidencia = transaccion.tipoCoincidencia || almacen?.tipoCoincidencia
             peticion.fechaEntrada = transaccion.fechaEntrada || almacen?.fechaEntrada
             peticion.fechaSalida = transaccion.fechaSalida || almacen?.fechaSalida
@@ -596,7 +601,16 @@ casaVitini.view = {
             peticion.sentidoColumna = transaccion.sentidoColumna
 
             peticion.pagina = transaccion.pagina
+        } else {
+            const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
+            espacioReservas.innerHTML = null
+
+            this.aplicadaDataBuscadorUI({ modo: "soloReseteaUI" })
+            console.log("return de mostrarReservasResueltas")
+            return
         }
+        console.log("peticion", peticion)
+
         const respuestaServidor = await casaVitini.shell.servidor(peticion)
 
         const instanciaRenderizada = document.querySelector(`[instanciaBusqueda="${instanciaUID}"]`)
@@ -609,14 +623,7 @@ casaVitini.view = {
             document.querySelector("[componente=estadoBusqueda]").textContent = respuestaServidor?.error
             return
         }
-        if (respuestaServidor?.totalReservas === 0) {
-            this.contructorMarcoInfo()
-            document.querySelector("[gridUID=gridReservas]")?.remove()
-            document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
-            document.querySelector("[componente=estadoBusqueda]").textContent = "No se han encontrado reservas"
-            return
-        }
-        document.querySelector("[componente=estadoBusqueda]")?.remove()
+
         const reservas = respuestaServidor.reservas
         const paginasTotales = respuestaServidor.paginasTotales
         const pagina = respuestaServidor.pagina
@@ -633,7 +640,6 @@ casaVitini.view = {
             const estadoReservaIDV = r.estadoReservaIDV
             r.estadoReservaIDV = estadoReservaIDV.charAt(0).toUpperCase() + estadoReservaIDV.slice(1);
         })
-
 
         const columnasGrid = [
             {
@@ -676,6 +682,9 @@ casaVitini.view = {
             parametrosFinales.tipo_consulta = "por_terminos"
             parametrosFinales.termino = termino
         }
+        if (tipoConsulta === "todo") {
+            parametrosFinales.tipo_consulta = "todo"
+        }
         if (tipoConsulta === "rango") {
             parametrosFinales.tipo_consulta = "rango"
             parametrosFinales.tipo_coincidencia = casaVitini.utilidades.cadenas.camelToSnake(tipoCoincidencia)
@@ -709,7 +718,6 @@ casaVitini.view = {
         if (estructuraParametrosFinales.length > 0) {
             parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
         }
-
         const constructorURLFinal = encodeURI(granuladoURL.directoriosFusion + parametrosURLFInal)
         const constructorAlmacen = {
             tipoConsulta
@@ -722,32 +730,42 @@ casaVitini.view = {
             constructorAlmacen.fechaEntrada = fechaEntrada
             constructorAlmacen.fechaSalida = fechaSalida
         }
+        console.log("constructorAlmacen", constructorAlmacen)
+        if (respuestaServidor?.totalReservas === 0) {
+            this.contructorMarcoInfo()
+            document.querySelector("[gridUID=gridReservas]")?.remove()
+            document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
+            document.querySelector("[componente=estadoBusqueda]").textContent = "No se han encontrado reservas"
+            const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
+            espacioReservas.innerHTML = null
+        } else {
+            document.querySelector("[componente=estadoBusqueda]")?.remove()
 
-        casaVitini.view.__sharedMethods__.grid.despliegue({
-            metodoSalida: "view.mostrarReservasResueltas",
-            configuracionGrid: {
-                filas: reservas,
-                almacen: constructorAlmacen,
-                sentidoColumna: sentidoColumna,
-                nombreColumna: nombreColumna,
-                pagina: pagina,
-                destino: "[contenedor=reservasEncontradas]",
-                columnasGrid: columnasGrid,
-                gridUID: "gridBuscadorReservas",
-                mascaraURL: {
-                    mascara: "/administracion/reservas/reserva:",
-                    parametro: "reservaUID"
+            casaVitini.view.__sharedMethods__.grid.despliegue({
+                metodoSalida: "view.mostrarReservasResueltas",
+                configuracionGrid: {
+                    filas: reservas,
+                    almacen: constructorAlmacen,
+                    sentidoColumna: sentidoColumna,
+                    nombreColumna: nombreColumna,
+                    pagina: pagina,
+                    destino: "[contenedor=reservasEncontradas]",
+                    columnasGrid: columnasGrid,
+                    gridUID: "gridBuscadorReservas",
+                    mascaraURL: {
+                        mascara: "/administracion/reservas/reserva:",
+                        parametro: "reservaUID"
+                    },
                 },
-            },
-            configuracionPaginador: {
-                paginasTotales: paginasTotales,
-                granuladoURL: {
-                    parametros: parametrosFinales,
-                    directoriosFusion: granuladoURL.directoriosFusion
-                },
-            }
-        })
-
+                configuracionPaginador: {
+                    paginasTotales: paginasTotales,
+                    granuladoURL: {
+                        parametros: parametrosFinales,
+                        directoriosFusion: granuladoURL.directoriosFusion
+                    },
+                }
+            })
+        }
         const titulo = ""
         const estado = {
             zona: constructorURLFinal,
@@ -755,25 +773,35 @@ casaVitini.view = {
             tipoCambio: "parcial",
             componenteExistente: "navegacionZonaAdministracion",
             funcionPersonalizada: "view.mostrarReservasResueltas",
-            args: transaccion
+            args: transaccion,
         }
+        console.log("granuladoURL.raw", granuladoURL.raw)
+        if (constructorURLFinal.toLocaleLowerCase() !== granuladoURL.raw.toLocaleLowerCase()) {
+            if (origen) {
+                console.log("resistro creado desde mostrarReservasResueltas", estado)
+                window.history.pushState(estado, titulo, constructorURLFinal);
+            }
+            console.log("origen", origen)
+            // if (origen === "url") {
+            //     //window.history.pushState(estado, titulo, constructorURLFinal);
+            //     window.history.replaceState(estado, titulo, constructorURLFinal);
 
-
-        if (origen === "url" || origen === "botonMostrarReservas") {
-            window.history.replaceState(estado, titulo, constructorURLFinal);
-        } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
-            window.history.pushState(estado, titulo, constructorURLFinal);
-        } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
-            window.history.replaceState(estado, titulo, constructorURLFinal);
+            // } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
+            //     window.history.pushState(estado, titulo, constructorURLFinal);
+            // } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
+            //     window.history.replaceState(estado, titulo, constructorURLFinal);
+            // } else if (origen === "botonMostrarReservas") {
+            //     window.history.pushState(estado, titulo, constructorURLFinal);
+            // }
         }
 
         this.aplicadaDataBuscadorUI({
+            modo: "aplicaData",
             tipoConsulta: tipoConsulta,
             termino: termino,
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,
             tipoCoincidencia: tipoCoincidencia
-
         })
     },
     verReservasHoy: function () {
@@ -786,21 +814,50 @@ casaVitini.view = {
         document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
         document.querySelector("[contenedor=filtrosOrden]")?.remove()
         espacioReservas.innerHTML = null
-        this.limpiarFormularioBusqueda()
         const estadoBusquedaUI = document.createElement("div")
         estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
         estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
         estadoBusquedaUI.textContent = "Buscando..."
         buscadorUI.parentNode.insertBefore(estadoBusquedaUI, buscadorUI.nextSibling);
 
-        const peticion = {
+        this.aplicadaDataBuscadorUI({
+            modo: "soloReseteaUI"
+        })
+
+        this.mostrarReservasResueltas({
             pagina: 1,
             tipoConsulta: "hoy",
             origen: "url",
             instanciaUID: instanciaUID,
             tipoCoincidencia: "porFechaEntrada"
-        }
-        this.mostrarReservasResueltas(peticion)
+        })
+    },
+    verTodasLasReservas: function () {
+        const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
+
+        const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
+        const buscadorUI = document.querySelector("[componente=navegacionZonaAdministracion]")
+        document.querySelector("[componente=estadoBusqueda]")?.remove()
+        document.querySelector("[gridUID=gridReservas]")?.remove()
+        document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
+        document.querySelector("[contenedor=filtrosOrden]")?.remove()
+        espacioReservas.innerHTML = null
+        const estadoBusquedaUI = document.createElement("div")
+        estadoBusquedaUI.classList.add("buscadorClientesEstadoBusqueda")
+        estadoBusquedaUI.setAttribute("componente", "estadoBusqueda")
+        estadoBusquedaUI.textContent = "Buscando..."
+        buscadorUI.parentNode.insertBefore(estadoBusquedaUI, buscadorUI.nextSibling);
+
+        this.aplicadaDataBuscadorUI({
+            modo: "soloReseteaUI"
+        })
+
+        this.mostrarReservasResueltas({
+            pagina: 1,
+            tipoConsulta: "todo",
+            origen: "botonMostrarReservas",
+            instanciaUID: instanciaUID,
+        })
     },
     mostrarReservasPorRango: function () {
         const fechaEntrada = document.querySelector("[calendario=entrada]")?.getAttribute("memoriaVolatil")
@@ -836,9 +893,7 @@ casaVitini.view = {
         this.mostrarReservasResueltas(peticion)
     },
     buscadorReservas: function (reserva) {
-
         const espacioReservas = document.querySelector("[contenedor=reservasEncontradas]")
-        const buscadorUI = document.querySelector("[componente=navegacionZonaAdministracion]")
         clearTimeout(casaVitini.componentes.temporizador);
         document.querySelector("[componente=resultadosSinReservas]")?.remove()
         document.querySelector("[gridUID=gridReservas")?.remove()
@@ -852,24 +907,22 @@ casaVitini.view = {
         const estadoBusqueda_s = document.querySelector("[componente=estadoBusqueda]")
         estadoBusqueda_s.textContent = "Buscando reservas..."
 
-
-
-        this.limpiarFormularioBusqueda()
+        this.aplicadaDataBuscadorUI({
+            modo: "reseteaUI_menosElcampoDeBusqueda"
+        })
         const terminoBusqueda = reserva.target.value
         if (terminoBusqueda.length === 0) {
+            const granuladoURL = casaVitini.utilidades.granuladorURL()
             clearTimeout(casaVitini.componentes.temporizador);
             document.querySelector("[gridUID=gridReservas")?.remove()
             document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
             document.querySelector("[componente=estadoBusqueda]")?.remove()
-            const vistaActual = document.querySelector("[componente=uiNavegacion]").getAttribute("vistaActual")
-            const resetUrl = "/administracion/reservas"
-            const titulo = "casavitini"
-            const estado = {
-                zona: vistaActual,
-                estadoInternoZona: "estado",
-                tipoCambio: "total"
+            const titulo = "Casa Vitini"
+            const estado = this.navegacion.estadoInicial
+            const url = "/administracion/reservas/buscador"
+            if (url !== granuladoURL.raw.toLocaleLowerCase()) {
+                window.history.pushState(estado, titulo, "/administracion/reservas/buscador");
             }
-            window.history.replaceState(estado, titulo, resetUrl);
             return
         }
         casaVitini.componentes.temporizador = setTimeout(() => {
@@ -895,35 +948,22 @@ casaVitini.view = {
             campo.parentNode.insertBefore(estadoBusquedaUI, campo.nextSibling);
         }
     },
-    limpiarFormularioBusqueda: function () {
-        const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
-        const selectorFechaEntradaUI = selectorCuadradoFechaEntrada.querySelector("[fechaUI=fechaInicio]")
-        const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
-        const selectorFechaSalidaUI = selectorCuadradoFechaSalida.querySelector("[fechaUI=fechaFin]")
-        selectorCuadradoFechaEntrada.removeAttribute("memoriaVolatil")
-        selectorFechaEntradaUI.textContent = "(Seleccionar)"
-        selectorCuadradoFechaSalida.removeAttribute("memoriaVolatil")
-        selectorFechaSalidaUI.textContent = "(Seleccionar)"
-        const selectorRangos = document.querySelectorAll(`[selectorRango]`)
-        selectorRangos.forEach((selectorRango) => {
-            selectorRango.removeAttribute("style")
-        })
-    },
     aplicadaDataBuscadorUI: function (data) {
-
+        const modo = data.modo
         const campoBuscador = document.querySelector("[componenteCampo=buscadorPorId]")
-        const selectorRangos = document.querySelectorAll(`[selectorRango]`)
-
         const selectorCuadradoFechaEntrada = document.querySelector("[calendario=entrada]")
         const selectorFechaEntradaUI = selectorCuadradoFechaEntrada?.querySelector("[fechaUI=fechaInicio]")
         const selectorCuadradoFechaSalida = document.querySelector("[calendario=salida]")
         const selectorFechaSalidaUI = selectorCuadradoFechaSalida?.querySelector("[fechaUI=fechaFin]")
 
+        const botonVerTodo = document.querySelector("[boton=botonVerTodo]")
         const tipoConsulta = data.tipoConsulta
 
-        if (tipoConsulta === "porTerminos") {
-            const selectorRangos = document.querySelectorAll(`[selectorRango]`)
-            selectorRangos.forEach((selectorRango) => {
+        const resetUI = () => {
+
+            botonVerTodo.removeAttribute("style")
+            const selectoresRangos = document.querySelectorAll(`[selectorRango]`)
+            selectoresRangos.forEach((selectorRango) => {
                 selectorRango.removeAttribute("style")
             })
             selectorCuadradoFechaEntrada.removeAttribute("memoriaVolatil")
@@ -931,38 +971,58 @@ casaVitini.view = {
             selectorCuadradoFechaSalida.removeAttribute("memoriaVolatil")
             selectorFechaSalidaUI.textContent = "Seleccionar"
 
-            const termino = data.termino
-            campoBuscador.value = termino
-        } else if (tipoConsulta === "rango") {
-
-            const fechaEntrada = data.fechaEntrada
-            const fechaSalida = data.fechaSalida
-            const tipoCoincidencia = data.tipoCoincidencia
-
+        }
+        const resetCampoBuscador = () => {
             campoBuscador.value = ""
-            selectorRangos.forEach((selectorRango) => {
-                selectorRango.removeAttribute("style")
-            })
-
-
-            if (fechaEntrada) {
-
-
-                selectorCuadradoFechaEntrada.setAttribute("memoriaVolatil", fechaEntrada)
-                selectorFechaEntradaUI.textContent = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaEntrada)
-            }
-            if (fechaSalida) {
-                selectorCuadradoFechaSalida.setAttribute("memoriaVolatil", fechaSalida)
-                selectorFechaSalidaUI.textContent = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaSalida)
-            }
-
-
-            const selectorRango = document.querySelector(`[selectorRango=${tipoCoincidencia}]`)
-            selectorRango.style.background = "rgb(8, 0, 255)"
-            selectorRango.style.color = "white"
-            selectorRango.setAttribute("estadoSelecion", "activado")
-
         }
 
+        if (modo === "reseteaUI_menosElcampoDeBusqueda") {
+            resetUI()
+        }
+        if (modo === "soloReseteaUI") {
+            resetUI()
+            resetCampoBuscador()
+
+        }
+        if (modo === "aplicaData") {
+            resetUI()
+            resetCampoBuscador()
+            if (tipoConsulta === "porTerminos") {
+                const termino = data.termino
+                campoBuscador.value = termino
+            } else if (tipoConsulta === "rango") {
+
+                const fechaEntrada = data.fechaEntrada
+                const fechaSalida = data.fechaSalida
+                const tipoCoincidencia = data.tipoCoincidencia
+
+                if (fechaEntrada) {
+                    selectorCuadradoFechaEntrada.setAttribute("memoriaVolatil", fechaEntrada)
+                    selectorFechaEntradaUI.textContent = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaEntrada)
+                }
+                if (fechaSalida) {
+                    selectorCuadradoFechaSalida.setAttribute("memoriaVolatil", fechaSalida)
+                    selectorFechaSalidaUI.textContent = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fechaSalida)
+                }
+                const selectorRango = document.querySelector(`[selectorRango=${tipoCoincidencia}]`)
+                selectorRango.style.background = "rgb(8, 0, 255)"
+                selectorRango.style.color = "white"
+                selectorRango.setAttribute("estadoSelecion", "activado")
+
+            } else if (tipoConsulta === "todo") {
+                botonVerTodo.style.background = "blue"
+                botonVerTodo.style.color = "white"
+            }
+        }
+    },
+    navegacion: {
+        estadoInicial: {
+            zona: "administracion/reservas/buscador",
+            EstadoInternoZona: "estado",
+            tipoCambio: "parcial",
+            componenteExistente: "navegacionZonaAdministracion",
+            funcionPersonalizada: "view.mostrarReservasResueltas",
+            args: {}
+        }
     }
 }

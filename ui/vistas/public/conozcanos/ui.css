@@ -2,6 +2,12 @@ main * {
     font-family: opensans-variable !important;
 }
 
+@font-face {
+    font-family: lovetheking;
+    src: url(/activos/fuentes/love_by_the_king/loved_by_the_King/LovedbytheKing-Regular.ttf) format('truetype');
+
+}
+
 .conozcanos_contenedorInterno {
 
     display: flex;
@@ -25,6 +31,15 @@ main * {
     z-index: 10;
 }
 
+.fuentePerso1 {
+    font-family: lovetheking !important;
+    font-size: 28px;
+    position: relative;
+    top: -30px;
+    transform: rotate(-8deg);
+    right: 22px;
+    white-space:nowrap;
+}
 
 
 .contactos_bannerTextoInterno {
@@ -448,7 +463,8 @@ main * {
     grid-template-columns: 1.5fr auto;
     grid-gap: 20px;
     padding: 40px;
-    align-items: center;
+    padding-top: 60px;
+    align-items: start;
 }
 
 .textoFirst {
@@ -474,16 +490,45 @@ main * {
 
 .questions {
     border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    padding-left: 20px;
+    padding-right: 20px;
+    /* padding: 20px; */
 }
 
 .lista {
-    list-style-type: circle;
+    list-style-type: none;
     padding-left: 20px;
     padding-right: 20px;
     font-weight: 550;
     color: #8D6E63;
+}
 
+.lista * {
+    font-family: lovetheking !important;
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.celda {
+    display: flex;
+    flex-direction: row;
+}
+
+.puntoletras {
+    font-family: lovetheking !important;
+    font-size: 45px !important;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    height: 22px;
+}
+
+.fuentee {
+    font-family: opensans-variable !important;
+    font-size: 13px !important;
 
 }

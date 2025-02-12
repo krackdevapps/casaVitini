@@ -220,6 +220,12 @@ export const grid = {
                 transacccion.mueveNavegadorHaciaAtras = mueveNavegadorHaciaAtras
                 transacccion.sentidoNavegacion = "Atras"
             }
+            
+            const almacen = gridEnlazado.closest("[almacen]").getAttribute("almacen")
+            if (almacen) {
+                const almacenParseado = JSON.parse(almacen)
+                Object.assign(transacccion, almacenParseado)
+            }
             await casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                 ruta: metodoSalida,
                 args: transacccion

@@ -6,6 +6,7 @@ const casaVitini = {
                 const tipoCambio = (history.state)?.tipoCambio || "parcial"
                 const componenteExistente = history.state?.componenteExistente
                 const componente = document.querySelector(`[componente="${componenteExistente}"]`)
+                console.log("navegacionInversa", history.state)
                 if (tipoCambio === "parcial") {
                     const funcionPersonalizada = history.state?.funcionPersonalizada
                     const args = history.state?.args || null
@@ -14,6 +15,7 @@ const casaVitini = {
                             const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
                             args.instanciaUID = instanciaUID
                         }
+
                         return casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                             ruta: funcionPersonalizada,
                             args: args
@@ -163,17 +165,29 @@ const casaVitini = {
                         }
                         selectorMenuRenderizado.setAttribute("vistaActual", vista)
                         const titulo = 'Casa Vitini';
-                        const estado = {
-                            zona: vista === "portada" ? "" : vista,
-                            tipoCambio: "total"
+                        const estado = {}
+
+                        const estadoInicial = casaVitini?.view?.navegacion?.estadoInicial
+                        if (estadoInicial) {
+                            console.log("esta vista tiene un estado inicial")
+                            Object.assign(estado, estadoInicial);
+                        } else {
+                            estado.zona = vista === "portada" ? "" : vista
+                            estado.tipoCambio = "total"
                         }
+                        console.log("estado en controladorVista", estado)
+
                         if (tipoOrigen === "menuNavegador" && !controladorUrl) {
+                            console.log("registro creado en controladorVista")
                             window.history.pushState(estado, titulo, urlVista);
                         } else if (controladorUrl === "soloActualiza") {
+                            console.log("registro actualizazdo en controladorVista")
                             window.history.replaceState(estado, titulo, urlVista);
                         } else if (!tipoOrigen && !controladorUrl) {
+                            console.log("registro actualizazdo en controladorVista")
                             window.history.replaceState(estado, titulo, urlVista);
                         }
+
                         const granuladorURL = casaVitini.utilidades.granuladorURL()
                         const directoriosFusion = granuladorURL.directoriosFusion
                         contenedorVista.setAttribute("zonaCSS", directoriosFusion)
