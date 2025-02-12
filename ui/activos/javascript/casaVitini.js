@@ -399,6 +399,7 @@ const casaVitini = {
                 const sobreControlUI = () => {
                     const sobreControl = document.createElement("a")
                     sobreControl.setAttribute("class", "esferaUI_flotante")
+                    sobreControl.setAttribute("title", "Cambiar menú")
                     sobreControl.setAttribute("tipoMenu", "volatil")
                     sobreControl.setAttribute("elemento", "esfera")
                     sobreControl.setAttribute("controlFlotante", "cancelar")
