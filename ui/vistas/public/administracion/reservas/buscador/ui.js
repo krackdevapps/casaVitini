@@ -194,7 +194,7 @@ casaVitini.view = {
         opcionRango = document.createElement("p")
         opcionRango.classList.add("selectorRangoOpcion")
         opcionRango.setAttribute("selectorRango", "porFechaDeEntrada")
-        opcionRango.textContent = "Por fecha de entradas"
+        opcionRango.textContent = "Por fecha de entrada"
         opcionRango.addEventListener("click", () => {
             this.seleccionarRango("porFechaDeEntrada")
         })
@@ -548,7 +548,7 @@ casaVitini.view = {
         if (!selectorEspacio) {
             return
         }
-        console.log("transaccion entrada mostrarReservasResuelvas", transaccion)
+
 
         selectorEspacio.setAttribute("instanciaBusqueda", instanciaUID)
         delete transaccion.instanciaUID
@@ -606,10 +606,10 @@ casaVitini.view = {
             espacioReservas.innerHTML = null
 
             this.aplicadaDataBuscadorUI({ modo: "soloReseteaUI" })
-            console.log("return de mostrarReservasResueltas")
+
             return
         }
-        console.log("peticion", peticion)
+
 
         const respuestaServidor = await casaVitini.shell.servidor(peticion)
 
@@ -730,7 +730,7 @@ casaVitini.view = {
             constructorAlmacen.fechaEntrada = fechaEntrada
             constructorAlmacen.fechaSalida = fechaSalida
         }
-        console.log("constructorAlmacen", constructorAlmacen)
+
         if (respuestaServidor?.totalReservas === 0) {
             this.contructorMarcoInfo()
             document.querySelector("[gridUID=gridReservas]")?.remove()
@@ -775,13 +775,13 @@ casaVitini.view = {
             funcionPersonalizada: "view.mostrarReservasResueltas",
             args: transaccion,
         }
-        console.log("granuladoURL.raw", granuladoURL.raw)
+
         if (constructorURLFinal.toLocaleLowerCase() !== granuladoURL.raw.toLocaleLowerCase()) {
             if (origen) {
-                console.log("resistro creado desde mostrarReservasResueltas", estado)
+
                 window.history.pushState(estado, titulo, constructorURLFinal);
             }
-            console.log("origen", origen)
+
             // if (origen === "url") {
             //     //window.history.pushState(estado, titulo, constructorURLFinal);
             //     window.history.replaceState(estado, titulo, constructorURLFinal);

@@ -76,8 +76,7 @@ casaVitini.view = {
             gridUsuarios?.remove()
 
             const terminoBusqueda = cliente.target.value
-            document.querySelector("[gridUID=gridUsuarios]")?.remove()
-            document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
+            document.querySelector("[areaGrid=gridUsuarios]")?.remove()
             document.querySelector("[contenedor=filtrosOrden]")?.remove()
 
             const estadoBusqueda_r = document.querySelector("[componente=estadoBusqueda]")
@@ -90,18 +89,18 @@ casaVitini.view = {
             const campoVacio = cliente.target.value.length
             if (campoVacio === 0) {
                 clearTimeout(casaVitini.componentes.temporizador);
+                const granuladoURL = casaVitini.utilidades.granuladorURL()
                 document.querySelector("[componente=estadoBusqueda]")?.remove()
-                document.querySelector("[componenteID=gridUsuarios]")?.remove()
-                document.querySelector("[componenteID=navegacionPaginacion]")?.remove()
-                const vistaActual = document.getElementById("uiNavegacion").getAttribute("vistaActual")
-                const resetUrl = "/administracion/usuarios"
+                document.querySelector("[areaGrid=gridUsuarios]")?.remove()
                 const titulo = "casavitini"
-                const estado = {
-                    zona: vistaActual,
-                    estadoInternoZona: "estado",
-                    tipoCambio: "total"
+                const estado = casaVitini.view.navegacion.estadoInicial
+                const url = "/administracion/usuarios"
+
+
+
+                if (url !== granuladoURL.raw.toLocaleLowerCase()) {
+                    window.history.pushState(estado, titulo, "/administracion/usuarios");
                 }
-                window.history.replaceState(estado, titulo, resetUrl);
                 return;
             }
             clearTimeout(casaVitini.componentes.temporizador);
@@ -133,9 +132,15 @@ casaVitini.view = {
             const paginaTipo = transaccion.paginaTipo
             delete transaccion.paginaTipo
 
-            const selectorAlmacen = document.querySelector("[areaGrid=gridUsuarios]")?.getAttribute("almacen") || "{}"
-            const almacen = JSON.parse(selectorAlmacen)
-            const busquedaInicial = transaccion.buscar || almacen?.buscar
+            const busquedaInicial = transaccion?.buscar
+            const campoBusqueda = document.querySelector("[componenteCampo=buscadorUsuarios]")
+
+            if (!busquedaInicial) {
+                document.querySelector("[componente=estadoBusqueda]")?.remove()
+                document.querySelector("[areaGrid=gridUsuarios]")?.remove()
+                campoBusqueda.value = null
+                return
+            }
 
             let nombreColumnaURL
             const nombreColumna = transaccion.nombreColumna
@@ -177,6 +182,8 @@ casaVitini.view = {
             const paginasTotales = resolverUsuarios.paginasTotales
             const pagina = resolverUsuarios.pagina
             const sentidoColumna = resolverUsuarios.sentidoColumna
+            campoBusqueda.value = buscar
+
             const columnasGrid = [
                 {
                     columnaUI: "Usuario",
@@ -261,7 +268,7 @@ casaVitini.view = {
                 }
             })
 
-            const titulo = "ADminstar reservas"
+            const titulo = "Casa Vitini"
             const estado = {
                 zona: constructorURLFinal,
                 EstadoInternoZona: "estado",
@@ -1162,5 +1169,14 @@ casaVitini.view = {
             },
         },
     },
-
+    navegacion: {
+        estadoInicial: {
+            zona: "administracion/usuarios",
+            EstadoInternoZona: "estado",
+            tipoCambio: "parcial",
+            componenteExistente: "zonaNavegacionPaginadaUsuarios",
+            funcionPersonalizada: "view.portada.mostrarUsuariosResueltos",
+            args: {}
+        }
+    }
 }

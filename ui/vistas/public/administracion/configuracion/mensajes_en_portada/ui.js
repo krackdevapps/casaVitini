@@ -290,12 +290,12 @@ casaVitini.view = {
                 mensaje: mensajeCarga
             }
             casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-            const transacccion = {
+            const transaccion = {
                 zona: "administracion/configuracion/mensajesEnPortada/actualizarMensaje",
                 mensaje: mensaje,
                 mensajeUID: mensajeUID
             }
-            const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
             const seccionRenderizada = document.querySelector(`main [instanciaUID="${instanciaUID}"]`)
             if (!seccionRenderizada)
                 seccionRenderizada.remove()
@@ -462,12 +462,12 @@ casaVitini.view = {
             procesandoEstadoUI = "Desactivando..."
         }
         estadoSoliciado.text = procesandoEstadoUI
-        const transacccion = {
+        const transaccion = {
             zona: "administracion/configuracion/mensajesEnPortada/actualizarEstado",
             mensajeUID: mensajeUID,
             estadoIDV: estadoIDV
         }
-        const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
         const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
 
         if (!seccionRenderizada) { return }

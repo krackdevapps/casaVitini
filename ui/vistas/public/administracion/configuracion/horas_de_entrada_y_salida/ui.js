@@ -123,16 +123,16 @@ casaVitini.view = {
         }
         casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
         const campos = document.querySelectorAll("[campo]")
-        const transacccion = {
+        const transaccion = {
             zona: "administracion/configuracion/horaDeEntradaSalida/guardarConfiguracion"
         }
         campos.forEach((campo) => {
             const nombreCampo = campo.getAttribute("campo")
             const valorCampo = campo.value
-            transacccion[nombreCampo] = valorCampo
+            transaccion[nombreCampo] = valorCampo
         })
 
-        const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
         if (!instanciaRenderizada) { return }
         instanciaRenderizada.remove()

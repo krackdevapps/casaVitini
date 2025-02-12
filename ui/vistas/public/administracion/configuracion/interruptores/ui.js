@@ -117,12 +117,12 @@ casaVitini.view = {
             procesandoEstadoUI = "Desactivando..."
         }
         estadoSoliciado.text = procesandoEstadoUI
-        const transacccion = {
+        const transaccion = {
             zona: "administracion/configuracion/interruptores/actualizarEstado",
             interruptorIDV: interruptorIDV,
             estado: estado
         }
-        const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
         const seccionRenderizada = document.querySelector(`main[instanciaUID="${seccionUID}"]`)
         if (!seccionRenderizada) { return }
         selectorListaEstadosInterruptor.removeAttribute("style")

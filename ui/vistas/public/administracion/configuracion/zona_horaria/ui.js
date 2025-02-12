@@ -39,7 +39,7 @@ casaVitini.view = {
             listaZonaHoraria.classList.add("botonV1BlancoIzquierda_campo")
             listaZonaHoraria.setAttribute("campo", "zonaHoraria")
             listaZonaHoraria.setAttribute("valorInicial", zonaHoraria)
-            listaZonaHoraria.addEventListener("input", () => {this.controlCampo()})
+            listaZonaHoraria.addEventListener("input", () => { this.controlCampo() })
             for (const zonaHorariaIterada of listaZonasHorarias) {
                 const zonaHorariaUI = zonaHorariaIterada.replaceAll("/", "/").replaceAll("_", " ")
                 const zonaHorariaOpcion = document.createElement("option");
@@ -101,20 +101,20 @@ casaVitini.view = {
         }
         casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
         const campos = document.querySelectorAll("[campo]")
-        const transacccion = {
+        const transaccion = {
             zona: "administracion/configuracion/zonaHoraria/guardarConfiguracion"
         }
         campos.forEach((campo) => {
             const nombreCampo = campo.getAttribute("campo")
             const valorCampo = campo.value
-            transacccion[nombreCampo] = valorCampo
+            transaccion[nombreCampo] = valorCampo
         })
-        const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
         if (!instanciaRenderizada) { return }
         instanciaRenderizada.remove()
         if (respuestaServidor?.error) {
-          this.cancelarCambios()
+            this.cancelarCambios()
             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
         }
         if (respuestaServidor?.ok) {

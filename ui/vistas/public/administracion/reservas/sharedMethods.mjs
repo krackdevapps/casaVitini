@@ -1103,18 +1103,19 @@ export const reservaComponentes = {
                         const fechaArray_ISO = fecha_ISO.split("-")
                         const fecha_Humano = `${fechaArray_ISO[2]}/${fechaArray_ISO[1]}/${fechaArray_ISO[0]}`
                         casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.actualizarReservaRenderizada()
-                        if (sentidoRangoRespueata === "pasado" && pantallaDeCargaRenderizada) {
+                        if (sentidoRangoRespueata === "pasado") {
                             const selectorFechaEntrada = document.querySelector("[calendario=entrada]")
                             const selectorFechaEntradaUI = document.querySelector("[fechaUI=fechaInicio]")
                             selectorFechaEntrada.setAttribute("memoriaVolatil", fecha_ISO)
                             selectorFechaEntradaUI.textContent = fecha_Humano
                         }
-                        if (sentidoRangoRespueata === "futuro" && pantallaDeCargaRenderizada) {
+                        if (sentidoRangoRespueata === "futuro") {
                             const selectorFechaSalida = document.querySelector("[calendario=salida]")
                             const selectorFechaSalidaUI = document.querySelector("[fechaUI=fechaFin]")
                             selectorFechaSalida.setAttribute("memoriaVolatil", fecha_ISO)
                             selectorFechaSalidaUI.textContent = fecha_Humano
                         }
+                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                         const selectorMarcoAlojamiento = document.querySelector(`[reservaUID="${reservaUID}"] [componente=marcoAlojamiento]`)
                         if (selectorMarcoAlojamiento) {
                             //  casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.alojamiento.arranque()

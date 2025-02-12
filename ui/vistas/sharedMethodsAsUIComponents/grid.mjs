@@ -183,20 +183,20 @@ export const grid = {
             const sentidoColumna = gridEnlazado.getAttribute("sentidoColumna")
             const paginaActual = Number(gridEnlazado.getAttribute("numeroPagina"))
             const paginaTipo = data.paginaTipo
-            const transacccion = {
+            const transaccion = {
                 gridUID,
                 paginaTipo
             }
             if (nombreColumna) {
-                transacccion.nombreColumna = nombreColumna
+                transaccion.nombreColumna = nombreColumna
             }
             if (sentidoColumna) {
-                transacccion.sentidoColumna = sentidoColumna
+                transaccion.sentidoColumna = sentidoColumna
             }
             if (tipoBoton === "numeroPagina") {
                 const numeroPagina = data.numeroPagina
-                transacccion.pagina = Number(numeroPagina)
-                transacccion.origen = "botonNumeroPagina"
+                transaccion.pagina = Number(numeroPagina)
+                transaccion.origen = "botonNumeroPagina"
             }
             if (tipoBoton === "botonAdelantePaginacion") {
                 const posicionRelativa = document.querySelector("[paginaTipo=actual]").getAttribute("posicionRelativa")
@@ -204,10 +204,10 @@ export const grid = {
                 if (Number(posicionRelativa) === 10) {
                     mueveNavegadorHaciaAdelante = "Activado"
                 }
-                transacccion.pagina = paginaActual + 1
-                transacccion.origen = "botonNumeroPagina"
-                transacccion.moverHaciaAdelanteNavegacion = mueveNavegadorHaciaAdelante
-                transacccion.sentidoNavegacion = "Adelante"
+                transaccion.pagina = paginaActual + 1
+                transaccion.origen = "botonNumeroPagina"
+                transaccion.moverHaciaAdelanteNavegacion = mueveNavegadorHaciaAdelante
+                transaccion.sentidoNavegacion = "Adelante"
             }
             if (tipoBoton === "botonAtrasPaginacion") {
                 const posicionRelativa = document.querySelector("[paginaTipo=actual]").getAttribute("posicionRelativa")
@@ -215,20 +215,20 @@ export const grid = {
                 if (Number(posicionRelativa) === 1) {
                     mueveNavegadorHaciaAtras = "Activado"
                 }
-                transacccion.pagina = paginaActual - 1
-                transacccion.origen = "botonNumeroPagina"
-                transacccion.mueveNavegadorHaciaAtras = mueveNavegadorHaciaAtras
-                transacccion.sentidoNavegacion = "Atras"
+                transaccion.pagina = paginaActual - 1
+                transaccion.origen = "botonNumeroPagina"
+                transaccion.mueveNavegadorHaciaAtras = mueveNavegadorHaciaAtras
+                transaccion.sentidoNavegacion = "Atras"
             }
-            
+
             const almacen = gridEnlazado.closest("[almacen]").getAttribute("almacen")
-            if (almacen) {
+            try {
                 const almacenParseado = JSON.parse(almacen)
-                Object.assign(transacccion, almacenParseado)
-            }
+                Object.assign(transaccion, almacenParseado)
+            } catch (error) { }
             await casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                 ruta: metodoSalida,
-                args: transacccion
+                args: transaccion
             })
             botonOrigen.classList.remove("parpeoGridSel")
         },
@@ -432,6 +432,12 @@ export const grid = {
                 transaccion.sentidoColumna = "ascendente"
                 transaccion.nombreColumna = nombreColumna
             }
+            const almacen = areaGrid?.getAttribute("almacen")
+            try {
+                const almacenParseado = JSON.parse(almacen)
+                Object.assign(transaccion, almacenParseado)
+            } catch (error) { }
+
             await casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                 ruta: metodoSalida,
                 args: transaccion
@@ -595,6 +601,11 @@ export const grid = {
                     if (selectorColumna) {
                         transaccion.nombreColumna = selectorColumna
                     }
+                    const almacen = areaGrid.getAttribute("almacen") || "{}"
+                    try {
+                        const almacenParseado = JSON.parse(almacen)
+                        Object.assign(transaccion, almacenParseado)
+                    } catch (error) { }
                     return casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
                         ruta: metodoSalida,
                         args: transaccion

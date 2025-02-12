@@ -238,8 +238,13 @@ casaVitini.view = {
         const fechaEntrada = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
         const fechaSalida = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
         const estadoInicialIDV = document.querySelector("[selector=estadoInicialReserva]").value
-        const estadoInicialOfertasIDV = document.querySelector("[configuracionOfertaIDV][estado=s]").getAttribute("configuracionOfertaIDV")
+        const estadoInicialOfertasIDV = document.querySelector("[configuracionOfertaIDV][estado=s]")?.getAttribute("configuracionOfertaIDV")
 
+        if (!estadoInicialOfertasIDV) {
+            const errorUI = "Seleciona el tipo de aplicación de la oferta"
+            return casaVitini.ui.componentes.advertenciaInmersiva(errorUI)
+            
+        }
 
         const apartamentos = []
         document.querySelectorAll("[estado=seleccionado]").forEach((apartamentoSeleccionado) => {

@@ -9,11 +9,11 @@ casaVitini.view = {
         }
         const comandoSecundario = granuladoURL.directorios[granuladoURL.directorios.length - 2]
         if (comandoSecundario === "recuperar_cuenta") {
-            const transacccion = {
+            const transaccion = {
                 zona: "miCasa/recuperarCuenta/validarCodigo",
                 codigo: comandoInicial
             }
-            const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
             if (respuestaServidor?.error) {
                 return this.ui.codigoErroneo()
             }

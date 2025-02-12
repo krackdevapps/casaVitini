@@ -9,11 +9,11 @@ casaVitini.view = {
         }
         const comandoSecundario = granuladoURL.directorios[granuladoURL.directorios.length - 2]
         if (comandoSecundario === "verificar_cuenta") {
-            const transacccion = {
+            const transaccion = {
                 zona: "miCasa/verificarCuenta",
                 codigo: comandoInicial
             }
-            const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
             if (respuestaServidor?.error) {
                 return this.ui.codigoErroneo()
             }
@@ -94,7 +94,7 @@ casaVitini.view = {
             botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
             botonIniciarReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIniciarReserva)
-        
+
             const irALogin = document.createElement("a")
             irALogin.classList.add("botonV1BlancoIzquierda")
             irALogin.textContent = "Ir a la pantalla de login"
@@ -155,7 +155,7 @@ casaVitini.view = {
                 mensaje: mensaje
             })
             const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-            
+
             const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "miCasa/verificarCuenta",
                 codigo: codigo.trim()

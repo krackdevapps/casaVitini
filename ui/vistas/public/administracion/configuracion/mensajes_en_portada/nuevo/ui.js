@@ -18,14 +18,14 @@ casaVitini.view = {
             mensaje: mensajeEsppera
         }
         casaVitini.ui.componentes.pantallaDeCargaSuperPuesta(datosPantallaSuperpuesta)
-        const transacccion = {
+        const transaccion = {
             zona: "administracion/configuracion/mensajesEnPortada/crearMensaje",
             mensaje: mensaje
         }
 
 
 
-        const respuestaServidor = await casaVitini.shell.servidor(transacccion)
+        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
         const seccionRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
         if (!seccionRenderizada)
             seccionRenderizada.remove()

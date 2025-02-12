@@ -108,7 +108,6 @@ casaVitini.view = {
         },
         buscadorClientesPorCampo: async function (cliente) {
 
-
             const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
             const campo = document.querySelector("[componente=zonaNavegacionPaginadaClientes]")
             const terminoBusqueda = cliente.target.value
@@ -125,27 +124,23 @@ casaVitini.view = {
             const estadoBusqueda_s = document.querySelector("[componente=estadoBusqueda]")
             estadoBusqueda_s.textContent = "Buscando clientes..."
 
-
-
-            const granuladorURL = casaVitini.utilidades.granuladorURL()
-            if (granuladorURL.parametros.buscar) {
-                history.replaceState(null, null, granuladorURL.directoriosFusion);
-            }
             const campoVacio = cliente.target.value.length
             if (campoVacio === 0) {
                 clearTimeout(casaVitini.componentes.temporizador);
+                const granuladoURL = casaVitini.utilidades.granuladorURL()
                 document.querySelector("[componente=estadoBusqueda]")?.remove()
                 document.querySelector("[areaGrid=gridClientes]")?.remove()
-                const vistaActual = document.querySelector("[componente=uiNavegacion]").getAttribute("vistaActual")
-                const resetUrl = "/administracion/clientes"
                 const titulo = "casavitini"
-                const estado = {
-                    zona: vistaActual,
-                    estadoInternoZona: "estado",
-                    tipoCambio: "total"
+                const estado = casaVitini.view.navegacion.estadoInicial
+                const url = "/administracion/clientes"
+
+
+
+                if (url !== granuladoURL.raw.toLocaleLowerCase()) {
+
+                    window.history.pushState(estado, titulo, "/administracion/clientes");
                 }
-                window.history.replaceState(estado, titulo, resetUrl);
-                return
+                return;
             }
             clearTimeout(casaVitini.componentes.temporizador);
             casaVitini.componentes.temporizador = setTimeout(async () => {
@@ -155,7 +150,6 @@ casaVitini.view = {
                     buscar: terminoBusqueda,
                     origen: "botonMostrarClientes",
                     tipoConstruccionGrid: "total",
-                    granuladoURL: granuladorURL,
                     instanciaUID: instanciaUID
                 }
 
@@ -175,10 +169,16 @@ casaVitini.view = {
             delete transaccion.origen
             const granuladoURL = casaVitini.utilidades.granuladorURL()
             const paginaTipo = transaccion.paginaTipo
-            const selectorAlmacen = document.querySelector("[areaGrid=gridClientes]")?.getAttribute("almacen") || "{}"
-            const almacen = JSON.parse(selectorAlmacen)
-            const busquedaInicial = transaccion.buscar || almacen?.buscar
 
+            const busquedaInicial = transaccion?.buscar //|| almacen?.buscar
+            const campoBusqueda = document.querySelector("[componenteCampo=buscadorPorId]")
+
+            if (!busquedaInicial) {
+                document.querySelector("[componente=estadoBusqueda]")?.remove()
+                document.querySelector("[areaGrid=gridClientes]")?.remove()
+                campoBusqueda.value = null
+                return
+            }
             let nombreColumnaURL
             const nombreColumna = transaccion.nombreColumna
             if ((nombreColumna)?.toLowerCase() === "clienteuid") {
@@ -213,6 +213,7 @@ casaVitini.view = {
             const paginasTotales = respuestaServidor.paginasTotales
             const pagina = respuestaServidor.pagina
             const sentidoColumna = respuestaServidor.sentidoColumna
+            campoBusqueda.value = buscar
 
             const columnasGrid = [
                 {
@@ -303,13 +304,19 @@ casaVitini.view = {
                 args: transaccion
             }
 
+
+
             if (origen === "url" || origen === "botonMostrarClientes") {
+
                 window.history.replaceState(estado, titulo, constructorURLFinal);
             } else if ((origen === "botonNumeroPagina" && paginaTipo === "otra") || origen === "tituloColumna") {
+
                 window.history.pushState(estado, titulo, constructorURLFinal);
             } else if (origen === "botonNumeroPagina" && paginaTipo === "actual") {
+
                 window.history.replaceState(estado, titulo, constructorURLFinal);
             }
+
         },
     },
     detallesCliente: {
@@ -930,4 +937,14 @@ casaVitini.view = {
         },
 
     },
+    navegacion: {
+        estadoInicial: {
+            zona: "administracion/clientes",
+            EstadoInternoZona: "estado",
+            tipoCambio: "parcial",
+            componenteExistente: "zonaNavegacionPaginadaClientes",
+            funcionPersonalizada: "view.buscador.mostrarClientesResueltos",
+            args: {}
+        }
+    }
 }
