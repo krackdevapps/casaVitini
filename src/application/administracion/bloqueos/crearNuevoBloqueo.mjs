@@ -71,7 +71,6 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
             const error = "zona solo puede ser global, publico o privada";
             throw new Error(error);
         }
-        const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
         let fechaInicio = null;
         let fechaFin = null;
         if (tipoBloqueoIDV === "rangoTemporal") {
@@ -99,14 +98,15 @@ export const crearNuevoBloqueo = async (entrada, salida) => {
                 throw new Error(error);
             }
         }
-        if (motivo) {
-            if (!filtroTextoSimple.test(motivo)) {
-                const error = "Por temas de seguridad, ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y números. Más adelante se aceptarán todos los caracteres.";
-                throw new Error(error);
-            }
-        } else {
-            motivo = null;
-        }
+        // if (motivo) {
+        //     const filtroTextoSimple = /^[a-zA-Z0-9\s]+$/;
+        //     if (!filtroTextoSimple.test(motivo)) {
+        //         const error = "Por temas de seguridad, ahora mismo en el campo motivo, solo pueden aceptarse minúsculas, mayúsculas, espacio y números. Más adelante se aceptarán todos los caracteres.";
+        //         throw new Error(error);
+        //     }
+        // } else {
+        //     motivo = null;
+        // }
 
         const datosNuevoBloqueo = {
             apartamentoIDV,

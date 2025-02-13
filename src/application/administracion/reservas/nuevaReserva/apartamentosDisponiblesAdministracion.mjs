@@ -40,7 +40,8 @@ export const apartamentosDisponiblesAdministracion = async (entrada) => {
 
         const res = {
             ok: {
-                apartamentosDisponibles: []
+                apartamentosDisponibles: [],
+                apartamentosNoDisponibles: []
             },
             configuracionesAlojamiento: {}
         }
@@ -58,6 +59,10 @@ export const apartamentosDisponiblesAdministracion = async (entrada) => {
 
             res.ok.apartamentosDisponibles.push(...apartamentosDisponibles)
             res.configuracionesAlojamiento = configuracionesAlojamiento.configuracionApartamento
+
+            const apartamentosNoDisponibles = apartamentosCribados.apartamentosNoDisponibles
+            res.ok.apartamentosNoDisponibles.push(...apartamentosNoDisponibles)
+
         }
 
         return res

@@ -130,7 +130,9 @@ describe('Global Operations Simulation', () => {
     })
     test('list all simulations with pagination with ok', async () => {
         const m = {
-            body: {},
+            body: {
+                pagina: 1
+            },
             session: fakeAdminSession
         }
         const response = await listaSimulacionesPaginados(m)

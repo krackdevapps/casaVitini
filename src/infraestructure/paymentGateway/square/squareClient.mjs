@@ -1,4 +1,4 @@
-import { Client, Environment, ApiError } from "square";
+import { SquareClient, SquareEnvironment } from "square";
 import dotenv from "dotenv";
 dotenv.config();
 const SQUARE_ENTORNO = process.env.SQUARE_ENTORNO
@@ -10,6 +10,6 @@ const config = {
 
 }
 
-const clienteSquare = new Client(config)
+const clienteSquare = new SquareClient(config)
 
 export { clienteSquare };
