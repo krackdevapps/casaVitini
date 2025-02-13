@@ -6,6 +6,30 @@ casaVitini.view = {
             const [minutos, segundos] = tiempo.split(':').map(Number);
             return (minutos * 60) + segundos;
         }
+        const tiemposAntiuo = [
+            "00:00",
+            "00:36",
+            "00:51",
+            // "01:07",
+            // "01:20",
+            "01:51",
+            // "02:07",
+            "02:41",
+            "02:49",
+            "02:58",
+            // "03:09",
+            // "03:35",
+            "03:46",
+            "04:03",
+            "04:13",
+            // "04:28",
+            "04:50",
+            "05:33",
+            "06:03",
+            // "07:03",
+            // "07:48",
+            // "08:05"
+        ];
 
         const video = main.querySelector("[componente=video]")
         video.addEventListener('loadeddata', () => {
@@ -13,34 +37,24 @@ casaVitini.view = {
                 "00:00",
                 "00:36",
                 "00:51",
-                // "01:07",
-                // "01:20",
+                "01:07",
+                "01:20",
                 "01:51",
-                // "02:07",
+                "02:07",
                 "02:41",
                 "02:49",
                 "02:58",
-                // "03:09",
-                // "03:35",
-                "03:46",
-                "04:03",
-                "04:13",
-                // "04:28",
-                "04:50",
-                "05:33",
-                "06:03",
-                // "07:03",
-                // "07:48",
-                // "08:05"
+                "03:09",
+                "03:35",
             ];
             const posicionAleatoria = Math.floor(Math.random() * tiempos.length)
             const tiempoAleatorio = tiempos[posicionAleatoria];
-
             video.currentTime = mmssASegundos(tiempoAleatorio);
 
         })
         video.addEventListener('canplaythrough', () => {
             const playProm = video.play();
+            video.playbackRate = 1.00;
             if (playProm !== undefined) {
                 playProm.then(_ => {
                     setTimeout(() => {
@@ -49,13 +63,11 @@ casaVitini.view = {
                             video.style.transition = "opacity 500ms linear"
                         }
                     }, 1000);
-
                 })
                     .catch(error => {
                     });
             }
         })
-
 
         document.querySelector("[componente=botonCambiaVistaEnSection]")
             .addEventListener("click", casaVitini.shell.navegacion.cambiarVista)

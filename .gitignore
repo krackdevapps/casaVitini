@@ -7,6 +7,9 @@ campo_pruebas
 ui/activos/videos/*
 !ui/activos/videos/
 
+ui/activos/imagenes/*
+!ui/activos/imagenes/
+
 certificados_ssl/*
 !certificados_ssl/
 

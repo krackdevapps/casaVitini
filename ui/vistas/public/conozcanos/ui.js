@@ -20,7 +20,7 @@ casaVitini.view = {
                 this.volatilObservers.parallaxControlador = new simpleParallax(grupoImagenesPalarax, {
                     delay: 0,
                     orientation: 'down',
-                    scale: 1.5,
+                    scale: 1.3,
                     overflow: false,
                 });
             } catch (errorCapturado) {
