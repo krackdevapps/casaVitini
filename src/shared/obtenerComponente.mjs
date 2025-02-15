@@ -18,7 +18,6 @@ export const obtenerComponente = async (transaccion) => {
         const controlFiltro = /^[a-zA-Z0-9_]+$/;
         let portal
         for (let rama of arbol) {
-          //  rama = rama.toLowerCase()
             if (controlFiltro.test(rama)) {
                 selectorRama = selectorRama + "/" + rama
 
@@ -88,7 +87,6 @@ export const obtenerComponente = async (transaccion) => {
                 mensaje: "No estás autorizado, necesitas una cuenta de más autoridad para acceder aquí"
             }
         }
-        console.log("urlResuelta", urlResuelta)
         const vistaSelector = "./ui/componentes" + urlResuelta + "/ui.ejs"
         if (existsSync(vistaSelector)) {
             const html = readFileSync(vistaSelector, 'utf-8');
@@ -107,8 +105,6 @@ export const obtenerComponente = async (transaccion) => {
            throw new Error(error)
         }
     } catch (errorCapturado) {
-        console.log("errorCapturado", errorCapturado)
-
         throw errorCapturado;
     }
 }

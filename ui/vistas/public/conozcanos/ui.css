@@ -1,10 +1,16 @@
 main * {
-    font-family: opensans-variable !important;
+    font-family: opensans-variable;
 }
 
 @font-face {
     font-family: lovetheking;
     src: url(/activos/fuentes/love_by_the_king/loved_by_the_King/LovedbytheKing-Regular.ttf) format('truetype');
+
+}
+
+@font-face {
+    font-family: tradewings;
+    src: url(/activos/fuentes/trade_winds/TradeWinds-Regular.ttf) format('truetype');
 
 }
 
@@ -33,12 +39,13 @@ main * {
 
 .fuentePerso1 {
     font-family: lovetheking !important;
-    font-size: 28px;
+    font-size: 31px;
     position: relative;
     top: -30px;
     transform: rotate(-8deg);
     right: 22px;
-    white-space:nowrap;
+    white-space: nowrap;
+    color: rgb(255, 133, 11);
 }
 
 
@@ -114,7 +121,7 @@ main * {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/zonas_comunes/image00009V2.jpeg");
+    background-image: url("/activos/imagenes/zonas_comunes/image00009V3.jpeg");
 }
 
 [zonaCSS="/conozcanos"] .fondo1 {
@@ -128,28 +135,28 @@ main * {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/zonas_comunes/image00023.jpeg");
+    background-image: url("/activos/imagenes/imagen2.jpg");
 }
 
 [zonaCSS="/conozcanos"] .fondo3 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/exteriores/image00010.jpeg");
+    background-image: url("/activos/imagenes/fotos/playaagua.jpeg");
 }
 
 [zonaCSS="/conozcanos"] .fondo4 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/montana.jpg");
+    background-image: url("/activos/imagenes/fotos/salinas.jpg");
 }
 
 [zonaCSS="/conozcanos"] .fondo5 {
-    background-position: center center;
+    background-position: center 0%;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/f5.jpeg");
+    background-image: url("/activos/imagenes/volcan3.jpg");
 }
 
 [zonaCSS="/conozcanos"] .fondo6 {
@@ -325,16 +332,16 @@ main * {
 }
 
 [zonaCSS="/conozcanos"] .texto_v2_parallax {
-    font-size: 35px;
+    font-size: 45px;
     font-weight: bold;
     color: rgb(255 255 255 / 85%);
     transform: translateX(-50%, -50%);
     z-index: 10;
-
     pointer-events: none;
     position: absolute;
     transition: all 500ms linear;
     z-index: 101;
+    padding-bottom: 450px;
 }
 
 [zonaCSS="/conozcanos"] [animacion="contenedorTexto"] {
@@ -349,10 +356,19 @@ main * {
 [zonaCSS="/conozcanos"] .contenedorParalax {
     display: flex;
     flex-direction: column;
-    max-width: 2160px;
+    max-width: 1480px;
     padding-left: 20px;
     padding-right: 20px;
     width: 100%;
+    gap: 80px;
+}
+
+@media (max-width: 1080px) {
+    [zonaCSS="/conozcanos"] .contenedorParalax {
+
+        max-width: 2160px;
+    }
+
 }
 
 [zonaCSS="/conozcanos"] .contenedorParalax .parallax {
@@ -380,11 +396,8 @@ main * {
 }
 
 [zonaCSS="/conozcanos"] .contenedorParalax .imagenParalaje {
-    max-width: none;
-    width: auto;
-    height: 100vh;
-    width: 100vw;
-
+    height: 100% !important;
+    width: 100% !important;
     top: 0;
     left: 50%;
     background-size: cover;
@@ -402,6 +415,8 @@ main * {
     overflow: hidden;
     border-radius: 40px;
     z-index: 100;
+    height: 100%;
+    width: 100%;
 }
 
 [zonaCSS="/conozcanos"] .contenedorParalax .texto_animado {
@@ -417,10 +432,12 @@ main * {
 }
 
 [zonaCSS="/conozcanos"] .contenedorParalax .texto {
-    padding: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
     z-index: 2;
     color: #8D6E63;
     font-weight: 550;
+    font-size: 15px;
 }
 
 [zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll,
@@ -461,16 +478,22 @@ main * {
 .containerFirst {
     display: grid;
     grid-template-columns: 1.5fr auto;
-    grid-gap: 20px;
-    padding: 40px;
+    grid-gap: 50px;
+    padding-left: 40px;
+    padding-right: 40px;
     padding-top: 60px;
     align-items: start;
 }
 
 .textoFirst {
-    padding: 50px;
-    color: #8D6E63;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 0px;
+    padding-right: 50px;
+    color: #4e3f39;
     font-weight: 550;
+    font-size: 15px;
+
 
 
 }
@@ -494,6 +517,8 @@ main * {
     padding-left: 20px;
     padding-right: 20px;
     /* padding: 20px; */
+    color: rgb(173, 93, 14);
+
 }
 
 .lista {
@@ -501,13 +526,11 @@ main * {
     padding-left: 20px;
     padding-right: 20px;
     font-weight: 550;
-    color: #8D6E63;
 }
 
 .lista * {
     font-family: lovetheking !important;
     font-size: 15px;
-    color: black;
     font-weight: bold;
     letter-spacing: 1px;
 }
@@ -520,7 +543,7 @@ main * {
 .puntoletras {
     font-family: lovetheking !important;
     font-size: 45px !important;
-    color: black;
+
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -531,4 +554,209 @@ main * {
     font-family: opensans-variable !important;
     font-size: 13px !important;
 
+}
+
+.imagenTest {
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    background-color: green;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    padding: 20px;
+    padding-top: 150px;
+}
+
+
+
+.contenedorImagen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 40px;
+    height: 100vh;
+}
+
+@media (max-width: 920px) {
+    .contenedorImagen {
+        grid-template-columns: 1fr;
+        height: auto;
+
+    }
+
+    .imagenTest {
+        height: 400px;
+
+    }
+
+}
+
+
+.textoViaja {
+    color: rgb(255 255 255 / 97%) !important;
+    padding: 200px !important;
+
+}
+
+.texto_foto2 {
+    color: rgb(255 255 255 / 55%) !important;
+    font-size: 33px !important;
+
+}
+
+.texto_foto3 {
+    color: rgb(255 255 255 / 55%) !important;
+
+}
+
+.superContainerActividades {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.tituloActividades {
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-size: 60px;
+    color: #271f1c;
+    font-weight: bold;
+    font-family: tradewings;
+}
+
+.textoAdrenalinaCompartido {
+    text-align: justify;
+    font-weight: 550;
+    font-size: 15px;
+    padding-left: 12.5%;
+    padding-right: 12.5%;
+}
+
+.textaArribaAdrenaliina {
+
+
+    padding-bottom: 40px;
+    /* font-family: tradewings; */
+}
+
+
+.paddingVertical {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.gridImagen1 {
+    background-image: url(/activos/imagenes/actividades/caballos.jpg);
+}
+
+.gridImagen2 {
+    background-image: url(/activos/imagenes/actividades/pesca1.jpg);
+}
+
+.gridImagen3 {
+    background-image: url(/activos/imagenes/actividades/skate.jpg);
+}
+
+.gridImagen4 {
+    background-image: url(/activos/imagenes/actividades/surf.jpg);
+}
+
+.tituloFotoActividades {
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 30px;
+    border-radius: 100px;
+    display: flex;
+    gap: 0px;
+    flex-direction: column;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(56, 56, 56, 0.85);
+    width: fit-content;
+    transition: all 1sease-in-out !important;
+}
+
+.tituloFotoGrande {
+    font-size: 16px;
+    z-index: 105;
+    /* padding: 14px;
+    padding-top: 80px;
+    padding-bottom: 80px;*/
+    padding-left: 34px;
+    padding-right: 34px;
+    display: flex;
+    align-items: center;
+    color: #4e3f39;
+    font-weight: 550;
+    text-align: justify;
+}
+
+@media (max-width: 920px) {
+    .tituloFotoGrande {}
+}
+
+.superContainerFoto {
+    display: grid;
+    grid-template-columns: 0.3fr 1fr;
+    align-items: center;
+    gap: 34px;
+}
+
+
+.superContainerFotoV2 {
+    display: grid;
+    grid-template-columns: 1fr 0.3fr;
+    align-items: center;
+    gap: 34px;
+
+}
+
+.superContainerFotoV2 >.cell-1 {
+    order: 1;
+}
+
+.superContainerFotoV2  .cell-2 {
+    order: 2;
+}
+.padingtopv1 {
+    padding-top: 40px;
+}
+
+
+@media (max-width: 920px) {
+    .superContainerFoto {
+        grid-template-columns: 1fr;
+        gap: 80px;
+
+    }
+
+    .superContainerFotoV2 {
+        grid-template-columns: 1fr;
+        gap: 80px;
+
+    }
+
+
+.superContainerFotoV2 > .cell-1 {
+    order: 2;
+}
+
+.superContainerFotoV2 > .cell-2 {
+    order: 1;
+}
+
+.padingtopv1 {
+    padding-top: 0px;
+}
+}
+
+.simpleParallax {
+    height: 100%;
+    width: 100%;
 }
