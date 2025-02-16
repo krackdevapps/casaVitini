@@ -1,5 +1,8 @@
 main * {
     font-family: opensans-variable;
+
+    align-items: flex-start;
+    /* padding-bottom: 0px !important; */
 }
 
 @font-face {
@@ -39,11 +42,11 @@ main * {
 
 .fuentePerso1 {
     font-family: lovetheking !important;
-    font-size: 31px;
+    font-size: 45px;
     position: relative;
     top: -30px;
     transform: rotate(-8deg);
-    right: 22px;
+    right: 10px;
     white-space: nowrap;
     color: rgb(255, 133, 11);
 }
@@ -356,17 +359,18 @@ main * {
 [zonaCSS="/conozcanos"] .contenedorParalax {
     display: flex;
     flex-direction: column;
-    max-width: 1480px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: 100%;
-    gap: 80px;
+    /* max-width: 1480px; */
+    /* padding-left: 20px; */
+    /* padding-right: 20px; */
+    /* width: 100%; */
+    gap: 0px;
 }
 
 @media (max-width: 1080px) {
     [zonaCSS="/conozcanos"] .contenedorParalax {
-
         max-width: 2160px;
+        gap: 80px;
+
     }
 
 }
@@ -411,9 +415,17 @@ main * {
     position: relative;
 }
 
+.gridFirstText {
+    display: grid;
+    grid-template-columns: 1fr 0.3fr;
+    align-items: center;
+    gap: 34px;
+
+}
+
 [zonaCSS="/conozcanos"] .contenedorImagenNecesario {
     overflow: hidden;
-    border-radius: 40px;
+    border-radius: 0px;
     z-index: 100;
     height: 100%;
     width: 100%;
@@ -476,21 +488,18 @@ main * {
 }
 
 .containerFirst {
-    display: grid;
-    grid-template-columns: 1.5fr auto;
-    grid-gap: 50px;
-    padding-left: 40px;
-    padding-right: 40px;
-    padding-top: 60px;
-    align-items: start;
+    display: flex;
+    grid-gap: 20px;
+    flex-direction: column;
+
 }
 
 .textoFirst {
     padding-top: 50px;
-    padding-bottom: 50px;
-    padding-left: 0px;
+    padding-bottom: 20px;
+    padding-left: 50px;
     padding-right: 50px;
-    color: #4e3f39;
+    color: #2f2622;
     font-weight: 550;
     font-size: 15px;
 
@@ -559,7 +568,7 @@ main * {
 .imagenTest {
     width: 100%;
     height: 100%;
-    border-radius: 50px;
+    border-radius: 0px;
     background-color: green;
     background-size: cover;
     background-repeat: no-repeat;
@@ -576,8 +585,11 @@ main * {
 .contenedorImagen {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 40px;
+    grid-gap: 5px;
     height: 100vh;
+    width: 100%;
+    align-items: stretch;
+
 }
 
 @media (max-width: 920px) {
@@ -611,11 +623,26 @@ main * {
     color: rgb(255 255 255 / 55%) !important;
 
 }
+.marcoParaGoogleMaps {
+    overflow: hidden;
+    border-radius: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 380px;
+    width: 380px;
+}
+.frameGoogleMaps {
+    height: 100%;
+    border-radius: 20px;
+}
+
 
 .superContainerActividades {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    align-items: center;
 }
 
 .tituloActividades {
@@ -685,9 +712,6 @@ main * {
 .tituloFotoGrande {
     font-size: 16px;
     z-index: 105;
-    /* padding: 14px;
-    padding-top: 80px;
-    padding-bottom: 80px;*/
     padding-left: 34px;
     padding-right: 34px;
     display: flex;
@@ -695,35 +719,68 @@ main * {
     color: #4e3f39;
     font-weight: 550;
     text-align: justify;
+    /* overflow: hidden; */
+    /* padding-top: 56px; */
 }
 
+
+.superContainerFotoVertical {
+    display: grid;
+    grid-template-columns: 1fr 0.3fr;
+    align-items: start;
+    gap: 0px;
+}
 @media (max-width: 920px) {
-    .tituloFotoGrande {}
+    .superContainerFotoVertical {
+        grid-template-columns: 1fr;
+        gap: 80px;
+
+        }
 }
 
 .superContainerFoto {
     display: grid;
-    grid-template-columns: 0.3fr 1fr;
+    grid-template-columns: 0.3fr  1fr;
     align-items: center;
-    gap: 34px;
+    gap: 0px;
 }
+.vertical1 {
+    /* display: flex;
+    flex-direction: column;
+    gap: 20px; */
+}
+.vertical2 {
+    display: flex;
+    flex-direction: column;
+    gap: 160px;
+    align-items: center;
+}
+@media (max-width: 920px) {
+    .vertical2 {
+        gap: 80px;
+
+        }
+}
+
 
 
 .superContainerFotoV2 {
     display: grid;
     grid-template-columns: 1fr 0.3fr;
     align-items: center;
-    gap: 34px;
+    gap: 0px;
+    width: 100%;
 
 }
 
-.superContainerFotoV2 >.cell-1 {
+.superContainerFotoV2>.cell-1 {
     order: 1;
 }
 
-.superContainerFotoV2  .cell-2 {
+.superContainerFotoV2 .cell-2 {
     order: 2;
 }
+
 .padingtopv1 {
     padding-top: 40px;
 }
@@ -743,17 +800,17 @@ main * {
     }
 
 
-.superContainerFotoV2 > .cell-1 {
-    order: 2;
-}
+    .superContainerFotoV2>.cell-1 {
+        order: 2;
+    }
 
-.superContainerFotoV2 > .cell-2 {
-    order: 1;
-}
+    .superContainerFotoV2>.cell-2 {
+        order: 1;
+    }
 
-.padingtopv1 {
-    padding-top: 0px;
-}
+    .padingtopv1 {
+        padding-top: 0px;
+    }
 }
 
 .simpleParallax {

@@ -1,6 +1,6 @@
 casaVitini.view = {
     start: function () {
-        document.querySelector("main").style.paddingBottom = "20px"
+      //  document.querySelector("main").style.paddingBottom = "20px"
         document.body.style.backgroundColor = "rgb(255 188 0 / 0.14)"
 
         const loadScript = async (url) => {
