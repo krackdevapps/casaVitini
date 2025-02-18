@@ -281,6 +281,7 @@ casaVitini.view = {
         )
         titulo.style.color = "#8D6E63"
         titulo.setAttribute("componenete", "tituloTextoApartamentos")
+        titulo.classList.add("botonDinamico")
         titulo.textContent = "Apartamentos"
         tituloPegajoso.appendChild(titulo)
 
@@ -297,17 +298,13 @@ casaVitini.view = {
             tituloPegajoso.style.zIndex = "2"
 
             if (boundingRect1.bottom >= (window.innerHeight - stickyTop)) {
-                titulo.style.boxShadow = "0px 0px 28px 0px rgba(0, 0, 0, 0.5)"
-                titulo.style.backdropFilter = "blur(50px)"
-                titulo.style.webkitBackdropFilter = "blur(50px)"
-                titulo.style.background = ""
-                titulo.style.fontSize = "13px"
+                titulo.classList.add("plegado")
+                titulo.classList.remove("desplegado")
                 titulo.textContent = "Ver apartamentos"
                 titulo.addEventListener("click", this.irAApartamentos)
             } else {
-                titulo.style.boxShadow = "0px 0px 0px 0px rgba(0, 0, 0, 0)"
-                titulo.style.background = "transparent"
-                titulo.style.fontSize = "40px"
+                titulo.classList.add("desplegado")
+                titulo.classList.remove("plegado")
                 titulo.textContent = "Apartamentos"
                 titulo.removeEventListener("click", this.irAApartamentos)
 

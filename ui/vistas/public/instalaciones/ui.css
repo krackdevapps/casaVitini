@@ -531,4 +531,33 @@
         width: 100%;
     }
 
+
+}
+
+.botonDinamico {
+    color: #8D6E63;
+    white-space: nowrap;
+}
+
+.botonDinamico.plegado {
+    font-size: 13px;
+    box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.2)
+}
+
+.botonDinamico.desplegado {
+    font-size: 40px;
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: transparent
+}
+
+@media (max-width: 720px) {
+    .botonDinamico.desplegado {
+        font-size: 25px;
+    }
+
 }
