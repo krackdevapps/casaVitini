@@ -404,7 +404,7 @@ main * {
     }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 920px) {
     .redondeoIzquierda {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
