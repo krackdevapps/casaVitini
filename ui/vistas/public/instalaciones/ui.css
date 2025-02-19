@@ -537,6 +537,7 @@
 .botonDinamico {
     color: #8D6E63;
     white-space: nowrap;
+    overflow: hidden;
 }
 
 .botonDinamico.plegado {
@@ -557,7 +558,7 @@
 
 @media (max-width: 720px) {
     .botonDinamico.desplegado {
-        font-size: 25px;
+        /* font-size: 25px; */
     }
 
 }
