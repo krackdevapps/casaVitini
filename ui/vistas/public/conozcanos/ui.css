@@ -1,19 +1,28 @@
 main * {
     font-family: opensans-variable;
-
     align-items: flex-start;
     /* margin-bottom: 20px !important; */
 }
-
+@media (min-width: 2160px) {
+    main{
+        padding-left: 80px;
+        padding-right: 80px;
+    }
+    
+}
 @font-face {
     font-family: lovetheking;
     src: url(/activos/fuentes/love_by_the_king/loved_by_the_King/LovedbytheKing-Regular.ttf) format('truetype');
+    font-display: block;
+
 
 }
 
 @font-face {
     font-family: tradewings;
     src: url(/activos/fuentes/trade_winds/TradeWinds-Regular.ttf) format('truetype');
+    font-display: block;
+
 
 }
 
@@ -53,7 +62,7 @@ main * {
 
 @media (max-width: 720px) {
     .fuentePerso1 {
-        font-size: 25px;
+        font-size: 8vw;
 
     }
 
@@ -354,6 +363,13 @@ main * {
     transition: all 500ms linear;
     z-index: 101;
     padding-bottom: 450px;
+    overflow: hidden;
+    text-align: center;
+}
+@media (max-width: 1080px){
+    .texto_v2_parallax {
+        font-size: 8vw !important;
+    }
 }
 
 [zonaCSS="/conozcanos"] [animacion="contenedorTexto"] {
@@ -374,6 +390,7 @@ main * {
     /* width: 100%; */
     gap: 80px;
 }
+
 
 @media (max-width: 1080px) {
     [zonaCSS="/conozcanos"] .contenedorParalax {
@@ -404,7 +421,7 @@ main * {
     }
 }
 
-@media (max-width: 920px) {
+@media (max-width: 1080px) {
     .redondeoIzquierda {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
@@ -467,19 +484,23 @@ main * {
 
 }
 
-@media (min-width: 2160px) {
-    .primerContainerResponsivo {
-        border-radius: 30px;
 
-    }
-}
-
-@media (max-width: 920px) {
+@media (max-width: 1080px) {
     .primerContainerResponsivo {
         margin: 0px;
         border-radius: 0px !important;
     }
 
+}
+
+
+@media (min-width: 2160px) {
+    .primerContainerResponsivo {
+        border-radius: 30px;
+        margin-left: 0px;
+        margin-right: 0px;
+
+    }
 }
 
 .gridFirstText {
@@ -561,9 +582,15 @@ main * {
 
 }
 
+.firstSuperContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
 .textoFirst {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding-top: 40px;
+    /* padding-bottom: 20px; */
     padding-left: 80px;
     padding-right: 50px;
     color: #2f2622;
@@ -613,7 +640,7 @@ main * {
     /* background-color: rgba(0, 0, 0, 0.1); */
     padding-left: 20px;
     padding-right: 20px;
-    padding-top: 20px;
+    padding-top: 30px;
     color: rgb(173, 93, 14);
     display: flex;
     flex-direction: column;
@@ -747,7 +774,12 @@ main * {
     font-weight: bold;
     font-family: tradewings;
 }
+@media (max-width: 920px) {
+    .tituloActividades {
+        font-size: 7vw;
 
+    }
+}
 .textoAdrenalinaCompartido {
     text-align: justify;
     font-weight: 550;
@@ -867,6 +899,7 @@ main * {
     align-items: center;
     gap: 0px;
     width: 100%;
+    height: auto;
 
 }
 
@@ -883,11 +916,11 @@ main * {
 }
 
 
-@media (max-width: 920px) {
+@media (max-width: 1080px) {
     .superContainerFoto {
         grid-template-columns: 1fr;
         gap: 80px;
-
+        height: auto;
     }
 
     .superContainerFotoV2 {
@@ -926,4 +959,72 @@ main * {
 
 }
 
-.firstGrid {}
+.containerIconsAndText {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.superContainerIcons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 30px;
+    align-items: stretch;
+    padding-left: 80px;
+    padding-right: 50px;
+    position: relative;
+}
+
+@media (max-width: 1080px) {
+    .superContainerIcons {
+        grid-template-columns: 1fr 1fr;
+        padding-left: 20px;
+        padding-right: 20px;
+
+    }
+}
+
+.containerIcon {
+    display: flex;
+    flex-direction: row;
+    /* background-color: orange; */
+    border-radius: 10px;
+    /* padding: 10px; */
+    gap: 20px;
+    align-items: center;
+ 
+}
+
+.iconShared {
+    background-position: center center;
+    background-size: contain;
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+}
+.iconoSVG {
+    height: 44px;
+}
+.icon1 {
+    background-image: url(/activos/iconos/sun-svgrepo-com.svg);
+}
+
+.icon2 {
+    background-image: url(/activos/iconos/surfing-5-svgrepo-com.svg);
+}
+
+.icon3 {
+    background-image: url(/activos/iconos/beach-with-umbrella-svgrepo-com.svg);
+}
+
+.icon4 {
+    background-image: url(/activos/iconos/restaurant-2-svgrepo-com.svg);
+}
+
+.icon5 {
+    background-image: url(/activos/iconos/volcano-svgrepo-com.svg);
+}
+
+.icon6 {
+    background-image: url(/activos/iconos/sun-svgrepo-com.svg);
+}

@@ -2,11 +2,15 @@
     font-family: opensans-semibold;
     src: url(/activos/fuentes/Open_Sans/static/OpenSans-SemiBold.ttf) format('truetype');
     font-style: normal;
+    font-display: block;
+
 }
 
 @font-face {
     font-family: opensans-variable;
     src: url(/activos/fuentes/Open_Sans/OpenSans-variable.ttf) format('truetype');
+    font-display: block;
+
 }
 
 main *:not(.sobreControlAnimacionGlobal):not(.sobreControlAnimacionGlobal *) {

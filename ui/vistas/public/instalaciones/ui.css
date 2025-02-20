@@ -538,6 +538,8 @@
     color: #8D6E63;
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 98vw;
 }
 
 .botonDinamico.plegado {
