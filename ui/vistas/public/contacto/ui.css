@@ -1,13 +1,11 @@
-.tituloBlanco {
-    color: white;
+body {
+    background-color: rgb(255 188 0 / 0.05);
+    height: 100vh;
+
 }
 
-body {
-    height: 100vh;
-}
 main {
     height: 100vh;
-
 }
 
 [zonaCSS="/contacto"] .plaza_contacto_gridContacto {
@@ -36,18 +34,15 @@ main {
 [zonaCSS="/contacto"] .plaza_contacto_tituloInfo {
     margin: 0px;
     padding: 6px;
-    color: white;
     font-weight: bold;
 }
 
 [zonaCSS="/contacto"] .plaza_contacto_tituloContenedor {
-    color: white;
     margin: 0px;
 }
 
 [zonaCSS="/contacto"] .plaza_contacto_datoContenedor {
     font-size: 16px;
-    color: white;
     margin: 0px;
     font-weight: bold;
     text-decoration: none;
@@ -58,7 +53,7 @@ main {
 }
 
 [zonaCSS="/contacto"] .plaza_contacto_cuadrado {
-    background: rgba(0, 0, 0, 0.1);
+    /* background: rgba(0, 0, 0, 0.1); */
     border-radius: 20px;
     color: rgba(0, 0, 0, 0.6);
     font-size: 18px;
@@ -73,6 +68,10 @@ main {
 
 .espaciado10px {
     padding: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 [zonaCSS="/contacto"] .marcoParaGoogleMaps {
@@ -87,4 +86,64 @@ main {
 [zonaCSS="/contacto"] .frameGoogleMaps {
     height: 100%;
     border-radius: 20px;
+}
+
+.logowaze {
+    height: 91px;
+    /* width: 236px; */
+    background: rgba(0, 0, 0, 0.164);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+
+.logogooglemaps {
+    height: 91px;
+    /* width: 40px; */
+    background: rgba(0, 0, 0, 0.164);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.logosContainer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.logos {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: space-evenly;
+    align-items: center;
+
+}
+
+@media (max-width: 1080px) {
+.logos {
+    flex-direction: column;
+
+}
+}
+
+.socialItem {
+    display: grid;
+    grid-template-columns: min-content max-content;
+    gap: 20px;
+    align-items: center;
+}
+
+.logofacebook {
+    height: 41px;
+
+}
+
+.logoinstagram {
+    height: 40px;
+}
+
+.logowhatsap {
+    height: 39px;
 }

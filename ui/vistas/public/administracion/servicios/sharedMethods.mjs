@@ -647,10 +647,8 @@ export const sharedMethods = {
 
             const tituloC = document.createElement("input")
             tituloC.setAttribute("campo", "nombreGrupo")
-            tituloC.classList.add(
-                "padding10",
-                "borderRadius10"
-            )
+            tituloC.classList.add(               "botonV1BlancoIzquierda_campo")
+            
             tituloC.placeholder = "Titulo o definición del grupo"
             c.appendChild(tituloC)
 
@@ -842,10 +840,7 @@ export const sharedMethods = {
 
             const tituloC = document.createElement("input")
             tituloC.setAttribute("campo", "nombreOpcion")
-            tituloC.classList.add(
-                "padding10",
-                "borderRadius10"
-            )
+            tituloC.classList.add("botonV1BlancoIzquierda_campo"              )
             tituloC.placeholder = "Nombre de la opcion"
             contenedor.appendChild(tituloC)
 
@@ -854,17 +849,33 @@ export const sharedMethods = {
             infoPrecio.classList.add(
                 "padding6",
             )
-            infoPrecio.textContent = "Si esta opcion tiene un precio, escribalo abajo, si la opcion no tiene precio, dejaló en blanco."
+            infoPrecio.textContent = "Si esta opción tiene un precio, escríbalo abajo, si la opción no tiene precio, déjalo en blanco."
             contenedor.appendChild(infoPrecio)
 
             const precioC = document.createElement("input")
             precioC.setAttribute("campo", "precioOpcion")
-            precioC.classList.add(
-                "padding10",
-                "borderRadius10"
-            )
+            precioC.classList.add(     "botonV1BlancoIzquierda_campo"            )
             precioC.placeholder = "Precio de la opcion, ejemplo 00.00"
             contenedor.appendChild(precioC)
+
+
+            const selectorOpcionCantidad = document.createElement("select");
+            selectorOpcionCantidad.classList.add("botonV1BlancoIzquierda_campo");
+            selectorOpcionCantidad.setAttribute("campo", "interruptorCantidad");
+            contenedor.appendChild(selectorOpcionCantidad);
+
+
+            const optionO1 = document.createElement("option");
+            optionO1.value = "desactivado"
+            optionO1.textContent = "Esta opcion no tiene selector por cantidad";
+            selectorOpcionCantidad.appendChild(optionO1);
+
+
+            const optionO2 = document.createElement("option");
+            optionO2.value = "activado";
+            optionO2.textContent = "Esta opcion tiene selector por cantidad";
+            selectorOpcionCantidad.appendChild(optionO2);
+
 
 
             const contenedorBotones = document.createElement("div")
@@ -949,9 +960,12 @@ export const sharedMethods = {
 
                 const nombreOpcion = og.querySelector("[campo=nombreOpcion]").value
                 const precioOpcion = og.querySelector("[campo=precioOpcion]").value
+                const interruptorCantidad = og.querySelector("[campo=interruptorCantidad]").value
+
                 const opcion = {
                     nombreOpcion,
-                    precioOpcion
+                    precioOpcion,
+                    interruptorCantidad
                 }
                 contenedorOpciones.opcionesGrupo.push(opcion)
             })

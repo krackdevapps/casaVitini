@@ -23,6 +23,7 @@
 [zonaCSS="administracion"] .tituloContextoAdministracion:hover {
     background-color: rgba(0, 0, 0, 0.45);
     color: white;
+    transition: all 250ms linear;
 }
 
 [zonaCSS="administracion"] .administracion_portada_contenedorContextual {

@@ -6,12 +6,7 @@
 
 }
 
-@font-face {
-    font-family: opensans-variable;
-    src: url(/activos/fuentes/Open_Sans/OpenSans-variable.ttf) format('truetype');
-    font-display: block;
 
-}
 
 main *:not(.sobreControlAnimacionGlobal):not(.sobreControlAnimacionGlobal *) {
     transition: scale 250ms ease-in-out;
@@ -1733,6 +1728,7 @@ summary:hover {
 
 .contenedorGlobal_hover:hover {
     background: hsl(0deg 0% 0% / 10%);
+    border-radius: 10px;
 }
 
 .esferaSeleccionable {
@@ -1759,7 +1755,7 @@ summary:hover {
 }
 
 .botonV1:hover,
-.botonV1Blanco:hover {
+.botonV1Blanco:active {
     background: rgba(255, 255, 255, 0.7);
 }
 

@@ -1,3 +1,8 @@
+
+body {
+    background-color: rgb(255 188 0 / 0.05);
+}
+
 [zonaCSS="/alojamiento/reserva_confirmada"] .reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;

@@ -1,7 +1,7 @@
 casaVitini.view = {
     start: () => {
-        document.body.style.backgroundImage = 'url("activos/imagenes/contacto.jpg")';
-        document.querySelector("#uiLogo").style.filter = "invert(1)"
-        document.querySelector("[componente=botonMenuResponsivo]").style.filter = "invert(1)"
+        // document.body.style.backgroundImage = 'url("activos/imagenes/contacto.jpg")';
+        // document.querySelector("#uiLogo").style.filter = "invert(1)"
+        // document.querySelector("[componente=botonMenuResponsivo]").style.filter = "invert(1)"
     }
 }

@@ -1517,7 +1517,7 @@ casaVitini.view = {
                             { value: "aumentarPorPorcentaje", text: "Aumentar por porcentaje" },
                             { value: "reducirPorPorcentaje", text: "Reducir por porcentaje" },
                             { value: "aumentarPorCantidadFija", text: "Aumentar por cantidad fija" },
-                            { value: "reducirPorCantidadFila", text: "Reducir por cantidad fila" },
+                            { value: "reducirPorCantidadFila", text: "Reducir por cantidad fija" },
                             { value: "establecerCantidad", text: "Establecer cantidad" }
                         ]
                         for (const opcionData of opciones) {

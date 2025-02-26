@@ -20,6 +20,11 @@
 
 }
 
+.contenedorGlobal {
+    display: flex;
+    flex-direction: row;
+}
+
 [zonaCSS="/administracion/servicios"] .botonNuevo {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);

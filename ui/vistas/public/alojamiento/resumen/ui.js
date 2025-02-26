@@ -1,6 +1,5 @@
 casaVitini.view = {
     start: async function () {
-        document.body.style.background = "rgb(214 192 157)"
         const main = document.querySelector("main")
         const instanciaUID = main.getAttribute("instanciaUID")
         main.setAttribute("zonaCSS", "/alojamiento/resumen")
@@ -9,7 +8,26 @@ casaVitini.view = {
         casaVitini.shell.controladoresUI.iconosGlobales.telefonoPublicoWhatsApp({
             zonaIcono: "alojamiento"
         })
-        if (Object.keys(reservaLocal).length === 0) {
+
+        const requistosPreReservaLocal = (reserva) => {
+
+            const alojamiento = Object.values(reserva?.alojamiento)
+            const fechaEntrada = reserva?.fechaEntrada
+            const fechaSalida = reserva?.fechaEntrada
+
+            if (alojamiento.length === 0) {
+                return true
+            } else if (!fechaEntrada) {
+                return true
+
+            } else if (!fechaSalida) {
+                return true
+            } else {
+                return false
+            }
+        }
+        console.log("requistosPreReservaLocal(reservaLocal)", requistosPreReservaLocal(reservaLocal))
+        if (requistosPreReservaLocal(reservaLocal)) {
             const ui = this.uiConReserva()
 
             main.appendChild(ui)
@@ -30,24 +48,31 @@ casaVitini.view = {
             selectorFechaEntrada.textContent = fechaEntrada_Humana
             selectorFechaSalida.textContent = fechaSalida_Humana
 
-            await this.bloqueAlojamientoUI({
-                instanciaUID,
-                reservaLocal
-            })
-            await this.tiempoRestanteUI({
-                selectorDestino: "[contenedor=tiempoRestante]",
-                fechaEntrada
-            })
-            await this.servicios.renderizarServiciosPublicos()
-            if (codigoDescuentoPorComprobar.length > 0) {
-                const selectorOfertasComprobadas = document.querySelector("[contenedor=ofertasComprobadas]")
-                const spinner = casaVitini.ui.componentes.spinnerSimple()
-                selectorOfertasComprobadas.appendChild(spinner)
-                await this.descuentos.contenedorCodigoDescuentos.recuperarOfertasPorArrayDeCodigos()
+            try {
+                await this.bloqueAlojamientoUI({
+                    instanciaUID,
+                    reservaLocal
+                })
+                await this.tiempoRestanteUI({
+                    selectorDestino: "[contenedor=tiempoRestante]",
+                    fechaEntrada
+                })
+                await this.servicios.renderizarServiciosPublicos()
+                if (codigoDescuentoPorComprobar.length > 0) {
+                    const selectorOfertasComprobadas = document.querySelector("[contenedor=ofertasComprobadas]")
+                    const spinner = casaVitini.ui.componentes.spinnerSimple()
+                    selectorOfertasComprobadas.appendChild(spinner)
+                    await this.descuentos.contenedorCodigoDescuentos.recuperarOfertasPorArrayDeCodigos()
+                }
+
+                await casaVitini.view.actualizarPrecioEnUI({
+                    aplicarUIData: "no"
+                })
+            } catch (error) {
+
             }
-            await casaVitini.view.actualizarPrecioEnUI({
-                aplicarUIData: "no"
-            })
+
+
         }
 
     },
@@ -264,15 +289,22 @@ casaVitini.view = {
         fechaSalidaContenedor.appendChild(fechaSalidaUI)
 
 
+        const containerHostinTitular = document.createElement("div")
+        containerHostinTitular.classList.add("containerHostinTitular")
+        containerHostinTitular.setAttribute("com", "containerHostinTitular")
+        contenedor.appendChild(containerHostinTitular)
+
+
+
         const contenedorAlojamiento = document.createElement("div")
         contenedorAlojamiento.setAttribute("data", "alojamiento")
-
-        contenedor.appendChild(contenedorAlojamiento)
+        contenedorAlojamiento.classList.add("contenedorAlojamiento")
+        containerHostinTitular.appendChild(contenedorAlojamiento)
 
         const tituloAlojamiento = document.createElement("p")
         tituloAlojamiento.classList.add("tituloBloqueSeccion")
         tituloAlojamiento.textContent = "Alojamiento"
-        contenedor.appendChild(contenedorAlojamiento)
+        //contenedor.appendChild(contenedorAlojamiento)
 
 
         const contenedorServicios = () => {
@@ -319,32 +351,35 @@ casaVitini.view = {
         contenedor.appendChild(contenedorServicios())
 
         const contenedorTitular = document.createElement("div")
+        contenedorTitular.setAttribute("com", "titular")
+        contenedorTitular.classList.add("contenedorTitular")
         contenedorTitular.classList.add(
             "flexVertical",
             "gap14",
-
+            "backgroundGrey1",
+            "padding12",
+            "borderRadius22"
         )
-        contenedor.appendChild(contenedorTitular)
+        containerHostinTitular.appendChild(contenedorTitular)
 
         const tituloTitular = document.createElement("p")
         tituloTitular.classList.add(
             "textoCentrado",
             "negrita"
         )
-        contenedorTitular.appendChild(tituloTitular)
+       // contenedorTitular.appendChild(tituloTitular)
 
         const infoTitular = document.createElement("p")
         infoTitular.classList.add(
-            "padding6",
             "textoCentrado"
         )
         infoTitular.textContent = "Indiquenos por favor sus datos, para ponernos en contacto con usted y comunicarle la disponibilidad de las fechas."
-        contenedorTitular.appendChild(infoTitular)
+      //  contenedorTitular.appendChild(infoTitular)
 
         const tituloTitularInfo = document.createElement("p")
         tituloTitularInfo.textContent = "Nombre completo del titular de la reserva"
         tituloTitularInfo.classList.add(
-            "paddinHorizontal6"
+            "paddingLateral20"
         )
         contenedorTitular.appendChild(tituloTitularInfo)
 
@@ -360,7 +395,7 @@ casaVitini.view = {
         const tituloPasaporteInfo = document.createElement("p")
         tituloPasaporteInfo.textContent = "Pasaporte o documento nacional de identificación del titular de la reserva"
         tituloPasaporteInfo.classList.add(
-            "paddinHorizontal6"
+            "paddingLateral20"
         )
         //contenedorTitular.appendChild(tituloPasaporteInfo)
 
@@ -377,7 +412,7 @@ casaVitini.view = {
         const tituloTelefonoInfo = document.createElement("p")
         tituloTelefonoInfo.textContent = "Telefono del titular de la reserva"
         tituloTelefonoInfo.classList.add(
-            "paddinHorizontal6"
+            "paddingLateral20"
         )
         contenedorTitular.appendChild(tituloTelefonoInfo)
 
@@ -410,7 +445,7 @@ casaVitini.view = {
         const tituloMailInfo = document.createElement("p")
         tituloMailInfo.textContent = "Correo electrónico titular de la reserva"
         tituloMailInfo.classList.add(
-            "paddinHorizontal6"
+            "paddingLateral20"
         )
         contenedorTitular.appendChild(tituloMailInfo)
 
@@ -472,12 +507,6 @@ casaVitini.view = {
         //infoPreConfirmar.textContent = "Para continuar con el proceso de reserva, haz clic en el botón de abajo. Una vez verifiquemos las fechas solicitadas. Nos pondremos en contacto con usted, por mail o por teléfono para comunicarle el estado de su reserva. Posteriormente, abriremos un plazo de 48 horas para queda realizar el depósito. Si pasado este plazo no se ha realizado el depósito no podemos garantizar su reserva. Si tiene algún problema o duda, póngase en contacto con nosotros."
         contenedor.appendChild(infoPreConfirmar)
 
-        const infoAceptacion = document.createElement("p")
-        infoAceptacion.classList.add(
-            "padding14"
-        )
-        infoAceptacion.textContent = "Preconfirmar esta reserva implica la aceptación de nuestras políticas de privacidad y el consentimiento para su aplicación, así como nuestras políticas de cancelación de la reserva. Por favor, lea detenidamente toda la información sobre nuestras políticas de privacidad, el uso de cookies y las condiciones de uso haciendo clic aquí."
-        contenedor.appendChild(infoAceptacion)
 
         const portilicasCancelacion = document.createElement("details")
         portilicasCancelacion.classList.add(
@@ -511,6 +540,72 @@ casaVitini.view = {
         portilicasPrivacida.textContent = "Ver políticas de privacidad, condiciones de uso y gestión de cookies. (Se abrirá otra ventana del navegador.)"
         contenedor.appendChild(portilicasPrivacida)
 
+
+
+        const infoAceptacion = document.createElement("p")
+        infoAceptacion.classList.add("padding14")
+        infoAceptacion.textContent = "Preconfirmar esta reserva implica la aceptación de nuestras políticas de privacidad, politicas de cancelación"
+        contenedor.appendChild(infoAceptacion)
+
+        // const infoAdvertencia = document.createElement("p")
+        // infoAdvertencia.classList.add("padding14")
+        // infoAdvertencia.textContent = "Para realizar reserva se requier un deposito del 50% que tendra que ser abonado a traves de: un desposito del 20% para reservas de 20 dias o mas y 50% para reservas de menos de 20 dias. Metodos de pago: Reservas nacionales:  Transferencia bancarias/efectivo. Reservas internacionales: Transferencia bancaria (25$ de comision por transferencia), Western Union"
+        // contenedor.appendChild(infoAdvertencia)
+
+        const containerMetodosPago = document.createElement("div")
+        containerMetodosPago.classList.add("blackgroundWhite30O", "textoCentrado", "borderRadius20", "padding14", "noSelecionable", "retonDefault")
+        contenedor.appendChild(containerMetodosPago)
+
+        const tituloCMD = document.createElement("p")
+        tituloCMD.classList.add("negrita")
+        tituloCMD.textContent = "Métodos de pago"
+        containerMetodosPago.appendChild(tituloCMD)
+
+
+        const descripcionCMD = document.createElement("p")
+        descripcionCMD.classList.add("padding14")
+        descripcionCMD.textContent = "Para realizar la reserva se requiere un depósito que será del 50% de 15 días o menos o del 20% para reservas de 15 días o más."
+        containerMetodosPago.appendChild(descripcionCMD)
+
+
+        const containerReservasTipo = document.createElement("div")
+        containerReservasTipo.classList.add("containerReservasTipo")
+        containerMetodosPago.appendChild(containerReservasTipo)
+
+
+        const containerReservaNacional = document.createElement("div")
+        containerReservaNacional.classList.add("flexVertical", "borderRadius14", "padding14", "blackgroundWhite30O")
+        containerReservasTipo.appendChild(containerReservaNacional)
+
+
+        const tituloCRN = document.createElement("p")
+        tituloCRN.classList.add("negrita")
+        tituloCRN.textContent = "Reservas nacionales"
+        containerReservaNacional.appendChild(tituloCRN)
+
+
+        const descripcionCRN = document.createElement("p")
+        descripcionCRN.classList.add()
+        descripcionCRN.textContent = "Transferencia bancaria/efectivo."
+        containerReservaNacional.appendChild(descripcionCRN)
+
+
+
+        const containerReservaInterNacional = document.createElement("div")
+        containerReservaInterNacional.classList.add("flexVertical", "borderRadius14", "padding14", "blackgroundWhite30O")
+        containerReservasTipo.appendChild(containerReservaInterNacional)
+
+        const tituloCRI = document.createElement("p")
+        tituloCRI.classList.add("negrita")
+        tituloCRI.textContent = "Reservas internacionales"
+        containerReservaInterNacional.appendChild(tituloCRI)
+
+        const descripcionCRI = document.createElement("p")
+        descripcionCRI.classList.add()
+        descripcionCRI.textContent = "Transferencia bancaria (25$ de comisión por transferencia), Western Union"
+        containerReservaInterNacional.appendChild(descripcionCRI)
+
+
         const botonConfirmar = document.createElement("div")
         botonConfirmar.classList.add(
             "blackgroundWhite30O",
@@ -520,7 +615,8 @@ casaVitini.view = {
             "comportamientoBoton",
             "negrita",
             "noSelecionable",
-            "retonDefault"
+            "retonDefault",
+            "botonPreConfirmar"
         )
         botonConfirmar.setAttribute("boton", "preConfirmar")
         botonConfirmar.textContent = "Enviar mensaje de solicitud de la fechas para comprobar la disponibilidad"
@@ -541,7 +637,7 @@ casaVitini.view = {
 
         const spinnerSimple = casaVitini.ui.componentes.spinnerSimple()
         uiDestinno.appendChild(spinnerSimple)
-
+        
         const respuestaServidor = await casaVitini.shell.servidor({
             zona: "plaza/reservas/apartamentosDisponiblesPublico",
             fechaEntrada: fechaEntrada,
@@ -551,7 +647,8 @@ casaVitini.view = {
         if (!document.querySelector(`[instanciaUID="${instanciaUID}"]`)) {
             return
         }
-
+        const contenedorHostinsTitularSel = document.querySelector("[com=containerHostinTitular]")
+        contenedorHostinsTitularSel.style.alignItems = "start"
         if (respuestaServidor?.error) {
             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
         }
@@ -563,7 +660,7 @@ casaVitini.view = {
             uiDestinno.innerHTML = null
             const contenedorUI = document.createElement("div")
             contenedorUI.classList.add(
-                "gridHorizontal2C_resp",
+                "flexVertical",
                 "gap14",
             )
             uiDestinno.appendChild(contenedorUI)
@@ -1345,7 +1442,7 @@ casaVitini.view = {
                     "padding6",
                     "textoCentrado"
                 )
-                info.textContent = "Si tienes un código de descuento, insértalo aquí para agregar el descuento a tu reserva. Una vez comprobado el código, confirma tu reserva."
+                info.textContent = "Inserta tu código de descuento"
                 contenedor.appendChild(info)
 
                 const campoUI = document.createElement("input")
@@ -1848,7 +1945,7 @@ casaVitini.view = {
                 botonAgregarCampoCodigoDescuento.classList.add(
                     "botonV1"
                 )
-                botonAgregarCampoCodigoDescuento.textContent = "Agregar codigo de descuento"
+                botonAgregarCampoCodigoDescuento.textContent = "Agregar código de descuento"
                 botonAgregarCampoCodigoDescuento.addEventListener("click", () => {
 
                     const contenedorCodigosDecuentos = document.querySelector("[contenedor=codigosDescuento]")
@@ -1925,7 +2022,7 @@ casaVitini.view = {
                     "padding10",
                     "borderRadius16",
                 )
-                campoCodigo.placeholder = "Inserta un codigo de descuento para comprobar"
+                campoCodigo.placeholder = "Inserta un código de descuento para comprobar"
                 campoCodigo.value = campoData
                 contenedor.appendChild(campoCodigo)
 

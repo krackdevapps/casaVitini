@@ -29,7 +29,7 @@ casaVitini.view = {
         const transaccion = casaVitini.view.__sharedMethods__.constructorObjeto()
         transaccion.zona = "administracion/servicios/crearServicio"
 
-
+        console.log("transaccion", transaccion)
         const respuestaServidor = await casaVitini.shell.servidor(transaccion)
         const pantallaDeCargaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
         if (!pantallaDeCargaRenderizada) {

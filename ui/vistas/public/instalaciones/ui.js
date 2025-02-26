@@ -4,8 +4,6 @@ casaVitini.view = {
         main.setAttribute("zonaCSS", "instalaciones")
         const instanciaUID = main.getAttribute("instanciaUID")
 
-
-        document.body.style.backgroundColor = "rgb(255 188 0 / 0.14)"
         main.style.paddingTop = "10px"
         main.style.maxWidth = "100%"
 
@@ -22,6 +20,9 @@ casaVitini.view = {
         return this.obtenerApartmentosIDV({
             instanciaUID
         })
+
+
+
     },
     irAApartamentos: (e) => {
         e.preventDefault()
@@ -277,7 +278,7 @@ casaVitini.view = {
             "ratonDefault",
             "noSelecionable",
             "fontForImg"
-            
+
         )
         titulo.style.color = "#8D6E63"
         titulo.setAttribute("componenete", "tituloTextoApartamentos")

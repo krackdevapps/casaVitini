@@ -124,6 +124,31 @@ export const validarServicio = async (data) => {
                             }
 
                         }).messages(commonMessages),
+                        interruptorCantidad: Joi.string().allow('').required().custom((value, helpers) => {
+                            try {
+                                const estadoIDV = validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: "El campo del interruptorCantidad solo espera un numero entero",
+                                    filtro: "strictoIDV",
+                                    sePermiteVacio: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                })
+                                const estados = [
+                                    "activado",
+                                    "desactivado"
+                                ]
+                                if (!estados.includes(estadoIDV)) {
+                                    throw new Error( "solo espera 'activado' o 'desactivado'")
+                                }
+                                return estadoIDV
+
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+
+                        }).messages(commonMessages),
                     }).required()
                 ).required()
             }).required()

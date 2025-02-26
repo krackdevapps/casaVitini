@@ -2,7 +2,6 @@ casaVitini.view = {
     start: async function () {
         const reservaConfirmada = JSON.parse(localStorage.getItem("reservaConfirmada"))
         if (reservaConfirmada) {
-            document.body.style.background = "rgb(214 192 157)"
             const main = document.querySelector("main")
             main.setAttribute("zonaCSS", "/alojamiento/reserva_confirmada")
 
@@ -217,12 +216,11 @@ casaVitini.view = {
                 titulo.textContent = "Desglose de la reserva"
                 contenedor.appendChild(titulo)
 
-
                 const testInfo = document.createElement("div")
                 testInfo.classList.add(
                     "textoJustificado", "padding10"
                 )
-                testInfo.textContent = "Aquí tiene desglose de importa de la reserva, detallando los cargos, impuestos y conceptos asociados."
+                testInfo.textContent = "Aquí tiene desglose del importe de la reserva, detallando los cargos, impuestos y conceptos asociados."
                 contenedor.appendChild(testInfo)
 
                 const botonCerrar = document.createElement("div")
@@ -259,34 +257,33 @@ casaVitini.view = {
             const marcoElasticoRelatico = document.createElement("div")
             marcoElasticoRelatico.classList.add("marcoElasticoRelativo")
             const marcoElastico = document.createElement("div")
-            marcoElastico.classList.add("marcoElastico")
+            marcoElastico.classList.add("marcoElastico", "padding16")
             marcoElastico.style.alignItems = "stretch"
-            marcoElastico.style.gap = "4px"
             const titulo = document.createElement("div")
-            titulo.classList.add("tituloGris")
+            titulo.classList.add("negrita", "textoCentrado")
             titulo.textContent = "Nínguna reserva que mostrar"
             marcoElastico.appendChild(titulo)
 
             const contenedorBanner = document.createElement("a")
-            contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_bannerV2")
+            contenedorBanner.classList.add("padding18")
             contenedorBanner.textContent = "Esta página muestra el resumen de tu reserva confirmada, pero no encuentra ninguna reserva guardada en la caché local de tu navegador. Cuando haces una reserva, los datos de la reserva, luego de guardarse en el servidor de Casa Vitini, se guarda una copia local en tu navegador. Esto se hace para la comodidad del usuario. Para que pueda acceder al resumen de su reserva confirmada cómodamente. Pero si el usuario borra la caché de navegador o esta se borra por la configuración del navegador, ya no se puede acceder a la reserva porque ya no existe en la caché del navegador. Si quieres volver a ver el resumen de tu reserva, tienes varias opciones. La más cómoda e inmediata es registrar una nueva cuenta en Mi Casa para obtener tu VitiniID y poder acceder a tu cuenta de usuario donde podrá ver tus reservas. Otra opción es ponerte en contacto con nosotros. Para ellos ves al apartado Contacto, donde podrás obtener las distintas formas de contacto con nosotros y te responderemos lo antes posible. Ten en cuenta que, debido a las zonas horarias, si cuando nos llamas no estamos disponibles por la diferencia horaria, puedes enviarnos un correo o un mensaje instantáneo. La primera opción, registrar una cuenta, es una opción instantánea y es la que te recomendamos."
             marcoElastico.appendChild(contenedorBanner)
             const botonIniciarReserva = document.createElement("a")
-            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
-            botonIrARegistrarse.textContent = "Iniciar una nueva reserva"
-            botonIrARegistrarse.setAttribute("href", "/alojamiento")
-            botonIrARegistrarse.setAttribute("vista", "/alojamiento")
-            botonIrARegistrarse.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            botonIniciarReserva.classList.add("botonV1BlancoIzquierda")
+            botonIniciarReserva.textContent = "Iniciar una nueva reserva"
+            botonIniciarReserva.setAttribute("href", "/alojamiento")
+            botonIniciarReserva.setAttribute("vista", "/alojamiento")
+            botonIniciarReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIniciarReserva)
             const botonIrARegistrarse = document.createElement("a")
-            botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
+            botonIrARegistrarse.classList.add("botonV1BlancoIzquierda")
             botonIrARegistrarse.textContent = "Ir a crear una cuenta a MiCasa"
             botonIrARegistrarse.setAttribute("href", "/micasa/crear_nueva_cuenta")
             botonIrARegistrarse.setAttribute("vista", "/micasa/crear_nueva_cuenta")
             botonIrARegistrarse.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIrARegistrarse)
             const botonInciarSession = document.createElement("a")
-            botonInciarSession.classList.add("plaza_reservas_reservaConfirmada_banner")
+            botonInciarSession.classList.add("botonV1BlancoIzquierda")
             botonInciarSession.textContent = "Iniciar session con mi VitiniID en MiCasa"
             botonInciarSession.setAttribute("href", "/micasa")
             botonInciarSession.setAttribute("vista", "/micasa")

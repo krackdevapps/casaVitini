@@ -23,7 +23,7 @@ export const crearServicio = async (entrada) => {
         await validarServicio({
             servicio: servicio,
         })
-
+        
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
             servicio.testingVI = testingVI

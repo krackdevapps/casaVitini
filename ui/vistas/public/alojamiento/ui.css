@@ -1,6 +1,7 @@
 
-
-
+body {
+    background-color: rgb(255 188 0 / 0.05);
+}
 [zonaCSS="/alojamiento"] .plaza_alojamiento_resumenReserva_bloqueHabitacion {
     display: flex;
     flex-direction: column;
@@ -16,8 +17,8 @@
     border-radius: 10px;
     justify-content: center;
     align-items: center;
-
 }
+
 [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoFechaCompartido {
     display: flex;
     flex-direction: column;
@@ -51,7 +52,6 @@
     padding: 4px;
     border-radius: 8px;
 }
-
 
 @media (max-width: 720px) {
     [zonaCSS="/alojamiento"] .plaza_alojamiento_marcoFechaCompartido {

@@ -1,7 +1,6 @@
 casaVitini.view = {
     start: async function () {
 
-        document.body.style.backgroundColor = "rgb(214, 192, 157)"
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
 

@@ -338,6 +338,10 @@ const casaVitini = {
                     href: "/instalaciones",
                     nombre: "Instalaciones",
                     zona: "instalaciones"
+                },                 {
+                    href: "/productos_y_servicios",
+                    nombre: "Productos y servicios",
+                    zona: "productos_y_servicios"
                 }, {
                     href: "/contacto",
                     nombre: "Contacto",

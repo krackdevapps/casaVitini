@@ -374,10 +374,14 @@ casaVitini.view = {
                 opcionesGrupo.forEach(og => {
                     const nombreOpcion = og.nombreOpcion
                     const precioOpcion = og.precioOpcion
+                    const interruptorCantidad = og.interruptorCantidad
+
 
                     const ogUI = componentesUI.opcionDelGrupo()
                     ogUI.querySelector("[campo=nombreOpcion]").value = nombreOpcion
                     ogUI.querySelector("[campo=precioOpcion]").value = precioOpcion
+                    ogUI.querySelector("[campo=interruptorCantidad]").value = interruptorCantidad
+
 
                     gpUI.querySelector("[componente=sinInfo]")?.remove()
                     gpUI.querySelector("[contenedor=opciones]").appendChild(ogUI)

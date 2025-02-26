@@ -80,3 +80,9 @@
     user-select: none;
     -webkit-user-select: none;
 }
+
+
+.contenedorGlobal {
+    display: flex;
+    flex-direction: row;
+}

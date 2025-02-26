@@ -16,6 +16,8 @@ export const actualizarImagen = async (entrada) => {
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
         })
+
+        
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",
