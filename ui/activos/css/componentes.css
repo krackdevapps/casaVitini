@@ -1731,13 +1731,13 @@ summary:hover {
     border-radius: 10px;
 }
 
-.esferaSeleccionable {
+/* .esferaSeleccionable {
     margin: 5px;
     height: 24px;
     width: 24px;
     border: 2px solid #373737;
     border-radius: 100%;
-}
+} */
 
 .indicadorDeSeleccion {
     margin: 3px;

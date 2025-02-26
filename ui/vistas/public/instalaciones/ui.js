@@ -147,6 +147,10 @@ casaVitini.view = {
         const imagenes = rS.imagenes
         imagenes.sort((a, b) => a.posicion - b.posicion);
 
+        if (  imagenes.length === 0) {
+            document.querySelector(`[instanciaUID="${instanciaUID}"] [contenedor=gridImagenes]`)?.remove()
+        }
+
         imagenes.forEach(imagen => {
             const imagenUID = imagen?.imagenUID
             const posicion = imagen?.posicion

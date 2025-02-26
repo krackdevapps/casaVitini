@@ -9,9 +9,6 @@ export const validadorComportamientosDesdeCalendario = async (data) => {
         const entrada = data.entrada
         const conf = data.conf
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
-        const sinApartamentosMessage = {
-            'array.includesRequiredUnknowns': '{{#label}} debe contener al menos 1 valor requerido111'
-        }
 
         const schema = Joi.object({
             fechasSel: Joi.array().items(

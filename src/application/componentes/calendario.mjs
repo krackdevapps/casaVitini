@@ -7,20 +7,13 @@ import Joi from "joi";
 
 export const calendario = async (entrada) => {
     try {
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const schema = Joi.object({
-            tipo: Joi.string().messages({
-                'string.base': '{{#label}} debe ser una cadena'
-            }),
-            ano: Joi.number().messages({
-                'number.base': '{{#label}} debe ser un numero'
-            }),
-            mes: Joi.number().messages({
-                'number.base': '{{#label}} debe ser un numero'
-            }),
-        }).required().messages({
-            'any.required': '{{#label}} es una llave obligatoria'
-        })
+            tipo: Joi.string().messages(commonMessages),
+            ano: Joi.number().messages(commonMessages),
+            mes: Joi.number().messages(commonMessages),
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: schema,

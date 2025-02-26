@@ -5,6 +5,8 @@ import { controlEstructuraPorJoi } from "../../validadores/controlEstructuraPorJ
 export const validarComportamiento = async (comportamiento) => {
     try {
 
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
+
         const schema = Joi.object({
             comportamientoUID: Joi.optional(),
             nombreComportamiento: Joi.required(),
@@ -22,17 +24,9 @@ export const validarComportamiento = async (comportamiento) => {
                     apartamentoIDV: Joi.required(),
                     simboloIDV: Joi.required(),
                     cantidad: Joi.required(),
-                }).messages({
-                    'object.base': '{{#label}} debe ser un objeto'
                 }))
-            }).required().messages({
-                'array.base': '{{#label}} debe ser un array'
-            }),
-        }).required().messages({
-            'any.required': '{{#label}} es una llave obligatoria',
-            'string.base': '{{#label}} debe de ser una cadena'
-
-        })
+            }).required(),
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: schema,

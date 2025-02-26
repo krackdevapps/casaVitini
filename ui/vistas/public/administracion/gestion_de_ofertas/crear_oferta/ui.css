@@ -38,6 +38,56 @@
     text-align: center;
 }
 
+
+.crearOfertaTituloTipoOferta {
+    margin: 0px;
+    font-weight: bold;
+}
+
+.opcionTipoOFerta {
+    background: #ffffff8f;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 0px;
+    cursor: default;
+    user-select: none;
+    transition: background 250ms linear;
+    -webkit-user-select: none;
+}
+
+.contenedorBotonesGlobal {
+    display: flex;
+    flex-direction: row;
+}
+
+.contenedorCondicion {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #ffffff54;
+    padding: 6px;
+    border-radius: 16px;
+}
+
+.crearOfertaContenedorHorizontalTipoOfertas {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+}
+
+@media (max-width: 720px) {
+    .crearOfertaContenedorHorizontalTipoOfertas {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    }
+}
+
+
 .administracion_ofertas_crearOfertas_contenedorFecha {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -160,8 +210,9 @@
 }
 
 .estadoInicialInvisible {
-    display: none;
+    display: none !important;
 }
+
 .crearOFertaBotonAnadirApartamento {
     margin: 0px;
     padding: 10px;
@@ -176,7 +227,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
- .crearOFertaBotonAnadirApartamento:hover {
+.crearOFertaBotonAnadirApartamento:hover {
     background: rgba(0, 0, 0, 0.3);
     color: white;
 }
@@ -204,6 +255,7 @@
     margin: 0px;
     text-align: center;
 }
+
 [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaApartamentoTItulo {
     font-weight: bold;
     margin: 0px;

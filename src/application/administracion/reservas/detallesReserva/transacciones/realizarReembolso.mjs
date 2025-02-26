@@ -15,6 +15,7 @@ export const realizarReembolso = async (entrada, salida) => {
         const IDX = new VitiniIDX(session, salida)
         IDX.administradores()
         IDX.empleados()
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
@@ -52,17 +53,13 @@ export const realizarReembolso = async (entrada, salida) => {
         })
 
         const schema = Joi.object({
-            reservaUID: Joi.required(),
-            cantidad: Joi.string(),
-            pagoUID: Joi.string(),
-            plataformaDePagoEntrada: Joi.string(),
-            palabra: Joi.string().optional(),
-            tipoReembolso: Joi.string()
-        }).required().messages({
-            'any.required': '{{#label}} es una llave obligatoria',
-            'string.base': '{{#label}} debe de ser una cadena'
-
-        })
+            reservaUID: Joi.required().messages(commonMessages),
+            cantidad: Joi.string().messages(commonMessages),
+            pagoUID: Joi.string().messages(commonMessages),
+            plataformaDePagoEntrada: Joi.string().messages(commonMessages),
+            palabra: Joi.string().optional().messages(commonMessages),
+            tipoReembolso: Joi.string().messages(commonMessages)
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: schema,

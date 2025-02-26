@@ -98,7 +98,7 @@
 }
 
 [zonaCSS="administracion/ofertas"] .ofertaUITituloOferta {
-    padding: 12px;
+    padding: 6px;
     margin: 0px;
 }
 
@@ -361,7 +361,7 @@
     font-weight: bold;
 }
 
-[zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaTituloTipoOferta {
+.crearOfertaTituloTipoOferta {
     margin: 0px;
     font-weight: bold;
 }
@@ -500,7 +500,7 @@
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .estadoInicialInvisible {
-    display: none;
+    display: none !important;
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .editarOfertaSoloLecturaUI {

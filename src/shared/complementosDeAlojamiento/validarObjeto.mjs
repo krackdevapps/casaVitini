@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../validadores/validadoresCompartidos.mj
 
 export const validarObjeto = async (data) => {
     try {
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const schema = Joi.object({
             complementoUID: Joi.string().optional(),
@@ -12,10 +13,7 @@ export const validarObjeto = async (data) => {
             definicion: Joi.string().allow(''),
             tipoPrecio: Joi.string().required(),
             precio: Joi.string().required(),
-        }).required().messages({
-            'any.required': '{{#label}} es una llave obligatoria',
-            'string.empty': '{{#label}} no puede estar vacia'
-        })
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: schema,

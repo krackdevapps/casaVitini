@@ -8,6 +8,9 @@ import { validarServiciosPubicos } from "../../shared/servicios/validarServicios
 import { limpiarContenedorFinacieroInformacionPrivada } from "../../shared/miCasa/misReservas/limpiarContenedorFinancieroInformacionPrivada.mjs"
 import { validarComplementosAlojamiento } from "../../shared/reservas/nuevaReserva/reservaPulica/validarComplementosAlojamiento.mjs"
 import { obtenerComplementoPorComplementoUIDArray } from "../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUIDArray.mjs"
+import { validadorComplementosDeAlojamiento } from "../plaza/reservas/validadores/validadorComplementosDeAlojamiento.mjs"
+import { validadorServicios } from "../plaza/reservas/validadores/validadorServicios.mjs"
+import { validadorDescuentos } from "../plaza/reservas/validadores/validadosDescuentos.mjs"
 
 export const precioReservaPublica = async (entrada) => {
     try {
@@ -42,89 +45,34 @@ export const precioReservaPublica = async (entrada) => {
         const servicios = reservaPublica?.servicios || []
         const complementosAlojamiento = reservaPublica?.complementosAlojamiento || []
 
-        //await validarComplementosAlojamiento(reservaPublica)
+        // await validarComplementosAlojamiento(reservaPublica)
 
         const ok = {
-            ok: "Precio actualizado en base a componentes solicitados"
+            ok: "Precio actualizado en base a componentes solicitados",
+            control: {}
         }
-
-        const constructorInformacionObsoleta = (data) => {
-            if (!data.hasOwnProperty("control")) {
-                data.control = {}
-            }
-        }
-
-        const complementosDeALojamientosUIDSolicitados = complementosAlojamiento.map(c => { return c.complementoUID })
         const complementosDeAlojamientoSiRecononcidos = []
-        if (complementosDeALojamientosUIDSolicitados.length > 0) {
-            const control = await obtenerComplementoPorComplementoUIDArray({
-                complementoUIDArray: complementosDeALojamientosUIDSolicitados,
-                estadoIDV: "activado"
-            })
-            constructorInformacionObsoleta(ok)
-
-            const complementosSiReonocidosSoloUID = control.map(c => { return c.complementoUID })
-
-            ok.control.complementosAlojamiento = {
-                complementosSiReconocidos: control,
-                complementosNoReconocidos: complementosAlojamiento.filter(c => !complementosSiReonocidosSoloUID.includes(c.complementoUID))
-            }
-            complementosDeAlojamientoSiRecononcidos.push(...complementosSiReonocidosSoloUID)
-        }
+        await validadorComplementosDeAlojamiento({
+            complementosAlojamiento,
+            schemaControl: ok.control,
+            complementosDeAlojamientoSiRecononcidos
+        })
 
         const serviciosSiReconocidos = []
-        if (servicios.length > 0) {
-            const controlServicios = await validarServiciosPubicos(servicios)
-            constructorInformacionObsoleta(ok)
-            ok.control.servicios = controlServicios
-            serviciosSiReconocidos.push(...controlServicios.serviciosSiReconocidos)
-        }
-
-        const codigosDescuentosSiReconocidos = []
-        if (contenedorCodigosDescuento.length > 0) {
-            const controlCodigosDescuentos = await validarDescuentosPorCodigo({
-                zonasArray: ["global", "publica"],
-                contenedorCodigosDescuento: contenedorCodigosDescuento,
-                fechaEntrada: fechaEntrada,
-                fechaSalida: fechaSalida,
-                apartamentosArray: apartamentosIDV
-            })
-            constructorInformacionObsoleta(ok)
-            codigosDescuentosSiReconocidos.push(...controlCodigosDescuentos.codigosDescuentosSiReconocidos)
-
-            const cSiReconocidos = controlCodigosDescuentos.codigosDescuentosSiReconocidos
-            cSiReconocidos.forEach((contenedor) => {
-                const codigosUID = contenedor.codigosUID
-                codigosUID.forEach((codigo, i) => {
-                    const buffer = Buffer.from(codigo, 'base64');
-                    codigo = buffer.toString('utf-8');
-                    codigosUID[i] = buffer.toString('utf-8');
-                })
-            })
-            const cNoReconocidos = controlCodigosDescuentos.codigosDescuentosNoReconocidos
-
-
-            cNoReconocidos.forEach((contenedor) => {
-                const codigosUID = contenedor.codigosUID
-
-                codigosUID.forEach((codigo, i) => {
-                    const buffer = Buffer.from(codigo, 'base64');
-                    codigo = buffer.toString('utf-8');
-                    codigosUID[i] = buffer.toString('utf-8');
-                })
-            })
-
-            ok.control.codigosDescuentos = controlCodigosDescuentos
-        }
+        await validadorServicios({
+            servicios,
+            schemaControl: ok.control,
+            serviciosSiReconocidos
+        })
 
         const soloCodigosBase64Descunetos = []
-        codigosDescuentosSiReconocidos.forEach((contenedor) => {
-            const grupoCodigos = contenedor.codigosUID
-            grupoCodigos.forEach((codigoUTF8) => {
-                const bufferFromUTF = Buffer.from(codigoUTF8, "utf8")
-                const codigoB64 = bufferFromUTF.toString("base64")
-                soloCodigosBase64Descunetos.push(codigoB64)
-            })
+        await validadorDescuentos({
+            contenedorCodigosDescuento,
+            schemaControl: ok.control,
+            soloCodigosBase64Descunetos,
+            fechaEntrada,
+            fechaSalida,
+            apartamentosIDV
         })
 
         const desgloseFinanciero = await procesador({

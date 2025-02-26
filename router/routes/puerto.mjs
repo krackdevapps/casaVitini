@@ -39,7 +39,6 @@ export const puerto = async (entrada, salida) => {
             if (typeof controllerSelected[nombreMetodo] === 'function') {
                 const respuesta = await controllerSelected[nombreMetodo](entrada, salida);
                 salida.json(respuesta)
-
             } else {
                 const error = "Dentro de esta zona no hay ninguna función."
                 throw new Error(error)

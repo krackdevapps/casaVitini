@@ -252,6 +252,7 @@ casaVitini.view = {
             const tituloContendor = document.createElement("div")
             tituloContendor.classList.add(
                 "negrita",
+     
 
             )
             tituloContendor.textContent = "Descuentos de la oferta"

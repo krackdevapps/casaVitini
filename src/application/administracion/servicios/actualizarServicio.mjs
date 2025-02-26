@@ -38,12 +38,12 @@ export const actualizarServicio = async (entrada) => {
             zonaIDV: entrada.body.zonaIDV,
             contenedor: entrada.body.contenedor
         };
-        await validarServicio({
+     const servicioValidado =  await validarServicio({
             servicio: servicioParaActualizar,
         })
-        servicioParaActualizar.servicioUID = servicioUID
+        servicioValidado.servicioUID = servicioUID
         await campoDeTransaccion("iniciar")
-        const servicioActualizado = await actualizarServicioPorServicioUID(servicioParaActualizar);
+        const servicioActualizado = await actualizarServicioPorServicioUID(servicioValidado);
         await campoDeTransaccion("confirmar")
 
         delete servicioActualizado.testingVI

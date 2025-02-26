@@ -1,7 +1,7 @@
 
-export const serviciosUI = {
-    serviciosUI: {
-        contenedor_gruposDeOpciones: function() {
+export const serviciosUI_grupoOpciones = {
+    serviciosUI_grupoOpciones: {
+        contenedor_gruposDeOpciones: function () {
             const contenedor = document.createElement("div")
             contenedor.setAttribute("area", "grupoOpciones")
             contenedor.classList.add(
@@ -10,7 +10,7 @@ export const serviciosUI = {
             )
             return contenedor
         },
-        grupoDeOpciones:function()  {
+        grupoDeOpciones: function () {
             const c = document.createElement("details")
             c.setAttribute("componente", "grupo")
             c.classList.add(
@@ -42,9 +42,9 @@ export const serviciosUI = {
             // c.appendChild(opcionesDelContenedor)
             return c
         },
-        opcionUI: function()  {
+        opcionUI: function () {
             const contenedorGlobal = document.createElement("div")
-            contenedorGlobal.classList.add("contenedorGlobal", "contenedorGlobal_hover", "padding4")
+            contenedorGlobal.classList.add( "contenedorGlobal_hover", "padding4" , "filaOpcionServicio")
             contenedorGlobal.setAttribute("selector", "opcion")
             contenedorGlobal.setAttribute("opcionIDV", "opcionIDV_destino")
             //  contenedorGlobal.addEventListener("click", (e) => {
@@ -59,23 +59,45 @@ export const serviciosUI = {
             // contenedorSelecioando.querySelector("[componente=indicadorSelecion]").style.background = "blue"
             //  })
             const esferaSeleccionable = document.createElement("div")
-            esferaSeleccionable.classList.add(
-                "esferaSeleccionable"
-            )
+            esferaSeleccionable.classList.add("esferaSeleccionable")
             contenedorGlobal.appendChild(esferaSeleccionable)
             const indicadorDeSeleccion = document.createElement("div")
             indicadorDeSeleccion.setAttribute("componente", "indicadorSelecion")
-            indicadorDeSeleccion.classList.add(
-                "indicadorDeSeleccion"
-            )
+            indicadorDeSeleccion.classList.add("indicadorDeSeleccion")
             esferaSeleccionable.appendChild(indicadorDeSeleccion)
             const tituloConf = document.createElement("p")
             tituloConf.setAttribute("data", "opcionUI")
-            tituloConf.classList.add(
-                "padding6",
-            )
+           // tituloConf.classList.add("padding6")
             tituloConf.textContent = "Nombre de la opcion"
             contenedorGlobal.appendChild(tituloConf)
+
+
+            const contenedorCantida = document.createElement("div")
+            contenedorCantida.classList.add("contenedorCantidad")
+            contenedorCantida.setAttribute("com", "contenedorCantidad")
+            contenedorGlobal.appendChild(contenedorCantida)
+
+
+
+            const infoCantida = document.createElement("p")
+            infoCantida.textContent = "Cantidad"
+            contenedorCantida.appendChild(infoCantida)
+
+            const campoCantidad = document.createElement("input")
+            campoCantidad.classList.add("campoCantidad")
+            campoCantidad.setAttribute("campo", "cantidad")
+            campoCantidad.addEventListener("click", (e) => {
+                e.preventDefault()
+                e.stopImmediatePropagation()
+                e.stopPropagation()
+            })
+            campoCantidad.type = "number"
+            campoCantidad.min = "1"
+            campoCantidad.max = "1000"
+            campoCantidad.value = "1"
+            contenedorCantida.appendChild(campoCantidad)
+
+
             return contenedorGlobal
         },
         controladorSeleccion: async function (e) {
@@ -102,7 +124,7 @@ export const serviciosUI = {
             const areaGrupoOpciones = e.target.closest("[area=grupoOpciones]")
             await this.controladorEstadoGrupos(areaGrupoOpciones)
         },
-        controladorEstadoGrupos: async function(areaGrupoOpciones)  {
+        controladorEstadoGrupos: async function (areaGrupoOpciones) {
             const gruposDelServicio = areaGrupoOpciones.querySelectorAll("[componente=grupo]")
             let interruptorRevisarGrupos = null
             const servicioUI = areaGrupoOpciones.closest("[servicioUID]")

@@ -1,6 +1,9 @@
 body {
     background-color: rgb(255 188 0 / 0.50);
 }
+main {
+    align-items: stretch;
+}
 
 [zonaCSS="/alojamiento/resumen"] .bloqueSeccion {
     margin: 10px;
@@ -34,6 +37,33 @@ body {
     text-align: center;
     border-radius: 8px;
 }
+.contenedorCantidad {
+    display: grid;
+    grid-template-columns: min-content min-content;
+    gap: 6px;
+    align-items: center;
+    height: 100%;
+    display: none;
+}
+.campoCantidad {
+    width: 80px;
+    border-radius: 6px;
+    height: 100%;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 6px !important;
+    padding-right: 6px  !important;
+
+
+}
+.filaOpcionServicio {
+    display: grid;
+    grid-template-columns: min-content auto min-content !important;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+}
+
 
 
 [zonaCSS="/alojamiento/resumen"] .diaTipo {

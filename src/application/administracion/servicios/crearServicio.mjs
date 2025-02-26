@@ -20,17 +20,17 @@ export const crearServicio = async (entrada) => {
             contenedor: entrada.body.contenedor
         };
 
-        await validarServicio({
+        const servicioValidado = await validarServicio({
             servicio: servicio,
         })
-        
+
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
-            servicio.testingVI = testingVI
+            servicioValidado.testingVI = testingVI
         }
 
-        servicio.estadoIDV = "desactivado"
-        const nuevoServicio = await insertarServicio(servicio);
+        servicioValidado.estadoIDV = "desactivado"
+        const nuevoServicio = await insertarServicio(servicioValidado);
         if (nuevoServicio) {
             const ok = {
                 ok: "Se ha añadido correctamente el servicio",

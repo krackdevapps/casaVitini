@@ -156,8 +156,8 @@ export const validarObjetoReservaPublica = async (data) => {
                                 return helpers.message(mensajeError);
                             }
                         }).messages(commonMessages),  // Claves dinámicas que sigan el patrón "grupo0", "grupo1", "grupo2", etc.
-                    Joi.array().items(
-                        Joi.string().custom((value, helpers) => {
+                    Joi.array().items({
+                        opcionIDV: Joi.string().custom((value, helpers) => {
                             try {
                                 return validadoresCompartidos.tipos.cadena({
                                     string: value,
@@ -171,7 +171,26 @@ export const validarObjetoReservaPublica = async (data) => {
                                 const mensajeError = `Error en ${path}: ${error.message}`;
                                 return helpers.message(mensajeError);
                             }
-                        }).messages(commonMessages)).required(),// Los valores deben ser arrays de objetos
+                        }).required().messages(commonMessages),
+                        cantidad: Joi.string().custom((value, helpers) => {
+                            try {
+                                return validadoresCompartidos.tipos.cadena({
+                                    string: value,
+                                    nombreCampo: "El identificador de opcionIDV",
+                                    filtro: "cadenaConNumerosEnteros",
+                                    sePermiteVacio: "no",
+                                    limpiezaEspaciosAlrededor: "si",
+                                    sePermitenNegativos: "no",
+                                    devuelveUnTipoNumber: "no"
+
+                                })
+                            } catch (error) {
+                                const path = helpers.state.path.join('.');
+                                const mensajeError = `Error en ${path}: ${error.message}`;
+                                return helpers.message(mensajeError);
+                            }
+                        }).messages(commonMessages),
+                    }).required(),// Los valores deben ser arrays de objetos
                 ).required().messages(commonMessages),
             })
         ).min(1)
@@ -405,7 +424,7 @@ export const validarObjetoReservaPublica = async (data) => {
             //         throw new Error(m)
             //     }
             //     grupoIDVDuplicados[grupoIDV] = true
-    
+
             // })
 
 

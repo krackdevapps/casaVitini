@@ -12,7 +12,7 @@ export const validarDataGlobalSimulacion = async (data) => {
         const esquemaBusqueda = Joi.object({
             simulacionUID: Joi.string().custom((value, helpers) => {
                 try {
-                    validadoresCompartidos.tipos.cadena({
+                   return  validadoresCompartidos.tipos.cadena({
                         string: value,
                         nombreCampo: "El simulacionUID",
                         filtro: "cadenaConNumerosEnteros",
@@ -81,16 +81,18 @@ export const validarDataGlobalSimulacion = async (data) => {
             }).optional().messages(commonMessages),
         }).required().messages(commonMessages)
 
-        controlEstructuraPorJoi({
+        const objectoValidado = controlEstructuraPorJoi({
             schema: esquemaBusqueda,
             objeto: data
         })
-        const simulacionUID = data.simulacionUID
+
+        
+        const simulacionUID = objectoValidado.simulacionUID
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
 
-        const fechaCreacion = data?.fechaCreacion || simulacion.fechaCreacion
-        const fechaEntrada = data?.fechaEntrada || simulacion.fechaEntrada
-        const fechaSalida = data?.fechaSalida || simulacion.fechaSalida
+        const fechaCreacion = objectoValidado?.fechaCreacion || simulacion.fechaCreacion
+        const fechaEntrada = objectoValidado?.fechaEntrada || simulacion.fechaEntrada
+        const fechaSalida = objectoValidado?.fechaSalida || simulacion.fechaSalida
         if (fechaEntrada && fechaSalida) {
             await validadoresCompartidos.fechas.validacionVectorial({
                 fechaEntrada: fechaEntrada,

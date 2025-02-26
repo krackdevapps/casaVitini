@@ -1,6 +1,7 @@
 import { DateTime } from "luxon"
 import { codigoZonaHoraria } from "../../../configuracion/codigoZonaHoraria.mjs"
 import { validadoresCompartidos } from "../../../validadores/validadoresCompartidos.mjs"
+import { utilidades } from "../../../utilidades.mjs"
 
 export const validarOpcionesDelServicio = async (data) => {
     try {
@@ -59,11 +60,46 @@ export const validarOpcionesDelServicio = async (data) => {
                 const m = `El servicio ${tituloPublico}, en las opciones de selección ${nombreGrupo}, solo se permite maximo una opcion seleccionada`
                 throw new Error(m)
             }
+
+
             const opcionesIDV = opcionesGrupo.map(o => o.opcionIDV);
-            const opcionesIDVNoReconocidos = grupoPorValidar[grupoIDV].filter(o => !opcionesIDV.includes(o));
+            // idv del servicio
+
+            const opcionesIDVNoReconocidos = grupoPorValidar[grupoIDV].filter(o => {
+                const oIDV = o.opcionIDV
+                return !opcionesIDV.includes(oIDV)
+            });
             if (opcionesIDVNoReconocidos.length > 0) {
-                const m = `El servicio ${tituloPublico}, en las opciones de selección ${nombreGrupo}, no se recononen los identificadores de opcionIDV: ${opcionesIDVNoReconocidos.join(" ")}`
+
+                const opcionesIDV = opcionesIDVNoReconocidos.map(o => o.opcionIDV)
+                const constructo = utilidades.constructorComasEY({
+                    array: opcionesIDV,
+                    articulo: ""
+                })
+                const m = `El servicio ${tituloPublico}, en las opciones de selección ${nombreGrupo}, no se recononen los identificadores de opcionIDV: ${constructo}`
                 throw new Error(m)
+            }
+
+
+            for (const o of opcionesGrupo) {
+                const estadoInterruptorCantidad = o.interruptorCantidad
+                const opcionIDV = o.opcionIDV
+                const nombreOpcion = o.nombreOpcion
+
+                const gpv = grupoPorValidar[grupoIDV].find(gPV => gPV.opcionIDV === opcionIDV)
+                if (!gpv) {
+                    continue
+                }
+
+                if (estadoInterruptorCantidad === "activado") {
+                    const controlCantidad = gpv?.cantidad || null
+                    if (controlCantidad === null) {
+                        const m = `El servicio ${tituloPublico}, en las opciones de selección ${nombreGrupo}, en la opcion ${nombreOpcion} (${opcionIDV}) se esperaba una llave cantidad definida`
+                        throw new Error(m)
+                    }
+                } else {
+                    gpv.cantidad = "1"
+                }
             }
         }
     } catch (error) {

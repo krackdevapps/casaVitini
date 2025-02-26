@@ -2,22 +2,40 @@ body {
     background-color: rgb(255 188 0 / 28%);
     height: 100vh;
 }
+
 main {
     height: 100vh;
     color: #503f39;
+    align-items: normal;
 }
 
+.textInicial {
+    padding-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 40px;
+    font-size: 11px;
+
+}
+.superContainerMenu {
+    display: flex;
+    max-width: 100%;
+    justify-content: center;
+    /* flex: 1; */
+}
 .superContainerTaxi {
     background-color: #faf3da;
     border-radius: 20px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    width:  700px;
+    width: 100%;
     gap: 20px;
-    
-}
 
+}
+.taxiServicio {
+    margin: 10px;
+}
 .tablaTaxi {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -32,11 +50,14 @@ main {
     font-size: 15px !important;
     border-radius: 14px;
 }
-.nombreDestino, .nombreDestino > * {
+
+.nombreDestino,
+.nombreDestino>* {
     font-size: 15px !important;
     font-weight: 550;
 
 }
+
 .precioDestino {
     display: flex;
     text-align: right;
@@ -58,9 +79,8 @@ main {
     background-color: wheat;
     border-radius: 20px;
 }
-.lavanderiaServicio {
 
-}
+.lavanderiaServicio {}
 
 .tourBoatFishin {
     background-color: aliceblue;
@@ -71,13 +91,20 @@ main {
 .containerTours {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    gap:20px
+    gap: 20px
 }
 
-.containerTours .containerItem {
-    background-color: white;
+@media (max-width: 1080px) {
+    .containerTours {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.containerItem {
+    background-color: #FBEED7;
+    box-shadow: 0 0 18px 8px rgba(0, 0, 0, 0.1);
     padding: 80px;
-    border-radius: 300px;
+    border-radius: 30px;
     height: 200px;
     width: 200px;
     display: flex;
@@ -88,8 +115,12 @@ main {
     color: black;
 }
 
-.containerTours .itemTour {
-
+@media (max-width: 1080px) {
+.containerItem {
+    height: 20vw;
+    width: 40vw;
+        padding: 0px;
+    }
 }
 
 .iconoShared {
@@ -100,8 +131,8 @@ main {
 
     transform: translateY(12px) translateX(-6px);
 }
-.iconotaxi2 {
-}
+
+
 .iconotaxi3 {
     transform: translateY(12px) translateX(6px);
 

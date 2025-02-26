@@ -40,8 +40,8 @@ export const insertarServicioEnReserva = async (entrada) => {
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
-        validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
-
+      const oSdS_validado =  validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
+         
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
@@ -70,10 +70,11 @@ export const insertarServicioEnReserva = async (entrada) => {
 
 
         await validarOpcionesDelServicio({
-            opcionesSeleccionadasDelServicio,
+            opcionesSeleccionadasDelServicio: oSdS_validado,
             servicioExistenteAccesible: servicioExistenteAccesible[0]
         })
-        const opcionesSeleccionadas = opcionesSeleccionadasDelServicio.opcionesSeleccionadas
+        
+        const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
 
         await campoDeTransaccion("iniciar")
         const servicioEnReserva = await insertarServicioPorReservaUID({

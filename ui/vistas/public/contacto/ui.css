@@ -121,7 +121,7 @@ main {
 
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 620px) {
 .logos {
     flex-direction: column;
 

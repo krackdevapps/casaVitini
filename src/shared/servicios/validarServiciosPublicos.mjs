@@ -16,6 +16,7 @@ export const validarServiciosPubicos = async (data) => {
 
         filtroServicios:
         for (const servicioPorValidar of serviciosPorValidar) {
+
             const servicioUID = servicioPorValidar.servicioUID
 
             const servicioExistenteAccesible = await obtenerServicioPorCriterioPublicoPorServicioUIDArray({
@@ -88,7 +89,10 @@ export const validarServiciosPubicos = async (data) => {
                     throw new Error(m)
                 }
                 const opcionesIDV = opcionesGrupo.map(o => o.opcionIDV);
-                const opcionesIDVNoReconocidos = grupoPorValidar[grupoIDV].filter(o => !opcionesIDV.includes(o));
+                const opcionesIDVNoReconocidos = grupoPorValidar[grupoIDV].filter(o => {
+                    const opcionIDV = o.opcionIDV
+                    !opcionesIDV.includes(opcionIDV)
+                });
                 if (opcionesIDVNoReconocidos.length > 0) {
                     serviciosPublicos.serviciosNoReconocidos.push(servicioPorValidar)
                     break filtroServicios

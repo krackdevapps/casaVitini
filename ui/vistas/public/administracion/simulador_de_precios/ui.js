@@ -2474,7 +2474,7 @@ casaVitini.view = {
                             casaVitini.view.componentes.servicios.actualizarContenedor({ servicios })
 
                             const desgloseFinanciero = respuestaServidor.desgloseFinanciero
-                           casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
+                            casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                                 destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                                 contenedorFinanciero: { desgloseFinanciero },
                                 modoUI: "simulador"
@@ -2503,7 +2503,7 @@ casaVitini.view = {
                 if (respuestaServidor?.ok) {
 
                     const contenedorFinanciero = respuestaServidor.contenedorFinanciero
-                   casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
+                    casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                         destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                         contenedorFinanciero,
                         modoUI: "simulador"
@@ -3242,7 +3242,7 @@ casaVitini.view = {
             } else if (desgloseFinanciero) {
 
                 document.querySelector(`[simulacionUID="${simulacionUID}"] [contenedor=simulacion] [info=llavesFaltantes]`)?.remove()
-               casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
+                casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                     destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                     contenedorFinanciero: { desgloseFinanciero },
                     modoUI: "simulador"
@@ -3533,7 +3533,11 @@ casaVitini.view = {
                                     const opcionesDelGrupoSeleccionadas = grupo.querySelectorAll("[selector=opcion][estado=activado]")
                                     opcionesDelGrupoSeleccionadas.forEach(opcionSel => {
                                         const opcionIDV = opcionSel.getAttribute("opcionIDV")
-                                        opcionesSeleccionadas[grupoIDV].push(opcionIDV)
+                                        const cantidad = opcionSel.querySelector("[campo=cantidad]").value
+                                        opcionesSeleccionadas[grupoIDV].push({
+                                            opcionIDV,
+                                            cantidad
+                                        })
                                     })
                                 })
 
@@ -3626,7 +3630,9 @@ casaVitini.view = {
                     const contenedor = data.contenedor
                     const opcionesSeleccionadas = data.opcionesSeleccionadas
 
-                    const definicion = contenedor.definicion
+                    const definicionBase64 = contenedor.definicion
+                    console.log("definicionBase64", definicionBase64)
+                    const definicion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionBase64)
                     const fechaFinal = contenedor.fechaFinal
                     const duracionIDV = contenedor.duracionIDV
                     const fechaInicio = contenedor.fechaInicio
@@ -3733,9 +3739,9 @@ casaVitini.view = {
                         contenedorDuracion.appendChild(info)
 
                     }
-                    const definicionUI = document.createElement("p")
+                    const definicionUI = document.createElement("pre")
                     definicionUI.classList.add(
-                        "padding6"
+                        "padding6", "whiteSpace"
                     )
                     definicionUI.textContent = definicion
                     servicioUI.appendChild(definicionUI)
@@ -4020,10 +4026,15 @@ casaVitini.view = {
 
                             Object.entries(opcionesSel).forEach(([grupoIDV, contenedorSel]) => {
                                 const selectorGrupo = servicioUI.querySelector(`[grupoIDV="${grupoIDV}"]`)
-                                contenedorSel.forEach(opcionIDV => {
+                                contenedorSel.forEach(o => {
+                                    const opcionIDV = o.opcionIDV
+                                    const cantidad = o.cantidad
+
                                     const selectorOpcion = selectorGrupo.querySelector(`[opcionIDV="${opcionIDV}"]`)
                                     selectorOpcion.setAttribute("estado", "activado")
                                     selectorOpcion.querySelector("[componente=indicadorSelecion]").style.background = "rgb(0, 255, 0)"
+                                    selectorOpcion.querySelector("[campo=cantidad]").value = cantidad
+
                                 })
                             })
 
@@ -4048,7 +4059,11 @@ casaVitini.view = {
                                     const opcionesDelGrupoSeleccionadas = grupo.querySelectorAll("[selector=opcion][estado=activado]")
                                     opcionesDelGrupoSeleccionadas.forEach(opcionSel => {
                                         const opcionIDV = opcionSel.getAttribute("opcionIDV")
-                                        opcionesSeleccionadas[grupoIDV].push(opcionIDV)
+                                        const cantidad = opcionSel.querySelector("[campo=cantidad]").value
+                                        opcionesSeleccionadas[grupoIDV].push({
+                                            opcionIDV,
+                                            cantidad
+                                        })
                                     })
                                 })
 
@@ -4122,7 +4137,7 @@ casaVitini.view = {
 
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             if (desgloseFinanciero) {
-                               casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
+                                casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                                     destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                                     contenedorFinanciero: { desgloseFinanciero },
                                     modoUI: "simulador"
@@ -4610,7 +4625,7 @@ casaVitini.view = {
                                 const desgloseFinanciero = respuestaServidor?.desgloseFinanciero
 
                                 if (desgloseFinanciero) {
-                                   casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
+                                    casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
                                         destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
                                         contenedorFinanciero: { desgloseFinanciero },
                                         modoUI: "simulador"

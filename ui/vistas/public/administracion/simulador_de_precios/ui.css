@@ -32,6 +32,43 @@
     align-items: center;
 }
 
+.esferaSeleccionable {
+    margin: 5px;
+    height: 24px;
+    width: 24px;
+    border: 2px solid #373737;
+    border-radius: 100%;
+}
+
+.contenedorCantidad {
+    display: grid;
+    grid-template-columns: min-content min-content;
+    gap: 6px;
+    align-items: center;
+    height: 100%;
+    display: none;
+}
+
+.campoCantidad {
+    width: 80px;
+    border-radius: 6px;
+    height: 100%;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+
+
+}
+
+.filaOpcionServicio {
+    display: grid;
+    grid-template-columns: min-content auto min-content !important;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+}
+
 [zonaCSS="administracion/simuladorDePrecios/detalles"] .menuCategoria {
     text-decoration: none;
     color: black;

@@ -50,12 +50,12 @@ export const actualizarConfiguracion = async (entrada) => {
             }).required().messages(commonMessages),
         }).required().messages(commonMessages)
 
-        controlEstructuraPorJoi({
+        const objectoValidado = controlEstructuraPorJoi({
             schema: esquema,
             objeto: entrada.body
         })
-        const configuracionIDV = entrada.body.configuracionIDV
-        const valor = entrada.body.valor
+        const configuracionIDV = objectoValidado.configuracionIDV
+        const valor = objectoValidado.valor
 
         const diccionarioConfiguracionesIDV = validadoresCompartidos.diccionarios.configuracionesUsuario.arbol
 
@@ -67,12 +67,12 @@ export const actualizarConfiguracion = async (entrada) => {
             const m = "No se espera la ruta que define configuracionIDV."
             throw new Error(m)
         }
-       
+
         if (!controlIDV?.contenedor.includes(valor)) {
             const m = "Los valores esperados son porDiasIndividual o porRango"
             throw new Error(m)
         }
-        
+
         const configuracionActualizada = await actualizarConfiguracionUsuario({
             usuario,
             configuracionIDV: configuracionIDV,

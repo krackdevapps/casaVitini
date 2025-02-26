@@ -1,15 +1,15 @@
 import { contenedorFinanciero } from "../../../sharedMethodsAsUIComponents/contenedorFinanciero.mjs"
-import { serviciosUI } from "../../../sharedMethodsAsUIComponents/serviciosUI.mjs"
+import { serviciosUI_grupoOpciones } from "../../../sharedMethodsAsUIComponents/serviciosUI.mjs"
+import { reservaComponentes } from "../../administracion/reservas/sharedMethods.mjs"
 import { sharedMethods } from "../sharedMethods.mjs"
-import { sharedMethods_resumen } from "./sharedMethods.mjs"
 
 export const shared = () => {   
 
     return {
         ...sharedMethods,
-        ...sharedMethods_resumen,
-        ...serviciosUI,
-        ...contenedorFinanciero
+        ...serviciosUI_grupoOpciones,
+        ...contenedorFinanciero,
+        servicioUI: reservaComponentes.detallesReservaUI.categoriasGlobales.servicios.componentesUI.servicioUI
     }
 }
 

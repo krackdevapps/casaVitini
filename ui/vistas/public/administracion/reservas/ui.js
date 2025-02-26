@@ -3,8 +3,8 @@ casaVitini.view = {
         const main = document.querySelector("main")
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const parametros = granuladoURL.parametros
-
         main.setAttribute("zonaCSS", "/administracion/reservas")
+
         const botones = document.querySelectorAll("[componente=botonAdministracion]")
         botones.forEach((boton) => {
             boton.addEventListener("click", (boton) => {
@@ -17,6 +17,7 @@ casaVitini.view = {
                 casaVitini.shell.navegacion.controladorVista(navegacion)
             })
         })
+        
         if (parametros.reserva) {
             main.innerHTML = null
             main.setAttribute("zonaCSS", "administracion/reservas/detallesReserva")

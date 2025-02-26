@@ -7,6 +7,7 @@ export const validarServicio = async (data) => {
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const servicio = data.servicio
+
         const gruposDeOpciones = Joi.array().items(
             Joi.object({
                 nombreGrupo: Joi.string().custom((value, helpers) => {
@@ -84,11 +85,11 @@ export const validarServicio = async (data) => {
                         }).required().messages(commonMessages),
                     ).required().messages(commonMessages)
                 }).required(),
-
                 opcionesGrupo: Joi.array().items(
                     Joi.object({
-                        nombreOpcion: Joi.string().custom((value, helpers) => {
+                        nombreOpcion: Joi.string().required().custom((value, helpers) => {
                             try {
+
                                 return validadoresCompartidos.tipos.cadena({
                                     string: value,
                                     nombreCampo: "El campo del nombre de la opcion",
@@ -98,16 +99,19 @@ export const validarServicio = async (data) => {
                                     limpiezaEspaciosAlrededor: "si",
                                     limpiezaEspaciosInternosGrandes: "si"
                                 })
+
+
                             } catch (error) {
                                 const path = helpers.state.path.join('.');
                                 const mensajeError = `Error en ${path}: ${error.message}`;
                                 return helpers.message(mensajeError);
                             }
 
-                        }).required().messages(commonMessages),
+                        }).messages(commonMessages),
                         precioOpcion: Joi.string().allow('').required().custom((value, helpers) => {
                             try {
-                                return validadoresCompartidos.tipos.cadena({
+
+                                const precioOpcion = validadoresCompartidos.tipos.cadena({
                                     string: value,
                                     nombreCampo: "El campo del precio",
                                     filtro: "cadenaConNumerosConDosDecimales",
@@ -116,7 +120,8 @@ export const validarServicio = async (data) => {
                                     devuelveUnTipoNumber: "no",
                                     limpiezaEspaciosAlrededor: "si",
                                 })
-
+                                
+                                return precioOpcion;  
                             } catch (error) {
                                 const path = helpers.state.path.join('.');
                                 const mensajeError = `Error en ${path}: ${error.message}`;
@@ -138,7 +143,7 @@ export const validarServicio = async (data) => {
                                     "desactivado"
                                 ]
                                 if (!estados.includes(estadoIDV)) {
-                                    throw new Error( "solo espera 'activado' o 'desactivado'")
+                                    throw new Error("solo espera 'activado' o 'desactivado'")
                                 }
                                 return estadoIDV
 
@@ -160,8 +165,8 @@ export const validarServicio = async (data) => {
             nombreServicio: Joi.string().messages(commonMessages),
             zonaIDV: Joi.string().messages(commonMessages),
             contenedor: Joi.object({
-                fechaInicio: Joi.date(),
-                fechaFinal: Joi.date(),
+                fechaInicio: Joi.string(),
+                fechaFinal: Joi.string(),
                 disponibilidadIDV: Joi.string().messages(commonMessages),
                 tituloPublico: Joi.string().messages(commonMessages),
                 definicion: Joi.string().messages(commonMessages),
@@ -170,13 +175,15 @@ export const validarServicio = async (data) => {
             }).required().messages(commonMessages),
         }).required().messages(commonMessages)
 
-        controlEstructuraPorJoi({
+        const objectoValidado = controlEstructuraPorJoi({
             schema: schema,
             objeto: servicio
         })
 
+
+
         validadoresCompartidos.tipos.cadena({
-            string: servicio.nombreServicio,
+            string: objectoValidado.nombreServicio,
             nombreCampo: "El nombreServicio",
             filtro: "strictoConEspacios",
             sePermiteVacio: "no",
@@ -185,7 +192,7 @@ export const validarServicio = async (data) => {
         })
 
         validadoresCompartidos.tipos.cadena({
-            string: servicio?.zonaIDV,
+            string: objectoValidado?.zonaIDV,
             nombreCampo: "El campo de zonaIDV",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
@@ -196,12 +203,12 @@ export const validarServicio = async (data) => {
             "privada",
             "global"
         ]
-        if (!zonas.includes(servicio.zonaIDV)) {
+        if (!zonas.includes(objectoValidado.zonaIDV)) {
             const m = "El selector de zonaIDV solo espera publica, privada, global"
             throw new Error(m)
         }
 
-        const contenedor = servicio.contenedor
+        const contenedor = objectoValidado.contenedor
         const duracionIDV = contenedor.duracionIDV
         const duraciones = [
             "permanente",
@@ -216,7 +223,7 @@ export const validarServicio = async (data) => {
         if (duracionIDV === "rango") {
             const fechaInicio = contenedor.fechaInicio
             const fechaFinal = contenedor.fechaFinal
-
+            
             await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: fechaInicio,
                 nombreCampo: "La fecha de inico del servicio"
@@ -232,7 +239,7 @@ export const validarServicio = async (data) => {
                 tipoVector: "igual"
             })
 
-  
+
         } else if (duracionIDV === "permanente") {
             delete contenedor.fechaInicio
             delete contenedor.fechaFinal
@@ -251,7 +258,7 @@ export const validarServicio = async (data) => {
 
         validadoresCompartidos.tipos.cadena({
             string: contenedor.disponibilidadIDV,
-            nombreCampo: "El tituloPublico",
+            nombreCampo: "La disponibilidad",
             filtro: "strictoConEspacios",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -261,17 +268,19 @@ export const validarServicio = async (data) => {
         validadoresCompartidos.tipos.cadena({
             string: contenedor.definicion,
             nombreCampo: "El definicion",
-            filtro: "strictoConEspacios",
+            filtro: "cadenaBase64",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             limpiezaEspaciosInternos: "si",
         })
+        
 
-        servicio.contenedor.gruposDeOpciones.forEach((grupo, ig) => {
+        objectoValidado.contenedor.gruposDeOpciones.forEach((grupo, ig) => {
             const grupoIDV = `grupo${ig}`
             grupo.grupoIDV = grupoIDV
 
             const opcionesGrupo = grupo.opcionesGrupo
+
             opcionesGrupo.forEach((opcion, io) => {
                 const opcionIDV = `${grupoIDV}opcion${io}`
                 opcion.opcionIDV = opcionIDV
@@ -279,12 +288,16 @@ export const validarServicio = async (data) => {
 
         })
         const opcionesFormateadasComoObjeto = {}
-        servicio.contenedor.gruposDeOpciones.forEach(gp => {
+        objectoValidado.contenedor.gruposDeOpciones.forEach(gp => {
             const grupoIDV = gp.grupoIDV
             opcionesFormateadasComoObjeto[grupoIDV] = gp
         })
 
-        servicio.contenedor.gruposDeOpciones = opcionesFormateadasComoObjeto
+        objectoValidado.contenedor.gruposDeOpciones = opcionesFormateadasComoObjeto
+
+        return objectoValidado
+
+
     } catch (error) {
         throw error
     }

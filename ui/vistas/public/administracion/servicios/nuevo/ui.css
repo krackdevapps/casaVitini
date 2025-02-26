@@ -25,6 +25,16 @@
     }
 }
 
+
+
+
+.esferaSeleccionable {
+    margin: 5px;
+    height: 24px;
+    width: 24px;
+    border: 2px solid #373737;
+    border-radius: 100%;
+}
 .crearOfertaContenedorHorizontalModoCrear {
     display: flex;
     grid-template-columns: 0.25fr 1fr;

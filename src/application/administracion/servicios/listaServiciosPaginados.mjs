@@ -12,11 +12,14 @@ export const listaServiciosPaginados = async (entrada) => {
         IDX.empleados()
         IDX.control()
 
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
+
         const esquemaBusqueda = Joi.object({
-            pagina: Joi.number(),
-            nombreColumna: Joi.string(),
-            sentidoColumna: Joi.string()
-        }).required()
+            pagina: Joi.number().messages(commonMessages),
+            nombreColumna: Joi.string().messages(commonMessages),
+            sentidoColumna: Joi.string().messages(commonMessages)
+
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: esquemaBusqueda,

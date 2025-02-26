@@ -2,17 +2,18 @@ import { contenedorFechasUI } from "../../../sharedMethodsAsUIComponents/contene
 import { contenedorFinanciero } from "../../../sharedMethodsAsUIComponents/contenedorFinanciero.mjs"
 import { grid } from "../../../sharedMethodsAsUIComponents/grid.mjs"
 import { selectorApartamentosEspecificosUI } from "../../../sharedMethodsAsUIComponents/selectorApartamentosEspecificosUI.mjs"
-import { serviciosUI } from "../../../sharedMethodsAsUIComponents/serviciosUI.mjs"
-import { sharedMethods_resumen } from "../../alojamiento/resumen/sharedMethods.mjs"
+import { serviciosUI_grupoOpciones } from "../../../sharedMethodsAsUIComponents/serviciosUI.mjs"
+import { reservaComponentes } from "../reservas/sharedMethods.mjs"
 
-export const shared = () => {   
+export const shared = () => {
     return {
-        ...sharedMethods_resumen,
         ...grid,
         ...contenedorFechasUI,
         ...selectorApartamentosEspecificosUI,
         ...contenedorFinanciero,
-        ...serviciosUI
+        ...serviciosUI_grupoOpciones,
+        servicioUI: reservaComponentes.detallesReservaUI.categoriasGlobales.servicios.componentesUI.servicioUI
+
     }
 }
 

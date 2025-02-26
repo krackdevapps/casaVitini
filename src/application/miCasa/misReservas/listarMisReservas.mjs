@@ -15,13 +15,14 @@ export const listarMisReservas = async (entrada) => {
         const session = entrada.session
         const IDX = new VitiniIDX(session)
         IDX.control()
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const usuario = entrada.session.usuario
         const esquemaBusqueda = Joi.object({
             pagina: Joi.number(),
             nombreColumna: Joi.string(),
             sentidoColumna: Joi.string()
-        }).required()
+        }).required().messages(commonMessages)
 
         controlEstructuraPorJoi({
             schema: esquemaBusqueda,

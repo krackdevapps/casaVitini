@@ -457,12 +457,12 @@ export const sharedMethods = {
         const contenedorBotones = document.querySelector("[componente=servicioUI]")
         contenedorBotones.querySelector("[contenedro=botones]")?.remove()
         if (modo === "modoEditar") {
-            const botones =this.botonesDuranteModificacion()
+            const botones = this.botonesDuranteModificacion()
             contenedorBotones.appendChild(botones)
             document.querySelector("[componente=soloLecturaInfo]")?.classList.remove("elementoOcultoInicialmente")
         }
         if (modo === "modoCancelar") {
-            const botones =this.botonesModificar()
+            const botones = this.botonesModificar()
             contenedorBotones.appendChild(botones)
             document.querySelector("[componente=soloLecturaInfo]")?.classList.remove("elementoOcultoInicialmente")
         }
@@ -647,8 +647,8 @@ export const sharedMethods = {
 
             const tituloC = document.createElement("input")
             tituloC.setAttribute("campo", "nombreGrupo")
-            tituloC.classList.add(               "botonV1BlancoIzquierda_campo")
-            
+            tituloC.classList.add("botonV1BlancoIzquierda_campo")
+
             tituloC.placeholder = "Titulo o definición del grupo"
             c.appendChild(tituloC)
 
@@ -840,7 +840,7 @@ export const sharedMethods = {
 
             const tituloC = document.createElement("input")
             tituloC.setAttribute("campo", "nombreOpcion")
-            tituloC.classList.add("botonV1BlancoIzquierda_campo"              )
+            tituloC.classList.add("botonV1BlancoIzquierda_campo")
             tituloC.placeholder = "Nombre de la opcion"
             contenedor.appendChild(tituloC)
 
@@ -854,8 +854,8 @@ export const sharedMethods = {
 
             const precioC = document.createElement("input")
             precioC.setAttribute("campo", "precioOpcion")
-            precioC.classList.add(     "botonV1BlancoIzquierda_campo"            )
-            precioC.placeholder = "Precio de la opcion, ejemplo 00.00"
+            precioC.classList.add("botonV1BlancoIzquierda_campo")
+            precioC.placeholder = "Precio de la opción, ejemplo 00.00"
             contenedor.appendChild(precioC)
 
 
@@ -917,6 +917,8 @@ export const sharedMethods = {
         const tituloPublico = document.querySelector("[campo=tituloPublico]").value
         const definicion = document.querySelector("[campo=definicion]").value
 
+        const definicionBase64 = casaVitini.utilidades.conversor.cadenaHaciaBase64ConTextDecoder(definicion)
+
         const o = {
             nombreServicio,
             zonaIDV,
@@ -924,7 +926,7 @@ export const sharedMethods = {
                 duracionIDV: duracionIDV,
                 disponibilidadIDV: disponibilidadIDV,
                 tituloPublico: tituloPublico,
-                definicion: definicion,
+                definicion: definicionBase64,
                 gruposDeOpciones: []
 
             }

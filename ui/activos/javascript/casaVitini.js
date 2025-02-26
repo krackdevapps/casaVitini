@@ -338,7 +338,7 @@ const casaVitini = {
                     href: "/instalaciones",
                     nombre: "Instalaciones",
                     zona: "instalaciones"
-                },                 {
+                }, {
                     href: "/productos_y_servicios",
                     nombre: "Productos y servicios",
                     zona: "productos_y_servicios"
@@ -4662,6 +4662,29 @@ const casaVitini = {
 
                 return ui
             }
+        },
+        obtenerComponentes: async function (data) {
+
+            const componentID = data.componenteID
+
+            const respuestaServidor = await casaVitini.shell.servidor({
+                zona: "componentes/obtenerComponente",
+                componente: "componentID"
+            })
+            if (respuestaServidor?.error) {
+                return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+            } else if (respuestaServidor?.ok) {
+                const html = respuestaServidor.html
+                const js = respuestaServidor.js
+                const css = respuestaServidor.css
+
+
+
+                const cssContainer = document.createElement("style")
+                cssContainer.textContent = css
+                return cssContainer
+            }
+
         }
     },
     componentes: {
@@ -5126,6 +5149,16 @@ const casaVitini = {
                 const binaryString = atob(base64);
                 const asciiString = Array.from(binaryString, char => char).join('');
                 return asciiString
+            },
+            base64HaciaConTextDecoder: (base64) => {
+                const decoder = new TextDecoder();
+                const datosDecodificados = new Uint8Array(atob(base64).split("").map(char => char.charCodeAt(0)));
+                return decoder.decode(datosDecodificados);
+            },
+            cadenaHaciaBase64ConTextDecoder: (cadena) => {
+                const encoder = new TextEncoder();
+                const datosCodificados = encoder.encode(cadena);
+                return btoa(String.fromCharCode(...datosCodificados));
             }
         },
         observador: {
@@ -5323,7 +5356,6 @@ const casaVitini = {
         ejecutarFuncionPorNombreDinamicoConContexto: async function (data) {
             try {
                 const ruta = data.ruta;
-
                 const args = data.args;
                 const partes = ruta.split('.');
                 const contexto = partes.slice(0, -1).reduce((acc, parte) => acc[parte], casaVitini);

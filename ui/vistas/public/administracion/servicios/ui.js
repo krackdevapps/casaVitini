@@ -286,7 +286,9 @@ casaVitini.view = {
             const disponibilidadIDV = contenedor.disponibilidadIDV
 
             const tituloPublico = contenedor.tituloPublico
-            const definicion = contenedor.definicion
+            const definicionBase64 = contenedor.definicion
+
+            const definicionASCI = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionBase64)
 
             const fechaInicio = contenedor?.fechaInicio
             const fechaFinal = contenedor?.fechaFinal
@@ -336,7 +338,7 @@ casaVitini.view = {
             tituloPublicoCampo.value = tituloPublico
 
             const definicionCampo = servicioUI.querySelector("[campo=definicion]")
-            definicionCampo.value = definicion
+            definicionCampo.value = definicionASCI
 
             const componentesUI = casaVitini.view.__sharedMethods__.grupoDeOpciones
             const selectorContenedorGrupos = servicioUI.querySelector("[contenedor=grupos]")
@@ -385,6 +387,11 @@ casaVitini.view = {
 
                     gpUI.querySelector("[componente=sinInfo]")?.remove()
                     gpUI.querySelector("[contenedor=opciones]").appendChild(ogUI)
+
+
+
+
+
 
                 })
 

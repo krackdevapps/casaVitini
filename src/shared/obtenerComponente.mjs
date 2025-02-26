@@ -87,22 +87,35 @@ export const obtenerComponente = async (transaccion) => {
                 mensaje: "No estás autorizado, necesitas una cuenta de más autoridad para acceder aquí"
             }
         }
-        const vistaSelector = "./ui/componentes" + urlResuelta + "/ui.ejs"
-        if (existsSync(vistaSelector)) {
-            const html = readFileSync(vistaSelector, 'utf-8');
-            let css = ""
-            const cssOptionalSelector = "./ui/componentes" + urlResuelta + "/ui.css"
-            if (existsSync(cssOptionalSelector)) {
-                css = readFileSync(cssOptionalSelector, 'utf-8')
-            }
-            return {
+        const com = "./ui/componentes" + urlResuelta + "/com.json"
+        if (existsSync(com)) {
+
+            const componentSchema = {
                 ok: "Componente encontrado",
-                html: html,
-                css: css
+                html: null,
+                js: null,
+                css: null
             }
+
+            const htmlSelector = "./ui/componentes" + urlResuelta + "/ui.ejs"
+            if (existsSync(htmlSelector)) {
+                componentSchema.html = readFileSync(htmlSelector, 'utf-8')
+            }
+
+            const cssSelector = "./ui/componentes" + urlResuelta + "/ui.css"
+            if (existsSync(cssSelector)) {
+                componentSchema.css = readFileSync(cssSelector, 'utf-8')
+            }
+
+            const jsSelector = "./ui/componentes" + urlResuelta + "/ui.js"
+            if (existsSync(jsSelector)) {
+                componentSchema.js = readFileSync(jsSelector, 'utf-8')
+            }
+
+            return componentSchema
         } else {
             const error = "noExisteElComponente"
-           throw new Error(error)
+            throw new Error(error)
         }
     } catch (errorCapturado) {
         throw errorCapturado;

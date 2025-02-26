@@ -33,11 +33,11 @@ export const obtenerConfiguracion = async (entrada) => {
                 })).min(1).messages(commonMessages).required(),
         }).required().messages(commonMessages)
 
-        controlEstructuraPorJoi({
+      const objectoValidado = controlEstructuraPorJoi({
             schema: esquema,
             objeto: entrada.body
         })
-        const paresConfIDV = entrada.body.paresConfIDV
+        const paresConfIDV = objectoValidado.paresConfIDV
         
         const paresConfiguracion = await obtenerParConfiguracionUsuario({
             paresConfIDV,

@@ -553,7 +553,7 @@ body {
     box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.2)
+    background: rgba(255, 255, 255, 0.4)
 }
 
 .botonDinamico.desplegado {

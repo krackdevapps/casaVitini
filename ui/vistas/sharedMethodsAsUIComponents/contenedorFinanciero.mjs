@@ -2,55 +2,55 @@
 export const contenedorFinanciero = {
     contenedorFinanciero: {
         constructor: function (data) {
-            try {
-                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const destino = data.destino
-                const modoUI = data.modoUI
-                const contenedorFinanciero = data.contenedorFinanciero
-                const global = contenedorFinanciero.desgloseFinanciero.global
-                const entidades = contenedorFinanciero.desgloseFinanciero.entidades
-                const contenedorOfertas = contenedorFinanciero.desgloseFinanciero.contenedorOfertas
-                const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
-                const totales = global.totales
-                this.control({
-                    destino,
-                    modoUI
-                })
-                this.componentesUI.contenedor({
-                    destino,
-                    modoUI,
-                    instanciaUID
-                })
-                this.componentesUI.panelGlobal.botonesControlFlexbile({
-                    destino,
-                    modoUI,
-                    instanciaUID
-                })
-                this.componentesUI.entidades.hub({
-                    destino,
-                    entidades,
-                    instanciaUID,
-                    modoUI
-                })
-                this.componentesUI.ofertas.hub({
-                    destino,
-                    contenedorOfertas,
-                    instanciaUID
-                })
-                this.componentesUI.impuestos({
-                    destino,
-                    impuestos,
-                    instanciaUID
-                })
-                this.componentesUI.totalesGlobales({
-                    destino,
-                    totales,
-                    instanciaUID
-                })
-            } catch (error) {
-                console.error(error)
-                throw error
-            }
+            //   try {
+            const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+            const destino = data.destino
+            const modoUI = data.modoUI
+            const contenedorFinanciero = data.contenedorFinanciero
+            const global = contenedorFinanciero.desgloseFinanciero.global
+            const entidades = contenedorFinanciero.desgloseFinanciero.entidades
+            const contenedorOfertas = contenedorFinanciero.desgloseFinanciero.contenedorOfertas
+            const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
+            const totales = global.totales
+            this.control({
+                destino,
+                modoUI
+            })
+            this.componentesUI.contenedor({
+                destino,
+                modoUI,
+                instanciaUID
+            })
+            this.componentesUI.panelGlobal.botonesControlFlexbile({
+                destino,
+                modoUI,
+                instanciaUID
+            })
+            this.componentesUI.entidades.hub({
+                destino,
+                entidades,
+                instanciaUID,
+                modoUI
+            })
+            this.componentesUI.ofertas.hub({
+                destino,
+                contenedorOfertas,
+                instanciaUID
+            })
+            this.componentesUI.impuestos({
+                destino,
+                impuestos,
+                instanciaUID
+            })
+            this.componentesUI.totalesGlobales({
+                destino,
+                totales,
+                instanciaUID
+            })
+            // } catch (error) {
+            //     console.error(error)
+            //      throw error
+            //  }
         },
         control: function (data) {
             try {
@@ -1206,6 +1206,9 @@ export const contenedorFinanciero = {
                         for (const contenedorServicio of desglosePorServicios) {
                             const servicio = contenedorServicio.servicio
                             const opcionesSolicitadasDelservicio = contenedorServicio.opcionesSolicitadasDelservicio
+                            const totalesDelSerivicio = contenedorServicio.totalesDelSerivicio
+
+
                             const servicioUID_enReserva = servicio.servicioUID
                             const serviciosRenderizados = porServicio_renderizado.querySelectorAll("[servicioUID]")
                             const contenedorServicio_selector = porServicio_renderizado.querySelector(`[servicioUID="${servicioUID_enReserva}"]`)
@@ -1214,13 +1217,18 @@ export const contenedorFinanciero = {
                                 contenedorServicio.setAttribute("servicioUID", servicioUID_enReserva)
                                 const nombreInterno = servicio.nombre
                                 const contenedor = servicio.contenedor
-                                const definicion = contenedor.definicion
+                                const definicionBase64 = contenedor.definicion
+                                const definicion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionBase64)
                                 const fechaFinal = contenedor.fechaFinal
                                 const duracionIDV = contenedor.duracionIDV
                                 const fechaInicio = contenedor.fechaInicio
                                 const tituloPublico = contenedor.tituloPublico
                                 const disponibilidadIDV = contenedor.disponibilidadIDV
                                 const gruposDeOpciones = contenedor.gruposDeOpciones
+
+
+
+
                                 const diccionario = {
                                     disponibilidad: {
                                         constante: "Disponible",
@@ -1264,9 +1272,7 @@ export const contenedorFinanciero = {
                                     contenedorNombreInterno.appendChild(nombreInternoUI)
                                 }
                                 const contenedorNombrePublico = document.createElement("div")
-                                contenedorNombrePublico.classList.add(
-                                    "flexVertical",
-                                )
+                                contenedorNombrePublico.classList.add("flexVertical")
                                 contenedorData.appendChild(contenedorNombrePublico)
                                 const tituluNombrePublico = document.createElement("p")
                                 tituluNombrePublico.textContent = `Nombre público`
@@ -1276,17 +1282,30 @@ export const contenedorFinanciero = {
                                     "negrita")
                                 titulo.textContent = tituloPublico
                                 contenedorNombrePublico.appendChild(titulo)
+
+
+
+
+                                const contenedorEstadoDisponibilidad = document.createElement("div")
+                                contenedorEstadoDisponibilidad.classList.add("flexVertical")
+                                contenedorData.appendChild(contenedorEstadoDisponibilidad)
+
+
+                                const tituloEstadoDisponibilidad = document.createElement("p")
+                                tituloEstadoDisponibilidad.textContent = `Estado de la disponibilidad`
+                                contenedorEstadoDisponibilidad.appendChild(tituloEstadoDisponibilidad)
+
                                 const disponibilidadUI = document.createElement("p")
-                                disponibilidadUI.classList.add(
-                                )
+                                disponibilidadUI.classList.add("negrita")
                                 disponibilidadUI.textContent = diccionario.disponibilidad[disponibilidadIDV]
-                                contenedorData.appendChild(disponibilidadUI)
+                                contenedorEstadoDisponibilidad.appendChild(disponibilidadUI)
+
+
                                 if (disponibilidadIDV === "variable") {
                                     const info = document.createElement("p")
-                                    info.classList.add(
-                                    )
+                                    info.classList.add()
                                     info.textContent = `Este servicio tiene una disponibilidad limitada. Es por eso que si selecciona este servicio, nos pondremos en contacto con el titular de la reserva en las próximas horas para confirmarle la disponibilidad del servicio para su reserva.`
-                                    contenedorData.appendChild(info)
+                                    contenedorEstadoDisponibilidad.appendChild(info)
                                 }
                                 // const precioUI = document.createElement("p")
                                 // precioUI.classList.add(
@@ -1305,14 +1324,45 @@ export const contenedorFinanciero = {
                                     info.textContent = `Servicio disponible solo desde ${fechaInicio} hata ${fechaFinal}. Ambas fechas incluidas.`
                                     contenedorDuracion.appendChild(info)
                                 }
-                                const definicionUI = document.createElement("p")
-                                definicionUI.classList.add(
-                                )
+
+
+                                const contenedorDefinicion = document.createElement("div")
+                                contenedorDefinicion.classList.add("flexVertical")
+                                contenedorData.appendChild(contenedorDefinicion)
+
+
+                                const tituloDefinicion = document.createElement("p")
+                                tituloDefinicion.textContent = `Definición`
+                                contenedorDefinicion.appendChild(tituloDefinicion)
+
+
+                                const definicionUI = document.createElement("pre")
+                                definicionUI.classList.add("whiteSpace")
                                 definicionUI.textContent = definicion
-                                contenedorData.appendChild(definicionUI)
+                                contenedorDefinicion.appendChild(definicionUI)
+
+
+                                const contenedorTotalServicio = document.createElement("div")
+                                contenedorTotalServicio.classList.add("flexVertical")
+                                contenedorData.appendChild(contenedorTotalServicio)
+
+
+                                const totaleDelServicioUIInfo = document.createElement("p")
+                                totaleDelServicioUIInfo.textContent = `Total del servicio`
+                                contenedorTotalServicio.appendChild(totaleDelServicioUIInfo)
+
+                                const totaleDelServicioUI = document.createElement("p")
+                                totaleDelServicioUI.classList.add("negrita")
+                                totaleDelServicioUI.textContent = totalesDelSerivicio.totalServicio
+                                contenedorTotalServicio.appendChild(totaleDelServicioUI)
+
+
                                 Object.entries(gruposDeOpciones).forEach(([grupoIDV, gDP]) => {
                                     const nombreGrupo = gDP.nombreGrupo
                                     const opcionesGrupo = gDP.opcionesGrupo
+
+                                    const selectorOpcionesGrupo = opcionesSolicitadasDelservicio.opcionesSeleccionadas[grupoIDV] || []
+
                                     const contenedorGrupo = document.createElement("div")
                                     contenedorGrupo.setAttribute("grupoIDV", grupoIDV)
                                     contenedorGrupo.classList.add(
@@ -1330,9 +1380,17 @@ export const contenedorFinanciero = {
                                     opcionesGrupo.forEach((op) => {
                                         const opcionIDV = op.opcionIDV
                                         const nombreOpcion = op.nombreOpcion
-                                        const precioOpcion = op.precioOpcion ? op.precioOpcion + "$" : "0.00$ (Sin coste añadido)"
-                                        const selectorOpcionesGrupo = opcionesSolicitadasDelservicio.opcionesSeleccionadas[grupoIDV] || []
-                                        if (selectorOpcionesGrupo.includes(opcionIDV)) {
+                                        const precioOpcion = op?.precioOpcion ? op?.precioOpcion + "$" : "0.00$ (Sin coste añadido)"
+
+
+
+
+                                        const controlSelctorOpcionesGrupo = selectorOpcionesGrupo.find(g => g.opcionIDV === opcionIDV);
+
+
+                                        if (controlSelctorOpcionesGrupo) {
+                                            const cantidad = controlSelctorOpcionesGrupo.cantidad
+
                                             const contenedorOpcion = document.createElement("div")
                                             contenedorOpcion.classList.add(
                                                 "flexVertical", "gap6", "backgroundGrey1", "borderRadius10", "padding14"
@@ -1344,15 +1402,59 @@ export const contenedorFinanciero = {
                                             }
                                             const opcionUI = document.createElement("p")
                                             opcionUI.setAttribute("opcionIDV", opcionIDV)
-                                            opcionUI.textContent = nombreOpcion
+                                            opcionUI.textContent = `${nombreOpcion}`
                                             contenedorOpcion.appendChild(opcionUI)
+
+                                            const contenedorPrecioUnidad = document.createElement("div")
+                                            contenedorPrecioUnidad.classList.add("flexVertical")
+                                            contenedorOpcion.appendChild(contenedorPrecioUnidad)
+
+                                            const tituloPrecioUnidad = document.createElement("p")
+                                            tituloPrecioUnidad.textContent = `Precio de la opción`
+                                            contenedorPrecioUnidad.appendChild(tituloPrecioUnidad)
+
+
                                             const precioUI = document.createElement("p")
                                             precioUI.setAttribute("opcionIDV", opcionIDV)
-                                            precioUI.classList.add(
-                                                "textoNegrita"
-                                            )
+                                            precioUI.classList.add("negrita")
                                             precioUI.textContent = precioOpcion
-                                            contenedorOpcion.appendChild(precioUI)
+                                            contenedorPrecioUnidad.appendChild(precioUI)
+
+
+                                            const contenedorCantidad = document.createElement("div")
+                                            contenedorCantidad.classList.add("flexVertical")
+                                            contenedorOpcion.appendChild(contenedorCantidad)
+
+
+                                            const tituloCantidad = document.createElement("p")
+                                            tituloCantidad.textContent = `Cantidad`
+                                            contenedorCantidad.appendChild(tituloCantidad)
+
+
+                                            const cantidadUI = document.createElement("p")
+                                            cantidadUI.setAttribute("opcionIDV", opcionIDV)
+                                            cantidadUI.classList.add("negrita")
+                                            cantidadUI.textContent = `${cantidad}`
+                                            contenedorCantidad.appendChild(cantidadUI)
+
+
+                                            const contenedorPrecioOpcionTotal = document.createElement("div")
+                                            contenedorPrecioOpcionTotal.classList.add("flexVertical")
+                                            contenedorOpcion.appendChild(contenedorPrecioOpcionTotal)
+
+
+                                            const tituloPrecioOpcionTotal = document.createElement("p")
+                                            tituloPrecioOpcionTotal.textContent = `Precio de la opción total con cantidades`
+                                            contenedorPrecioOpcionTotal.appendChild(tituloPrecioOpcionTotal)
+
+                                            const precioConCantidad = totalesDelSerivicio.porGruposDeOpciones[grupoIDV][opcionIDV].precioConCantidad
+
+                                            const precioTotalOpcionUI = document.createElement("p")
+                                            precioTotalOpcionUI.setAttribute("opcionIDV", opcionIDV)
+                                            precioTotalOpcionUI.classList.add("negrita")
+                                            precioTotalOpcionUI.textContent = precioConCantidad
+                                            contenedorPrecioOpcionTotal.appendChild(precioTotalOpcionUI)
+
                                         }
                                     })
                                 })
@@ -2296,7 +2398,9 @@ export const contenedorFinanciero = {
                                 "flexVertical",
                                 "backgroundGrey1",
                                 "padding6",
-                                "borderRadius8"
+                                "padding12",
+                                "borderRadius8",
+                                "gap6"
                             )
                             document.querySelector(destino)
                                 .querySelector("[contenedor=financiero]")
@@ -2313,11 +2417,13 @@ export const contenedorFinanciero = {
                             .querySelector(`[contenedor=${destinoOrigenOferta}]`)
                             .querySelector(`[ofertaUID="${ofertaUID}"]`)
                             .querySelector("[contenedor=descuentos]")
+
+
+
                         contenedorDescuentos_renderizado.innerHTML = null
                         const tituloContendor = document.createElement("div")
                         tituloContendor.classList.add(
                             "negrita",
-                            "padding6",
                         )
                         tituloContendor.textContent = "Descuentos de la oferta"
                         contenedorDescuentos_renderizado.appendChild(tituloContendor)
@@ -2335,7 +2441,7 @@ export const contenedorFinanciero = {
                         const contenedorDescuento = document.createElement("div")
                         const descripcionDescuento = document.createElement("p")
                         descripcionDescuento.classList.add(
-                            "padding6"
+                            // "padding6"
                         )
                         contenedorDescuento.appendChild(descripcionDescuento)
                         if (tipoDescuento === "porRango" && subTipoDescuento === "porDiasDelRango") {
