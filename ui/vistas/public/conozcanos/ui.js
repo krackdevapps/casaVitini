@@ -26,40 +26,43 @@ casaVitini.view = {
             }
         };
         arranqueParallax();
-    },
-    controladorIconoMouse: function () {
-        const iconoRaton = document.querySelector("[icono=mouse]")
-        if (!iconoRaton) {
-            window.removeEventListener('scroll', () => {
-                this.controladorIconoMouse()
-            });
-        }
-        const alturaScroll = window.scrollY
-        if (iconoRaton && alturaScroll > 10) {
-            iconoRaton.addEventListener("transitionend", (e) => {
 
-            })
-            iconoRaton.style.opacity = "0"
-        } else {
-            iconoRaton.style.opacity = "1"
-        }
+
+        
     },
-    scrollHandler: function () {
-        let animationRunning = false;
-        if (!animationRunning) {
-            animationRunning = true;
-            requestAnimationFrame(() => {
-                this.controladorParalaje()
-                animationRunning = false;
-            });
-        }
-        const contenedorParalaje = document.querySelector("[contenedor=paralaje]")
-        if (!contenedorParalaje) {
-            window.removeEventListener('scroll', () => {
-                this.scrollHandler()
-            });
-        }
-    },
+    // controladorIconoMouse: function () {
+    //     const iconoRaton = document.querySelector("[icono=mouse]")
+    //     if (!iconoRaton) {
+    //         window.removeEventListener('scroll', () => {
+    //             this.controladorIconoMouse()
+    //         });
+    //     }
+    //     const alturaScroll = window.scrollY
+    //     if (iconoRaton && alturaScroll > 10) {
+    //         iconoRaton.addEventListener("transitionend", (e) => {
+
+    //         })
+    //         iconoRaton.style.opacity = "0"
+    //     } else {
+    //         iconoRaton.style.opacity = "1"
+    //     }
+    // },
+    // scrollHandler: function () {
+    //     let animationRunning = false;
+    //     if (!animationRunning) {
+    //         animationRunning = true;
+    //         requestAnimationFrame(() => {
+    //             this.controladorParalaje()
+    //             animationRunning = false;
+    //         });
+    //     }
+    //     const contenedorParalaje = document.querySelector("[contenedor=paralaje]")
+    //     if (!contenedorParalaje) {
+    //         window.removeEventListener('scroll', () => {
+    //             this.scrollHandler()
+    //         });
+    //     }
+    // },
     controladorParalaje: () => {
         const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
         contenedoresPalaraje.forEach((contenedorParalaje) => {

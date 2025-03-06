@@ -3,7 +3,7 @@ export const obtenerWebCom_ = async (transaccion) => {
     try {
         const componente = transaccion.componente
         const arbol = componente
-        console.log("arbol", arbol)
+
         const usuarioIDX = transaccion.usuario
         const rolIDV = transaccion.rolIDV
         let selectorRama = './ui/componentes'
@@ -94,9 +94,9 @@ export const obtenerWebCom_ = async (transaccion) => {
         }
         const com = "./ui/componentes" + urlResuelta + "/com.json"
         let comData = ""
-        console.log("com", com)
+
         if (existsSync(com)) {
-            console.log("1")
+
             const comSelector = "./ui/componentes" + urlResuelta + "/com.js"
             if (existsSync(comSelector)) {
                 comData = {

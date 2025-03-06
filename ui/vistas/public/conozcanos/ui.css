@@ -1,25 +1,37 @@
-
 body {
-    background-color: rgb(255 188 0 / 0.05);
+    background-color: rgb(255, 254, 245) !important;
 }
+
+main {
+    position: absolute;
+    z-index: 0;
+}
+
 main * {
     font-family: opensans-variable;
     align-items: flex-start;
-    /* margin-bottom: 20px !important; */
 }
+
 @media (min-width: 2160px) {
-    main{
+    main {
         padding-left: 80px;
         padding-right: 80px;
     }
-    
+
 }
+
+header .estructura {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.uiCategoria {
+    color: black;
+}
+
 @font-face {
     font-family: lovetheking;
     src: url(/activos/fuentes/love_by_the_king/loved_by_the_King/LovedbytheKing-Regular.ttf) format('truetype');
     font-display: block;
-
-
 }
 
 @font-face {
@@ -146,7 +158,9 @@ main * {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/zonas_comunes/image00009V3.jpeg");
+    /* background-image: url("/activos/imagenes/zonas_comunes/image00009V3.jpeg"); */
+    background-image: url("/activos/imagenes/conozcanos/foto1.jpg");
+
 }
 
 [zonaCSS="/conozcanos"] .fondo1 {
@@ -370,7 +384,8 @@ main * {
     overflow: hidden;
     text-align: center;
 }
-@media (max-width: 1080px){
+
+@media (max-width: 1080px) {
     .texto_v2_parallax {
         font-size: 8vw !important;
     }
@@ -482,9 +497,9 @@ main * {
 }
 
 .primerContainerResponsivo {
-    margin-left: 80px;
+    /* margin-left: 80px;
     margin-right: 80px;
-    border-radius: 30px !important;
+    border-radius: 30px !important; */
 
 }
 
@@ -560,11 +575,11 @@ main * {
     position: absolute;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll:before {
+.contenedorParalax .icon-scroll:before {
     content: '';
     width: 8px;
     height: 8px;
-    background: #fff;
+    /* background: #fff; */
     margin-left: -4px;
     top: 8px;
     left: 20px;
@@ -778,12 +793,14 @@ main * {
     font-weight: bold;
     font-family: tradewings;
 }
+
 @media (max-width: 920px) {
     .tituloActividades {
-        font-size: 7vw;
+        font-size: 11vw;
 
     }
 }
+
 .textoAdrenalinaCompartido {
     text-align: justify;
     font-weight: 550;
@@ -907,13 +924,6 @@ main * {
 
 }
 
-.superContainerFotoV2>.cell-1 {
-    order: 1;
-}
-
-.superContainerFotoV2 .cell-2 {
-    order: 2;
-}
 
 .padingtopv1 {
     padding-top: 40px;
@@ -929,8 +939,11 @@ main * {
 
     .superContainerFotoV2 {
         grid-template-columns: 1fr;
-        gap: 80px;
+        gap: 40px;
 
+    }
+    .superContainerFoto>.cell-1 {
+        order: 1;
     }
 
 
@@ -939,7 +952,7 @@ main * {
     }
 
     .superContainerFotoV2>.cell-2 {
-        order: 1;
+        order: 2;
     }
 
     .padingtopv1 {
@@ -996,7 +1009,7 @@ main * {
     /* padding: 10px; */
     gap: 20px;
     align-items: center;
- 
+
 }
 
 .iconShared {
@@ -1006,9 +1019,11 @@ main * {
     height: 50px;
     background-repeat: no-repeat;
 }
+
 .iconoSVG {
     height: 44px;
 }
+
 .icon1 {
     background-image: url(/activos/iconos/sun-svgrepo-com.svg);
 }

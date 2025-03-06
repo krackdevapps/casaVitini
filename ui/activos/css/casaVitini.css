@@ -145,7 +145,7 @@
 }
 
 body {
-    background: rgb(206 206 206);
+    background: rgba(0, 0, 0, 0.3);
     background-image: url(/activos/imagenes/transparente.png);
     transition: background 700ms linear;
     flex-wrap: nowrap;
@@ -188,12 +188,12 @@ header .estructura {
     display: flex;
     padding: 6px;
     gap: 6px;
-    transition: all 250ms linear;
+    transition: all 500ms linear;
     border-radius: 30px;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     gap: 6px;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.2);
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
@@ -374,6 +374,7 @@ header .zonas {
     align-content: center;
     justify-content: center;
     align-items: center;
+    font-weight: 550;
     height: 33px;
     width: 100%;
     transition: background 250ms linear, color 250ms linear, scale 250ms ease-in-out;

@@ -10,13 +10,13 @@ export const selectorApartamentosEspecificosUI = {
             contenedor.setAttribute("instanciaUID", instanciaUID)
             contenedor.setAttribute("componente", "selectorApartamentos")
             contenedor.classList.add(
-                'flexVertical',
+                "flexVertical",
                 "gap6"
             )
             const contenedorSelectorApartamentos = document.createElement('div');
-            contenedorSelectorApartamentos.classList.add('crearOfertaConentenedor');
-            const boton = document.createElement('p');
-            boton.classList.add('crearOFertaBotonAnadirApartamento');
+            contenedorSelectorApartamentos.classList.add('flexVertical', "gap6");
+            const boton = document.createElement('div');
+            boton.classList.add('botonV1Blanco');
             boton.setAttribute('componente', 'botonAnadirApartamentoOferta');
             boton.textContent = 'Añadir apartamento';
             boton.addEventListener("click", (e) => {
@@ -29,10 +29,10 @@ export const selectorApartamentosEspecificosUI = {
             })
             contenedorSelectorApartamentos.appendChild(boton);
             const contenedorApartamentos = document.createElement('div');
-            contenedorApartamentos.classList.add('crearOfertaZonaAnadirApartamento');
+            contenedorApartamentos.classList.add('flexVertical', "padding6", "gap6", "backgroundGrey1", "borderRadius16");
             contenedorApartamentos.setAttribute('componente', 'zonaAnadirApartamento');
             const info = document.createElement('p');
-            info.classList.add('crearApartamentoInfoSinApartamento');
+            info.classList.add("flexVertical", "padding6", "textoCentrado");
             info.setAttribute('componente', 'infoSinApartamento');
             info.textContent = textoContenedorVacio
             contenedorApartamentos.appendChild(info);
@@ -85,7 +85,8 @@ export const selectorApartamentosEspecificosUI = {
                     apartamentoDetallesUI.setAttribute("apartamentoUI", apartamentoUI)
                     apartamentoDetallesUI.setAttribute("apartamentoComoOpcion", apartamentoIDV)
                     apartamentoDetallesUI.addEventListener("click", () => {
-                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                        ui?.remove()
+                        document.body.style.removeProperty("overflow")
                         this.insertarApartamento({
                             instanciaUID,
                             apartamentoIDV,
@@ -163,7 +164,7 @@ export const selectorApartamentosEspecificosUI = {
             const metodoEliminarApartamento = data?.metodoEliminarApartamento || {}
             const opcionesUI = data.opcionesUI || {}
             const apartamentoSeleccionadoUI = document.createElement("div")
-            apartamentoSeleccionadoUI.classList.add("crearOfertaApartamentoSeleccionadoUI")
+            apartamentoSeleccionadoUI.classList.add("flexVertical", "gap6", "borderRadius10", "padding6", "backgroundGrey1")
             apartamentoSeleccionadoUI.setAttribute("apartamentoIDV", apartamentoIDV)
             const tituloApartamento = document.createElement("div")
             tituloApartamento.classList.add("crearOfertaApartamentoSeleccionadoUITitulo")
@@ -176,7 +177,7 @@ export const selectorApartamentosEspecificosUI = {
             }
             const botonEliminarApartamento = document.createElement("div")
             botonEliminarApartamento.classList.add("botonV1BlancoIzquierda")
-            botonEliminarApartamento.style.borderRadius = "4px"
+            botonEliminarApartamento.style.borderRadius = "5px"
             botonEliminarApartamento.textContent = "Eliminar apartamento"
             botonEliminarApartamento.addEventListener("click", async (e) => {
                 if (metodoEliminarApartamento.hasOwnProperty("metodo")) {

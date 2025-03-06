@@ -544,11 +544,6 @@ casaVitini.view = {
 
 
 
-        const infoAceptacion = document.createElement("p")
-        infoAceptacion.classList.add("padding14", "textoCentrado", "negrita")
-        infoAceptacion.textContent = "Preconfirmar esta reserva implica la aceptación de nuestras políticas de privacidad, politicas de cancelación"
-        contenedor.appendChild(infoAceptacion)
-
         // const infoAdvertencia = document.createElement("p")
         // infoAdvertencia.classList.add("padding14")
         // infoAdvertencia.textContent = "Para realizar reserva se requier un deposito del 50% que tendra que ser abonado a traves de: un desposito del 20% para reservas de 20 dias o mas y 50% para reservas de menos de 20 dias. Metodos de pago: Reservas nacionales:  Transferencia bancarias/efectivo. Reservas internacionales: Transferencia bancaria (25$ de comision por transferencia), Western Union"
@@ -609,6 +604,12 @@ casaVitini.view = {
 
         containerReservaInterNacional.appendChild(opcionPago("Transferencia bancaria (25$ de comisión por transferencia)"))
         containerReservaInterNacional.appendChild(opcionPago("Western Union"))
+
+
+        const infoAceptacion = document.createElement("p")
+        infoAceptacion.classList.add("padding14", "textoCentrado", "negrita")
+        infoAceptacion.textContent = "Preconfirmar esta reserva implica la aceptación de nuestras políticas de privacidad, politicas de cancelación"
+        contenedor.appendChild(infoAceptacion)
 
 
         const botonConfirmar = document.createElement("div")

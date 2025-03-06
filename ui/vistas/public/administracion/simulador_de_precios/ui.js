@@ -3631,7 +3631,7 @@ casaVitini.view = {
                     const opcionesSeleccionadas = data.opcionesSeleccionadas
 
                     const definicionBase64 = contenedor.definicion
-                    console.log("definicionBase64", definicionBase64)
+
                     const definicion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionBase64)
                     const fechaFinal = contenedor.fechaFinal
                     const duracionIDV = contenedor.duracionIDV

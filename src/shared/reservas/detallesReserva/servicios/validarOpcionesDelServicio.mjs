@@ -42,7 +42,12 @@ export const validarOpcionesDelServicio = async (data) => {
             const confSelNumero = configuracionGrupo.confSelNumero
 
             // Servicio a comprorbar
-            const grupoPorValidar = opcionesSeleccionadasPorValidar || {}
+            const grupoPorValidar = opcionesSeleccionadasPorValidar ?? {}
+            if (Object.keys(grupoPorValidar).length === 0) {
+                const m = `En el servicio ${tituloPublico}, selecione al menos una opción. No ha seleccionado nada.`
+                throw new Error(m)
+            }
+
             // Comporbra si es obligatorio
             if (confSelObligatoria.includes("unaObligatoria")) {
                 if (!grupoPorValidar.hasOwnProperty(grupoIDV)) {
@@ -100,6 +105,7 @@ export const validarOpcionesDelServicio = async (data) => {
                 } else {
                     gpv.cantidad = "1"
                 }
+
             }
         }
     } catch (error) {

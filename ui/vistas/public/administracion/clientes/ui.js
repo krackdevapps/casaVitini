@@ -650,10 +650,10 @@ casaVitini.view = {
                     let selectorContenedor = campo.parentNode
                     selectorContenedor.appendChild(campoEditable)
                 })
-                document.querySelector("[boton=editar]").classList.add("estadoInicialInvisible")
-                document.querySelector("[boton=dejarDeEditar]").classList.remove("estadoInicialInvisible")
-                document.querySelector("[boton=eliminarCliente]").classList.remove("estadoInicialInvisible")
-                document.querySelector("[boton=guardarCambios]").classList.remove("estadoInicialInvisible")
+                document.querySelector("[boton=editar]").classList.add("contenedorOculto")
+                document.querySelector("[boton=dejarDeEditar]").classList.remove("contenedorOculto")
+                document.querySelector("[boton=eliminarCliente]").classList.remove("contenedorOculto")
+                document.querySelector("[boton=guardarCambios]").classList.remove("contenedorOculto")
             },
             dejarDeEditar: function () {
                 let camposEditables = document.querySelectorAll("[componenteEditable]")
@@ -664,10 +664,10 @@ casaVitini.view = {
                 camposLectura.forEach((campo) => {
                     campo.removeAttribute("style")
                 })
-                document.querySelector("[boton=editar]").classList.remove("estadoInicialInvisible")
-                document.querySelector("[boton=dejarDeEditar]").classList.add("estadoInicialInvisible")
-                document.querySelector("[boton=guardarCambios]").classList.add("estadoInicialInvisible")
-                document.querySelector("[boton=guardarCambios]").classList.add("estadoInicialInvisible")
+                document.querySelector("[boton=editar]").classList.remove("contenedorOculto")
+                document.querySelector("[boton=dejarDeEditar]").classList.add("contenedorOculto")
+                document.querySelector("[boton=guardarCambios]").classList.add("contenedorOculto")
+                document.querySelector("[boton=guardarCambios]").classList.add("contenedorOculto")
             },
             guardarCambios: async function () {
                 const campos = document.querySelectorAll("[componenteDetalle]")

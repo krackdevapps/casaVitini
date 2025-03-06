@@ -51,7 +51,7 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
         };
         const controlClave = vitiniCrypto(metadatos);
         if (!controlClave) {
-            const error = "Revisa la contraseña actual que has escrito porque no es correcta, por lo tanto, no se puede eliminar tu cuenta";
+            const error = "Revisa la contraseña actual que has escrito porque no es correcta";
             throw new Error(error);
         }
         const rol = usuario.rolIDV;

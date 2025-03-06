@@ -576,9 +576,9 @@ casaVitini.view = {
                     let selectorContenedor = campo.parentNode
                     selectorContenedor.appendChild(campoEditable)
                 })
-                document.querySelector("[boton=editar]").classList.add("estadoInicialInvisible")
-                document.querySelector("[boton=dejarDeEditar]").classList.remove("estadoInicialInvisible")
-                document.querySelector("[boton=guardarCambios]").classList.remove("estadoInicialInvisible")
+                document.querySelector("[boton=editar]").classList.add("contenedorOculto")
+                document.querySelector("[boton=dejarDeEditar]").classList.remove("contenedorOculto")
+                document.querySelector("[boton=guardarCambios]").classList.remove("contenedorOculto")
             },
             cancelarCambios: function () {
                 const campos = document.querySelectorAll("[campo]")

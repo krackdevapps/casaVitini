@@ -29,11 +29,11 @@ export const obtenerReserva = async (entrada) => {
             sePermitenDuplicados: "no",
             sePermiteArrayVacio: "si"
         })
-        const metadatos = {
+
+        const resuelveDetallesReserva = await detallesReserva({
             reservaUID: reservaUID,
             capas
-        }
-        const resuelveDetallesReserva = await detallesReserva(metadatos);
+        });
         const ok = {
             ok: resuelveDetallesReserva
         }

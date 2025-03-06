@@ -53,6 +53,7 @@
     display: flex;
     justify-content: flex-end;
 }
+
 [zonaCSS="administracion/clientes/detalles"] .detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
@@ -168,7 +169,7 @@
     align-items: center;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .estadoInicialInvisible {
+[zonaCSS="administracion/clientes/detalles"] .contenedorOculto {
     display: none;
 }
 
@@ -194,6 +195,7 @@
     padding: 12px;
     border-radius: 10px;
 }
+
 @media (max-width: 720px) {
     [zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontal {
         flex-direction: column;
@@ -265,6 +267,7 @@
 [zonaCSS="administracion/clientes/editar"] .detallesClienteDatoCampo {
     resize: none;
 }
+
 [zonaCSS="administracion/clientes/buscador"] .espacioClientes {
     display: flex;
     flex-direction: column;

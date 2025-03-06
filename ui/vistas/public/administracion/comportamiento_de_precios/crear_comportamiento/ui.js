@@ -11,9 +11,9 @@ casaVitini.view = {
         const tipoOferta = opcionOferta.target.closest("[tipoOferta]").getAttribute("tipoOferta")
         const selectorZonaOferta = document.querySelectorAll("[zonaOferta]")
         selectorZonaOferta.forEach((zonaOferta) => {
-            zonaOferta.classList.add("estadoInicialInvisible")
+            zonaOferta.classList.add("contenedorOculto")
         })
-        document.querySelector(`[zonaOferta=${tipoOferta}]`).classList.remove("estadoInicialInvisible")
+        document.querySelector(`[zonaOferta=${tipoOferta}]`).classList.remove("contenedorOculto")
         const selectoresBotonDeplegarOpcionesOferta = document.querySelectorAll("[tipoOferta]")
         selectoresBotonDeplegarOpcionesOferta.forEach((boton) => {
             boton.removeAttribute("style")
@@ -229,7 +229,7 @@ casaVitini.view = {
 
         let selectorOpciones = document.querySelectorAll("[controladorDesliegue]")
         selectorOpciones.forEach((opcion) => {
-            opcion.classList.add("estadoInicialInvisible")
+            opcion.classList.add("contenedorOculto")
         })
 
         let zonaDespliegue
@@ -242,7 +242,7 @@ casaVitini.view = {
         if (opciones === "totalNetoReserva") {
             zonaDespliegue = "descuentoGlobal"
         }
-        document.querySelector(`[controladorDesliegue="${zonaDespliegue}"]`)?.classList.remove("estadoInicialInvisible")
+        document.querySelector(`[controladorDesliegue="${zonaDespliegue}"]`)?.classList.remove("contenedorOculto")
     },
 
 }

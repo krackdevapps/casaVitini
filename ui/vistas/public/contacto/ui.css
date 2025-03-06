@@ -7,7 +7,12 @@ body {
 main {
     height: 100vh;
 }
-
+header .estructura {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.uiCategoria {
+    color: black;
+}
 [zonaCSS="/contacto"] .plaza_contacto_gridContacto {
     display: grid;
     grid-template-columns: 2fr 1fr;

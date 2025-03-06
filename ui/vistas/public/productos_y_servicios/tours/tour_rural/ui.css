@@ -1,0 +1,299 @@
+body {
+    background-color: rgb(255 188 0 / 28%);
+    height: 100vh;
+}
+
+/* header .estructura{
+    color:black;
+    background-color: rgba(255, 255, 255, 0.329);
+}
+.uiCategoria {
+    color: black;
+} */
+header .estructura {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.uiCategoria {
+    color: white;
+}
+
+main {
+    height: 100vh;
+    color: #503f39;
+    align-items: normal;
+    position: absolute;
+}
+
+.textInicial {
+    padding: 20px;
+
+}
+
+.superContainerMenu {
+    display: flex;
+    max-width: 100%;
+    justify-content: center;
+}
+
+.taxiServicio {
+    display: flex;
+    justify-content: center;
+}
+
+.superContainerTaxi {
+    background-color: #faf3da;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    gap: 20px;
+
+}
+
+.tablaTaxi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    font-weight: 550px;
+
+}
+
+.tituloTaxi {
+    padding: 20px;
+    text-align: center;
+    font-size: 15px !important;
+    border-radius: 14px;
+}
+
+.nombreDestino,
+.nombreDestino>* {
+    font-size: 15px !important;
+    font-weight: 550;
+
+}
+
+.precioDestino {
+    display: flex;
+    text-align: right;
+    justify-content: flex-end;
+    font-size: 15px !important;
+    font-weight: 550;
+
+}
+
+.tourSurf {
+    padding: 20px;
+    background-color: wheat;
+    border-radius: 20px;
+}
+
+
+.tourHorse {
+    padding: 20px;
+    background-color: wheat;
+    border-radius: 20px;
+}
+
+.tourBoatFishin {
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.containerTours {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 20px
+}
+
+@media (max-width: 1080px) {
+    .containerTours {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.containerItem {
+    background-color: #FBEED7;
+    box-shadow: 0 0 18px 8px rgba(0, 0, 0, 0.1);
+    padding: 80px;
+    border-radius: 20px;
+    height: 200px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: black;
+}
+
+@media (max-width: 1080px) {
+    .containerItem {
+        height: 40vw;
+        width: 40vw;
+        padding: 0px;
+    }
+}
+
+.iconoShared {
+    height: 30px;
+}
+
+.iconotaxi1 {
+
+    transform: translateY(12px) translateX(-6px);
+}
+
+
+.iconotaxi3 {
+    transform: translateY(12px) translateX(6px);
+
+}
+
+.containerTours .triangulo {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.tourrural3 {
+    width: 100%;
+    border-bottom-right-radius: 20px;
+}
+
+.tourrural5 {
+    width: 100%;
+    border-bottom-left-radius: 20px;
+}
+
+.fotosIniciales {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 850px) {
+    .fotosIniciales {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tourrural2 {
+    width: 100%;
+
+}
+
+.tourrural4 {
+    width: 90%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+
+}
+
+
+.texto {
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.titulo {
+    color: green;
+    font-size: 2.6vw;
+    font-family: 550px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.subtitle {
+    color: orange;
+    font-size: 1.5vw;
+    text-align: center;
+}
+
+.parrafo {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    text-align: justify;
+    line-height: 20px;
+
+}
+
+.opcion {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+    text-align: justify;
+
+}
+
+
+.opcion1 {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    text-align: justify;
+    color: green;
+    font-size: 19px;
+
+}
+
+
+.opcion2 {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    text-align: justify;
+    color: rgb(206, 110, 0);
+    font-size: 19px;
+
+}
+
+.movimiento {
+    position: sticky;
+    top: 0px;
+}
+
+.opcion4 {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    text-align: justify;
+
+}
+
+@media (max-width: 850px) {
+    .tourrural3 {
+        border-radius: 0px !important;
+    }
+
+    .contenedor1 {
+        order: -1;
+        padding-bottom: 20px;
+    }
+
+    .tourrural4 {
+        border-radius: 20px !important;
+    }
+
+    .tourrural5 {
+        border-radius: 0px !important;
+    }
+
+    .titulo {
+        font-size: 7vw;
+    }
+
+    .subtitle {
+        font-size: 3vw;
+    }
+
+    .contenedorDetalles {
+        order: 1;
+    }
+}

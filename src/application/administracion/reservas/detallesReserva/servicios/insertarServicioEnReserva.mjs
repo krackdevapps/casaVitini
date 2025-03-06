@@ -1,3 +1,4 @@
+import { DateTime } from "luxon"
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { insertarServicioPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/insertarServicioPorReservaUID.mjs"
@@ -8,6 +9,7 @@ import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/co
 import { validarObjetoDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarObjetoDelServicio.mjs"
 import { validarOpcionesDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
+import { obtenerFechaLocal } from "../../../../../shared/obtenerFechaLocal.mjs"
 
 export const insertarServicioEnReserva = async (entrada) => {
     try {
@@ -40,8 +42,9 @@ export const insertarServicioEnReserva = async (entrada) => {
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
-      const oSdS_validado =  validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
-         
+        const oSdS_validado = validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
+
+
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
@@ -73,23 +76,31 @@ export const insertarServicioEnReserva = async (entrada) => {
             opcionesSeleccionadasDelServicio: oSdS_validado,
             servicioExistenteAccesible: servicioExistenteAccesible[0]
         })
-        
-        const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
 
+
+   
         await campoDeTransaccion("iniciar")
+        const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
+        const descuentoTotalServicio = oSdS_validado.descuentoTotalServicio
+        const fechaUTC = DateTime.utc().toISO();
+        contenedorServicio.fechaAdquisicion = fechaUTC
+
+
         const servicioEnReserva = await insertarServicioPorReservaUID({
             reservaUID,
             nombre: nombreServicico,
             contenedor: contenedorServicio,
-            opcionesSel: opcionesSeleccionadas
+            opcionesSel: opcionesSeleccionadas,
+            descuentoTotalServicio: descuentoTotalServicio
         })
 
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+        servicioEnReserva.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaUTC)
 
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha insertado el servicio correctamente en la reserva y el contenedor financiero se ha renderizado.",
-            servicio: servicioEnReserva
+            servicio: servicioEnReserva,
         }
         return ok
     } catch (errorCapturado) {

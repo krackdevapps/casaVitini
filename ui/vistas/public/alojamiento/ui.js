@@ -28,15 +28,12 @@ casaVitini.view = {
     buscarAlojamientoUI: async function () {
         try {
 
-            document.querySelector("html").style.height = "100%"
+            //document.querySelector("html").style.height = "100%"
             const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
             const reservaLocal = JSON.parse(sessionStorage.getItem("preReservaLocal"))
             const reservaEnCache = localStorage.getItem("reservaConfirmada");
             const reservaConfirmadaLocal = reservaEnCache ? JSON.parse(reservaEnCache) : null;
             const main = document.querySelector("main")
-            main.style.paddingLeft = "6px"
-            main.style.paddingRight = "6px"
-            main.style.paddingBottom = "6px"
 
             const metodoSelectorPasarela = "view.metodoSelectorPasarela"
             const tituloUI = document.createElement("p")
@@ -46,14 +43,7 @@ casaVitini.view = {
             const marcoElasticoRelativo = document.createElement('div');
             marcoElasticoRelativo.classList.add('marcoElasticoRelativo');
             marcoElasticoRelativo.setAttribute("espacio", "marcoElastico")
-            marcoElasticoRelativo.style.transition = "background 250ms linear"
-            marcoElasticoRelativo.style.flex = "1"
-            marcoElasticoRelativo.style.padding = "6px"
-            marcoElasticoRelativo.classList.add(
-                "fondoAlojamiento"
-            )
-
-            marcoElasticoRelativo.style.justifyContent = "flex-start"
+            marcoElasticoRelativo.classList.add("fondoAlojamiento")
             main.appendChild(marcoElasticoRelativo);
 
             const bloquePasosReservaNuevo = document.createElement('div');
@@ -211,6 +201,9 @@ casaVitini.view = {
             textoDiaSalida.setAttribute('class', 'textoDiaNuevo');
             textoDiaSalida.textContent = 'Fecha de Salida';
             diaSalidaNuevo.appendChild(textoDiaSalida);
+
+
+
             const plazaAlojamientoMarcoFechaSalida = document.createElement('div');
             plazaAlojamientoMarcoFechaSalida.setAttribute('class', 'plaza_alojamiento_marcoFechaCompartido_contenedorFecha');
             plazaAlojamientoMarcoFechaSalida.setAttribute('fechaUI', 'fechaFin');
@@ -229,13 +222,14 @@ casaVitini.view = {
             botonMostrarDisponibilidad.addEventListener("click", this.buscarApartamentosDisponibles)
 
             plazaAlojamientoContenedor.appendChild(diaEntradaNuevo);
-            plazaAlojamientoContenedor.appendChild(diaSalidaNuevo);
             plazaAlojamientoContenedor.appendChild(botonMostrarDisponibilidad);
+
+            plazaAlojamientoContenedor.appendChild(diaSalidaNuevo);
             bloqueSelecionDias.appendChild(plazaAlojamientoContenedor);
             const botonBorrarBusquedaAlojamiento = document.createElement("div")
             botonBorrarBusquedaAlojamiento.classList.add("plaza_alojamiento_botonBorrarBusquedaAlojamiento")
             botonBorrarBusquedaAlojamiento.setAttribute("componente", "botonBorrarBusquedaAlojamiento")
-            botonBorrarBusquedaAlojamiento.textContent = "Borrar búsqueda de alojamiento "
+            botonBorrarBusquedaAlojamiento.textContent = "Borrar fechas seleccionadas "
             botonBorrarBusquedaAlojamiento.addEventListener("click", (e) => {
                 document.body.removeAttribute("class")
                 document.querySelector("[calendario=entrada]").classList.add("parpadeaFondo")
@@ -358,17 +352,17 @@ casaVitini.view = {
         cartelInfoCalendarioEstado.setAttribute("class", "cartelInfoCalendarioEstado")
         cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
         if (!fechaEntradaVolatil_Humana) {
-            const error = "Por favor, selecciona la fecha de entrada haciendo clic en el recuadro correspondiente y elige la fecha deseada en el calendario desplegable."
+            const error = "Por favor, selecciona la fecha de entrada."
             return casaVitini.ui.componentes.advertenciaInmersiva(error)
         }
         if (!fechaSalidaVolatil_Humana) {
-            const error = "Selecciona una fecha de salida pulsando en el cuadro de fecha de salida y seleccionando la fecha en el calendario flotante"
+            const error = "Selecciona una fecha de salida"
             return casaVitini.ui.componentes.advertenciaInmersiva(error)
         }
         document.querySelector("[espacio=marcoElastico]").classList.remove("fondoAlojamiento")
         document.querySelector("[espacio=marcoElastico]").classList.add("fondoTransparente")
 
-        document.body.style.backgroundColor = "rgb(214, 192, 157)"
+        document.body.classList.add("fondoConResultados")
         document.querySelector(".bloquePernoctacion")?.remove()
         document.querySelector(".bloqueBotonResumenReserva")?.remove()
         document.querySelectorAll("[componente=superBloque]").forEach((contenedorAlojamientoRenderizado) => {

@@ -4,7 +4,7 @@ casaVitini.view = {
         main.setAttribute("zonaCSS", "instalaciones")
         const instanciaUID = main.getAttribute("instanciaUID")
 
-        main.style.paddingTop = "10px"
+        // main.style.paddingTop = "10px"
         main.style.maxWidth = "100%"
 
         const marcoElasticoRelativo = main.querySelector("[contenedor=marcoElasticoRelativo]")
@@ -52,7 +52,7 @@ casaVitini.view = {
             const marcoElasticoRelativo = mainSel.querySelector("[contenedor=marcoElasticoRelativo]")
 
             const contenedorApartamento = document.createElement("div")
-            contenedorApartamento.classList.add("flexVertical", "gap20")
+            contenedorApartamento.classList.add("flexVertical", "gap20", "paddingLateral20")
             contenedorApartamento.setAttribute("contenedor", "apartamentos")
 
             if (configuracionDeAlojamientoPublicas.length > 0) {

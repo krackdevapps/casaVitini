@@ -91,6 +91,7 @@
     align-content: center;
     align-items: stretch;
 }
+
 @media (max-width: 720px) {
     [zonaCSS="administracion/ofertas"] .ofertaUIContenedorGlobalOferta {
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -332,6 +333,7 @@
     align-content: center;
     align-items: stretch;
 }
+
 @media (max-width: 720px) {
     [zonaCSS="administracion/ofertas/ofertaUI"] .crearOfertaContenedorHorizontalTipoOfertas {
         grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
@@ -499,7 +501,7 @@
     text-align: center;
 }
 
-[zonaCSS="administracion/ofertas/ofertaUI"] .estadoInicialInvisible {
+[zonaCSS="administracion/ofertas/ofertaUI"] .contenedorOculto {
     display: none !important;
 }
 

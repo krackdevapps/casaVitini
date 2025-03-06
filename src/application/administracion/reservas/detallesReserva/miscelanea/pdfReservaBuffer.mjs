@@ -42,9 +42,7 @@ export const pdfReservaBuffer = async (entrada, salida) => {
 
         salida.setHeader('Content-Type', 'application/pdf');
         salida.setHeader('Content-Disposition', 'inline; filename="reserva.pdf"'); // inline para mostrar el PDF en el navegador, si quieres que lo descargue usa 'attachment'
-
-
-        return salida.send(pdfBuffer);
+        salida.send(pdfBuffer);
 
     } catch (errorCapturado) {
         throw errorCapturado

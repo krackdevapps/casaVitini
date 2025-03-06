@@ -658,6 +658,17 @@ export const validadoresCompartidos = {
                             throw new Error(mensaje)
                         }
                     }
+
+                    const sePermitenNegativos = configuracion.sePermitenNegativos || "si"
+
+                    if (sePermitenNegativos === "no") {
+                        const numero = parseFloat(string)
+                        if (numero < 0) {
+                            const mensaje = `No se permiten números negativos, por favor revísalo.`
+                            throw new Error(mensaje)
+                        }
+                    }
+
                     const devuelveUnTipoNumber = configuracion.devuelveUnTipoNumber
                     if (typeof devuelveUnTipoNumber !== "string" &&
                         (devuelveUnTipoNumber !== "si" && devuelveUnTipoNumber !== "no")) {

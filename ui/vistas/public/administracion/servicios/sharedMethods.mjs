@@ -683,6 +683,7 @@ export const sharedMethods = {
                     contenedorGlobal.addEventListener("click", (e) => {
 
                         const botonesGrupo = e.target.closest("[area=seleccion]").querySelectorAll("[selector=opcion]")
+
                         botonesGrupo.forEach((b) => {
                             b.removeAttribute("estado")
                             const indicadorEsfera = b.querySelector("[componente=indicadorSelecion]")
@@ -692,6 +693,7 @@ export const sharedMethods = {
                         const contenedorSelecioando = e.target.closest("[selector=opcion]")
                         contenedorSelecioando.setAttribute("estado", "activado")
                         contenedorSelecioando.querySelector("[componente=indicadorSelecion]").style.background = "blue"
+
 
 
                     })
@@ -902,7 +904,8 @@ export const sharedMethods = {
             contenedorBotones.appendChild(boton)
 
             return contenedor
-        }
+        },
+
     },
     constructorObjeto: function () {
 

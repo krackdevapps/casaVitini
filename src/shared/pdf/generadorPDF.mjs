@@ -280,7 +280,12 @@ export const generadorPDF = async (reserva) => {
                     color: 'black',
                     margin: [0, 0, 0, 10],
                     alignment: "justify"
-
+                },
+                sericio_nombreGrupoOpciones: {
+                    color: "blue",
+                    // alignment: "left",
+                    background: "grey",
+                    margin: [0, 0, 0, 0],
 
                 }
             },
@@ -412,8 +417,7 @@ export const generadorPDF = async (reserva) => {
         }
         const desglosePorServicios = contenedorFinanciero.desgloseFinanciero.entidades.servicios.desglosePorServicios
         if (desglosePorServicios.length > 0) {
-
-            const contenedorServicio = {
+            const contenedorTituloServicio = {
                 style: 'contenedorServicio',
                 layout: 'lightHorizontalLines',
                 table: {
@@ -432,12 +436,62 @@ export const generadorPDF = async (reserva) => {
                                     style: 'tituloColumnaDerecha',
                                 }
                             ]
+
+                        ],
+                        [
+                            [
+                                {
+                                    text: '',
+                                    style: 'tituloColumnaIzquierda',
+                                }
+                            ],
+                            [
+                                {
+                                    text: '',
+                                    style: 'tituloColumnaDerecha',
+                                }
+                            ]
                         ]
                     ]
                 }
             }
 
+            //   docDefinition.content.push(contenedorTituloServicio)
+
+
             for (const s of desglosePorServicios) {
+
+
+
+                const contenedorServicio = {
+                    style: 'contenedorServicio',
+                    layout: 'lightHorizontalLines',
+                    // layout: {
+                    //     // fillColor: function (rowIndex, node, columnIndex) {
+                    //     //     return (rowIndex % 3 === 0) ? '#CCCCCC' : null;
+                    //     // },
+                    //     // hLineWidth: function (i, node) {
+                    //     //     return (i === 0 || i === node.table.body.length) ? 1 : 1;
+                    //     // },
+                    //     // vLineWidth: function (i, node) {
+                    //     //     return (i === 0 || i === node.table.widths.length) ? 1 : 1;
+                    //     // },
+                    //     // hLineColor: function (i, node) {
+                    //     //     return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+                    //     // },
+                    //     // vLineColor: function (i, node) {
+                    //     //     return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+                    //     // },
+                    // },
+                    table: {
+                        widths: ['*', 100],
+                        body: [
+                        ]
+                    }
+                }
+
+
+
 
                 const servicio = s.servicio
                 const opcionesSeleccionadas = s.opcionesSolicitadasDelservicio.opcionesSeleccionadas
@@ -446,24 +500,44 @@ export const generadorPDF = async (reserva) => {
 
                 const tituloPublico = contenedor.tituloPublico
 
-
+                // 
                 const filaServicio = [
-                    { text: tituloPublico, style: 'nombreSimple' },
+                    { text: tituloPublico, style: 'tituloColumnaIzquierda' },
                     { text: "", style: 'valorTotal' }
                 ];
                 contenedorServicio.table.body.push(filaServicio);
+                // 
+
+                // 
+
                 for (const [grupoIDV, opcionesSel] of Object.entries(opcionesSeleccionadas)) {
                     if (opcionesSel.length > 0) {
 
 
                         const grupoSelecioonado = gruposDeOpciones[grupoIDV]
+                        const nombreGrupo = grupoSelecioonado.nombreGrupo
+
+                        const filaOpcion = [
+                            { text: nombreGrupo, style: 'nombreSimple' },
+                            { text: "", style: 'valorTotal' }
+                        ];
+                        contenedorServicio.table.body.push(filaOpcion);
                         const opcionesGrupo = grupoSelecioonado.opcionesGrupo
 
                         opcionesGrupo.forEach(og => {
+                            // 
+
+                            const opcionesSelArray = opcionesSel.map(oS => oS.opcionIDV)
+                            //   
+
                             const opcionIDV = og.opcionIDV
-                            if (opcionesSel.includes(opcionIDV)) {
+                            if (opcionesSelArray.includes(opcionIDV)) {
+
                                 const nombreOpcion = og.nombreOpcion
                                 const precioOpcion = og.precioOpcion ? og.precioOpcion : "0.00"
+
+
+
                                 const filaOpcion = [
                                     { text: nombreOpcion, style: 'apartamentoNombre' },
                                     { text: precioOpcion + "$", style: 'valorTotal' }
@@ -475,10 +549,11 @@ export const generadorPDF = async (reserva) => {
                         });
                     }
                 }
+                docDefinition.content.push(contenedorServicio)
+                //contenedorTituloServicio.table.push(contenedorServicio)
 
             }
 
-            docDefinition.content.push(contenedorServicio)
         }
         const impuestos = contenedorFinanciero.desgloseFinanciero.impuestos
         if (impuestos.length > 0) {
@@ -590,7 +665,7 @@ export const generadorPDF = async (reserva) => {
         }
         docDefinition.content.push(tablaTotales)
         const mensaje1 = {
-            text: 'Este documento es solo un resumen de su reserva con la información global de la reserva y los totales más relevantes. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva. Puede encontrar la dirección de correo electrónico que se usó para hacer la reserva en la parte superior derecha de este documento, justo al lado del código QR.',
+            text: 'Este documento es solo un resumen de su reserva con la información global de la reserva y los totales. Si desea un desglose detallado, puede acceder a casavitini.com con su cuenta de usuario. Puede registrar su cuenta gratuitamente en https://casavitini.com/micasa/crear_nueva_cuenta. Recuerde usar la misma dirección de correo electrónico que utilizó para confirmar su reserva. Puede encontrar la dirección de correo electrónico que se usó para hacer la reserva en la parte superior derecha de este documento, justo al lado del código QR.',
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje1)
@@ -617,6 +692,31 @@ export const generadorPDF = async (reserva) => {
             style: 'textoSimple'
         }
         docDefinition.content.push(mensaje5)
+
+        const mensaje6 = {
+            text: `Puedes ver nuestro centro de políticas en 
+            casavitini.com/politicas
+
+            Puede ir directamente a nuestras políticas de cancelación en
+            casavitini.com/politicas/cancelacion
+
+            Puede ir directamente a nuestras políticas de privacidad en
+            casavitini.com/politicas/privacidad
+
+
+            Casa Vitini mantiene sus datos seguros con medidas de seguridad avanzadas:
+            Protocoles de comunicación cifradas con el cliente.
+            Cifrado de sus contraseñas  (SHA3-512)
+            Uso de Firewall avanzado (nftables).
+            Ejecución de procesos encapsulados en entornos aislados por contenedores (docker).
+            Uso del sistema de control de contextos de ejecución (SELinux).
+            Protección mediante cifrado SHA del servidor para las comunicaciones con el servidor.
+            Uso de SO Inmutable y atómico gestionado (RPM-OSTREE).
+            Actualizaciones de seguridad constantes (Red Hat).
+            Y sobre conscientes de que la seguridad 100% no existe.`,
+            style: 'textoSimple'
+        }
+        docDefinition.content.push(mensaje6)
 
         const generarPDF = async (docDefinition) => {
             return new Promise((resolve, reject) => {

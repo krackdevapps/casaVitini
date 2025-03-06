@@ -3,6 +3,10 @@ body {
     background-color: rgb(255 188 0 / 0.05);
 }
 
+main {
+    position: absolute;
+}
+
 
 [zonaCSS=instalaciones] .plaza_servicios_infoGlobal {
     padding: 10px;
@@ -33,12 +37,13 @@ body {
     font-family: opensans-semibold !important;
 }
 
-[zonaCSS=instalaciones] .marcoElasticoRelativo {
-    padding-left: 80px;
-    padding-right: 80px;
+.marcoElasticoRelativo {
+    /* padding-left: 80px;
+    padding-right: 80px; */
     max-width: 2160px;
     gap: 20px;
     transition: padding 1s linear, scale 250ms ease-in-out !important;
+    padding: 0px;
 }
 
 [zonaCSS=instalaciones] .marcoElasticoRelativo>* {
@@ -55,8 +60,8 @@ body {
     }
 
     [zonaCSS=instalaciones] .marcoElasticoRelativo {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 0px;
+        padding-right: 0px;
     }
 
     [zonaCSS=instalaciones] .imagenBancoBambu {
@@ -65,11 +70,17 @@ body {
 }
 
 [zonaCSS=instalaciones] .imagenPortada {
-    height: 80vh;
+    height: 100vh;
     padding: 14px;
-    margin-left: 100px;
-    margin-right: 100px;
+    /* margin-left: 100px;
+    margin-right: 100px; */
+    border-radius: 0px;
     background-position: center center !important;
+    box-shadow: none;
+}
+
+.imagenPortadaIMG {
+    background-image: url(/activos/imagenes/fotos/image00001_2s.jpeg)
 }
 
 @media (max-width: 920px) {
@@ -80,6 +91,9 @@ body {
         padding-top: 14px;
         margin-left: 0px;
         margin-right: 0px;
+    }
+    .imagenPortadaIMG {
+        background-image: url(activos/imagenes/fotos/image00007_1_reto1V3.jpeg);
     }
 }
 
@@ -108,7 +122,7 @@ body {
 }
 
 [zonaCSS=instalaciones] .photoContainer {
-    width: 100%;
+    width: calc(100% - 40px);
     max-width: 100%;
     overflow: scroll;
     padding-bottom: 8px;
@@ -118,6 +132,8 @@ body {
     border-radius: 20px;
     padding: 10px;
     background: #80808029;
+    margin-left: 20px;
+
 }
 
 
@@ -148,7 +164,7 @@ body {
 
 [zonaCSS=instalaciones] .photoContainer .butonEnd {
     padding-left: 12px;
-    right: calc(0% + 100px);
+    right: calc(0% + 50px);
 }
 
 [zonaCSS=instalaciones] .triangleL {
@@ -484,6 +500,8 @@ body {
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     gap: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 @media (max-width: 720px) {
@@ -566,7 +584,7 @@ body {
 
 @media (max-width: 720px) {
     .botonDinamico.desplegado {
-        /* font-size: 25px; */
+        font-size: 25px;
     }
 
 }

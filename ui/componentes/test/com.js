@@ -31,7 +31,7 @@ class MiBoton extends HTMLElement {
         this.shadowRoot.querySelector('#miBoton').addEventListener('click', () => {
             this.#cambiarColor(); // Llamada al método privado
         });
-        console.log("h")
+
     }
 
     // Método público

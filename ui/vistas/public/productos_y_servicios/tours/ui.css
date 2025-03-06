@@ -7,21 +7,33 @@ main {
     height: 100vh;
     color: #503f39;
     align-items: normal;
+    position: absolute;
+}
+
+header .estructura {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.uiCategoria {
+    color: white;
 }
 
 .textInicial {
     padding: 20px;
 }
+
 .superContainerMenu {
     display: flex;
     max-width: 100%;
     justify-content: center;
+    height: 100%;
 }
 
 .taxiServicio {
     display: flex;
     justify-content: center;
 }
+
 .superContainerTaxi {
     background-color: #faf3da;
     border-radius: 20px;
@@ -77,8 +89,6 @@ main {
     border-radius: 20px;
 }
 
-.lavanderiaServicio {}
-
 .tourBoatFishin {
     background-color: aliceblue;
     padding: 20px;
@@ -87,38 +97,85 @@ main {
 
 .containerTours {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    gap: 20px
+    grid-template-columns: 1fr 1fr;
+    gap: 0px;
+    width: 100%;
+    height: 100%;
+    min-height: 700px;
+    /* gap: 1px; */
 }
 
 @media (max-width: 1080px) {
     .containerTours {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
+        
     }
 }
 
 .containerItem {
     background-color: #FBEED7;
-    box-shadow: 0 0 18px 8px rgba(0, 0, 0, 0.1);
     padding: 80px;
-    border-radius: 20px;
-    height: 200px;
-    width: 200px;
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    align-items: stretch;
+    overflow: hidden;
+    justify-content: flex-end;
     flex-direction: column;
     gap: 10px;
     color: black;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-align: center;
+    padding-left: 20px;
+    padding-bottom: 20px;
+}
+
+/* 
+@media (max-width: 1080px) {
+    .containerTours {
+       gap: 1px
+    }
+} */
+
+.botontourpesca {
+    background-image: url("/activos/imagenes/servicios/tourpesca1.jpg");
+    /* background-position: -399px center; */
+
+
+}
+
+.botonSurf {
+    background-image: url("/activos/imagenes/servicios/surf.jpg");
+}
+
+.botontourcaballo {
+    background-image: url("/activos/imagenes/servicios/tourcaballo1.jpg");
+
+}
+
+.botontourrural {
+    background-image: url("/activos/imagenes/servicios/tourrural1.jpg");
+
 }
 
 @media (max-width: 1080px) {
-.containerItem {
-    height: 40vw;
-    width: 40vw;
-        padding: 0px;
+    .containerItem {
+        height: 250px;
+        width: 100vw;
+        justify-content: flex-end;
+        /* border-bottom: 2px white solid; */
+
+
     }
 }
+
+/* .itemTour {
+    background-color: white;
+     padding: 10px;
+} */
 
 .iconoShared {
     height: 30px;
@@ -138,4 +195,24 @@ main {
 .containerTours .triangulo {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+}
+
+.itemTour {
+    padding-left: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 30px;
+    border-radius: 100px;
+    display: flex;
+    gap: 0px;
+    flex-direction: column;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255);
+    width: fit-content;
+    font-weight: 650;
+    transition: all 1s ease-in-out !important;
+    border: 1px rgba(255, 255, 255, 0.5) solid;
 }

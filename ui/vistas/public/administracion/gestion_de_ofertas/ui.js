@@ -252,7 +252,7 @@ casaVitini.view = {
             const tituloContendor = document.createElement("div")
             tituloContendor.classList.add(
                 "negrita",
-     
+
 
             )
             tituloContendor.textContent = "Descuentos de la oferta"
@@ -550,20 +550,17 @@ casaVitini.view = {
                     const infoSinApartamento = contenedorApartamentos.querySelector("[componente=infoSinApartamento]")
                     infoSinApartamento.style.display = "none"
 
-
                     const cApartamento = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.apartamentoUI({
                         apartamentoIDV,
                         apartamentoUI,
                         opcionesUI: {
-                            ui: casaVitini.view.__sharedMethods__.componenteUI.compartidos.opcionesContenedorApartamentoUI,
+                            ui: casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.compartidos.opcionesContenedorApartamentoUI,
                             data: {
                                 descuentoTotal: descuentoTotal,
                                 seleccionadoInicial: tipoAplicacion
                             }
                         }
                     })
-
-
 
                     const selectorZonaApartamentos = contenedorApartamentos.querySelector("[componente=zonaAnadirApartamento]")
                     selectorZonaApartamentos.appendChild(cApartamento)
@@ -612,7 +609,7 @@ casaVitini.view = {
 
                     const descuentoPorDias = descuentosJSON.descuentoPorDias
                     const contenedorDias = contenedorPorRango.querySelector("[contenedorPorRango=porDiasDelRango]")
-                    contenedorDias.classList.remove("estadoInicialInvisible")
+                    contenedorDias.classList.remove("contenedorOculto")
                     contenedorDias.innerHTML = null
 
                     selectorSubTipo.value = subTipoDescuento
@@ -635,7 +632,7 @@ casaVitini.view = {
                             const tipoAplicacion = detallesDelDia.tipoAplicacion
 
                             const contenedorNetoDelDia = contenedorDia.querySelector("[contenedorDelDia=netoPorDia]")
-                            contenedorNetoDelDia.classList.remove("estadoInicialInvisible")
+                            contenedorNetoDelDia.classList.remove("contenedorOculto")
 
                             const campoDescuentoTotal = contenedorNetoDelDia.querySelector("[campoOferta=descuentoGlobal]")
                             campoDescuentoTotal.value = descuentoTotal
@@ -647,7 +644,7 @@ casaVitini.view = {
                             const apartamentos = detallesDelDia.apartamentos
 
                             const contenedorNetoPorApartamentoDelDia = contenedorDia.querySelector("[contenedorDelDia=netoPorApartamentoDelDia]")
-                            contenedorNetoPorApartamentoDelDia.classList.remove("estadoInicialInvisible")
+                            contenedorNetoPorApartamentoDelDia.classList.remove("contenedorOculto")
 
                             for (const apartamento of apartamentos) {
 
@@ -673,7 +670,7 @@ casaVitini.view = {
                                     apartamentoIDV,
                                     apartamentoUI,
                                     opcionesUI: {
-                                        ui: casaVitini.view.__sharedMethods__.componenteUI.compartidos.opcionesContenedorApartamentoUI,
+                                        ui: casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.compartidos.opcionesContenedorApartamentoUI,
                                         data: {
                                             descuentoTotal: descuentoTotal,
                                             seleccionadoInicial: tipoAplicacion
@@ -716,7 +713,6 @@ casaVitini.view = {
             selectorDescuentosRenderizado.removeAttribute("style")
 
         },
-
         ofertaModos: async function (modo) {
             const contenedorBotones = document.querySelector("[componente=espacioCrearOferta] [contenedor=botones]")
 
@@ -881,187 +877,4 @@ casaVitini.view = {
         }
         casaVitini.shell.navegacion.controladorVista(entrada)
     },
-    // detalleUI: function (modoUI) {
-    //     const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
-    //     const divPrincipal = document.createElement("div");
-    //     divPrincipal.setAttribute("componente", "espacioCrearOferta");
-    //     divPrincipal.classList.add("espacioClientes");
-
-    //     const divContenedorNombreYEstado = document.createElement("div");
-
-    //     if (modoUI === "editarOferta") {
-    //         divContenedorNombreYEstado.classList.add("crearOfertaContenedorHorizontalV2");
-
-    //         const botonEstadoOferta = document.createElement("div")
-    //         botonEstadoOferta.classList.add("creatOfertaBotonEstado")
-    //         botonEstadoOferta.setAttribute("componente", "estadoOferta")
-    //         botonEstadoOferta.addEventListener("click", (e) => {this.detallesOferta.estadoOferta(e)})
-    //         botonEstadoOferta.textContent = "Oferta desactivada"
-    //         divContenedorNombreYEstado.appendChild(botonEstadoOferta)
-
-    //     }
-    //     if (modoUI === "crearOferta") {
-    //         divContenedorNombreYEstado.classList.add("crearOfertaContenedorHorizontalModoCrear");
-    //     }
-
-    //     const input = document.createElement("input");
-    //     input.setAttribute("type", "text");
-    //     input.classList.add("preciosEImpuestosbotonOpcionCrearNuevoImpuesto");
-    //     input.setAttribute("campoOferta", "nombreOferta");
-    //     input.setAttribute("placeholder", "Escriba un nombre a esta oferta, el nombre sera publico");
-    //     divContenedorNombreYEstado.appendChild(input)
-    //     divPrincipal.appendChild(divContenedorNombreYEstado)
-
-
-    //     const titulo = document.createElement("p");
-    //     titulo.classList.add("crearOfertaTituloOpcion");
-    //     titulo.textContent = "Selecciona el rango de fechas de vigencia de la oferta.Este rango determina el inicio y el final de la vigencia de la oferta.Cuando se realiza una reserva, se determina si, en el momento de hacer una reserva, con la fecha de creación, esta, la reserva, puede acceder a la oferta.";
-    //     divPrincipal.appendChild(titulo);
-
-    //     const divContenedor = document.createElement("div");
-    //     divContenedor.classList.add("administracion_ofertas_crearOfertas_contenedorFecha");
-    //     divContenedor.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
-
-    //     const divContenedorHorizontal = document.createElement("div");
-    //     divContenedorHorizontal.classList.add("crearOfertaContenedorHorizontal");
-
-    //     const divContenedorFechaInicio = document.createElement("div");
-    //     divContenedorFechaInicio.classList.add("contenedorFecha");
-    //     divContenedorFechaInicio.setAttribute("calendario", "entrada");
-    //     divContenedorFechaInicio.setAttribute("componente", "inicioOferta");
-    //     divContenedorFechaInicio.setAttribute("paralizadorEvento", "ocultadorCalendarios");
-    //     divContenedorFechaInicio.addEventListener("click", async () => {
-    //         await casaVitini.ui.componentes.calendario.configurarCalendario({
-    //             perfilMes: "calendario_entrada_perfilSimple",
-    //             contenedorOrigenIDV: "[calendario=entrada]",
-    //             instanciaUID_contenedorFechas,
-    //             rangoIDV: "inicioRango",
-    //             metodoSelectorDia: null,
-    //             tituloCalendario: "Selecciona la fecha de inicio del rango de vigencia de la oferta",
-    //             seleccionableDiaLimite: "si"
-    //         })
-    //     })
-
-
-    //     const pFechaInicio = document.createElement("p");
-    //     pFechaInicio.classList.add("tituloFecha");
-    //     pFechaInicio.textContent = "Fecha de inicio";
-
-    //     const pFechaInicioSeleccionada = document.createElement("p");
-    //     pFechaInicioSeleccionada.classList.add("fechaInicio");
-    //     pFechaInicioSeleccionada.setAttribute("fechaUI", "fechaInicio");
-    //     pFechaInicioSeleccionada.textContent = "(Seleccionar)";
-
-    //     divContenedorFechaInicio.appendChild(pFechaInicio);
-    //     divContenedorFechaInicio.appendChild(pFechaInicioSeleccionada);
-
-    //     const divContenedorFechaFin = document.createElement("div");
-    //     divContenedorFechaFin.classList.add("contenedorFecha");
-    //     divContenedorFechaFin.setAttribute("calendario", "salida");
-    //     divContenedorFechaFin.setAttribute("paralizadorEvento", "ocultadorCalendarios");
-    //     divContenedorFechaFin.setAttribute("componente", "finOferta");
-
-    //     divContenedorFechaFin.addEventListener("click", async () => {
-    //         await casaVitini.ui.componentes.calendario.configurarCalendario({
-    //             perfilMes: "calendario_salida_perfilSimple",
-    //             contenedorOrigenIDV: "[calendario=salida]",
-    //             instanciaUID_contenedorFechas,
-    //             rangoIDV: "finalRango",
-    //             metodoSelectorDia: null,
-    //             tituloCalendario: "Selecciona la fecha del fin del rango de vigencia de la oferta",
-    //             seleccionableDiaLimite: "si"
-
-    //         })
-    //     })
-    //     const contenedorZonaOferta = document.createElement("div")
-    //     contenedorZonaOferta.classList.add("contenedorZonaOferta")
-
-    //     const selectorZonaOferta = document.createElement("select")
-    //     selectorZonaOferta.classList.add(
-    //         "selector",
-    //         "textCentrado"
-    //     )
-    //     selectorZonaOferta.setAttribute("campo", "zonaIDV")
-    //     const opcionPredeterminada = document.createElement("option")
-    //     opcionPredeterminada.selected = true
-    //     opcionPredeterminada.disabled = true;
-    //     opcionPredeterminada.value = "no"
-    //     opcionPredeterminada.text = "Zona de la oferta"
-    //     selectorZonaOferta.appendChild(opcionPredeterminada)
-    //     const opciones = [
-    //         { value: "publica", text: "Zona publica" },
-    //         { value: "global", text: "Zona global" },
-    //         { value: "privada", text: "Zona privada" }
-    //     ]
-    //     for (const opcionData of opciones) {
-    //         const opcion = document.createElement("option");
-    //         opcion.value = opcionData.value;
-    //         opcion.text = opcionData.text;
-    //         selectorZonaOferta.appendChild(opcion);
-    //     }
-    //     contenedorZonaOferta.appendChild(selectorZonaOferta)
-
-
-    //     const pFechaFin = document.createElement("p");
-    //     pFechaFin.classList.add("tituloFecha");
-    //     pFechaFin.textContent = "Fecha fin";
-
-    //     const pFechaFinSeleccionada = document.createElement("p");
-    //     pFechaFinSeleccionada.classList.add("fechaFin");
-    //     pFechaFinSeleccionada.setAttribute("fechaUI", "fechaFin");
-    //     pFechaFinSeleccionada.textContent = "(Seleccionar)";
-
-    //     divContenedorFechaFin.appendChild(pFechaFin);
-    //     divContenedorFechaFin.appendChild(pFechaFinSeleccionada);
-
-    //     divContenedorHorizontal.appendChild(divContenedorFechaInicio);
-    //     divContenedorHorizontal.appendChild(contenedorZonaOferta);
-    //     divContenedorHorizontal.appendChild(divContenedorFechaFin);
-
-    //     divContenedor.appendChild(divContenedorHorizontal);
-
-    //     divPrincipal.appendChild(divContenedor);
-
-
-    //     const botonAnadirCondicion = document.createElement("div")
-    //     botonAnadirCondicion.classList.add("botonV1")
-    //     botonAnadirCondicion.setAttribute("boton", "anadirCondicion")
-    //     if (modoUI === "editarOferta") {
-    //         botonAnadirCondicion.style.display = "none"
-    //     }
-    //     botonAnadirCondicion.textContent = "Añadir condición"
-    //     botonAnadirCondicion.addEventListener("click", casaVitini.view.__sharedMethods__.componenteUI.selectorTipoOferta)
-    //     divPrincipal.appendChild(botonAnadirCondicion)
-
-    //     const contonenedorPropiedades = document.createElement("div")
-    //     contonenedorPropiedades.setAttribute("contenedor", "superBloque")
-    //     contonenedorPropiedades.classList.add(
-    //         "flexVertical",
-    //         "gap6"
-    //     )
-    //     divPrincipal.appendChild(contonenedorPropiedades)
-
-    //     const contenedorCondiciones = document.createElement("div")
-    //     contenedorCondiciones.setAttribute("contenedor", "condiciones")
-    //     contenedorCondiciones.classList.add("contenedorCondiciones")
-    //     contonenedorPropiedades.appendChild(contenedorCondiciones)
-
-    //     const infoCondiciones = document.createElement("div")
-    //     infoCondiciones.setAttribute("info", "condiciones")
-    //     infoCondiciones.classList.add(
-    //         "textoCentrado",
-    //         "padding10"
-    //     )
-    //     infoCondiciones.textContent = "Inserta condiciones a esta oferta."
-    //     contenedorCondiciones.appendChild(infoCondiciones)
-
-    //     const contenedorDescuentos = document.createElement("div")
-    //     contenedorDescuentos.setAttribute("contenedor", "descuentos")
-    //     contonenedorPropiedades.appendChild(contenedorDescuentos)
-
-    //     const descuentosUI = casaVitini.view.__sharedMethods__.componenteUI.contenedorDescuento()
-    //     contenedorDescuentos.appendChild(descuentosUI)
-
-    //     return divPrincipal
-    // }
 }

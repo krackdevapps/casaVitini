@@ -7,6 +7,12 @@
     align-items: stretch;
     gap: 6px;
 }
+header .estructura {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.uiCategoria {
+    color: black;
+}
 
 .botonID {
     backdrop-filter: blur(50px);
@@ -51,4 +57,8 @@
     flex-wrap: nowrap;
     align-items: stretch;
     justify-content: flex-start;
+}
+
+.botonV1BlancoIzquierda_campo {
+    background-color: rgba(0, 0, 0, 0.1);
 }

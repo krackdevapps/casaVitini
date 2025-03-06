@@ -1,14 +1,14 @@
+import { DateTime } from "luxon"
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarServicioPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/actualizarServicioPorReservaUID.mjs"
 import { obtenerServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServicioEnReservaPorServicioUID.mjs"
-import { obtenerServicioPorCriterioPublicoPorServicioUIDArray } from "../../../../../infraestructure/repository/servicios/obtenerServicioPorCriterioPublicoPorServicioUIDArray.mjs"
-import { obtenerServicioPorServicioUID } from "../../../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs"
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { validarObjetoDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarObjetoDelServicio.mjs"
 import { validarOpcionesDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
+import { obtenerFechaLocal } from "../../../../../shared/obtenerFechaLocal.mjs"
 
 export const actualizarServicioEnReserva = async (entrada) => {
     try {
@@ -41,7 +41,7 @@ export const actualizarServicioEnReserva = async (entrada) => {
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
-        validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
+        const oSdS_validado = validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
 
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
@@ -58,10 +58,13 @@ export const actualizarServicioEnReserva = async (entrada) => {
 
 
         await validarOpcionesDelServicio({
-            opcionesSeleccionadasDelServicio,
+            opcionesSeleccionadasDelServicio: oSdS_validado,
             servicioExistenteAccesible: servicio
         })
-        const opcionesSeleccionadas = opcionesSeleccionadasDelServicio.opcionesSeleccionadas
+        const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
+        const descuentoTotalServicio = oSdS_validado.descuentoTotalServicio
+        const fechaUTC = DateTime.utc().toISO();
+        contenedorServicio.fechaAdquisicion = fechaUTC
 
         await campoDeTransaccion("iniciar")
         const servicioEnReserva = await actualizarServicioPorReservaUID({
@@ -69,15 +72,19 @@ export const actualizarServicioEnReserva = async (entrada) => {
             servicioUID_enReserva,
             nombre: nombreServicico,
             contenedor: contenedorServicio,
-            opcionesSel: opcionesSeleccionadas
+            opcionesSel: opcionesSeleccionadas,
+            descuentoTotalServicio: descuentoTotalServicio
         })
 
+        const fechaAdquisicion = servicioEnReserva.contenedor.fechaAdquisicion
+        servicioEnReserva.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaAdquisicion)
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+        servicioEnReserva.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaUTC)
 
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el servicio correctamente en la reserva y el contenedor financiero se ha renderizado.",
-            servicio: servicioEnReserva
+            servicio: servicioEnReserva,
         }
         return ok
     } catch (errorCapturado) {

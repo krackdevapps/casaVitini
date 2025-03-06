@@ -13,7 +13,7 @@ casaVitini.view = {
 
         const comJS = document.createElement("script")
         comJS.src = "/componentes/reservacom"
-        console.log("comJS", comJS)
+
         comJS.addEventListener('load', () => {
 
             const com = document.querySelector('[com=reserva-ui]');

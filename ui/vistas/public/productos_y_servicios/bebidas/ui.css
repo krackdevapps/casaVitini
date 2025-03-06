@@ -35,7 +35,7 @@ main {
 
 .tablaTaxi {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto;
     gap: 40px;
     font-weight: 550px;
 

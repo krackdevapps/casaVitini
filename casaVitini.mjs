@@ -23,7 +23,11 @@ process.on('uncaughtException', (error) => {
 
 const app = express()
 app.use(controlHTTPS)
-
+//app.use(compression());
+app.use(compression({
+  level: 9, // Nivel de compresión (de 0 a 9)
+  threshold: 1024 // Tamaño mínimo de bytes para comprimir));
+  }))
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')
 app.use(controlSizePeticion);
@@ -42,7 +46,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(controlTipoVerbo)
 app.disable('x-powered-by')
 app.use(csp);
-app.use(compression());
 
 app.use('/activos', express.static(path.join('./ui/activos')))
 app.use(controlBaseDeDatos)

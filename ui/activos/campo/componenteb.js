@@ -1,8 +1,8 @@
 class ComponenteA extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: 'open' });
-      this.shadowRoot.innerHTML = `
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = `
         <style>
           p {
             color: blue;
@@ -10,13 +10,12 @@ class ComponenteA extends HTMLElement {
         </style>
         <p>Este es el Componente A</p>
       `;
-    }
-  
-    metodoDeComponenteA() {
-      console.log('Método de Componente A ejecutado');
-    }
   }
-  
-  customElements.define('componente-a', ComponenteA);
-  export { ComponenteA }; // Exportar el componente
-  
+
+  metodoDeComponenteA() {
+
+  }
+}
+
+customElements.define('componente-a', ComponenteA);
+export { ComponenteA }; // Exportar el componente

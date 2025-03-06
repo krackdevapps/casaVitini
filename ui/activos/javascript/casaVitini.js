@@ -556,14 +556,14 @@ const casaVitini = {
                     .join(";");
                 elemento.style.cssText = propiedadesFiltradas;
             },
-            controlHorizontalVentana: () => {
-                const currentWidth = window.innerWidth;
-                const previousWidth = casaVitini.componentes.controladores.anchoActualVentanad
-                if (currentWidth !== previousWidth) {
-                    casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
-                } else {
-                }
-            },
+            // controlHorizontalVentana: () => {
+            //     const currentWidth = window.innerWidth;
+            //     const previousWidth = casaVitini.componentes.controladores.anchoActualVentanad
+            //     if (currentWidth !== previousWidth) {
+            //         casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
+            //     } else {
+            //     }
+            // },
             menuResponsivo: {
                 despliege: function () {
                     selectorMenuFlotanteRenderizado = document.querySelector("[componente=menuGlobalFlotante]")
@@ -839,9 +839,8 @@ const casaVitini = {
                     casaVitini.view.__observers__[o].disconnect()
                 })
                 window.removeEventListener("resize", casaVitini.view?.volatilObservers?.parallaxControlador?.resizeIsDone);
-                window.removeEventListener('scroll', casaVitini.view?.scrollHandler);
-                window.removeEventListener('scroll', casaVitini.view?.controladorIconoMouse);
-                window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
+                //window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
+
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
                 document.querySelectorAll("html, #uiLogo, body, header, [componente=contenedorMenu], [componente=botonMenuResponsivo]")
                     .forEach((e) => {
@@ -1892,10 +1891,14 @@ const casaVitini = {
                     }
                 },
                 configurarCalendario: async (data) => {
+                    const main = document.querySelector("main")
                     const metodoAlternativo = data.metodoAlternativo
                     const instanciaUID_contenedorFechas = data.instanciaUID_contenedorFechas
                     const contenedorOrigenIDV = data.contenedorOrigenIDV
                     const perfilMes = data.perfilMes
+                    const zonaDespliege = data?.zonaDespliege || main
+
+                    console.log("data", data.zonaDespliege)
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const metodoSelectorDia = data?.metodoSelectorDia || "ui.componentes.calendario.calendarioCompartido.seleccionarDia"
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
@@ -1934,7 +1937,7 @@ const casaVitini = {
                         tipoFecha: "enEspera",
                         calendarioIO: "enEspera"
                     })
-                    document.querySelector("main").appendChild(calendarioUI)
+                    zonaDespliege.appendChild(calendarioUI)
                     document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
                     const configGlobal = calendarioUI.querySelector("[contenedor=calendario]")
                     const fechasSeleccionadas = () => {
@@ -5105,6 +5108,23 @@ const casaVitini = {
                 }
             },
         },
+        calculadora: async function (data) {
+            const numero1 = data.numero1
+            const numero2 = data.numero2
+            const operador = data.operador
+            const redondeo = data.redondeo
+            const calculo = data.calculo
+
+            const respuestaServidor = await casaVitini.shell.servidor({
+                zona: "componentes/calculadora",
+                numero1,
+                numero2,
+                operador,
+                redondeo,
+                calculo
+            })
+            return respuestaServidor
+        },
         conversor: {
             fecha_humana_hacia_ISO: (fecha) => {
                 const filtroFechaHumana = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
@@ -5417,6 +5437,52 @@ const casaVitini = {
                 }
             }
         },
+        semaforo: {
+            mutexes: {},
+
+            crearInstancia(name) {
+                if (!this.mutexes[name]) {
+                    this.mutexes[name] = {
+                        locked: false,
+                        queue: []
+                    };
+                }
+                return this.mutexes[name];
+            },
+
+            async bloquear(name) {
+                const mutex = this.mutexes[name];
+                if (!mutex) {
+                    throw new Error(`Mutex con nombre '${name}' no existe.`);
+                }
+
+                return new Promise((resolve) => {
+                    if (!mutex.locked) {
+                        mutex.locked = true;
+                        resolve();
+                    } else {
+                        mutex.queue.push(resolve);
+                    }
+                });
+            },
+
+            desbloquear(name) {
+                const mutex = this.mutexes[name];
+                if (!mutex) {
+                    throw new Error(`Mutex con nombre '${name}' no existe.`);
+                }
+
+                if (mutex.queue.length > 0) {
+                    const nextResolve = mutex.queue.shift();
+                    nextResolve();
+                } else {
+                    mutex.locked = false;
+                    if (mutex.queue.length === 0) {
+                        delete this.mutexes[name];
+                    }
+                }
+            }
+        }
     },
     view: {}
 }

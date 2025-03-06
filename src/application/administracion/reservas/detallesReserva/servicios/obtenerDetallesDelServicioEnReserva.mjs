@@ -44,6 +44,8 @@ export const obtenerDetallesDelServicioEnReserva = async (entrada) => {
         const contenedorServicio = servicio.contenedor
         contenedorServicio.servicioUID = servicio.servicioUID
 
+        // ¿Calcular aqui el total del servicio o extraerlo de el contenedor financiero?
+
         const ok = {
             ok: "Detalles del servicio en la reserva",
             servicio

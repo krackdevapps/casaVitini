@@ -10,6 +10,8 @@ import { detallesPagos } from "./detallesReserva/detallesPagos.mjs"
 import { enlacesDePagoDeLaReserva } from "./detallesReserva/enlacesDePagoDeLaReserva.mjs"
 import { obtenerServiciosPorReservaUID } from "../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs"
 import { obtenerComplementosAlojamientoPorReservaUID } from "../../infraestructure/repository/reservas/complementosAlojamiento/obtenerComplementosAlojamientoPorReservaUID.mjs"
+import { obtenerFechaLocal } from "../obtenerFechaLocal.mjs"
+
 export const detallesReserva = async (data) => {
     try {
         const capas = data.capas
@@ -65,7 +67,17 @@ export const detallesReserva = async (data) => {
             reserva.pernoctantes = await pernoctantesDeLaReserva(reservaUID)
         }
         if (capas.includes(contenedorCapas[3])) {
-            reserva.contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+
+            const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
+            const desglosePorServicios = contenedorFinanciero.desgloseFinanciero.entidades.servicios.desglosePorServicios
+            for (const dS of desglosePorServicios) {
+
+                const contenedor = dS.servicio.contenedor
+                const fechaAdquisicion = contenedor.fechaAdquisicion
+                dS.servicio.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaAdquisicion)
+            }
+            reserva.contenedorFinanciero = contenedorFinanciero
+            
         }
         if (capas.includes(contenedorCapas[4])) {
             reserva.detallesPagos = await detallesPagos(reservaUID)
@@ -74,7 +86,13 @@ export const detallesReserva = async (data) => {
             reserva.enlacesDePago = await enlacesDePagoDeLaReserva(reservaUID)
         }
         if (capas.includes(contenedorCapas[6])) {
-            reserva.servicios = await obtenerServiciosPorReservaUID(reservaUID)
+            const servicios = await obtenerServiciosPorReservaUID(reservaUID)
+            for (const servicio of servicios) {
+                const contenedor = servicio.contenedor
+                const fechaAdquisicion = contenedor.fechaAdquisicion
+                servicio.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaAdquisicion)
+            }
+            reserva.servicios = servicios
         }
         if (capas.includes(contenedorCapas[7])) {
             reserva.complementosDeAlojamiento = await obtenerComplementosAlojamientoPorReservaUID(reservaUID)

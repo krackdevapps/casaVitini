@@ -5,6 +5,10 @@ export const contenedorFechasUI = {
         const nombreContenedor = data?.nombreContenedor
         const nombreFechaEntrada = data?.nombreFechaEntrada || "Fecha inicio"
         const nombreFechaSalida = data?.nombreFechaSalida || "Fecha Final"
+        const zonaDespliege = data?.zonaDespliege
+        console.log("1data", data)
+
+        console.log("1", zonaDespliege)
         const instanciaUID_contenedorFechas = casaVitini.utilidades.codigoFechaInstancia()
         const seleccionableDiaLimite = data?.seleccionableDiaLimite
         const modo = data?.modo
@@ -19,6 +23,7 @@ export const contenedorFechasUI = {
             perfilMes: "calendario_entrada_perfilSimple",
             metodoSelectorDia,
             seleccionableDiaLimite,
+            zonaDespliege,
             ...sobreControlConfiguracion.configuracionInicio
         }
         configuracionCalendarioInicio.instanciaUID_contenedorFechas = instanciaUID_contenedorFechas
@@ -27,6 +32,7 @@ export const contenedorFechasUI = {
             contenedorOrigenIDV: "[calendario=salida]",
             perfilMes: "calendario_salida_perfilSimple",
             metodoSelectorDia,
+            zonaDespliege,
             seleccionableDiaLimite,
             ...sobreControlConfiguracion.configuracionFin
         }

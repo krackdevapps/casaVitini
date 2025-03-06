@@ -6,6 +6,7 @@ import { sharedMethods } from "./sharedMethods.mjs"
 
 export const shared = () => {   
     return {
+        ofertas_componentesUI: sharedMethods,
         ...sharedMethods,
         ...contenedorFinanciero,
         ...selectorApartamentosEspecificosUI,

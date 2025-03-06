@@ -4,20 +4,20 @@ casaVitini.view = {
         // document.querySelector("#uiLogo").style.filter = "invert(1)"
         // document.querySelector("[componente=botonMenuResponsivo]").style.filter = "invert(1)"
 
-        const hs = document.createElement("script")
-        hs.src = "/componentes/reservacom"
-        document.querySelector("main").appendChild(hs)
+        // const hs = document.createElement("script")
+        // hs.src = "/componentes/reservacom"
+        // document.querySelector("main").appendChild(hs)
 
 
         // Escuchar el evento 'load' para asegurarse de que el script se cargue por completo
-        hs.addEventListener('load', () => {
-            console.log('Script cargado correctamente');
-            // Aquí puedes llamar a la función del script cargado
-            const myComponent = document.querySelector('[com=reserva-ui]');
-            console.log("my", myComponent)
-            myComponent.entrada()
+        // hs.addEventListener('load', () => {
 
-        });
+        //     // Aquí puedes llamar a la función del script cargado
+        //     const myComponent = document.querySelector('[com=reserva-ui]');
+
+        //     myComponent.entrada()
+
+        // });
 
 
 

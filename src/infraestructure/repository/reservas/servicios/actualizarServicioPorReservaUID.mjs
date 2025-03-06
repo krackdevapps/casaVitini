@@ -5,18 +5,25 @@ export const actualizarServicioPorReservaUID = async (data) => {
         const reservaUID = data.reservaUID
         const servicioUID_enReserva= data.servicioUID_enReserva
         const opcionesSel = data.opcionesSel
+        const descuentoTotalServicio = data.descuentoTotalServicio
+        const contenedor = data.contenedor
+
 
         const consulta = `
         UPDATE "reservaServicios"
         SET
-        "opcionesSel" = $1
+        "opcionesSel" = $1,
+        "descuentoTotalServicio" = $2,
+        "contenedor" = $3
         WHERE
-        "reservaUID" = $2
+        "reservaUID" = $4
         AND
-        "servicioUID" = $3
+        "servicioUID" = $5
         RETURNING *;        `;
         const parametros = [
             opcionesSel,
+            descuentoTotalServicio,
+            contenedor,
             reservaUID,
             servicioUID_enReserva
         ]

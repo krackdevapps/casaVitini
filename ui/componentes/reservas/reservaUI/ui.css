@@ -1329,13 +1329,18 @@
     color: green;
 }
 
+/* anterior filaOpcionServicio */
+
 .filaOpcionServicio {
     display: grid;
-    grid-template-columns: min-content auto min-content !important;
+    grid-template-columns: min-content auto !important;
     align-items: center;
     gap: 4px;
     padding: 4px;
 }
+
+
+
 
 
 
@@ -1357,13 +1362,35 @@
 }
 
 .campoCantidad {
-    width: 80px;
-    border-radius: 6px;
+    max-width: 100px;
+    border-radius: 10px !important;
     height: 100%;
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-    padding-left: 6px !important;
-    padding-right: 6px !important;
+    /* background-color: transparent !important; */
+    padding: 10px !important;
+    margin-left: -10px;
+}
 
+.campoDescuento {
+    max-width: 500px;
+    border-radius: 10px !important;
+    height: 100%;
+    padding: 10px !important;
+    width: 100%;
+}
 
+.botonReset {
+    max-width: 500px;
+    border-radius: 10px !important;
+    height: 100%;
+    padding: 10px !important;
+    width: 100%;
+    background-color: #0000004d;
+    transition: all 250ms linear;
+    
+margin-top: 16px;
+}
+
+.botonReset:hover {
+    background-color: rgba(255, 0, 0, 0.842);
+    color: white;
 }

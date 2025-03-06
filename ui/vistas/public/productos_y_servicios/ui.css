@@ -1,28 +1,50 @@
 body {
     background-color: rgb(255 188 0 / 28%);
     height: 100vh;
+    background-image: url("/activos/imagenes/servicios/toureleremate.png");
+
 }
 
 main {
-    height: 100vh;
     color: #503f39;
     align-items: normal;
 }
 
-.textInicial {
-    padding-top: 20px;
-    padding-left: 40px;
-    padding-right: 40px;
-    padding-bottom: 40px;
-    font-size: 11px;
+header .estructura {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.uiCategoria {
+    color: black;
+}
+
+.contenedorTexto {
+display: flex;
+justify-content: center;
+padding-bottom: 20px;
 
 }
+
+.textInicial {
+    padding: 10px;
+    font-size: 13px;
+    text-align: center;
+    /* background-color: hsla(0, 0%, 100%, 0.3); */
+    border-radius: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    /* backdrop-filter: blur(5px); */
+
+
+}
+
 .superContainerMenu {
     display: flex;
     max-width: 100%;
     justify-content: center;
     /* flex: 1; */
 }
+
 .superContainerTaxi {
     background-color: #faf3da;
     border-radius: 20px;
@@ -33,9 +55,11 @@ main {
     gap: 20px;
 
 }
+
 .taxiServicio {
     margin: 10px;
 }
+
 .tablaTaxi {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -90,7 +114,7 @@ main {
 
 .containerTours {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px
 }
 
@@ -101,24 +125,34 @@ main {
 }
 
 .containerItem {
-    background-color: #FBEED7;
+    background-color: hsla(0, 0%, 100%, 0.3);
     box-shadow: 0 0 18px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
     padding: 80px;
     border-radius: 30px;
-    height: 200px;
-    width: 200px;
+    height: 180px;
+    width: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 10px;
-    color: black;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 650;
+    transition: all 250ms linear !important;
+    border: 1px solid rgba(128, 128, 128, 0.8);
+}
+
+.containerItem:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: white;
+
 }
 
 @media (max-width: 1080px) {
-.containerItem {
-    height: 20vw;
-    width: 40vw;
+    .containerItem {
+        height: 20vw;
+        width: 40vw;
         padding: 0px;
     }
 }
