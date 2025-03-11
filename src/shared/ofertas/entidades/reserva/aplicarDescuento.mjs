@@ -18,7 +18,8 @@ export const aplicarDescuento = async (data) => {
             throw new Error(error)
         }
         const contenedorTotalesBase = estructura.entidades.reserva.global.totales
-        const totalNeto = new Decimal(contenedorTotalesBase.totalNeto)
+        const totalNeto = new Decimal(contenedorTotalesBase?.totalNetoConComplementos || contenedorTotalesBase.totalNeto)
+        
         const contenedorOfertas = estructura.contenedorOfertas.ofertas[origen]
         const contenedorPorTotal = estructura.contenedorOfertas.entidades.reserva.desgloses.porTotal
         const contenedorPorApartamento = estructura.contenedorOfertas.entidades.reserva.desgloses.porApartamento

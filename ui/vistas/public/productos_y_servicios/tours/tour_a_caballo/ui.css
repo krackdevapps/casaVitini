@@ -10,6 +10,7 @@ main {
     color: #503f39;
     align-items: normal;
     position: absolute;
+    padding-bottom: 0px;
 }
 
 header .estructura {

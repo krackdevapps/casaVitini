@@ -18,7 +18,7 @@ export const perfil_totalNetoPorRango = async (data) => {
         const fechaSalidaReserva_ISO = data.fechaSalidaReserva_ISO
         const estructura = data.estructura
         const contenedorOfertas = data.contenedorOfertas
-
+        console.log("ee")
         const diasArrayReserva = constructorObjetoEstructuraPrecioDia(fechaEntradaReserva_ISO, fechaSalidaReserva_ISO)
         for (const fechaDelDia of diasArrayReserva) {
             const nocheDeLaReserva = estructura.entidades.reserva.desglosePorNoche[fechaDelDia]
@@ -34,7 +34,8 @@ export const perfil_totalNetoPorRango = async (data) => {
             }
 
             if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
-                const precioNetoNoche = estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+                const precioNetoNoche = estructura.entidades.reserva.desglosePorNoche[fechaDelDia]?.precioNetoNocheConComplementos || estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+                console.log("precioNetonOche", precioNetoNoche)
                 contenedorPorDia[fechaDelDia] = {
                     totalSinDescuentos: precioNetoNoche,
                     totalConDescuentos: precioNetoNoche,
@@ -46,7 +47,12 @@ export const perfil_totalNetoPorRango = async (data) => {
             const totalNetoPorDia = estructura.entidades.reserva
                 .desglosePorNoche
             [fechaDelDia]
-                ?.precioNetoNoche
+                ?.precioNetoNocheConComplementos
+                || estructura.entidades.reserva
+                    .desglosePorNoche
+                [fechaDelDia]
+                    ?.precioNetoNoche
+
             if (!totalNetoPorDia) {
                 continue
             }

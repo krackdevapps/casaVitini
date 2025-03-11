@@ -22,7 +22,7 @@ export const aplicarImpuestos = async (data) => {
             instantaneaImpuestos.push(...impuestosDeAdministracion)
         } else if (origen === "simulacion") {
             const simulacionUID = data.simulacionUID
-            if (typeof simulacionUID !== "number") {
+            if (typeof simulacionUID !== "bigint") {
                 const error = "simulacionUID en aplicarImpuestos debe de ser un número."
                 throw new Error(error)
             }

@@ -10,6 +10,8 @@ export const insertarComplementoAlojamientoPorReservaUID = async (data) => {
         const tipoPrecio = data.tipoPrecio
         const precio = data.precio
         const apartamentoUID = data.apartamentoUID
+        const tipoUbicacion = data.tipoUbicacion
+        const habitacionUID = data.habitacionUID
 
         const consulta = `
         INSERT INTO "reservaComplementosAlojamiento"
@@ -20,9 +22,11 @@ export const insertarComplementoAlojamientoPorReservaUID = async (data) => {
         "definicion",
         "tipoPrecio",
         "precio",
-        "apartamentoUID"
+        "apartamentoUID",
+        "tipoUbicacion",
+        "habitacionUID"
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *
         `;
         const parametros = [
@@ -32,7 +36,9 @@ export const insertarComplementoAlojamientoPorReservaUID = async (data) => {
             definicion,
             tipoPrecio,
             precio,
-            apartamentoUID
+            apartamentoUID,
+            tipoUbicacion,
+            habitacionUID
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

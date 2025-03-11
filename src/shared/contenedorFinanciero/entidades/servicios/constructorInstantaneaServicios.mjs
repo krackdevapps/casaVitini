@@ -32,6 +32,7 @@ export const constructorInstantaneaServicios = async (data) => {
         const desglosePorServicios = serviciosEntidad.desglosePorServicios
 
         for (const servicio of servicios) {
+
             const servicioUID = servicio.servicioUID
             delete servicio.testingVI
             const contenedor = servicio.contenedor
@@ -111,8 +112,8 @@ export const constructorInstantaneaServicios = async (data) => {
                 })
             }
 
-            const tipoDescuentoTotalPorServicio = descuentoTotalServicio.tipoDescuento
-            const cantidadTotalPorServicio = descuentoTotalServicio.cantidadDescuento
+            const tipoDescuentoTotalPorServicio = descuentoTotalServicio?.tipoDescuento || null
+            const cantidadTotalPorServicio = descuentoTotalServicio?.cantidadDescuento || 0
 
             const desgloseDelServicio = {
                 servicio,

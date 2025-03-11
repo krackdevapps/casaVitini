@@ -29,6 +29,10 @@ casaVitini.view = {
 
                 const configuracionesAlojamiento = respuestaServidor.ok
                 configuracionesAlojamiento.forEach((conf) => {
+
+
+
+
                     const apartamentoIDV = conf.apartamentoIDV
                     const zonaIDV = conf.zonaIDV
                     const apartamentoUI = conf.apartamentoUI
@@ -65,8 +69,7 @@ casaVitini.view = {
 
             return contenedor
 
-        }
-
+        },
     },
     complementosPorAlojamiento: {
         arranque: function () {
@@ -111,20 +114,42 @@ casaVitini.view = {
                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor?.ok) {
-
                     const complementos = respuestaServidor.complementosPorApartamentoIDV
                     const apartamentoUI = respuestaServidor.apartamentoUI
 
-                    main.querySelector("[data=titulo]").textContent = `Complementos de alojamiento de ${apartamentoUI}`
+                    main.querySelector("[data=titulo]").textContent = `Todos los complementos de ${apartamentoUI}`
                     complementos.forEach((com) => {
+
+                        const tipoUbicacion = com.tipoUbicacion
+                        let sel
+                        if (tipoUbicacion === "alojamiento") {
+                            sel = `[contenedorTipoUbicacion=${tipoUbicacion}]`
+                        } else if (tipoUbicacion === "habitacion") {
+                            const habitacionUID = com.configuracionHabitacion.habitacionSeleccionada.componenteUID
+                            sel = `[contenedorTipoUbicacion=${tipoUbicacion}][habitacionUID="${habitacionUID}"]`
+                        }
+
+                        const cS_control = espacio.querySelector(sel)
+                        if (!cS_control) {
+                            const habitacionSeleccionada = com.configuracionHabitacion.habitacionSeleccionada
+                            const cC = this.contenedorComplemento({
+                                tipoUbicacion,
+                                habitacionSeleccionada
+                            })
+                            espacio.appendChild(cC)
+                        }
+
+
                         const tarjetaUI = this.tarjetaComplementoUI(com)
-                        espacio.appendChild(tarjetaUI)
+                        espacio.querySelector(sel).querySelector("[com=complementos]").appendChild(tarjetaUI)
                     })
                 }
             },
             tarjetaComplementoUI: (data) => {
 
                 const { complementoUI, definicion, tipoPrecio, precio, estadoIDV, complementoUID } = data
+                const definicionB64 = definicion.length === "0" ? "" : definicion
+                const definicionS = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionB64)
 
                 const contenedor = document.createElement("a")
                 contenedor.setAttribute("href", `/administracion/complementos_de_alojamiento/complemento:${complementoUID}`)
@@ -157,7 +182,7 @@ casaVitini.view = {
                 contenedor.appendChild(estadoUI)
 
                 const definicionUI = document.createElement("p")
-                definicionUI.textContent = definicion || "Sin definción"
+                definicionUI.textContent = definicionS || "Sin definción"
                 contenedor.appendChild(definicionUI)
 
                 const tipoPrecioUI = document.createElement("p")
@@ -169,6 +194,37 @@ casaVitini.view = {
                 precioUI.textContent = `${precio}$ ${dict[tipoPrecio]}`
                 contenedor.appendChild(precioUI)
                 return contenedor
+            },
+            contenedorComplemento: (data) => {
+
+                const tipoUbicacion = data.tipoUbicacion
+
+                const ui = document.createElement("div")
+                ui.classList.add("flexVertical", "gap6", "padding6")
+                ui.setAttribute("contenedorTipoUbicacion", tipoUbicacion)
+
+                const t = document.createElement("div")
+                t.classList.add("padding14")
+                if (tipoUbicacion === "alojamiento") {
+
+
+                    t.textContent = "Complementos del alojamiento"
+                } else if (tipoUbicacion === "habitacion") {
+
+                    const habitacionUID = data.habitacionSeleccionada.componenteUID
+                    const habitacionUI = data.habitacionSeleccionada.habitacionUI
+                    ui.setAttribute("habitacionUID", habitacionUID)
+                    t.textContent = habitacionUI
+                }
+                ui.appendChild(t)
+
+                const c = document.createElement("div")
+                c.classList.add("flexVertical", "gap6")
+                c.setAttribute("com", "complementos")
+                ui.appendChild(c)
+
+                return ui
+
             }
         },
         detallesComplemento: {
@@ -196,6 +252,10 @@ casaVitini.view = {
                     const apartamentoIDV = complemento.apartamentoIDV
                     const apartamentoUI = respuestaServidor.apartamentoUI
 
+                    const configuracionHabitacion = respuestaServidor.configuracionHabitacion
+                    const habitacionesAlojamiento = configuracionHabitacion.habitacionesAlojamiento
+                    const habitacionSeleccionada = configuracionHabitacion.habitacionSeleccionada
+
                     main.querySelector("[data=titulo]").textContent = `Detalles del complementos de alojamiento de ${apartamentoUI}`
 
                     espacio.setAttribute("instantanea", JSON.stringify(complemento))
@@ -204,11 +264,13 @@ casaVitini.view = {
                     const ui = casaVitini.view.__sharedMethods__.complementoUI({
                         modoUI: "editar",
                         apartamentoIDV,
-                        complementoUID
+                        complementoUID,
+                        habitacionesAlojamiento
                     })
                     espacio.appendChild(ui)
                     this.aplicaData({
                         complemento,
+                        habitacionSeleccionada,
                         instanciaUID_destino: instanciaUID
                     })
                     const botonCrearServicio = this.botonesDuranteModificacion()
@@ -246,7 +308,7 @@ casaVitini.view = {
                 botonEliminar.classList.add("botonV1");
                 botonEliminar.setAttribute("componente", "botonEliminarOferta");
                 botonEliminar.addEventListener("click", () => {
-                  this.eliminar.ui()
+                    this.eliminar.ui()
                 })
                 botonEliminar.textContent = "Eliminar complemento";
                 contenedor.appendChild(botonGuardar);
@@ -257,18 +319,33 @@ casaVitini.view = {
             aplicaData: function (data) {
 
                 const complemento = data.complemento
+
                 const complementoUI = complemento.complementoUI
                 const instanciaUID_destino = data.instanciaUID_destino
                 const complementoUID = complemento.complementoUID
                 const tipoPrecio = complemento.tipoPrecio
                 const precio = complemento.precio
-                const definicion = complemento.definicion
+                const definicionB64 = complemento.definicion.length === "0" ? "" : complemento.definicion
                 const estadoIDV = complemento.estadoIDV
+                const tipoUbicacion = complemento.tipoUbicacion
+                const definicion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionB64)
+
+                const habitacionSeleccionada = data.habitacionSeleccionada
 
                 const complementoUI_ = document.querySelector(`[instanciaUID="${instanciaUID_destino}"]`)
                 if (!complementoUI_) { return }
 
                 complementoUI_.querySelector("[componente=complementoUI]").setAttribute("complementoUID", complementoUID)
+                const selectorUbitacion = complementoUI_.querySelector("[campo=ubicacion]")
+
+                if (tipoUbicacion === "alojamiento") {
+                    selectorUbitacion.value = "alojamiento"
+                } else if (tipoUbicacion === "habitacion") {
+                    selectorUbitacion.value = habitacionSeleccionada.componenteUID
+
+                }
+
+
 
                 if (estadoIDV === "desactivado") {
                     complementoUI_.querySelector("[componente=estado]").setAttribute("estado", estadoIDV)
@@ -319,13 +396,22 @@ casaVitini.view = {
                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                 }
                 if (respuestaServidor?.ok) {
-                    const complementoActualizado = respuestaServidor.complementoActualizado
+                    const complemento = respuestaServidor.ok
+                    const apartamentoIDV = complemento.apartamentoIDV
+                    const apartamentoUI = respuestaServidor.apartamentoUI
+
+                    const configuracionHabitacion = respuestaServidor.configuracionHabitacion
+                    const habitacionesAlojamiento = configuracionHabitacion.habitacionesAlojamiento
+                    const habitacionSeleccionada = configuracionHabitacion.habitacionSeleccionada
+
+
 
                     const complementoUID = document.querySelector("[componente=complementoUI]")
-                    complementoUID.setAttribute("instantanea", JSON.stringify(complementoActualizado))
-                  this.aplicaData({
-                        complemento: complementoActualizado,
-                        instanciaUID_destino: instanciaUID
+                    complementoUID.setAttribute("instantanea", JSON.stringify(complemento))
+                    this.aplicaData({
+                        complemento,
+                        instanciaUID_destino: instanciaUID,
+                        habitacionSeleccionada
                     })
                 }
             },
@@ -434,7 +520,7 @@ casaVitini.view = {
                 }
             },
         },
-     
+
 
 
     }

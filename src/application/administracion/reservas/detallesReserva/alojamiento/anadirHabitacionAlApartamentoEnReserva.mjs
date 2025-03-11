@@ -55,7 +55,8 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
         }
         await obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV({
             habitacionIDV,
-            apartamentoUID
+            apartamentoUID,
+            errorSi: "existe"
         })
 
 

@@ -12,20 +12,16 @@ export const crearComplementoDeAlojamiento = async (entrada) => {
         IDX.control()
 
         await mutex.acquire();
-        await validarObjeto(entrada.body)
-        const complementoNuevo = {
-            apartamentoIDV : entrada.body.apartamentoIDV,
-            complementoUI: entrada.body.complementoUI,
-            definicion: entrada.body.definicion,
-            tipoPrecio: entrada.body.tipoPrecio,
-            precio: entrada.body.precio,
-        }
+        const oV = await validarObjeto({
+            o: entrada.body,
+            modo: "crear"
+        })
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
-            complementoNuevo.testingVI = testingVI
+            oV.testingVI = testingVI
         }
-        complementoNuevo.estadoIDV = "desactivado"
-        const nuevoComplemento = await insertarComplemento(complementoNuevo);
+        oV.estadoIDV = "desactivado"
+        const nuevoComplemento = await insertarComplemento(oV);
         if (nuevoComplemento) {
             const ok = {
                 ok: "Se ha añadido correctamente el servicio",

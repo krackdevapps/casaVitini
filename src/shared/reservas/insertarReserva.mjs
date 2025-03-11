@@ -20,6 +20,9 @@ import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from '../
 import { obtenerConfiguracionPorApartamentoIDV } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs';
 import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs';
+import { obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV } from '../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV.mjs';
+import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -182,7 +185,7 @@ export const insertarReserva = async (reserva) => {
             }
         })
 
-   
+
         await insertarDesgloseFinacieroPorReservaUID({
             reservaUID,
             desgloseFinanciero
@@ -205,19 +208,39 @@ export const insertarReserva = async (reserva) => {
         }
         for (const com of complementosAlojamiento) {
             const complementoUID = com.complementoUID
-            const complmemento = await obtenerComplementoPorComplementoUID(complementoUID)
+            const complemento = await obtenerComplementoPorComplementoUID(complementoUID)
 
-            const complementoUI = complmemento.complementoUI
-            const apartamentoIDV = complmemento.apartamentoIDV
-            const definicion = complmemento.definicion
-            const tipoPrecio = complmemento.tipoPrecio
-            const precio = complmemento.precio
+            const complementoUI = complemento.complementoUI
+            const apartamentoIDV = complemento.apartamentoIDV
+            const definicion = complemento.definicion
+            const tipoPrecio = complemento.tipoPrecio
+            const precio = complemento.precio
+            const tipoUbicacion = complemento.tipoUbicacion
+            const habitacionUID = complemento.habitacionUID
 
             const apartamentoEnReserva = await obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID({
                 reservaUID,
                 apartamentoIDV
             })
+            let habitacionUID_enReserva
 
+            if (tipoUbicacion === "habitacion") {
+                const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
+                const controlApartamento = apartamentosReserva.filter(a => a.apartamentoIDV === apartamentoIDV)
+                const apartamentoUID = controlApartamento[0].componenteUID
+
+
+                const habitacionDeLaConfiguracion = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
+                const habitacionIDV = habitacionDeLaConfiguracion.habitacionIDV
+
+                const habitacionDelApartamento = await obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV({
+                    apartamentoUID,
+                    habitacionIDV,
+                    errorSi: "desactivado"
+                })
+
+                habitacionUID_enReserva = habitacionDelApartamento.componenteUID
+            }
 
             await insertarComplementoAlojamientoPorReservaUID({
                 reservaUID,
@@ -226,7 +249,9 @@ export const insertarReserva = async (reserva) => {
                 definicion,
                 tipoPrecio,
                 precio,
-                apartamentoUID: apartamentoEnReserva.componenteUID
+                apartamentoUID: apartamentoEnReserva.componenteUID,
+                tipoUbicacion,
+                habitacionUID: habitacionUID_enReserva
             })
         }
         return nuevaReserva

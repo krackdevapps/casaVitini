@@ -120,8 +120,6 @@ export const aplicarOfertas = async (data) => {
         }
 
 
-
-
         await aplicarDescuento({
             origen: "porAdministrador",
             ofertasParaAplicarDescuentos: instantaneaOfertasPorAdministrador,

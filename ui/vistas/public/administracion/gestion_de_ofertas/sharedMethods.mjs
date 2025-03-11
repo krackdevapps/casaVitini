@@ -57,15 +57,20 @@ export const sharedMethods = {
             divBotones_O1.appendChild(pBotonEliminarOferta_O1);
             return divBotones_O1
         },
-        contenedorDescuento: function () {
+        contenedorDescuento: function (data) {
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+            const zonaDespliegue = data?.zonaDespliegue
+            const metodoSelectorDia = data?.metodoSelectorDia
 
 
-           const contenedorDescuentos = document.createElement("div");
+            const contenedorDescuentos = document.createElement("div");
             contenedorDescuentos.classList.add("flexVertical");
             contenedorDescuentos.setAttribute("contenedorDescuento", instanciaUID)
             contenedorDescuentos.setAttribute("contenedor", "descuentos")
             contenedorDescuentos.setAttribute("instanciaUID", instanciaUID)
+
+
+
 
 
             const titulo = document.createElement("p");
@@ -73,13 +78,13 @@ export const sharedMethods = {
             titulo.textContent =
                 `Determina dónde se aplica el descuento de esta oferta.
                 
-                Los descuentos se pueden aplicar a:
-                Toda la reserva.
-                Apartamentos específicos de la reserva. A diferencia de las condiciones, los descuentos se aplicarán solo a los apartamentos coincidentes.
-                A cada apartamento en la reserva. Se aplicará el mismo descuento a cada apartamento.
+Los descuentos se pueden aplicar a:
+Toda la reserva.
+Apartamentos específicos de la reserva. A diferencia de las condiciones, los descuentos se aplicarán solo a los apartamentos coincidentes.
+A cada apartamento en la reserva. Se aplicará el mismo descuento a cada apartamento.
 
-                Por rango de fechas:
-                Esta opción permite aplicar descuentos individuales a los netos de los días seleccionados dentro de un rango o a los apartamentos seleccionados dentro de estos días.`;
+Por rango de fechas:
+Esta opción permite aplicar descuentos individuales a los netos de los días seleccionados dentro de un rango o a los apartamentos seleccionados dentro de estos días.`;
             contenedorDescuentos.appendChild(titulo);
 
 
@@ -87,10 +92,15 @@ export const sharedMethods = {
             //selectorDescuento.classList.add("preciosEImpuestosbotonOpcionCrearNuevoImpuesto");
             selectorDescuento.setAttribute("campoOferta", "contextoAplicacion");
             selectorDescuento.setAttribute("componente", "tipoDescuento");
-            selectorDescuento.addEventListener("change", (e) => {
-                const descuentoIDV = e.target.value
+            selectorDescuento.addEventListener("input", (e) => {
+
+                const t = e.target
+                const tipoDescuento = t.value
+                const contenedorDescuentos = t.closest("[contenedor=descuentos]")
+
                 this.controladorDescuentos({
-                    descuentoIDV
+                    descuentoIDV: tipoDescuento,
+                    contenedorDescuentos
                 })
             })
 
@@ -140,7 +150,10 @@ export const sharedMethods = {
             contenedorDescuentos.appendChild(descuentoTotalNeto)
             const mismoDescuentoParaCadaApartamento = this.descuentosUI.mismoDescuentoParaCadaApartamento()
             contenedorDescuentos.appendChild(mismoDescuentoParaCadaApartamento)
-            const descuentoPorRango = this.descuentosUI.porRango.arranque()
+            const descuentoPorRango = this.descuentosUI.porRango.arranque({
+                zonaDespliegue,
+                metodoSelectorDia
+            })
             contenedorDescuentos.appendChild(descuentoPorRango)
 
             return contenedorDescuentos
@@ -973,7 +986,10 @@ export const sharedMethods = {
                 return contenedorDescuento
             },
             porRango: {
-                arranque: () => {
+                arranque: (data) => {
+                    const zonaDespliegue = data?.zonaDespliegue
+                    const metodoSelectorDia = data?.metodoSelectorDia ?? "view.__sharedMethods__.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia"
+
                     const contenedorDescuento = document.createElement("div");
                     contenedorDescuento.classList.add("flexVertical", "contenedorOculto", "gap6");
                     contenedorDescuento.setAttribute("descuentoIDV", "porRango");
@@ -985,12 +1001,13 @@ export const sharedMethods = {
                         "Determina el rango de aplicación del descuento.Una vez selecciones el rango.Podrás determinar si aplicar un descuento al neto total de la reserva que esté dentro de ese rango.Es decir, los días de la reserva con noche que estén dentro de ese rango.También puedes aplicar un descuento personalizado dentro de cada día con noche.Determinando si el descuento se aplica al neto de un día o a apartamentos específicos dentro de un día.";
                     contenedorDescuento.appendChild(titulo);
 
+
                     const contenedorFechasUI = casaVitini.view.__sharedMethods__.contenedorFechasUI({
-                        metodoSelectorDia: "view.__sharedMethods__.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia",
+                        metodoSelectorDia: metodoSelectorDia,
                         nombreContenedor: "totalNetoPorRango",
                         modo: "administracion",
                         seleccionableDiaLimite: "si",
-                        zonaDespliege: contenedorDescuento.closest("[desitno=inyector]")
+                        zonaDespliegue: zonaDespliegue
 
                     })
                     contenedorDescuento.appendChild(contenedorFechasUI)
@@ -1092,7 +1109,7 @@ export const sharedMethods = {
                         const contenedor = document.createElement("div")
                         contenedor.setAttribute("contenedor", "porDiasDentroDelRango")
                         contenedor.setAttribute("contenedorPorRango", "porDiasDelRango")
-                        contenedor.classList.add("contenedorOculto", "contenedorInternoPorRango")
+                        contenedor.classList.add("contenedorOculto", "flexVertical", "gap6")
                         const info = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.infoInicialSinApartametno()
                         contenedor.appendChild(info)
                         return contenedor
@@ -1152,9 +1169,9 @@ export const sharedMethods = {
                         contenedorPorApartamento.setAttribute("instanciaUID", instanciaUID)
 
                         const titulo = document.createElement("p");
-                        titulo.classList.add("crearOfertaTituloOpcion");
+                        titulo.classList.add("padding16", "textoCentrado");
                         titulo.textContent =
-                            "AAñade qué apartamentos en concreto debe de seleccionar el cliente para que se aplique esta oferta.";
+                            "Añade qué apartamentos en concreto debe de seleccionar el cliente para que se aplique esta oferta.";
                         contenedorPorApartamento.appendChild(titulo);
                         // const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                         //     textoContenedorVacio: "Añade apartamentos a esta condición para determinar qué apartamentos en concreto tienen que estar en una reserva para acceder a esta oferta.",
@@ -1225,7 +1242,7 @@ export const sharedMethods = {
                         const fechaDia_humana = casaVitini.utilidades.conversor.fecha_ISO_hacia_humana(fecha)
 
                         const contenedorDia = document.createElement("div")
-                        contenedorDia.classList.add("contenedorDia")
+                        contenedorDia.classList.add("flexVertical", "gap6", "padding6", "backgroundGrey1", "borderRadius16")
                         contenedorDia.setAttribute("fechaDelDia", fecha)
                         contenedorDia.setAttribute("contenedor", "dia")
                         contenedorDia.setAttribute("instanciaUID", fecha)
@@ -1236,7 +1253,7 @@ export const sharedMethods = {
                         contenedorDia.appendChild(fechaDelDiaUI)
 
                         const selectorEnDia = document.createElement("select");
-                        selectorEnDia.classList.add("preciosEImpuestosbotonOpcionCrearNuevoImpuesto");
+                        selectorEnDia.classList.add("botonV1BlancoIzquierda_campo")
                         selectorEnDia.setAttribute("campoOferta", "contextoAplicacion");
                         selectorEnDia.addEventListener("change", (e) => {
                             const areaDia = e.target.closest("[contenedor=dia]")
@@ -1291,12 +1308,15 @@ export const sharedMethods = {
             }
         },
         controladorDescuentos: (data) => {
+
             const descuentoIDV = data.descuentoIDV
-            const areaDescuentosUI = document.querySelector("[contenedor=descuentos]")
+
+            const areaDescuentosUI = data.contenedorDescuentos
             const selectorDescuentosUI = areaDescuentosUI.querySelectorAll("[descuentoIDV]")
             selectorDescuentosUI.forEach((descuentoUI) => {
                 descuentoUI.classList.add("contenedorOculto")
             })
+
             areaDescuentosUI.querySelector(`[descuentoIDV="${descuentoIDV}"]`)?.classList.remove("contenedorOculto")
         },
         compartidos: {
@@ -1443,7 +1463,6 @@ export const sharedMethods = {
 
             const input = document.createElement("input");
             input.setAttribute("type", "text");
-            input.classList.add("preciosEImpuestosbotonOpcionCrearNuevoImpuesto");
             input.setAttribute("campoOferta", "nombreOferta");
             input.setAttribute("placeholder", "Escriba un nombre a esta oferta, el nombre sera publico");
             divContenedorNombreYEstado.appendChild(input)
@@ -1478,7 +1497,6 @@ export const sharedMethods = {
                     seleccionableDiaLimite: "si"
                 })
             })
-
 
             const pFechaInicio = document.createElement("p");
             pFechaInicio.classList.add("tituloFecha");
@@ -1538,7 +1556,6 @@ export const sharedMethods = {
             }
             contenedorZonaOferta.appendChild(selectorZonaOferta)
 
-
             const pFechaFin = document.createElement("p");
             pFechaFin.classList.add("tituloFecha");
             pFechaFin.textContent = "Fecha fin";
@@ -1554,11 +1571,9 @@ export const sharedMethods = {
             divContenedorHorizontal.appendChild(divContenedorFechaInicio);
             divContenedorHorizontal.appendChild(contenedorZonaOferta);
             divContenedorHorizontal.appendChild(divContenedorFechaFin);
-
             divContenedor.appendChild(divContenedorHorizontal);
 
             divPrincipal.appendChild(divContenedor);
-
 
             const botonAnadirCondicion = document.createElement("div")
             botonAnadirCondicion.classList.add("botonV1")
@@ -1600,13 +1615,10 @@ export const sharedMethods = {
     },
     utilidades: {
         constructorObjeto: () => {
-
             const nombreOferta = document.querySelector("[campoOferta=nombreOferta]").value
             const fechaInicio_ISO = document.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
             const fechaFinal_ISO = document.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
-
             const zonaIDV = document.querySelector("[campo=zonaIDV]").value
-
             const contenedorCondiciones = document.querySelector("[contenedor=condiciones]")
 
             const oferta = {
@@ -1618,6 +1630,7 @@ export const sharedMethods = {
                 condicionesArray: [],
                 descuentosJSON: {}
             }
+
             const condiciones = contenedorCondiciones.querySelectorAll(`[zonaOferta]`)
             condiciones.forEach((espacioCondicion) => {
                 const tipoCondicion = espacioCondicion.getAttribute("zonaOferta")
@@ -1710,7 +1723,6 @@ export const sharedMethods = {
                     return casaVitini.ui.vistas.advertenciaInmersiva(error)
                 }
             })
-
 
             const contenedorDescuentos = document.querySelector("[contenedor=descuentos]")
             const tipoDescuento = contenedorDescuentos.querySelector("[componente=tipoDescuento]")?.value
@@ -1827,5 +1839,6 @@ export const sharedMethods = {
             }
             return oferta
         },
+
     }
 }

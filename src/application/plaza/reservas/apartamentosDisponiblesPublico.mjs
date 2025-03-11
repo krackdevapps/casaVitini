@@ -11,6 +11,7 @@ import { utilidades } from "../../../shared/utilidades.mjs";
 import { Mutex } from "async-mutex";
 import { obtenerComplementosPorApartamentoIDV } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementosPorApartamentoIDV.mjs";
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 
 export const apartamentosDisponiblesPublico = async (entrada) => {
     const mutex = new Mutex()
@@ -109,10 +110,18 @@ export const apartamentosDisponiblesPublico = async (entrada) => {
                     })
                     estructura.ok.contenedorFinanciero[apartamentoIDV] = desgloseFinanciero
                     const complementosDelAlojamientos = await obtenerComplementosPorApartamentoIDV(apartamentoIDV)
-                    complementosDelAlojamientos.forEach(complemento => {
+                    for (const complemento of complementosDelAlojamientos) {
+
                         delete complemento.testingVI
-                        delete complemento.apartamentoIDV
-                    });
+                        const habitacionUID = complemento.habitacionUID
+                        const tipoUbicacion = complemento.tipoUbicacion
+                        if (tipoUbicacion === "habitacion") {
+                            const habitacion = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
+                            complemento.habitacionIDV = habitacion.habitacionIDV
+                        }
+     
+                    }
+
                     const complementosDelAlojamientosActivos = complementosDelAlojamientos.filter((c) => c.estadoIDV === "activado")
                     estructura.ok.complementosAlojamiento[apartamentoIDV] = complementosDelAlojamientosActivos
                 }

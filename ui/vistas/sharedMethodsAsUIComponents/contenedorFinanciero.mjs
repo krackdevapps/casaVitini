@@ -302,6 +302,7 @@ export const contenedorFinanciero = {
                         }
                         if (entidadIDV === "complementosAlojamiento") {
                             const desglosePorComplementoDeAlojamiento = entidad.desglosePorComplementoDeAlojamiento
+                            const desglosePorAlojamiento = entidad.desglosePorAlojamiento
                             const totales = entidad.global.totales
                             //if ((modoUI === "administracion" || modoUI === "plaza" || modoUI === "simulador") && desglosePorComplementoDeAlojamiento.length > 0) {
                             this.complementosDelAlojamientos.contenedor({
@@ -311,7 +312,8 @@ export const contenedorFinanciero = {
                             })
                             this.complementosDelAlojamientos.porComplemento({
                                 destino,
-                                desglosePorComplementoDeAlojamiento
+                                desglosePorComplementoDeAlojamiento,
+                                desglosePorAlojamiento
                             })
                             this.complementosDelAlojamientos.totales({
                                 destino,
@@ -408,6 +410,7 @@ export const contenedorFinanciero = {
                         for (const [fechaNoche, desglose] of Object.entries(desglosePorNoche)) {
                             const precioNetoNoche = desglose.precioNetoNoche
                             const apartamentosPorNoche = desglose.apartamentosPorNoche
+                            const precioNetoNocheConComplementos = desglose.precioNetoNocheConComplementos
                             const nochesRenderizdas = contenedorDesglosePorNoche_renderizado.querySelectorAll("[noche]")
                             const contenedorNoche = document.createElement("div")
                             contenedorNoche.setAttribute("noche", fechaNoche)
@@ -432,16 +435,32 @@ export const contenedorFinanciero = {
                             const totalesNoche = document.createElement("div")
                             totalesNoche.classList.add("padding6")
                             totalesNoche.setAttribute("contenedor", "totalesNoche")
+                            contenedorNoche.appendChild(totalesNoche)
+
                             const totalNetoNocheUI = document.createElement("div")
                             totalNetoNocheUI.setAttribute("componente", "totalNetoNoche")
                             totalNetoNocheUI.classList.add("negrita")
                             totalesNoche.appendChild(totalNetoNocheUI)
-                            contenedorNoche.appendChild(totalesNoche)
+
+                            const totalNetoNocheConComplementosUI = document.createElement("div")
+                            totalNetoNocheConComplementosUI.setAttribute("componente", "totalNetoNocheConComplementos")
+                            totalNetoNocheConComplementosUI.classList.add("negrita")
+                            totalesNoche.appendChild(totalNetoNocheConComplementosUI)
 
                             posicion++
                             const contenedorNoche_renderizado = contenedorDesglosePorNoche_renderizado.querySelector(`[noche="${fechaNoche}"]`)
+
                             const totalNetoNoche_sel = contenedorNoche_renderizado.querySelector(`[componente=totalNetoNoche]`)
                             totalNetoNoche_sel.textContent = precioNetoNoche + "$ Total neto noche"
+                            if (precioNetoNocheConComplementos === "0.00") {
+                                contenedorNoche_renderizado.querySelector(`[componente=totalNetoNocheConComplementos]`).style.display = "none"
+                            } else {
+                                contenedorNoche_renderizado.querySelector(`[componente=totalNetoNocheConComplementos]`).removeAttribute("style")
+
+                            }
+                            const precioNetoNocheConComplementos_sel = contenedorNoche_renderizado.querySelector(`[componente=totalNetoNocheConComplementos]`)
+                            precioNetoNocheConComplementos_sel.textContent = precioNetoNocheConComplementos + "$ Total neto noche con complementos"
+
                             const apartamentosIDVArray = Object.keys(apartamentosPorNoche)
                             const selectorApartamentosRenderizados = contenedorNoche_renderizado.querySelectorAll(`[apartamentoIDV]`)
                             selectorApartamentosRenderizados.forEach((apartamentoRenderizado) => {
@@ -453,6 +472,7 @@ export const contenedorFinanciero = {
                             for (const [apartamentoIDV, desglosePorApartamento] of Object.entries(apartamentosPorNoche)) {
                                 const apartamentoUI = desglosePorApartamento.apartamentoUI
                                 const precioNetoApartamento = desglosePorApartamento.precioNetoApartamento
+                                const precioNetoApartamentoComplementos = desglosePorApartamento.precioNetoApartamentoComplementos
                                 const contenedorApartamento_selector = contenedorNoche_renderizado.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
                                 if (!contenedorApartamento_selector) {
                                     const contenedorApartamento = document.createElement("div")
@@ -484,6 +504,8 @@ export const contenedorFinanciero = {
                                     const contenedorApartamentoYTotal = document.createElement("div")
                                     contenedorApartamentoYTotal.classList.add("padding6")
                                     contenedorApartamentoYTotal.setAttribute("contenedor", "tituloApartamentoYTotales")
+                                    contenedorApartamento.appendChild(contenedorApartamentoYTotal)
+
                                     const tituloApartamento = document.createElement("div")
                                     tituloApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                                     tituloApartamento.classList.add(
@@ -495,11 +517,12 @@ export const contenedorFinanciero = {
                                     contenedorApartamentoYTotal.appendChild(tituloApartamento)
                                     const precioNetoApartamentoUI = document.createElement("div")
                                     precioNetoApartamentoUI.setAttribute("contenedor", "precioNetoApartamento")
-                                    precioNetoApartamentoUI.classList.add(
-                                        "reserva_resumen_apartamentoUIPrecio",
-                                    )
                                     contenedorApartamentoYTotal.appendChild(precioNetoApartamentoUI)
-                                    contenedorApartamento.appendChild(contenedorApartamentoYTotal)
+
+                                    const precioNetoApartamentoComplementosUI = document.createElement("div")
+                                    precioNetoApartamentoComplementosUI.setAttribute("contenedor", "precioNetoApartamentoComplementos")
+                                    contenedorApartamentoYTotal.appendChild(precioNetoApartamentoComplementosUI)
+
                                 }
                                 const contenedorApartamento_renderizado = contenedorNoche_renderizado.querySelector(`[apartamentoIDV="${apartamentoIDV}"]`)
                                 const contenedorTotalApartamentoYTotales_renderizado = contenedorApartamento_renderizado.querySelector("[contenedor=tituloApartamentoYTotales]")
@@ -545,6 +568,13 @@ export const contenedorFinanciero = {
                                 }
                                 const precioNetoApartamentoSelector = contenedorApartamento_renderizado.querySelector("[contenedor=precioNetoApartamento]")
                                 precioNetoApartamentoSelector.textContent = precioNetoApartamento + "$ Neto del apartamento"
+                                if (precioNetoApartamentoComplementos === "0.00") {
+                                    contenedorApartamento_renderizado.querySelector("[contenedor=precioNetoApartamentoComplementos]").style.display = "none"
+                                } else {
+                                    contenedorApartamento_renderizado.querySelector("[contenedor=precioNetoApartamentoComplementos]").removeAttribute("style")
+                                }
+                                const precioNetoApartamentoComplementosSelector = contenedorApartamento_renderizado.querySelector("[contenedor=precioNetoApartamentoComplementos]")
+                                precioNetoApartamentoComplementosSelector.textContent = precioNetoApartamentoComplementos + "$ Neto del apartamento con complementos"
                             }
                         }
                     },
@@ -583,37 +613,58 @@ export const contenedorFinanciero = {
                             const apartamentoUI = detalles.apartamentoUI
                             const totalNeto = detalles.totalNeto
                             const precioMedioNetoNoche = detalles.precioMedioNetoNoche
+                            const totalNetoConComplementos = detalles.totalNetoConComplementos
                             const contenedorApartamento_selector = porApartamento_renderizado.querySelector(`[apartamentoIDV=${apartamentoIDV}]`)
                             if (!contenedorApartamento_selector) {
                                 const contenedorApartamento = document.createElement("div")
                                 contenedorApartamento.classList.add("contenedorApartamento")
                                 contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                                 porApartamento_renderizado.appendChild(contenedorApartamento)
+
                                 const contenedorTituloYtotal = document.createElement("div")
                                 contenedorTituloYtotal.setAttribute("contenedor", "tituloYTotal")
                                 contenedorTituloYtotal.classList.add(
                                     "padding6"
                                 )
+                                contenedorApartamento.appendChild(contenedorTituloYtotal)
+
+
                                 const apartamentoUITitulo = document.createElement("div")
                                 apartamentoUITitulo.classList.add("contenedorTextoOferta")
                                 apartamentoUITitulo.classList.add("negrita")
                                 apartamentoUITitulo.textContent = apartamentoUI
                                 contenedorTituloYtotal.appendChild(apartamentoUITitulo)
+
                                 const apartamentoUIPrecioNetoTotal = document.createElement("div")
                                 apartamentoUIPrecioNetoTotal.classList.add("textoDetallesPorApartamento")
                                 apartamentoUIPrecioNetoTotal.setAttribute("dato", "totalNeto")
                                 contenedorTituloYtotal.appendChild(apartamentoUIPrecioNetoTotal)
+
+
                                 const apartamentoUIPrecioPromedioPorNoche = document.createElement("div")
                                 apartamentoUIPrecioPromedioPorNoche.classList.add("textoDetallesPorApartamento")
                                 apartamentoUIPrecioPromedioPorNoche.setAttribute("dato", "precioMedioNetoNoche")
                                 contenedorTituloYtotal.appendChild(apartamentoUIPrecioPromedioPorNoche)
-                                contenedorApartamento.appendChild(contenedorTituloYtotal)
+
+
+                                const apartamentoUITotalNetoConComplementos = document.createElement("div")
+                                apartamentoUITotalNetoConComplementos.classList.add("textoDetallesPorApartamento")
+                                apartamentoUITotalNetoConComplementos.setAttribute("dato", "totalNetoConComplementos")
+                                contenedorTituloYtotal.appendChild(apartamentoUITotalNetoConComplementos)
                             }
                             const contenedorApartamento_renderizado = porApartamento_renderizado.querySelector(`[apartamentoIDV=${apartamentoIDV}]`)
                             const precioNetoApartamentoUI = contenedorApartamento_renderizado.querySelector("[dato=totalNeto]")
                             precioNetoApartamentoUI.textContent = totalNeto + "$ Total neto"
                             const precioMedioNetoNocheApartamentoUI = contenedorApartamento_renderizado.querySelector("[dato=precioMedioNetoNoche]")
                             precioMedioNetoNocheApartamentoUI.textContent = precioMedioNetoNoche + "$ Precio medio neto por noche"
+
+                            if (totalNetoConComplementos === "0.00") {
+                                contenedorApartamento_renderizado.querySelector("[dato=totalNetoConComplementos]").style.display = "none"
+                            } else {
+                                contenedorApartamento_renderizado.querySelector("[dato=totalNetoConComplementos]").removeAttribute("style")
+                            }
+                            const totalNetoConComplementosUI = contenedorApartamento_renderizado.querySelector("[dato=totalNetoConComplementos]")
+                            totalNetoConComplementosUI.textContent = totalNetoConComplementos + "$ Total neto con complementos"
                         }
                     },
                     totales: function (data) {
@@ -621,6 +672,7 @@ export const contenedorFinanciero = {
                         const totales = data.totales
                         const instanciaUID = data.instanciaUID
                         const totalNeto = totales?.totalNeto
+                        const totalNetoConComplementos = totales?.totalNetoConComplementos
                         const totalFinal = totales?.totalFinal
                         const totalDescuento = totales?.totalDescuento
                         const impuestosAplicados = totales?.impuestosAplicados
@@ -658,34 +710,63 @@ export const contenedorFinanciero = {
                                 "flexVertical",
                                 "padding6"
                             )
+                            contenedorTotalesNeto.appendChild(contenedorTotalNetoUI)
+
                             const totalReservaNetoUI = document.createElement("div")
-                            totalReservaNetoUI.textContent = "Total reserva neto"
+                            totalReservaNetoUI.textContent = "Total neto alojamientos"
                             contenedorTotalNetoUI.appendChild(totalReservaNetoUI)
+
                             const totalReservaNetoUI_ = document.createElement("div")
                             totalReservaNetoUI_.setAttribute("dato", "totalNeto")
-                            totalReservaNetoUI_.classList.add(
-                                "negrita"
-                            )
+                            totalReservaNetoUI_.classList.add("negrita")
                             contenedorTotalNetoUI.appendChild(totalReservaNetoUI_)
-                            contenedorTotalesNeto.appendChild(contenedorTotalNetoUI)
+
+                            const contenedorTotalNetoConComplementos = document.createElement("div")
+                            contenedorTotalNetoConComplementos.classList.add("flexVertical")
+                            contenedorTotalNetoConComplementos.setAttribute("com", "contenedorTotalNetoConComplementos")
+                            contenedorTotalNetoUI.appendChild(contenedorTotalNetoConComplementos)
+
+
+                            const tituloTotalAlojamentoConComplementosUI = document.createElement("div")
+                            tituloTotalAlojamentoConComplementosUI.textContent = "Total neto alojamientos con complementos"
+                            contenedorTotalNetoConComplementos.appendChild(tituloTotalAlojamentoConComplementosUI)
+
+                            const totalAlojamentoConComplementosUI = document.createElement("div")
+                            totalAlojamentoConComplementosUI.setAttribute("dato", "totalNetoConComplementos")
+                            totalAlojamentoConComplementosUI.classList.add("negrita")
+                            contenedorTotalNetoConComplementos.appendChild(totalAlojamentoConComplementosUI)
+
                             const contenedorPromedioNoche = document.createElement("div")
                             contenedorPromedioNoche.classList.add(
                                 "flexVertical",
                                 "padding6"
                             )
+                            contenedorTotalesNeto.appendChild(contenedorPromedioNoche)
+
                             const totalReservaNetoDiaUI = document.createElement("div")
-                            totalReservaNetoDiaUI.textContent = "Precio medio neto de la reserva por noche"
+                            totalReservaNetoDiaUI.textContent = "total neto medio de alojamientos por noche"
                             contenedorPromedioNoche.appendChild(totalReservaNetoDiaUI)
+
                             const totalReservaNetoDiaUI_ = document.createElement("div")
                             totalReservaNetoDiaUI_.classList.add("negrita")
                             totalReservaNetoDiaUI_.setAttribute("dato", "totalNetoNocheMedio")
                             contenedorPromedioNoche.appendChild(totalReservaNetoDiaUI_)
-                            contenedorTotalesNeto.appendChild(contenedorPromedioNoche)
+
                             contenedorTotales_renderizado.appendChild(contenedorTotalesNeto)
                         }
                         const contenedorTotalesNeto_renderizado = contenedorTotales_renderizado.querySelector("[contenedor=totalesNeto]")
                         const totalNetoUI = contenedorTotalesNeto_renderizado.querySelector("[dato=totalNeto]")
                         totalNetoUI.textContent = totalNeto
+
+                        const contenedorTotalNetoConComplementos = contenedorTotalesNeto_renderizado.querySelector("[com=contenedorTotalNetoConComplementos]")
+                        if (totalNetoConComplementos === "0.00") {
+                            contenedorTotalNetoConComplementos.style.display = "none"
+                        } else {
+                            contenedorTotalNetoConComplementos.removeAttribute("style")
+                        }
+                        const totalNetoConComplementosUI = contenedorTotalesNeto_renderizado.querySelector("[dato=totalNetoConComplementos]")
+                        totalNetoConComplementosUI.textContent = totalNetoConComplementos
+
                         const promedioNocheNetoUI = contenedorTotalesNeto_renderizado.querySelector("[dato=totalNetoNocheMedio]")
                         promedioNocheNetoUI.textContent = promedioNocheNeto
                         const totalesDescuentos_selector = contenedorTotales_renderizado.querySelector("[contenedor=totalDescuentos]")
@@ -732,7 +813,7 @@ export const contenedorFinanciero = {
                                 "padding6"
                             )
                             const precioMedioConDescuentos = document.createElement("div")
-                            precioMedioConDescuentos.textContent = "Precio medio neto de la reserva por noche con descuentos aplicados"
+                            precioMedioConDescuentos.textContent = "Precio medio neto de alojamientos por noche con descuentos aplicados"
                             contenedorPromedio.appendChild(precioMedioConDescuentos)
                             const precioMedioConDescuentos_ = document.createElement("div")
                             precioMedioConDescuentos_.classList.add("negrita")
@@ -811,14 +892,17 @@ export const contenedorFinanciero = {
                             const contenedorPlegable = document.createElement('details');
                             contenedorPlegable.classList.add("contenedorEntidad", "sobreControlAnimacionGlobal")
                             contenedorPlegable.setAttribute("entidad", "complementosDelAlojamientos")
+
                             const tituloContenedorPlegable = document.createElement('summary');
                             tituloContenedorPlegable.classList.add(
                                 "padding12",
                             )
                             tituloContenedorPlegable.textContent = 'Complementos del alojamiento';
                             contenedorPlegable.appendChild(tituloContenedorPlegable)
+
                             const contenedor = document.createElement("div")
                             contenedor.setAttribute("contenedor", "data")
+                            contenedor.classList.add("flexVertical", "gap6")
                             contenedorPlegable.appendChild(contenedor)
                             document.querySelector(destino).querySelector("[contenedor=financiero]").appendChild(contenedorPlegable)
                         }
@@ -828,155 +912,340 @@ export const contenedorFinanciero = {
                         const desglosePorComplementoDeAlojamiento = data.desglosePorComplementoDeAlojamiento
                         const selector = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=complementosDelAlojamientos]")
                         if (!selector) { return }
-                        const porComplemento_selector = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=complementosDelAlojamientos] [contenedor=data]").querySelector("[contenedor=porComplemento]")
-                        if (!porComplemento_selector) {
+
+                        const complementosAlojamientoPorTipo = this.componentesUI.utilidades.organizarComplementosPorTipo(desglosePorComplementoDeAlojamiento)
+                        const apartamentosIDV_porRenderizar = Object.keys(complementosAlojamientoPorTipo)
+
+                        const contenedorData = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=complementosDelAlojamientos] [contenedor=data]")
+
+                        const cCR_selector = contenedorData.querySelector("[contenedor=complementosRenderizados]")
+                        if (!cCR_selector) {
+                            const contenedorComplementosRenderizados = document.createElement("div")
+                            contenedorComplementosRenderizados.setAttribute("contenedor", "complementosRenderizados")
+                            contenedorComplementosRenderizados.classList.add("flexVertical", "gap6")
+                            contenedorData.appendChild(contenedorComplementosRenderizados)
+                        }
+                        const cCR_renderizado = contenedorData.querySelector("[contenedor=complementosRenderizados]")
+
+
+                        this.componentesUI.utilidades.borrarContenedoresApartamentosObsoletos({
+                            cCR_renderizado,
+                            apartamentosIDV_porRenderizar,
+                        })
+
+                        let posicionCA = 0
+
+                        const contenedoresAlojamientoRenderizados = cCR_renderizado.querySelectorAll(`[contenedor=porAlojamiento]`)
+                        Object.entries(complementosAlojamientoPorTipo).forEach(contenedorComplementos => {
+                            const [apartamentoIDV, contenedor] = contenedorComplementos
+                            console.log(" contenedorComplementos", contenedorComplementos)
+
+                            const complemenstosPorAlojamiento = contenedor.tipoUbicacion.porAlojamiento
+                            const apartamentoUI = contenedor.apartamentoUI
+
+                            const contenedorGlobal_porAlojamiento_selector = cCR_renderizado.querySelector(`[contenedor=porAlojamiento] [apartamentoIDV="${apartamentoIDV}"]`)
+                            const contenedorAlojamiento = this.componentesUI.contenedorAlojamiento({
+                                apartamentoIDV,
+                                apartamentoUI
+                            })
+
+                            const existe = contenedorGlobal_porAlojamiento_selector
+                            if (!existe) {
+                                const elementosArray = Array.from(contenedoresAlojamientoRenderizados);
+                                cCR_renderizado.insertBefore(contenedorAlojamiento, elementosArray[posicionCA]);
+                            }
+                            posicionCA++
+
+                            const complementoUID_porRenderizar = complemenstosPorAlojamiento.map(c => c.complementoUID)
+                            this.componentesUI.utilidades.borrarContenedoresComplementosEnAlojamientoObsoletoa({
+                                contenedorAlojamiento: contenedorAlojamiento,
+                                complementoUID_porRenderizar,
+                                tipoUbicacion: "alojamiento"
+                            })
+
+
+                            this.componentesUI.intertorComplemento({
+                                contenedorAlojamiento: contenedorAlojamiento,
+                                titulo: "Complementos Alojamiento",
+                                tipoUbicacion: "alojamiento",
+                                complementos: complemenstosPorAlojamiento,
+                                contenedorGlobal_porAlojamiento_selector
+                            })
+
+                            const complementosPorHabitacion = contenedor.tipoUbicacion.porHabitacion
+
+                            Object.entries(complementosPorHabitacion).forEach(h => {
+
+                                const [habitacionIDV, complementos] = h
+                                const habitacionUI = complementos[0].habitacionUI
+
+                                this.componentesUI.intertorComplemento({
+                                    contenedorAlojamiento: contenedorAlojamiento,
+                                    titulo: `Complmentos ${habitacionUI}`,
+                                    tipoUbicacion: "habitacion",
+                                    habitacionIDV,
+                                    complementos: complementos,
+                                })
+                            })
+                        })
+                    },
+                    componentesUI: {
+                        contenedorAlojamiento: function (data) {
+
+                            const apartamentoIDV = data.apartamentoIDV
+                            const apartamentoUI = data.apartamentoUI
                             const contenedor = document.createElement("div")
                             contenedor.classList.add(
                                 "flexVertical",
-                                "gap6"
+                                "gap6",
+                                "padding6",
+                                "borderRadius20",
+                                "borderGrey1"
                             )
-                            contenedor.setAttribute("contenedor", "porComplemento")
+                            contenedor.setAttribute("contenedor", "porAlojamiento")
+                            contenedor.setAttribute("apartamentoIDV", apartamentoIDV)
                             contenedor.setAttribute("componente", "plegable")
+
                             const tituloContendor = document.createElement("div")
                             tituloContendor.classList.add(
                                 "negrita",
                                 "textoCentrado",
                                 "padding6"
                             )
-                            tituloContendor.textContent = "Desglose por complementos de alojamiento"
+                            tituloContendor.textContent = `Complementos de ${apartamentoUI}`
                             contenedor.appendChild(tituloContendor)
-                            document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=complementosDelAlojamientos] [contenedor=data]").appendChild(contenedor)
-                        }
-                        const porComplemento_renderizado = document.querySelector(destino).querySelector("[contenedor=financiero]").querySelector("[entidad=complementosDelAlojamientos] [contenedor=data]").querySelector("[contenedor=porComplemento]")
-                        const complementosUID_Renderizados = []
-                        const complementosUI_Renderizados = porComplemento_renderizado.querySelectorAll("[complementoUID]")
-                        complementosUI_Renderizados.forEach(complemento => {
-                            complementosUID_Renderizados.push(complemento.complementoUID)
-                        });
-                        complementosUI_Renderizados.forEach((complementoUI) => {
-                            const complementoUID = complementoUI.getAttribute("complementoUID")
-                            if (!complementosUID_Renderizados.includes(complementoUID)) {
-                                complementoUI?.remove()
-                                // Si no hay complementos, borra el apartamentos
+
+                            const contenedorTipoComplementos = document.createElement("div")
+                            contenedorTipoComplementos.classList.add("flexVertical", "gap6")
+                            contenedorTipoComplementos.style.background = "pink"
+                            contenedor.appendChild(contenedorTipoComplementos)
+                            return contenedor
+                        },
+                        contenedorComplementos: function (data) {
+
+                            const titulo = data.titulo
+                            const tipoUbicacion = data.tipoUbicacion
+                            const habitacionIDV = data?.habitacionIDV
+
+                            const ui = document.createElement("details")
+                            ui.setAttribute("com", "complementosDeAlojamiento")
+                            ui.setAttribute("tipoUbicacion", tipoUbicacion)
+                            if (tipoUbicacion === "habitacion") {
+                                ui.setAttribute("habitacionIDV", habitacionIDV)
                             }
-                        })
-                        const numeroComplementosPorRenderizar = desglosePorComplementoDeAlojamiento.length
-                        if (numeroComplementosPorRenderizar === 0) {
-                            const info_selector = porComplemento_renderizado.querySelector("[componente=titulo]")
-                            if (!info_selector) {
-                                const info = document.createElement("p")
-                                info.setAttribute("componente", "titulo")
-                                info.textContent = "No hay complementos de alojamiento seleccionados"
-                                info.classList.add("textoCentrado")
-                                porComplemento_renderizado.appendChild(info)
-                            }
-                        } else {
-                            porComplemento_renderizado.querySelector("[componente=titulo]")?.remove()
-                        }
-                        let posicion = 0
-                        for (const complemento of desglosePorComplementoDeAlojamiento) {
-                            const complementoUID_enReserva = complemento.complementoUID
-                            const complementoUI = complemento.complementoUI
-                            const precio = complemento.precio
-                            const definicion = complemento.definicion
-                            const apartamentoUI = complemento.apartamentoUI
-                            const apartamentoIDV = complemento.apartamentoIDV
-                            const tipoPrecio = complemento.tipoPrecio
-                            const noches = complemento.noches
-                            const total = complemento.total
-                            const contenedorApartamento_selector = porComplemento_renderizado.querySelector(`[contenedorApartamento=${apartamentoIDV}]`)
-                            if (!contenedorApartamento_selector) {
-                                const contenedorApartamentosComplementos = document.createElement("div")
-                                contenedorApartamentosComplementos.setAttribute("contenedorApartamento", apartamentoIDV)
-                                contenedorApartamentosComplementos.classList.add(
-                                    "flexVertical",
-                                    "backgroundGrey1",
-                                    "padding6",
-                                    "gap6",
-                                    "borderRadius18"
-                                )
-                                const titulo = document.createElement("p")
-                                titulo.classList.add("negrita", "padding14")
-                                titulo.textContent = apartamentoUI
-                                contenedorApartamentosComplementos.appendChild(titulo)
-                                porComplemento_renderizado.appendChild(contenedorApartamentosComplementos);
-                            }
-                            const contenedorApartamento_renderizado = porComplemento_renderizado.querySelector(`[contenedorApartamento=${apartamentoIDV}]`)
-                            const complementosRenderizados = contenedorApartamento_renderizado.querySelectorAll("[complementoUID]")
-                            const contenedorComplemento_selector = porComplemento_renderizado.querySelector(`[complementoUID="${complementoUID_enReserva}"]`)
-                            if (!contenedorComplemento_selector) {
-                                const contenedorServicio = document.createElement("div")
-                                contenedorServicio.setAttribute("complementoUID", complementoUID_enReserva)
-                                if (posicion < complementosRenderizados.length) {
-                                    const elementosArray = Array.from(complementosRenderizados);
-                                    contenedorApartamento_renderizado.insertBefore(contenedorServicio, elementosArray[posicion]);
-                                } else {
-                                    contenedorApartamento_renderizado.appendChild(contenedorServicio);
+                            ui.classList.add(
+                                "flexVertical",
+                                "padding6",
+                                "borderRadius18",
+                                "backgroundGrey1"
+                            )
+
+                            const t = document.createElement("summary")
+                            t.classList.add("padding10", "borderRadius12")
+                            t.textContent = titulo
+                            ui.appendChild(t)
+
+
+                            const c = document.createElement("div")
+                            c.classList.add("flexVertical", "gap6")
+                            c.setAttribute("com", "contenedor")
+                            ui.appendChild(c)
+                            return ui
+                        },
+                        complementoUI: function (data) {
+                            const complementoUID_enReserva = data.complementoUID
+                            const complementoUI = data.complementoUI
+                            const precio = data.precio
+                            const tipoPrecio = data.tipoPrecio
+                            const total = data.total
+                            const noches = data.noches
+                            const definiconB64 = data.definicion
+
+                            const precioContructor = (data) => {
+                                const precio = data.precio
+                                const tipoPrecio = data.tipoPrecio
+                                const noches = data.noches
+                                const total = data.total
+                                const nochesUI = noches === "1" ? "noche" : "noches"
+                                if (tipoPrecio === "porNoche") {
+                                    return `Total: ${total}$ (${noches} ${nochesUI}, precio por noche ${precio}$)`
+                                } else if (tipoPrecio === "fijoPorReserva") {
+                                    return `Total: ${precio}$`
                                 }
-                                const complementoUI_ = document.createElement("div")
-                                complementoUI_.setAttribute("complementoUID_enReserva", complementoUID_enReserva)
-                                complementoUI_.classList.add(
-                                    "flexVertical",
-                                    "padding14",
-                                    "borderGrey1",
-                                    "borderRadius14"
-                                )
-                                contenedorServicio.appendChild(complementoUI_)
-                                const contenedorData = document.createElement("div")
-                                contenedorData.classList.add(
-                                    "flexVertical",
-                                    "gap6",
-                                    // "padding10"
-                                )
-                                complementoUI_.appendChild(contenedorData)
-                                const contenedorNombrePublico = document.createElement("div")
-                                contenedorNombrePublico.classList.add(
-                                    "flexVertical",
-                                )
-                                contenedorData.appendChild(contenedorNombrePublico)
-                                const tituluNombrePublico = document.createElement("p")
-                                tituluNombrePublico.textContent = `Nombre del complemento de alojamiento`
-                                // contenedorNombrePublico.appendChild(tituluNombrePublico)
-                                const titulo = document.createElement("p")
-                                titulo.classList.add(
-                                    "negrita")
-                                titulo.textContent = complementoUI
-                                contenedorNombrePublico.appendChild(titulo)
-                                const precioContructor = (data) => {
-                                    const precio = data.precio
-                                    const tipoPrecio = data.tipoPrecio
-                                    const noches = data.noches
-                                    const total = data.total
-                                    const nochesUI = noches === "1" ? "noche" : "noches"
-                                    if (tipoPrecio === "porNoche") {
-                                        return `Total: ${total}$ (${noches} ${nochesUI}, precio por noche ${precio}$)`
-                                    } else if (tipoPrecio === "fijoPorReserva") {
-                                        return `Total: ${precio}$`
-                                    }
+                            }
+
+                            const def = (d) => {
+                                const def = d.length === 0 ? "" : d
+                                return casaVitini.utilidades.conversor.base64HaciaConTextDecoder(def)
+                            }
+
+                            const ui = document.createElement("div")
+                            ui.setAttribute("complementoUID_enReserva", complementoUID_enReserva)
+                            ui.classList.add(
+                                "flexVertical",
+                                "padding14",
+                                "borderGrey1",
+                                "borderRadius14"
+                            )
+
+                            const contenedorData = document.createElement("div")
+                            contenedorData.classList.add(
+                                "flexVertical",
+                                "gap6",
+                                // "padding10"
+                            )
+                            ui.appendChild(contenedorData)
+                            const contenedorNombrePublico = document.createElement("div")
+                            contenedorNombrePublico.classList.add(
+                                "flexVertical",
+                            )
+                            contenedorData.appendChild(contenedorNombrePublico)
+                            const tituluNombrePublico = document.createElement("p")
+                            tituluNombrePublico.textContent = `Nombre del complemento de alojamiento`
+                            // contenedorNombrePublico.appendChild(tituluNombrePublico)
+                            const titulo = document.createElement("p")
+                            titulo.classList.add(
+                                "negrita")
+                            titulo.textContent = complementoUI
+                            contenedorNombrePublico.appendChild(titulo)
+
+                            const precioUI = document.createElement("p")
+                            precioUI.classList.add(
+                                "negrita"
+                            )
+                            precioUI.textContent = precioContructor({
+                                precio, tipoPrecio, noches, total
+                            })
+                            contenedorData.appendChild(precioUI)
+                            const definicionUI = document.createElement("p")
+                            definicionUI.classList.add(
+                            )
+                            definicionUI.textContent = def(definiconB64)
+                            contenedorData.appendChild(definicionUI)
+                            return ui
+
+                        },
+                        intertorComplemento: function (data) {
+
+                            const contenedorAlojamiento = data.contenedorAlojamiento
+                            const titulo = data.titulo
+                            const tipoUbicacion = data.tipoUbicacion
+                            const complementos = data.complementos
+                            const habitacionIDV = data.habitacionIDV
+
+                            const selector = (data) => {
+                                const tipoUbicacion = data.tipoUbicacion
+                                const habitacionIDV = data?.habitacionIDV
+
+                                if (tipoUbicacion === "alojamiento") {
+                                    return `[com=complementosDeAlojamiento][tipoUbicacion="${tipoUbicacion}"] [com=contenedor]`
+                                } else if (tipoUbicacion === "habitacion") {
+                                    return `[com=complementosDeAlojamiento][tipoUbicacion="${tipoUbicacion}"][habitacionIDV="${habitacionIDV}"] [com=contenedor]`
                                 }
-                                const precioUI = document.createElement("p")
-                                precioUI.classList.add(
-                                    "negrita"
-                                )
-                                precioUI.textContent = precioContructor({
-                                    precio, tipoPrecio, noches, total
+
+                            }
+                            const selectorUI = selector({
+                                tipoUbicacion,
+                                habitacionIDV
+                            })
+                            if (complementos.length > 0) {
+                                const c = this.contenedorComplementos({
+                                    titulo,
+                                    tipoUbicacion,
+                                    habitacionIDV
                                 })
-                                contenedorData.appendChild(precioUI)
-                                const definicionUI = document.createElement("p")
-                                definicionUI.classList.add(
-                                )
-                                definicionUI.textContent = definicion
-                                contenedorData.appendChild(definicionUI)
+                                contenedorAlojamiento.appendChild(c)
+                            } else {
+                                contenedorAlojamiento.querySelector(selectorUI)?.remove()
+                                return
                             }
-                            posicion++
-                        }
-                        const contenedoresVacios = porComplemento_renderizado.querySelectorAll(`[contenedorApartamento]`)
-                        contenedoresVacios.forEach((cv) => {
-                            const complementosDelAlojamiento = cv.querySelectorAll("[complementouid_enreserva]")
-                            if (complementosDelAlojamiento.length === 0) {
-                                cv?.remove()
+
+                            const contenedorComplementoTipoUbicacion = contenedorAlojamiento.querySelector(selectorUI)
+                            const complementosPorAlojamientoRenderizados = contenedorComplementoTipoUbicacion.querySelectorAll("[complementoUID_enReserva]")
+
+                            let posicionComplemento = 0
+                            complementos.forEach(c => {
+                                const complementoUI = this.complementoUI(c)
+
+                                const existe = contenedorComplementoTipoUbicacion.querySelector(`[complementoUID_enReserva="${c.complementoUID}"]`)
+
+                                if (!existe) {
+                                    const elementosArray = Array.from(complementosPorAlojamientoRenderizados);
+
+                                    contenedorComplementoTipoUbicacion.insertBefore(complementoUI, elementosArray[posicionComplemento]);
+                                }
+
+                                posicionComplemento++
+                            })
+
+                        },
+                        utilidades: {
+                            organizarComplementosPorTipo: function (complementos) {
+                                const complementosAlojamientoPorTipo = {}
+
+                                complementos.forEach((comp) => {
+                                    const tipoUbicacion = comp.tipoUbicacion
+                                    const apartamentoIDVDelComplemento = comp.apartamentoIDV
+
+                                    if (!complementosAlojamientoPorTipo.hasOwnProperty(apartamentoIDVDelComplemento)) {
+                                        complementosAlojamientoPorTipo[apartamentoIDVDelComplemento] = {
+                                            tipoUbicacion: {
+                                                porAlojamiento: [],
+                                                porHabitacion: {}
+                                            }
+                                        }
+                                    }
+
+                                    const contenedorCom = complementosAlojamientoPorTipo[apartamentoIDVDelComplemento]
+                                    const apartamentoUI = comp.apartamentoUI
+                                    contenedorCom.apartamentoUI = apartamentoUI
+                                    if (tipoUbicacion === "alojamiento") {
+                                        contenedorCom.tipoUbicacion.porAlojamiento.push(comp)
+                                    } else if (tipoUbicacion === "habitacion") {
+                                        const habitacionIDV = comp.habitacionIDV
+                                        const porHabitacion = contenedorCom.tipoUbicacion.porHabitacion
+                                        if (!porHabitacion.hasOwnProperty(habitacionIDV)) {
+                                            porHabitacion[habitacionIDV] = []
+                                        }
+                                        porHabitacion[habitacionIDV].push(comp)
+                                    }
+                                })
+
+                                return complementosAlojamientoPorTipo
+
+                            },
+                            borrarContenedoresApartamentosObsoletos: function (data) {
+                                const areaContendoresPorAlojamiento = data.cCR_renderizado
+                                const apartamentosIDV_porRenderizar = data.apartamentosIDV_porRenderizar
+                                
+
+                                const complementosUI_Renderizados = areaContendoresPorAlojamiento.querySelectorAll(`[contenedor=porAlojamiento]`)
+                                complementosUI_Renderizados.forEach(c => {
+                                    const apartamentoIDV = c.apartamentoIDV
+                                    if (!apartamentosIDV_porRenderizar.includes(apartamentoIDV)) {
+                                        c?.remove()
+                                    }
+                                });
+                            },
+                            borrarContenedoresComplementosEnAlojamientoObsoletoa: function (data) {
+                                const contenedorAlojamiento = data.contenedorAlojamiento
+                                const complementoUID_porRenderizar = data?.complementoUID_porRenderizar
+                                const tipoUbicacion = data.tipoUbicacion
+
+
+                                const areaContendoresPorAlojamiento = contenedorAlojamiento.querySelector(`[com=complementosDeAlojamiento][tipoUbicacion=${tipoUbicacion}] [com=contenedor]`)
+                                if (areaContendoresPorAlojamiento) {
+                                    const complementosUI_Renderizados = areaContendoresPorAlojamiento.querySelectorAll(`[complementouid_enreserva]`)
+                                    complementosUI_Renderizados.forEach(c => {
+                                        const complementouid_enreserva = c.complementouid_enreserva
+                                        if (!complementoUID_porRenderizar.includes(complementouid_enreserva)) {
+                                            c?.remove()
+                                        }
+                                    });
+                                }
+
                             }
-                        })
+                        },
                     },
                     totales: function (data) {
                         const destino = data.destino
@@ -1233,6 +1502,8 @@ export const contenedorFinanciero = {
                                 const elementosArray = Array.from(serviciosRenderizados);
                                 porServicio_renderizado.insertBefore(contenedorServicioUI, elementosArray[posicion]);
                             }
+
+
                             const servicioUI = document.createElement("div")
                             servicioUI.setAttribute("servicioUID_enReserva", servicioUID_enReserva)
                             servicioUI.classList.add(
@@ -1754,7 +2025,7 @@ export const contenedorFinanciero = {
                                 "botonV3",
                                 "comportamientoBoton"
                             )
-                            botonInsertarDescuento.textContent = "Insertar descuento"
+                            botonInsertarDescuento.textContent = "Insertar descuento arbitrario"
                             botonInsertarDescuento.addEventListener("click", () => {
                                 casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.desgloseTotal.componentesUI.insertarDescuentos.ui({
                                     instanciaUID_contenedorFinanciero: instanciaUID
@@ -1781,11 +2052,12 @@ export const contenedorFinanciero = {
                                 "botonV3",
                                 "comportamientoBoton"
                             )
-                            botonDescuentoDedicado.textContent = "Insertar descuento dedicado"
-                            botonDescuentoDedicado.addEventListener("click", () => {
+                            botonDescuentoDedicado.textContent = "Crear e insertar descuento dedicado"
+                            botonDescuentoDedicado.addEventListener("click", (e) => {
                                 casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.desgloseTotal.componentesUI.insertarDescuentoDedicado.ui({
-                                    instanciaUID_contenedorFinanciero: instanciaUID
+                                    e
                                 })
+
                             })
                             contenedorBotones.appendChild(botonDescuentoDedicado)
 

@@ -5,6 +5,8 @@ export const actualizarComplementoPorComplementoUID = async (data) => {
         const definicion = data.definicion
         const tipoPrecio = data.tipoPrecio
         const precio = data.precio
+        const tipoUbicacion = data.tipoUbicacion
+        const habitacion = data.habitacion
         const complementoUID = data.complementoUID
 
 
@@ -14,9 +16,11 @@ export const actualizarComplementoPorComplementoUID = async (data) => {
         "complementoUI" = $1,
         definicion = $2,
         "tipoPrecio" = $3,
-        precio = $4
+        precio = $4,
+        "tipoUbicacion" = $5,
+        "habitacionUID" = $6
         WHERE
-        "complementoUID" = $5
+        "complementoUID" = $7
         RETURNING
         *`;
         const parametros = [
@@ -24,6 +28,8 @@ export const actualizarComplementoPorComplementoUID = async (data) => {
             definicion,
             tipoPrecio,
             precio,
+            tipoUbicacion,
+            habitacion,
             complementoUID
         ]
         const resuelve = await conexion.query(consulta, parametros);

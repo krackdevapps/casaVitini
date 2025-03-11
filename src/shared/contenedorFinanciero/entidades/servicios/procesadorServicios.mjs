@@ -25,6 +25,7 @@ export const procesadorServicios = async (data) => {
                 throw new Error(m)
             }
             const serviciosDeLaReserva = await obtenerServiciosPorReservaUID(reservaUID)
+
             serviciosDeLaReserva.forEach(s => {
                 const servicioUID = s.servicioUID
                 const opcionesSel = s.opcionesSel

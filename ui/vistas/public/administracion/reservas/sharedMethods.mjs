@@ -5263,6 +5263,7 @@ export const reservaComponentes = {
                     const contenedorDinamico = document.querySelector("[componente=contenedorDinamico]")
                     const instanciaUID_contenedorComplementos = casaVitini.utilidades.codigoFechaInstancia()
                     const spinnerPorRenderizar = casaVitini.ui.componentes.spinnerSimple()
+
                     const contenedor = document.createElement("div")
                     contenedor.classList.add(
                         "flexVertical",
@@ -5301,21 +5302,9 @@ export const reservaComponentes = {
                     if (respuestaServidor?.ok) {
                         const bloqueBotones = document.createElement("div")
                         bloqueBotones.classList.add("detallesReserva_enlacesDePago_bloqueBotones")
-                        const boton = document.createElement("div")
-                        boton.classList.add("detallesReserva_transacciones_botonV1")
-                        boton.textContent = "Insertar complemento de alojamiento"
-                        boton.addEventListener("click", () => {
-                            this.componentesUI.insertarServicio.ui({
-                                instanciaUID_contenedorComplementos: instanciaUID_contenedorComplementos
-                            })
-                        })
-                        // bloqueBotones.appendChild(boton)
                         const alojamiento = respuestaServidor.ok.alojamiento
                         const complementosDeAlojamiento = respuestaServidor.ok.complementosDeAlojamiento
-                        if (configuracionVista === "publica") {
-                        } else {
-                            // instanciaDestino.appendChild(bloqueBotones)
-                        }
+
                         const contenedorLista = document.createElement("div")
                         contenedorLista.classList.add(
                             "gridHorizontal2C",
@@ -5323,84 +5312,36 @@ export const reservaComponentes = {
                         )
                         contenedorLista.setAttribute("componente", "contenedorLista")
                         instanciaDestino.appendChild(contenedorLista)
-                        const apartamentoUI = (data) => {
-                            const apartamentoUI = data.apartamentoUI
-                            const apartamentoUID = data.apartamentoUID
-                            const apartamentoIDV = data.apartamentoIDV
-                            const ui = document.createElement("div")
-                            ui.setAttribute("apartamentoUID", apartamentoUID)
-                            ui.setAttribute("apartamentoIDV", apartamentoIDV)
-                            ui.classList.add(
-                                "flexVertical",
-                                "gap6",
-                                "padding6",
-                                "borderRadius12",
-                                "backgroundGrey1"
-                            )
-                            const n = document.createElement("p")
-                            n.classList.add(
-                                "negrita",
-                                "padding14"
-                            )
-                            n.textContent = apartamentoUI
-                            ui.appendChild(n)
-                            const contBo = document.createElement("div")
-                            contBo.classList.add("flexHorizontal")
-                            ui.appendChild(contBo)
-                            if (configuracionVista === "administrativa") {
-                                const b = document.createElement("div")
-                                b.classList.add("botonV3")
-                                b.textContent = "Añadir complemento de alojamiento"
-                                b.addEventListener("click", () => {
-                                    this.componentesUI.insertarComplementoEnAlojamiento.ui({
-                                        instanciaUID_contenedorComplementos,
-                                        apartamentoIDV,
-                                    })
-                                })
-                                contBo.appendChild(b)
-                            }
-                            const c = document.createElement("div")
-                            c.setAttribute("contenedor", "complementos")
-                            c.classList.add(
-                                "flexVertical",
-                                "gap6",
-                            )
-                            c.appendChild(this.componentesUI.infoSinComplemento())
-                            ui.appendChild(c)
-                            return ui
-                        }
+
                         Object.entries(alojamiento).forEach(([apartamentoIDV, contenedor]) => {
-                            contenedorLista.appendChild(apartamentoUI({
+                            
+                            const aUI = this.componentesUI.apartamentoUI({
                                 apartamentoIDV,
                                 apartamentoUI: contenedor.apartamentoUI,
-                                apartamentoUID: contenedor.apartamentoUID
-                            }))
+                                apartamentoUID: contenedor.apartamentoUID,
+                                configuracionVista,
+                                instanciaUID_contenedorComplementos
+                            })
+                            contenedorLista.appendChild(aUI)
                         })
-                        complementosDeAlojamiento.forEach((com) => {
-                            const contenedor = instanciaDestino.querySelector(`[apartamentoIDV="${com.apartamentoIDV}"] [contenedor=complementos]`)
-                            contenedor.querySelector("[componente=sinInfo]")?.remove()
-                            contenedor.appendChild(this.componentesUI.complementoUI(com))
+
+                        complementosDeAlojamiento.forEach((complemento) => {
+
+                            const contenedorAlojamiento = instanciaDestino.querySelector(`[apartamentoIDV="${complemento.apartamentoIDV}"] [contenedor=complementos]`)
+                            contenedorAlojamiento.querySelector("[componente=sinInfo]")?.remove()
+                            const habitacionUID = complemento.habitacionUID
+                            const habitacionUI = complemento.habitacionUI
+                            const tipoUbicacion = complemento.tipoUbicacion
+
+                            this.componentesUI.insertorDeComplemento({
+                                habitacionUID,
+                                habitacionUI,
+                                tipoUbicacion,
+                                instanciaUID_contenedorComplementos,
+                                destino: contenedorAlojamiento,
+                                complemento
+                            })
                         })
-                        return
-                        instanciaDestino.style.justifyContent = "flex-start";
-                        const serviciosEnReserva = respuestaServidor.ok.servicios
-                        if (serviciosEnReserva.length === 0) {
-                            contenedorLista.style.display = "none"
-                            const infoSinEnlaces = this.componentesUI.infoSinServiciosUI()
-                            instanciaDestino.appendChild(infoSinEnlaces)
-                        }
-                        if (serviciosEnReserva.length > 0) {
-                            const contenedorListaServicios = instanciaDestino.querySelector(`[componente=contenedorLista]`)
-                            for (const servicioEnReserva of serviciosEnReserva) {
-                                const servicioUI = this.componentesUI.servicioUI({
-                                    servicioUID_enReserva: servicioEnReserva.servicioUID,
-                                    instanciaUID_contenedorServicios,
-                                    nombreInterno: servicioEnReserva.nombre,
-                                    contenedor: servicioEnReserva.contenedor
-                                })
-                                contenedorListaServicios.appendChild(servicioUI)
-                            }
-                        }
                     }
                 },
                 componentesUI: {
@@ -5434,14 +5375,14 @@ export const reservaComponentes = {
                             if (respuestaServidor?.ok) {
                                 spinner.remove()
                                 const complementosPorApartamentoIDV = respuestaServidor.complementosPorApartamentoIDV
-                                const contenedor = document.createElement("div")
-                                contenedor.classList.add(
+                                const c = document.createElement("div")
+                                c.classList.add(
                                     "maxWidth1280px",
                                     "width100",
                                     "flexVertical",
                                     "gap10",
                                 )
-                                constructor.appendChild(contenedor)
+                                constructor.appendChild(c)
                                 const estadoUI_ = (estadoIDV) => {
                                     if (estadoIDV === "activado") {
                                         return "Activada"
@@ -5464,6 +5405,26 @@ export const reservaComponentes = {
                                     const tipoPrecio = c.tipoPrecio
                                     const precio = c.precio
                                     const definicion = c.definicion
+                                    const tipoUbicacion = c.tipoUbicacion
+
+                                    let sel
+                                    if (tipoUbicacion === "alojamiento") {
+                                        sel = `[contenedorTipoUbicacion=${tipoUbicacion}]`
+                                    } else if (tipoUbicacion === "habitacion") {
+                                        const habitacionUID = c.configuracionHabitacion.habitacionSeleccionada.componenteUID
+                                        sel = `[contenedorTipoUbicacion=${tipoUbicacion}][habitacionUID="${habitacionUID}"]`
+                                    }
+
+                                    const cS_control = constructor.querySelector(sel)
+                                    if (!cS_control) {
+                                        const habitacionSeleccionada = c.configuracionHabitacion.habitacionSeleccionada
+                                        const cC = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.complementosDeAlojamiento.componentesUI.contenedorComplemento({
+                                            tipoUbicacion,
+                                            habitacionSeleccionada
+                                        })
+                                        constructor.appendChild(cC)
+                                    }
+
                                     const contenedor = document.createElement("div")
                                     contenedor.setAttribute("complementoUID", complementoUID)
                                     contenedor.classList.add(
@@ -5474,12 +5435,15 @@ export const reservaComponentes = {
                                         "padding6",
                                         "gap6"
                                     )
+                                    constructor.querySelector(sel).querySelector("[com=complementos]").appendChild(contenedor)
+
                                     const contenedorGlobal = document.createElement("div")
                                     contenedorGlobal.classList.add(
                                         "flexVertical",
                                         "padding6",
                                         "gap6"
                                     )
+
                                     const nombreOfertaUI = document.createElement("div")
                                     nombreOfertaUI.classList.add("negrita")
                                     nombreOfertaUI.textContent = complementoUI
@@ -5524,6 +5488,7 @@ export const reservaComponentes = {
                                             instanciaUID_contenedorComplementos
                                         })
                                     })
+
                                     contendorBotones.appendChild(botonInsertar)
                                     const botonVerOferta = document.createElement("a")
                                     botonVerOferta.classList.add(
@@ -5539,7 +5504,7 @@ export const reservaComponentes = {
                                     botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                     contendorBotones.appendChild(botonVerOferta)
                                     contenedor.appendChild(contendorBotones)
-                                    constructor.appendChild(contenedor)
+
                                 })
                                 constructor.appendChild(this.botonCancelar())
                             }
@@ -5586,17 +5551,20 @@ export const reservaComponentes = {
                                 if (!selectorContenedor) {
                                     return
                                 }
-                                const complementoUI = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.complementosDeAlojamiento.componentesUI.complementoUI({
-                                    complementoUID: complementoDeAlojamiento.complementoUID,
-                                    complementoUI: complementoDeAlojamiento.complementoUI,
-                                    definicion: complementoDeAlojamiento.definicion,
-                                    precio: complementoDeAlojamiento.precio,
-                                    tipoPrecio: complementoDeAlojamiento.tipoPrecio,
-                                    apartamentoIDV: complementoDeAlojamiento.apartamentoIDV
+
+                                casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.complementosDeAlojamiento.componentesUI.insertorDeComplemento({
+                                    habitacionUID: complementoDeAlojamiento.habitacionUID,
+                                    habitacionUI: complementoDeAlojamiento.habitacionUI,
+                                    tipoUbicacion: complementoDeAlojamiento.tipoUbicacion,
+                                    instanciaUID_contenedorComplementos,
+                                    destino: selectorContenedor,
+                                    complemento: complementoDeAlojamiento
                                 })
+
+
+
                                 const selectorInfo = selectorContenedor.querySelector("[componente=sinInfo]")
                                 selectorInfo?.remove()
-                                selectorContenedor.appendChild(complementoUI)
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             }
                         },
@@ -5657,7 +5625,18 @@ export const reservaComponentes = {
                                     return
                                 }
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                                selectorContenedor.querySelector(`[complentoUID_enReserva="${complementoUID_enReserva}"]`)?.remove()
+
+
+                                const complementoSel = selectorContenedor.querySelector(`[complentoUID_enReserva="${complementoUID_enReserva}"]`)
+
+                                const contenedorTipoUbicacion = complementoSel.closest("[contenedorTipoUbicacion]")
+                                const complementosRestantesTipo = contenedorTipoUbicacion.querySelectorAll("[complentoUID_enReserva")
+                                complementoSel?.remove()
+
+                                if (complementosRestantesTipo.length <= 1) {
+                                    contenedorTipoUbicacion?.remove()
+                                }
+
                                 const selectorContenedoresDeServiciosRenderizados = selectorContenedor.querySelectorAll("[complentoUID_enReserva]")
                                 if (selectorContenedoresDeServiciosRenderizados.length === 0) {
                                     const infoSinEnlaces = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.complementosDeAlojamiento.componentesUI.infoSinComplemento()
@@ -5674,12 +5653,21 @@ export const reservaComponentes = {
                         return info
                     },
                     complementoUI: function (data) {
-                        const complementoUID = data.complementoUID
-                        const complementoUI = data.complementoUI
-                        const definicion = data.definicion
-                        const precio = data.precio
-                        const tipoPrecio = data.tipoPrecio
-                        const apartamentoIDV = data.apartamentoIDV
+                        const complemento = data.complemento
+                        const complementoUID = complemento.complementoUID
+                        const complementoUI = complemento.complementoUI
+                        const definicionB64 = complemento.definicion
+                        const precio = complemento.precio
+                        const tipoPrecio = complemento.tipoPrecio
+                        const apartamentoIDV = complemento.apartamentoIDV
+
+
+                        const complementoDef = (d) => {
+                            const def = d.length === 0 ? "" : d
+                            return casaVitini.utilidades.conversor.base64HaciaConTextDecoder(def)
+
+                        }
+
                         const reservaUI = document.querySelector("[reservaUID]")
                         const configuracionVista = reservaUI.getAttribute("configuracionVista")
                         const renderizaPrecio = (data) => {
@@ -5728,7 +5716,7 @@ export const reservaComponentes = {
                         d.classList.add(
                             //  "padding14"
                         )
-                        d.textContent = definicion
+                        d.textContent = complementoDef(definicionB64)
                         dataCont.appendChild(d)
                         if (configuracionVista === "administrativa") {
                             const b = document.createElement("div")
@@ -5747,6 +5735,117 @@ export const reservaComponentes = {
                             ui.appendChild(b)
                         }
                         return ui
+                    },
+                    apartamentoUI: function (data) {
+                        const apartamentoUI = data.apartamentoUI
+                        const apartamentoUID = data.apartamentoUID
+                        const apartamentoIDV = data.apartamentoIDV
+                        const configuracionVista = data.configuracionVista
+                        const instanciaUID_contenedorComplementos = data.instanciaUID_contenedorComplementos
+
+                        const ui = document.createElement("div")
+                        ui.setAttribute("apartamentoUID", apartamentoUID)
+                        ui.setAttribute("apartamentoIDV", apartamentoIDV)
+                        ui.classList.add(
+                            "flexVertical",
+                            "gap6",
+                            "padding6",
+                            "borderRadius12",
+                            "backgroundGrey1"
+                        )
+                        const n = document.createElement("p")
+                        n.classList.add(
+                            "negrita",
+                            "padding14"
+                        )
+                        n.textContent = apartamentoUI
+                        ui.appendChild(n)
+                        const contBo = document.createElement("div")
+                        contBo.classList.add("flexHorizontal")
+                        ui.appendChild(contBo)
+                        if (configuracionVista === "administrativa") {
+                            const b = document.createElement("div")
+                            b.classList.add("botonV3")
+                            b.textContent = "Añadir complemento de alojamiento"
+                            b.addEventListener("click", () => {
+                                this.insertarComplementoEnAlojamiento.ui({
+                                    instanciaUID_contenedorComplementos,
+                                    apartamentoIDV,
+                                })
+                            })
+                            contBo.appendChild(b)
+                        }
+                        const c = document.createElement("div")
+                        c.setAttribute("contenedor", "complementos")
+                        c.classList.add(
+                            "flexVertical",
+                            "gap6",
+                        )
+                        c.appendChild(this.infoSinComplemento())
+                        ui.appendChild(c)
+                        return ui
+                    },
+                    contenedorComplemento: function (data) {
+                        
+                        const tipoUbicacion = data.tipoUbicacion
+
+                        const ui = document.createElement("div")
+                        ui.classList.add("flexVertical", "gap6")
+                        ui.setAttribute("contenedorTipoUbicacion", tipoUbicacion)
+
+                        const t = document.createElement("div")
+                        t.classList.add("padding14")
+                        if (tipoUbicacion === "alojamiento") {
+                            t.textContent = "Complementos del alojamiento"
+                        } else if (tipoUbicacion === "habitacion") {
+                            const habitacionUID = data.habitacionSeleccionada.componenteUID
+                            const habitacionUI = data.habitacionSeleccionada.habitacionUI
+                            ui.setAttribute("habitacionUID", habitacionUID)
+                            t.textContent = habitacionUI
+                        }
+                        ui.appendChild(t)
+
+                        const c = document.createElement("div")
+                        c.classList.add("flexVertical", "gap6")
+                        c.setAttribute("com", "complementos")
+                        ui.appendChild(c)
+
+                        return ui
+                    },
+                    insertorDeComplemento: function (data) {
+                        const habitacionUID = data.habitacionUID
+                        const habitacionUI = data.habitacionUI
+                        const tipoUbicacion = data.tipoUbicacion
+                        const instanciaUID_contenedorComplementos = data.instanciaUID_contenedorComplementos
+                        const complemento = data.complemento
+                        const destino = data.destino
+                        
+                        let sel
+                        if (tipoUbicacion === "alojamiento") {
+                            sel = `[contenedorTipoUbicacion=${tipoUbicacion}]`
+                        } else if (tipoUbicacion === "habitacion") {
+                            sel = `[contenedorTipoUbicacion=${tipoUbicacion}][habitacionUID="${habitacionUID}"]`
+                        }
+
+                        const cS_control = destino.querySelector(sel)
+                        if (!cS_control) {
+                            const configuracion = {
+                                tipoUbicacion,
+                            }
+                            if (tipoUbicacion === "habitacion") {
+                                configuracion.habitacionSeleccionada = {
+                                    componenteUID: habitacionUID,
+                                    habitacionUI: habitacionUI
+                                }
+                            }
+                            const cC = this.contenedorComplemento(configuracion)
+                            destino.appendChild(cC)
+                        }
+
+                        destino.querySelector(sel).querySelector("[com=complementos]").appendChild(this.complementoUI({
+                            instanciaUID_contenedorComplementos,
+                            complemento
+                        }))
                     }
                 },
             },
@@ -6256,8 +6355,24 @@ export const reservaComponentes = {
                         botonCrearPagoManual.addEventListener("click", () => {
                             casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.crearPagoManual.UI()
                         })
-                        botonCrearPagoManual.textContent = "Crear pago"
+                        botonCrearPagoManual.textContent = "Realizar pago"
                         bloqueBotones.appendChild(botonCrearPagoManual)
+
+
+                        const botonDescuentoDedicado = document.createElement("div")
+                        botonDescuentoDedicado.classList.add(
+                            "botonV3",
+                            "comportamientoBoton"
+                        )
+                        botonDescuentoDedicado.textContent = "Crear e insertar descuento dedicado"
+                        botonDescuentoDedicado.addEventListener("click", (e) => {
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.desgloseTotal.componentesUI.insertarDescuentoDedicado.ui({
+                                e
+                            })
+
+                        })
+                        bloqueBotones.appendChild(botonDescuentoDedicado)
+
                         const botonCerrar = document.createElement("div")
                         botonCerrar.classList.add("detallesReserva_transacciones_botonV1")
                         botonCerrar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
@@ -9560,15 +9675,231 @@ export const reservaComponentes = {
                     },
                     insertarDescuentoDedicado: {
                         ui: function (data) {
+                            const e = data.e
                             const main = document.querySelector("main")
                             const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
-                            const reservaUID = main.querySelector("[reservaUID]").getAttribute("reservaUID")
+                            const reservaUID = e.target.closest("[reservaUID]").getAttribute("reservaUID")
+                            const instanciaUID = ui.getAttribute("instanciaUID")
+
                             main.appendChild(ui)
                             const constructor = ui.querySelector("[componente=contenedor]")
-                            
-                            const contenedorDescuento = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.contenedorDescuento()
-                            constructor.appendChild(contenedorDescuento)
+                            const contenedorIntermedio = ui.querySelector("[com=contenedorIntermedio]")
 
+                            constructor.style.position = "relative"
+                            constructor.style.padding = "0px"
+
+                            contenedorIntermedio.style.minHeight = "100vh"
+
+                            const sC = document.createElement("div")
+                            sC.classList.add("flexVertical", "padding18", "gap6")
+                            sC.setAttribute("area", "descuentoDedicado")
+                            constructor.appendChild(sC)
+
+                            const input = document.createElement("input");
+                            input.setAttribute("type", "text");
+                            input.setAttribute("campoOferta", "nombreOferta");
+                            input.setAttribute("placeholder", "Escriba un nombre a esta oferta, el nombre sera publico");
+                            sC.appendChild(input)
+
+
+                            const contenedorDescuento = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.contenedorDescuento({
+                                zonaDespliegue: `[componente=advertenciaInmersiva] [componente=contenedor]`,
+                                metodoSelectorDia: "view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia"
+                            })
+                            sC.appendChild(contenedorDescuento)
+
+                            const contenedorBotones = document.createElement("div")
+                            contenedorBotones.classList.add("flexHorizontal", "gap6")
+                            sC.appendChild(contenedorBotones)
+
+                            const botonInsertar = document.createElement("div")
+                            botonInsertar.classList.add("botonV1")
+                            botonInsertar.textContent = "Insertar descuento dedicado"
+                            botonInsertar.addEventListener("click", (e) => {
+                                this.confirmar({
+                                    e,
+                                    instanciaUID,
+                                    reservaUID,
+                                })
+                            })
+                            contenedorBotones.appendChild(botonInsertar)
+
+                            const botonVolver = document.createElement("div")
+                            botonVolver.classList.add("botonV1")
+                            botonVolver.textContent = "Cancelar y volver a la resserva"
+                            botonVolver.addEventListener("click", () => {
+                                return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+
+                            })
+                            contenedorBotones.appendChild(botonVolver)
+
+
+                        },
+                        constructorObjeto: ({ e }) => {
+
+                            const area = e.target.closest("[area=descuentoDedicado]")
+                            const nombreOferta = area.querySelector("[campoOferta=nombreOferta]").value
+                            //const fechaInicio_ISO = area.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                            //const fechaFinal_ISO = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+
+                            const oferta = {
+                                nombreOferta,
+                                zonaIDV: "global",
+                                entidadIDV: "reserva",
+                                descuentosJSON: {}
+                            }
+
+
+                            const contenedorDescuentos = area.querySelector("[contenedor=descuentos]")
+                            const tipoDescuento = contenedorDescuentos.querySelector("[componente=tipoDescuento]")?.value
+                            if (tipoDescuento === "totalNeto") {
+                                const descuentoTotal = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=descuentoGlobal]`).value
+                                const tipoAplicacion = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=tipoDescuento]`).value
+
+                                const estructuraDescuento = {
+                                    tipoDescuento: tipoDescuento,
+                                    tipoAplicacion: tipoAplicacion,
+                                    descuentoTotal: descuentoTotal
+                                }
+                                oferta.descuentosJSON = estructuraDescuento
+                            } else if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
+                                const descuentoTotal = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=descuentoGlobal]`).value
+                                const tipoAplicacion = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=tipoDescuento]`).value
+
+                                const estructuraDescuento = {
+                                    tipoDescuento: tipoDescuento,
+                                    tipoAplicacion: tipoAplicacion,
+                                    descuentoTotal: descuentoTotal
+                                }
+                                oferta.descuentosJSON = estructuraDescuento
+                            } else if (tipoDescuento === "individualPorApartamento") {
+                                const apartamentos = []
+
+                                const apartamentosSeleccionados = contenedorDescuentos.querySelector("[descuentoidv=individualPorApartamento]").querySelectorAll("[apartamentoIDV]")
+                                apartamentosSeleccionados.forEach((apartamento) => {
+                                    const apartamentoIDV = apartamento.getAttribute("apartamentoIDV")
+                                    const descuentoTotal = apartamento.querySelector("[campoapartamentoseleccionado=descuentoTotal]").value
+                                    const tipoDescuento = apartamento.querySelector("[campoapartamentoseleccionado=tipoDescuento]").value
+
+                                    const estructuraApartamento = {
+                                        apartamentoIDV,
+                                        descuentoTotal,
+                                        tipoAplicacion: tipoDescuento
+                                    }
+                                    apartamentos.push(estructuraApartamento)
+
+                                })
+                                const estructuraDescuento = {
+                                    tipoDescuento: tipoDescuento,
+                                    apartamentos: apartamentos
+                                }
+                                oferta.descuentosJSON = estructuraDescuento
+
+                            } else if (tipoDescuento === "porRango") {
+                                const area = contenedorDescuentos.querySelector("[area=descuentosPorRango]")
+                                const fechaInicioRango_ISO = area.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                                const fechaFinalRango_ISO = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                                const subTipoDescuento = area.querySelector("[componente=subTipoDescuento]").value
+
+
+                                const estructuraDescuento = {
+                                    tipoDescuento: tipoDescuento,
+                                    fechaInicioRango_ISO: fechaInicioRango_ISO,
+                                    fechaFinalRango_ISO: fechaFinalRango_ISO,
+                                    subTipoDescuento: subTipoDescuento,
+                                }
+                                oferta.descuentosJSON = estructuraDescuento
+
+                                if (subTipoDescuento === "totalNetoPorRango") {
+                                    const descuentoTotal = area.querySelector("[campoOferta=descuentoGlobal]").value
+                                    const tipoAplicacion = area.querySelector("[campoOferta=tipoDescuento]").value
+                                    estructuraDescuento.tipoAplicacion = tipoAplicacion
+                                    estructuraDescuento.descuentoTotal = descuentoTotal
+                                }
+
+                                if (subTipoDescuento === "porDiasDelRango") {
+                                    estructuraDescuento.descuentoPorDias = []
+
+                                    const contenedorPorDiasPorRango = area.querySelectorAll("[contenedor=dia]")
+                                    contenedorPorDiasPorRango.forEach((dia) => {
+
+                                        const fechaDelDia = dia.getAttribute("fechaDelDia")
+
+                                        const estructuraDescuentoPorDia = {
+                                            fecha: fechaDelDia
+                                        }
+                                        const tipoDescuentoEnElDia = dia.querySelector("[campoOferta=contextoAplicacion]").value
+                                        estructuraDescuentoPorDia.tipoDescuento = tipoDescuentoEnElDia
+
+
+                                        if (tipoDescuentoEnElDia === "netoPorDia") {
+                                            const descuentoTotal = dia.querySelector("[campoOferta=descuentoGlobal]").value
+                                            const tipoAplicacion = dia.querySelector("[campoOferta=tipoDescuento]").value
+
+                                            estructuraDescuentoPorDia.tipoAplicacion = tipoAplicacion
+                                            estructuraDescuentoPorDia.descuentoTotal = descuentoTotal
+
+                                            estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
+
+                                        } else if (tipoDescuentoEnElDia === "netoPorApartamentoDelDia") {
+                                            const contenedorApartamentos = dia.querySelectorAll("[apartamentoIDV]")
+                                            estructuraDescuentoPorDia.apartamentos = []
+
+                                            contenedorApartamentos.forEach((apartamento) => {
+                                                const aparatmentoIDV = apartamento.getAttribute("apartamentoIDV")
+                                                const tipoAplicacion = apartamento.querySelector("[campoApartamentoSeleccionado=tipoDescuento]").value
+                                                const descuentoTotal = apartamento.querySelector("[campoApartamentoSeleccionado=descuentoTotal]").value
+
+                                                const descuentoPorApartamento = {
+                                                    apartamentoIDV: aparatmentoIDV,
+                                                    tipoAplicacion: tipoAplicacion,
+                                                    descuentoTotal: descuentoTotal,
+                                                }
+                                                estructuraDescuentoPorDia.apartamentos.push(descuentoPorApartamento)
+
+                                            })
+                                            estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
+                                        }
+                                    })
+                                }
+                            }
+                            return oferta
+                        },
+                        confirmar: async function (data) {
+                            const event = data.e
+                            const reservaUID = data.reservaUID
+                            const instanciaUID_cF = data.instanciaUID
+
+                            const constructoDescuento = this.constructorObjeto({ e: event })
+                            const descuentoDedicado = {
+                                reservaUID: reservaUID,
+                                descuentoDedicado: constructoDescuento
+                            }
+
+                            const instanciaPantallaCarga = casaVitini.utilidades.codigoFechaInstancia()
+                            casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
+                                mensaje: "Insertando decuento dedicado en la reserva",
+                                textoBoton: "ocultar",
+                                instanciaUID: instanciaPantallaCarga
+                            })
+
+                            const respuestaServidor = await casaVitini.shell.servidor({
+                                zona: "administracion/reservas/detallesReserva/descuentos/insertarDescuentoDedicado",
+                                ...descuentoDedicado
+                            })
+                            document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`).remove()
+
+                            const instanciaCF = document.querySelector(`[instanciaUID="${instanciaUID_cF}"]`)
+                            if (!instanciaCF) {
+                                return
+                            }
+                            if (respuestaServidor?.error) {
+                                return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                            }
+                            if (respuestaServidor?.ok) {
+                                casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.actualizarReservaRenderizada()
+                                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                            }
                         }
                     },
                     sobreControlPrecios: {
@@ -9629,6 +9960,13 @@ export const reservaComponentes = {
                                     )
                                     titulo.textContent = `Detalles del ${apartamentoUI} en la noche de ${fechaNoche}`
                                     contenedor.appendChild(titulo)
+
+                                    const info = document.createElement("p")
+                                    info.classList.add("padding6")
+                                    info.textContent = "El sobre control de precio del alojamiento en reserva altera el precio del alojamiento en la reserva si las circunstancias los requieren. El sobre control solo altera el precio del apartamento y no de los complementos de alojamiento. Si necesitas aplicar un descuento al alojamiento usa el sistema de descuento dedicado en reserva, ya que este aplicará el descuento al alojamiento y los complementos del alojamiento. Si aplicas un sobre control de precio, este también será procesado por el sistema de descuentos."
+                                    contenedor.appendChild(info)
+
+
                                     const contenedorValorOrigen = document.createElement("div")
                                     contenedorValorOrigen.classList.add(
                                         "flexVertical",

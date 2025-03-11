@@ -13,8 +13,8 @@ export const perfil_mismoDescuentoParaCadaApartamento = (data) => {
         const contenedorPorApartamento = data.contenedorPorApartamento
 
         for (const apartamentoIDV of apartamentosIDVArray) {
-
-            const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
+            const desgloseDelApartamento = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]
+            const totalPorApartametno = desgloseDelApartamento?.totalNetoConComplementos || desgloseDelApartamento?.totalNeto
             if (!totalPorApartametno) {
                 continue
             }

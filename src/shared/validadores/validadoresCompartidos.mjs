@@ -635,7 +635,7 @@ export const validadoresCompartidos = {
                         throw new Error(mensaje)
                     }
                     const maximoDeLargo = configuracion.maximoDeLargo
-                    if (maximoDeLargo && typeof maximoDeLargo !== "number") {
+                    if (maximoDeLargo && typeof maximoDeLargo !== "bigint") {
                         const mensaje = `El validador de cadena está mal configurado, maximoDeLargo solo acepta números.`
                         throw new Error(mensaje)
                     }
@@ -733,9 +733,10 @@ export const validadoresCompartidos = {
                 const mensaje = `El validador de cadenas, necesita un nombre de campo.`
                 throw new Error(mensaje)
             }
+            // esto afecta a calendarios
             if (typeof number !== "number") {
                 const mensaje = `${nombreCampo} debe de ser un número.`
-                throw  new Error(mensaje)
+                throw new Error(mensaje)
             }
             if (typeof sePermiteVacio !== "string" &&
                 (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {

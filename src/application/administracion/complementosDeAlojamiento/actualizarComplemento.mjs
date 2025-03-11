@@ -5,6 +5,9 @@ import { campoDeTransaccion } from "../../../infraestructure/repository/globales
 import { obtenerComplementoPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs";
 import { validarObjeto } from "../../../shared/complementosDeAlojamiento/validarObjeto.mjs";
 import { actualizarComplementoPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/actualizarComplementoPorComplementoUID.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
 export const actualizarComplemento = async (entrada) => {
     const mutex = new Mutex()
@@ -26,30 +29,59 @@ export const actualizarComplemento = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
-        const complemento = await obtenerComplementoPorComplementoUID(complementoUID)
-        const estado = complemento.estadoIDV;
+        const complementoControl = await obtenerComplementoPorComplementoUID(complementoUID)
+        const estado = complementoControl.estadoIDV;
         if (estado === "activado") {
             const error = "No se puede modificar un complemento activo. Primero desactivalo con el botón de estado.";
             throw new Error(error);
         }
 
-        await validarObjeto(entrada.body)
-        const complementoActualizar = {
-            apartamentoIDV: entrada.body.apartamentoIDV,
-            complementoUI: entrada.body.complementoUI,
-            definicion: entrada.body.definicion,
-            tipoPrecio: entrada.body.tipoPrecio,
-            precio: entrada.body.precio,
-        }
-        complementoActualizar.complementoUID = complementoUID
-        await campoDeTransaccion("iniciar")
-        const complementoActualizado = await actualizarComplementoPorComplementoUID(complementoActualizar);
-        await campoDeTransaccion("confirmar")
+        const oV = await validarObjeto({
+            o: entrada.body,
+            modo: "actualizar"
+        })
 
-        delete complementoActualizado.testingVI
+        await campoDeTransaccion("iniciar")
+        const complemento = await actualizarComplementoPorComplementoUID(oV);
+        const apartamentoIDV = complemento.apartamentoIDV
+        const apartamento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+            apartamentoIDV: apartamentoIDV,
+            errorSi: "noExiste"
+        })
+        const apartamentoUI = apartamento.apartamentoUI
+        const habitacionUID = complemento.habitacionUID
+
+
+        const habitacionesAlojamiento = []
+        let habitacionSeleccionada
+
+        const hDA = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+        for (const h of hDA) {
+
+            const hUID = h.componenteUID
+            const hIDV = h.habitacionIDV
+
+            const habitacionUI = (await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV: hIDV,
+                errorSi: "noExiste"
+            })).habitacionUI
+            h.habitacionUI = habitacionUI
+
+            habitacionesAlojamiento.push(h)
+
+            if (habitacionUID === hUID) {
+                habitacionSeleccionada = h
+            }
+        }
+        await campoDeTransaccion("confirmar")
+        delete complemento.testingVI
         const ok = {
-            ok: "El Complemento se ha actualizado bien",
-            complementoActualizado
+            ok: complemento,
+            apartamentoUI,
+            configuracionHabitacion: {
+                habitacionSeleccionada,
+                habitacionesAlojamiento,
+            }
         };
         return ok
     } catch (errorCapturado) {

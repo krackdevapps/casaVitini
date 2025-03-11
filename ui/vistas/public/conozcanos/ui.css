@@ -515,7 +515,8 @@ header .estructura {
 
 @media (min-width: 2160px) {
     .primerContainerResponsivo {
-        border-radius: 30px;
+        border-bottom-right-radius: 30px;
+        border-bottom-left-radius: 30px;
         margin-left: 0px;
         margin-right: 0px;
 

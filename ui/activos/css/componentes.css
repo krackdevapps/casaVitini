@@ -572,8 +572,8 @@ summary:hover {
 .advertenciaInmersiva {
     background: #a5a5a500;
     position: fixed;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     display: flex;
     flex-wrap: nowrap;
     align-content: center;
@@ -583,8 +583,9 @@ summary:hover {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     cursor: default;
-    top: 0vh;
-    z-index: 99;
+    top: 0px;
+    /* z-index: 99; */
+    left: 0px;
 }
 
 .advertenciaInmersiva .titulo {
@@ -1798,10 +1799,24 @@ summary:hover {
     padding-left: 6px;
     padding-right: 6px;
 }
+.padding16Horizontal {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.padding10Horizontal {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 
 .padding6Vertical {
     padding-top: 6px;
     padding-bottom: 6px;
+}
+
+.fondoSelector:hover {
+    background-color: rgba(0, 0, 0, 0.212) !important;
+    color: white !important
 }
 
 .gap4 {
@@ -1939,6 +1954,7 @@ summary:hover {
     gap: 10px;
     /* padding-top: 80px; */
     align-items: stretch;
+    padding-top: 100px !important;
 }
 
 .width100 .borderRadius6 {

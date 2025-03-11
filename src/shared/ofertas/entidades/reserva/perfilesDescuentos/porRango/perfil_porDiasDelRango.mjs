@@ -23,7 +23,7 @@ export const perfil_porDiasDelRango = async (data) => {
             const apartamentos = descuentoPorDia.apartamentos
             const tipoDescuento = descuentoPorDia.tipoDescuento
             const nocheDeLaReserva = estructura.entidades.reserva.desglosePorNoche[fechaDelDia]
-  
+
             const fechaDentroDelRango = await validadoresCompartidos.fechas.fechaEnRango({
                 fechaAComprobrarDentroDelRango: fechaDelDia,
                 fechaInicioRango_ISO: fechaEntradaReserva_ISO,
@@ -35,7 +35,7 @@ export const perfil_porDiasDelRango = async (data) => {
             }
 
             if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
-                const precioNetoNoche = nocheDeLaReserva.precioNetoNoche
+                const precioNetoNoche = nocheDeLaReserva?.precioNetoNocheConComplementos || nocheDeLaReserva.precioNetoNoche
                 contenedorPorDia[fechaDelDia] = {
                     totalSinDescuentos: precioNetoNoche,
                     totalConDescuentos: precioNetoNoche,
@@ -54,7 +54,15 @@ export const perfil_porDiasDelRango = async (data) => {
                     [fechaDelDia]
                         ?.apartamentosPorNoche
                     [apartamentoIDV]
-                        ?.precioNetoApartamento
+                        ?.precioNetoApartamentoComplementos
+                        ||
+                        estructura.entidades.reserva
+                            ?.desglosePorNoche
+                        [fechaDelDia]
+                            ?.apartamentosPorNoche
+                        [apartamentoIDV]
+                            ?.precioNetoApartamento
+
                     if (!totalPorApartamento) {
                         continue
                     }
@@ -116,10 +124,8 @@ export const perfil_porDiasDelRango = async (data) => {
 
                 const descuentoTotal = descuentoPorDia.descuentoTotal
                 const tipoAplicacion = descuentoPorDia.tipoAplicacion
-                const totalNetoPorDia = estructura.entidades.reserva.
-                    desglosePorNoche
-                [fechaDelDia]
-                    .precioNetoNoche
+                const totalNetoPorDia = estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNocheConComplementos
+                    || estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
 
                 const totalCalculado = calcularTotal({
                     tipoAplicacion,

@@ -77,7 +77,7 @@ body {
     border-radius: 16px;
 }
  .plaza_reservas_reservaConfirmada_infoIngreso {
-    text-align: justify;
+    text-align: center;
     display: flex;
     padding: 16px;
     background: rgba(255, 255, 255, 0.3);
@@ -87,6 +87,7 @@ body {
     flex-direction: column;
     align-content: center;
     white-space: pre-wrap;
+
 }
 
 [zonaCSS="/alojamiento/reserva_confirmada"] .plaza_reservas_reservaConfirmada_contenedor {

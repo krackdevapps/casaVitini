@@ -3,16 +3,34 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructu
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerOfertasPorCodigoDescuentoArray } from "../../../../infraestructure/repository/ofertas/perfiles/obtenerOfertasPorCodigoDescuentoArray.mjs"
 import { obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID } from "../../../../infraestructure/repository/ofertas/perfiles/obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID.mjs"
+import { controlEstructuraPorJoi } from "../../../validadores/controlEstructuraPorJoi.mjs"
+import Joi from "joi"
 export const validarObjetoOferta = async (data) => {
 
     try {
         const oferta = data.oferta
         const modo = data.modo
+        const filtroCondiciones = data?.filtroCondiciones ?? "activado"
 
         if (modo !== "actualizarOferta" && modo !== "crearOferta") {
             const m = "validarObjetOferta requiero campo modo en actualizarOferta o crearOfert para procesar el objeto"
             throw new Error(m)
         }
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
+        let esquemaOferta = Joi.object({
+            nombreOferta: Joi.string().required(),
+            zonaIDV: Joi.string().required(),
+            entidadIDV: Joi.string().required(),
+            fechaInicio: Joi.string().required(),
+            fechaFinal: Joi.string().required(),
+            condicionesArray: Joi.array().required(),
+            descuentosJSON: Joi.object().required(),
+        }).required().messages(commonMessages)
+
+        controlEstructuraPorJoi({
+            schema: esquemaOferta,
+            objeto: oferta
+        })
 
         validadoresCompartidos.tipos.cadena({
             string: oferta.nombreOferta,
@@ -51,20 +69,6 @@ export const validarObjetoOferta = async (data) => {
             tipoVector: "igual"
         })
 
-        const condicionesArray = validadoresCompartidos.tipos.array({
-            array: oferta.condicionesArray,
-            filtro: "filtroDesactivado",
-            nombreCampo: "El array de condicionesArray"
-        })
-        const descuentosJSON = validadoresCompartidos.tipos.objetoLiteral({
-            objetoLiteral: oferta.descuentosJSON,
-            nombreCampo: "El objeto de descuentosJSON"
-        })
-
-        if (condicionesArray.length === 0) {
-            const error = "Añade al menos una condición a la oferta."
-            throw new Error(error)
-        }
         const zonaIDV = oferta.zonaIDV
         if (zonaIDV !== "global" && zonaIDV !== "publica" && zonaIDV !== "privada") {
             const error = "El campo zonaIDV solo admite global, pública o privada"
@@ -74,332 +78,359 @@ export const validarObjetoOferta = async (data) => {
         if (testingVI) {
             oferta.testingVI = testingVI
         }
-        const mensajeError = (data) => {
-            const numeroMaximo = data.numeroMaximo
-            const tipoCondicionIDV = data.tipoCondicionIDV
-            const m = `El contenedor ${tipoCondicionIDV} no espera más de ${numeroMaximo} de llaves en el objeto`
-            return m
-        }
 
-        const codigosDescuentosBase64DeLaMismaOferta = []
-        for (const condicion of condicionesArray) {
-            const tipoCondicionIDV = condicion?.tipoCondicion
-            if (tipoCondicionIDV === "conFechaEntradaEntreRango") {
+        if (filtroCondiciones === "activado") {
+            const condicionesArray = validadoresCompartidos.tipos.array({
+                array: oferta.condicionesArray,
+                filtro: "filtroDesactivado",
+                nombreCampo: "El array de condicionesArray"
+            })
 
-                if (Object.keys(condicion).length > 3) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 3
-                    })
-                    throw new Error(m)
-                }
+            if (condicionesArray.length === 0) {
+                const error = "Añade al menos una condición a la oferta."
+                throw new Error(error)
+            }
 
-                const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
-                const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
-                if (!fechaInicioRango_ISO) {
-                    const error = "En el tipo de condicion conFechaEntradaEntreRango no hay definida la fecha de incio de rango."
-                    throw new Error(error)
-                }
-                if (!fechaFinalRango_ISO) {
-                    const error = "En el tipo de condicion conFechaEntradaEntreRango no hay definida la fecha final del rango"
-                    throw new Error(error)
-                }
-                await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaInicioRango_ISO,
-                    nombreCampo: `La fecha de incio de la condicion ${tipoCondicionIDV}`
-                })
-                await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaFinalRango_ISO,
-                    nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
-                })
-
-                await validadoresCompartidos.fechas.validacionVectorial({
-                    fechaEntrada: fechaInicioRango_ISO,
-                    fechaSalida: fechaFinalRango_ISO,
-                    tipoVector: "igual"
-                })
-
-            } else if (tipoCondicionIDV === "conFechaSalidaEntreRango") {
-
-                if (Object.keys(condicion).length > 3) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 3
-                    })
-                    throw new Error(m)
-                }
-
-                const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
-                const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
-                if (!fechaInicioRango_ISO) {
-                    const error = "En el tipo de condicion conFechaSalidaEntreRango no hay definida la fecha de incio de rango."
-                    throw new Error(error)
-                }
-                if (!fechaFinalRango_ISO) {
-                    const error = "En el tipo de condicion conFechaSalidaEntreRango no hay definida la fecha final del rango"
-                    throw new Error(error)
-                }
-                await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaInicioRango_ISO,
-                    nombreCampo: `La fecha de incio de la condicion ${tipoCondicionIDV}`
-                })
-                await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaFinalRango_ISO,
-                    nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
-                })
-
-                await validadoresCompartidos.fechas.validacionVectorial({
-                    fechaEntrada: fechaInicioRango_ISO,
-                    fechaSalida: fechaFinalRango_ISO,
-                    tipoVector: "igual"
-                })
-
-            } else if (tipoCondicionIDV === "conFechaCreacionEntreRango") {
-            } else if (tipoCondicionIDV === "porNumeroDeApartamentos") {
-
-                if (Object.keys(condicion).length > 3) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 3
-                    })
-                    throw new Error(m)
-                }
+            const mensajeError = (data) => {
+                const numeroMaximo = data.numeroMaximo
+                const tipoCondicionIDV = data.tipoCondicionIDV
+                const m = `El contenedor ${tipoCondicionIDV} no espera más de ${numeroMaximo} de llaves en el objeto`
+                return m
+            }
 
 
-                const tipoConteo = condicion.tipoConteo
-                if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto" && tipoConteo !== "hastaUnNumeroExacto") {
-                    const error = `En la condiicon ${tipoCondicionIDV} el tipoConteo solo puede ser aPartirDe, numeroExacto o hastaUnNumeroExacto`
-                    throw new Error(error)
+            const validadorCondiciones = async (condicion) => {
+                const tipoCondicionIDV = condicion?.tipoCondicion
+                if (tipoCondicionIDV === "conFechaEntradaEntreRango") {
 
-                }
-                validadoresCompartidos.tipos.cadena({
-                    string: condicion.numeroDeApartamentos,
-                    nombreCampo: "El campo numeroDeApartamentos en la condicion " + tipoCondicionIDV,
-                    filtro: "cadenaConNumerosEnteros",
-                    sePermiteVacio: "no",
-                    impedirCero: "si",
-                    devuelveUnTipoNumber: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                })
-
-            } else if (tipoCondicionIDV === "porApartamentosEspecificos") {
-                if (Object.keys(condicion).length > 3) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 3
-                    })
-                    throw new Error(m)
-                }
-
-                const tipoDeEspecificidad = condicion.tipoDeEspecificidad
-                if (tipoDeEspecificidad !== "exactamente"
-                    &&
-                    tipoDeEspecificidad !== "alguno"
-                    &&
-                    tipoDeEspecificidad !== "exactamenteEntreOtros"
-                    &&
-                    tipoDeEspecificidad !== "noDebeContenedorAlguno"
-                    &&
-                    tipoDeEspecificidad !== "noDebeContenedorExactamente"
-
-
-                ) {
-                    const error = "El campo tipoDeEspecificidad solo admite, exactamente, alguno o exactamenteEntreOtros"
-                    throw new Error(error)
-                }
-                const apartamentos = condicion.apartamentos
-                validadoresCompartidos.tipos.array({
-                    array: apartamentos,
-                    filtro: "filtroDesactivado",
-                    nombreCampo: "Array de apartamento en la condición de porApartamentosEspecificos",
-                    sePermitenDuplicados: "no"
-                })
-                const contenedorControlIDVUnicos = {}
-                for (const contenedorApartamento of apartamentos) {
-
-                    if (Object.keys(contenedorApartamento).length > 1) {
-                        const m = "El contenedor de apartamentos en la condición porApartamentosEspecificos solo espera una llave."
+                    if (Object.keys(condicion).length > 3) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 3
+                        })
                         throw new Error(m)
                     }
 
-                    if (!contenedorApartamento.hasOwnProperty("apartamentoIDV")) {
-                        const m = "Se esperaba que el contenedor de apartamentos de la condición de porApartamentosEspecificos tuviera la llave apartamentoIDV"
+                    const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
+                    const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
+                    if (!fechaInicioRango_ISO) {
+                        const error = "En el tipo de condicion conFechaEntradaEntreRango no hay definida la fecha de incio de rango."
+                        throw new Error(error)
+                    }
+                    if (!fechaFinalRango_ISO) {
+                        const error = "En el tipo de condicion conFechaEntradaEntreRango no hay definida la fecha final del rango"
+                        throw new Error(error)
+                    }
+                    await validadoresCompartidos.fechas.validarFecha_ISO({
+                        fecha_ISO: fechaInicioRango_ISO,
+                        nombreCampo: `La fecha de incio de la condicion ${tipoCondicionIDV}`
+                    })
+                    await validadoresCompartidos.fechas.validarFecha_ISO({
+                        fecha_ISO: fechaFinalRango_ISO,
+                        nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
+                    })
+
+                    await validadoresCompartidos.fechas.validacionVectorial({
+                        fechaEntrada: fechaInicioRango_ISO,
+                        fechaSalida: fechaFinalRango_ISO,
+                        tipoVector: "igual"
+                    })
+
+                } else if (tipoCondicionIDV === "conFechaSalidaEntreRango") {
+
+                    if (Object.keys(condicion).length > 3) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 3
+                        })
                         throw new Error(m)
                     }
-                    const apartamentoIDV = contenedorApartamento.apartamentoIDV
+
+                    const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
+                    const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
+                    if (!fechaInicioRango_ISO) {
+                        const error = "En el tipo de condicion conFechaSalidaEntreRango no hay definida la fecha de incio de rango."
+                        throw new Error(error)
+                    }
+                    if (!fechaFinalRango_ISO) {
+                        const error = "En el tipo de condicion conFechaSalidaEntreRango no hay definida la fecha final del rango"
+                        throw new Error(error)
+                    }
+                    await validadoresCompartidos.fechas.validarFecha_ISO({
+                        fecha_ISO: fechaInicioRango_ISO,
+                        nombreCampo: `La fecha de incio de la condicion ${tipoCondicionIDV}`
+                    })
+                    await validadoresCompartidos.fechas.validarFecha_ISO({
+                        fecha_ISO: fechaFinalRango_ISO,
+                        nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
+                    })
+
+                    await validadoresCompartidos.fechas.validacionVectorial({
+                        fechaEntrada: fechaInicioRango_ISO,
+                        fechaSalida: fechaFinalRango_ISO,
+                        tipoVector: "igual"
+                    })
+
+                } else if (tipoCondicionIDV === "conFechaCreacionEntreRango") {
+                } else if (tipoCondicionIDV === "porNumeroDeApartamentos") {
+
+                    if (Object.keys(condicion).length > 3) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 3
+                        })
+                        throw new Error(m)
+                    }
+
+
+                    const tipoConteo = condicion.tipoConteo
+                    if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto" && tipoConteo !== "hastaUnNumeroExacto") {
+                        const error = `En la condiicon ${tipoCondicionIDV} el tipoConteo solo puede ser aPartirDe, numeroExacto o hastaUnNumeroExacto`
+                        throw new Error(error)
+
+                    }
                     validadoresCompartidos.tipos.cadena({
-                        string: apartamentoIDV,
-                        nombreCampo: "El apartamentoIDV",
-                        filtro: "strictoIDV",
+                        string: condicion.numeroDeApartamentos,
+                        nombreCampo: "El campo numeroDeApartamentos en la condicion " + tipoCondicionIDV,
+                        filtro: "cadenaConNumerosEnteros",
+                        sePermiteVacio: "no",
+                        impedirCero: "si",
+                        devuelveUnTipoNumber: "no",
+                        limpiezaEspaciosAlrededor: "si",
+                    })
+
+                } else if (tipoCondicionIDV === "porApartamentosEspecificos") {
+                    if (Object.keys(condicion).length > 3) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 3
+                        })
+                        throw new Error(m)
+                    }
+
+                    const tipoDeEspecificidad = condicion.tipoDeEspecificidad
+                    if (tipoDeEspecificidad !== "exactamente"
+                        &&
+                        tipoDeEspecificidad !== "alguno"
+                        &&
+                        tipoDeEspecificidad !== "exactamenteEntreOtros"
+                        &&
+                        tipoDeEspecificidad !== "noDebeContenedorAlguno"
+                        &&
+                        tipoDeEspecificidad !== "noDebeContenedorExactamente"
+
+
+                    ) {
+                        const error = "El campo tipoDeEspecificidad solo admite, exactamente, alguno o exactamenteEntreOtros"
+                        throw new Error(error)
+                    }
+                    const apartamentos = condicion.apartamentos
+                    validadoresCompartidos.tipos.array({
+                        array: apartamentos,
+                        filtro: "filtroDesactivado",
+                        nombreCampo: "Array de apartamento en la condición de porApartamentosEspecificos",
+                        sePermitenDuplicados: "no"
+                    })
+                    const contenedorControlIDVUnicos = {}
+                    for (const contenedorApartamento of apartamentos) {
+
+                        if (Object.keys(contenedorApartamento).length > 1) {
+                            const m = "El contenedor de apartamentos en la condición porApartamentosEspecificos solo espera una llave."
+                            throw new Error(m)
+                        }
+
+                        if (!contenedorApartamento.hasOwnProperty("apartamentoIDV")) {
+                            const m = "Se esperaba que el contenedor de apartamentos de la condición de porApartamentosEspecificos tuviera la llave apartamentoIDV"
+                            throw new Error(m)
+                        }
+                        const apartamentoIDV = contenedorApartamento.apartamentoIDV
+                        validadoresCompartidos.tipos.cadena({
+                            string: apartamentoIDV,
+                            nombreCampo: "El apartamentoIDV",
+                            filtro: "strictoIDV",
+                            sePermiteVacio: "no",
+                            limpiezaEspaciosAlrededor: "si",
+                            soloMinusculas: "si"
+                        })
+                        if (contenedorControlIDVUnicos.hasOwnProperty(apartamentoIDV)) {
+                            const m = "Hay identificadores visuales repetidos en el array de apartamentos del selector porApartamentosEspecificos"
+                            throw new Error(m)
+                        }
+                        contenedorControlIDVUnicos[apartamentoIDV] = true
+                        await obtenerConfiguracionPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "noExiste"
+                        })
+
+                        const entidadAlojamiento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV,
+                            errorSi: "noExiste"
+                        })
+                        contenedorApartamento.apartamentoUI = entidadAlojamiento.apartamentoUI
+                    }
+                } else if (tipoCondicionIDV === "porDiasDeAntelacion") {
+
+                    if (Object.keys(condicion).length > 3) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 3
+                        })
+                        throw new Error(m)
+                    }
+
+                    const tipoConteo = condicion.tipoConteo
+                    if (tipoConteo !== "aPartirDe"
+                        &&
+                        tipoConteo !== "numeroExacto"
+                        &&
+                        tipoConteo !== "hastaUnNumeroExacto") {
+                        const error = `En la condición ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
+                        throw new Error(error)
+
+                    }
+                    validadoresCompartidos.tipos.cadena({
+                        string: condicion.numeroDeDias,
+                        nombreCampo: "El campo numeroDeDias en la condición " + tipoCondicionIDV,
+                        filtro: "cadenaConNumerosEnteros",
+                        sePermiteVacio: "no",
+                        devuelveUnTipoNumber: "no",
+                        impedirCero: "si",
+                        limpiezaEspaciosAlrededor: "si",
+                    })
+
+                } else if (tipoCondicionIDV === "porDiasDeReserva") {
+
+                    if (Object.keys(condicion).length > 3) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 3
+                        })
+                        throw new Error(m)
+                    }
+
+
+                    const tipoConteo = condicion.tipoConteo
+                    if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto" && tipoConteo !== "hastaUnNumeroExacto") {
+                        const error = `En la condición ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
+                        throw new Error(error)
+
+                    }
+                    validadoresCompartidos.tipos.cadena({
+                        string: condicion.numeroDeDias,
+                        nombreCampo: "El campo numeroDeDias en la condición " + tipoCondicionIDV,
+                        filtro: "cadenaConNumerosEnteros",
+                        sePermiteVacio: "no",
+                        impedirCero: "si",
+                        devuelveUnTipoNumber: "no",
+                        limpiezaEspaciosAlrededor: "si",
+                    })
+
+                } else if (tipoCondicionIDV === "porRangoDeFechas") {
+                    if (Object.keys(condicion).length > 3) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 3
+                        })
+                        throw new Error(m)
+                    }
+
+
+                    const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
+                    const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
+                    if (!fechaInicioRango_ISO) {
+                        const error = "En el tipo de condición porRangoDeFechas no hay definida la fecha de inicio del rango"
+                        throw new Error(error)
+
+                    }
+                    if (!fechaFinalRango_ISO) {
+                        const error = "En el tipo de condicion porRangoDeFechas no hay definida la fecha del fin del rango"
+                        throw new Error(error)
+
+                    }
+                    await validadoresCompartidos.fechas.validarFecha_ISO({
+                        fecha_ISO: fechaInicioRango_ISO,
+                        nombreCampo: `La fecha de incio de la condicion ${tipoCondicionIDV}`
+                    })
+                    await validadoresCompartidos.fechas.validarFecha_ISO({
+                        fecha_ISO: fechaFinalRango_ISO,
+                        nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
+                    })
+                    await validadoresCompartidos.fechas.validacionVectorial({
+                        fechaEntrada: fechaInicioRango_ISO,
+                        fechaSalida: fechaFinalRango_ISO,
+                        tipoVector: "diferente"
+
+                    })
+                } else if (tipoCondicionIDV === "porCodigoDescuento") {
+
+                    if (Object.keys(condicion).length > 2) {
+                        const m = mensajeError({
+                            tipoCondicionIDV,
+                            numeroMaximo: 2
+                        })
+                        throw new Error(m)
+                    }
+
+                    const codigoDescuentoAsci = condicion?.codigoDescuento
+                    const codigoDescuentoBase64 = validadoresCompartidos.tipos.cadena({
+                        string: codigoDescuentoAsci,
+                        nombreCampo: "Te falta el código de descuento en la condición de código de descuento.",
+                        filtro: "transformaABase64",
                         sePermiteVacio: "no",
                         limpiezaEspaciosAlrededor: "si",
                         soloMinusculas: "si"
                     })
-                    if (contenedorControlIDVUnicos.hasOwnProperty(apartamentoIDV)) {
-                        const m = "Hay identificadores visuales repetidos en el array de apartamentos del selector porApartamentosEspecificos"
-                        throw new Error(m)
-                    }
-                    contenedorControlIDVUnicos[apartamentoIDV] = true
-                    await obtenerConfiguracionPorApartamentoIDV({
-                        apartamentoIDV,
-                        errorSi: "noExiste"
-                    })
-
-                    const entidadAlojamiento = await obtenerApartamentoComoEntidadPorApartamentoIDV({
-                        apartamentoIDV,
-                        errorSi: "noExiste"
-                    })
-                    contenedorApartamento.apartamentoUI = entidadAlojamiento.apartamentoUI
-                }
-            } else if (tipoCondicionIDV === "porDiasDeAntelacion") {
-
-                if (Object.keys(condicion).length > 3) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 3
-                    })
-                    throw new Error(m)
-                }
-
-                const tipoConteo = condicion.tipoConteo
-                if (tipoConteo !== "aPartirDe"
-                    &&
-                    tipoConteo !== "numeroExacto"
-                    &&
-                    tipoConteo !== "hastaUnNumeroExacto") {
-                    const error = `En la condición ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
+                    condicion.codigoDescuento = codigoDescuentoBase64
+                    codigosDescuentosBase64DeLaMismaOferta.push(codigoDescuentoBase64)
+                } else {
+                    const error = "No se reconoce el tipo de la condicion"
                     throw new Error(error)
-
-                }
-                validadoresCompartidos.tipos.cadena({
-                    string: condicion.numeroDeDias,
-                    nombreCampo: "El campo numeroDeDias en la condición " + tipoCondicionIDV,
-                    filtro: "cadenaConNumerosEnteros",
-                    sePermiteVacio: "no",
-                    devuelveUnTipoNumber: "no",
-                    impedirCero: "si",
-                    limpiezaEspaciosAlrededor: "si",
-                })
-
-            } else if (tipoCondicionIDV === "porDiasDeReserva") {
-
-                if (Object.keys(condicion).length > 3) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 3
-                    })
-                    throw new Error(m)
                 }
 
-
-                const tipoConteo = condicion.tipoConteo
-                if (tipoConteo !== "aPartirDe" && tipoConteo !== "numeroExacto" && tipoConteo !== "hastaUnNumeroExacto") {
-                    const error = `En la condición ${tipoCondicionIDV} el campo tipoConteo solo puede ser aPartirDe o numeroExacto`
-                    throw new Error(error)
-
-                }
-                validadoresCompartidos.tipos.cadena({
-                    string: condicion.numeroDeDias,
-                    nombreCampo: "El campo numeroDeDias en la condición " + tipoCondicionIDV,
-                    filtro: "cadenaConNumerosEnteros",
-                    sePermiteVacio: "no",
-                    impedirCero: "si",
-                    devuelveUnTipoNumber: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                })
-
-            } else if (tipoCondicionIDV === "porRangoDeFechas") {
-                if (Object.keys(condicion).length > 3) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 3
-                    })
-                    throw new Error(m)
-                }
-
-
-                const fechaInicioRango_ISO = condicion?.fechaInicioRango_ISO
-                const fechaFinalRango_ISO = condicion?.fechaFinalRango_ISO
-                if (!fechaInicioRango_ISO) {
-                    const error = "En el tipo de condición porRangoDeFechas no hay definida la fecha de inicio del rango"
-                    throw new Error(error)
-
-                }
-                if (!fechaFinalRango_ISO) {
-                    const error = "En el tipo de condicion porRangoDeFechas no hay definida la fecha del fin del rango"
-                    throw new Error(error)
-
-                }
-                await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaInicioRango_ISO,
-                    nombreCampo: `La fecha de incio de la condicion ${tipoCondicionIDV}`
-                })
-                await validadoresCompartidos.fechas.validarFecha_ISO({
-                    fecha_ISO: fechaFinalRango_ISO,
-                    nombreCampo: `La fecha de final de la condicion ${tipoCondicionIDV}`
-                })
-                await validadoresCompartidos.fechas.validacionVectorial({
-                    fechaEntrada: fechaInicioRango_ISO,
-                    fechaSalida: fechaFinalRango_ISO,
-                    tipoVector: "diferente"
-
-                })
-            } else if (tipoCondicionIDV === "porCodigoDescuento") {
-
-                if (Object.keys(condicion).length > 2) {
-                    const m = mensajeError({
-                        tipoCondicionIDV,
-                        numeroMaximo: 2
-                    })
-                    throw new Error(m)
-                }
-
-                const codigoDescuentoAsci = condicion?.codigoDescuento
-                const codigoDescuentoBase64 = validadoresCompartidos.tipos.cadena({
-                    string: codigoDescuentoAsci,
-                    nombreCampo: "Te falta el código de descuento en la condición de código de descuento.",
-                    filtro: "transformaABase64",
-                    sePermiteVacio: "no",
-                    limpiezaEspaciosAlrededor: "si",
-                    soloMinusculas: "si"
-                })
-                condicion.codigoDescuento = codigoDescuentoBase64
-                codigosDescuentosBase64DeLaMismaOferta.push(codigoDescuentoBase64)
-            } else {
-                const error = "No se reconoce el tipo de la condicion"
-                throw new Error(error)
             }
+
+
+            const codigosDescuentosBase64DeLaMismaOferta = []
+            for (const condicion of condicionesArray) {
+                await validadorCondiciones(condicion)
+            }
+
+            if (codigosDescuentosBase64DeLaMismaOferta.length > 0) {
+                const controlDescuentosRepetidos = new Set(codigosDescuentosBase64DeLaMismaOferta).size !== codigosDescuentosBase64DeLaMismaOferta.length;
+                if (controlDescuentosRepetidos) {
+                    const error = "Dentro de esta oferta tienes códigos de descuento repetidos"
+                    throw new Error(error)
+                }
+                if (modo === "crearOferta") {
+                    const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArray(codigosDescuentosBase64DeLaMismaOferta)
+                    if (ofertasConElMismoCodigo.length > 0) {
+                        const e = {
+                            error: `Revisa los códigos de descuento de esta oferta porque existen en otras ofertas. Cada código de descuento sirve para cada oferta. Aunque una oferta puede tener varios códigos de descuento, no pueden existir códigos de descuentos iguales. A continuación se muestran las ofertas con el mismo código.`,
+                            ofertasConElMismoCodigo: ofertasConElMismoCodigo
+                        }
+                        throw e
+                    }
+                } else if (modo === "actualizarOferta") {
+                    const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID({
+                        ofertaUID: oferta.ofertaUID,
+                        codigosDescuentosArray: codigosDescuentosBase64DeLaMismaOferta
+                    })
+                    if (ofertasConElMismoCodigo.length > 0) {
+                        const e = {
+                            error: `Revisa los códigos de descuento de esta oferta porque existen en otras ofertas. Cada código de descuento sirve para cada oferta. Aunque una oferta puede tener varios códigos de descuento, no pueden existir códigos de descuentos iguales. A continuación se muestran las ofertas con el mismo código.`,
+                            ofertasConElMismoCodigo: ofertasConElMismoCodigo
+                        }
+                        throw e
+                    }
+                }
+            }
+
         }
 
-        if (codigosDescuentosBase64DeLaMismaOferta.length > 0) {
-            const controlDescuentosRepetidos = new Set(codigosDescuentosBase64DeLaMismaOferta).size !== codigosDescuentosBase64DeLaMismaOferta.length;
-            if (controlDescuentosRepetidos) {
-                const error = "Dentro de esta oferta tienes códigos de descuento repetidos"
-                throw new Error(error)
-            }
-            if (modo === "crearOferta") {
-                const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArray(codigosDescuentosBase64DeLaMismaOferta)
-                if (ofertasConElMismoCodigo.length > 0) {
-                    const e = {
-                        error: `Revisa los códigos de descuento de esta oferta porque existen en otras ofertas. Cada código de descuento sirve para cada oferta. Aunque una oferta puede tener varios códigos de descuento, no pueden existir códigos de descuentos iguales. A continuación se muestran las ofertas con el mismo código.`,
-                        ofertasConElMismoCodigo: ofertasConElMismoCodigo
-                    }
-                    throw e
-                }
-            } else if (modo === "actualizarOferta") {
-                const ofertasConElMismoCodigo = await obtenerOfertasPorCodigoDescuentoArrayIgnorandoOfertaUID({
-                    ofertaUID: oferta.ofertaUID,
-                    codigosDescuentosArray: codigosDescuentosBase64DeLaMismaOferta
-                })
-                if (ofertasConElMismoCodigo.length > 0) {
-                    const e = {
-                        error: `Revisa los códigos de descuento de esta oferta porque existen en otras ofertas. Cada código de descuento sirve para cada oferta. Aunque una oferta puede tener varios códigos de descuento, no pueden existir códigos de descuentos iguales. A continuación se muestran las ofertas con el mismo código.`,
-                        ofertasConElMismoCodigo: ofertasConElMismoCodigo
-                    }
-                    throw e
-                }
-            }
-        }
+        const descuentosJSON = validadoresCompartidos.tipos.objetoLiteral({
+            objetoLiteral: oferta.descuentosJSON,
+            nombreCampo: "El objeto de descuentosJSON"
+        })
 
         const tipoDescuento = descuentosJSON.tipoDescuento
         if (tipoDescuento === "totalNeto") {
@@ -413,12 +444,12 @@ export const validarObjetoOferta = async (data) => {
             const descuentoTotal = descuentosJSON.descuentoTotal
 
             if (tipoAplicacion !== "porcentaje" && tipoAplicacion !== "cantidadFija") {
-                const error = `En el descuento, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
+                const error = `En el descuento ${tipoDescuento}, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
                 throw new Error(error)
             }
             validadoresCompartidos.tipos.cadena({
                 string: descuentoTotal,
-                nombreCampo: `El campo descuentoTotla solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
+                nombreCampo: `El campo descuentoTotal en ${tipoDescuento} solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                 filtro: "cadenaConNumerosConDosDecimales",
                 sePermiteVacio: "no",
                 impedirCero: "si",

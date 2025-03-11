@@ -39,6 +39,7 @@ export const constructorInstantaneaNoches = async (data) => {
         }
         global.totales = {
             totalNeto: "0.00",
+            totalNetoConComplementos: "0.00",
             totalDescuento: "0.00",
             totalFinal: "0.00",
             impuestosAplicados: "0.00",

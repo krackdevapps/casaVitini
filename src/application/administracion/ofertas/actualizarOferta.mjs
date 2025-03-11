@@ -33,6 +33,8 @@ export const actualizarOferta = async (entrada) => {
             const error = "No se puede modificar una oferta activa. Primero desactiva con el botón de estado.";
             throw new Error(error);
         }
+        const ofertaRaw = entrada.body
+        delete ofertaRaw.ofertaUID
 
         const nombreOferta = entrada.body.nombreOferta
         const zonaIDV = entrada.body.zonaIDV
@@ -42,6 +44,11 @@ export const actualizarOferta = async (entrada) => {
         const condicionesArray = entrada.body.condicionesArray
         const descuentosJSON = entrada.body.descuentosJSON
 
+        await validarObjetoOferta({
+            oferta: ofertaRaw,
+            modo: "actualizarOferta"
+        })
+
         const ofertaPorActualizar = {
             nombreOferta,
             zonaIDV,
@@ -50,12 +57,9 @@ export const actualizarOferta = async (entrada) => {
             fechaFinal,
             condicionesArray,
             descuentosJSON,
-            ofertaUID
+            ofertaUID: ofertaUID
         }
-        await validarObjetoOferta({
-            oferta: ofertaPorActualizar,
-            modo: "actualizarOferta"
-        })
+
         await campoDeTransaccion("iniciar")
         const ofertaActualizada = await actualizarOfertaPorOfertaUID(ofertaPorActualizar);
         await insertarApartamentoUIEnObjetoOfertas(ofertaActualizada)

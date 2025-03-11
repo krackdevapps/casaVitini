@@ -110,8 +110,11 @@ export const serviciosUI_grupoOpciones = {
             contenedorCantida.appendChild(infoCantida)
 
             const campoCantidad = document.createElement("input")
-            campoCantidad.classList.add("campoCantidad")
+            campoCantidad.classList.add("borderRadius12", "padding10")
+            campoCantidad.style.marginLeft = "-10px"
             campoCantidad.placeholder = "1"
+            campoCantidad.style.maxWidth = "100px"
+            
             campoCantidad.setAttribute("campo", "cantidad")
             campoCantidad.addEventListener('keypress', (e) => {
                 if (e.key === '.' || e.key === ',' || e.key === '-') {
@@ -124,9 +127,11 @@ export const serviciosUI_grupoOpciones = {
                 const valueVal = value.replaceAll(".", "1");
                 e.target.value = valueVal
                 const opcionIDV = field.closest("[opcionIDV]").getAttribute("opcionIDV")
+                const servicioUID = field.closest("[servicioUID]").getAttribute("servicioUID")
 
                 this.calcularTotalOpcion({
-                    opcionIDV
+                    opcionIDV,
+                    servicioUID
                 })
             })
 
@@ -278,17 +283,23 @@ export const serviciosUI_grupoOpciones = {
 
         },
         calcularTotalOpcion: async function (data) {
+            console.log("se inicia > calculaTotalOpcion")
 
             const semaforoID = "servicio_precioOpcion"
             const semaforo = casaVitini.utilidades.semaforo
             semaforo.crearInstancia(semaforoID)
             await semaforo.bloquear(semaforoID);
+            console.log("calculaTotalOpcion")
 
             try {
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                const servicioUID = data.servicioUID
                 const opcionIDV = data.opcionIDV
 
-                const opcionIDV_sel = document.querySelector(`[opcionIDV="${opcionIDV}"]`)
+                const opcionIDV_sel = document.querySelector(`[servicioUID="${servicioUID}"] [opcionIDV="${opcionIDV}"]`)
+
+                console.log("opcionIDV_Sel", opcionIDV_sel)
+
                 const precioOpcion_sel = opcionIDV_sel.querySelector("[com=precioData]")
                 const cantidad_sel = opcionIDV_sel.querySelector("[campo=cantidad]")
                 const tipoDescuento_sel = opcionIDV_sel.querySelector("[campo=tipoDescuento]")
@@ -300,9 +311,9 @@ export const serviciosUI_grupoOpciones = {
                 }
 
                 const precioOpcion_data = precioOpcion_sel.textContent
-                const cantidad_data = cantidad_sel?.value ?? "1";
-                const tipoDescuento_data = tipoDescuento_sel.value
-                const cantidadDescuento_data = cantidadDescuento_sel.value
+                const cantidad_data = cantidad_sel?.value || "1";
+                const tipoDescuento_data = tipoDescuento_sel?.value || null
+                const cantidadDescuento_data = cantidadDescuento_sel?.value || null
                 const total_data = total_sel.textContent
 
                 const resetData = {
@@ -315,14 +326,20 @@ export const serviciosUI_grupoOpciones = {
 
                 const errorUI = "Ha ocurrido un error en los calculos y se han revertido"
                 opcionIDV_sel.setAttribute("instanciaUID_calculoPrecioPorOpcion", instanciaUID)
-                const servicioUID = opcionIDV_sel.closest("[servicioUID]").getAttribute("servicioUID")
+
 
                 const resetPorError = () => {
                     if (cantidad_sel) {
                         cantidad_sel.value = resetData.cantidad_data
                     }
-                    tipoDescuento_sel.value = resetData.tipoDescuento_data
-                    cantidadDescuento_sel.value = resetData.cantidadDescuento_data
+                    if (tipoDescuento_sel?.value) {
+                        tipoDescuento_sel.value = resetData.tipoDescuento_data
+
+                    }
+                    if (cantidadDescuento_sel?.value) {
+                        cantidadDescuento_sel.value = resetData.cantidadDescuento_data
+                    }
+
                     total_sel.textContent = resetData.total_data
                 }
 
@@ -331,7 +348,7 @@ export const serviciosUI_grupoOpciones = {
                 }
 
                 total_sel.textContent = "Calculando..."
-                //await casaVitini.utilidades.ralentizador(2000)
+                //  await casaVitini.utilidades.ralentizador(2000)
                 const tiposDescuentos = [
                     "cantidad",
                     "porcentaje"
@@ -342,6 +359,14 @@ export const serviciosUI_grupoOpciones = {
                 }
 
                 const formato = /^\d+(\.\d{2})$/;
+
+                console.log({
+                    numero1: precioOpcion_data,
+                    numero2: cantidad_data,
+                    operador: "*",
+                    redondeo: "2",
+                    calculo: "simple"
+                })
 
                 const calculadora = await casaVitini.utilidades.calculadora({
                     numero1: precioOpcion_data,
@@ -395,27 +420,38 @@ export const serviciosUI_grupoOpciones = {
 
         },
         calcularTotalServicio: async function (data) {
+            console.log("se inicia > calcularTotalServicio")
+
             const semaforoID = "servicio_precioOpcion"
             const semaforo = casaVitini.utilidades.semaforo
             semaforo.crearInstancia(semaforoID)
             await semaforo.bloquear(semaforoID);
 
             try {
+                console.log("calcularTotalServicio")
 
 
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const servicioUID = data.servicioUID
 
                 const servicio = document.querySelector(`[servicioUID="${servicioUID}"]`)
+
                 if (!servicio) { return }
                 servicio.setAttribute("instancaiUID_calculoTotal", instanciaUID)
                 const totalServicio = servicio.querySelector("[data=totalServicio]")
                 const totalServicioConDescuentos = servicio.querySelector("[data=totalServicioConDescuentos]")
                 const areaDescuentoTotalServicio = servicio.querySelector("[com=descuentoTotalServicio]")
-                const tipoDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=tipoDescuento]")
-                const cantidadDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=cantidadDescuento]")
-                const tipoDescuento_data = tipoDescuento_sel.value
-                const cantidadDescuento_data = cantidadDescuento_sel.value
+                let tipoDescuento_sel
+                let cantidadDescuento_sel
+                if (areaDescuentoTotalServicio) {
+                    tipoDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=tipoDescuento]")
+                    cantidadDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=cantidadDescuento]")
+                }
+
+
+
+                const tipoDescuento_data = tipoDescuento_sel?.value
+                const cantidadDescuento_data = cantidadDescuento_sel?.value
                 totalServicio.textContent = "Calculando..."
                 totalServicioConDescuentos.textContent = "Calculando..."
 
@@ -462,10 +498,13 @@ export const serviciosUI_grupoOpciones = {
                 })
 
                 if (instancia(instanciaUID)) {
+
                     if (calculadora.error) {
                         totalServicio.textContent = "Error, vuelve a intentarlo"
                         return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(calculadora.error)
                     }
+
+
                     totalServicio.textContent = this.controlNumerosNegativos(calculadora.resultado)
                     totalServicioConDescuentos.textContent = this.controlNumerosNegativos(calculadora.resultado)
 

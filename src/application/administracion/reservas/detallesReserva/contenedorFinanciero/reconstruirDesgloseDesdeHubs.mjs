@@ -83,10 +83,17 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         for (const servicio of serviciosInstantaneaReserva) {
             const servicioUID_enSimulacion = servicio.servicioUID
             const servicioUID = servicio.contenedor.servicioUID
-            const opcionesSel = servicio.opcionesSel
+            const opcionesSel = servicio.opcionesSel 
+            const descuentoTotalServicio = servicio.descuentoTotalServicio
             await eliminarServicioEnReservaPorServicioUID(servicioUID_enSimulacion)
 
-            const servicioDelHub = await obtenerServicioPorServicioUID(servicioUID)
+            let servicioDelHub
+            try {
+                servicioDelHub = await obtenerServicioPorServicioUID(servicioUID)
+            } catch (error) {
+                continue
+            }
+            
             const nombreServicico = servicioDelHub.nombre
             const contenedorServicio = servicioDelHub.contenedor
             contenedorServicio.servicioUID = servicioDelHub.servicioUID
@@ -94,7 +101,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 reservaUID,
                 nombre: nombreServicico,
                 contenedor: contenedorServicio,
-                opcionesSel
+                opcionesSel,
+                descuentoTotalServicio
             })
         }
         const desgloseFinanciero = await procesador({

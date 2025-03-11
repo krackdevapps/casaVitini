@@ -1,8 +1,6 @@
 import Decimal from "decimal.js"
 import { calcularTotal } from "../calcularTotal.mjs"
 import { controlInstanciaDecimal } from "../controlInstanciaDecimal.mjs"
-import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
-import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
 
 export const perfil_individualPorApartamento = async (data) => {
     try {
@@ -19,8 +17,8 @@ export const perfil_individualPorApartamento = async (data) => {
             const apartamentoIDV = descuentoDelApartamento.apartamentoIDV
             const descuentoTotal = descuentoDelApartamento.descuentoTotal
             const tipoAplicacion = descuentoDelApartamento.tipoAplicacion
-
-            const totalPorApartametno = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]?.totalNeto
+            const desgloseDelApartamento = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]
+            const totalPorApartametno = desgloseDelApartamento?.totalNetoConComplementos || desgloseDelApartamento?.totalNeto
             if (!totalPorApartametno) {
                 continue
             }

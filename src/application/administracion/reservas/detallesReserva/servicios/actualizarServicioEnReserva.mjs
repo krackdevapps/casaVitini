@@ -54,7 +54,7 @@ export const actualizarServicioEnReserva = async (entrada) => {
         const servicio = await obtenerServicioEnReservaPorServicioUID(servicioUID_enReserva)
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
-        contenedorServicio.servicioUID = servicio.servicioUID
+        //contenedorServicio.servicioUID = servicio.servicioUID
 
 
         await validarOpcionesDelServicio({

@@ -11,6 +11,7 @@ import { enlacesDePagoDeLaReserva } from "./detallesReserva/enlacesDePagoDeLaRes
 import { obtenerServiciosPorReservaUID } from "../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs"
 import { obtenerComplementosAlojamientoPorReservaUID } from "../../infraestructure/repository/reservas/complementosAlojamiento/obtenerComplementosAlojamientoPorReservaUID.mjs"
 import { obtenerFechaLocal } from "../obtenerFechaLocal.mjs"
+import { obtenerHabitacionDelLaReserva } from "../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs"
 
 export const detallesReserva = async (data) => {
     try {
@@ -77,7 +78,7 @@ export const detallesReserva = async (data) => {
                 dS.servicio.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaAdquisicion)
             }
             reserva.contenedorFinanciero = contenedorFinanciero
-            
+
         }
         if (capas.includes(contenedorCapas[4])) {
             reserva.detallesPagos = await detallesPagos(reservaUID)
@@ -95,7 +96,21 @@ export const detallesReserva = async (data) => {
             reserva.servicios = servicios
         }
         if (capas.includes(contenedorCapas[7])) {
-            reserva.complementosDeAlojamiento = await obtenerComplementosAlojamientoPorReservaUID(reservaUID)
+            const complementosDeAlojamiento = await obtenerComplementosAlojamientoPorReservaUID(reservaUID)
+            for (const cDA of complementosDeAlojamiento) {
+                const tipoUbicacion = cDA.tipoUbicacion
+
+                if (tipoUbicacion === "habitacion") {
+                    const habitacionEnLaReserva = await obtenerHabitacionDelLaReserva({
+                        reservaUID: cDA.reservaUID,
+                        habitacionUID: cDA.habitacionUID
+
+                    })
+                    const habitacionUI = habitacionEnLaReserva.habitacionUI
+                    cDA.habitacionUI = habitacionUI
+                }
+            }
+            reserva.complementosDeAlojamiento = complementosDeAlojamiento
         }
         return reserva
     } catch (errorCapturado) {

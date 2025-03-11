@@ -21,7 +21,7 @@ export const aplicarImpuestosDesdeInstantaneaReserva = async (data) => {
         } else if (origen === "reserva") {
             const reservaUID = data.reservaUID
 
-            if (typeof reservaUID !== "number") {
+            if (typeof reservaUID !== "bigint") {
                 const error = "reservaUID en aplicarImpuestos debe de ser un número."
                 throw new Error(error)
             }

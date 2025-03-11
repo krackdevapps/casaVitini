@@ -8,6 +8,7 @@ main {
     align-items: normal;
     position: absolute;
     min-height: 100vh;
+    padding-bottom: 0px;
 }
 
 header .estructura {

@@ -99,9 +99,9 @@ export const aplicarImpuestos = async (data) => {
 
                 } else if (origen === "instantaneaImpuestosEnReserva") {
                     const reservaUID = data.reservaUID
-
+                    
                     if (typeof reservaUID !== "number") {
-                        const error = "reservaUID en aplicarImpuestos debe de ser un número."
+                        const error = "reservaUID en aplicarImpuestos debe de ser un número number."
                         throw new Error(error)
                     }
                     const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)

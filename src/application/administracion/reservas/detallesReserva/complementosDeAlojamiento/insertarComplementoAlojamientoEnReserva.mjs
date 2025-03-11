@@ -1,6 +1,10 @@
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs"
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs"
 import { obtenerComplementoPorComplementoUID } from "../../../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs"
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
+import { obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV.mjs"
+import { obtenerHabitacionDelLaReserva } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs"
 import { insertarComplementoAlojamientoPorReservaUID } from "../../../../../infraestructure/repository/reservas/complementosAlojamiento/insertarComplementoAlojamientoPorReservaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
@@ -51,10 +55,12 @@ export const insertarComplementoAlojamientoEnReserva = async (entrada) => {
         const tipoPrecio = complemento.tipoPrecio
         const precio = complemento.precio
         const estadoIDV = complemento.estadoIDV
+        const tipoUbicacion = complemento.tipoUbicacion
+        const habitacionUID = complemento.habitacionUID
+
         if (estadoIDV === "desactivado") {
             const m = `El complemento de alojamiento ${complementoUI} esta desactivado. Activalo primero para poder insertarlo en la reserva.`
             throw new Error(m)
-            
         }
 
         const apartamentosReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
@@ -65,8 +71,33 @@ export const insertarComplementoAlojamientoEnReserva = async (entrada) => {
             throw new Error(m)
         }
         const apartamentoUID = controlApartamento[0].componenteUID
+        const apartamentoUI = controlApartamento[0].apartamentoUI
+        let habitacionUID_enReserva
+        if (tipoUbicacion === "habitacion") {
 
-        // Necesicamos el apartmentoUID dentro de la reserva para la relacion
+            const habitacionDeLaConfiguracion = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
+            const habitacionIDV = habitacionDeLaConfiguracion.habitacionIDV
+
+            const habitacionDelApartamento = await obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV({
+                apartamentoUID,
+                habitacionIDV,
+                errorSi: "desactivado"
+            })
+
+            if (!habitacionDelApartamento?.componenteUID) {
+                const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                    habitacionIDV,
+                    errorSi: "noExiste"
+                })
+
+                const habitacionUI = habitacionEntidad.habitacionUI
+                const m = `El complemento de alojamiento ${complementoUI} (UID: ${complementoUID}) forma parte del alojamiento ${apartamentoUI} (IDV: ${apartamentoIDV}), dentro de este alojamiento este complemento esta asociado a la habitación ${habitacionUI} (IDV: ${habitacionIDV}) pero esta no esta añadida en el alojamiento. Añade en alojamiento de la reserva la habitacion ${habitacionUI} (${habitacionIDV})`
+                throw new Error(m)
+
+            }
+            habitacionUID_enReserva = habitacionDelApartamento.componenteUID
+        }
+
         await campoDeTransaccion("iniciar")
         const complementoDeAlojamiento = await insertarComplementoAlojamientoPorReservaUID({
             reservaUID,
@@ -75,11 +106,22 @@ export const insertarComplementoAlojamientoEnReserva = async (entrada) => {
             definicion,
             tipoPrecio,
             precio,
-            apartamentoUID
+            apartamentoUID,
+            tipoUbicacion,
+            habitacionUID: habitacionUID_enReserva
         })
 
-        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
+        if (complementoDeAlojamiento.tipoUbicacion === "habitacion") {
 
+            const habitacionEnLaReserva = await obtenerHabitacionDelLaReserva({
+                reservaUID: complementoDeAlojamiento.reservaUID,
+                habitacionUID: complementoDeAlojamiento.habitacionUID
+            })
+            const habitacionUI = habitacionEnLaReserva.habitacionUI
+            complementoDeAlojamiento.habitacionUI = habitacionUI
+        }
+
+        await actualizadorIntegradoDesdeInstantaneas(reservaUID)
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha insertado el complemento de alojamiento correctamente y el contenedor financiero se ha renderizado.",

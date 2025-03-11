@@ -1,11 +1,9 @@
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID.mjs"
 import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID.mjs"
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
-import { procesador } from "../../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const eliminarDescuentoEnReserva = async (entrada) => {
@@ -28,13 +26,15 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             devuelveUnTipoNumber: "si"
         })
 
+
+
         const ofertaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la oferta (ofertaUID)",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no"
         })
         const posicion = validadoresCompartidos.tipos.cadena({
             string: entrada.body.posicion,
@@ -65,6 +65,7 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         }
         await campoDeTransaccion("iniciar")
 
+
         if (origen === "porAdministrador") {
             await eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID({
                 reservaUID,
@@ -85,7 +86,6 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
         }
 
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
-
         await campoDeTransaccion("confirmar")
 
         const ok = {

@@ -38,7 +38,8 @@ casaVitini.view = {
 
             const titulo = document.createElement("div")
             titulo.classList.add("tituloGrande", "padding10", "textoCentrado")
-            titulo.textContent = "Solicitud de fechas recibida"
+            titulo.style.fontSize = "30px"
+            titulo.textContent = "Solicitud de reserva recibida"
             marcoElastico.appendChild(titulo)
 
 
@@ -76,7 +77,7 @@ casaVitini.view = {
             espacioDatosGlobalesReserva.appendChild(reversaUI)
             const botonDescargarPDF = document.createElement("a")
             botonDescargarPDF.classList.add("botonV1")
-            botonDescargarPDF.textContent = "Descargar un resumen de la reserva en PDF"
+            botonDescargarPDF.textContent = "Descargar un resumen de la solicitud de la reserva en PDF"
             botonDescargarPDF.download = "Reserva.pdf"
             botonDescargarPDF.href = `data:application/pdf;base64,${pdfCodificado}`
 
@@ -179,7 +180,7 @@ casaVitini.view = {
 
             const botonBorrarReserva = document.createElement("div")
             botonBorrarReserva.classList.add("plaza_reservas_reservaConfirmada_botonV1")
-            botonBorrarReserva.textContent = "Borrar la información de esta reserva de la cache de mi navegador "
+            botonBorrarReserva.textContent = "Borrar la información de esta solicitud navegador"
             botonBorrarReserva.addEventListener("click", () => {
                 this.borrarReservaLocal()
             })

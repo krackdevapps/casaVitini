@@ -3,6 +3,8 @@ export const sharedMethods = {
         const modoUI = data.modoUI
         const apartamentoIDV = data.apartamentoIDV
         const complementoUID = data.complementoUID
+        const habitacionesAlojamiento = data.habitacionesAlojamiento
+
         const ui = document.createElement("div");
         ui.setAttribute("componente", "complementoUI");
         ui.setAttribute("apartamentoIDV", apartamentoIDV)
@@ -39,6 +41,50 @@ export const sharedMethods = {
         input.setAttribute("placeholder", "Escriba el nombre del nuevo complemento");
         contenedorNombreEstado.appendChild(input)
         ui.appendChild(contenedorNombreEstado)
+
+
+        const selectorUbicacion = (hA) => {
+            const s = document.createElement("select")
+            s.classList.add("selector")
+            s.setAttribute("campo", "ubicacion")
+
+            const t1 = document.createElement("option");
+            t1.disabled = true
+            t1.selected = true
+            t1.value = ""
+            t1.text = "Ubicación de complemento"
+            s.add(t1);
+
+            const oA = document.createElement("option");
+            oA.value = "alojamiento"
+            oA.setAttribute("tipoUbicacion", "alojamiento")
+            oA.text = "Complemento del apartamento"
+            s.add(oA);
+
+            const t2 = document.createElement("option");
+            t2.disabled = true
+            t2.value = ""
+            t2.text = "Ubicación de complemento en habitacion"
+            s.add(t2);
+
+
+            hA.forEach(h => {
+                const hUID = h.componenteUID
+                const hUI = h.habitacionUI
+                const hIDV = h.habitacionIDV
+
+                const o = document.createElement("option");
+                o.value = hUID;
+                o.setAttribute("tipoUbicacion", "habitacion")
+
+                o.text = `${hUI} (${hIDV})`;
+                s.add(o);
+            });
+            return s
+        }
+        ui.appendChild(selectorUbicacion(habitacionesAlojamiento))
+
+
 
         const contenedorDefinicion = () => {
             const contenedor = document.createElement("div")
@@ -151,18 +197,30 @@ export const sharedMethods = {
         const definicion = document.querySelector("[campo=definicion]").value
         const tipoPrecio = document.querySelector("[campo=tipoPrecio]").value
         const precio = document.querySelector("[campo=precio]").value
-        return {
+        const ubicación = document.querySelector("[campo=ubicacion]")
+        const tipoUbicacion = ubicación.options[ubicación.selectedIndex]?.getAttribute("tipoUbicacion");
+        const ubicaciónValor = ubicación.value
+
+        const definicionB64 = casaVitini.utilidades.conversor.cadenaHaciaBase64ConTextDecoder(definicion)
+        const o = {
             apartamentoIDV,
             complementoUI,
-            definicion,
+            definicion: definicionB64,
             tipoPrecio,
             precio
         }
+        if (tipoUbicacion === "alojamiento") {
+            o.tipoUbicacion = "alojamiento"
+
+        } else if (tipoUbicacion === "habitacion") {
+            o.tipoUbicacion = "habitacion"
+            o.habitacion = ubicaciónValor
+        }
+        return o
+
     },
     nuevo: {
         arranque: async function (apartamentoIDV) {
-
-
             const main = document.querySelector("main")
             const instanciaUID = main.getAttribute("instanciaUID")
             const espacio = main.querySelector("[componente=espacio]")
@@ -182,11 +240,13 @@ export const sharedMethods = {
             if (respuestaServidor?.ok) {
 
                 const apartamentoUI = respuestaServidor.apartamentoUI
+                const habitaciones = respuestaServidor.habitaciones
                 main.querySelector("[data=titulo]").textContent = `Nuevo complemento de alojamiento de ${apartamentoUI}`
 
                 const ui = casaVitini.view.__sharedMethods__.complementoUI({
                     modoUI: "crear",
-                    apartamentoIDV
+                    apartamentoIDV,
+                    habitacionesAlojamiento: habitaciones
                 })
                 espacio.appendChild(ui)
                 const botonCrearServicio = casaVitini.view.__sharedMethods__.botonesCrear()

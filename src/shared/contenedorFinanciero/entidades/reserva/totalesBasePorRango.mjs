@@ -61,6 +61,7 @@ export const totalesBasePorRango = async (data) => {
 
                 const apartamentosPorNoche = noche.apartamentosPorNoche
                 if (apartamentosPorNoche.hasOwnProperty(apartamentoIDV)) {
+                    apartamentosPorNoche[apartamentoIDV].precioNetoApartamentoComplementos = "0.00"
 
                     const netoApartamento = apartamentosPorNoche[apartamentoIDV].precioNetoApartamento
                     const sobreControl = await aplicarSobreControl({
@@ -110,8 +111,10 @@ export const totalesBasePorRango = async (data) => {
         Object.entries(desglosePorApartamento).forEach(([apartamentoIDV, detallesApartamento]) => {
             const totalNetoPorApartmento = detallesApartamento.totalNeto
             detallesApartamento.precioMedioNetoNoche = new Decimal(totalNetoPorApartmento).div(diasArray.length).toDecimalPlaces(2).toFixed(2);
+            detallesApartamento.totalNetoConComplementos = "0.00"
             const totalNeto = totales.totalNeto
             estructura.entidades.reserva.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
+            
         })
         const totalNeto = totales.totalNeto
         totales.totalNeto = totalNeto.toFixed(2)

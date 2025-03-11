@@ -129,7 +129,7 @@ casaVitini.view = {
 
                 const contenedorBanner = document.createElement("a")
                 contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_banner")
-                contenedorBanner.textContent = "Tienes una reserva guardada en la cache de tu navegador. Esta reserva se ha guardado tras confirmar tu reserva. Para ver los detalles de la confirmación, pulsa aquí. Si borras la cache de tu navegador esta información desaparecerá. Si quieres un acceso persistente puedes crear un VitiniID desde MiCasa."
+                contenedorBanner.textContent = "Tienes la solicitud de reserva que hiciste anteriormente guardada en el navegador. Para ver los detalles pulsa aquí."
                 contenedorBanner.setAttribute("href", "/alojamiento/reserva_confirmada")
                 contenedorBanner.setAttribute("vista", "/alojamiento/reserva_confirmada")
                 contenedorBanner.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
@@ -444,7 +444,7 @@ casaVitini.view = {
             const tituloBloqueAlojamiento = document.createElement("p")
             tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
             tituloBloqueAlojamiento.setAttribute("componente", "tituloInfoSeleccionar")
-            tituloBloqueAlojamiento.textContent = "Selecciona los apartamentos que quieres reservas. Se aplicaran las ofertas automáticamente."
+            tituloBloqueAlojamiento.textContent = "Selecciona los apartamentos que quieres reservar. Se aplicarán las ofertas automáticamente."
             superBloqueReservaRenderizado.appendChild(tituloBloqueAlojamiento);
             const bloqueAlojamientoUI = document.createElement("div")
             bloqueAlojamientoUI.classList.add("bloqueAlojamiento")

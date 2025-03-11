@@ -1591,6 +1591,8 @@ const casaVitini = {
                 pantallaInmersivaPersonalizadaUI.setAttribute("instanciaUID", instanciaUID)
                 const contenedorAdvertenciaInmersiva = document.createElement("div")
                 contenedorAdvertenciaInmersiva.classList.add("contenedorAdvertencaiInmersiva")
+                contenedorAdvertenciaInmersiva.setAttribute("com", "contenedorIntermedio")
+
                 pantallaInmersivaPersonalizadaUI.appendChild(contenedorAdvertenciaInmersiva)
                 const contenidoAdvertenciaInmersiva = document.createElement("div")
                 contenidoAdvertenciaInmersiva.classList.add("contenidoAdvertenciaInmersiva")
@@ -1896,9 +1898,9 @@ const casaVitini = {
                     const instanciaUID_contenedorFechas = data.instanciaUID_contenedorFechas
                     const contenedorOrigenIDV = data.contenedorOrigenIDV
                     const perfilMes = data.perfilMes
-                    const zonaDespliege = data?.zonaDespliege || main
+                    const zonaDespliegue = data?.zonaDespliegue || "main"
 
-                    console.log("data", data.zonaDespliege)
+
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const metodoSelectorDia = data?.metodoSelectorDia || "ui.componentes.calendario.calendarioCompartido.seleccionarDia"
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
@@ -1937,7 +1939,9 @@ const casaVitini = {
                         tipoFecha: "enEspera",
                         calendarioIO: "enEspera"
                     })
-                    zonaDespliege.appendChild(calendarioUI)
+
+
+                    document.querySelector(zonaDespliegue).appendChild(calendarioUI)
                     document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
                     const configGlobal = calendarioUI.querySelector("[contenedor=calendario]")
                     const fechasSeleccionadas = () => {
@@ -4293,7 +4297,7 @@ const casaVitini = {
                         estadoDia = metadatosDia.estadoDia
                         diaSeleccionadoComoElemento = document.querySelector("li[dia='" + dia + "']")
                     }
-                    if (typeof metadatosDia === "number") {
+                    if (typeof metadatosDia === "bigint") {
                         dia = metadatosDia;
                         diaSeleccionadoComoElemento = document.querySelector("li[dia='" + dia + "']")
                     }
@@ -4375,7 +4379,7 @@ const casaVitini = {
                 },
                 seleccionarDiaNuevo: (dia) => {
                     let diaSeleccionado
-                    if (typeof dia === "number") {
+                    if (typeof dia === "bigint") {
                         metadatosDia = dia
                         casaVitini.componentes.seleccionarDiaProcesadoNuevo(metadatosDia)
                     }
@@ -5068,7 +5072,7 @@ const casaVitini = {
                         return "Cliente"
                     }
                     if (data === "administracion") {
-                        return "Adminitración"
+                        return "Administración"
                     }
                 },
                 estadoPagoIDV: (data) => {
@@ -5439,7 +5443,7 @@ const casaVitini = {
         },
         semaforo: {
             mutexes: {},
-
+            funcionesFinales: {},
             crearInstancia(name) {
                 if (!this.mutexes[name]) {
                     this.mutexes[name] = {
@@ -5477,10 +5481,15 @@ const casaVitini = {
                     nextResolve();
                 } else {
                     mutex.locked = false;
-                    if (mutex.queue.length === 0) {
-                        delete this.mutexes[name];
+                    delete this.mutexes[name];
+                    if (this.funcionesFinales[name]) {
+                        this.funcionesFinales[name]();
+                        delete this.funcionesFinales[name];
                     }
                 }
+            },
+            setFinalFunction(name, func) {
+                this.funcionesFinales[name] = func;
             }
         }
     },

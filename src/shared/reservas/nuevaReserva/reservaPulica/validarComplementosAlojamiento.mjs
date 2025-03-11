@@ -42,6 +42,7 @@ export const validarComplementosAlojamiento = async (reservaPublica) => {
                 const m = `Èl complemento de alojamiento ${complementoUI} con UID ${complementoUID} no se puede procesar si no se solicia tambien el alojamiento al que va integrado, en este caso ${apartamentoIDV_delComportameinto}.`
                 throw new Error(m);
             }
+
             const estadoIDV = complemento?.estadoIDV
             if (estadoIDV === "desactivado") {
                 const m = `Èl complemento de alojamiento ${complementoUI} con UID ${complementoUID} ya no esta disponible.`

@@ -10,11 +10,10 @@ casaVitini.view = {
             main.setAttribute("zonaCSS", "administracion/ofertas/ofertaUI")
             this.detallesOferta.obtenerDetallesOferta(granuladoURL.parametros.oferta)
         } else {
-            const info = {
+            casaVitini.ui.componentes.mensajeSimple({
                 titulo: "No existe ninguna oferta con ese identificador",
                 descripcion: "La oferta que buscas con ese identificador no existe. Comprueba el identificador de la reserva"
-            }
-            casaVitini.ui.componentes.mensajeSimple(info)
+            })
         }
     },
     portada: {
@@ -277,11 +276,10 @@ casaVitini.view = {
     detallesOferta: {
         obtenerDetallesOferta: async function (ofertaUID) {
             const instanciaUID = document.querySelector("main").getAttribute("instanciaUID")
-            const transaccion = {
+            const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "administracion/ofertas/detallesOferta",
                 ofertaUID: ofertaUID
-            }
-            const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+            })
             const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
             if (!seccionRenderizada) { return }
             if (respuestaServidor?.error) {
@@ -509,7 +507,8 @@ casaVitini.view = {
             selectorTipoDescuentos.value = tipoDescuento
 
             casaVitini.view.__sharedMethods__.componenteUI.controladorDescuentos({
-                descuentoIDV: tipoDescuento
+                descuentoIDV: tipoDescuento,
+                contenedorDescuentos
             })
 
             if (tipoDescuento === "totalNeto") {
