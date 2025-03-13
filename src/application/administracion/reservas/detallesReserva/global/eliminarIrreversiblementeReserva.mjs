@@ -25,7 +25,8 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const clave = entrada.body.clave;
         if (!clave) {

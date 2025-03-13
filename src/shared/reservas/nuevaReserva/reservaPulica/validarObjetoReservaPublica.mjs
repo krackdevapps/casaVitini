@@ -127,7 +127,8 @@ export const validarObjetoReservaPublica = async (data) => {
                                 filtro: "cadenaConNumerosEnteros",
                                 sePermiteVacio: "no",
                                 limpiezaEspaciosAlrededor: "si",
-                                devuelveUnTipoNumber: "si"
+                                devuelveUnTipoNumber: "no",
+                                devuelveUnTipoBigInt: "no"
                             })
 
 
@@ -181,7 +182,8 @@ export const validarObjetoReservaPublica = async (data) => {
                                     sePermiteVacio: "no",
                                     limpiezaEspaciosAlrededor: "si",
                                     sePermitenNegativos: "no",
-                                    devuelveUnTipoNumber: "no"
+                                    devuelveUnTipoNumber: "no",
+                                    devuelveUnTipoBigInt: "no"
 
                                 })
                             } catch (error) {
@@ -407,6 +409,7 @@ export const validarObjetoReservaPublica = async (data) => {
                 sePermiteVacio: "no",
                 impedirCero: "si",
                 devuelveUnTipoNumber: "no",
+                devuelveUnTipoBigInt: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
 

@@ -20,7 +20,8 @@ export const actualizarMensaje = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const mensaje = validadoresCompartidos.tipos.cadena({
             string: entrada.body.mensaje,

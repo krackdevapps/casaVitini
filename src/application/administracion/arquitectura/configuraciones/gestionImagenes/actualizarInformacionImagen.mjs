@@ -28,7 +28,8 @@ export const actualizarInformacionImagen = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const titulo = validadoresCompartidos.tipos.cadena({

@@ -5,7 +5,7 @@ import { controlEstructuraPorJoi } from "../../shared/validadores/controlEstruct
 import Decimal from "decimal.js";
 
 
-export const calculadora = (entrada, salida) => {
+export const calculadora = (entrada) => {
     try {
 
         const calculo = validadoresCompartidos.tipos.cadena({
@@ -22,7 +22,9 @@ export const calculadora = (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "si",
+            devuelveUnTipoBigInt: "no",
+            impedirCero: "no"
         })
 
 
@@ -105,7 +107,8 @@ export const calculadora = (entrada, salida) => {
                         filtro: "cadenaConNumerosEnteros",
                         sePermiteVacio: "si",
                         limpiezaEspaciosAlrededor: "si",
-                        devuelveUnTipoNumber: "si"
+                        devuelveUnTipoNumber: "no",
+                        devuelveUnTipoBigInt: "si"
                     })
                 }),
                 calculo: Joi.string()

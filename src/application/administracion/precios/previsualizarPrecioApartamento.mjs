@@ -31,7 +31,8 @@ export const previsualizarPrecioApartamento = async (entrada, salida) => {
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no"
+
         })
 
         await obtenerConfiguracionPorApartamentoIDV({

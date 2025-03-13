@@ -22,7 +22,8 @@ export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)

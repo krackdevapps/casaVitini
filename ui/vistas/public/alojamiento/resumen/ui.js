@@ -1332,7 +1332,7 @@ Un depósito del 20% para reservas de 15 días o más.`
 
 
         } catch (error) {
-            console.log(error)
+
         } finally {
         }
 
@@ -2282,7 +2282,7 @@ Un depósito del 20% para reservas de 15 días o más.`
                                     }
                                     const semaforo = casaVitini.utilidades.semaforo
                                     semaforo.setFinalFunction("servicio_precioOpcion", () => {
-                                        console.log("final")
+
                                         casaVitini.view.actualizarPrecioEnUI({
                                             aplicarUIData: "si",
                                             origen: "campoCantidad"
@@ -2317,7 +2317,7 @@ Un depósito del 20% para reservas de 15 días o más.`
                     const opcionIDV = o.getAttribute("opcionIDV")
                     casaVitini.view.__sharedMethods__.serviciosUI_grupoOpciones.calcularTotalOpcion({
                         opcionIDV,
-                        servicioUID
+                        area: s
                     })
                 })
             })

@@ -25,7 +25,8 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const reservaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.reservaUID,
@@ -33,7 +34,8 @@ export const confirmarFechaCheckOutAdelantado = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const fechaCheckOut = await validadoresCompartidos.fechas.validarFecha_ISO({
             fecha_ISO: entrada.body.fechaCheckOut,

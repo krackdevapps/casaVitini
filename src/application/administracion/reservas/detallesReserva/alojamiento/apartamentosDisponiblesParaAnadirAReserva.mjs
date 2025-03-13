@@ -24,7 +24,8 @@ export const apartamentosDisponiblesParaAnadirAReserva = async (entrada, salida)
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const detallesReserva = await obtenerReservaPorReservaUID(reservaUID)

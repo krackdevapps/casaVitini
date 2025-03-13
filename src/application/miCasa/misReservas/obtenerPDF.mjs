@@ -1,14 +1,13 @@
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { detallesReserva as detallesReserva_ } from "../../../shared/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-
 import { obtenerDatosPersonales } from "../../../infraestructure/repository/usuarios/obtenerDatosPersonales.mjs";
 import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
 import { obtenerReservaPorReservaUID } from "../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerTitularPoolReservaPorReservaUID } from "../../../infraestructure/repository/reservas/titulares/obtenerTitularPoolReservaPorReservaUID.mjs";
 import { obtenerTitularReservaPorReservaUID } from "../../../infraestructure/repository/reservas/titulares/obtenerTitularReservaPorReservaUID.mjs";
 import { obtenerDetallesCliente } from "../../../infraestructure/repository/clientes/obtenerDetallesCliente.mjs";
-import { generadorPDF } from "../../../shared/pdf/generadorPDF.mjs";
+import { esquemaGlobal } from "../../administracion/reservas/detallesReserva/pdf/contenedores/esquemaGlobal.mjs";
 
 export const obtenerPDF = async (entrada, salida) => {
     try {
@@ -26,7 +25,8 @@ export const obtenerPDF = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const datosDelUsuario = await obtenerDatosPersonales(usuario)
@@ -75,8 +75,17 @@ export const obtenerPDF = async (entrada, salida) => {
                 "desgloseFinanciero",
             ]
         });
-
-        const pdf = await generadorPDF(resuelveDetallesReserva);
+        const pdf = await esquemaGlobal({
+            incluirTitular: "si",
+            reserva: resuelveDetallesReserva,
+            tablasIDV: [
+                "fechas",
+                "alojamiento",
+                "servicios",
+                "totalesGlobales"
+            ],
+            configuracionPorTabla: {}
+        });
         const ok = {
             ok: "Aquí está el pdf en base64",
             pdf: pdf

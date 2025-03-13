@@ -100,8 +100,9 @@ export const aplicarImpuestos = async (data) => {
                 } else if (origen === "instantaneaImpuestosEnReserva") {
                     const reservaUID = data.reservaUID
                     
-                    if (typeof reservaUID !== "number") {
-                        const error = "reservaUID en aplicarImpuestos debe de ser un número number."
+                    
+                    if (typeof reservaUID !== "string") {
+                        const error = `reservaUID en aplicarImpuestos debe de ser una cadena y es un ${typeof reservaUID} `
                         throw new Error(error)
                     }
                     const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)
@@ -166,8 +167,8 @@ export const aplicarImpuestos = async (data) => {
 
         } else if (origen === "instantaneaImpuestosEnReserva") {
             const reservaUID = data.reservaUID
-            if (typeof reservaUID !== "number") {
-                const error = "reservaUID en aplicarImpuestos debe de ser un número."
+            if (typeof reservaUID !== "string") {
+                const error = `reservaUID en aplicarImpuestos debe de ser una cadean y es ${typeof reservaUID}.`
                 throw new Error(error)
             }
             const contenedorFinanciero = await obtenerDesgloseFinancieroPorReservaUID(reservaUID)

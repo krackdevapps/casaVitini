@@ -26,7 +26,8 @@ export const actualizarComplemento = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const complementoControl = await obtenerComplementoPorComplementoUID(complementoUID)

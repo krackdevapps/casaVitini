@@ -25,7 +25,8 @@ export const eliminarSobreControlNoche = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -56,13 +57,13 @@ export const eliminarSobreControlNoche = async (entrada) => {
         const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
 
         const ok = {
-           
-                ok: "Sobre control eliminado, el precio base se ha restaurado",
-                instantaneaNetoApartamento,
-                simulacionUID,
-                ...sobreControlActualizado,
-                ...postProcesadoSimualacion
-            
+
+            ok: "Sobre control eliminado, el precio base se ha restaurado",
+            instantaneaNetoApartamento,
+            simulacionUID,
+            ...sobreControlActualizado,
+            ...postProcesadoSimualacion
+
         }
         return ok
     } catch (errorCapturado) {

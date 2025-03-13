@@ -131,9 +131,9 @@ export const constructorInstantaneaComplementosAlojamiento = async (data) => {
 
         const desglosePorApartamento = contenedorEntidades.reserva.desglosePorApartamento
         Object.entries(desglosePorApartamento).forEach(a => {
-            console.log("a", a)
-            const [ apartamentoIDV, contenedor ] = a
-            console.log("apartamentoIDV",apartamentoIDV, "contenedor", contenedor)
+
+            const [apartamentoIDV, contenedor] = a
+
             if (desglosePorAlojamiento[apartamentoIDV]) {
                 const totalNetoComplementos = desglosePorAlojamiento[apartamentoIDV].global.totalNeto
                 const totalNeto = contenedor.totalNeto

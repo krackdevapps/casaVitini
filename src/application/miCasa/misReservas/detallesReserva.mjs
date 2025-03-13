@@ -27,7 +27,8 @@ export const detallesReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const datosDelUsuario = await obtenerDatosPersonales(usuario)

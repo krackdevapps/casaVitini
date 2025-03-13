@@ -32,7 +32,8 @@ export const reservasDelCliente = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         let nombreColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreColumna || "",
@@ -51,10 +52,9 @@ export const reservasDelCliente = async (entrada) => {
             soloMinusculas: "si"
         })
 
-        const pagina = validadoresCompartidos.tipos.numero({
+        const pagina = validadoresCompartidos.tipos.granEntero({
             number: entrada.body.pagina,
             nombreCampo: "El numero de página",
-            filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
@@ -106,7 +106,7 @@ export const reservasDelCliente = async (entrada) => {
             };
             return estructuraFinal;
         };
-        
+
         const reservasEstructuradas = encontrarRepetidosEliminar(comoTitularPreProcesado, comoPernoctantePreProcesado);
         const UIDSreservasComoTitular = reservasEstructuradas.comoTitular;
         const UIDSreservasComoPernoctante = reservasEstructuradas.comoPernoctante;

@@ -23,11 +23,9 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
-
-
-
         const ofertaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.ofertaUID,
             nombreCampo: "El identificador universal de la oferta (ofertaUID)",
@@ -42,7 +40,8 @@ export const eliminarDescuentoEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         if (posicion === "0") {
             const m = "No puedes pasar una posición en 0, recuerda que aquí las posiciones empiezan a contar desde 1"

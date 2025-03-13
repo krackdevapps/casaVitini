@@ -1,9 +1,8 @@
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
-import { generadorPDF } from "../../../../../shared/pdf/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "../../../../../shared/reservas/detallesReserva.mjs";
-
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { esquemaGlobal } from "../pdf/contenedores/esquemaGlobal.mjs";
 
 export const pdfReserva = async (entrada) => {
     try {
@@ -22,7 +21,8 @@ export const pdfReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         await obtenerReservaPorReservaUID(reservaUID)
@@ -35,8 +35,17 @@ export const pdfReserva = async (entrada) => {
                 "desgloseFinanciero"
             ]
         })
-
-        const pdf = await generadorPDF(reserva);
+        const pdf = await esquemaGlobal({
+            incluirTitular: "si",
+            reserva: reserva,
+            tablasIDV: [
+                "fechas",
+                "alojamiento",
+                "servicios",
+                "totalesGlobales"
+            ],
+            configuracionPorTabla: {}
+        });
         const ok = {
             ok: "Aquí está el pdf en base64",
             pdf: pdf

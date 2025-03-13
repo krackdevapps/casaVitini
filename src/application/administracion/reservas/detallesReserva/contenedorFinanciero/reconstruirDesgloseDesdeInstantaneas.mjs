@@ -23,7 +23,8 @@ export const reconstruirDesgloseDesdeInstantaneas = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
 
         mutex.acquire()

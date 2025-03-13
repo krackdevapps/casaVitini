@@ -25,7 +25,8 @@ export const eliminarComplemento = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const complemento = await obtenerComplementoPorComplementoUID(complementoUID)
         await campoDeTransaccion("iniciar")

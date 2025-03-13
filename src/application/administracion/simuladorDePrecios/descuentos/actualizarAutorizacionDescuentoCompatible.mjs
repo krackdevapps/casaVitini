@@ -28,7 +28,8 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const ofertaUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.ofertaUID,
@@ -36,7 +37,8 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const nuevaAutorizacion = entrada.body.nuevaAutorizacion

@@ -29,7 +29,8 @@ export const insertarComplementoAlojamientoEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
 
         const complementoUID = validadoresCompartidos.tipos.cadena({
@@ -38,7 +39,8 @@ export const insertarComplementoAlojamientoEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

@@ -22,7 +22,8 @@ export const detallesComplemento = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const complemento = await obtenerComplementoPorComplementoUID(complementoUID)
         const apartamentoIDV = complemento.apartamentoIDV
@@ -46,7 +47,7 @@ export const detallesComplemento = async (entrada) => {
 
 
         };
-        
+
         return ok
     } catch (errorCapturado) {
         throw errorCapturado

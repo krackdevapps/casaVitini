@@ -18,7 +18,8 @@ export const validarObjetoDelServicio = (data) => {
                             filtro: "cadenaConNumerosEnteros",
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si",
-                            devuelveUnTipoNumber: "si"
+                            devuelveUnTipoNumber: "no",
+                            devuelveUnTipoBigInt: "no"
                         })
 
 
@@ -40,6 +41,7 @@ export const validarObjetoDelServicio = (data) => {
                             limpiezaEspaciosAlrededor: "si",
                             sePermitenNegativos: "no",
                             devuelveUnTipoNumber: "no",
+                            devuelveUnTipoBigInt: "no",
                             impedirCero: "no"
 
                         })
@@ -122,7 +124,9 @@ export const validarObjetoDelServicio = (data) => {
                                     sePermiteVacio: "no",
                                     limpiezaEspaciosAlrededor: "si",
                                     sePermitenNegativos: "no",
-                                    devuelveUnTipoNumber: "no"
+                                    devuelveUnTipoNumber: "no",
+                                    devuelveUnTipoBigInt: "no"
+
 
                                 })
                             } catch (error) {
@@ -141,7 +145,9 @@ export const validarObjetoDelServicio = (data) => {
                                     limpiezaEspaciosAlrededor: "si",
                                     sePermitenNegativos: "no",
                                     devuelveUnTipoNumber: "no",
-                                    impedirCero: "no"
+                                    impedirCero: "no",
+                                    devuelveUnTipoNumber: "no",
+
 
                                 })
                             } catch (error) {

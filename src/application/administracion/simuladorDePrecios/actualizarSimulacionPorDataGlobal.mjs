@@ -16,12 +16,15 @@ export const actualizarSimulacionPorDataGlobal = async (entrada) => {
         mutex.acquire()
         const data = entrada.body
 
-        await validarDataGlobalSimulacion(data)
-        const fechaCreacion = data.fechaCreacion
-        const fechaEntrada = data.fechaEntrada
-        const fechaSalida = data.fechaSalida
-        const simulacionUID = data.simulacionUID
-        const zonaIDV = data.zonaIDV
+
+        const dataGlobalVal = await validarDataGlobalSimulacion(data)
+        const fechaCreacion = dataGlobalVal.fechaCreacion
+        const fechaEntrada = dataGlobalVal.fechaEntrada
+        const fechaSalida = dataGlobalVal.fechaSalida
+        const simulacionUID = dataGlobalVal.simulacionUID
+        const zonaIDV = dataGlobalVal.zonaIDV
+
+
 
         await actualizarRangoFechasPorSimulacionUID({
             fechaCreacion,

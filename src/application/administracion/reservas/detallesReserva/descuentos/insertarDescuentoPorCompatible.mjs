@@ -27,7 +27,8 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const ofertaUID = validadoresCompartidos.tipos.cadena({
@@ -36,7 +37,8 @@ export const insertarDescuentoPorCompatible = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         mutex.acquire()
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

@@ -31,7 +31,8 @@ export const insertarDescuentoDedicado = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

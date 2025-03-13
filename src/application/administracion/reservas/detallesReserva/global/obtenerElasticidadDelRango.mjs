@@ -24,7 +24,8 @@ export const obtenerElasticidadDelRango = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
         const sentidoRango = validadoresCompartidos.tipos.cadena({
             string: entrada.body.sentidoRango,
@@ -40,7 +41,8 @@ export const obtenerElasticidadDelRango = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "no"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
         const anoCalendario = validadoresCompartidos.tipos.cadena({
             string: entrada.body.anoCalendario,
@@ -48,7 +50,8 @@ export const obtenerElasticidadDelRango = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "no"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
 
         if (sentidoRango !== "pasado" && sentidoRango !== "futuro") {

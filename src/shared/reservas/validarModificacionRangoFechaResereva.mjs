@@ -8,6 +8,7 @@ import { validadorPasado } from './rangoFlexible/pasado.mjs';
 import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from '../../infraestructure/repository/reservas/apartamentos/obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID.mjs';
 export const validarModificacionRangoFechaResereva = async (data) => {
     try {
+
         const mesCalendario = data.mesCalendario.padStart(2, '0');
         const anoCalendario = data.anoCalendario.padStart(2, '0');
         const sentidoRango = data.sentidoRango

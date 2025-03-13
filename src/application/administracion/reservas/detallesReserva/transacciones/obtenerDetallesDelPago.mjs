@@ -25,19 +25,17 @@ export const obtenerDetallesDelPago = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const detallesDelPago = await obtenerPagoPorPagoUID(pagoUID)
 
         const cantidadDelPago = detallesDelPago.cantidad;
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
-        const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO;
-        const fechaPagoTZ_ISO = DateTime.fromISO(fechaPagoUTC_ISO, { zone: 'utc' })
-            .setZone(zonaHoraria)
-            .toISO();
-        detallesDelPago.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
-
+        const fechaPago = detallesDelPago.fechaPago;
+        const fechaPagoLocal = DateTime.fromISO(fechaPago, { zone: zonaHoraria });
+        detallesDelPago.fechaPagoLocal = fechaPagoLocal;
 
         const ok = {
             ok: "Aquí tienes los pagos de esta reserva",

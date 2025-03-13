@@ -29,7 +29,8 @@ export const eliminarImagen = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         await campoDeTransaccion("iniciar")
 
@@ -48,7 +49,7 @@ export const eliminarImagen = async (entrada) => {
         const posicion = Number(imagen.posicion)
         await actualizarPosicionesPorEliminacion({
             apartamentoIDV,
-            posicionInicial: Number(posicion)            
+            posicionInicial: Number(posicion)
         })
         await campoDeTransaccion("confirmar")
 

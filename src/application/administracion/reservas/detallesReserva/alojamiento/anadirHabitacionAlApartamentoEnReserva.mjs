@@ -28,7 +28,8 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
 
         })
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -37,7 +38,8 @@ export const anadirHabitacionAlApartamentoEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const habitacionIDV = validadoresCompartidos.tipos.cadena({

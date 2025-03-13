@@ -5314,7 +5314,7 @@ export const reservaComponentes = {
                         instanciaDestino.appendChild(contenedorLista)
 
                         Object.entries(alojamiento).forEach(([apartamentoIDV, contenedor]) => {
-                            
+
                             const aUI = this.componentesUI.apartamentoUI({
                                 apartamentoIDV,
                                 apartamentoUI: contenedor.apartamentoUI,
@@ -5467,6 +5467,28 @@ export const reservaComponentes = {
                                     estadoUI.textContent = estadoUI_(estadoIDV)
                                     contenedorGlobal.appendChild(estadoUI)
                                     contenedor.appendChild(contenedorGlobal)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                     const contendorBotones = document.createElement("div")
                                     contendorBotones.classList.add(
                                         "flexHorizontal",
@@ -5786,7 +5808,7 @@ export const reservaComponentes = {
                         return ui
                     },
                     contenedorComplemento: function (data) {
-                        
+
                         const tipoUbicacion = data.tipoUbicacion
 
                         const ui = document.createElement("div")
@@ -5819,7 +5841,7 @@ export const reservaComponentes = {
                         const instanciaUID_contenedorComplementos = data.instanciaUID_contenedorComplementos
                         const complemento = data.complemento
                         const destino = data.destino
-                        
+
                         let sel
                         if (tipoUbicacion === "alojamiento") {
                             sel = `[contenedorTipoUbicacion=${tipoUbicacion}]`
@@ -6321,7 +6343,6 @@ export const reservaComponentes = {
                 },
                 UI: {
                     listaDePagos: async function (data) {
-                        const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
                         const listaDePagos = data.detallesPagos.ok.detallesPagos
                         const totalReserva = listaDePagos.totalReserva
                         const totalPagado = listaDePagos.totalPagado
@@ -6330,40 +6351,33 @@ export const reservaComponentes = {
                         const totalReembolsado = listaDePagos.totalReembolsado
                         const porcentajeReembolsado = listaDePagos.porcentajeReembolsado
                         const porcentajePagado = listaDePagos.porcentajePagado
-                        const pagos = listaDePagos.pagos //array
+                        const pagos = listaDePagos.pagos
+
+                        const reservaUI = document.querySelector("[reservaUID]")
+                        const configuracionVista = reservaUI.getAttribute("configuracionVista")
+                        const reservaUID = reservaUI.getAttribute("reservaUID")
+
                         const contenedorAdvertenciaInmersiva = document.createElement("div")
-                        contenedorAdvertenciaInmersiva.classList.add("administracion_reservas_detallesReserva_contenedorListaDePagos")
-                        const titulo = document.createElement("p")
-                        titulo.classList.add("detallesReserva_reembolso_tituloGlobal")
-                        titulo.textContent = "Transacciones"
-                        contenedorAdvertenciaInmersiva.appendChild(titulo)
-                        const infoGlobal = document.createElement("div")
-                        infoGlobal.classList.add("detallesReserva_reembolso_infoGlobal")
-                        infoGlobal.textContent = `Estos son los de pagos de esta reserva. Los pagos pueden realizarse por la pasarela o, si realiza un pago en efectivo, deberá añadir un pago manual desde el botón correspondiente. Para ver los detalles de un pago y sus reembolsos si los hubiera pulsado en un pago. Para realizar un reembolso, entra en los detalles de un pago y desde ahí podrás realizar el reembolso.`
-                        contenedorAdvertenciaInmersiva.appendChild(infoGlobal)
+                        contenedorAdvertenciaInmersiva.classList.add("flexVertical", "padding6")
+
                         const bloqueTransacciones = document.createElement("div")
-                        bloqueTransacciones.classList.add("detallesReserva_transacciones_bloqueGlobal")
+                        bloqueTransacciones.classList.add("flexVertical", "gap6")
                         bloqueTransacciones.setAttribute("contenedor", "transaccionesUI")
+                        contenedorAdvertenciaInmersiva.appendChild(bloqueTransacciones)
+
                         const bloqueBotones = document.createElement("div")
-                        bloqueBotones.classList.add("detallesReserva_transacciones_bloqueBotones")
-                        const botonEnlacesDePago = document.createElement("div")
-                        botonEnlacesDePago.classList.add("detallesReserva_transacciones_botonV1")
-                        botonEnlacesDePago.addEventListener("click", casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.UI.enlacesDePago)
-                        botonEnlacesDePago.textContent = "Crear un enlace de pago"
+                        bloqueBotones.classList.add("flexHorizontal", "gap6")
+
                         const botonCrearPagoManual = document.createElement("div")
-                        botonCrearPagoManual.classList.add("botonV1BlancoIzquierda")
+                        botonCrearPagoManual.classList.add("botonV4")
                         botonCrearPagoManual.addEventListener("click", () => {
                             casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.crearPagoManual.UI()
                         })
                         botonCrearPagoManual.textContent = "Realizar pago"
                         bloqueBotones.appendChild(botonCrearPagoManual)
 
-
                         const botonDescuentoDedicado = document.createElement("div")
-                        botonDescuentoDedicado.classList.add(
-                            "botonV3",
-                            "comportamientoBoton"
-                        )
+                        botonDescuentoDedicado.classList.add("botonV4")
                         botonDescuentoDedicado.textContent = "Crear e insertar descuento dedicado"
                         botonDescuentoDedicado.addEventListener("click", (e) => {
                             casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.desgloseTotal.componentesUI.insertarDescuentoDedicado.ui({
@@ -6373,75 +6387,91 @@ export const reservaComponentes = {
                         })
                         bloqueBotones.appendChild(botonDescuentoDedicado)
 
+                        const botonGenerarPDF = document.createElement("div")
+                        botonGenerarPDF.classList.add("botonV4")
+                        botonGenerarPDF.addEventListener("click", () => {
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.utilidades.pdf.renderizarPDF({
+                                configuracionVista,
+                                nombreArchivo: `Lista_de_pagos_de_la_reserva_${reservaUID}`,
+                                reservaUID,
+                                incluirTitular: "si",
+                                tipoIDV: "base64",
+                                tablasIDV: [
+                                    "pagos",
+                                ],
+                                configuracionPorTabla: {
+                                    pagos: {
+                                        incluirTotales: "si"
+                                    }
+
+                                }
+                            })
+                        })
+                        botonGenerarPDF.textContent = "Generar un PDF de todos los pagos1"
+                        bloqueBotones.appendChild(botonGenerarPDF)
+
                         const botonCerrar = document.createElement("div")
                         botonCerrar.classList.add("detallesReserva_transacciones_botonV1")
                         botonCerrar.addEventListener("click", casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas)
                         botonCerrar.textContent = "Cerrar"
                         bloqueTransacciones.appendChild(bloqueBotones)
-                        const bloqueDatosGenerales = document.createElement("div")
-                        bloqueDatosGenerales.classList.add("detallesReserva_transacciones_bloqueDatosGenerales")
-                        let bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        let bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Total de la reserva"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        let bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.setAttribute("componentePago", "totalReserva")
-                        bloqueDato.textContent = totalReserva + "$"
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDatosGenerales.appendChild(bloqueInfoDato)
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.setAttribute("componentePago", "porcentajePagado")
-                        bloqueInfo.textContent = `Total pagado (${porcentajePagado})`
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.setAttribute("componentePago", "totalPagado")
-                        bloqueDato.textContent = totalPagado + "$"
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDatosGenerales.appendChild(bloqueInfoDato)
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.setAttribute("componentePago", "porcentajeReembolsado")
-                        bloqueInfo.textContent = `Total reembolsado (${porcentajeReembolsado})`
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.setAttribute("componentePago", "totalReembolsado")
-                        bloqueDato.textContent = totalReembolsado + "$"
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDatosGenerales.appendChild(bloqueInfoDato)
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Faltante por pagar"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.setAttribute("componentePago", "faltantePorPagar")
-                        bloqueDato.textContent = faltantePorPagar + "$"
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDatosGenerales.appendChild(bloqueInfoDato)
-                        bloqueTransacciones.appendChild(bloqueDatosGenerales)
+
+                        const panelGlobal = document.createElement("div")
+                        panelGlobal.classList.add("flexHorizontal", "elementosExpandidos", "padding12", "gap6", "backgroundGrey1", "borderRadius12")
+                        panelGlobal.setAttribute("contenedor", "panelGlobal")
+                        bloqueTransacciones.appendChild(panelGlobal)
+
+                        const dataUI = (data) => {
+                            const titulo = data.titulo
+                            const valor = data.valor
+                            const nombreContenedor = data.nombreContenedor
+                            const ui = document.createElement("div")
+                            ui.classList.add("flexVertical")
+                            ui.setAttribute("nombreContenedor", nombreContenedor)
+
+                            const t = document.createElement("div")
+                            t.classList.add("negrita")
+                            t.setAttribute("a", "titulo")
+                            t.textContent = titulo
+                            ui.appendChild(t)
+
+                            const v = document.createElement("div")
+                            v.textContent = valor
+                            v.setAttribute("a", "valor")
+                            ui.appendChild(v)
+                            return ui
+                        }
+
+                        panelGlobal.appendChild(dataUI({
+                            titulo: "Total de la reserva",
+                            valor: totalReserva + "$",
+                            nombreContenedor: "totalReserva"
+                        }))
+
+                        panelGlobal.appendChild(dataUI({
+                            titulo: `Total pagado (${porcentajePagado})`,
+                            valor: totalPagado + "$",
+                            nombreContenedor: "totalPagado"
+                        }))
+
+                        panelGlobal.appendChild(dataUI({
+                            titulo: `Total reembolsado (${porcentajeReembolsado})`,
+                            valor: totalReembolsado + "$",
+                            nombreContenedor: "totalReembolsado"
+                        }))
+
+                        panelGlobal.appendChild(dataUI({
+                            titulo: "Faltante por pagar",
+                            valor: faltantePorPagar + "$",
+                            nombreContenedor: "faltantePorPagar"
+                        }))
+
                         if (pagos.length === 0) {
                             const infoNoPagoUI = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.UI.infoNoPagos()
                             bloqueTransacciones.appendChild(infoNoPagoUI)
-                        }
-                        if (pagos.length > 0) {
+                        } else {
                             const bloqueListaDePagos = document.createElement("div")
-                            bloqueListaDePagos.classList.add("reservaDetalles_transacciones_bloqueListaDePagos")
+                            bloqueListaDePagos.classList.add("flexVertical")
                             bloqueListaDePagos.setAttribute("contenedor", "listaDePagos")
                             for (const detallesDelPago of pagos) {
                                 const pagoUI = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.UI.pagoUI(detallesDelPago)
@@ -6451,30 +6481,27 @@ export const reservaComponentes = {
                         }
                         const enlacePagoUIRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
                         enlacePagoUIRenderizada.innerHTML = null
-                        contenedorAdvertenciaInmersiva.appendChild(bloqueTransacciones)
                         enlacePagoUIRenderizada.appendChild(contenedorAdvertenciaInmersiva)
                     },
-                    pagoUI: function (metadatos) {
-                        const pagoUID = metadatos.pagoUID
-                        const plataformaDePagoIDV = metadatos.plataformaDePagoIDV
-                        const pagoUIDPasarela = metadatos.pagoUIDPasarela
-                        const tarjetaDigitos = metadatos.tarjetaDigitos
-                        const fechaPago = metadatos.fechaPago
-                        const fechaPagoTZ_ISO = metadatos.fechaPagoTZ_ISO
-                        const tarjeta = metadatos.tarjeta
-                        const cantidad = metadatos.cantidad
-                        const sumaDeLoReembolsado = metadatos.sumaDeLoReembolsado
-                        const reembolsado = metadatos.reembolsado
-                        const chequeUID = metadatos.chequeUID
-                        const instanciaUID_contenedorDinamicoTransacciones = metadatos.instanciaUID_contenedorDinamicoTransacciones
-                        const fechaPagoUTC_objeto = fechaPago.split("T")
-                        const fechaUTC_array = fechaPagoUTC_objeto[0].split("-")
-                        const horaUTC_array = fechaPagoUTC_objeto[1].split("-")[0]
-                        const fechaPagoUTC_humana = `${fechaUTC_array[2]}/${fechaUTC_array[1]}/${fechaUTC_array[0]} ${horaUTC_array}`
-                        const fechaPagoTZ_objeto = fechaPagoTZ_ISO.split("T")
-                        const fechaTZ_array = fechaPagoTZ_objeto[0].split("-")
-                        const horaTZ_array = fechaPagoTZ_objeto[1].split("-")[0]
-                        const fechaPagoTZ_humana = `${fechaTZ_array[2]}/${fechaTZ_array[1]}/${fechaTZ_array[0]} ${horaTZ_array}`
+                    pagoUI: function (data) {
+
+
+
+                        const pagoUID = data.pagoUID
+                        const plataformaDePagoIDV = data.plataformaDePagoIDV
+                        const pagoUIDPasarela = data.pagoUIDPasarela
+                        const tarjetaDigitos = data.tarjetaDigitos
+                        const fechaPago = data.fechaPago
+                        const fechaPagoLocal = data.fechaPagoLocal
+                        const tarjeta = data.tarjeta
+                        const cantidad = data.cantidad
+                        const sumaDeLoReembolsado = data.sumaDeLoReembolsado
+                        const reembolsado = data.reembolsado
+                        const chequeUID = data.chequeUID
+                        const conceptoPagoB64 = data.conceptoPago
+                        const conceptoPago = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(conceptoPagoB64)
+                        const instanciaUID_contenedorDinamicoTransacciones = data.instanciaUID_contenedorDinamicoTransacciones
+
                         const plataformaDePagoUI = {
                             efectivo: "Efectivo",
                             transferenciaBancaria: "Transferencia bancaria",
@@ -6482,139 +6509,155 @@ export const reservaComponentes = {
                             pasarela: "Pasarela de pago",
                             cheque: "Cheque"
                         }
-                        const bloqueDetallesDelPago = document.createElement("div")
-                        bloqueDetallesDelPago.classList.add("flexVertical", "gap10", "borderRadius10", "backgroundGrey1", "padding10", "comportamientoBoton")
-                        bloqueDetallesDelPago.setAttribute("pagoUID", pagoUID)
-                        bloqueDetallesDelPago.addEventListener("click", () => {
-                            const metadatos = {
+
+                        const contenedor = document.createElement("div")
+                        contenedor.classList.add("grid2x1_r_1x1_1fr_auto", "gap6", "borderRadius12", "backgroundGrey1", "padding6")
+                        contenedor.setAttribute("pagoUID", pagoUID)
+                        // contenedor.addEventListener("click", () => {
+                        //     casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.detallesDelPago.UI({
+                        //         pagoUID: pagoUID,
+                        //         instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
+                        //     })
+                        // })
+
+                        const dataUI = (data) => {
+                            const titulo = data.titulo
+                            const valor = data.valor
+
+                            const ui = document.createElement("div")
+                            ui.classList.add("flexVertical")
+
+                            const t = document.createElement("div")
+                            t.classList.add("negrita")
+                            t.textContent = titulo
+                            ui.appendChild(t)
+
+                            const v = document.createElement("div")
+                            v.textContent = valor
+                            ui.appendChild(v)
+                            return ui
+                        }
+
+
+                        const contenedorData = document.createElement("div")
+                        contenedorData.classList.add("flexVertical", "gap10", "padding6")
+                        contenedor.appendChild(contenedorData)
+
+                        contenedorData.appendChild(dataUI({
+                            titulo: "Concepto del pago",
+                            valor: conceptoPago
+                        }))
+
+
+                        contenedorData.appendChild(dataUI({
+                            titulo: "Identificador del pago (pagoUID)",
+                            valor: pagoUID
+                        }))
+
+                        contenedorData.appendChild(dataUI({
+                            titulo: "Plataforma de pago",
+                            valor: plataformaDePagoUI[plataformaDePagoIDV]
+                        }))
+
+
+
+                        if (plataformaDePagoIDV === "pasarela") {
+                            contenedorData.appendChild(dataUI({
+                                titulo: "Identificador del pago dentro de la pasarela",
+                                valor: pagoUIDPasarela
+                            }))
+
+                        }
+                        if (plataformaDePagoIDV === "pasarela") {
+                            contenedorData.appendChild(dataUI({
+                                titulo: "Tarjeta de crédito",
+                                valor: `**** **** **** ${tarjetaDigitos} (${tarjeta})`
+                            }))
+                        }
+
+                        if (chequeUID) {
+                            contenedorData.appendChild(dataUI({
+                                titulo: "Identificador del cheque",
+                                valor: chequeUID
+                            }))
+                        }
+
+                        contenedorData.appendChild(dataUI({
+                            titulo: "Fecha del pago UTC",
+                            valor: fechaPago
+                        }))
+
+                        contenedorData.appendChild(dataUI({
+                            titulo: "Fecha del pago local",
+                            valor: fechaPagoLocal
+                        }))
+
+                        contenedorData.appendChild(dataUI({
+                            titulo: "Cantidad del pago",
+                            valor: cantidad + "$"
+                        }))
+
+                        if (sumaDeLoReembolsado) {
+                            contenedorData.appendChild(dataUI({
+                                titulo: "Resumen de reembolsos",
+                                valor: `${sumaDeLoReembolsado}$, reembolsado ${reembolsado}`
+                            }))
+                        }
+
+                        const contenedorBotones = document.createElement("div")
+                        contenedorBotones.classList.add("flexVertical", "gap6")
+                        contenedor.appendChild(contenedorBotones)
+
+                        const botonAbrirPago = document.createElement("div")
+                        botonAbrirPago.classList.add("botonV4")
+                        botonAbrirPago.setAttribute("boton", "detalles")
+                        botonAbrirPago.textContent = "Detalles del pago"
+                        botonAbrirPago.addEventListener("click", () => {
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.detallesDelPago.UI({
                                 pagoUID: pagoUID,
                                 instanciaUID_contenedorDinamicoTransacciones: instanciaUID_contenedorDinamicoTransacciones
-                            }
-                            casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.detallesDelPago.UI(metadatos)
+                            })
                         })
-                        let bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        let bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Identificador del pago (pagoUID)"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        let bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = pagoUID
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Plataforma de pago"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = plataformaDePagoUI[plataformaDePagoIDV]
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.textContent = "Identificador del pago dentro de la pasarela"
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = pagoUIDPasarela
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        if (plataformaDePagoIDV === "pasarela") {
-                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                        }
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Tarjeta de crédito"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = `**** **** **** ${tarjetaDigitos} (${tarjeta})`
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        if (plataformaDePagoIDV === "pasarela") {
-                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                        }
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Fecha del pago en UTC"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = fechaPagoUTC_humana
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Fecha del pago en hora local"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = fechaPagoTZ_humana
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                        bloqueInfoDato = document.createElement("div")
-                        bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Cantidad del pago"
-                        bloqueInfoDato.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = cantidad + "$"
-                        bloqueInfoDato.appendChild(bloqueDato)
-                        bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                        const bloqueSumaDeLoReembolsado = document.createElement("div")
-                        bloqueSumaDeLoReembolsado.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Resumen de reembolsos"
-                        bloqueSumaDeLoReembolsado.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = `${sumaDeLoReembolsado}$, reembolsado ${reembolsado}`
-                        bloqueSumaDeLoReembolsado.appendChild(bloqueDato)
-                        if (sumaDeLoReembolsado) {
-                            bloqueDetallesDelPago.appendChild(bloqueSumaDeLoReembolsado)
-                        }
-                        const bloqueChequeUID = document.createElement("div")
-                        bloqueChequeUID.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                        bloqueInfo = document.createElement("div")
-                        bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                        bloqueInfo.classList.add("negrita")
-                        bloqueInfo.textContent = "Identificador del cheque"
-                        bloqueChequeUID.appendChild(bloqueInfo)
-                        bloqueDato = document.createElement("div")
-                        bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                        bloqueDato.textContent = chequeUID
-                        bloqueChequeUID.appendChild(bloqueDato)
-                        if (chequeUID) {
-                            bloqueDetallesDelPago.appendChild(bloqueChequeUID)
-                        }
-                        return bloqueDetallesDelPago
+                        contenedorBotones.appendChild(botonAbrirPago)
+
+                        const botonGenerarPDF = document.createElement("div")
+                        botonGenerarPDF.classList.add("botonV4")
+
+                        botonGenerarPDF.textContent = "Generar PDF"
+                        botonGenerarPDF.addEventListener("click", () => {
+                            const reservaUI = document.querySelector("[reservaUID]")
+                            const configuracionVista = reservaUI.getAttribute("configuracionVista")
+                            const reservaUID = reservaUI.getAttribute("reservaUID")
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.utilidades.pdf.renderizarPDF({
+                                configuracionVista,
+                                nombreArchivo: `Pago_${pagoUID}_de_la_reserva_${reservaUID}`,
+                                reservaUID: reservaUID,
+                                incluirTitular: "no",
+                                tipoIDV: "base64",
+                                tablasIDV: [
+                                    "pagos",
+                                ],
+                                configuracionPorTabla: {
+                                    pagos: {
+                                        incluirTotales: "no",
+                                        contenedorUID: [pagoUID]
+                                    }
+
+                                }
+                            })
+                        })
+                        contenedorBotones.appendChild(botonGenerarPDF)
+
+
+
+
+                        return contenedor
                     },
                     infoNoPagos: function () {
                         const infoNoPagos = document.createElement("div")
                         infoNoPagos.classList.add("reservaDetalles_transacciones_textoV1")
                         infoNoPagos.setAttribute("contenedor", "infoNoPagos")
-                        infoNoPagos.textContent = "Esta reserva no tiene ningún pago. Los pagos que se realicen por la pasarela de pagos se mostrarán automáticamente aquí. Sin embargo, si ha cobrado esta reserva, por ejemplo, en efectivo o con un TPV, debería de añadir un pago manual. No es obligatorio añadir un pago manual, pero si quiere tener un seguimiento centralizado de todos los pagos en esta reserva, tiene esa opción."
+                        infoNoPagos.textContent = "Esta reserva no tiene ningún pago. Los pagos que se realicen por la pasarela de pagos se mostrarán automáticamente aquí. Sin embargo, si ha cobrado esta reserva, por ejemplo, en efectivo o con un TPV, debería de añadir un pago manualmente."
                         return infoNoPagos
                     }
                 },
@@ -6663,30 +6706,8 @@ export const reservaComponentes = {
                             const detallesDelPago = respuestaServidor.detallesDelPago
                             const plataformaDePagoIDV = detallesDelPago.plataformaDePagoIDV
                             const pagoUID = detallesDelPago.pagoUID
-                            const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela
-                            const tarjetaDigitos = detallesDelPago.tarjetaDigitos
-                            const fechaPagoUTC_ISO = detallesDelPago.fechaPagoUTC_ISO
-                            const fechaPagoTZ_ISO = detallesDelPago.fechaPagoTZ_ISO
-                            const fechaPagoUTC_objeto = fechaPagoUTC_ISO.split("T")
-                            const fechaUTC_array = fechaPagoUTC_objeto[0].split("-")
-                            const horaUTC_array = fechaPagoUTC_objeto[1].split("-")[0]
-                            const fechaPagoUTC_humana = `${fechaUTC_array[2]}/${fechaUTC_array[1]}/${fechaUTC_array[0]} ${horaUTC_array}`
-                            const fechaPagoTZ_objeto = fechaPagoTZ_ISO.split("T")
-                            const fechaTZ_array = fechaPagoTZ_objeto[0].split("-")
-                            const horaTZ_array = fechaPagoTZ_objeto[1].split("-")[0]
-                            const fechaPagoTZ_humana = `${fechaTZ_array[2]}/${fechaTZ_array[1]}/${fechaTZ_array[0]} ${horaTZ_array}`
-                            const tarjeta = detallesDelPago.tarjeta
-                            const cantidad = detallesDelPago.cantidad
-                            const sumaDeLoReembolsado = detallesDelPago.sumaDeLoReembolsado
-                            const reembolsado = detallesDelPago.reembolsado
+
                             const deglosePorReembolso = respuestaServidor.deglosePorReembolso
-                            const plataformaDePagoUI = {
-                                efectivo: "Efectivo",
-                                transferenciaBancaria: "Transferencia bancaria",
-                                tarjeta: "Tarteja TPV",
-                                pasarela: "Pasarela de pago",
-                                cheque: "Cheque"
-                            }
                             const selectorInstanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"]`)?.querySelector("[espacio=detallesDelPago]")
                             if (!selectorInstanciaRenderizada) {
                                 return
@@ -6699,114 +6720,11 @@ export const reservaComponentes = {
                             info.textContent = `Detalles del pago ${pagoUID} de la reserva ${reservaUID} junto con sus reembolsos. Desde aquí puedes ver los detalles de este pago y gestionar los reembolsos. Puedes crear reembolsos. Tanto los pagos hechos por la pasarela como los reembolsos enviados a la pasarela no se pueden eliminar. Solo se pueden eliminar los pagos manuales.`
                             bloque.appendChild(info)
                             selectorInstanciaRenderizada.appendChild(bloque)
-                            const bloqueDetallesDelPago = document.createElement("div")
-                            bloqueDetallesDelPago.classList.add("flexVertical", "gap6", "padding14", "borderRadius20", "backgroundGrey1")
-                            bloqueDetallesDelPago.setAttribute("pagoUID", pagoUID)
-                            let bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            let bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfo.textContent = "Identificador del pago (pagoUID)"
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            let bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.textContent = pagoUID
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfo.textContent = "Plataforma de pago"
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.textContent = plataformaDePagoUI[plataformaDePagoIDV]
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.textContent = "Identificador del pago dentro de la pasarela"
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.textContent = pagoUIDPasarela
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            if (plataformaDePagoIDV === "pasarela") {
-                                bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            }
-                            bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfo.textContent = "Tarjeta de crédito"
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.textContent = `**** **** **** ${tarjetaDigitos} (${tarjeta})`
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            if (plataformaDePagoIDV === "pasarela") {
-                                bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            }
-                            bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfo.textContent = "Fecha del pago UTC"
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.textContent = fechaPagoUTC_humana
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfo.textContent = "Fecha del pago hora local"
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.textContent = fechaPagoTZ_humana
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfo.textContent = "Cantidad del pago"
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.setAttribute("cantidadPago", cantidad)
-                            bloqueDato.textContent = cantidad + "$"
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            bloqueInfoDato = document.createElement("div")
-                            bloqueInfoDato.classList.add("reservaDetalles_transacciones_bloqueInfoDato")
-                            bloqueInfo = document.createElement("div")
-                            bloqueInfo.classList.add("reservaDetalles_transacciones_bloqueInfo")
-                            bloqueInfo.classList.add("negrita")
-                            bloqueInfo.textContent = "Resumen de reembolsos"
-                            bloqueInfoDato.appendChild(bloqueInfo)
-                            bloqueDato = document.createElement("div")
-                            bloqueDato.classList.add("reservaDetalles_transacciones_bloqueDato")
-                            bloqueDato.setAttribute("sumaDeLoReembolsado", sumaDeLoReembolsado)
-                            bloqueDato.textContent = `${sumaDeLoReembolsado}$, reembolsado ${reembolsado}`
-                            bloqueInfoDato.appendChild(bloqueDato)
-                            if (sumaDeLoReembolsado) {
-                                bloqueDetallesDelPago.appendChild(bloqueInfoDato)
-                            }
-                            selectorInstanciaRenderizada.appendChild(bloqueDetallesDelPago)
+
+                            const pagoUI = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.UI.pagoUI(detallesDelPago)
+                            pagoUI.querySelector("[boton=detalles]")?.remove()
+                            selectorInstanciaRenderizada.appendChild(pagoUI)
+
                             const contenedorBotones = document.createElement("div")
                             contenedorBotones.classList.add("flexVertical", "gap10")
                             const botonCrearReembolso = document.createElement("div")
@@ -7124,24 +7042,27 @@ export const reservaComponentes = {
                             const selectorUI = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [componente=totalReembolsable]`)
                             selectorUI.textContent = "Esperando resultado del calculo..."
                             if (!totalReembolsado) {
-                                selectorUI.textContent = `Total reembolsable ${totalPagado}$`
+                                selectorUI.textContent = `Total reembolsable1 ${totalPagado}$`
                                 selectorUI.setAttribute("totalReembolsable", totalPagado)
                             }
                             try {
-                                const transaccion = {
+
+                                const respuestaServidor = await casaVitini.shell.servidor({
                                     zona: "componentes/calculadora",
                                     numero1: totalPagado,
                                     numero2: totalReembolsado || "0.00",
-                                    operador: "-"
-                                }
-                                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                    calculo: "simple",
+                                    operador: "-",
+                                    redondeo: "2"
+                                })
                                 if (respuestaServidor?.error) {
                                     casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
                                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                 }
                                 if (respuestaServidor?.ok) {
-                                    const resultado = Number(respuestaServidor?.ok).toFixed(2)
-                                    selectorUI.textContent = `Total reembolsable ${resultado}$`
+                                    const resultado = respuestaServidor?.resultado
+
+                                    selectorUI.textContent = `Total reembolsable2 ${resultado}$`
                                     selectorUI.setAttribute("totalReembolsable", resultado)
                                 }
                             } catch (errorCapturado) {
@@ -7161,25 +7082,26 @@ export const reservaComponentes = {
                             const selectorUI = document.querySelector(`[instanciaUID="${instanciaUIDDetalleDelPago}"] [informacionPorcentaje=informacionPorcentaje]`)
                             selectorUI.innerHTML = "Calculando..."
                             try {
-                                const transaccion = {
+
+                                const respuestaServidor = await casaVitini.shell.servidor({
                                     zona: "componentes/calculadora",
+                                    calculo: "simple",
                                     numero1: totalReembolsable,
                                     numero2: porcentaje,
-                                    operador: "%"
-                                }
-                                const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                                    operador: "%",
+                                    redondeo: "2",
+                                })
                                 if (respuestaServidor?.error) {
                                     casaVitini.shell.controladoresUI.ocultarMenusVolatiles()
                                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                                 }
                                 if (respuestaServidor?.ok) {
-                                    const resultado = Number(respuestaServidor?.ok).toFixed(2)
+                                    const resultado = respuestaServidor?.resultado
                                     selectorUI.textContent = `El reembolso sería de ${resultado}$ (El ${porcentaje}% de ${totalReembolsable}$ es ${resultado}$)`
                                     selectorUI.setAttribute("totalReembolso", resultado)
                                 }
                             } catch (errorCapturado) {
-                                const error = errorCapturado.message
-                                casaVitini.ui.componentes.advertenciaInmersiva(error)
+                                casaVitini.ui.componentes.advertenciaInmersiva(errorCapturado)
                             }
                         };
                         const contenedorEmitirReembolso = document.createElement("div")
@@ -7506,10 +7428,21 @@ export const reservaComponentes = {
                         info.classList.add("padding14")
                         info.textContent = `Crea un pago manual cuando necesites crear un pago por fuera de la pasarela. Escoge el tipo de pago, si es efectivo o si es por TPV por ejemplo. Luego rellena los datos y el pago se añadirá a la lista de pagos de la reserva. Los pagos manuales requieren una acción manual.`
                         bloque.appendChild(info)
+
+
+                        const conceptoPago = document.createElement("input")
+                        conceptoPago.placeholder = "Concepto del pago"
+                        conceptoPago.setAttribute("campo", "conceptoPago")
+                        bloque.appendChild(conceptoPago)
+
+
+
                         const selectorTipoDePago = document.createElement("select")
                         selectorTipoDePago.classList.add("botonV1BlancoIzquierda_noSeleccionable")
                         selectorTipoDePago.setAttribute("campo", "selectorRol")
                         selectorTipoDePago.addEventListener("change", mostrarContenedorTipoPago)
+                        bloque.appendChild(selectorTipoDePago)
+
                         const opcionPreterminada = document.createElement("option");
                         opcionPreterminada.value = "";
                         opcionPreterminada.selected = "true"
@@ -7536,7 +7469,8 @@ export const reservaComponentes = {
                         opcion.value = "pasarela";
                         opcion.text = "Pasarela(Asociar pago)";
                         selectorTipoDePago.add(opcion);
-                        bloque.appendChild(selectorTipoDePago)
+
+
                         const contenedorTipoPago = document.createElement("div")
                         contenedorTipoPago.classList.add("flexVertical", "gap6")
                         const infoDesplegable = document.createElement("p")
@@ -7555,6 +7489,8 @@ export const reservaComponentes = {
                         const contenedorPasarela = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.transacciones.crearPagoManual.contenedoresTipoPago.pasarela()
                         contenedorTipoPago.appendChild(contenedorPasarela)
                         bloque.appendChild(contenedorTipoPago)
+
+
                         contenidoAdvertenciaInmersiva.appendChild(bloque)
                         const bloqueBotones = document.createElement("div")
                         bloqueBotones.classList.add("flexVertical", "gap10")
@@ -7583,6 +7519,8 @@ export const reservaComponentes = {
                         const reservaUID = document.querySelector("[reservaUID]").getAttribute("reservaUID")
                         const contenedorActivo = document.querySelector("[estado=activa][contenedorTipoPago]")
                         const plataformaDePago = document.querySelector("[campo=selectorRol]").value
+                        const conceptoPago = document.querySelector("[campo=conceptoPago]").value || ""
+                        const conceptoPagoB64 = casaVitini.utilidades.conversor.cadenaHaciaBase64ConTextDecoder(conceptoPago)
                         const instanciaUID_pantallaEspera = casaVitini.utilidades.codigoFechaInstancia()
                         const metadatosPantallaCarga = {
                             mensaje: "Esperando al servidor...",
@@ -7592,7 +7530,8 @@ export const reservaComponentes = {
                         const transaccion = {
                             zona: "administracion/reservas/detallesReserva/transacciones/crearPagoManual",
                             plataformaDePago: plataformaDePago,
-                            reservaUID: reservaUID
+                            reservaUID: reservaUID,
+                            conceptoPago: conceptoPagoB64
                         }
                         if (contenedorActivo) {
                             contenedorActivo.querySelectorAll("[campo]").forEach((campo) => {
@@ -7809,45 +7748,58 @@ export const reservaComponentes = {
                         }
                     }
                 },
-                actualizarDatosGlobalesPago: async function (metadatos) {
-                    const reservaUID = metadatos.reservaUID
-                    const instanciaUID_contenedorDinamicoTransacciones = document.querySelector("[contenedorID=transacciones]").getAttribute("instanciaUID")
-                    const selectorTotalReservaEnPanelGlobal = document.querySelector(`[dataReserva=totalReservaConImpuestos]`)
-                    const selectorTotalReserva = document.querySelector(`[componentePago=totalReserva]`)
-                    const selectorTotalPagado = document.querySelector(`[componentePago=totalPagado]`)
-                    const selectorFaltantePorPagar = document.querySelector(`[componentePago=faltantePorPagar]`)
-                    const selectorEstadoPago = document.querySelector(`[dataReserva=estadoPago]`)
-                    const selectorPorecentajeReembolsado = document.querySelector(`[componentePago=porcentajeReembolsado]`)
-                    const selectorPorecentajePagado = document.querySelector(`[componentePago=porcentajePagado]`)
-                    const selectorTotalReembolsado = document.querySelector(`[componentePago=totalReembolsado]`)
-                    const reservaAcutalRenderizada = document.querySelector("[reservaUID]").getAttribute("reservaUID")
-                    if (reservaAcutalRenderizada === reservaUID) {
-                        selectorTotalReservaEnPanelGlobal.innerHTML = "Recalculando..."
+                actualizarDatosGlobalesPago: async function (data) {
+                    const reservaUID = data.reservaUID
+
+                    const reservaUI = document.querySelector(`[reservaUID="${reservaUID}"]`)
+                    const transaccionesContenedor = reservaUI.querySelector("[contenedorID=transacciones]")
+                    const instanciaUID_transacciones = transaccionesContenedor.getAttribute("instanciaUID")
+
+                    const reserva_totalGlobal = reservaUI.querySelector(`[dataReserva=totalReservaConImpuestos]`)
+                    const reserva_estado = reservaUI.querySelector(`[dataReserva=estadoPago]`)
+
+                    const panelGlobal = transaccionesContenedor.querySelector("[contenedor=panelGlobal]")
+
+                    const contenedorTotalReserva = panelGlobal.querySelector(`[nombreContenedor=totalReserva]`)
+                    const contenedorTotalPagado = panelGlobal.querySelector(`[nombreContenedor=totalPagado]`)
+                    const contenedorFaltantePorPagar = panelGlobal.querySelector(`[nombreContenedor=faltantePorPagar]`)
+                    const contenedorTotalReembolsado = panelGlobal.querySelector(`[nombreContenedor=totalReembolsado]`)
+
+                    const dict = {
+                        pagado: "Pagado",
+                        noPagado: "No pagado",
+                        pagadoParcialmente: "Pagado parcialmente",
+                        pagadoSuperadamente: "Pagado superadamente"
                     }
-                    selectorTotalReserva.innerHTML = "Recalculando..."
-                    selectorTotalPagado.innerHTML = "Recalculando..."
-                    selectorFaltantePorPagar.innerHTML = "Recalculando..."
-                    selectorEstadoPago.innerHTML = "Recalculando..."
-                    selectorPorecentajeReembolsado.innerHTML = "Total reembolsado"
-                    selectorPorecentajePagado.innerHTML = "Total pagado"
-                    selectorTotalReembolsado.innerHTML = "Recalculando..."
-                    const obtenerPagoaActualizados = {
+
+                    reserva_totalGlobal.innerHTML = "Recalculando..."
+                    reserva_estado.innerHTML = "Recalculando..."
+
+                    contenedorTotalReserva.querySelector("[a=valor]").innerHTML = "Recalculando..."
+                    contenedorTotalPagado.querySelector("[a=valor]").innerHTML = "Recalculando..."
+                    contenedorFaltantePorPagar.querySelector("[a=valor]").innerHTML = "Recalculando..."
+                    contenedorTotalReembolsado.querySelector("[a=valor]").innerHTML = "Recalculando..."
+
+                    contenedorTotalReembolsado.querySelector("[a=titulo]").innerHTML = "Total reembolsado"
+                    contenedorTotalPagado.querySelector("[a=titulo]").innerHTML = "Total pagado"
+
+                    const respuestaServidor = await casaVitini.shell.servidor({
                         zona: "administracion/reservas/detallesReserva/global/obtenerReserva",
                         reservaUID: reservaUID,
                         capas: [
                             "detallesPagos",
                         ]
-                    }
-                    const respuestaServidor = await casaVitini.shell.servidor(obtenerPagoaActualizados)
-                    const seleccionarInstancia = document.querySelector(`[instanciaUID="${instanciaUID_contenedorDinamicoTransacciones}"]`)
+                    })
+
+                    const seleccionarInstancia = reservaUI.querySelector(`[instanciaUID="${instanciaUID_transacciones}"]`)
+                    if (!seleccionarInstancia) { return }
                     if (respuestaServidor?.error) {
-                        if (seleccionarInstancia) {
-                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
-                        }
+                        casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                     }
+
                     if (respuestaServidor?.ok) {
                         const data = respuestaServidor.ok
-                        const estadoPago = respuestaServidor.ok.global.estadoPagoIDV
+                        const estadoPagoIDV = respuestaServidor.ok.global.estadoPagoIDV
                         const detallesPagos = data.detallesPagos
                         const totalReserva = detallesPagos.totalReserva
                         const totalPagado = detallesPagos.totalPagado
@@ -7855,31 +7807,17 @@ export const reservaComponentes = {
                         const totalReembolsado = detallesPagos.totalReembolsado
                         const porcentajeReembolsado = detallesPagos.porcentajeReembolsado
                         const porcentajePagado = detallesPagos.porcentajePagado
-                        if (reservaAcutalRenderizada === reservaUID) {
-                            selectorTotalReservaEnPanelGlobal.innerHTML = totalReserva + "$"
-                        }
-                        if (!seleccionarInstancia) {
-                        }
-                        selectorTotalReserva.innerHTML = totalReserva + "$"
-                        selectorTotalPagado.innerHTML = totalPagado + "$"
-                        selectorFaltantePorPagar.innerHTML = faltantePorPagar + "$"
-                        selectorPorecentajeReembolsado.innerHTML = `Total reembolsado (${porcentajeReembolsado})`
-                        selectorPorecentajePagado.innerHTML = `Total pagado (${porcentajePagado})`
-                        selectorTotalReembolsado.innerHTML = totalReembolsado + "$"
-                        let estadoPagoUI
-                        if (estadoPago === "pagado") {
-                            estadoPagoUI = "Pagado"
-                        }
-                        if (estadoPago === "noPagado") {
-                            estadoPagoUI = "No pagado"
-                        }
-                        if (estadoPago === "pagadoParcialmente") {
-                            estadoPagoUI = "Pagado parcialmente"
-                        }
-                        if (estadoPago === "pagadoSuperadamente") {
-                            estadoPagoUI = "Pagado superadamente"
-                        }
-                        selectorEstadoPago.innerHTML = estadoPagoUI
+
+                        reserva_totalGlobal.innerHTML = totalReserva + "$"
+                        reserva_estado.innerHTML = dict[estadoPagoIDV]
+
+                        contenedorTotalReserva.querySelector("[a=valor]").innerHTML = totalReserva + "$"
+                        contenedorTotalPagado.querySelector("[a=valor]").innerHTML = totalPagado + "$"
+                        contenedorFaltantePorPagar.querySelector("[a=valor]").innerHTML = faltantePorPagar + "$"
+                        contenedorTotalReembolsado.querySelector("[a=valor]").innerHTML = totalReembolsado + "$"
+
+                        contenedorTotalReembolsado.querySelector("[a=titulo]").innerHTML = `Total reembolsado (${porcentajeReembolsado})`
+                        contenedorTotalPagado.querySelector("[a=titulo]").innerHTML = `Total pagado (${porcentajePagado})`
                     }
                 },
             },
@@ -7913,6 +7851,31 @@ export const reservaComponentes = {
                             this.componentesUI.insertarServicio.ui()
                         })
                         bloqueBotones.appendChild(boton)
+
+                        const botonPDF = document.createElement("div")
+                        botonPDF.classList.add("detallesReserva_transacciones_botonV1")
+                        botonPDF.textContent = "Generar factura de todos los servicios"
+                        botonPDF.addEventListener("click", () => {
+                            const reservaUID = reservaUI.getAttribute("reservaUID")
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.utilidades.pdf.renderizarPDF({
+                                configuracionVista,
+                                reservaUID: reservaUI.getAttribute("reservaUID"),
+                                nombreArchivo: `Lista_de_servicios_de_la_reserva_${reservaUID}`,
+                                incluirTitular: "no",
+                                tipoIDV: "base64",
+                                tablasIDV: [
+                                    "servicios",
+                                ],
+                                configuracionPorTabla: {
+                                    servicios: {
+                                        incluirTotales: "si"
+                                    }
+
+                                }
+                            })
+                        })
+                        bloqueBotones.appendChild(botonPDF)
+
                         if (configuracionVista === "publica") {
                         } else {
                             contenedor.appendChild(bloqueBotones)
@@ -8095,6 +8058,7 @@ export const reservaComponentes = {
                                 Object.entries(opcionesSel).forEach(([grupoIDV, contenedorSel]) => {
 
                                     const selectorGrupo = servicioUI.querySelector(`[grupoIDV="${grupoIDV}"]`)
+                                    selectorGrupo.open = true
 
                                     contenedorSel.forEach(gO => {
                                         const opcionIDV = gO.opcionIDV
@@ -8129,7 +8093,8 @@ export const reservaComponentes = {
 
 
                                         casaVitini.view.__sharedMethods__.serviciosUI_grupoOpciones.calcularTotalOpcion({
-                                            opcionIDV: opcionIDV
+                                            opcionIDV: opcionIDV,
+                                            area: servicioUI,
                                         })
 
                                     })
@@ -8144,7 +8109,8 @@ export const reservaComponentes = {
                                     const servicioUID = servicioUI_selector.getAttribute("servicioUID")
 
                                     const opcionesSeleccionadasDelServicio = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.servicios.componentesUI.constructorObjetoParaEnvio({
-                                        servicioUID
+                                        servicioUID,
+                                        area: servicioUI
                                     })
 
                                     this.confirmarActualizar({
@@ -8392,7 +8358,8 @@ export const reservaComponentes = {
                                     const servicioUID = servicioUI_selector.getAttribute("servicioUID")
 
                                     const opcionesSeleccionadasDelServicio = casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.servicios.componentesUI.constructorObjetoParaEnvio({
-                                        servicioUID
+                                        servicioUID,
+                                        area: servicioUI,
                                     })
 
                                     this.confirmarInsertar({
@@ -8461,7 +8428,7 @@ export const reservaComponentes = {
                         const definicion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionBase64)
 
 
-                        const totalServicio = desgloseFinancieroDelServicio.totalesDelSerivicio.global.totalServicio
+                        const totalServicio = desgloseFinancieroDelServicio.totalesDelServicio.global.totalServicio
 
 
                         const fechaAdquisicionLocal = contenedor.fechaAdquisicionLocal
@@ -8494,6 +8461,7 @@ export const reservaComponentes = {
                             "flexVertical",
                             "padding6"
                         )
+                        contenedorData.style.borderRadius = "10px"
                         servicioUI.appendChild(contenedorData)
 
 
@@ -8596,16 +8564,15 @@ export const reservaComponentes = {
                         const contenedorOS = this.opcionesSelecionadas_enServiciosInsertadosEnReserva({
                             desgloseFinancieroDelServicio: desgloseFinancieroDelServicio
                         })
+                        contenedorOS.style.borderRadius = "10px"
+
 
                         servicioUI.appendChild(contenedorOS)
 
-
-
-
-
-
                         const contenedorDefinicion = document.createElement("details")
                         contenedorDefinicion.classList.add("flexVertical", "padding6")
+                        contenedorDefinicion.style.borderRadius = "10px"
+
                         servicioUI.appendChild(contenedorDefinicion)
 
                         const tituloDefinicion = document.createElement("summary")
@@ -8614,7 +8581,7 @@ export const reservaComponentes = {
                         contenedorDefinicion.appendChild(tituloDefinicion)
 
                         const definicionUI = document.createElement("pre")
-                        definicionUI.classList.add("whiteSpace")
+                        definicionUI.classList.add("whiteSpace", "padding10")
                         definicionUI.textContent = definicion
                         contenedorDefinicion.appendChild(definicionUI)
 
@@ -8625,7 +8592,7 @@ export const reservaComponentes = {
                             const contenedorGrupo = document.createElement("div")
                             contenedorGrupo.setAttribute("grupoIDV", grupoIDV)
                             contenedorGrupo.classList.add(
-                                "flexVertical", "gap6", "borderGrey1", "borderRadius14", "padding6"
+                                "flexVertical", "gap6", "borderGrey1", "borderRadius12", "padding6"
                             )
                             const tituloGrupo = document.createElement("p")
                             tituloGrupo.classList.add("negrita", "padding10")
@@ -8672,7 +8639,7 @@ export const reservaComponentes = {
                         })
                         const contenedorBotones = document.createElement("div")
                         contenedorBotones.classList.add(
-                            "flexHorizontal",
+                            "grid4x4_r_2x2",
                             "gap6"
                         )
                         if (configuracionVista === "publica") {
@@ -8680,7 +8647,7 @@ export const reservaComponentes = {
                             servicioUI.appendChild(contenedorBotones)
                         }
                         const botonModificar = document.createElement("div")
-                        botonModificar.classList.add("administracion_reservas_detallesReservas_enlacesDePago_botonV1")
+                        botonModificar.classList.add("botonV4")
                         botonModificar.textContent = "Modificar servicio en reserva"
                         botonModificar.addEventListener("click", (e) => {
                             this.acutalizarServicioEnReserva.ui({
@@ -8690,24 +8657,40 @@ export const reservaComponentes = {
                         })
                         contenedorBotones.appendChild(botonModificar)
                         const botonIr = document.createElement("a")
-                        botonIr.classList.add("administracion_reservas_detallesReservas_enlacesDePago_botonV1")
+                        botonIr.classList.add("botonV4")
                         botonIr.textContent = "Ir al servicio"
                         botonIr.setAttribute("href", "/administracion/servicios/servicio:" + servicioUID)
                         botonIr.setAttribute("target", "_blank")
                         contenedorBotones.appendChild(botonIr)
 
                         const botonGenerarFactura = document.createElement("div")
-                        botonGenerarFactura.classList.add("administracion_reservas_detallesReservas_enlacesDePago_botonV1")
+                        botonGenerarFactura.classList.add("botonV4")
                         botonGenerarFactura.textContent = "Generar factura"
                         botonGenerarFactura.addEventListener("click", () => {
-                            this.generarFacturaDelServicio({
-                                servicioUID: servicioUID
+                            const reservaUID = reservaUI.getAttribute("reservaUID")
+                            casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.utilidades.pdf.renderizarPDF({
+                                configuracionVista,
+                                reservaUID: reservaUID,
+                                nombreArchivo: `Servicio_${servicioUID}_de_la_reserva_${reservaUID}`,
+                                incluirTitular: "no",
+                                tipoIDV: "base64",
+                                tablasIDV: [
+                                    "servicios",
+                                ],
+                                configuracionPorTabla: {
+                                    servicios: {
+                                        incluirTotales: "no",
+                                        contenedorUID: [servicioUID]
+                                    }
+
+                                }
                             })
                         })
+
                         contenedorBotones.appendChild(botonGenerarFactura)
 
                         const botonEliminar = document.createElement("div")
-                        botonEliminar.classList.add("administracion_reservas_detallesReservas_enlacesDePago_botonV1")
+                        botonEliminar.classList.add("botonV4")
                         botonEliminar.textContent = "Eliminar servicio de la reserva"
                         botonEliminar.addEventListener("click", (e) => {
                             this.
@@ -8929,7 +8912,7 @@ export const reservaComponentes = {
                             metodoCalculo: "calcularTotalServicio",
                             titulo: "Aplicar descuento a todo el servicio (Opcional)",
                             parametrosCalculo: {
-                                servicioUID: servicioUID
+                                area: servicioUI
                             }
                         })
                         superContenedorDescuento.style.display = "none"
@@ -8965,7 +8948,7 @@ export const reservaComponentes = {
 
                         const definicionUI = document.createElement("pre")
                         definicionUI.classList.add(
-                            "padding6",
+                            "padding10",
                             "whiteSpace"
                         )
                         definicionUI.textContent = definicion + "--"
@@ -8994,7 +8977,8 @@ export const reservaComponentes = {
                                 const opcionIDV = og.opcionIDV
 
                                 const opcionUI = componentesUI.opcionUI({
-                                    opcionIDV
+                                    opcionIDV,
+                                    area: servicioUI
                                 })
 
                                 opcionUI.querySelector("[data=opcionUI]").textContent = nombreOpcion + "    + + "
@@ -9035,9 +9019,9 @@ export const reservaComponentes = {
                     constructorObjetoParaEnvio: function (data) {
 
                         const servicioUID = data.servicioUID
-                        const servicioUI_selector = document.querySelector(`[servicioUID="${servicioUID}"]`)
-                        const grupoDeOpciones = servicioUI_selector.querySelector("[area=grupoOpciones]").querySelectorAll("[componente=grupo]")
-                        const areaDescuentoTotalServicio = servicioUI_selector.querySelector("[com=descuentoTotalServicio]")
+                        const area = data.area
+                        const grupoDeOpciones = area.querySelector("[area=grupoOpciones]").querySelectorAll("[componente=grupo]")
+                        const areaDescuentoTotalServicio = area.querySelector("[com=descuentoTotalServicio]")
                         const tipoDescuento_totalServicio = areaDescuentoTotalServicio.querySelector("[campo=tipoDescuento]").value
                         const cantidadDescuento_totalServicio = areaDescuentoTotalServicio.querySelector("[campo=cantidadDescuento]").value || "0.00"
 
@@ -9084,8 +9068,8 @@ export const reservaComponentes = {
                         const contenedor = desgloseFinancieroDelServicio.servicio.contenedor
                         const gruposDeOpciones = contenedor.gruposDeOpciones
                         const opcionesSolicitadasDelservicio = desgloseFinancieroDelServicio.opcionesSolicitadasDelservicio
-                        const totalesDelSerivicio = desgloseFinancieroDelServicio.totalesDelSerivicio
-                        const porGruposDeOpciones = totalesDelSerivicio.porGruposDeOpciones
+                        const totalesDelServicio = desgloseFinancieroDelServicio.totalesDelServicio
+                        const porGruposDeOpciones = totalesDelServicio.porGruposDeOpciones
 
                         const superContenedorOSUI = document.createElement("details")
                         superContenedorOSUI.classList.add("padding6")
@@ -9215,8 +9199,8 @@ export const reservaComponentes = {
                                     tituloPrecioOpcionTotal.textContent = `Precio de la opción total con cantidades`
                                     contenedorPrecioOpcionTotal.appendChild(tituloPrecioOpcionTotal)
 
-                                    const precioConCantidad = totalesDelSerivicio.porGruposDeOpciones[grupoIDV][opcionIDV].precioConCantidad
-                                    const totalOpcion = totalesDelSerivicio.porGruposDeOpciones[grupoIDV][opcionIDV].total
+                                    const precioConCantidad = totalesDelServicio.porGruposDeOpciones[grupoIDV][opcionIDV].precioConCantidad
+                                    const totalOpcion = totalesDelServicio.porGruposDeOpciones[grupoIDV][opcionIDV].total
 
                                     const precioTotalOpcionUI = document.createElement("p")
                                     precioTotalOpcionUI.setAttribute("opcionIDV", opcionIDV)
@@ -9230,11 +9214,6 @@ export const reservaComponentes = {
 
 
                         return superContenedorOSUI
-                    },
-                    generarFacturaDelServicio: function (data) {
-
-
-
                     }
                 },
             },
@@ -11182,7 +11161,120 @@ export const reservaComponentes = {
                     const reservaUI = document.querySelector("[reservaUID]")
                     const configuracionVista = reservaUI.getAttribute("configuracionVista")
                     const reservaUID = reservaUI.getAttribute("reservaUID")
-                    const obtenerPDF = async () => {
+                    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                    const contenedorDinamico = document.querySelector("[componente=contenedorDinamico]")
+                    const contenedorDesgloseDelTotal = document.createElement("div")
+                    contenedorDesgloseDelTotal.classList.add("administracion_reserver_detallesReserva_contenedorDesgloseTotal")
+                    contenedorDesgloseDelTotal.setAttribute("instanciaUID", instanciaUID)
+                    contenedorDesgloseDelTotal.setAttribute("componente", "contenedorDesgloseTotal")
+                    contenedorDinamico.appendChild(contenedorDesgloseDelTotal)
+                    const contenedorAdvertenciaInmersiva = document.createElement("div")
+                    contenedorAdvertenciaInmersiva.classList.add("administracion_reservas_detallesReserva_contenedorMisleanea")
+                    const titulo = document.createElement("p")
+                    titulo.classList.add("detallesReserva_reembolso_tituloGlobal")
+                    titulo.textContent = "Miscelánea"
+                    contenedorAdvertenciaInmersiva.appendChild(titulo)
+                    const infoGlobal = document.createElement("div")
+                    infoGlobal.classList.add("detallesReserva_reembolso_infoGlobal")
+                    infoGlobal.textContent = `En la miscelánea de la reserva encontrará operaciones y demás propósitos u opciones que, por su idiosincrasia específica, no requieren de un contexto dedicado.`
+                    contenedorAdvertenciaInmersiva.appendChild(infoGlobal)
+                    let boton = document.createElement("div")
+                    boton.classList.add("botonV1BlancoIzquierda_sinRadius", "borderRadius12")
+                    boton.addEventListener("click", () => {
+                        casaVitini.view.__sharedMethods__.detallesReservaUI.categoriasGlobales.utilidades.pdf.renderizarPDF({
+                            configuracionVista,
+                            reservaUID,
+                            nombreArchivo: `Reserva_${reservaUID}`,
+                            incluirTitular: "si",
+                            tipoIDV: "base64",
+                            tablasIDV: [
+                                "fechas",
+                                "alojamiento",
+                                "servicios",
+                                "totalesGlobales"
+                            ]
+                        })
+                    })
+                    boton.textContent = "Generar un PDF del resumen de la reserva"
+                    contenedorAdvertenciaInmersiva.appendChild(boton)
+                    boton = document.createElement("div")
+                    boton.classList.add("administracion_reservas_detallesReserfa_miscelanea_botonOpcion")
+                    boton.textContent = "Generar un PDF del resumen de la reserva y enviar por mail(implementandose)"
+                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                    instanciaRenderizada.innerHTML = null
+                    instanciaRenderizada.appendChild(contenedorAdvertenciaInmersiva)
+                }
+            },
+            utilidades: {
+                pdf: {
+                    renderizarPDF: async function (data) {
+                        const configuracionVista = data.configuracionVista
+                        const reservaUID = data.reservaUID
+                        const incluirTitular = data?.incluirTitular
+                        const tipoIDV = data?.tipoIDV
+                        const tablasIDV = data?.tablasIDV
+                        const configuracionPorTabla = data?.configuracionPorTabla
+                        const nombreArchivo = data?.nombreArchivo || "archivo"
+
+
+                        const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
+                        pantallaInmersiva.style.justifyContent = "center"
+                        const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
+                        const instanciaUID = pantallaInmersiva.closest("[instanciaUID]").getAttribute("instanciaUID")
+                        const titulo = constructor.querySelector("[componente=titulo]")
+                        titulo.textContent = "Generador de documentos PDF"
+                        const mensaje = constructor.querySelector("[componente=mensajeUI]")
+                        mensaje.textContent = "Generando el pdf..."
+                        const contenedorEspacio = constructor.querySelector("[componente=contenedor]")
+                        const spinnerPorRenderizar = casaVitini.ui.componentes.spinnerSimple()
+                        contenedorEspacio.appendChild(spinnerPorRenderizar)
+                        const botonDescargar = constructor.querySelector("[boton=aceptar]")
+                        botonDescargar.style.display = "none"
+                        const botonCancelar = constructor.querySelector("[boton=cancelar]")
+                        botonCancelar.textContent = "Cancelar generacion del pdf..."
+                        document.querySelector("main").appendChild(pantallaInmersiva)
+                        const advertenciaInmersivaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        const transaccion = {
+                            reservaUID
+                        }
+                        if (configuracionVista === "publica") {
+                            transaccion.zona = "miCasa/misReservas/obtenerPDF"
+                        } else {
+                            transaccion.zona = "administracion/reservas/detallesReserva/pdf/renderizar"
+                            transaccion.incluirTitular = incluirTitular
+                            transaccion.tipoIDV = tipoIDV
+                            transaccion.tablasIDV = tablasIDV
+                            transaccion.configuracionPorTabla = configuracionPorTabla
+                        }
+                        const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+                        const pantallaInmersivaRenderizda = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
+                        if (!pantallaInmersivaRenderizda) {
+                            return
+                        }
+                        if (respuestaServidor?.error) {
+                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
+                        }
+                        if (respuestaServidor.ok) {
+                            const pdfBase64 = respuestaServidor.pdf
+                            const selectorZonaGestion = advertenciaInmersivaRenderizada.querySelector("[componente=contenedor]");
+                            selectorZonaGestion.innerHTML = null;
+                            mensaje.textContent = "Se ha generado el archivo PDF. Para descargar el PDF, pulsa en el botón inferior.";
+                            const botonDescargarPDF = document.createElement("a")
+                            botonDescargarPDF.classList.add(
+                                "botonV1"
+                            )
+                            botonDescargarPDF.textContent = "Descargar PDF"
+                            botonDescargarPDF.download = `${nombreArchivo}.pdf`
+                            botonDescargarPDF.title = "Descargar PDF"
+                            botonDescargarPDF.href = `data:application/pdf;base64,${pdfBase64}`
+                            botonDescargar.parentNode.replaceChild(botonDescargarPDF, botonDescargar);
+                            botonCancelar.textContent = "Cancelar y volver"
+                        }
+                    },
+                    resumenPago: async function (data) {
+                        const configuracionVista = data.configuracionVista
+                        const reservaUID = data.reservaUID
                         const pantallaInmersiva = casaVitini.ui.componentes.pantallaInmersivaPersonalizadaMoldeada()
                         pantallaInmersiva.style.justifyContent = "center"
                         const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
@@ -11203,6 +11295,7 @@ export const reservaComponentes = {
                         const transaccion = {
                             reservaUID
                         }
+
                         if (configuracionVista === "publica") {
                             transaccion.zona = "miCasa/misReservas/obtenerPDF"
                         } else {
@@ -11221,7 +11314,7 @@ export const reservaComponentes = {
                             const pdfBase64 = respuestaServidor.pdf
                             const selectorZonaGestion = advertenciaInmersivaRenderizada.querySelector("[componente=contenedor]");
                             selectorZonaGestion.innerHTML = null;
-                            mensaje.textContent = "Se ha generado el archivo PDF con el resumen de esta reserva.Para descargar el PDF, pulsa en el botón inferior.";
+                            mensaje.textContent = "Se ha generado el archivo PDF con el resumen de esta reserva. Para descargar el PDF, pulsa en el botón inferior.";
                             const botonDescargarPDF = document.createElement("a")
                             botonDescargarPDF.classList.add(
                                 "botonV1"
@@ -11233,37 +11326,10 @@ export const reservaComponentes = {
                             botonDescargar.parentNode.replaceChild(botonDescargarPDF, botonDescargar);
                             botonCancelar.textContent = "Cancelar y volver"
                         }
-                    }
-                    const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                    const contenedorDinamico = document.querySelector("[componente=contenedorDinamico]")
-                    const contenedorDesgloseDelTotal = document.createElement("div")
-                    contenedorDesgloseDelTotal.classList.add("administracion_reserver_detallesReserva_contenedorDesgloseTotal")
-                    contenedorDesgloseDelTotal.setAttribute("instanciaUID", instanciaUID)
-                    contenedorDesgloseDelTotal.setAttribute("componente", "contenedorDesgloseTotal")
-                    contenedorDinamico.appendChild(contenedorDesgloseDelTotal)
-                    const contenedorAdvertenciaInmersiva = document.createElement("div")
-                    contenedorAdvertenciaInmersiva.classList.add("administracion_reservas_detallesReserva_contenedorMisleanea")
-                    const titulo = document.createElement("p")
-                    titulo.classList.add("detallesReserva_reembolso_tituloGlobal")
-                    titulo.textContent = "Miscelánea"
-                    contenedorAdvertenciaInmersiva.appendChild(titulo)
-                    const infoGlobal = document.createElement("div")
-                    infoGlobal.classList.add("detallesReserva_reembolso_infoGlobal")
-                    infoGlobal.textContent = `En la miscelánea de la reserva encontrará operaciones y demás propósitos u opciones que, por su idiosincrasia específica, no requieren de un contexto dedicado.`
-                    contenedorAdvertenciaInmersiva.appendChild(infoGlobal)
-                    let boton = document.createElement("div")
-                    boton.classList.add("botonV1BlancoIzquierda_sinRadius", "borderRadius12")
-                    boton.addEventListener("click", obtenerPDF)
-                    boton.textContent = "Generar un PDF del resumen de la reserva"
-                    contenedorAdvertenciaInmersiva.appendChild(boton)
-                    boton = document.createElement("div")
-                    boton.classList.add("administracion_reservas_detallesReserfa_miscelanea_botonOpcion")
-                    boton.textContent = "Generar un PDF del resumen de la reserva y enviar por mail(implementandose)"
-                    const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
-                    instanciaRenderizada.innerHTML = null
-                    instanciaRenderizada.appendChild(contenedorAdvertenciaInmersiva)
+                    },
+
                 }
-            },
+            }
         },
     },
 }

@@ -25,7 +25,8 @@ export const eliminarCamaFisicaDeHabitacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const componenteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.componenteUID,
@@ -33,7 +34,8 @@ export const eliminarCamaFisicaDeHabitacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
 
         })
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

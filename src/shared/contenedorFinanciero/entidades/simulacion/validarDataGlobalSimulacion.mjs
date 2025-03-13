@@ -12,13 +12,14 @@ export const validarDataGlobalSimulacion = async (data) => {
         const esquemaBusqueda = Joi.object({
             simulacionUID: Joi.string().custom((value, helpers) => {
                 try {
-                   return  validadoresCompartidos.tipos.cadena({
+                    return validadoresCompartidos.tipos.cadena({
                         string: value,
                         nombreCampo: "El simulacionUID",
                         filtro: "cadenaConNumerosEnteros",
                         sePermiteVacio: "no",
                         limpiezaEspaciosAlrededor: "si",
-                        devuelveUnTipoNumber: "si"
+                        devuelveUnTipoNumber: "no",
+                        devuelveUnTipoBigInt: "si"
                     })
 
                 } catch (error) {
@@ -27,44 +28,9 @@ export const validarDataGlobalSimulacion = async (data) => {
                     return helpers.message(mensajeError);
                 }
             }).required().messages(commonMessages),
-            fechaCreacion: Joi.string().custom(async (value, helpers) => {
-                try {
-                    await validadoresCompartidos.fechas.validarFecha_ISO({
-                        fecha_ISO: value,
-                        nombreCampo: "La fecha de fechaCreacion"
-                    })
-
-                } catch (error) {
-                    const path = helpers.state.path.join('.');
-                    const mensajeError = `Error en ${path}: ${error.message}`;
-                    return helpers.message(mensajeError);
-                }
-            }).optional().messages(commonMessages),
-            fechaEntrada: Joi.string().custom(async (value, helpers) => {
-                try {
-                    await validadoresCompartidos.fechas.validarFecha_ISO({
-                        fecha_ISO: value,
-                        nombreCampo: "La fecha de entrada"
-                    })
-
-                } catch (error) {
-                    const path = helpers.state.path.join('.');
-                    const mensajeError = `Error en ${path}: ${error.message}`;
-                    return helpers.message(mensajeError);
-                }
-            }).optional().messages(commonMessages),
-            fechaSalida: Joi.string().custom(async (value, helpers) => {
-                try {
-                    await validadoresCompartidos.fechas.validarFecha_ISO({
-                        fecha_ISO: value,
-                        nombreCampo: "La fecha de salida"
-                    })
-                } catch (error) {
-                    const path = helpers.state.path.join('.');
-                    const mensajeError = `Error en ${path}: ${error.message}`;
-                    return helpers.message(mensajeError);
-                }
-            }).optional().messages(commonMessages),
+            fechaCreacion: Joi.string().optional().messages(commonMessages),
+            fechaEntrada: Joi.string().optional().messages(commonMessages),
+            fechaSalida: Joi.string().optional().messages(commonMessages),
             zonaIDV: Joi.string().custom((value, helpers) => {
                 try {
                     const zonasIDV = ["global", "privada", "publica"]
@@ -73,6 +39,7 @@ export const validarDataGlobalSimulacion = async (data) => {
                         const m = "zonaIDV solo espera global, privada o publica"
                         throw new Error(m)
                     }
+                    return value
                 } catch (error) {
                     const path = helpers.state.path.join('.');
                     const mensajeError = `Error en ${path}: ${error.message}`;
@@ -86,7 +53,36 @@ export const validarDataGlobalSimulacion = async (data) => {
             objeto: data
         })
 
-        
+        const validaFecha = async (data) => {
+            const dataFecha = data.dataFecha
+            const nombreCampo = data.nombreCampo
+
+            return await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: dataFecha,
+                nombreCampo: nombreCampo
+            })
+        }
+
+        const fechaCreacionVal = objectoValidado.fechaCreacion
+        await validaFecha({
+            dataFecha: fechaCreacionVal,
+            nombreCampo: "El cammpo de fecha de creación"
+        })
+
+
+        const fechaEntradaVal = objectoValidado.fechaEntrada
+        await validaFecha({
+            dataFecha: fechaEntradaVal,
+            nombreCampo: "El cammpo de fecha de entrad"
+        })
+
+
+        const fechaSalidaVal = objectoValidado.fechaSalida
+        await validaFecha({
+            dataFecha: fechaSalidaVal,
+            nombreCampo: "El cammpo de fecha de salida"
+        })
+
         const simulacionUID = objectoValidado.simulacionUID
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
 
@@ -99,7 +95,6 @@ export const validarDataGlobalSimulacion = async (data) => {
                 fechaSalida: fechaSalida,
                 tipoVector: "diferente"
             })
-
         }
         if (fechaEntrada && fechaCreacion) {
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
@@ -111,10 +106,7 @@ export const validarDataGlobalSimulacion = async (data) => {
                 throw new Error(error);
             }
         }
-
-
-
-
+        return objectoValidado
     } catch (error) {
         throw error
     }

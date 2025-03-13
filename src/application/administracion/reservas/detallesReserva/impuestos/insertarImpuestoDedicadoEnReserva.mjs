@@ -21,7 +21,8 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const impuesto = entrada.body
@@ -70,7 +71,7 @@ export const insertarImpuestoDedicadoEnReserva = async (entrada) => {
             nombre: nombre,
             tipoImpositivo: tipoImpositivo,
             tipoValorIDV: tipoValorIDV,
-            entidadIDV:entidadIDV,
+            entidadIDV: entidadIDV,
             estadoIDV: "activado",
             impuestoTVI: null
         }

@@ -23,7 +23,8 @@ export const eliminarPerfilImpuesto = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         await obtenerImpuestosPorImppuestoUID(impuestoUID)

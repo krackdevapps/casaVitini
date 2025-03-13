@@ -1,5 +1,5 @@
 
-export const controlEstructuraPorJoi = (data) => {
+export const controlEstructuraPorJoi =  (data) => {
     try {
 
         const schema = data.schema
@@ -12,7 +12,7 @@ export const controlEstructuraPorJoi = (data) => {
             };
         }
 
-        const { value, error } = schema.validate(objeto);
+        const { value, error } =  schema.validate(objeto);
 
 
         const errorTipo = error?.details[0].type

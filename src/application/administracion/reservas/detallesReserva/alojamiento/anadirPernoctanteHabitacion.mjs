@@ -28,7 +28,8 @@ export const anadirPernoctanteHabitacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const habitacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacionUID,
@@ -36,7 +37,8 @@ export const anadirPernoctanteHabitacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const clienteUID = validadoresCompartidos.tipos.cadena({
@@ -46,7 +48,8 @@ export const anadirPernoctanteHabitacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
 
         })
         await campoDeTransaccion("iniciar")

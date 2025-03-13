@@ -27,7 +27,8 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const habitacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacionUID,
@@ -35,7 +36,8 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const resolverReserva = await obtenerReservaPorReservaUID(reservaUID)

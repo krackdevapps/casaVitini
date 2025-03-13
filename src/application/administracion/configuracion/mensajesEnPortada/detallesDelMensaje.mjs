@@ -20,7 +20,8 @@ export const detallesDelMensaje = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const mensajesEnPortada = await obtenerMensajePorMensajeUID(mensajeUID)
         const bufferObjPreDecode = Buffer.from(mensajesEnPortada.mensaje, "base64");

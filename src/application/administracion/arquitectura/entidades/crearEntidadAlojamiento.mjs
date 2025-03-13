@@ -210,7 +210,8 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
                 sePermitenNegativos: "no",
-                devuelveUnTipoNumber: "si"
+                devuelveUnTipoNumber: "no",
+                devuelveUnTipoBigInt: "si"
             })
 
 

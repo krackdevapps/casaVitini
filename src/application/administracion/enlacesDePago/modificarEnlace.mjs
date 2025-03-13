@@ -23,7 +23,8 @@ export const modificarEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const horasCaducidad = validadoresCompartidos.tipos.cadena({
             string: entrada.body.horasCaducidad || "72",
@@ -31,7 +32,8 @@ export const modificarEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const nombreEnlace = validadoresCompartidos.tipos.cadena({
@@ -54,7 +56,8 @@ export const modificarEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no"
+
 
         })
 

@@ -53,10 +53,9 @@ export const buscarUsuarios = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-        const pagina = validadoresCompartidos.tipos.numero({
+        const pagina = validadoresCompartidos.tipos.granEntero({
             number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
-            filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"

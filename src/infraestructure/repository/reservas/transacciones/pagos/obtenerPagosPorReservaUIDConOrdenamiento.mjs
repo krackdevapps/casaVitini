@@ -15,7 +15,8 @@ export const obtenerPagosPorReservaUIDConOrdenamiento = async (reservaUID) => {
         "pagadorNombre",
         "pagadorPasaporte",
         "chequeUID",
-        "transferenciaUID"
+        "transferenciaUID",
+        "conceptoPago"
         FROM 
         "reservaPagos"
         WHERE 

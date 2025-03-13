@@ -35,7 +35,17 @@ export const crearPagoManual = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
+        })
+
+        const conceptoPago = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.conceptoPago,
+            nombreCampo: "El campo de concepto de pago",
+            filtro: "cadenaBase64",
+            sePermiteVacio: "si",
+            limpiezaEspaciosAlrededor: "si",
+
         })
 
         const cantidadValidada = (cantidad) => {
@@ -45,7 +55,8 @@ export const crearPagoManual = async (entrada) => {
                 filtro: "cadenaConNumerosConDosDecimales",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
-                devuelveUnTipoNumber: "no"
+                devuelveUnTipoNumber: "no",
+                devuelveUnTipoBigInt: "no"
             })
             return cv
         }
@@ -62,14 +73,14 @@ export const crearPagoManual = async (entrada) => {
                 reservaUID: reservaUID,
                 cantidadConPunto: cantidad_,
                 fechaPago: fechaActual,
+                conceptoPago: conceptoPago,
 
             };
             const pagoUID = await insertarPago(nuevoPago)
             const fechaPago = pagoUID.fechaPago;
-            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
-                .setZone(zonaHoraria)
-                .toISO()
-            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
+            const fechaPagoLocal = DateTime.fromISO(fechaPago, { zone: zonaHoraria });
+            pagoUID.fechaPagoLocal = fechaPagoLocal;
+
             estructuraFinal.ok = "Se ha insertado el nuevo pago en efectivo";
             estructuraFinal.detallesDelPago = pagoUID;
         } else if (plataformaDePago === "cheque") {
@@ -88,14 +99,13 @@ export const crearPagoManual = async (entrada) => {
                 reservaUID: reservaUID,
                 cantidadConPunto: cantidad_,
                 fechaPago: fechaActual,
-                chequeUID: chequeUID
+                chequeUID: chequeUID,
+                conceptoPago: conceptoPago,
             };
             const pagoUID = await insertarPago(nuevoPago)
             const fechaPago = pagoUID.fechaPago;
-            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
-                .setZone(zonaHoraria)
-                .toISO()
-            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
+            const fechaPagoLocal = DateTime.fromISO(fechaPago, { zone: zonaHoraria });
+            pagoUID.fechaPagoLocal = fechaPagoLocal;
             estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque";
 
             estructuraFinal.detallesDelPago = pagoUID;
@@ -117,14 +127,13 @@ export const crearPagoManual = async (entrada) => {
                 reservaUID: reservaUID,
                 cantidadConPunto: cantidad_,
                 fechaPago: fechaActual,
-                transferenciaUID: transferenciaUID
+                transferenciaUID: transferenciaUID,
+                conceptoPago: conceptoPago
             };
             const pagoUID = await insertarPago(nuevoPago)
             const fechaPago = pagoUID.fechaPago;
-            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
-                .setZone(zonaHoraria)
-                .toISO()
-            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
+            const fechaPagoLocal = DateTime.fromISO(fechaPago, { zone: zonaHoraria });
+            pagoUID.fechaPagoLocal = fechaPagoLocal;
             estructuraFinal.ok = "Se ha insertado el nuevo pago en cheque";
             estructuraFinal.detallesDelPago = pagoUID;
 
@@ -143,7 +152,8 @@ export const crearPagoManual = async (entrada) => {
 
             const dataPago = {
                 pagoUIDPasarela: pagoUIDPasarela,
-                reservaUID: reservaUID
+                reservaUID: reservaUID,
+                conceptoPago: conceptoPago
             }
             const detallesDelPagoPasarela = await obtenerPagoPorPagoUIDPasaresa(dataPago)
             if (detallesDelPagoPasarela.length > 0) {
@@ -182,6 +192,9 @@ export const crearPagoManual = async (entrada) => {
 
             };
             const pagoUID = await sql.insertarPago(nuevoPago);
+            const fechaPagoLocal = DateTime.fromISO(fechaPago, { zone: zonaHoraria });
+            pagoUID.fechaPagoLocal = fechaPagoLocal;
+
             estructuraFinal.ok = "Se han insertado los datos importados de la pasarela.";
             estructuraFinal.detallesDelPago = pagoUID;
         } else if (plataformaDePago === "tarjeta") {
@@ -201,14 +214,15 @@ export const crearPagoManual = async (entrada) => {
                 reservaUID: reservaUID,
                 cantidadConPunto: cantidad_,
                 fechaPago: fechaActual,
-                tarjetaDigitos: tarjetaUltimos
+                tarjetaDigitos: tarjetaUltimos,
+                conceptoPago: conceptoPago
+
             };
             const pagoUID = await insertarPago(nuevoPago)
             const fechaPago = pagoUID.fechaPago;
-            const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
-                .setZone(zonaHoraria)
-                .toISO()
-            pagoUID.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
+            const fechaPagoLocal = DateTime.fromISO(fechaPago, { zone: zonaHoraria });
+            pagoUID.fechaPagoLocal = fechaPagoLocal;
+
             estructuraFinal.ok = "Se ha insertado el nuevo pago hecho con tarjeta de manera externa como en un TPV";
             estructuraFinal.detallesDelPago = pagoUID;
         } else {

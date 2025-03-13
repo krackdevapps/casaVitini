@@ -19,7 +19,8 @@ export const detallesOferta = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const detallesOferta = await obtenerOfertaConApartamentos(ofertaUID);
 

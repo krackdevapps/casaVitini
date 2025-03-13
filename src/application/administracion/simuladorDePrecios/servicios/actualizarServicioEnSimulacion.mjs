@@ -7,6 +7,8 @@ import { validadoresCompartidos } from "../../../../shared/validadores/validador
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
+import { DateTime } from "luxon"
+import { obtenerFechaLocal } from "../../../../shared/obtenerFechaLocal.mjs"
 
 export const actualizarServicioEnSimulacion = async (entrada) => {
     try {
@@ -26,7 +28,8 @@ export const actualizarServicioEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const servicioUID_enSimulacion = validadoresCompartidos.tipos.cadena({
@@ -35,11 +38,12 @@ export const actualizarServicioEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
-        validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
+        const oSdS_validado = validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
 
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
@@ -51,18 +55,25 @@ export const actualizarServicioEnSimulacion = async (entrada) => {
 
 
         await validarOpcionesDelServicio({
-            opcionesSeleccionadasDelServicio,
+            opcionesSeleccionadasDelServicio: oSdS_validado,
             servicioExistenteAccesible: servicio
         })
-        const opcionesSeleccionadas = opcionesSeleccionadasDelServicio.opcionesSeleccionadas
+        const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
+        const descuentoTotalServicio = oSdS_validado.descuentoTotalServicio
+        const fechaUTC = DateTime.utc().toISO();
+        contenedorServicio.fechaAdquisicion = fechaUTC
 
         await campoDeTransaccion("iniciar")
         const servicioEnSimulacion = await actualizarServicioPorSimulacionUID({
             simulacionUID,
             servicioUID_enSimulacion,
-            opcionesSel: opcionesSeleccionadas
+            opcionesSel: opcionesSeleccionadas,
+            descuentoTotalServicio: descuentoTotalServicio
+
         })
         const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
+        servicioEnSimulacion.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaUTC)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el servicio correctamente en la simulación y el contenedor financiero se ha renderizado.",

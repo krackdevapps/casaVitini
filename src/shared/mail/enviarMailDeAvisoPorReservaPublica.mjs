@@ -1,15 +1,15 @@
 import { detallesReserva } from "../reservas/detallesReserva.mjs"
 import { enviarMail } from "./enviarMail.mjs"
-import { generadorPDF } from "../pdf/generadorPDF.mjs"
 import dotenv from "dotenv";
 import { obtenerParametroConfiguracion } from "../configuracion/obtenerParametroConfiguracion.mjs";
+import { esquemaGlobal } from "../../application/administracion/reservas/detallesReserva/pdf/contenedores/esquemaGlobal.mjs";
 dotenv.config();
 export const enviarMailDeAvisoPorReservaPublica = async (reservaUID) => {
     try {
         const configuracon = await obtenerParametroConfiguracion([
             "correoCopiaReservaPublica"
         ])
-        const correoCopiaReservaPublica  = configuracon.correoCopiaReservaPublica 
+        const correoCopiaReservaPublica = configuracon.correoCopiaReservaPublica
         if (!correoCopiaReservaPublica || correoCopiaReservaPublica.length === 0) {
             return
         }
@@ -46,7 +46,17 @@ export const enviarMailDeAvisoPorReservaPublica = async (reservaUID) => {
         <br>
         <a href="https://casavitini.com/administracion/reservas/pendientes_de_revision">Ir a reservas pendientes de revisión</a>
         </html>`
-        const pdf = await generadorPDF(reserva)
+        const pdf = await esquemaGlobal({
+            incluirTitular: "si",
+            reserva: resolverDetallesReserva,
+            tablasIDV: [
+                "fechas",
+                "alojamiento",
+                "servicios",
+                "totalesGlobales"
+            ]
+        })
+
         const composicionDelMensaje = {
             origen: origen,
             destino: destino,

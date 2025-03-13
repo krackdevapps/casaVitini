@@ -12,6 +12,7 @@ export const insertarPago = async (data) => {
         const fechaPago = data.fechaPago
         const chequeUID = data.chequeUID
         const transferenciaUID = data.transferenciaUID
+        const conceptoPago = data.conceptoPago
 
         const consulta = `
         INSERT INTO
@@ -25,10 +26,11 @@ export const insertarPago = async (data) => {
         cantidad,
         "fechaPago",
         "chequeUID",
-        "transferenciaUID"
+        "transferenciaUID",
+        "conceptoPago"
         )
         VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING
         "pagoUID",
         "plataformaDePagoIDV",
@@ -37,7 +39,9 @@ export const insertarPago = async (data) => {
         cantidad,
         to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPago", 
         "chequeUID",
-        "transferenciaUID"        `;
+        "transferenciaUID",
+        "conceptoPago"
+        `;
         const parametros = [
             plataformaDePago,
             tarjeta,
@@ -47,7 +51,8 @@ export const insertarPago = async (data) => {
             cantidadConPunto,
             fechaPago,
             chequeUID,
-            transferenciaUID
+            transferenciaUID,
+            conceptoPago
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

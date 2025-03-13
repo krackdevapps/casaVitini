@@ -27,7 +27,8 @@ export const actualizarEstadoServicio = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const estadoIDV = validadoresCompartidos.tipos.cadena({
@@ -40,14 +41,14 @@ export const actualizarEstadoServicio = async (entrada, salida) => {
         })
 
         const estadosIDV = [
-            "activado", 
+            "activado",
             "desactivado"
         ]
-        
+
         if (!estadosIDV.includes(estadoIDV)) {
             const m = "El campo estadoIDV solo espepra activado o desactivado"
             throw new Error(m)
-            
+
         }
         await obtenerServicioPorServicioUID(servicioUID)
 

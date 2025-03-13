@@ -13,6 +13,7 @@ main {
 
 main *:not(.sobreControlAnimacionGlobal):not(.sobreControlAnimacionGlobal *) {
     transition: scale 250ms ease-in-out;
+
     @starting-style {
         scale: 0;
     }
@@ -1799,6 +1800,7 @@ summary:hover {
     padding-left: 6px;
     padding-right: 6px;
 }
+
 .padding16Horizontal {
     padding-left: 16px;
     padding-right: 16px;
@@ -2202,6 +2204,26 @@ summary:hover {
     align-content: center;
     justify-content: center;
     align-items: center;
+}
+
+.botonV4 {
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.botonV4:hover {
+    background: rgba(0, 0, 0, 0.4);
+
 }
 
 .botonV6 {
@@ -2623,4 +2645,34 @@ textarea {
 
 .fondoNaranja {
     background: rgb(214, 192, 157);
+}
+
+.grid4x4_r_2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.grid2x1_r_1x1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.grid2x1_r_1x1_1fr_auto {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+@media (max-width: 720px) {
+    .grid4x4_r_2x2 {
+        grid-template-columns: 1fr 1fr;
+    }
+    .grid2x1_r_1x1 {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .grid2x1_r_1x1_1fr_auto {
+        display: grid;
+        grid-template-columns: 1fr ;
+    }
+    
+    
 }

@@ -29,7 +29,8 @@ export const insertarServicioEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
 
         const servicioUID = validadoresCompartidos.tipos.cadena({
@@ -38,7 +39,8 @@ export const insertarServicioEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
@@ -78,7 +80,7 @@ export const insertarServicioEnReserva = async (entrada) => {
         })
 
 
-   
+
         await campoDeTransaccion("iniciar")
         const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
         const descuentoTotalServicio = oSdS_validado.descuentoTotalServicio

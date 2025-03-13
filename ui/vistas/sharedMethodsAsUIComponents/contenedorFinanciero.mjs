@@ -938,7 +938,7 @@ export const contenedorFinanciero = {
                         const contenedoresAlojamientoRenderizados = cCR_renderizado.querySelectorAll(`[contenedor=porAlojamiento]`)
                         Object.entries(complementosAlojamientoPorTipo).forEach(contenedorComplementos => {
                             const [apartamentoIDV, contenedor] = contenedorComplementos
-                            console.log(" contenedorComplementos", contenedorComplementos)
+
 
                             const complemenstosPorAlojamiento = contenedor.tipoUbicacion.porAlojamiento
                             const apartamentoUI = contenedor.apartamentoUI
@@ -1217,7 +1217,7 @@ export const contenedorFinanciero = {
                             borrarContenedoresApartamentosObsoletos: function (data) {
                                 const areaContendoresPorAlojamiento = data.cCR_renderizado
                                 const apartamentosIDV_porRenderizar = data.apartamentosIDV_porRenderizar
-                                
+
 
                                 const complementosUI_Renderizados = areaContendoresPorAlojamiento.querySelectorAll(`[contenedor=porAlojamiento]`)
                                 complementosUI_Renderizados.forEach(c => {
@@ -1474,7 +1474,7 @@ export const contenedorFinanciero = {
                         for (const contenedorServicio of desglosePorServicios) {
                             const servicio = contenedorServicio.servicio
                             const opcionesSolicitadasDelservicio = contenedorServicio.opcionesSolicitadasDelservicio
-                            const totalesDelSerivicio = contenedorServicio.totalesDelSerivicio
+                            const totalesDelServicio = contenedorServicio.totalesDelServicio
                             const servicioUID_enReserva = servicio.servicioUID
                             const nombreInterno = servicio.nombre
                             const contenedor = servicio.contenedor
@@ -1635,7 +1635,7 @@ export const contenedorFinanciero = {
                             contenedorTotalServicio.appendChild(totaleDelServicioUIInfo)
 
                             const totaleDelServicioUI = document.createElement("p")
-                            totaleDelServicioUI.textContent = totalesDelSerivicio.global.totalServicio
+                            totaleDelServicioUI.textContent = totalesDelServicio.global.totalServicio
                             contenedorTotalServicio.appendChild(totaleDelServicioUI)
 
 
@@ -1650,7 +1650,7 @@ export const contenedorFinanciero = {
 
                             const definicionUI = document.createElement("pre")
                             definicionUI.classList.add(
-                                "padding6",
+                                "padding10",
                                 "whiteSpace"
                             )
                             definicionUI.textContent = definicion + "--"
@@ -1789,7 +1789,7 @@ export const contenedorFinanciero = {
                                         tituloPrecioOpcionTotal.textContent = `Precio de la opción total con cantidades`
                                         contenedorPrecioOpcionTotal.appendChild(tituloPrecioOpcionTotal)
 
-                                        const totalOpcion = totalesDelSerivicio.porGruposDeOpciones[grupoIDV][opcionIDV].total
+                                        const totalOpcion = totalesDelServicio.porGruposDeOpciones[grupoIDV][opcionIDV].total
 
                                         const precioTotalOpcionUI = document.createElement("p")
                                         precioTotalOpcionUI.setAttribute("opcionIDV", opcionIDV)
@@ -2020,6 +2020,8 @@ export const contenedorFinanciero = {
                                 "flexHorizontal",
                                 "gap6"
                             )
+                            contenedor.appendChild(contenedorBotones)
+
                             const botonInsertarDescuento = document.createElement("div")
                             botonInsertarDescuento.classList.add(
                                 "botonV3",
@@ -2032,7 +2034,6 @@ export const contenedorFinanciero = {
                                 })
                             })
                             contenedorBotones.appendChild(botonInsertarDescuento)
-                            contenedor.appendChild(contenedorBotones)
 
                             const botonDescuentosCompatibles = document.createElement("div")
                             botonDescuentosCompatibles.classList.add(
@@ -2061,7 +2062,6 @@ export const contenedorFinanciero = {
                             })
                             contenedorBotones.appendChild(botonDescuentoDedicado)
 
-                            contenedor.appendChild(contenedorBotones)
                         }
                         if (modoUI === "simulador") {
                             const contenedorBotones = document.createElement("div")
@@ -2069,6 +2069,9 @@ export const contenedorFinanciero = {
                                 "flexHorizontal",
                                 "gap6",
                             )
+                            contenedor.appendChild(contenedorBotones)
+
+
                             const botonInsertarDescuento = document.createElement("div")
                             botonInsertarDescuento.classList.add(
                                 "botonV3",
@@ -2081,7 +2084,6 @@ export const contenedorFinanciero = {
                                 })
                             })
                             contenedorBotones.appendChild(botonInsertarDescuento)
-                            contenedor.appendChild(contenedorBotones)
                             const botonDescuentosCompatibles = document.createElement("div")
                             botonDescuentosCompatibles.classList.add(
                                 "botonV3",
@@ -2094,7 +2096,20 @@ export const contenedorFinanciero = {
                                 })
                             })
                             contenedorBotones.appendChild(botonDescuentosCompatibles)
-                            contenedor.appendChild(contenedorBotones)
+
+                            const botonDescuentoDedicado = document.createElement("div")
+                            botonDescuentoDedicado.classList.add(
+                                "botonV3",
+                                "comportamientoBoton"
+                            )
+                            botonDescuentoDedicado.textContent = "Crear e insertar descuento dedicado"
+                            botonDescuentoDedicado.addEventListener("click", (e) => {
+                                casaVitini.view.detallesSimulacion.componentesUI.insertarDescuentoDedicado.ui({
+                                    e
+                                })
+
+                            })
+                            contenedorBotones.appendChild(botonDescuentoDedicado)
                         }
                     }
                     const contenedorListaOfertas_selector = document.querySelector(destino).querySelector("[contenedor=financiero]")

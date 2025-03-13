@@ -1,5 +1,7 @@
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
+import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs"
 import { obtenerComplementoPorComplementoUID } from "../../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerAlojamientoDeLaSimulacionPorApartamentoIDV } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerAlojamientoDeLaSimulacionPorApartamentoIDV.mjs"
@@ -24,7 +26,8 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const complementoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.complementoUID,
@@ -32,15 +35,18 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const complemento = await obtenerComplementoPorComplementoUID(complementoUID)
         const apartamentoIDV = complemento.apartamentoIDV
         const complementoUI = complemento.complementoUI
+        const tipoUbicacion = complemento.tipoUbicacion
         const definicion = complemento.definicion
         const tipoPrecio = complemento.tipoPrecio
         const precio = complemento.precio
+        const habitacionUID = complemento.habitacionUID
 
         const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
@@ -60,6 +66,20 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
             apartamentoIDV,
             errorSi: "noExiste"
         })
+        if (tipoUbicacion === "habitacion") {
+
+            const habitacionDeLaConfiguracion = await obtenerHabitacionDelApartamentoPorHabitacionUID(habitacionUID)
+            const habitacionIDV = habitacionDeLaConfiguracion?.habitacionIDV
+            const habitacionEntidad = await obtenerHabitacionComoEntidadPorHabitacionIDV({
+                habitacionIDV,
+                errorSi: "noExiste"
+            })
+
+            const habitacionUI = habitacionEntidad.habitacionUI
+            complemento.habitacionUI = habitacionUI
+            complemento.habitacionIDV = habitacionIDV
+
+        }
 
         await campoDeTransaccion("iniciar")
         // No puede haber dos apartametnos iguales en la simulacion
@@ -69,8 +89,11 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
             apartamentoIDV,
             definicion,
             tipoPrecio,
+            tipoUbicacion,
             precio,
-            apartamentoUID
+            apartamentoUID,
+            habitacionIDV: complemento.habitacionIDV,
+            habitacionUI: complemento.habitacionUI,
         })
         const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         await campoDeTransaccion("confirmar")

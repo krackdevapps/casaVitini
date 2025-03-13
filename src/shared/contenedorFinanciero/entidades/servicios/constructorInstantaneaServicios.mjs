@@ -21,8 +21,8 @@ export const constructorInstantaneaServicios = async (data) => {
             totalSinDescuentosAplicados: new Decimal("0.00"),
             descuentoAplicados: new Decimal("0.00"),
             totalConDescuentoAplicados: new Decimal("0.00"),
-            impuestosAplicados: "0.00",
             totalNeto: new Decimal("0.00"),
+            impuestosAplicados: "0.00",
             totalFinal: new Decimal("0.00")
         }
         const globalTotales = global.totales
@@ -97,10 +97,11 @@ export const constructorInstantaneaServicios = async (data) => {
 
 
                         } else if (tipoDescuento === "porcentaje") {
+
                             const diferenciaPorcentaje = new Decimal(precioNetoOpcionDelServicio).times(cantidadDescuento).dividedBy(100);
                             const descuentoAplicado = new Decimal(precioNetoOpcionDelServicio).minus(diferenciaPorcentaje)
 
-                            tds.descuentoAplicado = diferenciaPorcentaje.toFixed(2)
+                            tds.descuentoAplicado = cantidadDescuento
                             tds.precioConDescuento = descuentoAplicado.toFixed(2)
                             tds.total = descuentoAplicado.toFixed(2)
                             globalTotales.descuentoAplicados = globalTotales.descuentoAplicados.plus(diferenciaPorcentaje)
@@ -118,7 +119,7 @@ export const constructorInstantaneaServicios = async (data) => {
             const desgloseDelServicio = {
                 servicio,
                 opcionesSolicitadasDelservicio: servicioSoliciado_objeto,
-                totalesDelSerivicio: {
+                totalesDelServicio: {
                     global: {
                         totalGruposServicio: Number(totalServicio).toFixed(2),
                         descuentoAplicadoAlServicio: "0.00",
@@ -130,7 +131,7 @@ export const constructorInstantaneaServicios = async (data) => {
                 }
             }
 
-            const degloseServicio = desgloseDelServicio.totalesDelSerivicio.global
+            const degloseServicio = desgloseDelServicio.totalesDelServicio.global
 
             if (tipoDescuentoTotalPorServicio === "cantidad") {
                 const descuentoAplicado = new Decimal(totalServicio).minus(cantidadTotalPorServicio)
@@ -152,9 +153,9 @@ export const constructorInstantaneaServicios = async (data) => {
 
             }
             desglosePorServicios.push(desgloseDelServicio)
-            globalTotales.totalSinDescuentosAplicados = globalTotales.totalSinDescuentosAplicados.plus(desgloseDelServicio.totalesDelSerivicio.global.totalGruposServicio)
-            globalTotales.totalConDescuentoAplicados = globalTotales.totalConDescuentoAplicados.plus(desgloseDelServicio.totalesDelSerivicio.global.totalServicioConDescuentosAplicados)
-            globalTotales.totalNeto = globalTotales.totalNeto.plus(desgloseDelServicio.totalesDelSerivicio.global.totalServicio)
+            globalTotales.totalSinDescuentosAplicados = globalTotales.totalSinDescuentosAplicados.plus(desgloseDelServicio.totalesDelServicio.global.totalGruposServicio)
+            globalTotales.totalConDescuentoAplicados = globalTotales.totalConDescuentoAplicados.plus(desgloseDelServicio.totalesDelServicio.global.totalServicioConDescuentosAplicados)
+            globalTotales.totalNeto = globalTotales.totalNeto.plus(desgloseDelServicio.totalesDelServicio.global.totalServicio)
 
         }
         globalTotales.totalSinDescuentosAplicados = globalTotales.totalSinDescuentosAplicados.toFixed(2)

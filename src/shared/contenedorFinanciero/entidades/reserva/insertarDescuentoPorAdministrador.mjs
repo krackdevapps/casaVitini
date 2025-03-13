@@ -16,10 +16,9 @@ export const insertarDescuentoPorAdministrador = async (data) => {
         const estructura = data.estructura
         const reservaUID = data.reservaUID
 
-        const ofertaUID = validadoresCompartidos.tipos.numero({
+        const ofertaUID = validadoresCompartidos.tipos.granEntero({
             number: data?.ofertaUID,
             nombreCampo: "El campo de ofertaUID dentro del actualizarDesgloseFinanciero",
-            filtro: "numeroSimple",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })

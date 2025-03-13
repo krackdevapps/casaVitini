@@ -21,7 +21,8 @@ export const obtenerDetallesDelServicioEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const servicioUID_enReserva = validadoresCompartidos.tipos.cadena({
@@ -30,7 +31,8 @@ export const obtenerDetallesDelServicioEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

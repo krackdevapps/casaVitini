@@ -41,6 +41,7 @@ export const serviciosUI_grupoOpciones = {
         },
         opcionUI: function (data) {
             const opcionIDV = data.opcionIDV
+            const area = data.area
             const contenedorGlobal = document.createElement("details")
             contenedorGlobal.classList.add("contenedorOpcionServivicio", "padding6", "flexVertical")
             contenedorGlobal.setAttribute("opcionIDV", opcionIDV)
@@ -114,7 +115,7 @@ export const serviciosUI_grupoOpciones = {
             campoCantidad.style.marginLeft = "-10px"
             campoCantidad.placeholder = "1"
             campoCantidad.style.maxWidth = "100px"
-            
+
             campoCantidad.setAttribute("campo", "cantidad")
             campoCantidad.addEventListener('keypress', (e) => {
                 if (e.key === '.' || e.key === ',' || e.key === '-') {
@@ -127,11 +128,10 @@ export const serviciosUI_grupoOpciones = {
                 const valueVal = value.replaceAll(".", "1");
                 e.target.value = valueVal
                 const opcionIDV = field.closest("[opcionIDV]").getAttribute("opcionIDV")
-                const servicioUID = field.closest("[servicioUID]").getAttribute("servicioUID")
 
                 this.calcularTotalOpcion({
                     opcionIDV,
-                    servicioUID
+                    area: area
                 })
             })
 
@@ -147,13 +147,13 @@ export const serviciosUI_grupoOpciones = {
             contenedorDescuentoPorOpcion.classList.add("flexVertical")
             contenedorDetallesOpcion.appendChild(contenedorDescuentoPorOpcion)
 
-
             const superContenedorDescuento = this.aplicarDescuentoUI({
                 nombreArea: "descuentoDeLaOpcion",
                 metodoCalculo: "calcularTotalOpcion",
                 titulo: "Aplicar descuento a la opción (Opcional)",
                 parametrosCalculo: {
-                    opcionIDV: opcionIDV
+                    opcionIDV: opcionIDV,
+                    area: area
                 }
             })
             contenedorDescuentoPorOpcion.appendChild(superContenedorDescuento)
@@ -283,22 +283,16 @@ export const serviciosUI_grupoOpciones = {
 
         },
         calcularTotalOpcion: async function (data) {
-            console.log("se inicia > calculaTotalOpcion")
 
             const semaforoID = "servicio_precioOpcion"
             const semaforo = casaVitini.utilidades.semaforo
             semaforo.crearInstancia(semaforoID)
             await semaforo.bloquear(semaforoID);
-            console.log("calculaTotalOpcion")
-
             try {
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const servicioUID = data.servicioUID
                 const opcionIDV = data.opcionIDV
-
-                const opcionIDV_sel = document.querySelector(`[servicioUID="${servicioUID}"] [opcionIDV="${opcionIDV}"]`)
-
-                console.log("opcionIDV_Sel", opcionIDV_sel)
+                const area = data.area
+                const opcionIDV_sel = area.querySelector(`[opcionIDV="${opcionIDV}"]`)
 
                 const precioOpcion_sel = opcionIDV_sel.querySelector("[com=precioData]")
                 const cantidad_sel = opcionIDV_sel.querySelector("[campo=cantidad]")
@@ -307,6 +301,7 @@ export const serviciosUI_grupoOpciones = {
                 const total_sel = opcionIDV_sel.querySelector("[com=total]")
 
                 if (!precioOpcion_sel) {
+
                     return
                 }
 
@@ -360,323 +355,323 @@ export const serviciosUI_grupoOpciones = {
 
                 const formato = /^\d+(\.\d{2})$/;
 
-                console.log({
-                    numero1: precioOpcion_data,
-                    numero2: cantidad_data,
-                    operador: "*",
-                    redondeo: "2",
-                    calculo: "simple"
-                })
 
-                const calculadora = await casaVitini.utilidades.calculadora({
-                    numero1: precioOpcion_data,
+                numero1: precioOpcion_data,
                     numero2: cantidad_data,
-                    operador: "*",
+                        operador: "*",
+                            redondeo: "2",
+                                calculo: "simple"
+            })
+
+            const calculadora = await casaVitini.utilidades.calculadora({
+                numero1: precioOpcion_data,
+                numero2: cantidad_data,
+                operador: "*",
+                redondeo: "2",
+                calculo: "simple"
+            })
+
+            if (instancia(instanciaUID)) {
+                if (calculadora.error) {
+                    resetPorError()
+                    return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(errorUI)
+                }
+                if (!tiposDescuentos.includes(tipoDescuento_data) || !formato.test(cantidadDescuento_data)) {
+                    total_sel.textContent = this.controlNumerosNegativos(calculadora.resultado)
+                    return this.calcularTotalServicio({ area })
+                }
+            } else {
+                return
+            }
+            if (tiposDescuentos.includes(tipoDescuento_data) && formato.test(cantidadDescuento_data)) {
+
+                const calculadoraDescuentos = await casaVitini.utilidades.calculadora({
+                    numero1: calculadora.resultado,
+                    numero2: cantidadDescuento_data,
+                    operador: dict[tipoDescuento_data],
                     redondeo: "2",
                     calculo: "simple"
                 })
 
                 if (instancia(instanciaUID)) {
-                    if (calculadora.error) {
+
+                    if (calculadoraDescuentos.error) {
+                        return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(errorUI)
+                    }
+
+                    if (tipoDescuento_data === "cantidad") {
+                        total_sel.textContent = this.controlNumerosNegativos(calculadoraDescuentos.resultado)
+                    } else if (tipoDescuento_data === "porcentaje") {
+                        total_sel.textContent = this.controlNumerosNegativos(calculadoraDescuentos.diferencia)
+                    }
+                    this.calcularTotalServicio({ area })
+                }
+            }
+        } catch(error) {
+            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(error)
+        } finally {
+            semaforo.desbloquear(semaforoID);
+        }
+
+    },
+    calcularTotalServicio: async function (data) {
+
+
+        const semaforoID = "servicio_precioOpcion"
+        const semaforo = casaVitini.utilidades.semaforo
+        semaforo.crearInstancia(semaforoID)
+        await semaforo.bloquear(semaforoID);
+
+        try {
+
+
+
+            const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+            const area = data.area
+
+            if (!area) { return }
+            area.setAttribute("instancaiUID_calculoTotal", instanciaUID)
+            const totalServicio = area.querySelector("[data=totalServicio]")
+            const totalServicioConDescuentos = area.querySelector("[data=totalServicioConDescuentos]")
+            const areaDescuentoTotalServicio = area.querySelector("[com=descuentoTotalServicio]")
+            let tipoDescuento_sel
+            let cantidadDescuento_sel
+            if (areaDescuentoTotalServicio) {
+                tipoDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=tipoDescuento]")
+                cantidadDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=cantidadDescuento]")
+            }
+
+
+
+            const tipoDescuento_data = tipoDescuento_sel?.value
+            const cantidadDescuento_data = cantidadDescuento_sel?.value
+            totalServicio.textContent = "Calculando..."
+            totalServicioConDescuentos.textContent = "Calculando..."
+
+            const tiposDescuentos = [
+                "cantidad",
+                "porcentaje"
+            ]
+            const dict = {
+                cantidad: "-",
+                porcentaje: "%"
+            }
+            const formato = /^\d+(\.\d{2})$/;
+
+
+            const instancia = (instanciaUID) => {
+                return document?.querySelector(`[instancaiUID_calculoTotal="${instanciaUID}"]`)
+            }
+
+            const gruposDelServicio = area.querySelectorAll(`[grupoIDV]`)
+            const totalesPorOpcion = []
+            gruposDelServicio.forEach(gDS => {
+
+                const opcionesDelGrupo = gDS.querySelectorAll("[opcionIDV]")
+                opcionesDelGrupo.forEach(oDG => {
+                    const estadoActivado = oDG.querySelector("[estado=activado]")
+                    if (estadoActivado) {
+                        const totalDeLaOpcion = oDG.querySelector("[com=total]")
+                        if (totalDeLaOpcion) {
+                            totalesPorOpcion.push(totalDeLaOpcion.textContent)
+
+                        }
+                    }
+                })
+            })
+            if (totalesPorOpcion.length === 0) {
+                totalServicio.textContent = "0.00"
+                return
+            }
+            const calculadora = await casaVitini.shell.servidor({
+                zona: "componentes/calculadora",
+                numeros: totalesPorOpcion,
+                calculo: "grupoDeNumeros",
+                redondeo: "2"
+            })
+            if (instancia(instanciaUID)) {
+
+                if (calculadora.error) {
+                    totalServicio.textContent = "Error, vuelve a intentarlo"
+                    return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(calculadora.error)
+                }
+
+
+                totalServicio.textContent = this.controlNumerosNegativos(calculadora.resultado)
+                totalServicioConDescuentos.textContent = this.controlNumerosNegativos(calculadora.resultado)
+
+            } else {
+                return
+            }
+
+            if (tiposDescuentos.includes(tipoDescuento_data) && formato.test(cantidadDescuento_data)) {
+
+                const calculadoraDescuentos = await casaVitini.utilidades.calculadora({
+                    numero1: calculadora.resultado,
+                    numero2: cantidadDescuento_data,
+                    operador: dict[tipoDescuento_data],
+                    redondeo: "2",
+                    calculo: "simple"
+                })
+
+                if (instancia(instanciaUID)) {
+
+                    if (calculadoraDescuentos.error) {
                         resetPorError()
                         return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(errorUI)
                     }
-                    if (!tiposDescuentos.includes(tipoDescuento_data) || !formato.test(cantidadDescuento_data)) {
-                        total_sel.textContent = this.controlNumerosNegativos(calculadora.resultado)
-                        return this.calcularTotalServicio({ servicioUID })
+
+                    if (tipoDescuento_data === "cantidad") {
+                        totalServicioConDescuentos.textContent = this.controlNumerosNegativos(calculadoraDescuentos.resultado)
+                    } else if (tipoDescuento_data === "porcentaje") {
+                        totalServicioConDescuentos.textContent = this.controlNumerosNegativos(calculadoraDescuentos.diferencia)
                     }
-                } else {
-                    return
+
+
                 }
-                if (tiposDescuentos.includes(tipoDescuento_data) && formato.test(cantidadDescuento_data)) {
-
-                    const calculadoraDescuentos = await casaVitini.utilidades.calculadora({
-                        numero1: calculadora.resultado,
-                        numero2: cantidadDescuento_data,
-                        operador: dict[tipoDescuento_data],
-                        redondeo: "2",
-                        calculo: "simple"
-                    })
-
-                    if (instancia(instanciaUID)) {
-
-                        if (calculadoraDescuentos.error) {
-                            return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(errorUI)
-                        }
-
-                        if (tipoDescuento_data === "cantidad") {
-                            total_sel.textContent = this.controlNumerosNegativos(calculadoraDescuentos.resultado)
-                        } else if (tipoDescuento_data === "porcentaje") {
-                            total_sel.textContent = this.controlNumerosNegativos(calculadoraDescuentos.diferencia)
-                        }
-                        this.calcularTotalServicio({ servicioUID })
-                    }
-                }
-            } catch (error) {
-                casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(error)
-            } finally {
-                semaforo.desbloquear(semaforoID);
             }
 
-        },
-        calcularTotalServicio: async function (data) {
-            console.log("se inicia > calcularTotalServicio")
+        } catch (error) {
+            return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(error)
 
-            const semaforoID = "servicio_precioOpcion"
-            const semaforo = casaVitini.utilidades.semaforo
-            semaforo.crearInstancia(semaforoID)
-            await semaforo.bloquear(semaforoID);
+        } finally {
+            semaforo.desbloquear(semaforoID)
+        }
 
-            try {
-                console.log("calcularTotalServicio")
+    },
+    aplicarDescuentoUI: function (data) {
 
+        const nombreArea = data.nombreArea
+        const metodoCalculo = data.metodoCalculo
+        const titulo = data.titulo
+        const parametrosCalculo = data.parametrosCalculo
 
-                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
-                const servicioUID = data.servicioUID
+        const controladorDescuento = (e) => {
 
-                const servicio = document.querySelector(`[servicioUID="${servicioUID}"]`)
+            const elemento = e.target
+            const areaDescuento = elemento.closest(`[com=${nombreArea}]`)
+            const tipoDescuento = areaDescuento.querySelector("[campo=tipoDescuento]")
+            const campoCantidad = areaDescuento.querySelector("[campo=cantidadDescuento]")
 
-                if (!servicio) { return }
-                servicio.setAttribute("instancaiUID_calculoTotal", instanciaUID)
-                const totalServicio = servicio.querySelector("[data=totalServicio]")
-                const totalServicioConDescuentos = servicio.querySelector("[data=totalServicioConDescuentos]")
-                const areaDescuentoTotalServicio = servicio.querySelector("[com=descuentoTotalServicio]")
-                let tipoDescuento_sel
-                let cantidadDescuento_sel
-                if (areaDescuentoTotalServicio) {
-                    tipoDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=tipoDescuento]")
-                    cantidadDescuento_sel = areaDescuentoTotalServicio.querySelector("[campo=cantidadDescuento]")
-                }
+            const cantida_data = campoCantidad?.value
+            const tipoDescuento_data = tipoDescuento?.value
 
+            const formato = /^\d+(\.\d{2})$/;
 
-
-                const tipoDescuento_data = tipoDescuento_sel?.value
-                const cantidadDescuento_data = cantidadDescuento_sel?.value
-                totalServicio.textContent = "Calculando..."
-                totalServicioConDescuentos.textContent = "Calculando..."
-
-                const tiposDescuentos = [
-                    "cantidad",
-                    "porcentaje"
-                ]
-                const dict = {
-                    cantidad: "-",
-                    porcentaje: "%"
-                }
-                const formato = /^\d+(\.\d{2})$/;
+            const tiposDescuentos = [
+                "cantidad",
+                "porcentaje"
+            ]
 
 
-                const instancia = (instanciaUID) => {
-                    return document?.querySelector(`[instancaiUID_calculoTotal="${instanciaUID}"]`)
-                }
-
-                const gruposDelServicio = servicio.querySelectorAll(`[grupoIDV]`)
-                const totalesPorOpcion = []
-                gruposDelServicio.forEach(gDS => {
-
-                    const opcionesDelGrupo = gDS.querySelectorAll("[opcionIDV]")
-                    opcionesDelGrupo.forEach(oDG => {
-                        const estadoActivado = oDG.querySelector("[estado=activado]")
-                        if (estadoActivado) {
-                            const totalDeLaOpcion = oDG.querySelector("[com=total]")
-                            if (totalDeLaOpcion) {
-                                totalesPorOpcion.push(totalDeLaOpcion.textContent)
-
-                            }
-                        }
-                    })
-                })
-                if (totalesPorOpcion.length === 0) {
-                    totalServicio.textContent = "0.00"
-                    return
-                }
-                const calculadora = await casaVitini.shell.servidor({
-                    zona: "componentes/calculadora",
-                    numeros: totalesPorOpcion,
-                    calculo: "grupoDeNumeros",
-                    redondeo: "2"
-                })
-
-                if (instancia(instanciaUID)) {
-
-                    if (calculadora.error) {
-                        totalServicio.textContent = "Error, vuelve a intentarlo"
-                        return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(calculadora.error)
-                    }
-
-
-                    totalServicio.textContent = this.controlNumerosNegativos(calculadora.resultado)
-                    totalServicioConDescuentos.textContent = this.controlNumerosNegativos(calculadora.resultado)
-
-                } else {
-                    return
-                }
-
-                if (tiposDescuentos.includes(tipoDescuento_data) && formato.test(cantidadDescuento_data)) {
-
-                    const calculadoraDescuentos = await casaVitini.utilidades.calculadora({
-                        numero1: calculadora.resultado,
-                        numero2: cantidadDescuento_data,
-                        operador: dict[tipoDescuento_data],
-                        redondeo: "2",
-                        calculo: "simple"
-                    })
-
-                    if (instancia(instanciaUID)) {
-
-                        if (calculadoraDescuentos.error) {
-                            resetPorError()
-                            return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(errorUI)
-                        }
-
-                        if (tipoDescuento_data === "cantidad") {
-                            totalServicioConDescuentos.textContent = this.controlNumerosNegativos(calculadoraDescuentos.resultado)
-                        } else if (tipoDescuento_data === "porcentaje") {
-                            totalServicioConDescuentos.textContent = this.controlNumerosNegativos(calculadoraDescuentos.diferencia)
-                        }
-
-
-                    }
-                }
-
-            } catch (error) {
-                return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(error)
-
-            } finally {
-                semaforo.desbloquear(semaforoID)
-            }
-
-        },
-        aplicarDescuentoUI: function (data) {
-
-            const nombreArea = data.nombreArea
-            const metodoCalculo = data.metodoCalculo
-            const titulo = data.titulo
-            const parametrosCalculo = data.parametrosCalculo
-
-            const controladorDescuento = (e) => {
-
-                const elemento = e.target
-                const areaDescuento = elemento.closest(`[com=${nombreArea}]`)
-                const tipoDescuento = areaDescuento.querySelector("[campo=tipoDescuento]")
-                const campoCantidad = areaDescuento.querySelector("[campo=cantidadDescuento]")
-
-                const cantida_data = campoCantidad.value
-                const tipoDescuento_data = tipoDescuento.value
-
-                const formato = /^\d+(\.\d{2})$/;
-
-                if (cantida_data.length === 0 || formato.test(cantida_data)) {
-                    const tiposDescuentos = [
-                        "cantidad",
-                        "porcentaje"
-                    ]
-                    campoCantidad.removeAttribute("style")
-
-                    if (tiposDescuentos.includes(tipoDescuento_data)) {
-                        tipoDescuento.removeAttribute("style")
-                        this[metodoCalculo](parametrosCalculo);
-                    } else {
-                        tipoDescuento.style.background = "red"
-                        tipoDescuento.style.color = "white"
-                    }
-                } else {
-                    campoCantidad.style.background = "red"
-                    campoCantidad.style.color = "white"
-                }
-
-            }
-
-            const superContenedorDescuento = document.createElement("details")
-            superContenedorDescuento.classList.add("flexVertical", "padding6")
-            superContenedorDescuento.setAttribute("com", nombreArea)
-            superContenedorDescuento.setAttribute("area", "decuentoUI")
-
-            superContenedorDescuento.style.marginLeft = "-28px";
-            superContenedorDescuento.style.maxWidth = "500px";
-            superContenedorDescuento.style.width = "100%";
-
-
-            const tituloDescuento = document.createElement("summary")
-            tituloDescuento.classList.add("negrita", "padding10")
-            tituloDescuento.textContent = titulo
-            superContenedorDescuento.appendChild(tituloDescuento)
-
-            const contenedorDescuento = document.createElement("div")
-            contenedorDescuento.classList.add("flexVertical", "padding6", "gap6")
-            contenedorDescuento.style.paddingTop = "0px";
-            contenedorDescuento.style.paddingLeft = "13px";
-            contenedorDescuento.style.paddingRight = "0px";
-            contenedorDescuento.style.paddingBottom = "0px";
-            superContenedorDescuento.appendChild(contenedorDescuento)
-
-            const infoDescuento = document.createElement("p")
-            infoDescuento.style.paddingLeft = "10px"
-            infoDescuento.textContent = "Recuerda que el formato es 0.00. Siempre pon dos decimales separados por punto."
-            contenedorDescuento.appendChild(infoDescuento)
-
-
-            const tipoDescuento = document.createElement("select")
-            tipoDescuento.classList.add("campoDescuento")
-            tipoDescuento.addEventListener("input", (e) => {
-                controladorDescuento(e)
-            })
-            tipoDescuento.setAttribute("campo", "tipoDescuento")
-            contenedorDescuento.appendChild(tipoDescuento)
-
-
-            const o1 = document.createElement("option");
-            o1.disabled = true;
-            o1.selected = true
-            o1.value = "sinDescuento"
-            o1.text = "Seleciona el tipo de descuento";
-            tipoDescuento.appendChild(o1)
-
-            const o3 = document.createElement("option");
-            o3.value = "cantidad"
-            o3.text = "Descuento por cantidad";
-            tipoDescuento.appendChild(o3)
-
-            const o4 = document.createElement("option");
-            o4.value = "porcentaje"
-            o4.text = "Descuento por porcentaje";
-            tipoDescuento.appendChild(o4)
-
-            const descuentoData = document.createElement("input")
-            descuentoData.classList.add("campoDescuento")
-            descuentoData.setAttribute("campo", "cantidadDescuento")
-            descuentoData.placeholder = "0.00"
-            descuentoData.addEventListener("input", (e) => {
-                controladorDescuento(e)
-            })
-            contenedorDescuento.appendChild(descuentoData)
-
-
-            const botonNoAplicar = document.createElement("div")
-            botonNoAplicar.classList.add("botonReset")
-            botonNoAplicar.textContent = "No aplicar descuento y ocultar"
-            botonNoAplicar.addEventListener("click", (e) => {
-
-                const areaDescuento = e.target.closest(`[com=${nombreArea}]`)
-                const tipoDescuento = areaDescuento.querySelector("[campo=tipoDescuento]")
-                const campoCantidad = areaDescuento.querySelector("[campo=cantidadDescuento]")
-
-                tipoDescuento.removeAttribute("style")
+            if (cantida_data.length === 0 || formato.test(cantida_data)) {
                 campoCantidad.removeAttribute("style")
 
-                tipoDescuento.value = "sinDescuento"
-                campoCantidad.value = ""
 
-                areaDescuento.open = false
+                if (tiposDescuentos.includes(tipoDescuento_data)) {
+                    tipoDescuento.removeAttribute("style")
+                    this[metodoCalculo](parametrosCalculo);
+                } else {
+                    tipoDescuento.style.background = "red"
+                    tipoDescuento.style.color = "white"
+                }
+            } else {
+                campoCantidad.style.background = "red"
+                campoCantidad.style.color = "white"
+            }
 
-                this[metodoCalculo](parametrosCalculo);
+        }
+
+        const superContenedorDescuento = document.createElement("details")
+        superContenedorDescuento.classList.add("flexVertical", "padding6")
+        superContenedorDescuento.setAttribute("com", nombreArea)
+        superContenedorDescuento.setAttribute("area", "decuentoUI")
+
+        superContenedorDescuento.style.marginLeft = "-28px";
+        superContenedorDescuento.style.maxWidth = "500px";
+        superContenedorDescuento.style.width = "100%";
 
 
-            })
-            contenedorDescuento.appendChild(botonNoAplicar)
+        const tituloDescuento = document.createElement("summary")
+        tituloDescuento.classList.add("negrita", "padding10")
+        tituloDescuento.textContent = titulo
+        superContenedorDescuento.appendChild(tituloDescuento)
 
-            return superContenedorDescuento
+        const contenedorDescuento = document.createElement("div")
+        contenedorDescuento.classList.add("flexVertical", "padding6", "gap6")
+        contenedorDescuento.style.paddingTop = "0px";
+        contenedorDescuento.style.paddingLeft = "13px";
+        contenedorDescuento.style.paddingRight = "0px";
+        contenedorDescuento.style.paddingBottom = "0px";
+        superContenedorDescuento.appendChild(contenedorDescuento)
 
-        },
-    }
+        const infoDescuento = document.createElement("p")
+        infoDescuento.style.paddingLeft = "10px"
+        infoDescuento.textContent = "Recuerda que el formato es 0.00. Siempre pon dos decimales separados por punto."
+        contenedorDescuento.appendChild(infoDescuento)
+
+
+        const tipoDescuento = document.createElement("select")
+        tipoDescuento.classList.add("campoDescuento")
+        tipoDescuento.addEventListener("change", (e) => {
+            controladorDescuento(e)
+        })
+        tipoDescuento.setAttribute("campo", "tipoDescuento")
+        contenedorDescuento.appendChild(tipoDescuento)
+
+
+        const o1 = document.createElement("option");
+        o1.disabled = true;
+        o1.selected = true
+        o1.value = "sinDescuento"
+        o1.text = "Seleciona el tipo de descuento";
+        tipoDescuento.appendChild(o1)
+
+        const o3 = document.createElement("option");
+        o3.value = "cantidad"
+        o3.text = "Descuento por cantidad";
+        tipoDescuento.appendChild(o3)
+
+        const o4 = document.createElement("option");
+        o4.value = "porcentaje"
+        o4.text = "Descuento por porcentaje";
+        tipoDescuento.appendChild(o4)
+
+        const descuentoData = document.createElement("input")
+        descuentoData.classList.add("campoDescuento")
+        descuentoData.setAttribute("campo", "cantidadDescuento")
+        descuentoData.placeholder = "0.00"
+        descuentoData.addEventListener("input", (e) => {
+            controladorDescuento(e)
+        })
+        contenedorDescuento.appendChild(descuentoData)
+
+
+        const botonNoAplicar = document.createElement("div")
+        botonNoAplicar.classList.add("botonReset")
+        botonNoAplicar.textContent = "No aplicar descuento y ocultar"
+        botonNoAplicar.addEventListener("click", (e) => {
+
+            const areaDescuento = e.target.closest(`[com=${nombreArea}]`)
+            const tipoDescuento = areaDescuento.querySelector("[campo=tipoDescuento]")
+            const campoCantidad = areaDescuento.querySelector("[campo=cantidadDescuento]")
+
+            tipoDescuento.removeAttribute("style")
+            campoCantidad.removeAttribute("style")
+
+            tipoDescuento.value = "sinDescuento"
+            campoCantidad.value = ""
+
+            areaDescuento.open = false
+
+            this[metodoCalculo](parametrosCalculo);
+
+
+        })
+        contenedorDescuento.appendChild(botonNoAplicar)
+
+        return superContenedorDescuento
+
+    },
+}
 }

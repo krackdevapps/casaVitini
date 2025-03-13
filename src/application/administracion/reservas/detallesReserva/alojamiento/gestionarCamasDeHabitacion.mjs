@@ -34,7 +34,8 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             impedirCero: "si",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const habitacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacionUID,
@@ -44,7 +45,8 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             impedirCero: "si",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const nuevaCamaIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevaCamaIDV,

@@ -23,7 +23,8 @@ export const actualizarServicio = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
@@ -38,7 +39,7 @@ export const actualizarServicio = async (entrada) => {
             zonaIDV: entrada.body.zonaIDV,
             contenedor: entrada.body.contenedor
         };
-     const servicioValidado =  await validarServicio({
+        const servicioValidado = await validarServicio({
             servicio: servicioParaActualizar,
         })
         servicioValidado.servicioUID = servicioUID

@@ -19,7 +19,8 @@ export const detalleImpuesto = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const perfilImpuesto = await obtenerImpuestosPorImppuestoUID(impuestoUID)

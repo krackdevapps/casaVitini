@@ -19,7 +19,8 @@ export const detallesCliente = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const detallesCliente = await obtenerDetallesCliente(clienteUID)
         const ok = {

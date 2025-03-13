@@ -42,7 +42,8 @@ export const resolverQR = async (entrada) => {
                 filtro: "cadenaConNumerosEnteros",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
-                devuelveUnTipoNumber: "si"
+                devuelveUnTipoNumber: "no",
+                devuelveUnTipoBigInt: "si"
             })
             await obtenerReservaPorReservaUID(reservaUID)
 

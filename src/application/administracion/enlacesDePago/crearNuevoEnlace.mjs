@@ -21,7 +21,8 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
 
@@ -48,7 +49,9 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "no"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
+
         })
 
         const descripcion = validadoresCompartidos.tipos.cadena({

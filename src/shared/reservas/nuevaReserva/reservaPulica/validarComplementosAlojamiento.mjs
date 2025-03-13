@@ -27,6 +27,7 @@ export const validarComplementosAlojamiento = async (reservaPublica) => {
                 sePermiteVacio: "no",
                 impedirCero: "si",
                 devuelveUnTipoNumber: "no",
+                devuelveUnTipoBigInt: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
 

@@ -20,7 +20,8 @@ export const detallesServicio = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
         delete servicio.testingVI

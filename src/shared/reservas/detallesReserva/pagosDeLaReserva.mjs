@@ -38,10 +38,9 @@ export const pagosDeLaReserva = async (reservaUID) => {
                 const pagoUIDPasarela = detallesDelPago.pagoUIDPasarela;
 
                 const fechaPago = detallesDelPago.fechaPago;
-                const fechaPagoTZ_ISO = DateTime.fromISO(fechaPago, { zone: 'utc' })
-                    .setZone(zonaHoraria)
-                    .toISO()
-                detallesDelPago.fechaPagoTZ_ISO = fechaPagoTZ_ISO;
+                const fechaPagoLocal = DateTime.fromISO(fechaPago, { zone: zonaHoraria });
+                detallesDelPago.fechaPagoLocal = fechaPagoLocal;
+                
                 const cantidadDelPago = new Decimal(detallesDelPago.cantidad);
                 const reembolsosDelPago = await obtenerReembolsosPorPagoUID(pagoUID)
                 if (reembolsosDelPago.length === 0) {
@@ -49,11 +48,6 @@ export const pagosDeLaReserva = async (reservaUID) => {
                     pagoResultadoFinal = cantidadDelPago.plus(pagoResultadoFinal);
                 }
                 if (reembolsosDelPago.length > 0) {
-
-
-
-
-
 
                     let sumaDeLoReembolsado = 0;
                     for (const detallesDelReembolso of reembolsosDelPago) {

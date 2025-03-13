@@ -17,7 +17,7 @@ export const validarImpuesto = (impuesto) => {
             estadoIDV: Joi.string()
         }).required().messages(commonMessages)
 
-        
+
         controlEstructuraPorJoi({
             schema: esquemaBusqueda,
             objeto: impuesto
@@ -37,7 +37,8 @@ export const validarImpuesto = (impuesto) => {
             filtro: "cadenaConNumerosConDosDecimales",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
 
         const tipoValorIDV = validadoresCompartidos.tipos.cadena({

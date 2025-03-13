@@ -9,9 +9,10 @@ export const obtenerPagoPorPagoUID = async (pagoUID) => {
             "pagoUID",
             "pagoUIDPasarela",
             "tarjetaDigitos",
-            to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPagoUTC_ISO", 
+            to_char("fechaPago", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as "fechaPago", 
             tarjeta,
-            cantidad
+            cantidad,
+            "conceptoPago"
         FROM 
             "reservaPagos"
         WHERE 

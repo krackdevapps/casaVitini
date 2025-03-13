@@ -32,7 +32,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const sobreControl = validadoresCompartidos.tipos.cadena({
@@ -41,7 +42,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             filtro: "strictoSinEspacios",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         if (sobreControl !== "" && sobreControl !== "activado") {
             const error = "El campo sobreControl si esta definido solo puede ser activado o un string vacío"
@@ -54,7 +56,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 filtro: "strictoSinEspacios",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
-                devuelveUnTipoNumber: "si"
+                devuelveUnTipoNumber: "no",
+                devuelveUnTipoBigInt: "si"
             })
             if (palabra !== "reconstruir") {
                 const error = "Por favor, escribe correctamente la palabra, reconstruir en el campo de texto. Escribe la palabra, reconstruir en minúsculas y sin espacios internos. Esto está así para evitar falsos clics."
@@ -82,9 +85,9 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 zonaIDV: "Falta establecer la zona simulada",
                 alojamiento: "Falta insertar algun alojamiento en la simulación"
             }
-            const llavesUI = llavesGlobalesFaltantes.map(llave=> dictLlaves[llave])
+            const llavesUI = llavesGlobalesFaltantes.map(llave => dictLlaves[llave])
             const llavesSring = utilidades.constructorComasEY({
-                array:llavesUI,
+                array: llavesUI,
                 articulo: ""
             })
             const m = `No se puede generar el contenedor financiero de la simulacion desde los hubs, por que faltan los siguientes datos globales de la simulacion: ${llavesSring}`

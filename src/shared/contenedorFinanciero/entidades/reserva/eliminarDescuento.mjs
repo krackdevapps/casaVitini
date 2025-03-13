@@ -33,13 +33,13 @@ export const eliminarDescuento = async (data) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
-        const ofertaUIDParaEliminar = validadoresCompartidos.tipos.numero({
+        const ofertaUIDParaEliminar = validadoresCompartidos.tipos.granEntero({
             number: data?.ofertaUID,
             nombreCampo: "El campo de ofertaUID dentro del actualizarDesgloseFinanciero",
-            filtro: "numeroSimple",
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
@@ -50,10 +50,9 @@ export const eliminarDescuento = async (data) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        const posicion = validadoresCompartidos.tipos.numero({
+        const posicion = validadoresCompartidos.tipos.granEntero({
             number: data.posicion,
             nombreCampo: "El el campo de posicion",
-            filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"

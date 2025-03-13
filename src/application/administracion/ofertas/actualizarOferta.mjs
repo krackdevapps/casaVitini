@@ -24,7 +24,8 @@ export const actualizarOferta = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const oferta = await obtenerOferatPorOfertaUID(ofertaUID)

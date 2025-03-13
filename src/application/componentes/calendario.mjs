@@ -153,15 +153,15 @@ export const calendario = async (entrada) => {
             const ano = validadoresCompartidos.tipos.numero({
                 number: entrada.body.ano,
                 nombreCampo: "El campo del año",
-                filtro: "numeroSimple",
                 sePermiteVacio: "no",
+                filtro: "numeroSimple",
                 limpiezaEspaciosAlrededor: "si",
             })
             const mes = validadoresCompartidos.tipos.numero({
                 number: entrada.body.mes,
                 nombreCampo: "El campo del mes",
-                filtro: "numeroSimple",
                 sePermiteVacio: "no",
+                filtro: "numeroSimple",
                 limpiezaEspaciosAlrededor: "si",
             })
 
@@ -263,17 +263,15 @@ export const calendario = async (entrada) => {
                 numeroDeLLavesMaximo: 3
             })
 
-            const ano = validadoresCompartidos.tipos.numero({
+            const ano = validadoresCompartidos.tipos.granEntero({
                 number: entrada.body.ano,
                 nombreCampo: "El campo del año",
-                filtro: "numeroSimple",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
-            const mes = validadoresCompartidos.tipos.numero({
+            const mes = validadoresCompartidos.tipos.granEntero({
                 number: entrada.body.mes,
                 nombreCampo: "El campo del mes",
-                filtro: "numeroSimple",
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })

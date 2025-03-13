@@ -26,7 +26,8 @@ export const insertarImpuestoEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const impuestoUID = validadoresCompartidos.tipos.cadena({
@@ -35,7 +36,8 @@ export const insertarImpuestoEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
         await obtenerImpuestoPorImpuestoUIDPorSimulacionUID({

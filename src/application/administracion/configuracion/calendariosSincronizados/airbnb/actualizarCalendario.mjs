@@ -23,7 +23,8 @@ export const actualizarCalendario = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const nombre = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombre,

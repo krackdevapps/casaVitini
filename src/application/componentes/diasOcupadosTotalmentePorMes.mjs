@@ -17,15 +17,15 @@ export const diasOcupadosTotalmentePorMes = async (entrada) => {
         const ano = validadoresCompartidos.tipos.numero({
             number: entrada.body.ano,
             nombreCampo: "El campo del año",
-            filtro: "numeroSimple",
             sePermiteVacio: "no",
+            filtro: "numeroSimple",
             limpiezaEspaciosAlrededor: "si",
         })
         const mes = validadoresCompartidos.tipos.numero({
             number: entrada.body.mes,
             nombreCampo: "El campo del mes",
-            filtro: "numeroSimple",
             sePermiteVacio: "no",
+            filtro: "numeroSimple",
             limpiezaEspaciosAlrededor: "si",
         })
         validadoresCompartidos.fechas.cadenaMes

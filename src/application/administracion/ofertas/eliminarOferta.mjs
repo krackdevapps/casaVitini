@@ -24,7 +24,8 @@ export const eliminarOferta = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         await obtenerOferatPorOfertaUID(ofertaUID)
         await campoDeTransaccion("iniciar")

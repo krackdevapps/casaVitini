@@ -21,7 +21,8 @@ export const obtenerDetallesDelServicioEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const servicioUID_enSimulacion = validadoresCompartidos.tipos.cadena({
@@ -30,11 +31,12 @@ export const obtenerDetallesDelServicioEnSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
-        
+
         const servicio = await obtenerServicioEnSimulacionPorServicioUID(servicioUID_enSimulacion)
         const contenedorServicio = servicio.contenedor
         contenedorServicio.servicioUID = servicio.servicioUID

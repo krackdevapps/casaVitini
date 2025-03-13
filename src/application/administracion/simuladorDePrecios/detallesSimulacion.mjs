@@ -7,6 +7,7 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs";
 import { obtenerComplementosAlojamientoPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/complementosDeAlojamiento/obtenerComplementosAlojamientoPorSimulacionUID.mjs";
 import { controladorGeneracionDesgloseFinanciero } from "../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs";
+import { obtenerFechaLocal } from "../../../shared/obtenerFechaLocal.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -25,7 +26,8 @@ export const detallesSimulacion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
 
@@ -33,7 +35,7 @@ export const detallesSimulacion = async (entrada) => {
         const zonaIDV = simulacion.zonaIDV
         const fechaCreacion = simulacion.fechaCreacion
         const fechaEntrada = simulacion.fechaEntrada
-        const fechaSalida = simulacion.fechaSalida  
+        const fechaSalida = simulacion.fechaSalida
         const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
 
         const apartamentos = []
@@ -63,6 +65,14 @@ export const detallesSimulacion = async (entrada) => {
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
         const complementosDeAlojamientoDeLaSimulacion = await obtenerComplementosAlojamientoPorSimulacionUID(simulacionUID)
         const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
+
+        for (const dS of serviciosDeLaSimulacion) {
+
+            const contenedor = dS.contenedor
+            const fechaAdquisicion = contenedor.fechaAdquisicion
+            contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaAdquisicion)
+        }
+
 
         const ok = {
             ok: "Aquí tienes los detalles de la simulación",

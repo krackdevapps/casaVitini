@@ -677,6 +677,20 @@ export const validadoresCompartidos = {
                     }
                     if (devuelveUnTipoNumber === "si") {
                         string = Number(string)
+                    } else {
+                        const devuelveUnTipoBigInt = configuracion.devuelveUnTipoBigInt
+                        if (typeof devuelveUnTipoBigInt !== "string" &&
+                            (devuelveUnTipoBigInt !== "si" && devuelveUnTipoBigInt !== "no")) {
+                            const mensaje = `El validador de cadena está mal configurado, devuelveUnTipoBigInt solo acepta si o no.`
+                            throw new Error(mensaje)
+                        }
+                        if (devuelveUnTipoBigInt === "si") {
+                            string = BigInt(string)
+                        }
+
+
+
+
                     }
 
                 } catch (errorCapturado) {
@@ -783,6 +797,73 @@ export const validadoresCompartidos = {
                 const mensaje = `El validador de números, necesitó un identificador de filtro válido`
                 throw new Error(mensaje)
 
+            }
+            return number
+        },
+        granEntero: (configuracion) => {
+
+            let number = configuracion.number
+            const nombreCampo = configuracion.nombreCampo
+            const sePermiteVacio = configuracion.sePermiteVacio
+            const sePermiteCero = configuracion.sePermiteCero
+            const limpiezaEspaciosAlrededor = configuracion.limpiezaEspaciosAlrededor
+            const sePermitenNegativos = configuracion.sePermitenNegativos || "no"
+
+            if (!configuracion.hasOwnProperty("number")) {
+                throw new Error("El validador de granEntero no encuentra la llave number en el objeto");
+            }
+
+            if (!configuracion.hasOwnProperty("nombreCampo")) {
+                throw new Error("El validador de granEntero no encuentra la llave nombreCampo en el objeto");
+            }
+
+
+            if (!nombreCampo) {
+                const mensaje = `El validador de cadenas, necesita un nombre de campo.`
+                throw new Error(mensaje)
+            }
+            // esto afecta a calendarios
+            if (typeof number !== "bigint") {
+                const mensaje = `${nombreCampo} debe de ser un granEntero.`
+                throw new Error(mensaje)
+            }
+            if (typeof sePermiteVacio !== "string" &&
+                (sePermiteVacio !== "si" && sePermiteVacio !== "no")) {
+                const mensaje = `El validador de granEntero está mal configurado, sePermiteVacio solo acepta sí o no y es obligatorio declararlo en la configuración.`
+                throw new Error(mensaje)
+            }
+
+            if (typeof limpiezaEspaciosAlrededor !== "string" &&
+                (limpiezaEspaciosAlrededor !== "si" && limpiezaEspaciosAlrededor !== "no")) {
+                const mensaje = `El validador de granEntero está mal configurado, limpiezaEspaciosAlrededor solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+
+            if (sePermitenNegativos &&
+                typeof sePermitenNegativos !== "string" &&
+                (sePermitenNegativos !== "si" && sePermitenNegativos !== "no")) {
+                const mensaje = `El validador de granEntero está mal configurado, sePermitenNegativos solo acepta si o no.`
+                throw new Error(mensaje)
+            }
+            if (sePermitenNegativos === "no") {
+                if (number < 0) {
+                    const mensaje = `No se permiten granEntero negativos, por favor revísalo.`
+                    throw new Error(mensaje)
+                }
+            }
+
+            if (sePermiteCero === "no") {
+                if (number === 0) {
+                    const mensaje = `No se permite el cero, por favor revísalo.`
+                    throw new Error(mensaje)
+                }
+            }
+
+            try {
+                number = BigInt(number)
+            } catch (error) {
+                const mensaje = `No se puede procesar el numero, solo se espera un entero en cadena o en numero`
+                throw new Error(mensaje)
             }
             return number
         },

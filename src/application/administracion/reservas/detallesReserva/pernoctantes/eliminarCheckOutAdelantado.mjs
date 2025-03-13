@@ -25,7 +25,8 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -34,7 +35,8 @@ export const eliminarCheckOutAdelantado = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
 

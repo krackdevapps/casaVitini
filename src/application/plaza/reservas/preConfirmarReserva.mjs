@@ -5,7 +5,6 @@ import { detallesReserva } from "../../../shared/reservas/detallesReserva.mjs";
 import { actualizarEstadoPago } from "../../../shared/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { mensajesUI } from "../../../shared/mensajesUI.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
-import { generadorPDF } from "../../../shared/pdf/generadorPDF.mjs";
 import { utilidades } from "../../../shared/utilidades.mjs";
 import { validarHoraLimitePublica } from "../../../shared/reservas/validarHoraLimitePublica.mjs";
 import { disponibilidadApartamentos } from "../../../shared/reservas/nuevaReserva/reservaPulica/disponibilidadApartamentos.mjs";
@@ -18,6 +17,7 @@ import { enviarMailReservaConfirmadaAlCliente } from "../../../shared/mail/envia
 import { enviarMailDeAvisoPorReservaPublica } from "../../../shared/mail/enviarMailDeAvisoPorReservaPublica.mjs";
 import { validarComplementosAlojamiento } from "../../../shared/reservas/nuevaReserva/reservaPulica/validarComplementosAlojamiento.mjs";
 import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
+import { esquemaGlobal } from "../../administracion/reservas/detallesReserva/pdf/contenedores/esquemaGlobal.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     try {
@@ -117,7 +117,17 @@ export const preConfirmarReserva = async (entrada) => {
             ]
         })
         limpiarContenedorFinacieroInformacionPrivada(resolverDetallesReserva)
-        const pdf = await generadorPDF(resolverDetallesReserva);
+        const pdf = await esquemaGlobal({
+            incluirTitular: "si",
+            reserva: resolverDetallesReserva,
+            tablasIDV: [
+                "fechas",
+                "alojamiento",
+                "servicios",
+                "totalesGlobales"
+            ],
+            configuracionPorTabla: {}
+        });
         if (!testingVI) {
             //  enviarMailReservaConfirmadaAlCliente(reservaUID)
             // enviarMailDeAvisoPorReservaPublica(reservaUID)

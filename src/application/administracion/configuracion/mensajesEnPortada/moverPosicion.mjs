@@ -24,7 +24,8 @@ export const moverPosicion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const nuevaPosicion = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevaPosicion,
@@ -32,7 +33,8 @@ export const moverPosicion = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const mensajeDePortadaa = await obtenerMensajePorMensajeUID(mensajeUID)
@@ -76,7 +78,7 @@ export const moverPosicion = async (entrada) => {
         };
         await campoDeTransaccion("iniciar")
 
-   
+
         await actualizarPosicionDelMensajeDePortada({
             mensajeUID: mensajeUIDAfectado,
             posicion: "0"
@@ -87,7 +89,7 @@ export const moverPosicion = async (entrada) => {
             posicion: nuevaPosicion
         })
 
-        await actualizarPosicionDelMensajeDePortada( {
+        await actualizarPosicionDelMensajeDePortada({
             mensajeUID: mensajeUIDAfectado,
             posicion: posicionAntigua
         })

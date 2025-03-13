@@ -21,7 +21,8 @@ export const guardarConfiguracion = async (entrada, salida) => {
             sePermiteVacio: "no",
             impedirCero: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const limiteFuturoReserva = validadoresCompartidos.tipos.cadena({
@@ -31,7 +32,8 @@ export const guardarConfiguracion = async (entrada, salida) => {
             sePermiteVacio: "no",
             impedirCero: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const diasMaximosReserva = validadoresCompartidos.tipos.cadena({
             string: entrada.body.diasMaximosReserva,
@@ -39,7 +41,8 @@ export const guardarConfiguracion = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const horaLimiteDelMismoDia = entrada.body?.horaLimiteDelMismoDia || ""

@@ -1,7 +1,5 @@
 casaVitini.view = {
     start: async function () {
-        const main = document.querySelector("main")
-        const instanciaUID = main.getAttribute("instanciaUID")
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const comandoInicial = granuladoURL.directorios[granuladoURL.directorios.length - 1]
 
@@ -23,33 +21,11 @@ casaVitini.view = {
 
             this.portada.mostrarSimulacionesResueltas(parametrosFormatoIDV)
         } else if (comandoInicial === "simulador_de_precios" && parametros.simulacion) {
-            main.setAttribute("zonaCSS", "administracion/simuladorDePrecios/detalles")
-
-            const respuestaServidor = await casaVitini.shell.servidor({
-                zona: "administracion/simuladorDePrecios/detallesSimulacion",
-                simulacionUID: String(parametros.simulacion)
+            this.detallesSimulacion.detalleSimulacion({
+                simulacionUID: parametros.simulacion,
+                zona: parametros.zona
             })
-            const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
-            if (!seccionRenderizada) { return }
-            if (respuestaServidor.error) {
-                const titulo = document.querySelector(".tituloGris")
-                titulo.textContent = "No existe ningúns simulación con el identificador: " + parametros.simulacion
-                main.innerHTML = null
-                main.appendChild(titulo)
-                return
-            }
-            await this.detallesSimulacion.detalleSimulacion(respuestaServidor)
-
-            const zonaURL = parametros.zona
-            if (zonaURL) {
-                const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zonaURL)
-                this.detallesSimulacion.componentesUI.categoriasGlobalesUI.controladorMostrar({
-                    origen: "url",
-                    categoria: categoriaGlobalIDV
-                })
-            }
-        }
-        else {
+        } else {
             casaVitini.ui.componentes.urlDesconocida()
         }
     },
@@ -220,7 +196,32 @@ casaVitini.view = {
         },
     },
     detallesSimulacion: {
-        detalleSimulacion: async function (respuestaServidor) {
+        obtenerDatoSimulacion: async function (data) {
+            const simulacionUID = data.simulacionUID
+            const respuestaServidor = await casaVitini.shell.servidor({
+                zona: "administracion/simuladorDePrecios/detallesSimulacion",
+                simulacionUID: String(simulacionUID)
+            })
+            return respuestaServidor
+        },
+        detalleSimulacion: async function (data) {
+
+            const simulacionUID = data.simulacionUID
+            const zona = data.zona
+            const main = document.querySelector("main")
+            const instanciaUID = main.getAttribute("instanciaUID")
+
+            const respuestaServidor = await this.obtenerDatoSimulacion({ simulacionUID: simulacionUID })
+            const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
+            if (!seccionRenderizada) { return }
+            if (respuestaServidor.error) {
+                const titulo = document.querySelector(".tituloGris")
+                titulo.textContent = "No existe ningúns simulación con el identificador: " + simulacionUID
+                main.innerHTML = null
+                main.appendChild(titulo)
+                return
+            }
+
             if (respuestaServidor?.error) {
                 const info = {
                     titulo: "No existe ninguna simulación con ese identificador",
@@ -230,7 +231,6 @@ casaVitini.view = {
             }
             if (respuestaServidor?.ok) {
 
-
                 const simulacionData = respuestaServidor
                 const nombre = simulacionData.nombre
                 const zonaIDV = simulacionData.zonaIDV
@@ -238,11 +238,10 @@ casaVitini.view = {
                 const fechaCreacion = simulacionData?.fechaCreacion
                 const fechaEntrada = simulacionData?.fechaEntrada
                 const fechaSalida = simulacionData?.fechaSalida
-                const contenedorFinanciero = simulacionData.contenedorFinanciero
                 const apartamentos = simulacionData.apartamentos
                 const servicios = simulacionData.servicios || []
                 const complementosDeAlojamiento = simulacionData.complementosDeAlojamiento
-                const codigosDescuento = simulacionData.codigosDescuento || []
+                const desglosePorServicios = simulacionData.desgloseFinanciero.entidades.servicios.desglosePorServicios
 
                 const selectorEspacio = document.querySelector("[componente=espacio]")
                 const contenedor = document.createElement("div")
@@ -260,7 +259,6 @@ casaVitini.view = {
                     "padding5",
                     "titulo"
                 )
-
 
                 const controladorAlturaTituloDinamico = (e) => {
                     const selectorInstanciaActual = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
@@ -281,70 +279,10 @@ casaVitini.view = {
                 }
                 document.addEventListener("scroll", controladorAlturaTituloDinamico)
 
-                const contenedorSimulacion = document.querySelector("[contenedor=simulacion]")
-                const contenedorGlobal = simulacionUI.querySelector("[contenedor=botones]")
-
-                const campoNombre = document.createElement("input")
-                campoNombre.setAttribute("campo", "nombre")
-                campoNombre.classList.add(
-                    "padding6",
-                    "backgroundGrey1",
-                    "borderRadius8",
-                    "padding10",
-                    "simplificadorCampo",
-                    "noSelecionable"
-                )
-                campoNombre.placeholder = "Escriba un nombre para la simulación"
-
-                contenedorGlobal.appendChild(campoNombre)
-
-                const contenedorBotones = document.createElement("div")
-                contenedorBotones.classList.add(
-                    "gridHorizontal2C",
-                    "gap6"
-                )
-                contenedorGlobal.appendChild(contenedorBotones)
-
-
-                const botonGuardar = document.createElement("div")
-                botonGuardar.classList.add(
-                    "botonV1",
-                    "comportamientoBoton",
-                    "padding6",
-                    "textoCentrado",
-                    "backgroundGrey1",
-                    "borderRadius8",
-                    "noSelecionable"
-                )
-                botonGuardar.textContent = "Guardar simulación"
-                botonGuardar.addEventListener("click", () => {
-                    this.actualizarNombreSimulacion()
-                })
-
-                contenedorBotones.appendChild(botonGuardar)
-
-                const botonEliminar = document.createElement("div")
-                botonEliminar.classList.add(
-                    "botonV1",
-                    "comportamientoBoton",
-                    "padding6",
-                    "textoCentrado",
-                    "backgroundGrey1",
-                    "borderRadius8",
-                    "noSelecionable"
-                )
-                botonEliminar.textContent = "Eliminar simulación"
-                botonEliminar.addEventListener("click", () => {
-                    this.eliminarSimulacion.UI()
-                })
-                contenedorBotones.appendChild(botonEliminar)
-
                 const selectorNombre = simulacionUI.querySelector("[campo=nombre]")
                 const selectorFechaEntrada = simulacionUI.querySelector("[calendario=entrada]")
                 const selectorFechaSalida = simulacionUI.querySelector("[calendario=salida]")
                 const selectorFechaCreacion = simulacionUI.querySelector("[calendario=unico]")
-                const selectorsApartamentos = simulacionUI.querySelector("[contenedor=apartamentosSeleccianados]")
-                const instanciaUID_contenedorApartamentos = selectorsApartamentos.querySelector("[instanciaUID]").getAttribute("instanciaUID")
 
                 const hubFecha = (fecha) => {
                     if (fecha) {
@@ -407,7 +345,8 @@ casaVitini.view = {
 
                 casaVitini.view.componentes.servicios.actualizarContenedor({
                     servicios,
-                    simulacionUID
+                    simulacionUID,
+                    desglosePorServicios
                 })
 
                 casaVitini.view.detallesSimulacion.componentesUI.complementosDeAlojamiento.arranque({
@@ -416,18 +355,13 @@ casaVitini.view = {
                 })
                 casaVitini.view.componentes.postProcesamientoTransaccion(simulacionData)
 
-                // if (contenedorFinanciero?.desgloseFinanciero) {
-                //    casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
-                //         destino: `[contenedor=simulacion]`,
-                //         contenedorFinanciero,
-                //         modoUI: "simulador"
-                //     })
-                // } else {
-                //    casaVitini.view.componentes.infoLllavesFaltantes({
-                //     simulacionUID,
-                //     info: null
-                //    })
-                // }
+                if (zona) {
+                    const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zona)
+                    this.componentesUI.categoriasGlobalesUI.controladorMostrar({
+                        origen: "url",
+                        categoria: categoriaGlobalIDV
+                    })
+                }
             }
         },
         componentesUI: {
@@ -578,13 +512,23 @@ casaVitini.view = {
 
                     })
 
-                    complementosDeAlojamiento.forEach((com) => {
-                        const sel = contenedor.querySelector(`[apartamentoIDV="${com.apartamentoIDV}"] [contenedor=complementos]`)
-                        sel.querySelector("[componente=sinInfo]")?.remove()
-                        sel.appendChild(this.componentesUI.complementoUI(com))
+                    complementosDeAlojamiento.forEach((complemento) => {
+
+                        const contenedorAlojamiento = contenedor.querySelector(`[apartamentoIDV="${complemento.apartamentoIDV}"] [contenedor=complementos]`)
+                        contenedorAlojamiento.querySelector("[componente=sinInfo]")?.remove()
+                        const habitacionUID = complemento.habitacionIDV
+                        const habitacionUI = complemento.habitacionUI
+                        const tipoUbicacion = complemento.tipoUbicacion
+
+                        this.componentesUI.insertorDeComplemento({
+                            habitacionUID,
+                            habitacionUI,
+                            tipoUbicacion,
+                            instanciaUID_contenedorComplementos,
+                            destino: contenedorAlojamiento,
+                            complemento
+                        })
                     })
-
-
                 },
                 componentesUI: {
                     insertarComplementoEnAlojamiento: {
@@ -657,7 +601,61 @@ casaVitini.view = {
                                     const tipoPrecio = c.tipoPrecio
                                     const precio = c.precio
                                     const definicion = c.definicion
+                                    const tipoUbicacion = c.tipoUbicacion
 
+                                    // const contenedor = document.createElement("div")
+                                    // contenedor.setAttribute("complementoUID", complementoUID)
+                                    // contenedor.classList.add(
+                                    //     "borderRadius12",
+                                    //     "width100",
+                                    //     "flexVertical",
+                                    //     "backgroundGrey1",
+                                    //     "padding6",
+                                    //     "gap6"
+                                    // )
+
+                                    // const contenedorGlobal = document.createElement("div")
+                                    // contenedorGlobal.classList.add(
+                                    //     "flexVertical",
+                                    //     "padding6",
+                                    //     "gap6"
+                                    // )
+
+                                    // const nombreOfertaUI = document.createElement("div")
+                                    // nombreOfertaUI.classList.add("negrita")
+                                    // nombreOfertaUI.textContent = complementoUI
+                                    // contenedorGlobal.appendChild(nombreOfertaUI)
+
+                                    // const estadoTitulo = document.createElement("div")
+                                    // estadoTitulo.textContent = "Estado del complemento"
+                                    // contenedorGlobal.appendChild(estadoTitulo)
+
+
+                                    // const estadoUI = document.createElement("div")
+                                    // estadoUI.classList.add("negrita")
+                                    // estadoUI.textContent = estadoUI_(estadoIDV)
+                                    // contenedorGlobal.appendChild(estadoUI)
+                                    // contenedor.appendChild(contenedorGlobal)
+
+
+
+                                    let sel
+                                    if (tipoUbicacion === "alojamiento") {
+                                        sel = `[contenedorTipoUbicacion=${tipoUbicacion}]`
+                                    } else if (tipoUbicacion === "habitacion") {
+                                        const habitacionUID = c.configuracionHabitacion.habitacionSeleccionada.componenteUID
+                                        sel = `[contenedorTipoUbicacion=${tipoUbicacion}][habitacionUID="${habitacionUID}"]`
+                                    }
+
+                                    const cS_control = constructor.querySelector(sel)
+                                    if (!cS_control) {
+                                        const habitacionSeleccionada = c.configuracionHabitacion.habitacionSeleccionada
+                                        const cC = casaVitini.view.detallesSimulacion.componentesUI.complementosDeAlojamiento.componentesUI.contenedorComplemento({
+                                            tipoUbicacion,
+                                            habitacionSeleccionada
+                                        })
+                                        constructor.appendChild(cC)
+                                    }
 
                                     const contenedor = document.createElement("div")
                                     contenedor.setAttribute("complementoUID", complementoUID)
@@ -669,6 +667,7 @@ casaVitini.view = {
                                         "padding6",
                                         "gap6"
                                     )
+                                    constructor.querySelector(sel).querySelector("[com=complementos]").appendChild(contenedor)
 
                                     const contenedorGlobal = document.createElement("div")
                                     contenedorGlobal.classList.add(
@@ -681,17 +680,49 @@ casaVitini.view = {
                                     nombreOfertaUI.classList.add("negrita")
                                     nombreOfertaUI.textContent = complementoUI
                                     contenedorGlobal.appendChild(nombreOfertaUI)
-
+                                    const precioUI = document.createElement("div")
+                                    precioUI.classList.add("negrita")
+                                    if (tipoPrecio === "porNoche") {
+                                        precioUI.textContent = precio + "$ Por noche"
+                                    } else if (tipoPrecio === "fijoPorReserva") {
+                                        precioUI.textContent = precio + "$ Precio final"
+                                    }
+                                    contenedorGlobal.appendChild(precioUI)
+                                    const definicionUI = document.createElement("div")
+                                    definicionUI.textContent = definicion
+                                    contenedorGlobal.appendChild(definicionUI)
                                     const estadoTitulo = document.createElement("div")
                                     estadoTitulo.textContent = "Estado del complemento"
                                     contenedorGlobal.appendChild(estadoTitulo)
-
-
                                     const estadoUI = document.createElement("div")
                                     estadoUI.classList.add("negrita")
                                     estadoUI.textContent = estadoUI_(estadoIDV)
                                     contenedorGlobal.appendChild(estadoUI)
                                     contenedor.appendChild(contenedorGlobal)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                                     const contendorBotones = document.createElement("div")
                                     contendorBotones.classList.add(
@@ -785,31 +816,28 @@ casaVitini.view = {
                                 const complementoDeAlojamiento = respuestaServidor.complementoDeAlojamiento
                                 const apartamentoIDV_destino = complementoDeAlojamiento.apartamentoIDV
 
+
+
                                 const selectorContenedor = uiRenderizada.querySelector(`[apartamentoIDV="${apartamentoIDV_destino}"] [contenedor=complementos]`)
-
-
                                 if (!selectorContenedor) {
                                     return
                                 }
 
-                                const complementoUI = casaVitini.view.detallesSimulacion.componentesUI.complementosDeAlojamiento.componentesUI.complementoUI({
-                                    complementoUID: complementoDeAlojamiento.complementoUID,
-                                    complementoUI: complementoDeAlojamiento.complementoUI,
-                                    definicion: complementoDeAlojamiento.definicion,
-                                    precio: complementoDeAlojamiento.precio,
-                                    tipoPrecio: complementoDeAlojamiento.tipoPrecio,
-                                    apartamentoIDV: complementoDeAlojamiento.apartamentoIDV
+                                casaVitini.view.detallesSimulacion.componentesUI.complementosDeAlojamiento.componentesUI.insertorDeComplemento({
+                                    habitacionUID: complementoDeAlojamiento.habitacionIDV,
+                                    habitacionUI: complementoDeAlojamiento.habitacionUI,
+                                    tipoUbicacion: complementoDeAlojamiento.tipoUbicacion,
+                                    instanciaUID_contenedorComplementos,
+                                    destino: selectorContenedor,
+                                    complemento: complementoDeAlojamiento
                                 })
+
                                 const selectorInfo = selectorContenedor.querySelector("[componente=sinInfo]")
                                 selectorInfo?.remove()
 
-                                selectorContenedor.appendChild(complementoUI)
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                                 casaVitini.view.componentes.postProcesamientoTransaccion(respuestaServidor)
-
-
                             }
-
                         },
                     },
                     eliminarComplementoDeAlojamiento: {
@@ -876,7 +904,16 @@ casaVitini.view = {
                                 }
 
                                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                                selectorContenedor.querySelector(`[complentoUID_enSimulacion="${complementoUID_enSimulacion}"]`)?.remove()
+
+                                const complementoSel = selectorContenedor.querySelector(`[complentoUID_enSimulacion="${complementoUID_enSimulacion}"]`)
+
+                                const contenedorTipoUbicacion = complementoSel.closest("[contenedorTipoUbicacion]")
+                                const complementosRestantesTipo = contenedorTipoUbicacion.querySelectorAll("[complentoUID_enSimulacion]")
+                                complementoSel?.remove()
+
+                                if (complementosRestantesTipo.length <= 1) {
+                                    contenedorTipoUbicacion?.remove()
+                                }
 
                                 const selectorContenedoresComplentosRenderizados = selectorContenedor.querySelectorAll("[complentoUID_enSimulacion]")
                                 if (selectorContenedoresComplentosRenderizados.length === 0) {
@@ -898,14 +935,20 @@ casaVitini.view = {
                         return info
                     },
                     complementoUI: (data) => {
-                        const complementoUID = data.complementoUID
-                        const complementoUI = data.complementoUI
-                        const definicion = data.definicion
-                        const precio = data.precio
-                        const tipoPrecio = data.tipoPrecio
-                        const apartamentoIDV = data.apartamentoIDV
+                        const complemento = data.complemento
+                        const complementoUID = complemento.complementoUID
+                        const complementoUI = complemento.complementoUI
+                        const definicionB64 = complemento.definicion
+                        const precio = complemento.precio
+                        const tipoPrecio = complemento.tipoPrecio
+                        const apartamentoIDV = complemento.apartamentoIDV
 
 
+                        const complementoDef = (d) => {
+                            const def = d.length === 0 ? "" : d
+                            return casaVitini.utilidades.conversor.base64HaciaConTextDecoder(def)
+
+                        }
                         const renderizaPrecio = (data) => {
                             const precio = data.precio
                             const tipoPrecio = data.tipoPrecio
@@ -961,7 +1004,7 @@ casaVitini.view = {
                         d.classList.add(
                             //  "padding14"
                         )
-                        d.textContent = definicion
+                        d.textContent = complementoDef(definicionB64)
                         dataCont.appendChild(d)
 
                         const b = document.createElement("div")
@@ -1032,6 +1075,70 @@ casaVitini.view = {
                         c.appendChild(this.infoSinComplemento())
                         ui.appendChild(c)
                         return ui
+                    },
+                    contenedorComplemento: function (data) {
+
+                        const tipoUbicacion = data.tipoUbicacion
+
+                        const ui = document.createElement("div")
+                        ui.classList.add("flexVertical", "gap6")
+                        ui.setAttribute("contenedorTipoUbicacion", tipoUbicacion)
+
+                        const t = document.createElement("div")
+                        t.classList.add("padding14")
+                        if (tipoUbicacion === "alojamiento") {
+                            t.textContent = "Complementos del alojamiento"
+                        } else if (tipoUbicacion === "habitacion") {
+                            const habitacionUID = data.habitacionSeleccionada.componenteUID
+                            const habitacionUI = data.habitacionSeleccionada.habitacionUI
+                            ui.setAttribute("habitacionUID", habitacionUID)
+                            t.textContent = habitacionUI
+                        }
+                        ui.appendChild(t)
+
+                        const c = document.createElement("div")
+                        c.classList.add("flexVertical", "gap6")
+                        c.setAttribute("com", "complementos")
+                        ui.appendChild(c)
+
+                        return ui
+                    },
+                    insertorDeComplemento: function (data) {
+
+
+                        const habitacionUID = data.habitacionUID
+                        const habitacionUI = data.habitacionUI
+                        const tipoUbicacion = data.tipoUbicacion
+                        const instanciaUID_contenedorComplementos = data.instanciaUID_contenedorComplementos
+                        const complemento = data.complemento
+                        const destino = data.destino
+
+                        let sel
+                        if (tipoUbicacion === "alojamiento") {
+                            sel = `[contenedorTipoUbicacion=${tipoUbicacion}]`
+                        } else if (tipoUbicacion === "habitacion") {
+                            sel = `[contenedorTipoUbicacion=${tipoUbicacion}][habitacionUID="${habitacionUID}"]`
+                        }
+
+                        const cS_control = destino.querySelector(sel)
+                        if (!cS_control) {
+                            const configuracion = {
+                                tipoUbicacion,
+                            }
+                            if (tipoUbicacion === "habitacion") {
+                                configuracion.habitacionSeleccionada = {
+                                    componenteUID: habitacionUID,
+                                    habitacionUI: habitacionUI
+                                }
+                            }
+                            const cC = this.contenedorComplemento(configuracion)
+                            destino.appendChild(cC)
+                        }
+
+                        destino.querySelector(sel).querySelector("[com=complementos]").appendChild(this.complementoUI({
+                            instanciaUID_contenedorComplementos,
+                            complemento
+                        }))
                     }
                 },
             },
@@ -1414,6 +1521,236 @@ casaVitini.view = {
 
                 },
 
+            },
+            insertarDescuentoDedicado: {
+                ui: function (data) {
+                    const e = data.e
+                    const main = document.querySelector("main")
+                    const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+                    const simulacionUID = main.querySelector("[simulacionUID]").getAttribute("simulacionUID")
+                    const instanciaUID = ui.getAttribute("instanciaUID")
+
+                    main.appendChild(ui)
+                    const constructor = ui.querySelector("[componente=contenedor]")
+                    const contenedorIntermedio = ui.querySelector("[com=contenedorIntermedio]")
+
+                    constructor.style.position = "relative"
+                    constructor.style.padding = "0px"
+
+                    contenedorIntermedio.style.minHeight = "100vh"
+
+                    const sC = document.createElement("div")
+                    sC.classList.add("flexVertical", "padding18", "gap6")
+                    sC.setAttribute("area", "descuentoDedicado")
+                    constructor.appendChild(sC)
+
+                    const input = document.createElement("input");
+                    input.setAttribute("type", "text");
+                    input.setAttribute("campoOferta", "nombreOferta");
+                    input.setAttribute("placeholder", "Escriba un nombre a esta oferta, el nombre sera publico");
+                    sC.appendChild(input)
+
+
+                    const contenedorDescuento = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.contenedorDescuento({
+                        zonaDespliegue: `[componente=advertenciaInmersiva] [componente=contenedor]`,
+                        metodoSelectorDia: "view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.componentes.pasarelaSelectorDia"
+                    })
+                    sC.appendChild(contenedorDescuento)
+
+                    const contenedorBotones = document.createElement("div")
+                    contenedorBotones.classList.add("flexHorizontal", "gap6")
+                    sC.appendChild(contenedorBotones)
+
+                    const botonInsertar = document.createElement("div")
+                    botonInsertar.classList.add("botonV1")
+                    botonInsertar.textContent = "Insertar descuento dedicado"
+                    botonInsertar.addEventListener("click", (e) => {
+                        this.confirmar({
+                            e,
+                            instanciaUID,
+                            simulacionUID,
+                        })
+                    })
+                    contenedorBotones.appendChild(botonInsertar)
+
+                    const botonVolver = document.createElement("div")
+                    botonVolver.classList.add("botonV1")
+                    botonVolver.textContent = "Cancelar y volver a la resserva"
+                    botonVolver.addEventListener("click", () => {
+                        return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+
+                    })
+                    contenedorBotones.appendChild(botonVolver)
+
+
+                },
+                constructorObjeto: ({ e }) => {
+
+                    const area = e.target.closest("[area=descuentoDedicado]")
+                    const nombreOferta = area.querySelector("[campoOferta=nombreOferta]").value
+                    //const fechaInicio_ISO = area.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                    //const fechaFinal_ISO = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+
+                    const oferta = {
+                        nombreOferta,
+                        zonaIDV: "global",
+                        entidadIDV: "reserva",
+                        descuentosJSON: {}
+                    }
+
+
+                    const contenedorDescuentos = area.querySelector("[contenedor=descuentos]")
+                    const tipoDescuento = contenedorDescuentos.querySelector("[componente=tipoDescuento]")?.value
+                    if (tipoDescuento === "totalNeto") {
+                        const descuentoTotal = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=descuentoGlobal]`).value
+                        const tipoAplicacion = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=tipoDescuento]`).value
+
+                        const estructuraDescuento = {
+                            tipoDescuento: tipoDescuento,
+                            tipoAplicacion: tipoAplicacion,
+                            descuentoTotal: descuentoTotal
+                        }
+                        oferta.descuentosJSON = estructuraDescuento
+                    } else if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
+                        const descuentoTotal = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=descuentoGlobal]`).value
+                        const tipoAplicacion = contenedorDescuentos.querySelector(`[descuentoIDV="${tipoDescuento}"] [campoOferta=tipoDescuento]`).value
+
+                        const estructuraDescuento = {
+                            tipoDescuento: tipoDescuento,
+                            tipoAplicacion: tipoAplicacion,
+                            descuentoTotal: descuentoTotal
+                        }
+                        oferta.descuentosJSON = estructuraDescuento
+                    } else if (tipoDescuento === "individualPorApartamento") {
+                        const apartamentos = []
+
+                        const apartamentosSeleccionados = contenedorDescuentos.querySelector("[descuentoidv=individualPorApartamento]").querySelectorAll("[apartamentoIDV]")
+                        apartamentosSeleccionados.forEach((apartamento) => {
+                            const apartamentoIDV = apartamento.getAttribute("apartamentoIDV")
+                            const descuentoTotal = apartamento.querySelector("[campoapartamentoseleccionado=descuentoTotal]").value
+                            const tipoDescuento = apartamento.querySelector("[campoapartamentoseleccionado=tipoDescuento]").value
+
+                            const estructuraApartamento = {
+                                apartamentoIDV,
+                                descuentoTotal,
+                                tipoAplicacion: tipoDescuento
+                            }
+                            apartamentos.push(estructuraApartamento)
+
+                        })
+                        const estructuraDescuento = {
+                            tipoDescuento: tipoDescuento,
+                            apartamentos: apartamentos
+                        }
+                        oferta.descuentosJSON = estructuraDescuento
+
+                    } else if (tipoDescuento === "porRango") {
+                        const area = contenedorDescuentos.querySelector("[area=descuentosPorRango]")
+                        const fechaInicioRango_ISO = area.querySelector("[calendario=entrada]").getAttribute("memoriaVolatil")
+                        const fechaFinalRango_ISO = area.querySelector("[calendario=salida]").getAttribute("memoriaVolatil")
+                        const subTipoDescuento = area.querySelector("[componente=subTipoDescuento]").value
+
+
+                        const estructuraDescuento = {
+                            tipoDescuento: tipoDescuento,
+                            fechaInicioRango_ISO: fechaInicioRango_ISO,
+                            fechaFinalRango_ISO: fechaFinalRango_ISO,
+                            subTipoDescuento: subTipoDescuento,
+                        }
+                        oferta.descuentosJSON = estructuraDescuento
+
+                        if (subTipoDescuento === "totalNetoPorRango") {
+                            const descuentoTotal = area.querySelector("[campoOferta=descuentoGlobal]").value
+                            const tipoAplicacion = area.querySelector("[campoOferta=tipoDescuento]").value
+                            estructuraDescuento.tipoAplicacion = tipoAplicacion
+                            estructuraDescuento.descuentoTotal = descuentoTotal
+                        }
+
+                        if (subTipoDescuento === "porDiasDelRango") {
+                            estructuraDescuento.descuentoPorDias = []
+
+                            const contenedorPorDiasPorRango = area.querySelectorAll("[contenedor=dia]")
+                            contenedorPorDiasPorRango.forEach((dia) => {
+
+                                const fechaDelDia = dia.getAttribute("fechaDelDia")
+
+                                const estructuraDescuentoPorDia = {
+                                    fecha: fechaDelDia
+                                }
+                                const tipoDescuentoEnElDia = dia.querySelector("[campoOferta=contextoAplicacion]").value
+                                estructuraDescuentoPorDia.tipoDescuento = tipoDescuentoEnElDia
+
+
+                                if (tipoDescuentoEnElDia === "netoPorDia") {
+                                    const descuentoTotal = dia.querySelector("[campoOferta=descuentoGlobal]").value
+                                    const tipoAplicacion = dia.querySelector("[campoOferta=tipoDescuento]").value
+
+                                    estructuraDescuentoPorDia.tipoAplicacion = tipoAplicacion
+                                    estructuraDescuentoPorDia.descuentoTotal = descuentoTotal
+
+                                    estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
+
+                                } else if (tipoDescuentoEnElDia === "netoPorApartamentoDelDia") {
+                                    const contenedorApartamentos = dia.querySelectorAll("[apartamentoIDV]")
+                                    estructuraDescuentoPorDia.apartamentos = []
+
+                                    contenedorApartamentos.forEach((apartamento) => {
+                                        const aparatmentoIDV = apartamento.getAttribute("apartamentoIDV")
+                                        const tipoAplicacion = apartamento.querySelector("[campoApartamentoSeleccionado=tipoDescuento]").value
+                                        const descuentoTotal = apartamento.querySelector("[campoApartamentoSeleccionado=descuentoTotal]").value
+
+                                        const descuentoPorApartamento = {
+                                            apartamentoIDV: aparatmentoIDV,
+                                            tipoAplicacion: tipoAplicacion,
+                                            descuentoTotal: descuentoTotal,
+                                        }
+                                        estructuraDescuentoPorDia.apartamentos.push(descuentoPorApartamento)
+
+                                    })
+                                    estructuraDescuento.descuentoPorDias.push(estructuraDescuentoPorDia)
+                                }
+                            })
+                        }
+                    }
+                    return oferta
+                },
+                confirmar: async function (data) {
+                    const event = data.e
+                    const simulacionUID = data.simulacionUID
+                    const instanciaUID_cF = data.instanciaUID
+
+                    const constructoDescuento = this.constructorObjeto({ e: event })
+
+                    const descuentoDedicado = {
+                        simulacionUID: simulacionUID,
+                        descuentoDedicado: constructoDescuento
+                    }
+
+                    const instanciaPantallaCarga = casaVitini.utilidades.codigoFechaInstancia()
+                    casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
+                        mensaje: "Insertando decuento dedicado en la reserva",
+                        textoBoton: "ocultar",
+                        instanciaUID: instanciaPantallaCarga
+                    })
+
+                    const respuestaServidor = await casaVitini.shell.servidor({
+                        zona: "administracion/simuladorDePrecios/descuentos/insertarDescuentoDedicado",
+                        ...descuentoDedicado
+                    })
+                    document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`).remove()
+
+                    const instanciaCF = document.querySelector(`[instanciaUID="${instanciaUID_cF}"]`)
+                    if (!instanciaCF) {
+                        return
+                    }
+                    if (respuestaServidor?.error) {
+                        return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                    }
+                    if (respuestaServidor?.ok) {
+                        casaVitini.view.componentes.postProcesamientoTransaccion(respuestaServidor)
+                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                    }
+                }
             },
             sobreControlPrecios: {
                 botonAlterarPrecio: () => {
@@ -2813,6 +3150,61 @@ casaVitini.view = {
             )
             contenedor.appendChild(contenedorBotones)
 
+
+            const campoNombre = document.createElement("input")
+            campoNombre.setAttribute("campo", "nombre")
+            campoNombre.classList.add(
+                "padding6",
+                "backgroundGrey1",
+                "borderRadius8",
+                "padding10",
+                "simplificadorCampo",
+                "noSelecionable"
+            )
+            campoNombre.placeholder = "Escriba un nombre para la simulación"
+            contenedorBotones.appendChild(campoNombre)
+
+            const cBotones = document.createElement("div")
+            cBotones.classList.add(
+                "gridHorizontal2C",
+                "gap6"
+            )
+            contenedor.appendChild(cBotones)
+
+
+            const botonGuardar = document.createElement("div")
+            botonGuardar.classList.add(
+                "botonV1",
+                "comportamientoBoton",
+                "padding6",
+                "textoCentrado",
+                "backgroundGrey1",
+                "borderRadius8",
+                "noSelecionable"
+            )
+            botonGuardar.textContent = "Guardar simulación"
+            botonGuardar.addEventListener("click", () => {
+                this.actualizarNombreSimulacion()
+            })
+
+            cBotones.appendChild(botonGuardar)
+
+            const botonEliminar = document.createElement("div")
+            botonEliminar.classList.add(
+                "botonV1",
+                "comportamientoBoton",
+                "padding6",
+                "textoCentrado",
+                "backgroundGrey1",
+                "borderRadius8",
+                "noSelecionable"
+            )
+            botonEliminar.textContent = "Eliminar simulación"
+            botonEliminar.addEventListener("click", () => {
+                this.eliminarSimulacion.UI()
+            })
+            cBotones.appendChild(botonEliminar)
+
             const contenedorFechaCreacion = document.createElement("div");
             contenedorFechaCreacion.setAttribute("calendario", "fechaCreacion");
             contenedorFechaCreacion.setAttribute("CSS", "selectorFechas")
@@ -3063,29 +3455,8 @@ casaVitini.view = {
             contenedorZonaCodigo.appendChild(contenedorCodigosDescuentosPorVerificar)
 
 
-            const contenedorServicios = document.createElement("div");
-            contenedorServicios.setAttribute("zonaSimulacion", "servicios")
-            contenedorServicios.classList.add(
-                "flexVertical",
-                "gap6",
-                "backgroundGrey1",
-                "padding6",
-                "borderRadius12",
-                "ocultoInicial_enContexto"
-            );
-            contenedorServicios.setAttribute("contenedor", "servicios")
-            contenedor.appendChild(contenedorServicios)
-
-            const tituloServicios = document.createElement("p")
-            tituloServicios.classList.add(
-                "negrita",
-                "padding10"
-            )
-            tituloServicios.textContent = "Servicios de la simulación"
-            contenedorServicios.appendChild(tituloServicios)
-
-            const serviciosUI = casaVitini.view.componentes.servicios.arranque()
-            contenedorServicios.appendChild(serviciosUI)
+            const serviciosUI = casaVitini.view.componentes.servicios.renderizaUI()
+            contenedor.appendChild(serviciosUI)
 
             const contenedorComplementosDeAlojamiento = document.createElement("div");
             contenedorComplementosDeAlojamiento.setAttribute("zonaSimulacion", "complementosAlojamiento")
@@ -3254,11 +3625,33 @@ casaVitini.view = {
 
         },
         servicios: {
-            arranque: function () {
+            renderizaUI: function () {
+
+                const contenedorServicios = document.createElement("div");
+                contenedorServicios.setAttribute("zonaSimulacion", "servicios")
+                contenedorServicios.classList.add(
+                    "flexVertical",
+                    "gap6",
+                    "backgroundGrey1",
+                    "padding6",
+                    "borderRadius12",
+                    "ocultoInicial_enContexto"
+                );
+                contenedorServicios.setAttribute("contenedor", "servicios")
+
+                const tituloServicios = document.createElement("p")
+                tituloServicios.classList.add(
+                    "negrita",
+                    "padding10"
+                )
+                tituloServicios.textContent = "Servicios de la simulación"
+                contenedorServicios.appendChild(tituloServicios)
+
 
                 const contenedor = document.createElement("div")
                 contenedor.setAttribute("class", "contenedorServicios")
                 contenedor.setAttribute("componente", "categoriaServicios")
+                contenedorServicios.appendChild(contenedor)
 
                 const contenedorInformacionGlobal = document.createElement("div")
                 contenedorInformacionGlobal.classList.add("administracion_reservas_detallesReserva_contenedorEnlacesDePago")
@@ -3271,7 +3664,7 @@ casaVitini.view = {
                 botonCrearPagoManual.classList.add("detallesReserva_transacciones_botonV1")
                 botonCrearPagoManual.textContent = "Insertar un servicio"
                 botonCrearPagoManual.addEventListener("click", () => {
-                    casaVitini.view.componentes.servicios.componentesUI.insertarServicio.ui({})
+                    this.componentesUI.insertarServicio.ui({})
                 })
                 bloqueBotones.appendChild(botonCrearPagoManual)
                 contenedorInformacionGlobal.appendChild(bloqueBotones)
@@ -3281,7 +3674,7 @@ casaVitini.view = {
                 contenedorListaServicios.setAttribute("componente", "contenedorListaServiciosEnReserva")
                 contenedor.appendChild(contenedorListaServicios)
 
-                return contenedor
+                return contenedorServicios
 
             },
             componentesUI: {
@@ -3518,30 +3911,15 @@ casaVitini.view = {
                             botonInsertar.setAttribute("boton", "volver")
                             botonInsertar.addEventListener("click", (e) => {
                                 const servicioUI_selector = e.target.closest("[componente=contenedor]").querySelector("[servicioUID]")
-
                                 const servicioUID = servicioUI_selector.getAttribute("servicioUID")
-                                const grupoDeOpciones = servicioUI_selector.querySelector("[area=grupoOpciones]").querySelectorAll("[componente=grupo]")
-                                const opcionesSeleccionadasDelServicio = {
-                                    servicioUID,
-                                    opcionesSeleccionadas: {}
-                                }
-                                const opcionesSeleccionadas = opcionesSeleccionadasDelServicio.opcionesSeleccionadas
-                                grupoDeOpciones.forEach((grupo) => {
-                                    const grupoIDV = grupo.getAttribute("grupoIDV")
-                                    opcionesSeleccionadas[grupoIDV] = []
 
-                                    const opcionesDelGrupoSeleccionadas = grupo.querySelectorAll("[selector=opcion][estado=activado]")
-                                    opcionesDelGrupoSeleccionadas.forEach(opcionSel => {
-                                        const opcionIDV = opcionSel.getAttribute("opcionIDV")
-                                        const cantidad = opcionSel.querySelector("[campo=cantidad]").value
-                                        opcionesSeleccionadas[grupoIDV].push({
-                                            opcionIDV,
-                                            cantidad
-                                        })
-                                    })
+
+                                const opcionesSeleccionadasDelServicio = casaVitini.view.componentes.servicios.componentesUI.constructorObjetoParaEnvio({
+                                    servicioUID,
+                                    area: servicioUI
                                 })
 
-                                // Poner una advertenc  ia superpuesta para al espera.
+
                                 this.confirmarInsertar({
                                     servicioUID,
                                     instanciaUID_UIFlotanteServicios,
@@ -3566,13 +3944,7 @@ casaVitini.view = {
                     confirmarInsertar: async function (data) {
                         const simulacionUID = document.querySelector("[simulacionUID]").getAttribute("simulacionUID")
                         const servicioUID = String(data.servicioUID)
-                        const instanciaUID_UIFlotanteServicios = data.instanciaUID_UIFlotanteServicios
-                        const instanciaUID_contenedorServicios = data.instanciaUID_contenedorServicios
                         const opcionesSeleccionadasDelServicio = data.opcionesSeleccionadasDelServicio
-                        // const ui = document.querySelector(`[instanciaUID="${instanciaUID_insertarServiciosUI}"]`)
-                        // const contenedor = ui.querySelector("[componente=contenedor]")
-                        // contenedor.innerHTML = null
-
 
                         const instanciaPantallaCarga = casaVitini.utilidades.codigoFechaInstancia()
                         casaVitini.ui.componentes.pantallaDeCargaSuperPuesta({
@@ -3595,26 +3967,11 @@ casaVitini.view = {
                             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
-
-                            const servicioData = respuestaServidor.servicio
-                            const nombreInterno = servicioData.nombre
-                            const contenedor = servicioData.contenedor
-                            const servicioUID_enSimulacion = servicioData.servicioUID
-                            const opcionesSel = servicioData.opcionesSel
-
-                            const servicioUI = casaVitini.view.componentes.servicios.componentesUI.servicioUI({
-                                servicioUID_enSimulacion: servicioUID_enSimulacion,
-                                instanciaUID_contenedorServicios: "contenedorServicios",
-                                nombreInterno: nombreInterno,
-                                contenedor: contenedor,
-                                opcionesSeleccionadas: opcionesSel
-
+                            casaVitini.view.componentes.servicios.renderizarListaServicios({
+                                simulacionUID
                             })
                             const selectorInfo = uiRenderizada.querySelector("[componente=contenedorInfoSinServicios]")
                             selectorInfo?.remove()
-
-                            const selectorListaServicios = uiRenderizada.querySelector("[componente=contenedorListaServiciosEnReserva]")
-                            selectorListaServicios.appendChild(servicioUI)
 
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             casaVitini.view.componentes.postProcesamientoTransaccion(respuestaServidor)
@@ -3623,16 +3980,21 @@ casaVitini.view = {
 
                     },
                 },
-                servicioUI: function (data) {
+                servicioUI_enServiciosInsertadosEnSimulacion: function (data) {
                     const servicioUID_enSimulacion = data.servicioUID_enSimulacion
+                    const desgloseFinancieroDelServicio = data.desgloseFinancieroDelServicio
                     const instanciaUID_contenedorServicios = data.instanciaUID_contenedorServicios
                     const nombreInterno = data.nombreInterno
-                    const contenedor = data.contenedor
                     const opcionesSeleccionadas = data.opcionesSeleccionadas
-
+                    const contenedor = data.contenedor
                     const definicionBase64 = contenedor.definicion
-
                     const definicion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionBase64)
+
+
+                    const totalServicio = desgloseFinancieroDelServicio.totalesDelServicio.global.totalServicio
+
+
+                    const fechaAdquisicionLocal = contenedor.fechaAdquisicionLocal
                     const fechaFinal = contenedor.fechaFinal
                     const duracionIDV = contenedor.duracionIDV
                     const fechaInicio = contenedor.fechaInicio
@@ -3640,143 +4002,173 @@ casaVitini.view = {
                     const servicioUID = contenedor.servicioUID
                     const disponibilidadIDV = contenedor.disponibilidadIDV
                     const gruposDeOpciones = contenedor.gruposDeOpciones
-
-
                     const diccionario = {
                         disponibilidad: {
                             constante: "Disponible",
                             variable: "Disponibilidad variable"
                         }
                     }
-
                     const servicioUI = document.createElement("div")
                     servicioUI.setAttribute("servicioUID_enSimulacion", servicioUID_enSimulacion)
                     servicioUI.classList.add(
                         "flexVertical",
                         "padding6",
+                        "gap6",
                         "backgroundGrey1",
-                        "borderRadius10",
-                        "gap6"
+                        "borderRadius14"
                     )
+
+
+                    const contenedorData = document.createElement("details")
+                    contenedorData.classList.add(
+                        "flexVertical",
+                        "padding6"
+                    )
+                    servicioUI.appendChild(contenedorData)
+
+
+                    const tituloPublicoData = document.createElement("summary")
+                    tituloPublicoData.classList.add("negrita", "padding10")
+                    tituloPublicoData.textContent = `${tituloPublico}`
+                    contenedorData.appendChild(tituloPublicoData)
+
                     const contenedorInterno = document.createElement("div")
+                    contenedorInterno.style.paddingLeft = "24px"
                     contenedorInterno.classList.add(
                         "flexVertical",
+                        "padding6",
                         "gap6"
                     )
-                    servicioUI.appendChild(contenedorInterno)
+                    contenedorData.appendChild(contenedorInterno)
+
 
                     const contenedorNombreInterno = document.createElement("div")
-                    contenedorNombreInterno.classList.add(
-                        "flexVertical",
-                        "padding8"
-                    )
+                    contenedorNombreInterno.classList.add("flexVertical")
                     contenedorInterno.appendChild(contenedorNombreInterno)
 
-                    const tituluNombreInternoUI = document.createElement("p")
-                    tituluNombreInternoUI.textContent = `Nombre administrativo`
-                    contenedorNombreInterno.appendChild(tituluNombreInternoUI)
+                    const nombreInternoTitulo = document.createElement("p")
+                    nombreInternoTitulo.textContent = `Nombre interno`
+                    nombreInternoTitulo.classList.add("negrita")
+                    contenedorNombreInterno.appendChild(nombreInternoTitulo)
 
-                    const nombreInternoUI = document.createElement("p")
-                    nombreInternoUI.classList.add(
-                        "negrita")
-                    nombreInternoUI.textContent = `${nombreInterno}`
-                    contenedorNombreInterno.appendChild(nombreInternoUI)
+                    const nombreInternoData = document.createElement("p")
+                    nombreInternoData.textContent = nombreInterno
+                    contenedorNombreInterno.appendChild(nombreInternoData)
 
-                    const contenedorGlobal = document.createElement("div")
-                    contenedorGlobal.classList.add(
-                        "flexVertical"
-                    )
-                    servicioUI.appendChild(contenedorGlobal)
 
-                    const contenedorNombrePublico = document.createElement("div")
-                    contenedorNombrePublico.classList.add(
-                        "flexVertical",
-                        "padding6"
-                    )
-                    contenedorGlobal.appendChild(contenedorNombrePublico)
 
-                    const tituluNombrePublico = document.createElement("p")
-                    tituluNombrePublico.textContent = `Nombre público`
-                    contenedorNombrePublico.appendChild(tituluNombrePublico)
+                    const disponibilidadContenedor = document.createElement("div")
+                    disponibilidadContenedor.classList.add("flexVertical")
+                    contenedorInterno.appendChild(disponibilidadContenedor)
 
-                    const titulo = document.createElement("p")
-                    titulo.classList.add(
-                        "negrita")
-                    titulo.textContent = tituloPublico
-                    contenedorNombrePublico.appendChild(titulo)
-
+                    const disponibilidadInfo = document.createElement("p")
+                    disponibilidadInfo.classList.add("negrita")
+                    disponibilidadInfo.textContent = "Estado de la disponibilidad1"
+                    disponibilidadContenedor.appendChild(disponibilidadInfo)
 
                     const disponibilidadUI = document.createElement("p")
-                    disponibilidadUI.classList.add(
-                        "padding6"
-                    )
+                    disponibilidadUI.classList.add()
                     disponibilidadUI.textContent = diccionario.disponibilidad[disponibilidadIDV]
-                    servicioUI.appendChild(disponibilidadUI)
+                    disponibilidadContenedor.appendChild(disponibilidadUI)
 
 
                     if (disponibilidadIDV === "variable") {
-
                         const info = document.createElement("p")
                         info.classList.add(
-                            "padding6"
                         )
                         info.textContent = `Este servicio tiene una disponibilidad limitada. Es por eso que si selecciona este servicio, nos pondremos en contacto con el titular de la reserva en las próximas horas para confirmarle la disponibilidad del servicio para su reserva.`
-                        servicioUI.appendChild(info)
+                        contenedorInterno.appendChild(info)
                     }
-
                     if (duracionIDV === "rango") {
                         const contenedorDuracion = document.createElement("div")
                         contenedorDuracion.classList.add(
                             "flexVertical",
-                            "padding6"
-
                         )
-                        servicioUI.appendChild(contenedorDuracion)
-
+                        contenedorInterno.appendChild(contenedorDuracion)
                         const info = document.createElement("p")
                         info.classList.add("negrita")
                         info.textContent = `Servicio disponible solo desde ${fechaInicio} hata ${fechaFinal}. Ambas fechas incluidas.`
                         contenedorDuracion.appendChild(info)
-
                     }
+
+                    const fechaContenedor = document.createElement("div")
+                    fechaContenedor.classList.add("flexVertical")
+                    contenedorInterno.appendChild(fechaContenedor)
+
+                    const fechaInfo = document.createElement("p")
+                    fechaInfo.classList.add("negrita")
+                    fechaInfo.textContent = "Fecha del adquisición"
+                    fechaContenedor.appendChild(fechaInfo)
+
+                    const fechaData = document.createElement("p")
+                    fechaData.classList.add()
+                    fechaData.textContent = fechaAdquisicionLocal
+                    fechaContenedor.appendChild(fechaData)
+
+
+                    const totalContenedor = document.createElement("div")
+                    totalContenedor.classList.add("flexVertical")
+                    contenedorInterno.appendChild(totalContenedor)
+
+                    const totalInfo = document.createElement("p")
+                    totalInfo.classList.add("negrita")
+                    totalInfo.textContent = "Total del servicio"
+                    totalContenedor.appendChild(totalInfo)
+
+                    const totalData = document.createElement("p")
+                    totalData.classList.add()
+                    totalData.textContent = totalServicio
+                    totalContenedor.appendChild(totalData)
+
+
+                    const contenedorOS = this.opcionesSelecionadas_enServiciosInsertadosEnReserva({
+                        desgloseFinancieroDelServicio: desgloseFinancieroDelServicio
+                    })
+
+                    servicioUI.appendChild(contenedorOS)
+
+
+
+
+
+
+                    const contenedorDefinicion = document.createElement("details")
+                    contenedorDefinicion.classList.add("flexVertical", "padding6")
+                    servicioUI.appendChild(contenedorDefinicion)
+
+                    const tituloDefinicion = document.createElement("summary")
+                    tituloDefinicion.classList.add("padding10")
+                    tituloDefinicion.textContent = "Descripción del servicio"
+                    contenedorDefinicion.appendChild(tituloDefinicion)
+
                     const definicionUI = document.createElement("pre")
-                    definicionUI.classList.add(
-                        "padding6", "whiteSpace"
-                    )
+                    definicionUI.classList.add("whiteSpace", "padding10")
                     definicionUI.textContent = definicion
-                    servicioUI.appendChild(definicionUI)
+                    contenedorDefinicion.appendChild(definicionUI)
 
 
                     Object.entries(gruposDeOpciones).forEach(([grupoIDV, gDP]) => {
                         const nombreGrupo = gDP.nombreGrupo
                         const opcionesGrupo = gDP.opcionesGrupo
-
                         const contenedorGrupo = document.createElement("div")
                         contenedorGrupo.setAttribute("grupoIDV", grupoIDV)
                         contenedorGrupo.classList.add(
                             "flexVertical", "gap6", "borderGrey1", "borderRadius14", "padding6"
                         )
-
-
                         const tituloGrupo = document.createElement("p")
                         tituloGrupo.classList.add("negrita", "padding10")
                         tituloGrupo.textContent = nombreGrupo
                         contenedorGrupo.appendChild(tituloGrupo)
-
-
                         const contenedorOpcionesGrupo = document.createElement("div")
                         contenedorOpcionesGrupo.classList.add(
                             "flexVertical", "gap6"
                         )
                         contenedorGrupo.appendChild(contenedorOpcionesGrupo)
-
                         let interruptor = false
-
                         opcionesGrupo.forEach((op) => {
                             const opcionIDV = op.opcionIDV
                             const nombreOpcion = op.nombreOpcion
                             const precioOpcion = op.precioOpcion ? op.precioOpcion + "$" : "0.00$ (Sin coste añadido)"
-
                             const selectorOpcionesGrupo = opcionesSeleccionadas[grupoIDV] || []
                             if (selectorOpcionesGrupo.includes(opcionIDV)) {
                                 interruptor = true
@@ -3785,19 +4177,14 @@ casaVitini.view = {
                                     "flexVertical", "gap6", "backgroundGrey1", "borderRadius10", "padding14"
                                 )
                                 contenedorOpcionesGrupo.appendChild(contenedorOpcion)
-
                                 // const grupoRenderizado_selector = servicioUI.querySelector(`[grupoIDV="${grupoIDV}"]`)
                                 // if (!grupoRenderizado_selector) {
                                 //     servicioUI.appendChild(contenedorGrupo)
                                 // }
-
                                 const opcionUI = document.createElement("p")
                                 opcionUI.setAttribute("opcionIDV", opcionIDV)
-
                                 opcionUI.textContent = nombreOpcion
                                 contenedorOpcion.appendChild(opcionUI)
-
-
                                 const precioUI = document.createElement("p")
                                 precioUI.setAttribute("opcionIDV", opcionIDV)
                                 precioUI.classList.add(
@@ -3811,17 +4198,13 @@ casaVitini.view = {
                             servicioUI.appendChild(contenedorGrupo)
                         }
                     })
-
-
-
                     const contenedorBotones = document.createElement("div")
                     contenedorBotones.classList.add(
                         "flexHorizontal",
-                        "flexAHCentrad",
                         "gap6"
                     )
-                    servicioUI.appendChild(contenedorBotones)
 
+                    servicioUI.appendChild(contenedorBotones)
 
                     const botonModificar = document.createElement("div")
                     botonModificar.classList.add("botonV6")
@@ -3839,7 +4222,7 @@ casaVitini.view = {
                     })
                     contenedorBotones.appendChild(botonModificar)
 
-
+                    contenedorBotones.appendChild(botonModificar)
                     const botonIr = document.createElement("a")
                     botonIr.classList.add("botonV6")
                     botonIr.textContent = "Ir al servicio"
@@ -3868,8 +4251,160 @@ casaVitini.view = {
 
 
 
-
                     return servicioUI
+                },
+                opcionesSelecionadas_enServiciosInsertadosEnReserva: function (data) {
+                    const desgloseFinancieroDelServicio = data.desgloseFinancieroDelServicio
+
+                    const contenedor = desgloseFinancieroDelServicio.servicio.contenedor
+                    const gruposDeOpciones = contenedor.gruposDeOpciones
+                    const opcionesSolicitadasDelservicio = desgloseFinancieroDelServicio.opcionesSolicitadasDelservicio
+                    const totalesDelServicio = desgloseFinancieroDelServicio.totalesDelServicio
+                    const porGruposDeOpciones = totalesDelServicio.porGruposDeOpciones
+
+                    const superContenedorOSUI = document.createElement("details")
+                    superContenedorOSUI.classList.add("padding6")
+
+                    const tituloOSUI = document.createElement("summary")
+                    tituloOSUI.classList.add("padding10")
+                    tituloOSUI.textContent = "Opciones selecionadas"
+                    superContenedorOSUI.appendChild(tituloOSUI)
+
+                    const contenedorOSUI = document.createElement("div")
+                    contenedorOSUI.classList.add("flexVertical", "gap6")
+                    superContenedorOSUI.appendChild(contenedorOSUI)
+
+                    Object.entries(gruposDeOpciones).forEach(([grupoIDV, gDP]) => {
+                        const nombreGrupo = gDP.nombreGrupo
+                        const opcionesGrupo = gDP.opcionesGrupo
+
+                        const selectorOpcionesGrupo = opcionesSolicitadasDelservicio.opcionesSeleccionadas[grupoIDV] || []
+
+                        const totalesPorGrupo = porGruposDeOpciones[grupoIDV]
+
+
+
+                        const contenedorGrupo = document.createElement("div")
+                        contenedorGrupo.setAttribute("grupoIDV", grupoIDV)
+                        contenedorGrupo.classList.add(
+                            "flexVertical", "gap6", "borderGrey1", "borderRadius14", "padding6"
+                        )
+                        const tituloGrupo = document.createElement("p")
+                        tituloGrupo.classList.add("negrita", "padding10")
+                        tituloGrupo.textContent = nombreGrupo
+                        contenedorGrupo.appendChild(tituloGrupo)
+                        const contenedorOpcionesGrupo = document.createElement("div")
+                        contenedorOpcionesGrupo.classList.add(
+                            "flexVertical", "gap6"
+                        )
+                        contenedorGrupo.appendChild(contenedorOpcionesGrupo)
+                        contenedorOSUI.appendChild(contenedorGrupo)
+                        opcionesGrupo.forEach((op) => {
+                            const opcionIDV = op.opcionIDV
+                            const nombreOpcion = op.nombreOpcion
+                            const precioOpcion = op?.precioOpcion ? op?.precioOpcion + "$" : "0.00$ (Sin coste añadido)"
+                            const controlSelctorOpcionesGrupo = selectorOpcionesGrupo.find(g => g.opcionIDV === opcionIDV);
+                            const totalesDeLaOpcion = totalesPorGrupo[opcionIDV]
+
+                            if (controlSelctorOpcionesGrupo) {
+                                const cantidad = controlSelctorOpcionesGrupo.cantidad
+                                const tipoDescuento = controlSelctorOpcionesGrupo.tipoDescuento
+                                const cantidadDescuento = controlSelctorOpcionesGrupo.cantidadDescuento
+
+
+                                const contenedorOpcion = document.createElement("div")
+                                contenedorOpcion.classList.add(
+                                    "flexVertical", "gap6", "backgroundGrey1", "borderRadius10", "padding14"
+                                )
+                                contenedorOpcionesGrupo.appendChild(contenedorOpcion)
+
+                                const opcionUI = document.createElement("p")
+                                opcionUI.setAttribute("opcionIDV", opcionIDV)
+                                opcionUI.textContent = `${nombreOpcion}`
+                                contenedorOpcion.appendChild(opcionUI)
+
+                                const contenedorPrecioUnidad = document.createElement("div")
+                                contenedorPrecioUnidad.classList.add("flexVertical")
+                                contenedorOpcion.appendChild(contenedorPrecioUnidad)
+
+                                const tituloPrecioUnidad = document.createElement("p")
+                                tituloPrecioUnidad.textContent = `Precio de la opción`
+                                contenedorPrecioUnidad.appendChild(tituloPrecioUnidad)
+
+
+                                const precioUI = document.createElement("p")
+                                precioUI.setAttribute("opcionIDV", opcionIDV)
+                                precioUI.classList.add("negrita")
+                                precioUI.textContent = precioOpcion
+                                contenedorPrecioUnidad.appendChild(precioUI)
+
+
+                                const contenedorCantidad = document.createElement("div")
+                                contenedorCantidad.classList.add("flexVertical")
+                                contenedorOpcion.appendChild(contenedorCantidad)
+
+
+                                const tituloCantidad = document.createElement("p")
+                                tituloCantidad.textContent = `Cantidad`
+                                contenedorCantidad.appendChild(tituloCantidad)
+
+
+                                const cantidadUI = document.createElement("p")
+                                cantidadUI.setAttribute("opcionIDV", opcionIDV)
+                                cantidadUI.classList.add("negrita")
+                                cantidadUI.textContent = `${cantidad}`
+                                contenedorCantidad.appendChild(cantidadUI)
+
+
+                                const tiposDescuentos = [
+                                    "porcentaje",
+                                    "cantidad"
+                                ]
+
+                                if (tiposDescuentos.includes(tipoDescuento)) {
+
+                                    const contenedorDescuento = document.createElement("div")
+                                    contenedorDescuento.classList.add("flexVertical")
+                                    contenedorOpcion.appendChild(contenedorDescuento)
+
+
+                                    const tituloDescuento = document.createElement("p")
+                                    tituloDescuento.textContent = `Descuento aplicado por ${tipoDescuento}`
+                                    contenedorDescuento.appendChild(tituloDescuento)
+
+
+                                    const cantidaDescuentodUI = document.createElement("p")
+                                    cantidaDescuentodUI.classList.add("negrita")
+                                    cantidaDescuentodUI.textContent = `${cantidadDescuento}`
+                                    contenedorDescuento.appendChild(cantidaDescuentodUI)
+
+                                }
+
+
+                                const contenedorPrecioOpcionTotal = document.createElement("div")
+                                contenedorPrecioOpcionTotal.classList.add("flexVertical")
+                                contenedorOpcion.appendChild(contenedorPrecioOpcionTotal)
+
+
+                                const tituloPrecioOpcionTotal = document.createElement("p")
+                                tituloPrecioOpcionTotal.textContent = `Precio de la opción total con cantidades`
+                                contenedorPrecioOpcionTotal.appendChild(tituloPrecioOpcionTotal)
+
+                                const precioConCantidad = totalesDelServicio.porGruposDeOpciones[grupoIDV][opcionIDV].precioConCantidad
+                                const totalOpcion = totalesDelServicio.porGruposDeOpciones[grupoIDV][opcionIDV].total
+
+                                const precioTotalOpcionUI = document.createElement("p")
+                                precioTotalOpcionUI.setAttribute("opcionIDV", opcionIDV)
+                                precioTotalOpcionUI.classList.add("negrita")
+                                precioTotalOpcionUI.textContent = totalOpcion
+                                contenedorPrecioOpcionTotal.appendChild(precioTotalOpcionUI)
+
+                            }
+                        })
+                    })
+
+
+                    return superContenedorOSUI
                 },
                 eliminarServicio: {
                     ui: async function (data) {
@@ -4013,6 +4548,12 @@ casaVitini.view = {
                             const servicio = respuestaServidor.servicio
                             const servicioUID = servicio.servicioUID
                             const contenedor = servicio.contenedor
+                            const descuentoTotalServicio = servicio.descuentoTotalServicio
+
+                            const tiposDescuentos = [
+                                "cantidad",
+                                "porcentaje"
+                            ]
 
                             const servicioUI = casaVitini.view.__sharedMethods__.servicioUI({
                                 servicioUID,
@@ -4020,20 +4561,61 @@ casaVitini.view = {
                             })
                             servicioUI.setAttribute("estadoServicio", "selCompleta")
                             servicioUI.querySelector("[componente=indicadorSelecion]").style.background = "rgb(0, 255, 0)"
+                            servicioUI.open = true
 
                             constructor.appendChild(servicioUI)
                             const opcionesSel = servicio.opcionesSel
 
+                            const descuentoTotalServicioUI = servicioUI.querySelector("[com=descuentoTotalServicio]")
+                            descuentoTotalServicioUI.querySelector("[campo=tipoDescuento]").value = descuentoTotalServicio.tipoDescuento
+                            descuentoTotalServicioUI.querySelector("[campo=cantidadDescuento]").value = descuentoTotalServicio.cantidadDescuento
+
+
+                            if (tiposDescuentos.includes(descuentoTotalServicio.tipoDescuento)) {
+                                descuentoTotalServicioUI.open = true
+                            }
+
                             Object.entries(opcionesSel).forEach(([grupoIDV, contenedorSel]) => {
+
                                 const selectorGrupo = servicioUI.querySelector(`[grupoIDV="${grupoIDV}"]`)
-                                contenedorSel.forEach(o => {
-                                    const opcionIDV = o.opcionIDV
-                                    const cantidad = o.cantidad
+                                selectorGrupo.open = true
+
+                                contenedorSel.forEach(gO => {
+                                    const opcionIDV = gO.opcionIDV
+                                    const cantidad = gO.cantidad
+                                    const tipoDescuento = gO.tipoDescuento
+                                    const cantiadDescuento = gO.cantidadDescuento
 
                                     const selectorOpcion = selectorGrupo.querySelector(`[opcionIDV="${opcionIDV}"]`)
-                                    selectorOpcion.setAttribute("estado", "activado")
+                                    selectorOpcion.open = true
+
+                                    selectorOpcion.querySelector("[selector=opcion]").setAttribute("estado", "activado")
                                     selectorOpcion.querySelector("[componente=indicadorSelecion]").style.background = "rgb(0, 255, 0)"
-                                    selectorOpcion.querySelector("[campo=cantidad]").value = cantidad
+                                    const cantidadSel = selectorOpcion.querySelector("[campo=cantidad]")
+                                    const precioData = selectorOpcion.querySelector("[com=precioData]")
+
+                                    if (cantidadSel) {
+                                        cantidadSel.value = cantidad
+                                    }
+                                    const tipoDescuentoSel = selectorOpcion.querySelector("[campo=tipoDescuento]")
+                                    if (tipoDescuentoSel) {
+                                        tipoDescuentoSel.value = tipoDescuento
+                                    }
+                                    const cantidadDescuentoSel = selectorOpcion.querySelector("[campo=cantidadDescuento]")
+                                    if (cantidadDescuentoSel) {
+                                        cantidadDescuentoSel.value = cantiadDescuento
+                                    }
+
+                                    if (tiposDescuentos.includes(tipoDescuento)) {
+                                        const areaDescuentoOpcion = selectorOpcion.querySelector("[com=descuentoDeLaOpcion]")
+                                        areaDescuentoOpcion.open = true
+                                    }
+
+
+                                    casaVitini.view.__sharedMethods__.serviciosUI_grupoOpciones.calcularTotalOpcion({
+                                        opcionIDV: opcionIDV,
+                                        area: servicioUI
+                                    })
 
                                 })
                             })
@@ -4046,28 +4628,13 @@ casaVitini.view = {
                                 const servicioUI_selector = e.target.closest("[componente=contenedor]").querySelector("[servicioUID]")
 
                                 const servicioUID = servicioUI_selector.getAttribute("servicioUID")
-                                const grupoDeOpciones = servicioUI_selector.querySelector("[area=grupoOpciones]").querySelectorAll("[componente=grupo]")
-                                const opcionesSeleccionadasDelServicio = {
-                                    servicioUID,
-                                    opcionesSeleccionadas: {}
-                                }
-                                const opcionesSeleccionadas = opcionesSeleccionadasDelServicio.opcionesSeleccionadas
-                                grupoDeOpciones.forEach((grupo) => {
-                                    const grupoIDV = grupo.getAttribute("grupoIDV")
-                                    opcionesSeleccionadas[grupoIDV] = []
 
-                                    const opcionesDelGrupoSeleccionadas = grupo.querySelectorAll("[selector=opcion][estado=activado]")
-                                    opcionesDelGrupoSeleccionadas.forEach(opcionSel => {
-                                        const opcionIDV = opcionSel.getAttribute("opcionIDV")
-                                        const cantidad = opcionSel.querySelector("[campo=cantidad]").value
-                                        opcionesSeleccionadas[grupoIDV].push({
-                                            opcionIDV,
-                                            cantidad
-                                        })
-                                    })
+
+                                const opcionesSeleccionadasDelServicio = casaVitini.view.componentes.servicios.componentesUI.constructorObjetoParaEnvio({
+                                    servicioUID,
+                                    area: servicioUI
                                 })
 
-                                // Poner una advertenc  ia superpuesta para al espera.
                                 this.confirmarActualizar({
                                     servicioUID_enSimulacion,
                                     simulacionUID,
@@ -4082,8 +4649,6 @@ casaVitini.view = {
                     confirmarActualizar: async function (data) {
                         const simulacionUID = data.simulacionUID
                         const servicioUID_enSimulacion = String(data.servicioUID_enSimulacion)
-                        const instanciaUID_UIFlotanteServicios = data.instanciaUID_UIFlotanteServicios
-                        const instanciaUID_contenedorServicios = data.instanciaUID_contenedorServicios
                         const opcionesSeleccionadasDelServicio = data.opcionesSeleccionadasDelServicio
 
                         const instanciaPantallaCarga = casaVitini.utilidades.codigoFechaInstancia()
@@ -4099,19 +4664,12 @@ casaVitini.view = {
                             servicioUID_enSimulacion,
                             opcionesSeleccionadasDelServicio
                         })
-
-
                         document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`).remove()
                         if (respuestaServidor?.error) {
                             return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
                         }
                         if (respuestaServidor?.ok) {
 
-                            const servicioData = respuestaServidor.servicio
-                            const servicioUID_enSimulacion = servicioData.servicioUID
-                            const nombreInterno = servicioData.nombre
-                            const contenedor = servicioData.contenedor
-                            const opcionesSel = servicioData.opcionesSel
                             const desgloseFinanciero = respuestaServidor?.desgloseFinanciero
 
                             const selectorContenedorServicios = document.querySelector(`[simulacionUID="${simulacionUID}"] [contenedor=servicios]`)
@@ -4119,21 +4677,11 @@ casaVitini.view = {
                                 return
                             }
 
-                            const servicioUI = casaVitini.view.componentes.servicios.componentesUI.servicioUI({
-                                servicioUID_enSimulacion: servicioUID_enSimulacion,
-                                instanciaUID_contenedorServicios: "contenedorServicios",
-                                nombreInterno: nombreInterno,
-                                contenedor: contenedor,
-                                opcionesSeleccionadas: opcionesSel
-
+                            casaVitini.view.componentes.servicios.renderizarListaServicios({
+                                simulacionUID
                             })
                             const selectorInfo = selectorContenedorServicios.querySelector("[componente=contenedorInfoSinServicios]")
                             selectorInfo?.remove()
-
-                            const selectorListaServicios = selectorContenedorServicios.querySelector("[componente=contenedorListaServiciosEnReserva]")
-
-                            const selContenedorServicio = selectorListaServicios.querySelector(`[servicioUID_enSimulacion="${servicioUID_enSimulacion}"]`)
-                            selectorListaServicios.replaceChild(servicioUI, selContenedorServicio);
 
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             if (desgloseFinanciero) {
@@ -4144,40 +4692,126 @@ casaVitini.view = {
                                 })
                             }
                         }
-
                     },
+                },
+                constructorObjetoParaEnvio: function (data) {
+                    const servicioUID = data.servicioUID
+                    const area = data.area
+                    const grupoDeOpciones = area.querySelector("[area=grupoOpciones]").querySelectorAll("[componente=grupo]")
+                    const areaDescuentoTotalServicio = area.querySelector("[com=descuentoTotalServicio]")
+                    const tipoDescuento_totalServicio = areaDescuentoTotalServicio.querySelector("[campo=tipoDescuento]").value
+                    const cantidadDescuento_totalServicio = areaDescuentoTotalServicio.querySelector("[campo=cantidadDescuento]").value || "0.00"
+
+                    const opcionesSeleccionadasDelServicio = {
+                        servicioUID,
+                        descuentoTotalServicio: {
+                            tipoDescuento: tipoDescuento_totalServicio,
+                            cantidadDescuento: cantidadDescuento_totalServicio
+                        },
+                        opcionesSeleccionadas: {}
+                    }
+
+                    const opcionesSeleccionadas = opcionesSeleccionadasDelServicio.opcionesSeleccionadas
+                    grupoDeOpciones.forEach((grupo) => {
+                        const grupoIDV = grupo.getAttribute("grupoIDV")
+
+                        const opcionesDelGrupo = grupo.querySelectorAll("[opcionIDV]")
+                        opcionesDelGrupo.forEach(oS => {
+
+                            const estadoActivado = oS.querySelector("[estado=activado]")
+                            if (estadoActivado) {
+                                if (!opcionesSeleccionadas.hasOwnProperty(grupoIDV)) {
+                                    opcionesSeleccionadas[grupoIDV] = []
+                                }
+                                const opcionIDV = oS.getAttribute("opcionIDV")
+                                const cantidad = oS.querySelector("[campo=cantidad]")?.value || "1"
+                                const tipoDescuento = oS.querySelector("[campo=tipoDescuento]")?.value || "sinDescuento"
+                                const cantidadDescuento = oS.querySelector("[campo=cantidadDescuento]")?.value || "0.00"
+                                opcionesSeleccionadas[grupoIDV].push({
+                                    opcionIDV,
+                                    cantidad,
+                                    tipoDescuento,
+                                    cantidadDescuento
+                                })
+                            }
+                        })
+                    })
+
+                    return opcionesSeleccionadasDelServicio
                 },
             },
             actualizarContenedor: function (data) {
                 const servicios = data.servicios
                 const simulacionUID = data.simulacionUID
+                const desgloseFinanciero = data.desglosePorServicios
                 const simulacionUI = document.querySelector("[simulacionUID]")
-                const contenedorListaServicios = simulacionUI.querySelector(`[componente=contenedorListaServiciosEnReserva]`)
-                contenedorListaServicios.innerHTML = null
+                const serviciosUI = document.querySelector(`[simulacionUID="${simulacionUID}"]`).querySelector("[componente=categoriaServicios]")
+                const cLS_control = serviciosUI.querySelector("[componente=contenedorListaServiciosEnReserva]")
+                if (!cLS_control) {
+                    const contenedorListaServicios = document.createElement("div")
+                    contenedorListaServicios.classList.add(
+                        "flexVertical",
+                        "gap6",
+                    )
+                    contenedorListaServicios.setAttribute("componente", "contenedorListaServiciosEnReserva")
+                    serviciosUI.appendChild(contenedorListaServicios)
+                    serviciosUI.style.justifyContent = "flex-start";
+                }
+                const cLS_sel = serviciosUI.querySelector("[componente=contenedorListaServiciosEnReserva]")
+                const contenedorServiciosIdizadosPorUID = {}
 
+                desgloseFinanciero.forEach(dPS => {
+                    const servicioUID = dPS.servicio.servicioUID
+                    contenedorServiciosIdizadosPorUID[servicioUID] = dPS
+                })
+                simulacionUI.querySelector("[componente=contenedorInfoSinServicios]")?.remove()
                 if (servicios.length === 0) {
-                    const contenedorServicios = simulacionUI.querySelector(`[contenedor=servicios]`)
-                    const infoSinEnlaces_selector = contenedorServicios.querySelector("[componente=contenedorInfoSinServicios]")
-                    if (!infoSinEnlaces_selector) {
-                        const infoSinEnlaces = casaVitini.view.componentes.servicios.componentesUI.infoSinServiciosUI()
-                        contenedorServicios.appendChild(infoSinEnlaces)
-                    }
+                    cLS_sel?.remove()
+                    const infoSinEnlaces = this.componentesUI.infoSinServiciosUI()
+                    simulacionUI.appendChild(infoSinEnlaces)
+                }
 
-                } else {
+                if (servicios.length > 0) {
+                    let posicion = 0
+
                     for (const servicioEnReserva of servicios) {
-                        const servicioUI = casaVitini.view.componentes.servicios.componentesUI.servicioUI({
+                        const serviciosRenderizados = cLS_sel.querySelectorAll("[servicioUID_enSimulacion]")
+
+                        const servicioUID = servicioEnReserva.servicioUID
+                        const servicioUI = casaVitini.view.componentes.servicios.componentesUI.servicioUI_enServiciosInsertadosEnSimulacion({
                             servicioUID_enSimulacion: servicioEnReserva.servicioUID,
                             instanciaUID_contenedorServicios: simulacionUID,
                             nombreInterno: servicioEnReserva.nombre,
                             contenedor: servicioEnReserva.contenedor,
-                            opcionesSeleccionadas: servicioEnReserva.opcionesSel
+                            opcionesSeleccionadas: servicioEnReserva.opcionesSel,
+                            desgloseFinancieroDelServicio: contenedorServiciosIdizadosPorUID[servicioEnReserva.servicioUID]
                         })
-                        contenedorListaServicios.appendChild(servicioUI)
+
+                        const existe = cLS_sel.querySelector(`[servicioUID_enSimulacion="${servicioUID}"]`)
+                        if (!existe) {
+                            servicioUI.style.transition = "all 0ms !important"
+                            const elementosArray = Array.from(serviciosRenderizados);
+                            cLS_sel.insertBefore(servicioUI, elementosArray[posicion]);
+
+                        }
+                        posicion++
                     }
                 }
-
-
             },
+            renderizarListaServicios: async function (data) {
+                const simulacionUID = data.simulacionUID
+                const respuestaServidor = await casaVitini.view.detallesSimulacion.obtenerDatoSimulacion({ simulacionUID: simulacionUID })
+                if (respuestaServidor?.error) {
+                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
+                }
+                if (respuestaServidor?.ok) {
+                    casaVitini.view.componentes.servicios.actualizarContenedor({
+                        servicios: respuestaServidor.servicios,
+                        simulacionUID,
+                        desglosePorServicios: respuestaServidor.desgloseFinanciero.entidades.servicios.desglosePorServicios
+                    })
+                }
+            }
         },
         contenedorCodigosDescuento: {
             infoInit: function () {
@@ -4694,6 +5328,7 @@ casaVitini.view = {
                 explicacionUI.textContent = dictLlaves[lF]
                 infoRenderizado_sel.appendChild(explicacionUI)
             })
-        }
+        },
+
     },
 }

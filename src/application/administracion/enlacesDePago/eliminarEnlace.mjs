@@ -19,7 +19,8 @@ export const eliminarEnlace = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         await obtenerEnlaceDePagoPorEnlaceUID(enlaceUID)

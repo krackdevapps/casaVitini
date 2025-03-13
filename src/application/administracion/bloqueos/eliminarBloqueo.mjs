@@ -21,7 +21,8 @@ export const eliminarBloqueo = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const bloqueoSeleccionado = await obtenerBloqueoPorBloqueoUID(bloqueoUID)

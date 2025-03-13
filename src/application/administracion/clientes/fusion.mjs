@@ -27,7 +27,8 @@ export const fusion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const clienteUID_destino = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID_destino,
@@ -36,7 +37,8 @@ export const fusion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         await campoDeTransaccion("iniciar")
 

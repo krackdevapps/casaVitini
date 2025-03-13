@@ -31,7 +31,8 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
@@ -79,7 +80,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             zonaBloqueo_array: ["privada", "global"],
         })
 
-               
+
         const apartamentosDisponiblesResueltos = resuelveApartamentosDisponibles.apartamentosDisponibles;
         if (apartamentosDisponiblesResueltos.length === 0) {
             const error = "No hay ningún apartamento disponible para las fechas de la reserva";

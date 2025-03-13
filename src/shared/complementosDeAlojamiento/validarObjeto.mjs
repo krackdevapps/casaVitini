@@ -177,7 +177,8 @@ export const validarObjeto = async (data) => {
                             sePermiteVacio: "no",
                             limpiezaEspaciosAlrededor: "si",
                             limpiezaEspaciosInternos: "si",
-                            devuelveUnTipoNumber: "si"
+                            devuelveUnTipoNumber: "no",
+                            devuelveUnTipoBigInt: "si"
                         })
                     } catch (error) {
                         const path = helpers.state.path.join('.');

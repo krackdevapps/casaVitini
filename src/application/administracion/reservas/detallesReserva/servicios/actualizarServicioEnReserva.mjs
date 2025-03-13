@@ -28,7 +28,8 @@ export const actualizarServicioEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "no"
         })
 
         const servicioUID_enReserva = validadoresCompartidos.tipos.cadena({
@@ -37,7 +38,8 @@ export const actualizarServicioEnReserva = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
@@ -75,9 +77,6 @@ export const actualizarServicioEnReserva = async (entrada) => {
             opcionesSel: opcionesSeleccionadas,
             descuentoTotalServicio: descuentoTotalServicio
         })
-
-        const fechaAdquisicion = servicioEnReserva.contenedor.fechaAdquisicion
-        servicioEnReserva.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaAdquisicion)
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
         servicioEnReserva.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaUTC)
 

@@ -30,7 +30,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
 
@@ -40,7 +41,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             filtro: "strictoSinEspacios",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         if (palabra !== "reconstruir") {
             const error = "Por favor, escribe correctamente la palabra, reconstruir en el campo de texto. Escribe la palabra, reconstruir en minúsculas y sin espacios internos. Esto está así para evitar falsos clics."
@@ -83,7 +85,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         for (const servicio of serviciosInstantaneaReserva) {
             const servicioUID_enSimulacion = servicio.servicioUID
             const servicioUID = servicio.contenedor.servicioUID
-            const opcionesSel = servicio.opcionesSel 
+            const opcionesSel = servicio.opcionesSel
             const descuentoTotalServicio = servicio.descuentoTotalServicio
             await eliminarServicioEnReservaPorServicioUID(servicioUID_enSimulacion)
 
@@ -93,7 +95,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             } catch (error) {
                 continue
             }
-            
+
             const nombreServicico = servicioDelHub.nombre
             const contenedorServicio = servicioDelHub.contenedor
             contenedorServicio.servicioUID = servicioDelHub.servicioUID

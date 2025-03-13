@@ -17,7 +17,7 @@ export const actualizarImagen = async (entrada) => {
             numeroDeLLavesMaximo: 3
         })
 
-        
+
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
             nombreCampo: "El apartamentoIDV",
@@ -31,7 +31,8 @@ export const actualizarImagen = async (entrada) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const contenidoArchivo = validadoresCompartidos.tipos.cadena({

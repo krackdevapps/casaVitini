@@ -26,7 +26,8 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
 
         const estadoIDV = validadoresCompartidos.tipos.cadena({

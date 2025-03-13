@@ -20,7 +20,8 @@ export const estadoReserva = async (entrada, salida) => {
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
-            devuelveUnTipoNumber: "si"
+            devuelveUnTipoNumber: "no",
+            devuelveUnTipoBigInt: "si"
         })
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const ok = {
