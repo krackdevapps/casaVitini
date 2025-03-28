@@ -202,14 +202,27 @@ casaVitini.view = {
         const descripcion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(descripcionB64)
 
         const ui = document.createElement("div")
-        ui.classList.add("gridHorizontal2C_resp", "borderRadius20", "padding10", "gap10", "contenedorApartamento")
+        ui.classList.add("grid_contenedorApartamentos", "borderRadius20", "padding10", "gap10", "contenedorApartamento")
         ui.setAttribute("instanciaUID", instanciaUID)
         ui.setAttribute("grupoIDV", apartamentoIDV)
         ui.style.alignItems = "start"
         ui.style.background = "#f6e1af"
-
-
         contenedorApartamento.appendChild(ui)
+
+
+        const cInfoResponsive = document.createElement("div")
+        cInfoResponsive.classList.add("flexVertical", "gap10", "paddingLateral20", "tituloApartmentoResponsivo")
+        ui.appendChild(cInfoResponsive)
+
+        const tituloPublicoRes = document.createElement("p")
+        tituloPublicoRes.classList.add("negrita", "nombreApartmento")
+        tituloPublicoRes.textContent = apartamentoUIPublico
+        cInfoResponsive.appendChild(tituloPublicoRes)
+
+        const definicionPublicaUIRes = document.createElement("p")
+        definicionPublicaUIRes.classList.add("subtituloApartramento")
+        definicionPublicaUIRes.textContent = definicionPublica
+        cInfoResponsive.appendChild(definicionPublicaUIRes)
 
         const superContenedorImagenes = document.createElement("div")
         superContenedorImagenes.classList.add("grid3x3_0_fr_0", "flextJustificacion_center", "flexAHCentrad")
@@ -255,17 +268,29 @@ casaVitini.view = {
 
 
         const contenedorInfoGlobal = document.createElement("div")
-        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "padding18", "contenedorInfoGlobal", "gap6", "fontForImg", "elementosExpandidos")
+        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "padding18", "contenedorInfoGlobal", "gap12", "fontForImg", "elementosExpandidos")
         ui.appendChild(contenedorInfoGlobal)
+
+
+        const cInfoNORes = document.createElement("div")
+        cInfoNORes.classList.add("flexVertical", "gap10", "tituloApartmentoNOResponsivo")
+        contenedorInfoGlobal.appendChild(cInfoNORes)
+
+        const tituloPublico = document.createElement("p")
+        tituloPublico.classList.add("negrita", "nombreApartmento")
+        tituloPublico.textContent = apartamentoUIPublico
+        cInfoNORes.appendChild(tituloPublico)
+
+        const definicionPublicaUI = document.createElement("p")
+        definicionPublicaUI.classList.add("subtituloApartramento")
+        definicionPublicaUI.textContent = definicionPublica
+        cInfoNORes.appendChild(definicionPublicaUI)
 
         const infoGlobalAlojamiento = document.createElement("div")
         infoGlobalAlojamiento.classList.add("flexVertical", "gap10")
         contenedorInfoGlobal.appendChild(infoGlobalAlojamiento)
 
-        const tituloPublico = document.createElement("p")
-        tituloPublico.classList.add("negrita", "nombreApartmento")
-        tituloPublico.textContent = apartamentoUIPublico
-        infoGlobalAlojamiento.appendChild(tituloPublico)
+
 
 
         const infoDown = document.createElement("div")
@@ -274,10 +299,7 @@ casaVitini.view = {
 
 
 
-        const definicionPublicaUI = document.createElement("p")
-        definicionPublicaUI.classList.add("subtituloApartramento")
-        definicionPublicaUI.textContent = definicionPublica
-        infoGlobalAlojamiento.appendChild(definicionPublicaUI)
+        
 
         const contenedorCGlobales = document.createElement("div")
         contenedorCGlobales.classList.add("flexVertical")
@@ -341,9 +363,10 @@ casaVitini.view = {
         infoDown.appendChild(contenedorResto)
 
         const cMasInfo = document.createElement("div")
-        cMasInfo.classList.add("flexVertical", "botonMasInfo", "ratonDefault")
   
         if (descripcion.length > 0) {
+            cMasInfo.classList.add("flexVertical", "botonMasInfo", "ratonDefault")
+
             cMasInfo.textContent = "Mas información"
             cMasInfo.addEventListener("click", () => {
                 this.masInfoAlojamiento({

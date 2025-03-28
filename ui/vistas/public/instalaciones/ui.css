@@ -4,6 +4,8 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    /* background: linear-gradient(to bottom, #f0f0f0 50%, #ffffff 50%);
+    background-size: 100% 200%; */
 }
 
 main {
@@ -74,17 +76,21 @@ main * {
 
 }
 
-@media (max-width: 720px) {
+@media (max-width: 920px) {
     .bloqueCaracteristicas {
         align-items: center;
         transition: all 250ms ease-in-out !important;
         padding: 0px;
-
+        height: 250px;
+        border-radius: 0px;
+        box-shadow: 0px 0px 0px 0px;
     }
 
     .marcoElasticoRelativo {
         padding-left: 0px;
         padding-right: 0px;
+        margin-top: 80vh;
+
     }
 
     .imagenBancoBambu {
@@ -104,6 +110,17 @@ main * {
 
 .imagenPortadaIMG {
     background-image: url(/activos/imagenes/fotos/image00001_2s_comprimida.jpg)
+}
+
+.grid_contenedorApartamentos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 920px) {
+    .grid_contenedorApartamentos {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 920px) {
@@ -160,7 +177,6 @@ main * {
 }
 
 
-
 .photoContainer .button {
     cursor: default;
     user-select: none;
@@ -208,12 +224,22 @@ main * {
     pointer-events: none;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 920px) {
     .photoContainer .button {
         display: none;
+    }
 
+    .photoContainer {
+        margin-left: 16px;
+        width: calc(100% - 32px);
+    }
+
+    [contenedor=apartamentos] {
+        padding-left: 16px;
+        padding-right: 16px;
 
     }
+
 }
 
 .photoContainer::-webkit-scrollbar {
@@ -248,7 +274,7 @@ main * {
 
 }
 
-@media (max-width: 720px) {
+@media (max-width: 920px) {
     .photoGrid {
         padding: 0px;
         height: 150px;
@@ -273,7 +299,6 @@ main * {
 }
 
 .apliarImagen:hover {
-
     box-shadow: 0px 0px 20px 0px #0000007a;
 }
 
@@ -345,6 +370,14 @@ main * {
 }
 
 
+@media (max-width: 920px) {
+    .controlSegundaImagen {
+        animation-name: none !important;
+        animation-timeline: none !important;
+    }
+}
+
+
 .textoPresentacion {
     padding-left: 120px;
     padding-right: 120px;
@@ -355,11 +388,13 @@ main * {
     padding-bottom: 50px;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 920px) {
     .textoPresentacion {
         padding-left: 20px;
         padding-right: 20px;
-        padding-top: 30px;
+        padding-top: 20px;
+        padding-bottom: 0px;
+
     }
 }
 
@@ -415,6 +450,16 @@ main * {
     width: 100%;
     justify-content: flex-end;
     overflow: hidden;
+
+}
+
+@media (max-width: 920px) {
+    .gridImagenesApartamento {
+
+        height: 200px;
+
+    }
+
 
 }
 
@@ -479,12 +524,15 @@ main * {
     padding-right: 80px;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 920px) {
     .plaza_servicios_contenedorCaracteristicas {
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         align-items: stretch;
+        padding-left: 0px;
+        padding-right: 0px;
+        gap: 6px;
     }
 }
 
@@ -519,7 +567,7 @@ main * {
 }
 
 
-@media (max-width: 720px) {
+@media (max-width: 920px) {
     .plaza_servicios_contenedorCaracteristicaTexto {
         padding-top: 10px;
         padding-bottom: 10px;
@@ -559,7 +607,7 @@ main * {
     background: transparent
 }
 
-@media (max-width: 720px) {
+@media (max-width: 920px) {
     .botonDinamico.desplegado {
         font-size: 25px;
     }
@@ -590,10 +638,12 @@ main * {
     padding: 10px;
     border-radius: 10px;
     transition: all 250ms linear;
+    background: rgba(0, 0, 0, 0.1);
+
 }
 
 .botonMasInfo:hover {
-    background: rgba(0, 0, 0, 0.137);
+    background: rgba(0, 0, 0, 0.3);
 
 }
 
@@ -640,4 +690,19 @@ main * {
     translate: -42px;
     width: 32px;
     padding-right: 8px;
+}
+
+.tituloApartmentoResponsivo{
+    display: none;
+}
+
+
+@media (max-width: 920px) {
+    .tituloApartmentoResponsivo{
+        display: flex;
+    }
+    .tituloApartmentoNOResponsivo {
+        display: none;
+
+    }
 }

@@ -24,6 +24,13 @@ casaVitini.view = {
         main.querySelector("[ui=detallesDelProtocolo]").classList.add("ocultoInicial")
         const uiSelector = main.querySelector("[ui=portada]")
         uiSelector.setAttribute("instanciaUID", instanciaUID)
+        
+        const botonConf = document.createElement("a")
+        botonConf.classList.add("botonV4")
+        botonConf.textContent = "Configuracion global de protocolos de alojamiento"
+        botonConf.href = "/administracion/protocolos/gestion_de_protocolos/configuracion"
+        botonConf.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+        uiSelector.querySelector("[contenedor=botones]").appendChild(botonConf)
 
         const respuestaServidor = await casaVitini.shell.servidor({
             zona: "administracion/arquitectura/configuraciones/listarConfiguracionApartamentos"
@@ -42,6 +49,9 @@ casaVitini.view = {
         }
         if (respuestaServidor.ok) {
 
+
+
+
             const alojamientos = respuestaServidor.ok
             alojamientos.forEach(a => {
                 const apartamentoIDV = a.apartamentoIDV
@@ -54,26 +64,7 @@ casaVitini.view = {
                 ui.textContent = apartamentoUI
                 uiSelector.querySelector("[contenedor=alojamiento]").appendChild(ui)
             });
-
-
-
-
-            // uiSelector.querySelector("[data=nombre]").textContent = nombre
-            // uiSelector.querySelector("[data=elementoUID]").textContent = elementoUID
-            // uiSelector.querySelector("[data=operacionUI]").textContent = operacionUI
-            // uiSelector.querySelector("[data=fecha]").textContent = fecha
-            // uiSelector.querySelector("[data=definicion]").textContent = definicion
-            // uiSelector.querySelector("[data=uid]").textContent = uid
-
-
-            // botonIrAlElemento.href = `/administracion/inventario/ver_todo_el_inventario/elemento:${elementoUID}`
-
-            // botonIrAlElemento.removeEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-            // botonIrAlElemento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             uiSelector.classList.remove("ocultoInicial")
-
-
-
 
         }
 

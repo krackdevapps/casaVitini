@@ -433,18 +433,34 @@ header .estructura {
     padding-bottom: 20px;
 
 }
-
-.titulo1 {
-    font-size: 30px;
-    padding-left: 50px;
+.tituloShared  {
     color: #2f2622;
+    font-size: 30px;
+
 }
+.tituloCV {
+    text-wrap: nowrap;
+}
+.titulo1 {
+    padding-left: 50px;
+}
+
+@media (max-width: 1080px) {
+    .titulo1 {
+        padding-left: 20px;
+
+
+    }
+
+}
+
 
 @media (max-width: 1080px) {
     .contenedorParalax {
         max-width: 2160px;
-        gap: 80px;
-
+        gap: 40px;
+        margin-top: 100px;
+        padding-bottom: 0px;
     }
 
 }
@@ -531,8 +547,17 @@ header .estructura {
     border-radius: 30px !important; */
 
 }
-
-
+.containerFotoActividades {
+       width: 100%; 
+}
+@media (max-width: 720px) {
+    .contenedorParalax .parallax_comenzado {
+        height: 30vh;   
+    }
+    .containerFotoActividades {
+        
+    }
+}
 @media (max-width: 1080px) {
     .primerContainerResponsivo {
         margin: 0px;
@@ -637,6 +662,17 @@ header .estructura {
     gap: 40px;
     padding-top: 30px;
 }
+
+@media (max-width: 720px) {
+
+    .firstSuperContainer {
+        height: auto;
+        padding-top: 0px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
 
 .textoFirst {
     padding-top: 10px;
@@ -782,7 +818,7 @@ header .estructura {
     }
 
     .imagenTest {
-        height: 400px;
+        height: 194px;
 
     }
 
@@ -842,7 +878,7 @@ header .estructura {
 
 @media (max-width: 920px) {
     .tituloActividades {
-        font-size: 11vw;
+        font-size: 13vw;
 
     }
 }
@@ -936,7 +972,7 @@ header .estructura {
 @media (max-width: 920px) {
     .superContainerFotoVertical {
         grid-template-columns: 1fr;
-        gap: 80px;
+        gap: 40px;
 
     }
 }
@@ -989,13 +1025,13 @@ header .estructura {
 @media (max-width: 1080px) {
     .superContainerFoto {
         grid-template-columns: 1fr;
-        gap: 80px;
+        gap: 40px;
         height: auto;
     }
 
     .superContainerFotoV2 {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 20px;
 
     }
 
@@ -1011,6 +1047,14 @@ header .estructura {
     .superContainerFotoV2>.cell-2 {
         order: 2;
     }
+    .superContainerFotoV2>.cell-3 {
+        order: 1;
+    }
+
+    .superContainerFotoV2>.cell-4 {
+        order: 0;
+    }
+
 
     .padingtopv1 {
         padding-top: 0px;
