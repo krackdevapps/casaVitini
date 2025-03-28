@@ -3,11 +3,14 @@ casaVitini.view = {
 
         const granuladoURL = casaVitini.utilidades.granuladorURL()
         const directorios = granuladoURL.directorios[granuladoURL.directorios.length - 1]
+        document.body.classList.remove("fondoConResultados")
+        const main = document.querySelector("main")
 
         casaVitini.shell.controladoresUI.iconosGlobales.telefonoPublicoWhatsApp({
             zonaIcono: "alojamiento"
         })
-        return this.buscarAlojamientoUI()
+        await this.buscarAlojamientoUI()
+        const instanciaUID = main.querySelector("[instanciaUID_contenedorFechas]").getAttribute("instanciaUID_contenedorFechas")
 
         // if (directorios === "alojamiento") {
 
@@ -24,6 +27,44 @@ casaVitini.view = {
         //         return casaVitini.shell.navegacion.controladorVista(entrada)
         //     }
         // }
+
+
+        // Configuramos la consulta de media
+        const mediaQuery = window.matchMedia('(max-width: 720px)');
+
+        // Función para verificar el estado
+        function handleMediaQueryChange(event) {
+            if (event.matches) {
+                console.log('Estás debajo de 720px.');
+
+                casaVitini.shell.controladoresUI.ocultarElementos({})
+            } else {
+
+                const reservaLocal = JSON.parse(sessionStorage.getItem("preReservaLocal"))
+                console.log("reservaLocal", reservaLocal)
+                if (!reservaLocal) {
+                    casaVitini.ui.componentes.calendario.configurarCalendario({
+                        perfilMes: "calendario_entrada_publico_sinPasado",
+                        contenedorOrigenIDV: "[calendario=entrada]",
+                        instanciaUID_contenedorFechas: instanciaUID,
+                        rangoIDV: "inicioRango",
+                        metodoSelectorDia: "view.metodoSelectorPasarela",
+                        tituloCalendario: "Selecciona una fecha de entrada por favor",
+                        seleccionableDiaLimite: "no"
+                    })
+                }
+
+
+
+            }
+        }
+
+        // Adjuntamos un listener para cambios
+        //mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+        // Comprobamos el estado inicial
+        handleMediaQueryChange(mediaQuery);
+
     },
     buscarAlojamientoUI: async function () {
         try {
@@ -131,18 +172,26 @@ casaVitini.view = {
                 contenedorBanner.classList.add("plaza_reservas_reservaConfirmada_banner")
                 contenedorBanner.textContent = "Tienes la solicitud de reserva que hiciste anteriormente guardada en el navegador. Para ver los detalles pulsa aquí."
                 contenedorBanner.setAttribute("href", "/alojamiento/reserva_confirmada")
-                contenedorBanner.setAttribute("vista", "/alojamiento/reserva_confirmada")
+
                 contenedorBanner.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 bloquePasosReservaNuevo.appendChild(contenedorBanner)
             }
 
+            const superContenedorSeleconDias = document.createElement('div');
+            superContenedorSeleconDias.classList.add("flexVertical", "flexAHCentrad")
+            bloquePasosReservaNuevo.appendChild(superContenedorSeleconDias);
+
+
             const bloqueSelecionDias = document.createElement('div');
             bloqueSelecionDias.setAttribute('class', 'bloqueSelecionDias');
+            superContenedorSeleconDias.appendChild(bloqueSelecionDias);
+
 
             const plazaAlojamientoContenedor = document.createElement('div');
             plazaAlojamientoContenedor.setAttribute('class', 'plaza_alojamiento_contenedor');
             plazaAlojamientoContenedor.setAttribute('contenedor', 'alojamiento');
             plazaAlojamientoContenedor.setAttribute("instanciaUID_contenedorFechas", instanciaUID_contenedorFechas)
+            bloqueSelecionDias.appendChild(plazaAlojamientoContenedor);
 
             const diaEntradaNuevo = document.createElement('div');
             diaEntradaNuevo.setAttribute('class', 'diaEntradaNuevo plaza_alojamiento_marcoFechaCompartido');
@@ -164,17 +213,30 @@ casaVitini.view = {
                     seleccionableDiaLimite: "no"
                 })
             })
+            plazaAlojamientoContenedor.appendChild(diaEntradaNuevo);
+
+
+            const botonMostrarDisponibilidad = document.createElement('div');
+            botonMostrarDisponibilidad.setAttribute('class', 'botonMostrarDisponibilidad');
+            botonMostrarDisponibilidad.setAttribute('componente', 'botonDisponibilidad');
+            botonMostrarDisponibilidad.setAttribute('boton', 'mostrarDisponibilidad');
+            botonMostrarDisponibilidad.textContent = 'Buscar';
+            botonMostrarDisponibilidad.addEventListener("click", this.buscarApartamentosDisponibles)
+            plazaAlojamientoContenedor.appendChild(botonMostrarDisponibilidad);
+
+
             const textoDiaEntrada = document.createElement('div');
             textoDiaEntrada.setAttribute('class', 'textoDiaNuevo');
-            textoDiaEntrada.textContent = 'Fecha de entrada';
+            textoDiaEntrada.textContent = 'FECHA DE ENTRADA';
             diaEntradaNuevo.appendChild(textoDiaEntrada);
+
             const plazaAlojamientoMarcoFechaEntrada = document.createElement('div');
             plazaAlojamientoMarcoFechaEntrada.setAttribute('class', 'plaza_alojamiento_marcoFechaCompartido_contenedorFecha');
             plazaAlojamientoMarcoFechaEntrada.setAttribute('fechaUI', 'fechaInicio');
             if (reservaLocal?.fechaEntrada) {
                 plazaAlojamientoMarcoFechaEntrada.textContent = reservaLocal.fechaEntrada
             } else {
-                plazaAlojamientoMarcoFechaEntrada.textContent = '(Seleccionar)';
+                plazaAlojamientoMarcoFechaEntrada.textContent = '(seleccionar)';
             }
             diaEntradaNuevo.appendChild(plazaAlojamientoMarcoFechaEntrada);
 
@@ -197,9 +259,13 @@ casaVitini.view = {
                     seleccionableDiaLimite: "no"
                 })
             })
+            plazaAlojamientoContenedor.appendChild(diaSalidaNuevo);
+
+
+
             const textoDiaSalida = document.createElement('div');
             textoDiaSalida.setAttribute('class', 'textoDiaNuevo');
-            textoDiaSalida.textContent = 'Fecha de Salida';
+            textoDiaSalida.textContent = 'FECHA DE SALIDA';
             diaSalidaNuevo.appendChild(textoDiaSalida);
 
 
@@ -210,22 +276,12 @@ casaVitini.view = {
             if (reservaLocal?.fechaSalida) {
                 plazaAlojamientoMarcoFechaSalida.textContent = reservaLocal.fechaSalida
             } else {
-                plazaAlojamientoMarcoFechaSalida.textContent = '(Seleccionar)';
+                plazaAlojamientoMarcoFechaSalida.textContent = '(seleccionar)';
             }
             diaSalidaNuevo.appendChild(plazaAlojamientoMarcoFechaSalida);
 
-            const botonMostrarDisponibilidad = document.createElement('div');
-            botonMostrarDisponibilidad.setAttribute('class', 'botonMostrarDisponibilidad');
-            botonMostrarDisponibilidad.setAttribute('componente', 'botonDisponibilidad');
-            botonMostrarDisponibilidad.setAttribute('boton', 'mostrarDisponibilidad');
-            botonMostrarDisponibilidad.textContent = 'Buscar';
-            botonMostrarDisponibilidad.addEventListener("click", this.buscarApartamentosDisponibles)
 
-            plazaAlojamientoContenedor.appendChild(diaEntradaNuevo);
-            plazaAlojamientoContenedor.appendChild(botonMostrarDisponibilidad);
 
-            plazaAlojamientoContenedor.appendChild(diaSalidaNuevo);
-            bloqueSelecionDias.appendChild(plazaAlojamientoContenedor);
             const botonBorrarBusquedaAlojamiento = document.createElement("div")
             botonBorrarBusquedaAlojamiento.classList.add("plaza_alojamiento_botonBorrarBusquedaAlojamiento")
             botonBorrarBusquedaAlojamiento.setAttribute("componente", "botonBorrarBusquedaAlojamiento")
@@ -254,7 +310,6 @@ casaVitini.view = {
 
             })
             bloqueSelecionDias.appendChild(botonBorrarBusquedaAlojamiento);
-            bloquePasosReservaNuevo.appendChild(bloqueSelecionDias);
             if (reservaLocal?.alojamiento) {
                 reservaLocal.alojamiento = {}
                 sessionStorage.setItem("preReservaLocal", JSON.stringify(reservaLocal))
@@ -284,6 +339,10 @@ casaVitini.view = {
     },
     metodoSelectorPasarela: async function (e) {
         const estadoDia = e.target.getAttribute("estadoDia")
+        if (estadoDia === "noDisponible") {
+            return
+        }
+
         casaVitini.ui.componentes.calendario.calendarioCompartido.seleccionarDia(e)
         if (estadoDia !== "seleccionado") {
             this.asistenteCalendarios()
@@ -440,12 +499,18 @@ casaVitini.view = {
                 superBloqueReservaRenderizado.appendChild(infoSinAlojamiento);
                 return
             }
+            const superContenedorTitulo = document.createElement("div")
+            superContenedorTitulo.classList.add("flexVertical", "flexAHCentrad")
+            superBloqueReservaRenderizado.appendChild(superContenedorTitulo);
+
 
             const tituloBloqueAlojamiento = document.createElement("p")
             tituloBloqueAlojamiento.setAttribute("class", "tituloBloqueAlojamiento parpadeaFondoTransparente")
             tituloBloqueAlojamiento.setAttribute("componente", "tituloInfoSeleccionar")
             tituloBloqueAlojamiento.textContent = "Selecciona los apartamentos que quieres reservar. Se aplicarán las ofertas automáticamente."
-            superBloqueReservaRenderizado.appendChild(tituloBloqueAlojamiento);
+            superContenedorTitulo.appendChild(tituloBloqueAlojamiento);
+
+
             const bloqueAlojamientoUI = document.createElement("div")
             bloqueAlojamientoUI.classList.add("bloqueAlojamiento")
             bloqueAlojamientoUI.setAttribute("contenedor", "alojamiento")
@@ -918,7 +983,8 @@ casaVitini.view = {
                 zona: "plaza/reservas/preciosPorSeleccion",
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida,
-                apartamentosIDVARRAY: apartamentosSeleccionados
+                apartamentosIDVARRAY: apartamentosSeleccionados,
+                tipoRango: "personalizado"
             })
 
 
@@ -1373,6 +1439,8 @@ casaVitini.view = {
                 cImagen.setAttribute("contenedor", "imagenBase64")
                 cImagen.setAttribute("titulo", titulo)
                 cImagen.setAttribute("descripcion", descripcion)
+                cImagen.setAttribute("origenImagen", "linea")
+                cImagen.setAttribute("tipoImagen", "base64")
                 if (imagenBase64.length > 0) {
                     const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
                     cImagen.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;

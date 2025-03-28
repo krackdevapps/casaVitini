@@ -29,6 +29,10 @@ casaVitini.view = {
                 seleccionableDiaLimite: "no"
             })
         })
+        const botonInicial = document.querySelector("[configuracionOfertaIDV=aplicarTodasLasOfertas]")
+        botonInicial.setAttribute("estado", "s")
+        botonInicial.style.color = "white"
+        botonInicial.style.background = "blue"
 
         document.querySelector("[componente=botonBuscarAlojamiento]").addEventListener("click", () => { this.buscarAlojamiento() })
         document.querySelector("[componente=botonConfirmarReserva]").addEventListener("click", () => { this.confirmarReservaNueva() })
@@ -202,7 +206,6 @@ casaVitini.view = {
                 sel.style.background = "blue"
                 sel.style.color = "white"
             }
-
         }
         const selectorOpcion = document.querySelectorAll("[configuracionOfertaIDV]")
         selectorOpcion.forEach((opcion) => {

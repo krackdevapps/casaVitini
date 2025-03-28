@@ -1,0 +1,118 @@
+[campo=descripcion] {
+    resize: vertical;
+    height: 200px;
+}
+
+.textoBoton {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 70px;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    transition: background 500ms linear, color 500ms linear;
+}
+
+[ui="portadaElemento"] [data=descripcion] {
+    white-space: break-spaces;
+}
+
+.textoContenedor {
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 14px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.textoBoton:hover {
+    background-color: rgba(0, 0, 0, 0.45);
+    color: white;
+    transition: all 250ms linear;
+}
+
+details {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: background 500ms linear, border 500ms linear !important;
+}
+
+details[open] {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0);
+
+}
+
+details .contenedor * {
+    transition: all 250ms linear !important;
+
+}
+
+.contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 0px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-content: left;
+    gap: 6px;
+}
+
+@media (max-width: 1280px) {
+    .contenedor {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .contenedor {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+@media (max-width: 720px) {
+
+    [areaGrid="gridElementosIventario"] [gridUID="gridElementosIventario"] {
+        display: none;
+    }
+
+    [areaGrid="gridElementosIventario"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [areaGrid="gridElementosIventario"] [gridUID="gridElementosIventario"] {
+        display: none;
+    }
+
+    [areaGrid="gridElementosIventario"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [areaGrid="gridElementosIventario"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
+}

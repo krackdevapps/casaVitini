@@ -126,6 +126,9 @@ export const constructorInstantaneaComplementosAlojamiento = async (data) => {
                     nR.precioNetoNocheConComplementos = new Decimal(nR.precioNetoNocheConComplementos).plus(precioNetoApartamentoComplementos)
                 }
             })
+
+            nR.precioNetoNocheConComplementos = new Decimal(nR.precioNetoNocheConComplementos).plus(precioNetoNoche)
+
         })
 
 

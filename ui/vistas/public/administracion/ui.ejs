@@ -1,148 +1,124 @@
 <div class="marcoElasticoRelativo" contenedor="menu">
-    <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Reservas
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/situacion" Componente="botonAdministracion" vista="/administracion/situacion"
-                class="tituloContextoAdministracion">Situación</a>
-            <a href="/administracion/reservas/pendientes_de_revision" Componente="botonAdministracion"
-                vista="/administracion/reservas/pendientes_de_revision" class="tituloContextoAdministracion">Reservas
-                pendientes de revisión</a>
-            <a href="/administracion/calendario" Componente="botonAdministracion" vista="/administracion/calendario"
-                class="tituloContextoAdministracion">Calendario</a>
-            <a href="/administracion/reservas/buscador" Componente="botonAdministracion"
-                vista="/administracion/reservas/buscador" class="tituloContextoAdministracion">Buscador de reservas</a>
-            <a href="/administracion/reservas/nueva" Componente="botonAdministracion"
-                vista="/administracion/reservas/nueva" class="tituloContextoAdministracion">Crear una nueva
-                reserva</a>
-            <a href="/administracion/enlaces_de_pago" Componente="botonAdministracion"
-                vista="/administracion/enlaces_de_pago" class="tituloContextoAdministracion">Enlaces de pago</a>
-        </div>
-    </div>
-    <!-- <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Protocolos de limpieza e inventario
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/protocolos_e_iventario/estado_del_alojamiento" Componente="botonAdministracion"
-                vista="/administracion/protocolos_e_iventario/estado_del_alojamiento"
-                class="tituloContextoAdministracion">Estado del alojamiento</a>
-            <a href="/administracion/protocolos_e_iventario" Componente="botonAdministracion"
-                vista="/administracion/protocolos_e_iventario" class="tituloContextoAdministracion">Protocolos de
-                limpieza</a>
-            <a href="/administracion/protocolos_e_iventario" Componente="botonAdministracion"
-                vista="/administracion/protocolos_e_iventario" class="tituloContextoAdministracion">Lista de la
-                compra</a>
-            <a href="/administracion/protocolos_e_iventario" Componente="botonAdministracion"
-                vista="/administracion/protocolos_e_iventario" class="tituloContextoAdministracion">Inventario
-                general</a>
-        </div>
-    </div> -->
-    <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Servicios
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/servicios" Componente="botonAdministracion" vista="/administracion/servicios"
-                class="tituloContextoAdministracion">Gestión de servicios</a>
-            <a href="/administracion/servicios/nuevo" Componente="botonAdministracion"
-                vista="/administracion/servicios/nuevo" class="tituloContextoAdministracion">Crear servicio</a>
+    <div class="flexVertical gap10">
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Reservas</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/situacion" class="textoBoton">Situación</a>
+                <a href="/administracion/reservas/pendientes_de_revision" class="textoBoton">Reservas
+                    pendientes de revisión</a>
+                <a href="/administracion/calendario" class="textoBoton">Calendario</a>
+                <a href="/administracion/reservas/buscador" class="textoBoton">Buscador de
+                    reservas</a>
+                <a href="/administracion/reservas/nueva" class="textoBoton">Crear una nueva
+                    reserva</a>
+                <a href="/administracion/enlaces_de_pago" class="textoBoton">Enlaces de pago</a>
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Protocolos del alojamiento</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/protocolos/revisar_alojamiento" class="textoBoton">Revisar alojaminento</a>
+                <a href="/administracion/protocolos/estado_del_alojamiento" class="textoBoton">Estado del alojamiento
+                    (En Construcción)</a>
+                <a href="/administracion/protocolos/registro_de_revisiones" class="textoBoton">Registro de
+                    revisiones</a>
 
-        </div>
-    </div>
-    <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Clientes
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/clientes" Componente="botonAdministracion" vista="/administracion/clientes"
-                class="tituloContextoAdministracion">Buscador de clientes</a>
-            <a href="/administracion/clientes/nuevo" Componente="botonAdministracion"
-                vista="/administracion/clientes/nuevo" class="tituloContextoAdministracion">Añadir un nuevo cliente</a>
-            <a href="/administracion/clientes/fusion" Componente="botonAdministracion"
-                vista="/administracion/clientes/fusion" class="tituloContextoAdministracion">Fusión de clientes</a>
-        </div>
-    </div>
-    <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Precios e impuestos
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/precios" Componente="botonAdministracion" vista="/administracion/precios"
-                class="tituloContextoAdministracion">Gestión de precios</a>
-            <a href="/administracion/impuestos" Componente="botonAdministracion" vista="/administracion/impuestos"
-                class="tituloContextoAdministracion">Gestión de impuestos</a>
-            <a href="/administracion/gestion_de_ofertas" Componente="botonAdministracion"
-                vista="/administracion/gestion_de_ofertas" class="tituloContextoAdministracion">Gestión de ofertas</a>
-            <a href="/administracion/comportamiento_de_precios" Componente="botonAdministracion"
-                vista="/administracion/comportamiento_de_precios" class="tituloContextoAdministracion">Comportamiento de
-                precios</a>
-            <a href="/administracion/simulador_de_precios" Componente="botonAdministracion"
-                vista="/administracion/simulador_de_precios" class="tituloContextoAdministracion">Simulador de
-                precios</a>
-        </div>
-    </div>
-    <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Arquitectura de alojamiento y disponibilidad
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/arquitectura_del_alojamiento" Componente="botonAdministracion"
-                vista="/administracion/arquitectura_del_alojamiento" class="tituloContextoAdministracion">Arquitectura
-                del
-                alojamiento</a>
-            <a href="/administracion/gestion_de_bloqueos_temporales" Componente="botonAdministracion"
-                vista="/administracion/gestion_de_bloqueos_temporales" class="tituloContextoAdministracion">Gestión de
-                bloqueos temporales</a>
-            <a href="/administracion/complementos_de_alojamiento" Componente="botonAdministracion"
-                vista="/administracion/complementos_de_alojamiento" class="tituloContextoAdministracion">Complementos de
-                alojamiento</a>
-        </div>
-    </div>
-    <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Usuarios y administradores
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/usuarios" Componente="botonAdministracion" vista="/administracion/usuarios"
-                class="tituloContextoAdministracion">Buscador de usuarios</a>
-            <a href="/administracion/usuarios/nuevo" Componente="botonAdministracion"
-                vista="/administracion/usuarios/nuevo" class="tituloContextoAdministracion">Crear un nuevo usuario</a>
-        </div>
-    </div>
-    <div class="administracion_portada_contenedorContextual">
-        <div class="administracion_portada_contenedorContextual_titulo">
-            Configuración global
-        </div>
-        <div class="administracion_portada_contenedorContextual_contenedorBotones">
-            <a href="/administracion/configuracion/zona_horaria" Componente="botonAdministracion"
-                vista="/administracion/configuracion/zona_horaria" class="tituloContextoAdministracion">Zona Horaria</a>
-            <a href="/administracion/configuracion/horas_de_entrada_y_salida" Componente="botonAdministracion"
-                vista="/administracion/configuracion/horas_de_entrada_y_salida"
-                class="tituloContextoAdministracion">Hora de entrada y salida</a>
-            <a href="/administracion/configuracion/calendarios_sincronizados" Componente="botonAdministracion"
-                vista="/administracion/configuracion/calendarios_sincronizados"
-                class="tituloContextoAdministracion">Calendarios sincronizados</a>
-            <a href="/administracion/configuracion/limites_de_la_reserva_publica" Componente="botonAdministracion"
-                vista="/administracion/configuracion/limites_de_la_reserva_publica"
-                class="tituloContextoAdministracion">Límites de la reserva pública</a>
-            <a href="/administracion/configuracion/interruptores" Componente="botonAdministracion"
-                vista="/administracion/configuracion/interruptores"
-                class="tituloContextoAdministracion">Interruptores</a>
-            <a href="/administracion/configuracion/mensajes_en_portada" Componente="botonAdministracion"
-                vista="/administracion/configuracion/mensajes_en_portada" class="tituloContextoAdministracion">Mensajes
-                en portada</a>
-            <a href="/administracion/configuracion/telefono_publico_whatsapp" Componente="botonAdministracion"
-                vista="/administracion/configuracion/telefono_publico_whatsapp"
-                class="tituloContextoAdministracion">Telefono público WhatsApp</a>
-            <a href="/administracion/configuracion/correo_copia_reserva_publica" Componente="botonAdministracion"
-                vista="/administracion/configuracion/correo_copia_reserva_publica"
-                class="tituloContextoAdministracion">Correo de envío de copia de reserva pública realizada</a>
-            <a href="/administracion/configuracion/mensaje_principal_en_reserva_publica"
-                Componente="botonAdministracion"
-                vista="/administracion/configuracion/mensaje_principal_en_reserva_publica"
-                class="tituloContextoAdministracion">Mensaje principal en reserva confirmada</a>
-        </div>
-    </div>
-</div>
+                <a href="/administracion/protocolos/gestion_de_protocolos" class="textoBoton">Gestión de protocolos</a>
+
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Servicios</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/servicios" class="textoBoton">Gestión de servicios</a>
+                <a href="/administracion/servicios/nuevo" class="textoBoton">Crear servicio</a>
+
+            </div>
+       </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Gestión financiera, balance y depositos</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/finanzas/balance" class="textoBoton">Balance</a>
+                <a href="/administracion/finanzas/nuevo" class="textoBoton">Nuevo ingreso o gasto</a>
+                <a href="/administracion/finanzas/depositos" class="textoBoton">Depositos</a>
+                <a href="/administracion/finanzas/depositos" class="textoBoton">Presupuestos</a>
+                <a href="/administracion/finanzas/depositos" class="textoBoton">Cagegorias</a>
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Clientes y fusión</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/clientes" class="textoBoton">Buscador de clientes</a>
+                <a href="/administracion/clientes/nuevo" class="textoBoton">Añadir un nuevo
+                    cliente</a>
+                <a href="/administracion/clientes/fusion" class="textoBoton">Fusión de clientes</a>
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Inventario</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/inventario/situacion" class="textoBoton">Situación del inventario</a>
+                <a href="/administracion/inventario/ver_todo_el_inventario" class="textoBoton">Ver todo el
+                    inventario</a>
+                <a href="/administracion/inventario/registro" class="textoBoton">Registro del inventario</a>
+                <a href="/administracion/inventario/agregar_al_inventario" class="textoBoton">Agregar al inventario
+                </a>
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Precios, ofertas, simulaciones e impuestos</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/precios" class="textoBoton">Gestión de precios</a>
+                <a href="/administracion/impuestos" class="textoBoton">Gestión de impuestos</a>
+                <a href="/administracion/gestion_de_ofertas" class="textoBoton">Gestión de
+                    ofertas</a>
+                <a href="/administracion/comportamiento_de_precios" class="textoBoton">Comportamiento de
+                    precios</a>
+                <a href="/administracion/simulador_de_precios" class="textoBoton">Simulador de
+                    precios</a>
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Arquitectura de alojamiento, complementos y disponibilidad
+            </summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/arquitectura_del_alojamiento" class="textoBoton">Arquitectura
+                    del
+                    alojamiento</a>
+                <a href="/administracion/gestion_de_bloqueos_temporales" class="textoBoton">Gestión
+                    de
+                    bloqueos temporales</a>
+                <a href="/administracion/complementos_de_alojamiento" class="textoBoton">Complementos de
+                    alojamiento</a>
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Usuarios y administradores</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/usuarios" class="textoBoton">Buscador de usuarios</a>
+                <a href="/administracion/usuarios/nuevo" class="textoBoton">Crear un nuevo
+                    usuario</a>
+            </div>
+        </details>
+        <details class="flexVertical padding6 borderRadius18">
+            <summary class="textoContenedor">Configuración global</summary>
+            <div class="contenedor sobreControlAnimacionGlobal">
+                <a href="/administracion/configuracion/zona_horaria" class="textoBoton">Zona
+                    Horaria</a>
+                <a href="/administracion/configuracion/horas_de_entrada_y_salida" class="textoBoton">Hora de entrada y
+                    salida</a>
+                <a href="/administracion/configuracion/calendarios_sincronizados" class="textoBoton">Calendarios
+                    sincronizados</a>
+                <a href="/administracion/configuracion/limites_de_la_reserva_publica" class="textoBoton">Límites de la
+                    reserva pública</a>
+                <a href="/administracion/configuracion/interruptores" class="textoBoton">Interruptores</a>
+                <a href="/administracion/configuracion/mensajes_en_portada" class="textoBoton">Mensajes
+                    en portada</a>
+                <a href="/administracion/configuracion/telefono_publico_whatsapp" class="textoBoton">Telefono público
+                    WhatsApp</a>
+                <a href="/administracion/configuracion/correo_copia_reserva_publica" class="textoBoton">Correo de
+                    envío de copia de reserva pública realizada</a>
+                <a href="/administracion/configuracion/mensaje_principal_en_reserva_publica" class="textoBoton">Mensaje
+                    principal en reserva confirmada</a>
+            </div>
+        </details>

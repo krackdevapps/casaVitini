@@ -3,6 +3,7 @@ import { calcularTotal } from "../../calcularTotal.mjs"
 import { validadoresCompartidos } from "../../../../../validadores/validadoresCompartidos.mjs"
 import { controlInstanciaDecimal } from "../../controlInstanciaDecimal.mjs"
 import { constructorObjetoEstructuraPrecioDia } from "../../../../../contenedorFinanciero/entidades/reserva/constructorObjetoEstructuraPrecioDia.mjs"
+import { controlTotalNetoAlojamiento } from "../../../../../contenedorFinanciero/shared/controlTotalNetoAlojamiento.mjs"
 
 export const perfil_totalNetoPorRango = async (data) => {
     try {
@@ -34,7 +35,10 @@ export const perfil_totalNetoPorRango = async (data) => {
             }
 
             if (!contenedorPorDia.hasOwnProperty(fechaDelDia)) {
-                const precioNetoNoche = estructura.entidades.reserva.desglosePorNoche[fechaDelDia]?.precioNetoNocheConComplementos || estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+                const precioNetoNoche = controlTotalNetoAlojamiento({
+                    totalNetoConComplementos: estructura.entidades.reserva.desglosePorNoche[fechaDelDia]?.precioNetoNocheConComplementos,
+                    totalNetoSinComplementos: estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+                })
 
                 contenedorPorDia[fechaDelDia] = {
                     totalSinDescuentos: precioNetoNoche,

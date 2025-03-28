@@ -34,21 +34,18 @@ export const validarOpcionesDelServicio = async (data) => {
         const gruposDeOpcionesDelServicio = servicioExistenteAccesible.contenedor.gruposDeOpciones
         for (const [grupoIDV, grupoDeOpciones] of Object.entries(gruposDeOpcionesDelServicio)) {
 
-            // Servicio DB
             const configuracionGrupo = grupoDeOpciones.configuracionGrupo
             const nombreGrupo = grupoDeOpciones.nombreGrupo
             const opcionesGrupo = grupoDeOpciones.opcionesGrupo
             const confSelObligatoria = configuracionGrupo.confSelObligatoria
             const confSelNumero = configuracionGrupo.confSelNumero
 
-            // Servicio a comprorbar
             const grupoPorValidar = opcionesSeleccionadasPorValidar ?? {}
             if (Object.keys(grupoPorValidar).length === 0) {
                 const m = `En el servicio ${tituloPublico}, selecione al menos una opción. No ha seleccionado nada.`
                 throw new Error(m)
             }
 
-            // Comporbra si es obligatorio
             if (confSelObligatoria.includes("unaObligatoria")) {
                 if (!grupoPorValidar.hasOwnProperty(grupoIDV)) {
                     const m = `El servicio ${tituloPublico}, en las opciones de selección ${nombreGrupo}, no esta definido el obligatorio y esperado ${grupoIDV}.`
@@ -90,7 +87,6 @@ export const validarOpcionesDelServicio = async (data) => {
                 const estadoInterruptorCantidad = o.interruptorCantidad
                 const opcionIDV = o.opcionIDV
                 const nombreOpcion = o.nombreOpcion
-
                 const gpv = grupoPorValidar[grupoIDV].find(gPV => gPV.opcionIDV === opcionIDV)
                 if (!gpv) {
                     continue
@@ -105,6 +101,7 @@ export const validarOpcionesDelServicio = async (data) => {
                 } else {
                     gpv.cantidad = "1"
                 }
+
 
             }
         }

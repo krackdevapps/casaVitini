@@ -279,21 +279,23 @@ casaVitini.view = {
             main.appendChild(marcoElastico)
             const reservaUI = await casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.despliege({
                 reservaUID,
-                configuracionVista: "publica"
+                configuracionVista: "publica",
+                destino: marcoElastico
+
             })
-            marcoElastico.appendChild(reservaUI)
+            if (reservaUI.ok) {
+                const parametros = granuladoURL.parametros
+                const zonaURL = parametros.zona
 
-
-            const parametros = granuladoURL.parametros
-            const zonaURL = parametros.zona
-
-            if (zonaURL) {
-                const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zonaURL)
-                casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
-                    origen: "url",
-                    categoria: categoriaGlobalIDV
-                })
+                if (zonaURL) {
+                    const categoriaGlobalIDV = casaVitini.utilidades.cadenas.snakeToCamel(zonaURL)
+                    casaVitini.view.__sharedMethods__.detallesReservaUI.reservaUI.ui.componentesUI.categoriasGlobalesUI.controladorCategorias({
+                        origen: "url",
+                        categoria: categoriaGlobalIDV
+                    })
+                }
             }
+
         }
     },
 }

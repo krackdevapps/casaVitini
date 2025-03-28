@@ -1,18 +1,15 @@
 
-export const controlEstructuraPorJoi =  (data) => {
+export const controlEstructuraPorJoi = (data) => {
     try {
 
         const schema = data.schema
         const objeto = data.objeto
-
+        
         if (Object.keys(objeto || {}).length === 0) {
-            throw {
-                error: "objetoVacio",
-                errorUI: "El objeto esta vacio"
-            };
+            throw new Error("objetoVacio")
         }
 
-        const { value, error } =  schema.validate(objeto);
+        const { value, error } = schema.validate(objeto);
 
 
         const errorTipo = error?.details[0].type

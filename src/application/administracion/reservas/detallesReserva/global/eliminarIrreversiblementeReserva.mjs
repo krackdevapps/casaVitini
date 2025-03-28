@@ -6,6 +6,8 @@ import { obtenerUsuario } from "../../../../../infraestructure/repository/usuari
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { eliminarReservaIrreversiblementePorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/eliminarReservaIrreversiblementePorReservaUID.mjs";
+import { obtenerServiciosPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs";
+import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs";
 
 export const eliminarIrreversiblementeReserva = async (entrada) => {
     const mutex = new Mutex()
@@ -62,6 +64,16 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
             throw new Error(error);
         }
         await obtenerReservaPorReservaUID(reservaUID)
+
+
+        const servicios_EnReserva = await obtenerServiciosPorReservaUID(reservaUID)
+        for (const sER of servicios_EnReserva) {
+            await sincronizarRegistros({
+                servicioExistenteAccesible: sER
+            })
+        }
+
+
         await eliminarReservaIrreversiblementePorReservaUID(reservaUID)
         await campoDeTransaccion("confirmar")
         const ok = {

@@ -1,0 +1,95 @@
+<div class="marcoElasticoRelativo" contenedor="menu">
+
+    <div ui="verTodoElInventario" class="flexVertical gap10 ocultoInicial">
+        <p class="colorGris negrita textoCentrado">Inventario general</p>
+        <input type="text" campo="buscador" componente="zonaNavegacionPaginadaElementos"
+            placeholder="Buscar en todo el inventario">
+        <div contenedor="lista">
+        </div>
+    </div>
+
+    <div ui="portadaElemento" class="flexVertical ocultoInicial gap6">
+        <p data="nombre" class="negrita fontSize20 paddingLateral16 ">Nombre del elemento</p>
+
+        <details class="padding6 ocultoInicial" contenedor="descripcion">
+            <summary class="padding10">Descripción del elemento</summary>
+            <pre class="padding6" data="descripcion"></pre>
+        </details>
+
+        <div class="flexVertical padding16 gap10 borderGrey1 borderRadius16">
+
+            <div class="flexVertical">
+                <p class="negrita">Cantidades actuales en el inventario general</p>
+                <p data="cantidad">2</p>
+            </div>
+
+
+            <div class="flexVertical ocultoInicial" contenedor="tipoLimite">
+                <p class="negrita">Configuración minima</p>
+                <p data="tipoLimite"></p>
+
+            </div>
+        </div>
+
+        <div class="contenedor sobreControlAnimacionGlobal">
+            <a href="/administracion/inventario/situacion" vista="/administracion/inventario/situacion"
+                class="textoBoton" zona="actualizar_cantidades">Modificar
+                cantidades actuales</a>
+            <a href="/administracion/inventario/ver_todo_el_inventario"
+                vista="/administracion/inventario/ver_todo_el_inventario" class="textoBoton" zona="editar">Editar
+                elemento del
+                inventario</a>
+                <a href="/administracion/inventario/ver_todo_el_inventario"
+                vista="/administracion/inventario/ver_todo_el_inventario/elemento:e/inventario" class="textoBoton" zona="inventario">Registro del inventario del elemento</a>
+            <a class="textoBoton" accion="eliminar">Eliminar
+                elemento del
+                inventario</a>
+        </div>
+    </div>
+
+    <div ui="editarElemento" class="flexVertical ocultoInicial">
+        <p class="padding10 colorGrisV1 negrita textoCentrado">Editar elemento en el inventario general</p>
+        <div class="flexVertical gap10">
+            <input type="text" campo="nombre" placeholder="Nombre de nuevo elemento del inventario">
+            <select campo="tipoLimite">
+                <option value="" disabled selected>Seleciona el tipo de limite</option>
+                <option value="sinLimite">El elemento no tiene un limite mínimo</option>
+                <option value="conLimite">El elemento tiene un limite mínimo</option>
+            </select>
+
+            <div class="flexVertical gap10 borderGrey1 borderRadius20 padding6 ocultoInicial" contenedor="limiteMinimo">
+                <p class="padding16">Seleciona el limite minimo que se usará par dar la notificación de aviso</p>
+                <input type="number" campo="cantidadMinima" placeholder="Cantidad inicial, por ejemplo 5">
+            </div>
+
+            <textarea campo="descripcion" placeholder="Descripción del elemento (Opcional)"></textarea>
+            <div class="botonV1BlancoIzquierda" boton="actualizar">Actualizar elemento</div>
+        </div>
+
+    </div>
+
+    <div ui="actualizarCantidad" class="flexVertical ocultoInicial gap6">
+        <p data="nombre" class="negrita fontSize20 paddingLateral16">Nombre del elemento</p>
+        <div class="flexVertical gap10">
+            <p class="paddingLateral16">Cantidad actual de elemento en el inventario general.</p>
+            <p class="paddingLateral16" data="cantidad">Cantidad actual de elemento en el inventario general.</p>
+
+            <input type="number" min="0" campo="cantidad" placeholder="Inserta la cantidad para actualizar la cantidad">
+            <div class="botonV1BlancoIzquierda" boton="insertar"> Insertar en inventario</div>
+            <div class="botonV1BlancoIzquierda" boton="extraer"> Extraer del inventario</div>
+        </div>
+    </div>
+
+    <div ui="registroDelInventarioDelElemento" class="flexVertical ocultoInicial gap10">
+
+        <p class="colorGrisV1 negrita textoCentrado">Registro del inventario del elemento</p>
+        <input type="text" campo="buscador" componente="zonaNavegacionPaginadaRegistroDelElemento"
+            placeholder="Buscar en todo el registro del elemento">
+        <div contenedor="lista">
+        </div>
+    
+    
+
+
+    </div>
+</div>

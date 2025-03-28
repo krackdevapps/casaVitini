@@ -25,6 +25,7 @@ export const ampliadorDeImagen = {
         },
         cambiarImagen: function (data) {
             const sentido = data.sentido
+
             const contenedorImagenAmpliada = data.e.target.closest("[componente=contenedorImagenAmpliada]")
             const grupoActual = contenedorImagenAmpliada.getAttribute("grupoActualIDV")
             const imagenActual = contenedorImagenAmpliada.getAttribute("numeroImagen")
@@ -42,10 +43,39 @@ export const ampliadorDeImagen = {
                 .querySelector(`[grupoIDV="${grupoActual}"] [numeroImagen="${imagenDestino}"]`)
             const imagenUID = contenedorImagen.getAttribute("imagenUID")
             contenedorImagenAmpliada.setAttribute("imagenUID_ampliada", imagenUID)
-            const imagen = contenedorImagen.querySelector("[contenedor=imagenBase64]")
-            const imagenBase64 = imagen.style.backgroundImage
+            const imagen = contenedorImagen.querySelector("[origenImagen]")
+            const origenImagen = imagen.getAttribute("origenImagen")
+            const tipoImagen = imagen.getAttribute("tipoImagen")
+
+            if (origenImagen === "clase") {
+                fondoClaseCSS = imagen.style.backgroundImage
+            } else if (origenImagen === "linea") {
+                const estilo = getComputedStyle(imagen);
+                fondoClaseCSS = estilo.backgroundImage;
+            } else if (origenImagen === "atributo") {
+                fondoClaseCSS = imagen.getAttribute("urlImagen")
+            } else {
+                //casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                this.cerrarImagen(data.e)
+                casaVitini.ui.componentes.advertenciaInmersiva("No se ha especificado el origen")
+                return
+            }
+            let imagenValor
+            if (tipoImagen === "url") {
+                imagenValor = `url(${fondoClaseCSS})`
+            } else if (tipoImagen === "base64") {
+                imagenValor = fondoClaseCSS;
+            } else {
+                // casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                this.cerrarImagen(data.e)
+
+                return casaVitini.ui.componentes.advertenciaInmersiva("tipoImagen debe de esepcificarse en url o base64")
+            }
+
+
+            //  const imagenBase64 = imagen.style.backgroundImage
             const imagenVolatil = contenedorImagenAmpliada.querySelector(`[contenedor=imagenVolatil]`)
-            imagenVolatil.style.backgroundImage = imagenBase64
+            imagenVolatil.style.backgroundImage = imagenValor
             const titulo = imagen.getAttribute("titulo")
             const descripcion = imagen.getAttribute("descripcion")
             this.uiInfoImagen({
@@ -90,8 +120,44 @@ export const ampliadorDeImagen = {
             imagenesAmpliadasObsoletas.forEach(iA => iA?.remove())
             document.body.style.overflow = 'hidden';
             const imagenElemento = imagen.target.closest("[componente=fotoAmpliable]")
-            const contenedorImagen = imagenElemento.querySelector("[contenedor=imagenBase64]")
-            const fondoClaseCSS = contenedorImagen.style.backgroundImage
+            const contenedorImagen = imagenElemento.querySelector("[origenImagen]")
+
+            if (!contenedorImagen) {
+                return casaVitini.ui.componentes.advertenciaInmersiva("No se ha especificado el origen")
+            }
+
+
+            const origenImagen = contenedorImagen?.getAttribute("origenImagen")
+            const tipoImagen = contenedorImagen?.getAttribute("tipoImagen")
+
+            let fondoClaseCSS
+
+            if (origenImagen === "clase") {
+                fondoClaseCSS = contenedorImagen.style.backgroundImage
+            } else if (origenImagen === "linea") {
+                const estilo = getComputedStyle(contenedorImagen);
+                fondoClaseCSS = estilo.backgroundImage;
+            } else if (origenImagen === "atributo") {
+                fondoClaseCSS = contenedorImagen.getAttribute("urlImagen")
+            } else {
+                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                casaVitini.ui.componentes.advertenciaInmersiva("No se ha especificado el origen")
+                return
+            }
+
+            let imagenValor
+
+            if (tipoImagen === "url") {
+                imagenValor = `url(${fondoClaseCSS})`
+            } else if (tipoImagen === "base64") {
+                // const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(urlFondo);
+
+                imagenValor = fondoClaseCSS;
+            } else {
+                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                return casaVitini.ui.componentes.advertenciaInmersiva("tipoImagen debe de esepcificarse en url o base64")
+            }
+
             const areaGaleria = imagen.target.closest("[grupoIDV]")
             const grupoIDV = areaGaleria.getAttribute("grupoIDV")
             const imagenesAmpliables = areaGaleria.querySelectorAll("[componente=fotoAmpliable]")
@@ -102,7 +168,8 @@ export const ampliadorDeImagen = {
             let numerosTotales = 0
             imagenesAmpliables.forEach((imagenDelGrupo, numero) => {
                 numerosTotales = numero
-                imagenDelGrupo.removeAttribute("style")
+                // revisar para que esta eso
+               // imagenDelGrupo.removeAttribute("style")
                 imagenDelGrupo.removeAttribute("numeroImagen")
                 imagenDelGrupo.setAttribute("numeroImagen", numero)
             })
@@ -124,7 +191,9 @@ export const ampliadorDeImagen = {
             botonAtras.addEventListener("click", (e) => {
                 this.cambiarImagen({
                     sentido: "imagenAnterior",
-                    e
+                    e,
+                    origenImagen,
+                    tipoImagen
                 })
             })
             const botonCerrar = document.createElement("div")
@@ -139,7 +208,9 @@ export const ampliadorDeImagen = {
             botonSiguiente.addEventListener("click", (e) => {
                 this.cambiarImagen({
                     sentido: "imagenSiguiente",
-                    e
+                    e,
+                    origenImagen,
+                    tipoImagen
                 })
             })
             const marcoEspaciadorContenedorBotones = document.createElement("div")
@@ -158,7 +229,7 @@ export const ampliadorDeImagen = {
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
             const contenedorImagenVolatil = document.createElement("div")
             contenedorImagenVolatil.classList.add("contenedorImagenVolatil", `calendarioFlotante_${instanciaUID}`)
-            contenedorImagenVolatil.style.backgroundImage = fondoClaseCSS
+            contenedorImagenVolatil.style.backgroundImage = imagenValor
             contenedorImagenVolatil.setAttribute("contenedor", "imagenVolatil")
             const claseDinamica = document.createElement('style');
             claseDinamica.innerHTML = `

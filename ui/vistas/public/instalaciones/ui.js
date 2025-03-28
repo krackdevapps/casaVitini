@@ -1,11 +1,11 @@
 casaVitini.view = {
-    start: function () {
+    start: async function () {
+        const granuladoURL = casaVitini.utilidades.granuladorURL()
+        const parametros = granuladoURL.parametros
+
         const main = document.querySelector("main")
         main.setAttribute("zonaCSS", "instalaciones")
         const instanciaUID = main.getAttribute("instanciaUID")
-
-        // main.style.paddingTop = "10px"
-        main.style.maxWidth = "100%"
 
         const marcoElasticoRelativo = main.querySelector("[contenedor=marcoElasticoRelativo]")
         main.appendChild(marcoElasticoRelativo)
@@ -16,20 +16,42 @@ casaVitini.view = {
                 casaVitini.view.__sharedMethods__.ampliadorDeImagen.ampliarImagen(e)
             })
         )
+
         this.photoGrid.start()
-        return this.obtenerApartmentosIDV({
+        await this.obtenerApartmentosIDV({
             instanciaUID
         })
 
+        this.__observers__.controlImagen = () => {
+            const elementos = document.querySelectorAll('[urlImagen]');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.intersectionRatio >= 0.1) {
+                        const div = entry.target;
+                        const bgUrl = div.getAttribute('urlImagen');
+                        div.style.backgroundImage = `url(${bgUrl})`;
+                        observer.unobserve(div);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            elementos.forEach(el => observer.observe(el));
+            return observer;
+        };
+        this.__observers__.controlImagen();
 
-
+        if (parametros?.zona === "alojamientos") {
+            this.irAApartamentos({})
+        }
     },
     irAApartamentos: (e) => {
-        e.preventDefault()
-        e.stopPropagation()
+        if (e.hasOwnProperty("preventDefault")) {
+            e?.preventDefault()
+            e?.stopPropagation()
+        }
         const destino = document.querySelector("[componente=destinoScroll]")
         destino.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-
     },
     obtenerApartmentosIDV: async function (data) {
         const instanciaUID = data.instanciaUID
@@ -52,24 +74,120 @@ casaVitini.view = {
             const marcoElasticoRelativo = mainSel.querySelector("[contenedor=marcoElasticoRelativo]")
 
             const contenedorApartamento = document.createElement("div")
-            contenedorApartamento.classList.add("flexVertical", "gap20", "paddingLateral20")
+            contenedorApartamento.classList.add("flexVertical", "gap20", "paddingLateral80")
+            contenedorApartamento.style.gap = "40px"
             contenedorApartamento.setAttribute("contenedor", "apartamentos")
 
             if (configuracionDeAlojamientoPublicas.length > 0) {
                 this.renderizaTituloPegajoso({ instanciaUID })
                 marcoElasticoRelativo.appendChild(contenedorApartamento)
             }
-
-            configuracionDeAlojamientoPublicas.forEach(cA => {
-
-                this.contenedorApartmentoUI({
+            for (const cA of configuracionDeAlojamientoPublicas) {
+                await this.contenedorApartmentoUI({
                     cA,
                     contenedorApartamento
                 })
-            })
+            }
         }
     },
+    moverFotoEnContenedor: async function (data) {
+        const sentido = data.sentido
+        const gridImagenes = data.gridImagenes
+        const contenedorVisile = gridImagenes.querySelector("[estado=visible]")
+        const contenedoresImagenVisible = gridImagenes.querySelectorAll("[imagenUID][estado=visible]")
+        const contenedoresImagen = gridImagenes.querySelectorAll("[imagenUID]")
+        const contenedoresDuranteMovimiento = gridImagenes.querySelectorAll("[imagenUID][durante=movimiento]")
+        console.log("contenedoresDuranteMovimiento", contenedoresDuranteMovimiento.length)
+        if (contenedoresDuranteMovimiento.length >= 2) {
+            console.log("se activa")
+            contenedoresImagen.forEach(c => {
+                console.log("dos p mas", c)
+                c.classList.remove("contenedorImagenMovimientoNormal")
+                c.style.width = getComputedStyle(c).width;
+                c.offsetWidth;
+                c.classList.add("contenedorImangeControMovimiento")
+                c.style.width = "0%"
+            })
+        } else {
+            contenedoresImagen.forEach(c => {
+                console.log("menos de dos", c)
+                c.classList.remove("contenedorImangeControMovimiento")
+                c.classList.add("contenedorImagenMovimientoNormal")
+                c.style.width = "0%"
+            })
+        }
+
+        const finTransicion = (e) => {
+            e.target.removeAttribute("durante")
+        }
+
+
+        contenedorVisile.removeAttribute("estado")
+        contenedorVisile.setAttribute("durante", "movimiento")
+        contenedorVisile.addEventListener("transitionend", (e) => {
+            finTransicion(e)
+        }, { once: true })
+
+        if (sentido === "adelante") {
+
+
+            const siguienteElemento = contenedorVisile.nextElementSibling
+            if (siguienteElemento) {
+                siguienteElemento.setAttribute("estado", "visible")
+                siguienteElemento.style.width = "100%"
+                siguienteElemento.setAttribute("durante", "movimiento")
+
+                siguienteElemento.addEventListener("transitionend", (e) => {
+                    finTransicion(e)
+                }, { once: true })
+
+            } else {
+                const primerElemento = gridImagenes.firstElementChild;
+                // primerElemento.style.width = "0%"
+                primerElemento.setAttribute("durante", "movimiento")
+
+                gridImagenes.appendChild(primerElemento)
+
+                primerElemento.addEventListener("transitionend", (e) => {
+                    finTransicion(e)
+                }, { once: true })
+                requestAnimationFrame(() => {
+                    primerElemento.setAttribute("estado", "visible")
+                    primerElemento.style.width = "100%"
+                });
+            }
+        } else if (sentido === "atras") {
+            const anteriorElemento = contenedorVisile.previousElementSibling
+            if (anteriorElemento) {
+                anteriorElemento.setAttribute("estado", "visible")
+                anteriorElemento.style.width = "100%"
+                anteriorElemento.setAttribute("durante", "movimiento")
+
+                anteriorElemento.addEventListener("transitionend", (e) => {
+                    finTransicion(e)
+                }, { once: true })
+
+            } else {
+                const ultimoElemento = gridImagenes.lastElementChild;
+                // primerElemento.style.width = "0%"
+                ultimoElemento.setAttribute("durante", "movimiento")
+
+                gridImagenes.insertBefore(ultimoElemento, gridImagenes.firstChild);
+
+                ultimoElemento.addEventListener("transitionend", (e) => {
+                    finTransicion(e)
+                }, { once: true })
+                requestAnimationFrame(() => {
+                    ultimoElemento.setAttribute("estado", "visible")
+                    ultimoElemento.style.width = "100%"
+                });
+            }
+        }
+    },
+
+
     contenedorApartmentoUI: async function (data) {
+        console.log(data)
         const cA = data.cA
         const contenedorApartamento = data.contenedorApartamento
         const apartamentoIDV = cA.apartamentoIDV
@@ -78,46 +196,188 @@ casaVitini.view = {
         const definicionPublica = cA.definicionPublica
         const caracteristicas = cA.caracteristicas
         const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+        const numeroHuespedes = cA.numeroHuespedes || 0
+        const habitaciones = cA.habitaciones || []
+        const descripcionB64 = cA.descripcion
+        const descripcion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(descripcionB64)
 
         const ui = document.createElement("div")
-        ui.classList.add("gridHorizontal2C_auto_1fr_resp", "borderRadius20", "backgroundWhite3", "padding10", "gap10")
+        ui.classList.add("gridHorizontal2C_resp", "borderRadius20", "padding10", "gap10", "contenedorApartamento")
         ui.setAttribute("instanciaUID", instanciaUID)
         ui.setAttribute("grupoIDV", apartamentoIDV)
         ui.style.alignItems = "start"
         ui.style.background = "#f6e1af"
 
+
         contenedorApartamento.appendChild(ui)
 
-        const contenedorInfoGlobal = document.createElement("div")
-        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "backgroundWhite5", "padding18", "contenedorInfoGlobal", "gap6", "fontForImg")
-        ui.appendChild(contenedorInfoGlobal)
+        const superContenedorImagenes = document.createElement("div")
+        superContenedorImagenes.classList.add("grid3x3_0_fr_0", "flextJustificacion_center", "flexAHCentrad")
+        superContenedorImagenes.setAttribute("superContenedor", "imagenes")
+        ui.appendChild(superContenedorImagenes)
 
-        const infoGlobalAlojamiento = document.createElement("div")
-        infoGlobalAlojamiento.classList.add("flexVertical")
-        contenedorInfoGlobal.appendChild(infoGlobalAlojamiento)
 
-        const tituloPublico = document.createElement("p")
-        tituloPublico.classList.add("negrita")
-        tituloPublico.textContent = apartamentoUIPublico
-        infoGlobalAlojamiento.appendChild(tituloPublico)
+        const contenedorBotonAtras = document.createElement("div")
+        contenedorBotonAtras.classList.add("botonAtras", "button")
+        contenedorBotonAtras.addEventListener("click", () => {
+            this.moverFotoEnContenedor({
+                sentido: "atras",
+                gridImagenes
+            })
+        })
+        superContenedorImagenes.appendChild(contenedorBotonAtras)
 
-        const definicionPublicaUI = document.createElement("p")
-        definicionPublicaUI.style.fontWeight = "normal"
-        definicionPublicaUI.textContent = definicionPublica
-        infoGlobalAlojamiento.appendChild(definicionPublicaUI)
+        const iconoAtras = document.createElement("div")
+        iconoAtras.classList.add("triangleL")
+        contenedorBotonAtras.appendChild(iconoAtras)
 
-        const contenedorCaracteristicas = document.createElement("div")
-        contenedorCaracteristicas.classList.add("flexVertical")
-        contenedorInfoGlobal.appendChild(contenedorCaracteristicas)
 
         const gridImagenes = document.createElement("div")
         gridImagenes.classList.add("gridImagenesApartamento")
         gridImagenes.setAttribute("contenedor", "gridImagenes")
-        ui.appendChild(gridImagenes)
+        superContenedorImagenes.appendChild(gridImagenes)
+
+
+        const contenedorBotonAdelante = document.createElement("div")
+        contenedorBotonAdelante.classList.add("botonAdelante", "button")
+        contenedorBotonAdelante.addEventListener("click", () => {
+            this.moverFotoEnContenedor({
+                sentido: "adelante",
+                gridImagenes
+            })
+        })
+        superContenedorImagenes.appendChild(contenedorBotonAdelante)
+
+        const iconoAdelante = document.createElement("div")
+        iconoAdelante.classList.add("triangleR")
+        contenedorBotonAdelante.appendChild(iconoAdelante)
+
+
+
+        const contenedorInfoGlobal = document.createElement("div")
+        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "padding18", "contenedorInfoGlobal", "gap6", "fontForImg", "elementosExpandidos")
+        ui.appendChild(contenedorInfoGlobal)
+
+        const infoGlobalAlojamiento = document.createElement("div")
+        infoGlobalAlojamiento.classList.add("flexVertical", "gap10")
+        contenedorInfoGlobal.appendChild(infoGlobalAlojamiento)
+
+        const tituloPublico = document.createElement("p")
+        tituloPublico.classList.add("negrita", "nombreApartmento")
+        tituloPublico.textContent = apartamentoUIPublico
+        infoGlobalAlojamiento.appendChild(tituloPublico)
+
+
+        const infoDown = document.createElement("div")
+        infoDown.classList.add("flexVertical", "gap10")
+        contenedorInfoGlobal.appendChild(infoDown)
+
+
+
+        const definicionPublicaUI = document.createElement("p")
+        definicionPublicaUI.classList.add("subtituloApartramento")
+        definicionPublicaUI.textContent = definicionPublica
+        infoGlobalAlojamiento.appendChild(definicionPublicaUI)
+
+        const contenedorCGlobales = document.createElement("div")
+        contenedorCGlobales.classList.add("flexVertical")
+        //   contenedorCGlobales.style.gridTemplateColumns = "min-content min-content"
+        infoGlobalAlojamiento.appendChild(contenedorCGlobales)
+
+        const cHuespuedes = document.createElement("div")
+        cHuespuedes.classList.add("flexHorizontal", "whiteSpaceNoWrap", "gap6")
+        contenedorCGlobales.appendChild(cHuespuedes)
+
+        const cHuespedesIcono = document.createElement("div")
+        cHuespedesIcono.classList.add("flexHorizontal", "contenedorIconoCompatido")
+        cHuespuedes.appendChild(cHuespedesIcono)
+
+        for (let index = 0; index < Number(numeroHuespedes); index++) {
+            const icono1 = document.createElement("img")
+            icono1.src = "/activos/iconos/guest.svg"
+            icono1.classList.add("iconoH")
+            cHuespedesIcono.appendChild(icono1)
+        }
+
+
+
+        const habitacionesCadena = (data) => {
+            const habitaciones = data.habitaciones
+            if (habitaciones.length === 1) {
+                return `${habitaciones.length} Habitación`
+            } else {
+                return `${habitaciones.length} Habitaciónes`
+            }
+
+
+        }
+        const cHuespedesTitulo = document.createElement("div")
+        cHuespedesTitulo.classList.add("flexVertical", "whiteSpaceNoWrap", "flextJustificacion_center")
+        cHuespedesTitulo.textContent = "Huespedes"
+        cHuespuedes.appendChild(cHuespedesTitulo)
+
+        const cH = document.createElement("div")
+        cH.classList.add("flexHorizontal", "gap6")
+        contenedorCGlobales.appendChild(cH)
+
+        // const cHI = document.createElement("div")
+        // cHI.classList.add("flexVertical", "contenedorIconoCompatido", "flextJustificacion_center", "flexAHCentrad")
+        // cHI.textContent = habitacionesCadena({
+        //     habitaciones
+        // })
+        // cH.appendChild(cHI)
+
+        // const cHT = document.createElement("div")
+        // cHT.classList.add("flexVertical", "whiteSpaceNoWrap", "flextJustificacion_center")
+        // cHT.textContent = "Habitaciones"
+        // cH.appendChild(cHT)
+
+
+
+
+        const contenedorResto = document.createElement("div")
+        contenedorResto.classList.add("grid")
+        contenedorResto.style.gridTemplateColumns = "auto 1fr"
+        infoDown.appendChild(contenedorResto)
+
+        const cMasInfo = document.createElement("div")
+        cMasInfo.classList.add("flexVertical", "botonMasInfo", "ratonDefault")
+  
+        if (descripcion.length > 0) {
+            cMasInfo.textContent = "Mas información"
+            cMasInfo.addEventListener("click", () => {
+                this.masInfoAlojamiento({
+                    apartamentoIDV,
+                    descripcion
+                })
+            })
+        }
+        contenedorResto.appendChild(cMasInfo)
+
+        const cPrecio = document.createElement("div")
+        cPrecio.classList.add("flexVertical", "flexAlineacionDerecha", "flextJustificacion_center")
+        contenedorResto.appendChild(cPrecio)
+
+
+        const precioUIDesde = document.createElement("p")
+        precioUIDesde.style.fontWeight = "normal"
+        precioUIDesde.setAttribute("campo", "precio")
+        precioUIDesde.textContent = "Obteniendo precio..."
+        cPrecio.appendChild(precioUIDesde)
+
+        this.obtenerPrecioApartamentos({
+            apartamentoIDV,
+            destino: precioUIDesde
+        })
+
+
+        const contenedorCaracteristicas = document.createElement("div")
+        contenedorCaracteristicas.classList.add("flexVertical")
+        infoGlobalAlojamiento.appendChild(contenedorCaracteristicas)
+
 
         caracteristicas.forEach(c => {
             const caracteristicaUI = c.caracteristicaUI
-
             const cUI = document.createElement("p")
             cUI.style.fontWeight = "normal"
             cUI.textContent = caracteristicaUI
@@ -132,7 +392,7 @@ casaVitini.view = {
             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
         }
         if (respuestaServidor?.ok) {
-            return this.redenderizaContenedorImagen({
+            await this.redenderizaContenedorImagen({
                 respuestaServidor,
                 gridImagenes,
                 instanciaUID
@@ -147,10 +407,12 @@ casaVitini.view = {
         const imagenes = rS.imagenes
         imagenes.sort((a, b) => a.posicion - b.posicion);
 
-        if (  imagenes.length === 0) {
+        if (imagenes.length === 0) {
             document.querySelector(`[instanciaUID="${instanciaUID}"] [contenedor=gridImagenes]`)?.remove()
+            return
         }
 
+        let primera = true
         imagenes.forEach(imagen => {
             const imagenUID = imagen?.imagenUID
             const posicion = imagen?.posicion
@@ -165,11 +427,20 @@ casaVitini.view = {
                 descripcion,
                 estadoInicial: "cargando"
             })
+            if (primera) {
+                contenedor.setAttribute("estado", "visible")
+                contenedor.style.width = "100%"
+                primera = false
+            } else {
+                contenedor.style.width = "0%"
+            }
 
             const destino = document.querySelector(`[instanciaUID="${instanciaUID}"] [contenedor=gridImagenes]`)
+
+
             if (destino) {
                 destino.appendChild(contenedor)
-                casaVitini.view.obtenerImagen({
+                casaVitini.view.obtenerImagenNuevo({
                     instanciaUID_destino: contenedor.getAttribute("instanciaUID"),
                     imagenUID,
                     apartamentoIDV
@@ -177,34 +448,52 @@ casaVitini.view = {
             }
         })
     },
-    obtenerImagen: async function (data) {
+    // obtenerImagen: async function (data) {
+
+    //     const instanciaUID_destino = data.instanciaUID_destino
+    //     const imagenUID = data.imagenUID
+    //     const apartamentoIDV = data.apartamentoIDV
+    //     const respuestaServidor = await casaVitini.shell.servidor({
+    //         zona: "componentes/obtenerImagenPorApartamentoIDVPublico",
+    //         apartamentoIDV,
+    //         imagenUID
+    //     })
+
+    //     const uiRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_destino}"]`)
+    //     if (uiRenderizada) {
+    //         if (respuestaServidor?.error) {
+    //             return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
+    //         }
+    //         if (respuestaServidor?.ok) {
+    //             const imagenBase64 = respuestaServidor.imagen.imagenBase64
+    //             const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
+    //             uiRenderizada.querySelector("[contenedor=imagenBase64]").style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
+    //             uiRenderizada.querySelector("[contenedor=imagenBase64] [contenedor=spinner]")?.remove()
+    //             uiRenderizada.removeAttribute("estadoActual")
+    //             const imagenAmpliadaEnEspera = document.querySelector(`[imagenUID_ampliada="${imagenUID}"]`)
+
+    //             if (imagenAmpliadaEnEspera) {
+    //                 imagenAmpliadaEnEspera.querySelector("[contenedor=imagenVolatil]").style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
+    //                 imagenAmpliadaEnEspera.querySelector("[contenedor=imagenVolatil] [contenedor=spinner]")?.remove()
+    //             }
+    //         }
+    //     }
+
+    // },
+    obtenerImagenNuevo: function (data) {
 
         const instanciaUID_destino = data.instanciaUID_destino
         const imagenUID = data.imagenUID
-        const apartamentoIDV = data.apartamentoIDV
-        const respuestaServidor = await casaVitini.shell.servidor({
-            zona: "componentes/obtenerImagenPorApartamentoIDVPublico",
-            apartamentoIDV,
-            imagenUID
-        })
-
         const uiRenderizada = document.querySelector(`[instanciaUID="${instanciaUID_destino}"]`)
         if (uiRenderizada) {
-            if (respuestaServidor?.error) {
-                return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
-            }
-            if (respuestaServidor?.ok) {
-                const imagenBase64 = respuestaServidor.imagen.imagenBase64
-                const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
-                uiRenderizada.querySelector("[contenedor=imagenBase64]").style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
-                uiRenderizada.querySelector("[contenedor=imagenBase64] [contenedor=spinner]")?.remove()
-                uiRenderizada.removeAttribute("estadoActual")
-                const imagenAmpliadaEnEspera = document.querySelector(`[imagenUID_ampliada="${imagenUID}"]`)
+            uiRenderizada.querySelector("[contenedor=imagenBase64]").setAttribute("urlImagen", `/com/imagenes/${imagenUID}`)
+            uiRenderizada.querySelector("[contenedor=imagenBase64] [contenedor=spinner]")?.remove()
+            uiRenderizada.removeAttribute("estadoActual")
+            const imagenAmpliadaEnEspera = document.querySelector(`[imagenUID_ampliada="${imagenUID}"]`)
 
-                if (imagenAmpliadaEnEspera) {
-                    imagenAmpliadaEnEspera.querySelector("[contenedor=imagenVolatil]").style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
-                    imagenAmpliadaEnEspera.querySelector("[contenedor=imagenVolatil] [contenedor=spinner]")?.remove()
-                }
+            if (imagenAmpliadaEnEspera) {
+                imagenAmpliadaEnEspera.querySelector("[contenedor=imagenVolatil]").setAttribute("urlImagen", `/com/imagenes/${imagenUID}`)
+                imagenAmpliadaEnEspera.querySelector("[contenedor=imagenVolatil] [contenedor=spinner]")?.remove()
             }
         }
 
@@ -220,7 +509,7 @@ casaVitini.view = {
         const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
         const imagenResponsiva = `${apartamentoIDV}_imagen${posicion}`
         const contenedor = document.createElement("div")
-        contenedor.classList.add("flexVertical", "contenedorImagen")
+        contenedor.classList.add("flexVertical", "contenedorImagen", "sobreControlAnimacionGlobal")
         contenedor.setAttribute("instanciauID", instanciaUID)
         contenedor.setAttribute("imagenUID", imagenUID)
         contenedor.setAttribute("imagenResponsiva", imagenResponsiva)
@@ -235,10 +524,12 @@ casaVitini.view = {
         cImagen.setAttribute("contenedor", "imagenBase64")
         cImagen.setAttribute("titulo", titulo)
         cImagen.setAttribute("descripcion", descripcion)
-        if (imagenBase64.length > 0) {
-            const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
-            cImagen.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
-        }
+        cImagen.setAttribute("origenImagen", "atributo")
+        cImagen.setAttribute("tipoImagen", "url")
+        // if (imagenBase64.length > 0) {
+        //     const tipoDeImagen = casaVitini.utilidades.formatos.imagenes.base64(imagenBase64);
+        //     cImagen.style.backgroundImage = `url(data:image/${tipoDeImagen.toLowerCase()};base64,${imagenBase64})`;
+        // }
         contenedor.appendChild(cImagen)
 
         const spinner = casaVitini.ui.componentes.spinnerSimple()
@@ -270,7 +561,7 @@ casaVitini.view = {
         )
         z.appendChild(tituloPegajoso)
 
-        const titulo = document.createElement("p")
+        const titulo = document.createElement("h1")
         titulo.classList.add(
             "tituloGris",
             "textoCentrado",
@@ -284,10 +575,10 @@ casaVitini.view = {
             "fontForImg"
 
         )
-        titulo.style.color = "#8D6E63"
+        titulo.style.color = "#2f2622"
         titulo.setAttribute("componenete", "tituloTextoApartamentos")
         titulo.classList.add("botonDinamico")
-        titulo.textContent = "Apartamentos"
+        titulo.textContent = "APARTAMENTOS"
         tituloPegajoso.appendChild(titulo)
 
         const controladorAlturaTituloDinamico = () => {
@@ -305,12 +596,12 @@ casaVitini.view = {
             if (boundingRect1.bottom >= (window.innerHeight - stickyTop)) {
                 titulo.classList.add("plegado")
                 titulo.classList.remove("desplegado")
-                titulo.textContent = "Ver apartamentos"
+                titulo.textContent = "VER APARTAMENTOS"
                 titulo.addEventListener("click", this.irAApartamentos)
             } else {
                 titulo.classList.add("desplegado")
                 titulo.classList.remove("plegado")
-                titulo.textContent = "Apartamentos"
+                titulo.textContent = "APARTAMENTOS"
                 titulo.removeEventListener("click", this.irAApartamentos)
 
             }
@@ -337,8 +628,8 @@ casaVitini.view = {
             const photoGrid = main.querySelector("[com=photoGrid]")
             const botonSel = e.target.getAttribute("com")
 
-            const horizontalPhoyo = photoGrid.querySelector("[contenedor=imagenBase64]")
-            const elementWidth = horizontalPhoyo.getBoundingClientRect().width;
+            const horizontalPhoto = photoGrid.querySelector("[origenImagen]")
+            const elementWidth = horizontalPhoto.getBoundingClientRect().width;
             if (botonSel === "adelante") {
                 photoGrid.scrollTo({
                     left: photoGrid.scrollLeft + elementWidth,
@@ -351,5 +642,54 @@ casaVitini.view = {
                 });
             }
         }
-    }
+    },
+    obtenerPrecioApartamentos: async function (data) {
+
+        const apartamentoIDV = data.apartamentoIDV
+        const destino = data.destino
+        const apartamentosIDVARRAY = []
+        apartamentosIDVARRAY.push(apartamentoIDV)
+        const respuestaServidor = await casaVitini.shell.servidor({
+            zona: "plaza/reservas/preciosPorSeleccion",
+            tipoRango: "presente",
+            apartamentosIDVARRAY
+        })
+        if (respuestaServidor.error) {
+            casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
+
+        } else if (respuestaServidor.ok) {
+            const preciosPorSeleccion = respuestaServidor.preciosPorSeleccion[apartamentoIDV].precioEnBaseASeleccion
+            destino.textContent = `Desde ${preciosPorSeleccion}$ Noche`
+        }
+
+    },
+    masInfoAlojamiento: function (data) {
+        const main = document.querySelector("main")
+        const apartmentoIDV = data.aparatmentoIDV
+        const descripcion = data.descripcion
+        const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
+        const contenedor = ui.querySelector("[componente=contenedor]")
+        contenedor.style.gap = "20px"
+        main.appendChild(ui)
+
+        const texto = document.createElement("div")
+        texto.style.background = "white"
+        texto.style.borderRadius = "14px"
+        texto.style.padding = "20px"
+        texto.textContent = descripcion
+        contenedor.append(texto)
+
+        const botonCancelar = document.createElement("div")
+        botonCancelar.classList.add("botonV1")
+        botonCancelar.setAttribute("boton", "cancelar")
+        botonCancelar.textContent = "Cerra y volver"
+        botonCancelar.addEventListener("click", () => {
+            return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+        })
+        contenedor.appendChild(botonCancelar)
+
+
+
+    },
+    __observers__: {}
 }

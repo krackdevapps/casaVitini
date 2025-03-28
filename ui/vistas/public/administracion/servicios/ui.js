@@ -45,7 +45,7 @@ casaVitini.view = {
             boton.classList.add("botonV1")
             boton.textContent = "Crear servicio"
             boton.setAttribute("href", "/administracion/servicios/nuevo")
-            boton.setAttribute("vista", "/administracion/servicios/nuevo")
+
             boton.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorBotones.appendChild(boton)
             espacio.appendChild(contenedorBotones)
@@ -124,12 +124,19 @@ casaVitini.view = {
                 estados: {
                     activado: "Activado",
                     desactivado: "Desactivado"
+                },
+                zonas: {
+                    publica: "Pública",
+                    global: "Global",
+                    privada: "Privada"
                 }
             }
 
             for (const detallesDelServicio of servicios) {
                 const estadoIDV = detallesDelServicio.estadoIDV
+                const zonaIDV = detallesDelServicio.zonaIDV
                 detallesDelServicio.estadoIDV = dicccionario.estados[estadoIDV]
+                detallesDelServicio.zonaIDV = dicccionario.zonas[zonaIDV]
             }
             const sentidoColumna = respuestaServidor.sentidoColumna
 
@@ -377,6 +384,7 @@ casaVitini.view = {
                     const nombreOpcion = og.nombreOpcion
                     const precioOpcion = og.precioOpcion
                     const interruptorCantidad = og.interruptorCantidad
+                    const elementoEnlazado = og?.elementoEnlazado
 
 
                     const ogUI = componentesUI.opcionDelGrupo()
@@ -388,14 +396,23 @@ casaVitini.view = {
                     gpUI.querySelector("[componente=sinInfo]")?.remove()
                     gpUI.querySelector("[contenedor=opciones]").appendChild(ogUI)
 
+                    if (elementoEnlazado) {
+                        const nombre = elementoEnlazado.nombre
+                        const elementoUID = elementoEnlazado.elementoUID
 
+                        const enlaceUI = casaVitini.view.__sharedMethods__.grupoDeOpciones.enlazarOpcionConInventario.elementoEnlazadoUI({
+                            nombre,
+                            elementoUID
+                        })
+                        const contenedorSinEnlace = gpUI.querySelector("[contenedro=sinEnlace]")
+                        contenedorSinEnlace.classList.add("ocultoInicial")
+                        const contenedorConEnlace = gpUI.querySelector("[contenedro=conEnlace]")
+                        contenedorConEnlace.classList.remove("ocultoInicial")
 
+                        contenedorConEnlace.appendChild(enlaceUI)
 
-
-
+                    }
                 })
-
-
             })
 
             // Inyectar grupo
@@ -403,11 +420,6 @@ casaVitini.view = {
             // inyectar configracion grupo
             // inyectac opcion
             // inyectar datos opcion
-
-
-
-
-
         },
         estadoUIControlador: async function (estado) {
             const servicioUID = document.querySelector("[servicioUID]")?.getAttribute("servicioUID")

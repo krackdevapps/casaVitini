@@ -10,6 +10,8 @@ import { validarObjetoDelServicio } from "../../../../../shared/reservas/detalle
 import { validarOpcionesDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerFechaLocal } from "../../../../../shared/obtenerFechaLocal.mjs"
+import { estadoInicialPagoServicio } from "../../../../../shared/reservas/servicios/estadoInicialPagoServicio.mjs"
+import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs"
 
 export const insertarServicioEnReserva = async (entrada) => {
     try {
@@ -72,28 +74,35 @@ export const insertarServicioEnReserva = async (entrada) => {
             const m = "No se encuentra el servicio, verifique que el servicio este configurado en la zona global o privada y que este Activado"
             throw new Error(m)
         }
-
-
+        await campoDeTransaccion("iniciar")
+        const contenedorInventario_pipe = []
         await validarOpcionesDelServicio({
             opcionesSeleccionadasDelServicio: oSdS_validado,
-            servicioExistenteAccesible: servicioExistenteAccesible[0]
+            servicioExistenteAccesible: servicioExistenteAccesible[0],
+            contenedorInventario_pipe
         })
 
-
-
-        await campoDeTransaccion("iniciar")
         const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
         const descuentoTotalServicio = oSdS_validado.descuentoTotalServicio
         const fechaUTC = DateTime.utc().toISO();
         contenedorServicio.fechaAdquisicion = fechaUTC
+        const gruposDeOpciones = contenedorServicio.gruposDeOpciones
+        const eIP = estadoInicialPagoServicio({
+            gruposDeOpciones
+        })
 
+        await sincronizarRegistros({
+            opcionesSeleccionadasDelServicio: oSdS_validado,
+            servicioExistenteAccesible: servicioExistenteAccesible[0],
+        })
 
         const servicioEnReserva = await insertarServicioPorReservaUID({
             reservaUID,
             nombre: nombreServicico,
             contenedor: contenedorServicio,
             opcionesSel: opcionesSeleccionadas,
-            descuentoTotalServicio: descuentoTotalServicio
+            descuentoTotalServicio: descuentoTotalServicio,
+            estadoPagoIDV: eIP
         })
 
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)

@@ -1,12 +1,13 @@
 body {
     background-color: rgb(255 188 0 / 28%);
-    height: 100vh;
+   
 }
 
 main {
-    height: 100vh;
+ 
     color: #503f39;
     align-items: normal;
+    margin-bottom: 50px;
 }
 
 .textInicial {

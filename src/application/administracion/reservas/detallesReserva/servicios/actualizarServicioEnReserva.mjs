@@ -9,6 +9,8 @@ import { validarObjetoDelServicio } from "../../../../../shared/reservas/detalle
 import { validarOpcionesDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerFechaLocal } from "../../../../../shared/obtenerFechaLocal.mjs"
+import { controladorDelMovimiento } from "../../../../../shared/inventario/controladorDeMovimiento.mjs"
+import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs"
 
 export const actualizarServicioEnReserva = async (entrada) => {
     try {
@@ -57,18 +59,23 @@ export const actualizarServicioEnReserva = async (entrada) => {
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
         //contenedorServicio.servicioUID = servicio.servicioUID
-
+        await campoDeTransaccion("iniciar")
 
         await validarOpcionesDelServicio({
             opcionesSeleccionadasDelServicio: oSdS_validado,
-            servicioExistenteAccesible: servicio
+            servicioExistenteAccesible: servicio,
         })
         const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
         const descuentoTotalServicio = oSdS_validado.descuentoTotalServicio
         const fechaUTC = DateTime.utc().toISO();
         contenedorServicio.fechaAdquisicion = fechaUTC
 
-        await campoDeTransaccion("iniciar")
+
+        await sincronizarRegistros({
+            opcionesSeleccionadasDelServicio: oSdS_validado,
+            servicioExistenteAccesible: servicio,
+        })
+
         const servicioEnReserva = await actualizarServicioPorReservaUID({
             reservaUID,
             servicioUID_enReserva,

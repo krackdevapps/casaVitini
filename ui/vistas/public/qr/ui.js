@@ -6,7 +6,7 @@ casaVitini.view = {
 
         if (Object.keys(parametros).length === 1 && parametros.hasOwnProperty("reserva")) {
 
-             const respuestaServidor = await casaVitini.shell.servidor({
+            const respuestaServidor = await casaVitini.shell.servidor({
                 zona: "componentes/resolverQR",
                 codigoIDV: "reserva",
                 reservaUID: parametros.reserva
@@ -50,7 +50,7 @@ casaVitini.view = {
         )
         boton.textContent = "Ir a Administración"
         boton.setAttribute("href", "/administracion")
-        boton.setAttribute("vista", "/administracion")
+
         boton.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         main.appendChild(boton)
 

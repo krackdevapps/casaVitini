@@ -675,7 +675,7 @@ casaVitini.view = {
         botonCrearImpuesto.classList.add("administracion_impuestos_botonV1")
         botonCrearImpuesto.textContent = "Crear impuesto"
         botonCrearImpuesto.setAttribute("href", "/administracion/impuestos/crear_nuevo_impuesto")
-        botonCrearImpuesto.setAttribute("vista", "/administracion/impuestos/crear_nuevo_impuesto")
+
         botonCrearImpuesto.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotones.appendChild(botonCrearImpuesto)
         espacioImpuestos.appendChild(contenedorBotones)

@@ -27,7 +27,7 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const complementoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.complementoUID,

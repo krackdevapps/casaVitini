@@ -130,23 +130,37 @@ export const grid = {
             const columnasAceptadas = columnasGrid.map((columna) => {
                 return columna.columnaIDV
             })
+
             filas.forEach((detallesFila) => {
                 const fila = document.createElement("a")
                 fila.setAttribute("class", "administracionReservasFila")
                 fila.setAttribute("componenteGrid", "fila")
                 fila.setAttribute("href", mascaraURL?.mascara + detallesFila[mascaraURL?.parametro])
                 fila.addEventListener("click", this.resolverFila)
-                for (const detallesObjeto of Object.entries(detallesFila)) {
-                    const celdaIDV = detallesObjeto[0]
-                    const celdaUI = detallesObjeto[1]
-                    if (columnasAceptadas.includes(celdaIDV)) {
-                        const celda = document.createElement("div")
-                        celda.setAttribute("class", "administracionCeldaEstiloCompartido")
-                        celda.setAttribute("celdaIDV", celdaIDV)
-                        celda.textContent = celdaUI
-                        fila.appendChild(celda)
-                    }
+
+                for (const columnaAceptada of columnasGrid) {
+                    const columnaIDV = columnaAceptada.columnaIDV
+                    const celdaUI = detallesFila[columnaIDV]
+
+                    const celda = document.createElement("div")
+                    celda.setAttribute("class", "administracionCeldaEstiloCompartido")
+                    celda.setAttribute("celdaIDV", columnaIDV)
+                    celda.textContent = celdaUI
+                    fila.appendChild(celda)
+
                 }
+
+                // for (const detallesObjeto of Object.entries(detallesFila)) {
+                //     const celdaIDV = detallesObjeto[0]
+                //     const celdaUI = detallesObjeto[1]
+                //     if (columnasAceptadas.includes(celdaIDV)) {
+                //         const celda = document.createElement("div")
+                //         celda.setAttribute("class", "administracionCeldaEstiloCompartido")
+                //         celda.setAttribute("celdaIDV", celdaIDV)
+                //         celda.textContent = celdaUI
+                //         fila.appendChild(celda)
+                //     }
+                // }
                 gridConstruido_renderizado.appendChild(fila)
             })
             this.tarjetas.selectorFiltro.despliegue({
@@ -651,7 +665,7 @@ export const grid = {
                         "comportamientoBoton"
                     )
                     tarjeta.href = mascaraURL?.mascara + fila[mascaraURL?.parametro]
-                    tarjeta.setAttribute("vista", mascaraURL?.mascara + fila[mascaraURL?.parametro])
+
                     tarjeta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     contenedor.appendChild(tarjeta)
                     Object.entries(fila).forEach(([dataIDV, data]) => {

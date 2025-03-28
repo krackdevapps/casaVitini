@@ -1,0 +1,63 @@
+<div class="flexVertical gap10 padding10">
+
+    <div class="flexVertical ocultoInicial gap10" ui="registros">
+        <p class="colorGrisV1 negrita textoCentrado">Registro del inventario general</p>
+        <input type="text" campo="buscador" componente="zonaNavegacionPaginadaRegistroGeneral"
+            placeholder="Buscar en todo el registro del inventario">
+        <div contenedor="lista">
+        </div>
+    </div>
+    <div data="info" ui="sinRegistro" class="ocultoInicial flexVertical gap10"></div>
+    <div class="flexVertical padding10 gap10 ocultoInicial" ui="registroEnDetalle">
+        
+
+
+        <p class="colorGrisV1 negrita textoCentrado">Registro en detalle</p>
+
+        <div class="flexVertical gap10 padding12">
+
+            <div class="flexVertical">
+                <p class="negrita">Identificador del registro</p>
+                <p data="uid"></p>
+            </div>
+            
+            <div class="flexVertical">
+                <p class="negrita">Nombre del elemento en el inventario</p>
+                <p data="nombre"></p>
+            </div>
+
+            <div class="flexVertical">
+                <p class="negrita">Centidad en movimiento</p>
+                <p data="cantidadEnMovimiento"></p>
+            </div>
+                  
+            <div class="flexVertical">
+                <p class="negrita">Sentido del movimiento</p>
+                <p data="sentidoMovimiento"></p>
+            </div>
+
+            <div class="flexVertical">
+                <p class="negrita">Identificador del elemento en el inventario</p>
+                <p data="elementoUID"></p>
+            </div>
+            <div class="flexVertical">
+                 <p class="negrita">Operacion</p>
+                <p data="operacionUI"></p>
+            </div>
+            <div class="flexVertical">
+                <p class="negrita">Fecha</p>
+                <p data="fecha"></p>
+            </div>
+            <div class="flexVertical">
+                <p class="negrita">Descripcion de la operación</p>
+                <p data="definicion"></p>
+            </div>
+
+        </div>
+
+        <a class="botonV1BlancoIzquierda" boton="irAlElemento">Ir al elemento en el inventario</a>
+            
+        <div class="botonV1BlancoIzquierda" boton="revertir">Eliminar registro y revertir operación</div>
+
+    </div>
+</div>

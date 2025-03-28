@@ -16,27 +16,6 @@ export const validarObjetoReservaPublica = async (data) => {
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const camaSeleccionada = Joi.object({
-            // camaUI: Joi.string().required()
-            //     .custom((value, helpers) => {
-            //         try {
-            //             return validadoresCompartidos.tipos.cadena({
-            //                 string: value,
-            //                 nombreCampo: `La llave camaUI`,
-            //                 filtro: "strictoConEspacios",
-            //                 sePermiteVacio: "no",
-            //                 limpiezaEspaciosAlrededor: "si",
-            //             })
-            //         } catch (error) {
-            //             const path = helpers.state.path.join('.');
-            //             const mensajeError = `Error en ${path}: ${error.message}`;
-            //             return helpers.message(mensajeError);
-            //         }
-            //     })
-            //     .messages({
-            //         'string.base': '{{#label}} debe ser una cadena de texto',
-            //         'string.empty': '{{#label}} no puede estar vacío',
-            //         'any.required': '{{#label}} es una llave obligatoria'
-            //     }),
             camaIDV: Joi.string().required()
                 .custom((value, helpers) => {
                     try {
@@ -57,52 +36,10 @@ export const validarObjetoReservaPublica = async (data) => {
         })
 
         const habitacionSchema = Joi.object({
-            // habitacionUI: Joi.string().required()
-            //     .custom((value, helpers) => {
-            //         try {
-            //             return validadoresCompartidos.tipos.cadena({
-            //                 string: value,
-            //                 nombreCampo: `La llave habitacionUI`,
-            //                 filtro: "strictoConEspacios",
-            //                 sePermiteVacio: "no",
-            //                 limpiezaEspaciosAlrededor: "si",
-            //             })
-            //         } catch (error) {
-            //             const path = helpers.state.path.join('.');
-            //             const mensajeError = `Error en ${path}: ${error.message}`;
-            //             return helpers.message(mensajeError);
-            //         }
-            //     })
-            //     .messages({
-            //         'string.base': '{{#label}} debe ser una cadena de texto',
-            //         'string.empty': '{{#label}} no puede estar vacío',
-            //         'any.required': '{{#label}} es una llave obligatoria'
-            //     }),
             camaSeleccionada: camaSeleccionada.optional().messages(commonMessages)
         })
 
         const apartamentoSchemaConHabitacion = Joi.object({
-            // apartamentoUI: Joi.string().optional()
-            //     .custom((value, helpers) => {
-            //         try {
-            //             return validadoresCompartidos.tipos.cadena({
-            //                 string: value,
-            //                 nombreCampo: `La llave apartamentoUI`,
-            //                 filtro: "strictoConEspacios",
-            //                 sePermiteVacio: "no",
-            //                 limpiezaEspaciosAlrededor: "si",
-            //             })
-            //         } catch (error) {
-            //             const path = helpers.state.path.join('.');
-            //             const mensajeError = `Error en ${path}: ${error.message}`;
-            //             return helpers.message(mensajeError);
-            //         }
-            //     })
-            //     .messages({
-            //         'string.base': '{{#label}} debe ser una cadena de texto',
-            //         'string.empty': '{{#label}} no puede estar vacío',
-            //         'any.required': '{{#label}} es una llave obligatoria'
-            //     }),
             habitaciones: Joi.object().pattern(
                 Joi.string(),
                 habitacionSchema.required()
@@ -156,7 +93,7 @@ export const validarObjetoReservaPublica = async (data) => {
                                 const mensajeError = `Error en ${path}: ${error.message}`;
                                 return helpers.message(mensajeError);
                             }
-                        }).messages(commonMessages),  // Claves dinámicas que sigan el patrón "grupo0", "grupo1", "grupo2", etc.
+                        }).messages(commonMessages),
                     Joi.array().items({
                         opcionIDV: Joi.string().custom((value, helpers) => {
                             try {
@@ -192,8 +129,8 @@ export const validarObjetoReservaPublica = async (data) => {
                                 return helpers.message(mensajeError);
                             }
                         }).messages(commonMessages),
-                    }).required(),// Los valores deben ser arrays de objetos
-                ).required().messages(commonMessages),
+                    }).required(),
+                ).min(1).required().messages(commonMessages),
             })
         ).min(1)
             .messages(commonMessages)
@@ -418,18 +355,6 @@ export const validarObjetoReservaPublica = async (data) => {
                 throw new Error(m)
             }
             servicioUIDDuplicados[servicioUID] = true
-
-            // const grupoIDVDuplicados = {}
-            // Object.entries(opcionesSeleccionadas).forEach(([grupoIDV, os]) => {
-
-            //     if (grupoIDVDuplicados.hasOwnProperty(grupoIDV)) {
-            //         const m = `No se permite identificadores de grupoIDV duplicados en ${servicioUID}.`
-            //         throw new Error(m)
-            //     }
-            //     grupoIDVDuplicados[grupoIDV] = true
-
-            // })
-
 
         })
         const fechaEntrada = await validadoresCompartidos.fechas.validarFecha_ISO({

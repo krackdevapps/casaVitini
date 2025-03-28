@@ -1,0 +1,58 @@
+main {
+    align-content: normal;
+    align-items: normal;
+}
+
+.globalInfo {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+@keyframes animacionIcono {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.botonAlerta {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    transition: background 250ms linear !important;
+    border-radius: 16px;
+    cursor: default;
+}
+
+.botonAlerta:hover {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
+.contenedorIcono {
+    height: 100px;
+    width: 100px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.iconoOk {
+    background-image: url(/activos/iconos/ok.svg);
+}
+
+.iconoWarning {
+    background-image: url(/activos/iconos/warning.svg);
+    /* animation: animacionIcono 1s infinite; */
+}

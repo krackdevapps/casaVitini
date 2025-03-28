@@ -29,7 +29,7 @@ casaVitini.view = {
         const botonCrearConfiguracion = document.createElement("a")
         botonCrearConfiguracion.classList.add("arquitecturaConfApartamento_portada_boton")
         botonCrearConfiguracion.textContent = "Crear nueva configuración de alojamiento"
-        botonCrearConfiguracion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/crear")
+
         botonCrearConfiguracion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/crear")
         botonCrearConfiguracion.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         espacioBotonesGlobales.appendChild(botonCrearConfiguracion)
@@ -69,7 +69,7 @@ casaVitini.view = {
                     contenedorApartamento.classList.add("arquitecturaConfiguracionesAlojamiento_contenedorConfiguracion")
                     contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                     contenedorApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
-                    contenedorApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
+
                     contenedorApartamento.addEventListener("click", (e) => { this.traductorCambioVista(e) })
                     const contenedorTitulo = document.createElement("div")
                     contenedorTitulo.classList.add("arquitecturaConfAlojamiento_configuracionesTitulo")
@@ -197,7 +197,7 @@ casaVitini.view = {
                 const botonIrPerfilPrecio = document.createElement("a")
                 botonIrPerfilPrecio.classList.add("arquitecturaConfApartamento_boton")
                 botonIrPerfilPrecio.textContent = "Ir al perfil del precio"
-                botonIrPerfilPrecio.setAttribute("vista", "/administracion/precios/apartamentos:" + apartamentoIDV)
+
                 botonIrPerfilPrecio.setAttribute("href", "/administracion/precios/apartamentos:" + apartamentoIDV)
                 botonIrPerfilPrecio.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorBotonesGlobalesApartamento.appendChild(botonIrPerfilPrecio)
@@ -206,7 +206,7 @@ casaVitini.view = {
                 const botonIrALaEntidad = document.createElement("a")
                 botonIrALaEntidad.classList.add("arquitecturaConfApartamento_boton")
                 botonIrALaEntidad.textContent = "Ir a la entidad de alojamiento"
-                botonIrALaEntidad.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
+
                 botonIrALaEntidad.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
                 botonIrALaEntidad.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorBotonesGlobalesApartamento.appendChild(botonIrALaEntidad)
@@ -262,7 +262,7 @@ casaVitini.view = {
                 const botonIrPerfilPrecio1 = document.createElement("a")
                 botonIrPerfilPrecio1.classList.add("arquitecturaConfApartamento_boton")
                 botonIrPerfilPrecio1.textContent = "Gestión de imagenes del apartamento"
-                botonIrPerfilPrecio1.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV + "/zona:gestion_de_imagenes")
+
                 botonIrPerfilPrecio1.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV + "/zona:gestion_de_imagenes")
                 botonIrPerfilPrecio1.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorTituloYBoton.appendChild(botonIrPerfilPrecio1)
@@ -635,7 +635,7 @@ casaVitini.view = {
                             "ratonDefault"
                         )
                         reservaActivaContenedorUI.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}/alojamiento`)
-                        reservaActivaContenedorUI.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}/alojamiento`)
+
                         reservaActivaContenedorUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorLista.appendChild(reservaActivaContenedorUI)
 
@@ -669,7 +669,7 @@ casaVitini.view = {
                             "ratonDefault"
                         )
                         reservaActivaContenedorUI.setAttribute("href", `/administracion/gestion_de_ofertas/oferta:${ofertaUID}`)
-                        reservaActivaContenedorUI.setAttribute("vista", `/administracion/gestion_de_ofertas/oferta:${ofertaUID}`)
+
                         reservaActivaContenedorUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorLista.appendChild(reservaActivaContenedorUI)
 
@@ -1329,6 +1329,8 @@ casaVitini.view = {
                             cImagen.setAttribute("titulo", titulo)
                             cImagen.setAttribute("descripcion", descripcion)
                             cImagen.setAttribute("contenedor", "imagenBase64")
+                            cImagen.setAttribute("origenImagen", "linea")
+                            cImagen.setAttribute("tipoImagen", "base64")
                             cImagen.addEventListener("click", (e) => {
                                 casaVitini.view.__sharedMethods__.ampliadorDeImagen.ampliarImagen(e)
                             })
@@ -1384,7 +1386,6 @@ casaVitini.view = {
                                 })
                             })
                         },
-
                         opcionesImagen: {
                             ui: function (data) {
                                 const contenedorImagenOrigen = data.e.target.closest("[imagenUID]")

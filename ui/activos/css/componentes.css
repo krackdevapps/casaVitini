@@ -6,10 +6,6 @@
 
 }
 
-main {
-    padding-bottom: 20px;
-
-}
 
 main *:not(.sobreControlAnimacionGlobal):not(.sobreControlAnimacionGlobal *) {
     transition: scale 250ms ease-in-out;
@@ -26,7 +22,8 @@ select {
 }
 
 input,
-select {
+select,
+textarea {
     padding: 14px;
     border-radius: 16px;
     cursor: default;
@@ -40,6 +37,9 @@ select {
     outline: none;
 }
 
+.textAreaRedimenzionHorizontal {
+    resize: vertical;
+}
 
 
 [ui=global] .plaza_marcoError_seccion {
@@ -96,6 +96,22 @@ summary:hover {
 
 .colorGris {
     color: grey;
+}
+
+.colorGrisV1 {
+    color: rgb(94, 94, 94);
+}
+
+.colorNaranja {
+    color: #ff8f00
+}
+
+.colorAzul {
+    color: #005eca
+}
+
+.colorBlanco {
+    color: white
 }
 
 .marcoElastico {
@@ -390,9 +406,25 @@ summary:hover {
     padding-right: 14px;
 }
 
+.paddingLateral16 {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+
+.paddingLateral18 {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
 .paddingLateral20 {
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.paddingLateral80 {
+    padding-left: 80px;
+    padding-right: 80px;
 }
 
 .paddingLateral22 {
@@ -558,6 +590,7 @@ summary:hover {
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
     top: 0px;
+    left: 0px;
     display: flex;
     flex-wrap: nowrap;
     align-content: center;
@@ -573,8 +606,8 @@ summary:hover {
 .advertenciaInmersiva {
     background: #a5a5a500;
     position: fixed;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-wrap: nowrap;
     align-content: center;
@@ -585,8 +618,9 @@ summary:hover {
     -webkit-backdrop-filter: blur(50px);
     cursor: default;
     top: 0px;
-    /* z-index: 99; */
+    z-index: 99;
     left: 0px;
+
 }
 
 .advertenciaInmersiva .titulo {
@@ -634,6 +668,7 @@ summary:hover {
     user-select: none;
     cursor: default;
     z-index: 100;
+    left: 0px;
 }
 
 .errorInfo {
@@ -696,7 +731,7 @@ summary:hover {
 }
 
 .calendarioDiaNoDisponiblePorAntelacion {
-    background: rgba(155, 155, 155, 0.7) !important;
+    background: rgb(148, 148, 148) !important;
     border: 3px solid transparent;
     color: black !important;
     pointer-events: none;
@@ -849,6 +884,11 @@ summary:hover {
 .padding18 {
     padding: 18px;
 }
+
+.padding20 {
+    padding: 20px;
+}
+
 
 .padding8 {
     padding: 8px;
@@ -1209,6 +1249,14 @@ summary:hover {
     text-align: right;
 }
 
+.esferaSeleccionable {
+    margin: 5px;
+    height: 24px;
+    width: 24px;
+    border: 2px solid #373737;
+    border-radius: 100%;
+}
+
 .circuloAnimado {
     width: 16px;
     height: 16px;
@@ -1239,6 +1287,8 @@ summary:hover {
     flex-wrap: nowrap;
     gap: 20px;
     border-radius: 20px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
 }
 
 .fondoTransparente {
@@ -1340,6 +1390,12 @@ summary:hover {
 .whiteSpace {
     white-space: pre-wrap;
 }
+
+
+.whiteSpaceNoWrap {
+    white-space: pre;
+}
+
 
 .plaza_miCasa_recuperarCuenta_contenedorInfo {
     backdrop-filter: blur(50px);
@@ -1511,9 +1567,9 @@ summary:hover {
     overflow: hidden;
 }
 
-[globalUI="desgloseTotales"] .textoJustificado {
+.textoJustificado {
     text-align: justify;
-    padding: 10px;
+
 }
 
 [globalUI="desgloseTotales"].marco {
@@ -1756,6 +1812,15 @@ summary:hover {
     border-radius: 100%;
 }
 
+.indicadorDeSeleccionConFondo {
+    margin: 3px;
+    height: 14px;
+    width: 14px;
+    border-radius: 100%;
+    background-color: black;
+}
+
+
 .textSize16 {
     font-size: 16px;
 }
@@ -1838,6 +1903,15 @@ summary:hover {
     gap: 10px;
 }
 
+
+.gap12 {
+    gap: 12px;
+}
+
+.gap14 {
+    gap: 14px;
+}
+
 .gridHorizontal2C {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1859,6 +1933,12 @@ summary:hover {
     grid-template-columns: min-content auto;
 }
 
+.gridHorizontal3C_minContent_auto {
+    display: grid;
+    grid-template-columns: min-content min-content auto;
+}
+
+
 .gridHorizontal2C_minContent_auto_resp {
     display: grid;
     grid-template-columns: min-content auto;
@@ -1873,6 +1953,11 @@ summary:hover {
 .gridHorizontal2C_auto_1fr_resp {
     display: grid;
     grid-template-columns: auto 1fr;
+}
+
+.gridHorizontal2C_auto_auto_resp {
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 @media (max-width: 990px) {
@@ -1944,6 +2029,9 @@ summary:hover {
 
 .flexAHCentrad {
     align-items: center;
+}
+.flexAlineacionDerecha {
+    align-items: flex-end;
 }
 
 .contenidoAdvertenciaInmersiva {
@@ -2162,21 +2250,6 @@ summary:hover {
     backdrop-filter: blur(50px) !important;
 }
 
-.botonV4 {
-    padding: 8px;
-    border-radius: 16px;
-    background: rgba(0, 0, 0, 0.1);
-    cursor: default;
-    user-select: none;
-    -webkit-user-select: none;
-    text-align: center;
-    transition: all 250ms linear;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-}
-
 .botonV2 {
     padding: 8px;
     border-radius: 6px;
@@ -2223,8 +2296,28 @@ summary:hover {
 
 .botonV4:hover {
     background: rgba(0, 0, 0, 0.4);
-
 }
+
+.botonV5 {
+    padding: 10px;
+    border-radius: 10px;
+    background: #a13131;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    transition: all 250ms linear;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white
+}
+
+.botonV5:hover {
+    background: red;
+}
+
 
 .botonV6 {
     background: rgba(255, 255, 255, 0.4);
@@ -2497,6 +2590,13 @@ summary:hover {
     width: 100%;
     align-content: center;
     justify-content: center;
+    align-items: center;
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
 }
 
 .areaSinDecoracionPredeterminada,
@@ -2552,6 +2652,7 @@ a {
 
     50% {
         background: blue;
+        color: white
     }
 
     100% {
@@ -2590,7 +2691,7 @@ a {
 
 
 .parpadeoFondoAzul {
-    animation: parpadeoElementoIndicadorAzul 2s infinite linear;
+    animation: parpadeoElementoIndicadorAzul 3s infinite linear;
 }
 
 .ocultoInicial_enContexto {
@@ -2627,6 +2728,26 @@ textarea {
     }
 }
 
+.fontSize20 {
+    font-size: 20px;
+}
+
+
+.fontSize40 {
+    font-size: 40px;
+}
+
+.fuenteAdaptable40-20 {
+    font-size: 40px;
+}
+
+@media (max-width: 720px) {
+
+    .fuenteAdaptable40-20 {
+        font-size: 20px;
+    }
+}
+
 .efectoAparicion>div {
     overflow: hidden;
 }
@@ -2647,10 +2768,26 @@ textarea {
     background: rgb(214, 192, 157);
 }
 
+.grid3x1 {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+}
+
 .grid4x4_r_2x2 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
+
+.grid3x3_0_fr_0 {
+    display: grid;
+    grid-template-columns: 0 1fr 0;
+}
+
+.grid3x3_mC_fr_mc {
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+}
+
 .grid2x1_r_1x1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2665,14 +2802,68 @@ textarea {
     .grid4x4_r_2x2 {
         grid-template-columns: 1fr 1fr;
     }
+
     .grid2x1_r_1x1 {
         display: grid;
         grid-template-columns: 1fr;
     }
+
     .grid2x1_r_1x1_1fr_auto {
         display: grid;
-        grid-template-columns: 1fr ;
+        grid-template-columns: 1fr;
     }
-    
-    
+
+
+}
+
+
+@keyframes animacionAzul {
+    0% {
+        background-color: blue;
+        color: white;
+    }
+
+    50% {
+        background-color: rgb(255 255 255 / 0.3);
+        color: black;
+    }
+
+    100% {
+        background-color: blue;
+        color: white;
+    }
+}
+
+
+.animacionAzul {
+    animation: animacionAzul 3s infinite;
+}
+
+.privacidadUI {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0px;
+    background: #ffffff42;
+    margin: 20px;
+    max-width: 720px;
+    border-radius: 18px;
+    padding: 10px;
+    z-index: 1000;
+    backdrop-filter: blur(50px);
+    /* right: 0px; */
+}
+.privacidadUI .contenedorInfo *{
+    font-size: 12px !important;
+}
+
+.privacidadUI .boton {
+    padding: 4px !important;
+    transition: all 250ms linear !important;
+}
+
+.privacidadUI .boton:hover {
+    background-color: blue !important;
+    color: white !important;
+    box-shadow: 0 0 20px 4px #00000078;
 }

@@ -1,5 +1,5 @@
 casaVitini.view = {
-    start: async function ()  {
+    start: async function () {
         const main = document.querySelector("main")
         const instanciaUID = document.querySelector("main[instanciaUID]").getAttribute("instanciaUID")
 
@@ -24,7 +24,7 @@ casaVitini.view = {
                 enlace.classList.add("enlace")
                 enlace.textContent = "Ir directo a crear un nuevo apartamento como entidad"
                 enlace.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
-                enlace.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
+
                 enlace.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 main.appendChild(enlace)
             }
@@ -52,12 +52,12 @@ casaVitini.view = {
                 const botonCrearConfiguracion = document.createElement("div")
                 botonCrearConfiguracion.classList.add("botonV1BlancoIzquierda")
                 botonCrearConfiguracion.textContent = "Crear configuración"
-                botonCrearConfiguracion.addEventListener("click",() => { this.transactor()})
+                botonCrearConfiguracion.addEventListener("click", () => { this.transactor() })
                 selectorZonaCreacionConfiguracion.appendChild(botonCrearConfiguracion)
             }
         }
     },
-    transactor: async function() {
+    transactor: async function () {
         const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
         const mensaje = "Creando configuración de alojamiento..."
         const datosPantallaSuperpuesta = {

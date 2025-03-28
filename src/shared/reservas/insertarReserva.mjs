@@ -23,6 +23,7 @@ import { codigoZonaHoraria } from '../configuracion/codigoZonaHoraria.mjs';
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from '../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs';
 import { obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV } from '../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV.mjs';
 import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
+import { estadoInicialPagoServicio } from './servicios/estadoInicialPagoServicio.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -148,64 +149,8 @@ export const insertarReserva = async (reserva) => {
             })
 
         })
+
         const complementosUIDSolicitados = complementosAlojamiento.map(contenedor => contenedor.complementoUID)
-
-
-        const desgloseFinanciero = await procesador({
-            entidades: {
-                reserva: {
-                    origen: "externo",
-                    fechaEntrada: fechaEntrada,
-                    fechaSalida: fechaSalida,
-                    fechaActual: fechaCreacion_simple_TZ,
-                    apartamentosArray: apartamentosArray,
-                    origenSobreControl: "reserva"
-                },
-                complementosAlojamiento: {
-                    origen: "hubComplementosAlojamiento",
-                    complementosUIDSolicitados: complementosUIDSolicitados
-                },
-                servicios: {
-                    origen: "hubServicios",
-                    serviciosSolicitados: contendorServicios
-                },
-            },
-            capas: {
-                ofertas: {
-                    zonasArray: ["global", "publica"],
-                    operacion: {
-                        tipo: "insertarDescuentosPorCondicionPorCodigo",
-                    },
-                    codigoDescuentosArrayBASE64: soloCodigosBase64Descunetos,
-                    ignorarCodigosDescuentos: "no"
-                },
-                impuestos: {
-                    origen: "hubImuestos"
-                }
-            }
-        })
-
-
-        await insertarDesgloseFinacieroPorReservaUID({
-            reservaUID,
-            desgloseFinanciero
-        })
-
-
-        for (const servicioSolicitado of contendorServicios) {
-            const servicioUID = servicioSolicitado.servicioUID
-            const opcionesSel = servicioSolicitado.opcionesSeleccionadas
-            const servicio = await obtenerServicioPorServicioUID(servicioUID)
-            const nombreServicico = servicio.nombre
-            const contenedorServicio = servicio.contenedor
-            contenedorServicio.servicioUID = servicioUID
-            await insertarServicioPorReservaUID({
-                reservaUID,
-                nombre: nombreServicico,
-                contenedor: contenedorServicio,
-                opcionesSel: opcionesSel
-            })
-        }
         for (const com of complementosAlojamiento) {
             const complementoUID = com.complementoUID
             const complemento = await obtenerComplementoPorComplementoUID(complementoUID)
@@ -254,6 +199,75 @@ export const insertarReserva = async (reserva) => {
                 habitacionUID: habitacionUID_enReserva
             })
         }
+
+
+        for (const servicioSolicitado of contendorServicios) {
+            const servicioUID = servicioSolicitado.servicioUID
+            const opcionesSel = servicioSolicitado.opcionesSeleccionadas
+            const servicio = await obtenerServicioPorServicioUID(servicioUID)
+            const nombreServicico = servicio.nombre
+            const contenedorServicio = servicio.contenedor
+            contenedorServicio.servicioUID = servicioUID
+            const gruposDeOpciones = contenedorServicio.gruposDeOpciones
+            const descuentoTotalServicio = servicioSolicitado.descuentoTotalServicio
+
+            const eIP = estadoInicialPagoServicio({
+                gruposDeOpciones
+            })
+
+            await insertarServicioPorReservaUID({
+                reservaUID,
+                nombre: nombreServicico,
+                contenedor: contenedorServicio,
+                opcionesSel: opcionesSel,
+                descuentoTotalServicio: {
+                    tipoDescuento: "sinDescuento",
+                    cantidadDescuento: "0.00"
+                },
+                estadoPagoIDV: eIP
+            })
+        }
+
+        const desgloseFinanciero = await procesador({
+            entidades: {
+                reserva: {
+                    origen: "externo",
+                    fechaEntrada: fechaEntrada,
+                    fechaSalida: fechaSalida,
+                    fechaActual: fechaCreacion_simple_TZ,
+                    apartamentosArray: apartamentosArray,
+                    origenSobreControl: "reserva"
+                },
+                complementosAlojamiento: {
+                    origen: "instantaneaComplementosAlojamientoEnReserva",
+                    reservaUID: reservaUID
+                },
+                servicios: {
+                    origen: "instantaneaServiciosEnReserva",
+                    reservaUID: reservaUID
+                },
+            },
+            capas: {
+                ofertas: {
+                    zonasArray: ["global", "publica"],
+                    operacion: {
+                        tipo: "insertarDescuentosPorCondicionPorCodigo",
+                    },
+                    codigoDescuentosArrayBASE64: soloCodigosBase64Descunetos,
+                    ignorarCodigosDescuentos: "no"
+                },
+                impuestos: {
+                    origen: "hubImuestos"
+                }
+            }
+        })
+
+
+        await insertarDesgloseFinacieroPorReservaUID({
+            reservaUID,
+            desgloseFinanciero
+        })
+
         return nuevaReserva
     } catch (errorCapturado) {
         throw errorCapturado

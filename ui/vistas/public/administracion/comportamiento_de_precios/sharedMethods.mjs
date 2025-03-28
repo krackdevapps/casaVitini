@@ -544,7 +544,7 @@ export const sharedMethodsPricesBehavior = {
                     "gap6"
                 )
                 comportamientoUI.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
-                comportamientoUI.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+
                 comportamientoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
                 const tituloComportamiento = document.createElement("p")

@@ -50,7 +50,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
         if (tipoEntidad === "apartamento") {
             validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
                 objeto: entrada.body,
-                numeroDeLLavesMaximo: 7
+                numeroDeLLavesMaximo: 9
             })
 
             const apartamentoIDV = validadoresCompartidos.tipos.cadena({
@@ -68,6 +68,25 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
+            console.log("entrada.body", entrada.body)
+            const numeroHuespedes = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.numeroHuespedes,
+                nombreCampo: "El campo del numeroHuespedes",
+                filtro: "cadenaConNumerosEnteros",
+                sePermiteVacio: "no",
+                limpiezaEspaciosAlrededor: "si",
+                devuelveUnTipoNumber: "si",
+                devuelveUnTipoBigInt: "no"
+            })
+
+            const descripcion = validadoresCompartidos.tipos.cadena({
+                string: entrada.body.descripcion,
+                nombreCampo: "El campo de descripcion",
+                filtro: "cadenaBase64",
+                sePermiteVacio: "si",
+                limpiezaEspaciosAlrededor: "si"
+            })
+
 
             const apartamentoUIPublico = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.apartamentoUIPublico,
@@ -83,7 +102,6 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
-
 
             const caracteristicas = validadoresCompartidos.tipos.array({
                 array: entrada.body.caracteristicas,
@@ -111,7 +129,9 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 apartamentoUI: apartamentoUI,
                 apartamentoIDVSelector: entidadIDV,
                 apartamentoUIPublico,
-                definicionPublica
+                definicionPublica,
+                numeroHuespedes,
+                descripcion
             })
             if (apartamentoComoEntidadActualizado.rowCount === 0) {
                 const error = "No se han podido guardar los datos porque no se ha encontrado el apartamento.";

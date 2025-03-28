@@ -17,10 +17,14 @@ casaVitini.view = {
         contenedorFecha.classList.add("administracion_situacion_portada_contenedorFecha")
         contenedorFecha.textContent = fechaUI
         if (Object.keys(parametros).length === 0) {
-            return this.portada.arranque()
+
+            await this.portada.arranque()
+            this.portada.controlDespliegue()
         } else if (parametros.alojamiento) {
+            
             const apartamentoIDV = parametros.alojamiento
-            return this.detallesApartamento.arranque(apartamentoIDV)
+            await this.detallesApartamento.arranque(apartamentoIDV)
+            this.portada.controlDespliegue()
         }
     },
     portada: {
@@ -43,7 +47,7 @@ casaVitini.view = {
 
                 const botonIrACalendario = document.createElement("a")
                 botonIrACalendario.setAttribute("href", '/administracion/calendario/capa:todas_las_reservas/capa:todas_las_reservas_por_apartamento/capa:todos_los_bloqueos/capa:todo_airbnb')
-                botonIrACalendario.setAttribute("vista", '/administracion/calendario/capa:todas_las_reservas/capa:todas_las_reservas_por_apartamento/capa:todos_los_bloqueos/capa:todo_airbnb')
+
                 botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 botonIrACalendario.classList.add("botonV1BlancoIzquierda")
                 botonIrACalendario.textContent = "Ver la situación global de todos los eventos pernoctativos y la disponibilidad de alojamiento en el calendario."
@@ -76,13 +80,13 @@ casaVitini.view = {
                                 detallesReservas.horaEntrada = horaEntrada
                                 detallesReservas.horaSalida = horaSalida
                                 const contenedorReserva = casaVitini.view.componentesUI.tarjetaReservaUI(detallesReservas)
-                                apartamentoUI.appendChild(contenedorReserva)
+                                apartamentoUI.querySelector("[contenedor=alojamiento]").appendChild(contenedorReserva)
                             }
                             if (calendariosSincronizados.airbnb) {
                                 const eventosAirbnb = calendariosSincronizados.airbnb.eventos
                                 for (const detallesDelEvento of eventosAirbnb) {
                                     const contenedorEvento = casaVitini.view.componentesUI.tarjetaEventoUI(detallesDelEvento)
-                                    apartamentoUI.appendChild(contenedorEvento)
+                                    apartamentoUI.querySelector("[contenedor=alojamiento]").appendChild(contenedorEvento)
                                 }
                             }
                             espacioSituacion.appendChild(apartamentoUI)
@@ -106,6 +110,28 @@ casaVitini.view = {
                 return respuestaServidor
             }
         },
+        controlDespliegue: function () {
+            const mediaQuery = window.matchMedia("(min-width: 920px)");
+            function actualizarDetalles(e) {
+                const contenedores = document.querySelectorAll("[superContenedor=alojamiento]");
+                if (contenedores.length === 0) {
+                    console.log("fin")
+                    mediaQuery.removeEventListener("change", actualizarDetalles);
+                    return
+                }
+                console.log("test")
+                contenedores.forEach((c) => {
+                    if (e.matches) {
+                        c.setAttribute("open", "");
+                    } else {
+                        c.removeAttribute("open");
+                    }
+                })
+            }
+            mediaQuery.removeEventListener("change", actualizarDetalles);
+            mediaQuery.addEventListener("change", actualizarDetalles);
+            actualizarDetalles(mediaQuery);
+        }
     },
     detallesApartamento: {
         arranque: async function (apartamentoIDV) {
@@ -140,9 +166,7 @@ casaVitini.view = {
                 const apartamentoUI = await casaVitini.view.componentesUI.tarjetaApartamentoUI(detallesApartamento)
                 const selectorTituloApartamentoUI = apartamentoUI.querySelector("[componente=titulo]")
                 selectorTituloApartamentoUI.classList.remove("comportamientoBoton")
-                selectorTituloApartamentoUI.removeEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-                selectorTituloApartamentoUI.removeAttribute("vista")
-                selectorTituloApartamentoUI.removeAttribute("href")
+                apartamentoUI.querySelector("[com=enlace]")?.remove()
 
                 marcoElastico.appendChild(apartamentoUI)
 
@@ -224,16 +248,17 @@ casaVitini.view = {
                 }
             }
 
-            const apartamentoGUI = document.createElement("div")
+            const apartamentoGUI = document.createElement("details")
+            apartamentoGUI.setAttribute("superContenedor", "alojamiento")
             apartamentoGUI.classList.add(
                 "flexVertical",
                 "padding6",
-                "gap6",
                 "backgroundWhite3",
-                "borderRadius20"
+                "borderRadius20",
+                "contenedorAlojamiento"
             )
 
-            const apartamentoTitulo = document.createElement("a")
+            const apartamentoTitulo = document.createElement("summary")
             apartamentoTitulo.setAttribute("componente", "titulo")
             apartamentoTitulo.classList.add(
                 "flexVertical",
@@ -246,10 +271,25 @@ casaVitini.view = {
             )
 
             apartamentoTitulo.textContent = apartamentoUI
-            apartamentoTitulo.setAttribute("vista", `/administracion/situacion/alojamiento:${apartamentoIDV}`)
-            apartamentoTitulo.setAttribute("href", `/administracion/situacion/alojamiento:${apartamentoIDV}`)
-            apartamentoTitulo.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+
+
             apartamentoGUI.appendChild(apartamentoTitulo)
+
+
+            const contenedorGlobal = document.createElement("div")
+            contenedorGlobal.classList.add("flexVertical", "gap6")
+            contenedorGlobal.setAttribute("contenedor", "alojamiento")
+            apartamentoGUI.appendChild(contenedorGlobal)
+
+
+            const botonAlojamiento = document.createElement("a")
+            botonAlojamiento.classList.add("botonV1BlancoIzquierda")
+            botonAlojamiento.setAttribute("com", "enlace")
+            botonAlojamiento.textContent = "Abrir alojamiento"
+            botonAlojamiento.setAttribute("href", `/administracion/situacion/alojamiento:${apartamentoIDV}`)
+            botonAlojamiento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            contenedorGlobal.appendChild(botonAlojamiento)
+
 
             const contenedorInfoGlobal = document.createElement("div")
             contenedorInfoGlobal.classList.add(
@@ -259,7 +299,7 @@ casaVitini.view = {
                 "backgroundGrey1",
                 "borderRadius16"
             )
-            apartamentoGUI.appendChild(contenedorInfoGlobal)
+            contenedorGlobal.appendChild(contenedorInfoGlobal)
 
             const contenedorEstadoPernoctacion = casaVitini.ui.componentes.widgetsUI.contenedorTituloDescripcionSimple({
                 titulo: "Estado pernoctativo",
@@ -300,11 +340,11 @@ casaVitini.view = {
             }
             const botonIrACalendario = document.createElement("a")
             botonIrACalendario.setAttribute("href", urlBase + urlCalendarioAirbnb)
-            botonIrACalendario.setAttribute("vista", urlBase + urlCalendarioAirbnb)
+
             botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             botonIrACalendario.classList.add("botonV1BlancoIzquierda")
             botonIrACalendario.textContent = "Ver reservas, eventos por calendarios sincronizados y bloqueos del apartamento en el calendario"
-            apartamentoGUI.appendChild(botonIrACalendario)
+            contenedorGlobal.appendChild(botonIrACalendario)
 
 
 
@@ -323,13 +363,12 @@ casaVitini.view = {
             const horaSalida = data.horaSalida
 
             const contenedorReserva = document.createElement("div")
-            contenedorReserva.classList.add("administracion_situacion_portada_contenedorReserva")
+            contenedorReserva.classList.add("contenedorReserva")
+
             let bloqueEntidad = document.createElement("a")
             bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
-            bloqueEntidad.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}/zona:alojamiento`)
             bloqueEntidad.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}/zona:alojamiento`)
             bloqueEntidad.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-
             bloqueEntidad.classList.add("administracion_situacion_portada_contenedorSelecccionable")
             let tituloEntidad = document.createElement("div")
             tituloEntidad.classList.add("administracion_situacion_portada_tituloEntidad")
@@ -340,6 +379,25 @@ casaVitini.view = {
             apartamentoReserva.textContent = reservaUID
             bloqueEntidad.appendChild(apartamentoReserva)
             contenedorReserva.appendChild(bloqueEntidad)
+
+
+
+            const botonIrAServicios = document.createElement("a")
+            botonIrAServicios.classList.add("botonV1BlancoIzquierda")
+            botonIrAServicios.textContent = "Servicios"
+            botonIrAServicios.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}/zona:servicios`)
+            botonIrAServicios.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            contenedorReserva.appendChild(botonIrAServicios)
+
+            const botonTransacciones = document.createElement("a")
+            botonTransacciones.classList.add("botonV1BlancoIzquierda")
+            botonTransacciones.textContent = "Transacciones"
+            botonTransacciones.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}/zona:transacciones`)
+            botonTransacciones.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            contenedorReserva.appendChild(botonTransacciones)
+
+
+
             if (diaLimite === "diaDeSalida") {
                 let bloqueEntidad = document.createElement("div")
                 bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
@@ -406,7 +464,6 @@ casaVitini.view = {
             bloqueEntidad.classList.add("administracion_situacion_portada_bloqueEntidad")
             let apartamentoEstadoReserva = document.createElement("div")
             apartamentoEstadoReserva.classList.add("situacionApartamentoEstadoReserva")
-
 
 
             const nombreClaseDinamica = `barraProgresso-anchoDinamico-${reservaUID}`;
@@ -551,7 +608,7 @@ casaVitini.view = {
             } else {
                 const botonIrAlEvento = document.createElement("div")
 
-                botonIrAlEvento.textContent = "Airbnb no proporciona ninguna información sobre este evento. Probablemente, este evento sea de un calendario que Airbnb ha sincronizado con otra plataforma, un evento de Airbnbn generado cuando estableces días obligatorios de antelación o un evento generado cuando deshabilitas la disponibilidad de ciertos días en Airbnbn. Para ver más información de este evento, por favor diríjase a la web de Airbnb porque Airbnb no proporciona ninguna forma de enlazar este evento."
+                botonIrAlEvento.textContent = "Airbnb no proporciona ninguna información sobre este evento. Este evento viene de otra plataforma sincronizada por Airbnb o es un evento de días de antelación de Airbnb."
                 contenedorEvento.appendChild(botonIrAlEvento)
             }
             return contenedorEvento
@@ -603,7 +660,7 @@ casaVitini.view = {
                 "ratonDefault"
             )
             if (tipoPernoctante === "cliente") {
-                marcoPernoctante.setAttribute("vista", `/administracion/clientes/cliente:${clienteUID}`)
+
                 marcoPernoctante.setAttribute("href", `/administracion/clientes/cliente:${clienteUID}`)
                 marcoPernoctante.setAttribute("clienteUID", clienteUID)
                 marcoPernoctante.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)

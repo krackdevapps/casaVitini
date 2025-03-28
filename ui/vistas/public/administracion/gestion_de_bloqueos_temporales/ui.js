@@ -57,7 +57,7 @@ casaVitini.view = {
         const botonIrAlCalendario = document.createElement("a")
         botonIrAlCalendario.classList.add("botonV1BlancoIzquierda")
         botonIrAlCalendario.innerHTML = "Ver todos los bloqueos en el calendario"
-        botonIrAlCalendario.setAttribute("vista", "/administracion/calendario/capa:todos_los_bloqueos")
+
         botonIrAlCalendario.setAttribute("href", "/administracion/calendario/capa:todos_los_bloqueos")
         botonIrAlCalendario.addEventListener("click", (boton) => {
             boton.preventDefault()
@@ -73,7 +73,7 @@ casaVitini.view = {
         const botonCrearBloqueoUI = document.createElement("a")
         botonCrearBloqueoUI.classList.add("botonV1BlancoIzquierda")
         botonCrearBloqueoUI.innerHTML = "Crear un bloqueo"
-        botonCrearBloqueoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/crear_bloqueo")
+
         botonCrearBloqueoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/crear_bloqueo")
         botonCrearBloqueoUI.addEventListener("click", (boton) => {
             boton.preventDefault()
@@ -114,7 +114,7 @@ casaVitini.view = {
                 bloqueApartamentoUI.classList.add("gestionBloqueoApartamento_bloqueApartamentoUI")
                 bloqueApartamentoUI.setAttribute("apartamentoIDV", apartamentoIDV)
                 bloqueApartamentoUI.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV)
-                bloqueApartamentoUI.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV)
+
                 bloqueApartamentoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 selectorEspacioBloqueos.appendChild(bloqueApartamentoUI)
 
@@ -285,7 +285,7 @@ casaVitini.view = {
 
                     const botonEntrarBloqueo = document.createElement("a")
                     botonEntrarBloqueo.setAttribute("href", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
-                    botonEntrarBloqueo.setAttribute("vista", "/administracion/gestion_de_bloqueos_temporales/" + apartamentoIDV + "/" + bloqueoUID)
+
                     botonEntrarBloqueo.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     botonEntrarBloqueo.classList.add("botonV1BlancoIzquierda")
                     botonEntrarBloqueo.textContent = "Editar bloqueo del alojamiento"
@@ -302,7 +302,7 @@ casaVitini.view = {
 
                     const botonIrACalendario = document.createElement("a")
                     botonIrACalendario.setAttribute("href", urlCalendario)
-                    botonIrACalendario.setAttribute("vista", urlCalendario)
+
                     botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     botonIrACalendario.classList.add("botonV1BlancoIzquierda")
                     botonIrACalendario.textContent = "Ver bloqueo en el calendario"

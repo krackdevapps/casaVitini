@@ -13,6 +13,7 @@ import { actualizarDesgloseFinacieroDesdeHubsPorSimulacionUID } from "../../../.
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
 import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
 import { utilidades } from "../../../../shared/utilidades.mjs"
+import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -76,36 +77,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
         const apartamentosArray = alojamientosSimulacion.map(a => a.apartamentoIDV)
 
-        const llavesGlobalesFaltantes = await soloFiltroDataGlobal(simulacionUID)
-        if (llavesGlobalesFaltantes.length > 0) {
-            const dictLlaves = {
-                fechaCreacion: "Falta establecer la fecha de creación simulada",
-                fechaEntrada: "Falta establecer la fecha de entrada",
-                fechaSalida: "Falta establecer la fecha de salida",
-                zonaIDV: "Falta establecer la zona simulada",
-                alojamiento: "Falta insertar algun alojamiento en la simulación"
-            }
-            const llavesUI = llavesGlobalesFaltantes.map(llave => dictLlaves[llave])
-            const llavesSring = utilidades.constructorComasEY({
-                array: llavesUI,
-                articulo: ""
-            })
-            const m = `No se puede generar el contenedor financiero de la simulacion desde los hubs, por que faltan los siguientes datos globales de la simulacion: ${llavesSring}`
-            throw new Error(m)
-        }
-
-        try {
-            for (const apartamentoIDV of apartamentosArray) {
-                await obtenerConfiguracionPorApartamentoIDV({
-                    apartamentoIDV,
-                    errorSi: "noExiste"
-                })
-            }
-        } catch (error) {
-            const m = "No se puede reconstruir este desglose financiero de esta reserva desde los hubs de precios, porque hay apartamentos que ya no existen como configuración de alojamiento en el hub de configuraciones de alojamiento."
-            throw new Error(m)
-        }
-        const serviciosInstantaneaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
+       const serviciosInstantaneaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
 
         for (const servicio of serviciosInstantaneaSimulacion) {
             const servicioUID_enSimulacion = servicio.servicioUID
@@ -125,6 +97,9 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 opcionesSel
             })
         }
+        await controladorGeneracionDesgloseFinanciero(simulacionUID)
+
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {

@@ -59,7 +59,7 @@ casaVitini.view = {
         botonIS.classList.add("botonV1")
         botonIS.textContent = "Iniciar sessión"
         botonIS.setAttribute("href", "/micasa")
-        botonIS.setAttribute("vista", "/micasa")
+
         botonIS.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotones.appendChild(botonIS)
     }

@@ -1,4 +1,3 @@
-
 casaVitini.view = {
     start: async function () {
         const main = document.querySelector("main")
@@ -94,7 +93,7 @@ casaVitini.view = {
             botonIrAReservaConfirmada.classList.add("botonV1BlancoIzquierda")
             botonIrAReservaConfirmada.textContent = "Tienes una reserva guardada en la cache de tu navegador. Esta reserva se ha guardado tras confirmar tu reserva. Para ver los detalles de la confirmación pulsa aquí. Si borras la cache de tu navegador esta información desaparecerá. Si quieres un acceso persistente puedes crear un VitiniID desde MiCasa."
             botonIrAReservaConfirmada.setAttribute("href", "/alojamiento/reserva_confirmada")
-            botonIrAReservaConfirmada.setAttribute("vista", "/alojamiento/reserva_confirmada")
+
             botonIrAReservaConfirmada.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedor.appendChild(botonIrAReservaConfirmada)
         }
@@ -104,7 +103,7 @@ casaVitini.view = {
         botonIrAlInicioDelProcesoDeReserva.classList.add("botonV1BlancoIzquierda")
         botonIrAlInicioDelProcesoDeReserva.textContent = "Ir al incio del proceso de la reserva"
         botonIrAlInicioDelProcesoDeReserva.setAttribute("href", "/alojamiento")
-        botonIrAlInicioDelProcesoDeReserva.setAttribute("vista", "/alojamiento")
+
         botonIrAlInicioDelProcesoDeReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedor.appendChild(botonIrAlInicioDelProcesoDeReserva)
         return contenedor
@@ -662,7 +661,6 @@ Un depósito del 20% para reservas de 15 días o más.`
             const apartamentosDisponibles = respuestaServidor?.ok.apartamentosDisponibles
             const contenedorFinanciero = respuestaServidor?.ok.contenedorFinanciero
             const complementosAlojamiento = respuestaServidor?.ok.complementosAlojamiento
-
             uiDestinno.innerHTML = null
             const contenedorUI = document.createElement("div")
             contenedorUI.classList.add(
@@ -749,9 +747,15 @@ Un depósito del 20% para reservas de 15 días o más.`
 
                 const complementoAlojamiento = complementosAlojamientoPorTipo[apartamentoIDV]?.tipoUbicacion.porAlojamiento ?? []
                 if (complementoAlojamiento.length > 0) {
+                    let tipoUI = "simple"
+                    if (complementoAlojamiento.length > 1) {
+                        tipoUI = "desplegable"
+
+                    }
                     const c = this.componentesAlojamiento.contenedorComplementos({
-                        titulo: "Complementos del alojamiento",
-                        tipoUbicacion: "alojamiento"
+                        titulo: "Complementos opcionales del alojamiento",
+                        tipoUbicacion: "alojamiento",
+                        tipoUI
                     })
                     bloqueApartamento.appendChild(c)
 
@@ -783,22 +787,23 @@ Un depósito del 20% para reservas de 15 días o más.`
                     bloqueHabitacion.appendChild(tituloHabitacion)
 
                     const complementosDeHabitacion = complementosAlojamientoPorTipo[apartamentoIDV]?.tipoUbicacion?.porHabitacion[habitacionIDV] ?? []
-                    if (complementosDeHabitacion || complementosDeHabitacion.length > 0) {
+                    if (complementosDeHabitacion.length > 0) {
+                        let tipoUI = "simple"
+                        if (complementosDeHabitacion.length > 1) {
+                            tipoUI = "desplegable"
+
+                        }
 
                         const cH = this.componentesAlojamiento.contenedorComplementos({
-                            titulo: "Complementos del la habitación",
-                            tipoUbicacion: "habitacion"
+                            titulo: "Complementos opcionales del la habitación",
+                            tipoUbicacion: "habitacion",
+                            tipoUI
                         })
-
                         bloqueHabitacion.appendChild(cH)
-
                         complementosDeHabitacion.forEach((comp) => {
                             const complementoUI = this.componentesAlojamiento.componentesUI(comp)
                             cH.querySelector("[com=contenedor]").appendChild(complementoUI)
                         })
-
-
-
                     }
 
 
@@ -809,11 +814,6 @@ Un depósito del 20% para reservas de 15 días o más.`
                         info.classList.add("padding16")
                         info.textContent = "Esta habitación dispone de más de un tipo de configuración para el descanso. Por favor, seleccione el tipo de cama:"
                         bloqueHabitacion.appendChild(info)
-
-
-
-
-
                         const selectorCama = document.createElement("select")
                         selectorCama.setAttribute("componente", "selectorCama")
                         selectorCama.addEventListener("change", (e) => {
@@ -838,13 +838,11 @@ Un depósito del 20% para reservas de 15 días o más.`
                             }
                             const reservaOUT = JSON.stringify(reservaIN)
                             sessionStorage.setItem("preReservaLocal", reservaOUT)
+
+                            this.controlAnimacionSelectorCama(e)
                         })
+                        selectorCama.classList.add("animacionAzul")
                         bloqueHabitacion.appendChild(selectorCama)
-
-
-
-
-
 
                         const opcionPreterminada = document.createElement("option");
                         opcionPreterminada.value = "";
@@ -995,6 +993,9 @@ Un depósito del 20% para reservas de 15 días o más.`
         } else if (respuestaServidor.ok) {
             const reservaConfirmada = respuestaServidor.detalles
             reservaConfirmada.pdf = respuestaServidor.pdf
+            reservaConfirmada.caracteristicasPorApartamento = respuestaServidor.caracteristicasPorApartamento
+            reservaConfirmada.informacionPublicaPorApartamento = respuestaServidor.informacionPublicaPorApartamento
+
             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
             sessionStorage.removeItem("preReservaLocal");
             localStorage.setItem("reservaConfirmada", JSON.stringify(reservaConfirmada))
@@ -1044,6 +1045,11 @@ Un depósito del 20% para reservas de 15 días o más.`
 
         const aplicarUIData = data?.aplicarUIData
         if (aplicarUIData === "si") {
+
+
+
+
+
             const complementosAlojamientoSeleccionados = []
             document.querySelectorAll(`[complementoUID][estado="activado"]`).forEach((e) => {
                 const complementoUID = e.getAttribute("complementoUID")
@@ -1058,8 +1064,6 @@ Un depósito del 20% para reservas de 15 días o más.`
             } else {
                 reservaNoConfirmada.complementosAlojamiento = complementosAlojamientoSeleccionados
             }
-
-
             const serviciosSelecionados = []
             document.querySelectorAll(`[servicioUID][estadoServicio=selCompleta]`).forEach((servicioUISelecionado) => {
                 const servicioUID = servicioUISelecionado.getAttribute("servicioUID")
@@ -1153,11 +1157,12 @@ Un depósito del 20% para reservas de 15 días o más.`
 
             const selectorInstanciaDestino = document.querySelector(`[data=totalFinal][instanciaUID="${instanciaUID}"]`)
             if (selectorInstanciaDestino) {
-
                 const totalFinal = contenedorFinanciero.desgloseFinanciero.global.totales.totalFinal
                 selectorInstanciaDestino.textContent = totalFinal + "$"
                 selectorInstanciaDestino.setAttribute("contenedorFinanciero", JSON.stringify(contenedorFinanciero.desgloseFinanciero))
                 selectorBotonDesplegarDesglose.removeAttribute("style")
+            } else {
+                return
             }
 
             if (contenedorFinanciero?.error) {
@@ -1219,6 +1224,24 @@ Un depósito del 20% para reservas de 15 días o más.`
                 } else {
                     delete reservaNoConfirmada?.complementosAlojamiento
                 }
+
+                const alojamiento = reservaNoConfirmada.alojamiento
+                Object.entries(alojamiento).forEach(a => {
+                    const [apartamentoIDV, cA] = a
+                    const habitaciones = cA?.habitaciones || {}
+
+                    Object.entries(habitaciones).forEach(h => {
+                        const [habitacionIDV, cH] = h
+                        const camaIDV = cH.camaSeleccionada.camaIDV
+                        const selector = document.querySelector(`[apartamentoIDV="${apartamentoIDV}"] [habitacionIDV="${habitacionIDV}"] [componente=selectorCama]`)
+                        selector.value = camaIDV
+                        selector.classList.remove("animacionAzul")
+                    })
+
+
+
+
+                })
                 const complementosOboseltos = []
                 complementosNoReconocidos.forEach((contenedor) => {
                     const complementoUID = contenedor.complementoUID
@@ -1234,6 +1257,9 @@ Un depósito del 20% para reservas de 15 días o más.`
                     const complementoUI = document.querySelector(`[complementoUID="${complementoUID}"]`)
                     complementoUI.setAttribute("estado", "activado")
                     complementoUI.querySelector("[componente=indicadorSelecion]").style.background = "rgb(0, 255, 0)"
+
+                    const contenedorComplementos = complementoUI.closest("[com=complementosDeAlojamiento]")
+                    contenedorComplementos.open = true
 
                 })
 
@@ -1335,8 +1361,6 @@ Un depósito del 20% para reservas de 15 días o más.`
 
         } finally {
         }
-
-
     },
     limpiezaObjetoLocalPreEnvio: async function () {
         const reservaNoConfirmada = sessionStorage.getItem("preReservaLocal") ? JSON.parse(sessionStorage.getItem("preReservaLocal")) : {};
@@ -2626,18 +2650,32 @@ Un depósito del 20% para reservas de 15 días o más.`
 
             const titulo = data.titulo
             const tipoUbicacion = data.tipoUbicacion
+            const tipoUI = data.tipoUI
 
-            const ui = document.createElement("details")
+            let ec
+            let et
+            if (tipoUI === "desplegable") {
+                ec = "details"
+                et = "summary"
+
+
+            } else if (tipoUI === "simple") {
+                ec = "div"
+                et = "p"
+            }
+
+            const ui = document.createElement(ec)
             ui.setAttribute("com", "complementosDeAlojamiento")
             ui.setAttribute("tipoUbicacion", tipoUbicacion)
             ui.classList.add(
                 "flexVertical",
                 "padding6",
                 "borderRadius18",
-                "backgroundGrey1"
+                // "backgroundGrey1",
+                "borderGrey1"
             )
 
-            const t = document.createElement("summary")
+            const t = document.createElement(et)
             t.classList.add("padding10", "borderRadius12", "negrita")
             t.textContent = titulo
             ui.appendChild(t)
@@ -2796,5 +2834,15 @@ Gracias por su comprensión y disculpe las molestias ocasionadas.`
             return ui
 
         }
+    },
+    controlAnimacionSelectorCama: function (e) {
+
+        const valorSel = e.target.value
+        if (!valorSel) {
+            e.target.classList.add("animacionAzul")
+        } else {
+            e.target.classList.remove("animacionAzul")
+        }
+
     }
 }

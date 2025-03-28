@@ -4,23 +4,38 @@ html {
 
 body {
     flex: 1;
-    background-image: url("/activos/imagenes/instalaciones/2-editada.jpeg"); 
+    background-image: url("/activos/imagenes/piscina.jpg");
     /* border-radius: 15px; */
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center center;
     transition: background-image 500ms linear;
+    background-color: white;
 
     @stating-style {
         background-image: url(/activos/imagenes/transparente.png);
 
     }
-
 }
+
+
+.menuGlobal_styloCompartido {
+    background-color: rgba(109, 109, 109, 0.2);
+}
+
+.botonMenuResponsivo {
+    /* ackground-image: url(/activos/iconos/menu_blanco.svg); */
+    background-color: rgba(109, 109, 109, 0.2);
+}
+
+/* .uiCategoria {
+    color: white;
+} */
 
 .fondoConResultados {
     background-image: url(/activos/imagenes/transparente.png);
+    background-color: white;
 }
 
 main {
@@ -53,10 +68,17 @@ main {
     padding: 10px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
+    background-color: rgba(109, 109, 109, 0.2);
+    border-radius: 16px;
     justify-content: center;
     align-items: center;
+    transition: background 500ms linear, color 500ms linear !important;
+
+}
+
+.plaza_alojamiento_botonBorrarBusquedaAlojamiento:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
 }
 
 .plaza_alojamiento_marcoFechaCompartido {
@@ -64,19 +86,25 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    background-color: #ffffff61;
-    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.822);
+    border-radius: 16px;
     overflow: hidden;
-    transition: all 250ms linear;
+    transition: background 500ms linear, color 500ms linear !important;
     padding: 10px;
     gap: 6px;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
+
+}
+
+.plaza_alojamiento_marcoFechaCompartido:hover {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    color: white !important;
 }
 
 @keyframes parpadeoFondo {
     0% {
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.822);
     }
 
     50% {
@@ -84,7 +112,7 @@ main {
     }
 
     100% {
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.822);
     }
 }
 
@@ -111,9 +139,7 @@ main {
     -webkit-animation-iteration-count: infinite;
 }
 
-.plaza_alojamiento_marcoFechaCompartido:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-}
+
 
 .bloquePernoctacion {
     display: grid;
@@ -156,6 +182,7 @@ main {
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
+    font-weight: 650;
 }
 
 .plaza_alojamiento_marcoFechaCompartido_contenedorFecha {
@@ -173,20 +200,20 @@ main {
 
 
 .botonMostrarDisponibilidad {
-    background-color: rgb(225 225 225 / 70%);
+    background-color: rgba(255, 255, 255, 0.822);
     padding: 10px;
     user-select: none;
     cursor: default;
     -webkit-user-select: none;
-    border-radius: 10px;
+    border-radius: 16px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    transition: background 250ms linear;
+    transition: background 500ms linear, color 500ms linear !important;
     align-content: center;
     justify-content: center;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+    /* backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px); */
 }
 
 .botonMostrarDisponibilidad:hover {
@@ -219,7 +246,6 @@ main {
     flex-wrap: nowrap;
     align-items: stretch;
     justify-content: flex-start;
-    align-items: center;
     border-radius: 12px;
     padding: 0px;
     gap: 6px;
@@ -329,6 +355,7 @@ main {
         padding: 10px;
     }
 }
+
 .parpadeaFondoSemiBlanco {
     transition: background 500ms linear !important;
 }
@@ -593,9 +620,11 @@ main {
 .tituloBloqueAlojamiento {
 
     margin: 0px;
-    border-radius: 10px;
+    border-radius: 16px;
     padding: 30px;
     text-align: center;
+    max-width: 800px;
+    width: 100%;
 }
 
 .tituloApartamentoComponenteUI {
@@ -1180,9 +1209,36 @@ main {
 
 .calendarioDiaDisponible {
     background-color: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.205);
 }
 
-.calendarioDiaReservaLimite{
+.calendarioDiaReservaLimite {
     background-color: orange !important;
     color: black !important;
 }
+
+.calendarioDiaSeleccionado {
+    background-color: orange !important;
+    color: black !important;
+}
+
+.calendarioDiaNoDisponible,
+.calendarioDiaNoDisponiblePorAntelacion {
+    background: rgba(0, 0, 0, 0.1) !important;
+    cursor: not-allowed !important;
+    pointer-events: all;
+}
+
+[estadoDia="disponible"].dia:hover {
+    background-color: orange;
+    box-shadow: 00px 0px 10px 7px #0000002d;
+}
+
+.calendarioNuevo {
+    background-color: rgba(255, 255, 255, 0.7);
+    /* backdrop-filter: blur(0px) !important; */
+}
+/* 
+.calendarioNuevo [elemento=noFlotante] {
+    display: none;
+} */

@@ -25,12 +25,12 @@ export const eliminarComplementoDeAlojamientoEnReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
 
         const complementoDeAlojamientoEnReserva = await obtenerComplementoAlojamientoEnReservaPorComplementoUID(complementoUID_enReserva)
-        const reservaUID = Number(complementoDeAlojamientoEnReserva.reservaUID)
+        const reservaUID = String(complementoDeAlojamientoEnReserva.reservaUID)
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {

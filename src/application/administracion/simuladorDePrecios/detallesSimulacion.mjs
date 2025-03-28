@@ -8,6 +8,7 @@ import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../..
 import { obtenerComplementosAlojamientoPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/complementosDeAlojamiento/obtenerComplementosAlojamientoPorSimulacionUID.mjs";
 import { controladorGeneracionDesgloseFinanciero } from "../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs";
 import { obtenerFechaLocal } from "../../../shared/obtenerFechaLocal.mjs";
+import { soloFiltroDataGlobal } from "../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs";
 export const detallesSimulacion = async (entrada) => {
     try {
         const session = entrada.session
@@ -27,7 +28,7 @@ export const detallesSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
 
@@ -64,16 +65,14 @@ export const detallesSimulacion = async (entrada) => {
         }
         const serviciosDeLaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
         const complementosDeAlojamientoDeLaSimulacion = await obtenerComplementosAlojamientoPorSimulacionUID(simulacionUID)
-        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
-
         for (const dS of serviciosDeLaSimulacion) {
-
             const contenedor = dS.contenedor
             const fechaAdquisicion = contenedor.fechaAdquisicion
             contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaAdquisicion)
         }
 
 
+        const llavesFaltantes = await soloFiltroDataGlobal(simulacionUID)
         const ok = {
             ok: "Aquí tienes los detalles de la simulación",
             nombre,
@@ -85,11 +84,12 @@ export const detallesSimulacion = async (entrada) => {
             apartamentos,
             servicios: serviciosDeLaSimulacion,
             complementosDeAlojamiento: complementosDeAlojamientoDeLaSimulacion,
-            //contenedorFinanciero: simulacion,
-            ...postProcesadoSimualacion
+            contenedorFinanciero: simulacion,
+            llavesFaltantes
         }
         return ok
     } catch (errorCapturado) {
+
         throw errorCapturado
     }
 }

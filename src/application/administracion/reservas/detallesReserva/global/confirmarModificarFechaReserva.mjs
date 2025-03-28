@@ -32,7 +32,7 @@ export const confirmarModificarFechaReserva = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const sentidoRango = validadoresCompartidos.tipos.cadena({

@@ -7,6 +7,9 @@ import { eliminarEnlaceDePagoPorReservaUID } from "../../../../../infraestructur
 import { DateTime } from "luxon";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 import { actualizarEstadoReservaYFechaCancelacionPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/actualizarEstadoReservaYFechaCancelacionPorReservaUID.mjs";
+import { obtenerServiciosPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs";
+import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {
     const mutex = new Mutex()
@@ -48,6 +51,8 @@ export const cancelarReserva = async (entrada, salida) => {
             const error = "La reserva ya esta cancelada";
             throw new Error(error);
         }
+        await campoDeTransaccion("iniciar")
+
         await eliminarEnlaceDePagoPorReservaUID(reservaUID)
         const fechaEntrada = reserva.fechaEntrada;
         const fechaSalida = reserva.fechaSalida;
@@ -69,17 +74,28 @@ export const cancelarReserva = async (entrada, salida) => {
         const estadoReserva = "cancelada";
         const fechaCancelacion = DateTime.utc().toISO();
 
+
+        const servicios_EnReserva = await obtenerServiciosPorReservaUID(reservaUID)
+        for (const sER of servicios_EnReserva) {
+            await sincronizarRegistros({
+                servicioExistenteAccesible: sER
+            })
+        }
+
         await actualizarEstadoReservaYFechaCancelacionPorReservaUID({
             estadoReserva: estadoReserva,
             fechaCancelacion: fechaCancelacion,
             reservaUID: reservaUID
         })
+        await campoDeTransaccion("confirmar")
 
         const ok = {
             ok: "La reserva se ha cancelado correctamente"
         };
         return ok
     } catch (errorCapturado) {
+        await campoDeTransaccion("cancelar")
+
         throw errorCapturado
     }
 }

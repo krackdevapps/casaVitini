@@ -1,17 +1,21 @@
 body {
     background-color: rgb(255 188 0 / 0.05);
     height: 100vh;
-
 }
 
 main {
     height: 100vh;
+    padding-bottom: 0px;
 }
-header .estructura {
+.menuGlobal_styloCompartido {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.botonMenuResponsivo {
+    background-image: url(/activos/iconos/menu_blanco.svg);
     background-color: rgba(0, 0, 0, 0.1);
 }
 .uiCategoria {
-    color: black;
+    color: rgb(0, 0, 0);
 }
 [zonaCSS="/contacto"] .plaza_contacto_gridContacto {
     display: grid;
@@ -35,7 +39,12 @@ header .estructura {
         grid-template-columns: 1fr;
     }
 }
-
+.fondoMapa {
+    background-image: url(/activos/imagenes/mapaPrivacidad.png);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
 [zonaCSS="/contacto"] .plaza_contacto_tituloInfo {
     margin: 0px;
     padding: 6px;

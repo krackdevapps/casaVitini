@@ -19,7 +19,7 @@ casaVitini.view = {
                     orientation: 'down',
                     scale: 1.4,
                     overflow: false,
-                   
+
                 });
             } catch (errorCapturado) {
                 console.error(errorCapturado);
@@ -27,42 +27,38 @@ casaVitini.view = {
         };
         arranqueParallax();
 
+        // Define la función controlImagen y guarda el observer en __observers__.controlImagen
+        this.__observers__.controlImagen = () => {
+            const elementos = document.querySelectorAll('[urlImagen]');
 
-        
+            // Crear y almacenar el IntersectionObserver
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.intersectionRatio >= 0.1) { // Umbral del 50%
+                        const div = entry.target;
+
+                        // Añadir el fondo dinámicamente
+                        const bgUrl = div.getAttribute('urlImagen');
+                        div.style.backgroundImage = `url(${bgUrl})`;
+
+                        // Dejar de observar el elemento
+                        observer.unobserve(div);
+                    }
+                });
+            }, {
+                threshold: 0.1 // Umbral del 50%
+            });
+
+            // Observa cada elemento
+            elementos.forEach(el => observer.observe(el));
+
+            // Retorna el observer para almacenamiento
+            return observer;
+        };
+
+        // Llamar a controlImagen para inicializar la observación
+       this.__observers__.controlImagen();
     },
-    // controladorIconoMouse: function () {
-    //     const iconoRaton = document.querySelector("[icono=mouse]")
-    //     if (!iconoRaton) {
-    //         window.removeEventListener('scroll', () => {
-    //             this.controladorIconoMouse()
-    //         });
-    //     }
-    //     const alturaScroll = window.scrollY
-    //     if (iconoRaton && alturaScroll > 10) {
-    //         iconoRaton.addEventListener("transitionend", (e) => {
-
-    //         })
-    //         iconoRaton.style.opacity = "0"
-    //     } else {
-    //         iconoRaton.style.opacity = "1"
-    //     }
-    // },
-    // scrollHandler: function () {
-    //     let animationRunning = false;
-    //     if (!animationRunning) {
-    //         animationRunning = true;
-    //         requestAnimationFrame(() => {
-    //             this.controladorParalaje()
-    //             animationRunning = false;
-    //         });
-    //     }
-    //     const contenedorParalaje = document.querySelector("[contenedor=paralaje]")
-    //     if (!contenedorParalaje) {
-    //         window.removeEventListener('scroll', () => {
-    //             this.scrollHandler()
-    //         });
-    //     }
-    // },
     controladorParalaje: () => {
         const contenedoresPalaraje = document.querySelectorAll("[contenedorParalaje]")
         contenedoresPalaraje.forEach((contenedorParalaje) => {
@@ -101,4 +97,5 @@ casaVitini.view = {
     volatilObservers: {
         parallaxControlador: null,
     },
+    __observers__: {}
 }

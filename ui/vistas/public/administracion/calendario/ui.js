@@ -1274,7 +1274,7 @@ casaVitini.view = {
             eventoUI.setAttribute("tipoEvento", tipoEvento)
             eventoUI.setAttribute("detallesDelEvento", JSON.stringify(detallesDelEvento))
             if (urlUI) {
-                eventoUI.setAttribute("vista", urlUI)
+
                 eventoUI.setAttribute("href", urlUI)
             }
             eventoUI.style.gridColumn = `${inicioColumna} /${finalColumna} span `
@@ -3687,7 +3687,7 @@ casaVitini.view = {
                 infoDeSel.classList.add("padding10", "textoCentrado")
                 infoDeSel.textContent = "No se ha selecionado ningun apartamentos dentro de los dias selecccionados. Cerciorese que existen configuraciones de alojamiento disponibles."
                 contenedor.appendChild(infoDeSel)
-                return 
+                return
             }
 
 

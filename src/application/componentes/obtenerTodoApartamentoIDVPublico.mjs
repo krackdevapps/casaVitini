@@ -2,6 +2,7 @@ import { validadoresCompartidos } from "../../shared/validadores/validadoresComp
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerTodasLasCaracteristicasDelApartamento } from "../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs";
+import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 
 export const obtenerTodoApartamentoIDVPublico = async (entrada) => {
     try {
@@ -33,6 +34,11 @@ export const obtenerTodoApartamentoIDVPublico = async (entrada) => {
             cA.aparatmentoUI = aparatmentoUI
             cA.apartamentoUIPublico = apartamentoUIPublico
             cA.definicionPublica = definicionPublica           
+            cA.descripcion = entidadApartamento.descripcion
+            cA.numeroHuespedes = entidadApartamento.numeroHuespedes
+
+            const habitaciones = await obtenerHabitacionesDelApartamentoPorApartamentoIDV(apartamentoIDV)
+            cA.habitaciones = habitaciones
 
             const caracteristicas = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
             cA.caracteristicas = caracteristicas

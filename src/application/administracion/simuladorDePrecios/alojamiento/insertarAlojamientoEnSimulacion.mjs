@@ -25,7 +25,7 @@ export const insertarAlojamientoEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,
@@ -53,13 +53,13 @@ export const insertarAlojamientoEnSimulacion = async (entrada) => {
             simulacionUID,
             apartamentoIDV
         })
-        await campoDeTransaccion("confirmar")
         const apartamentoEntidad = await obtenerApartamentoComoEntidadPorApartamentoIDV({
             apartamentoIDV,
             errorSi: "noExiste"
         })
         const apartamentoUI = apartamentoEntidad.apartamentoUI
         nuevoApartamento.apartamentoUI = apartamentoUI
+        await campoDeTransaccion("confirmar")
         const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
 
         return {

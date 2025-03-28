@@ -63,25 +63,34 @@ export const validarDataGlobalSimulacion = async (data) => {
             })
         }
 
-        const fechaCreacionVal = objectoValidado.fechaCreacion
-        await validaFecha({
-            dataFecha: fechaCreacionVal,
-            nombreCampo: "El cammpo de fecha de creación"
-        })
+        const fechaCreacionVal = objectoValidado?.fechaCreacion
+        if (fechaCreacionVal) {
+            await validaFecha({
+                dataFecha: fechaCreacionVal,
+                nombreCampo: "El cammpo de fecha de creación"
+            })
+    
+        }
+    
 
-
-        const fechaEntradaVal = objectoValidado.fechaEntrada
-        await validaFecha({
-            dataFecha: fechaEntradaVal,
-            nombreCampo: "El cammpo de fecha de entrad"
-        })
-
+        const fechaEntradaVal = objectoValidado?.fechaEntrada
+        if (fechaEntradaVal) {
+            await validaFecha({
+                dataFecha: fechaEntradaVal,
+                nombreCampo: "El cammpo de fecha de entrad"
+            })
+       
+        }
+   
 
         const fechaSalidaVal = objectoValidado.fechaSalida
-        await validaFecha({
-            dataFecha: fechaSalidaVal,
-            nombreCampo: "El cammpo de fecha de salida"
-        })
+        if (fechaSalidaVal) {
+            await validaFecha({
+                dataFecha: fechaSalidaVal,
+                nombreCampo: "El cammpo de fecha de salida"
+            })
+    
+        }
 
         const simulacionUID = objectoValidado.simulacionUID
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)

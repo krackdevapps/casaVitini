@@ -27,7 +27,7 @@ casaVitini.view = {
             botonCrearOfertas.classList.add("gestionDeOfertasBotonCrearOferta")
             botonCrearOfertas.textContent = "Crear una nueva oferta"
             botonCrearOfertas.setAttribute("href", "/administracion/gestion_de_ofertas/crear_oferta")
-            botonCrearOfertas.setAttribute("vista", "/administracion/gestion_de_ofertas/crear_oferta")
+
             botonCrearOfertas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorBotones.appendChild(botonCrearOfertas)
             contenedor.appendChild(contenedorBotones)
@@ -86,7 +86,7 @@ casaVitini.view = {
                         ofertaUI.classList.add("ofertaUI")
                         ofertaUI.setAttribute("ofertaUID", ofertaUID)
                         ofertaUI.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
-                        ofertaUI.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+
                         ofertaUI.addEventListener("click", (e) => { casaVitini.view.traductorCambioVista(e) })
                         const tituloOferta = document.createElement("p")
                         tituloOferta.classList.add("ofertaUITituloOferta")

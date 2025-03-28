@@ -10,6 +10,7 @@ import { selectorPorCondicion } from "../../../../shared/ofertas/entidades/reser
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
 import { obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/alojamiento/obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID.mjs"
+import { utilidades } from "../../../../shared/utilidades.mjs"
 
 export const comprobarCodigosEnSimulacion = async (entrada) => {
     const mutex = new Mutex()

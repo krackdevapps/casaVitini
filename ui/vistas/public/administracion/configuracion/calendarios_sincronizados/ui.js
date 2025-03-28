@@ -17,7 +17,7 @@ casaVitini.view = {
             pTituloContenedor.textContent = "Calendarios sincronizados con Airbnb";
             const aBotonMas = document.createElement("a");
             aBotonMas.classList.add("botonV1");
-            aBotonMas.setAttribute("vista", "/administracion/configuracion/calendarios_sincronizados/crear_calendario");
+
             aBotonMas.setAttribute("href", "/administracion/configuracion/calendarios_sincronizados/crear_calendario");
             aBotonMas.setAttribute("componente", "botonGlobal");
             aBotonMas.addEventListener("click", (boton) => {
@@ -222,7 +222,7 @@ casaVitini.view = {
                 const detallesDelCalendario = respuestaServidor.ok
                 const plataformaOrigen = detallesDelCalendario.plataformaOrigenIDV
                 if (plataformaOrigen === "airbnb") {
-                   this.editarCalendarioUI(detallesDelCalendario)
+                    this.editarCalendarioUI(detallesDelCalendario)
                 }
             }
         }

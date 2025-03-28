@@ -7,6 +7,20 @@
     align-items: stretch;
     gap: 6px;
 }
+body {
+    background-color: white;
+}
+.menuGlobal_styloCompartido {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.botonMenuResponsivo {
+    background-image: url(/activos/iconos/menu_blanco.svg);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.uiCategoria {
+    color: white;
+}
+
 header .estructura {
     background-color: rgba(0, 0, 0, 0.1);
 }

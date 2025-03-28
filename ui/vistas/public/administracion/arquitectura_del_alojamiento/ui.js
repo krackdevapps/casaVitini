@@ -19,7 +19,6 @@ casaVitini.view = {
         const botonalojamientoUI = document.createElement("a")
         botonalojamientoUI.classList.add("botonV1BlancoIzquierda")
         botonalojamientoUI.textContent = "Configuraciones del alojamiento"
-        botonalojamientoUI.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones")
         botonalojamientoUI.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones")
         botonalojamientoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotonesPortada.appendChild(botonalojamientoUI)
@@ -32,7 +31,6 @@ casaVitini.view = {
         const botonEntidadesAlojamientoUI = document.createElement("a")
         botonEntidadesAlojamientoUI.classList.add("botonV1BlancoIzquierda")
         botonEntidadesAlojamientoUI.textContent = "Entidades de alojamiento"
-        botonEntidadesAlojamientoUI.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades")
         botonEntidadesAlojamientoUI.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades")
         botonEntidadesAlojamientoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotonesPortada.appendChild(botonEntidadesAlojamientoUI)

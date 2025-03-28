@@ -356,13 +356,6 @@ export const serviciosUI_grupoOpciones = {
                 const formato = /^\d+(\.\d{2})$/;
 
 
-                numero1: precioOpcion_data,
-                    numero2: cantidad_data,
-                        operador: "*",
-                            redondeo: "2",
-                                calculo: "simple"
-            })
-
             const calculadora = await casaVitini.utilidades.calculadora({
                 numero1: precioOpcion_data,
                 numero2: cantidad_data,
@@ -415,16 +408,12 @@ export const serviciosUI_grupoOpciones = {
 
     },
     calcularTotalServicio: async function (data) {
-
-
         const semaforoID = "servicio_precioOpcion"
         const semaforo = casaVitini.utilidades.semaforo
         semaforo.crearInstancia(semaforoID)
         await semaforo.bloquear(semaforoID);
 
         try {
-
-
 
             const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
             const area = data.area

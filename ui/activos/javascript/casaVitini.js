@@ -31,7 +31,7 @@ const casaVitini = {
                 if (vistaMenu.button === 0) { // 0 es el botón izquierdo, 1 es el botón central
                     vistaMenu.preventDefault()
                     vistaMenu.stopPropagation()
-                    const vista = vistaMenu.target.closest("[vista]").getAttribute("vista")
+                    const vista = vistaMenu.target.closest("[href]").getAttribute("href")
                     return casaVitini.shell.navegacion.controladorVista({
                         vista: vista,
                         tipoOrigen: "menuNavegador",
@@ -80,6 +80,7 @@ const casaVitini = {
                 selectorCalendarioRenderizados.forEach((calendarioRenderizado) => {
                     calendarioRenderizado.remove()
                 })
+
                 const vistaActual = selectorMenuRenderizado?.getAttribute("vistaActual")
                 let url = window.location.pathname.split("/");
                 delete url[0]
@@ -95,10 +96,11 @@ const casaVitini = {
                     zona: "componentes/cambiarVista",
                     vista: vista
                 }
-                const privacidad = casaVitini.componentes.privacidad.arranque(vista)
-                if (privacidad) {
-                    transaccion.vista = "politicas/privacidad"
-                }
+                // const privacidad = casaVitini.componentes.privacidad.arranque(vista)
+                // if (privacidad) {
+                //     transaccion.vista = "politicas/privacidad"
+                // }
+                //  await casaVitini.utilidades.ralentizador(5000)
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                 const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (contenedorVista) {
@@ -112,12 +114,15 @@ const casaVitini = {
                         casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
                         casaVitini.shell.controladoresUI.limpiezaUI()
                         casaVitini.view = {}
+
                         const marcoError = document.createElement("div")
                         marcoError.classList.add("plaza_marcoError_seccion")
                         marcoError.setAttribute("ui", "global")
                         marcoError.textContent = respuestaServidor.error
+
                         contenedorVista.appendChild(marcoError)
                         main.removeAttribute("style")
+
                     } else if (respuestaServidor?.ok) {
                         const zona = respuestaServidor?.zona
                         document.documentElement.scrollTop = 0;
@@ -154,9 +159,9 @@ const casaVitini = {
                         await casaVitini.shell.controladoresUI.controladorEstadoIDX()
                         casaVitini.shell.controladoresUI.eliminarTodasLasPropiedadesCSSMenosUna(["opacity", "transition"])
                         let urlVista = respuestaServidor.url
-                        if (privacidad) {
-                            urlVista = vista === "portada" ? "/" : vista;
-                        }
+                        // if (privacidad) {
+                        //     urlVista = vista === "portada" ? "/" : vista;
+                        // }
                         urlVista = urlVista === "/portada" ? "/" : urlVista;
                         urlVista = decodeURIComponent(urlVista);
                         let controladorUrl;
@@ -285,7 +290,7 @@ const casaVitini = {
                     menuID.textContent = usuario
                 }
                 if (estadoIDV === "desconectado") {
-                    menuID.textContent = "Mi Casa"
+                    menuID.textContent = "MI CASA"
                     panelNavegacion.removeAttribute("sobreControl")
                     panelNavegacion.querySelector("[elemento=esfera]")?.remove()
                 }
@@ -327,24 +332,24 @@ const casaVitini = {
                 }]
                 const menuPublicoData = [{
                     href: "/alojamiento",
-                    nombre: "Alojamiento",
+                    nombre: "RESERVAR",
                     zona: "alojamiento"
                 },
                 {
                     href: "/conozcanos",
-                    nombre: "Conózcanos",
+                    nombre: "CONOZCANOS",
                     zona: "conozcanos"
                 }, {
                     href: "/instalaciones",
-                    nombre: "Instalaciones",
+                    nombre: "INSTALACIONES",
                     zona: "instalaciones"
                 }, {
                     href: "/productos_y_servicios",
-                    nombre: "Productos y servicios",
+                    nombre: "SERVICIOS",
                     zona: "productos_y_servicios"
                 }, {
                     href: "/contacto",
-                    nombre: "Contacto",
+                    nombre: "CONTACTOS",
                     zona: "contacto"
                 }, {
                     tipo: "sobreControlMenu"
@@ -356,7 +361,8 @@ const casaVitini = {
                     const estructuraMenu = document.createElement("div")
                     estructuraMenu.setAttribute("estructura", "menu")
                     estructuraMenu.classList.add(
-                        "estructura"
+                        "estructuraHoriontal",
+                        "menuGlobal_styloCompartido"
                     )
                     selectorDestino.appendChild(estructuraMenu)
                     const contenedorZonas = document.createElement("div")
@@ -368,14 +374,13 @@ const casaVitini = {
                     contenedorIDX.setAttribute("href", "/micasa")
                     contenedorIDX.setAttribute("class", "uiCategoria")
                     contenedorIDX.setAttribute("tipoMenu", "volatil")
-                    contenedorIDX.setAttribute("vista", "/micasa")
                     contenedorIDX.setAttribute("zona", "micasa")
                     contenedorIDX.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     estructuraMenu.appendChild(contenedorIDX)
                     const textoIDV = document.createElement("div")
                     textoIDV.classList.add("elipsisIDX")
                     textoIDV.setAttribute("data", "vitiniIDX")
-                    textoIDV.textContent = !usuario ? "Mi Casa" : usuario
+                    textoIDV.textContent = !usuario ? "MI CASA" : usuario
                     contenedorIDX.appendChild(textoIDV)
                 }
                 const estructura_renderizada = selectorDestino.querySelector("[estructura=menu]")
@@ -394,7 +399,6 @@ const casaVitini = {
                     zona.setAttribute("href", href)
                     zona.setAttribute("class", "uiCategoria")
                     zona.setAttribute("tipoMenu", "volatil")
-                    zona.setAttribute("vista", href)
                     zona.setAttribute("zona", zonaIDV)
                     zona.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     zona.textContent = nombre
@@ -454,11 +458,16 @@ const casaVitini = {
             await casaVitini.shell.controladoresUI.controladorEstadoIDX()
             document.querySelector("[componente=botonMenuResponsivo]").addEventListener("click", () => {
                 casaVitini.shell.controladoresUI.menuResponsivo.despliege()
+                //casaVitini.shell.controladoresUI.gestionIdiomaBarraGlobal()
+
             })
             const vistas = document.querySelectorAll("[vista]")
             for (const vistaMenu of vistas) {
                 vistaMenu.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             }
+            // casaVitini.shell.controladoresUI.gestionIdiomaBarraGlobal()
+
+            casaVitini.componentes.privacidad.arranque()
             const url = window.location.pathname;
             if (url === "/") {
                 return casaVitini.shell.navegacion.controladorVista({
@@ -469,6 +478,7 @@ const casaVitini = {
                     vista: url
                 })
             }
+
         },
         IDX: {
             iniciarSession: async (IDX) => {
@@ -574,6 +584,7 @@ const casaVitini = {
                         window.addEventListener("click", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
                         window.addEventListener("resize", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
                         window.addEventListener("scroll", casaVitini.shell.controladoresUI.ocultaMenuGlobalFlotante)
+
                     }
                 },
                 tranformaMenuARespontivo: function () {
@@ -583,7 +594,9 @@ const casaVitini = {
                     } else {
                         const menuFlotante = document.createElement("div")
                         menuFlotante.setAttribute("componente", "menuGlobalFlotante")
-                        menuFlotante.classList.add("uiMenuGlobalResponsivo")
+                        menuFlotante.classList.add(
+                            "uiMenuGlobalResponsivo",
+                        )
                         document.body.appendChild(menuFlotante)
                     }
                     this.renderizaMenuResponsivo()
@@ -594,6 +607,7 @@ const casaVitini = {
                     const menuID = contenedorMenu.getAttribute("menuID")
                     const usuario = contenedorMenu.querySelector("[data=vitiniIDX]").textContent
                     const sobreControl = contenedorMenu?.getAttribute("sobreControl") === "activo" ? "sobreControl" : null
+
                     casaVitini.shell.navegacion.constructorMenuUI({
                         tipoMenu: menuID,
                         destino: "body [componente=menuGlobalFlotante]",
@@ -602,6 +616,8 @@ const casaVitini = {
                     })
                     const menuRenderizado = menu_renderizado.querySelector("[estructura=menu]")
                     menuRenderizado.classList.add("estructuraVertical")
+                    menuRenderizado.classList.remove("estructuraHoriontal")
+
                     const zonasRenderizadas = menuRenderizado.querySelectorAll("[zona]")
                     zonasRenderizadas.forEach((zona) => zona.style.borderRadius = "12px")
                     const selectorEsfera = menu_renderizado.querySelector("[elemento=esfera]")
@@ -835,11 +851,32 @@ const casaVitini = {
                 const zonaDestino = data?.zonaDestino
                 casaVitini.view?.volatilObservers?.parallaxControlador?.destroy()
                 const observersObserving = casaVitini?.view?.__observers__ || {};
-                Object.keys(observersObserving).forEach(o => {
-                    casaVitini.view.__observers__[o].disconnect()
-                })
+                // Object.entries(observersObserving).forEach(o => {
+                //     const oID = o[0]
+                //     if (casaVitini.view.__observers__[oID]()?.disconnect && typeof casaVitini.view.__observers__[oID]()?.disconnect === 'function') {
+                //         console.warn("El objeto desconectado:", o);
+
+                //         casaVitini.view.__observers__[oID]().disconnect()
+                //     } else {
+                //         console.warn("El objeto no es un IntersectionObserver válido:", o);
+                //     }
+                // })
+
+                Object.entries(observersObserving).forEach(([oID, observerFactory]) => {
+                    try {
+                        const observer = observerFactory(); // Asegurarse de que sea una función que devuelva el observador
+
+                        if (observer?.disconnect && typeof observer.disconnect === 'function') {
+                            console.warn("Desconectando el observador:", oID);
+                            observer.disconnect(); // Llama a disconnect para terminar la observación
+                        } else {
+                            console.warn(`El valor asociado a ${oID} no es un IntersectionObserver válido.`);
+                        }
+                    } catch (error) {
+                        console.error(`Error al procesar el observador con ID: ${oID}`, error);
+                    }
+                });
                 window.removeEventListener("resize", casaVitini.view?.volatilObservers?.parallaxControlador?.resizeIsDone);
-                //window.removeEventListener("resize", casaVitini.shell.controladoresUI.controlHorizontalVentana)
 
                 screen.orientation?.removeEventListener("change", casaVitini.shell.controladoresUI.ocultarMenusVolatiles);
                 document.querySelectorAll("html, #uiLogo, body, header, [componente=contenedorMenu], [componente=botonMenuResponsivo]")
@@ -859,6 +896,30 @@ const casaVitini = {
                 menu_renderizado.querySelectorAll("[tipoMenu=volatil]").forEach((menu) => {
                     menu.removeAttribute("style")
                 })
+            },
+            gestionIdiomaBarraGlobal: function () {
+                // Detectar el idioma del navegador
+                const idiomaNavegador = navigator.language || navigator.languages[0];
+                if (idiomaNavegador.startsWith('en')) {
+                    const elementosMenu = document.querySelectorAll("[estructura=menu]")
+                    elementosMenu.forEach(m => {
+                        const zonas = m.querySelectorAll("[zona]")
+                        zonas.forEach(i => {
+                            const zona = i.getAttribute("zona")
+                            if (zona === "alojamiento") {
+                                i.textContent = "Accommodation"
+                            } else if (zona === "conozcanos") {
+                                i.textContent = "Get to know us"
+                            } else if (zona === "instalaciones") {
+                                i.textContent = "Facilities"
+                            } else if (zona === "productos_y_servicios") {
+                                i.textContent = "Products and Services"
+                            } else if (zona === "contacto") {
+                                i.textContent = "Contact"
+                            }
+                        })
+                    })
+                }
             }
         },
         servidor: async function (transaccion) {
@@ -924,7 +985,7 @@ const casaVitini = {
                 const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                 const mensaje = "Se ha producido un error en la red y no se ha podido comunicar con el servidor. Si es por una causa circunstancial de la red, reinténtalo y debería funcionar. Comprueba que tienes acceso a la red. El estado de la experiencia se ha detenido, pero no se ha perdido. Los datos que tengas escritos en algún campo de texto o contenido pendiente de envío sigue tras esta pantalla de información."
                 const advertenciaInmersivaUI = document.createElement("div")
-                advertenciaInmersivaUI.setAttribute("class", "advertenciaInmersivaSuperpuesta")
+                advertenciaInmersivaUI.classList.add("advertenciaInmersivaSuperpuesta")
                 advertenciaInmersivaUI.setAttribute("identificadorVisual", "errorConexion")
                 advertenciaInmersivaUI.setAttribute("pantallaSuperpuesta", "pantallaCargaSuperpuesta")
                 advertenciaInmersivaUI.setAttribute("componente", "advertenciaInmersiva")
@@ -973,7 +1034,6 @@ const casaVitini = {
                 )
                 boton.textContent = "Ir a Administración"
                 boton.setAttribute("href", "/administracion")
-                boton.setAttribute("vista", "/administracion")
                 boton.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 main.appendChild(boton)
             },
@@ -2405,6 +2465,7 @@ const casaVitini = {
                                 if (tiempo === "presente") {
                                     if (diaFinal_decimal < diaActual_decimal) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
                                         bloqueDia.setAttribute("estadoDia", "noDisponible")
                                     }
                                 }
@@ -2414,15 +2475,11 @@ const casaVitini = {
                                 if (detallesDiasOcupacion[diaFinal_decimal]?.estadoDia === "diaCompleto") {
                                     bloqueDia.classList.add("calendarioDiaCompleto")
                                 }
-                                if (diasAntelacion[anoActual_decimal] &&
-                                    diasAntelacion[anoActual_decimal][mesActual_decimal] &&
-                                    diasAntelacion[anoActual_decimal][mesActual_decimal][diaFinal_decimal]) {
-                                    bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
-                                    bloqueDia.setAttribute("estadoDia", "noDisponible")
-                                }
+
                                 if (anoActual_decimal === limiteFuturo.ano && mesActual_decimal === limiteFuturo.mes) {
                                     if (diaFinal_decimal > limiteFuturo.dia) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
                                         bloqueDia.setAttribute("estadoDia", "noDisponible")
                                     }
                                 }
@@ -2466,6 +2523,7 @@ const casaVitini = {
                                         }
                                         if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                     } else if ((mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano)) {
@@ -2490,6 +2548,7 @@ const casaVitini = {
                                         }
                                         if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                         if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
@@ -2546,6 +2605,7 @@ const casaVitini = {
                                             bloqueDia.setAttribute("estadoDia", "disponible")
                                         } else if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                     } else {
@@ -2561,6 +2621,7 @@ const casaVitini = {
                                         const diaEntradaLimiteReserva = objetoFechaLimitePorDias.fecha.dia
                                         if (diaFinal_decimal < diaEntradaLimiteReserva) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                     }
@@ -2568,6 +2629,13 @@ const casaVitini = {
                                 if (tiempo === "presente" && diaActual_decimal === diaFinal_decimal) {
                                     bloqueDia.style.border = "3px solid white";
                                     bloqueDia.setAttribute("tipoDia", "hoy")
+                                }
+                                if (diasAntelacion[anoActual_decimal] &&
+                                    diasAntelacion[anoActual_decimal][mesActual_decimal] &&
+                                    diasAntelacion[anoActual_decimal][mesActual_decimal][diaFinal_decimal]) {
+                                    bloqueDia.classList.add("calendarioDiaNoDisponiblePorAntelacion")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
+                                    bloqueDia.setAttribute("estadoDia", "noDisponible")
                                 }
                                 bloqueDia.textContent = diaFinal_decimal
                                 marcoMes.appendChild(bloqueDia)
@@ -2751,6 +2819,7 @@ const casaVitini = {
                                 if (tiempo === "presente") {
                                     if (diaFinal_decimal < diaActual_decimal) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
                                         bloqueDia.setAttribute("estadoDia", "noDisponible")
                                     }
                                 }
@@ -2764,6 +2833,7 @@ const casaVitini = {
                                     diasAntelacion[anoActual_decimal][mesActual_decimal] &&
                                     diasAntelacion[anoActual_decimal][mesActual_decimal][diaFinal_decimal]) {
                                     bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                    bloqueDia.classList.remove("calendarioDiaDisponible")
                                     bloqueDia.setAttribute("estadoDia", "noDisponible")
                                 }
                                 if (objetoFechaLimitePorDias.arbol[anoActual_decimal] &&
@@ -2771,12 +2841,14 @@ const casaVitini = {
                                     const diaSalidaLimiteReserva = objetoFechaLimitePorDias.fecha.dia
                                     if (diaFinal_decimal > diaSalidaLimiteReserva) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
                                         bloqueDia.setAttribute("estadoDia", "noDisponible")
                                     }
                                 }
                                 if (anoActual_decimal === limiteFuturo.ano && mesActual_decimal === limiteFuturo.mes) {
                                     if (diaFinal_decimal > limiteFuturo.dia) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
                                         bloqueDia.setAttribute("estadoDia", "noDisponible")
                                     }
                                 }
@@ -2806,6 +2878,7 @@ const casaVitini = {
                                         }
                                         if (diaFinal_decimal < fechaEntradaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                         if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
@@ -2836,6 +2909,7 @@ const casaVitini = {
                                             if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
                                             }
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                         if (tiempo === "futuro") {
@@ -2880,6 +2954,7 @@ const casaVitini = {
                                             } else
                                                 if (diaFinal_decimal < fechaEntradaSeleccionada.dia) {
                                                     bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                                    bloqueDia.classList.remove("calendarioDiaDisponible")
                                                     bloqueDia.setAttribute("estadoDia", "noDisponible")
                                                 }
                                     } else {
@@ -3087,6 +3162,8 @@ const casaVitini = {
                                         bloqueDia.addEventListener("click", pasarelaX)
                                     } else if (diaFinal_decimal > diaSalidaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
+
                                     }
                                 } else if ((mesActual_decimal === mesEntradaReserva_decimal && anoActual_decimal === anoEntradaReserva_decimal)) {
                                     if (diaFinal_decimal === diaEntradaReserva_decimal) {
@@ -3262,6 +3339,7 @@ const casaVitini = {
                                         bloqueDia.style.pointerEvents = "none"
                                     } else if (diaFinal_decimal < diaEntradaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
                                         bloqueDia.setAttribute("estadoDia", "deshabilitado")
                                     } else if (diaFinal_decimal === diaEntradaReserva_decimal) {
                                         bloqueDia.classList.add("calendarioDiaReservaLimite")
@@ -3290,6 +3368,7 @@ const casaVitini = {
                                         if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
                                         }
                                         bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                        bloqueDia.classList.remove("calendarioDiaDisponible")
                                         bloqueDia.setAttribute("estadoDia", "deshabilitado")
                                     }
                                     if (calendario.tiempo === "futuro") {
@@ -3804,6 +3883,7 @@ const casaVitini = {
                                             bloqueDia.setAttribute("estadoDia", "disponible")
                                         } else if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                     } else if ((mesActual_decimal === fechaEntradaSeleccionada.mes && anoActual_decimal === fechaEntradaSeleccionada.ano)) {
@@ -3829,6 +3909,7 @@ const casaVitini = {
                                             bloqueDia.setAttribute("estadoDia", "disponible")
                                         } else if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         } else if (diaFinal_decimal === fechaSalidaSeleccionada.dia) {
                                             if (seleccionableDiaLimite === "si") {
@@ -3882,6 +3963,7 @@ const casaVitini = {
                                             }
                                         } else if (diaFinal_decimal > fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         } else if (diaFinal_decimal < fechaSalidaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaDisponible")
@@ -3994,6 +4076,7 @@ const casaVitini = {
                                             bloqueDia.addEventListener("click", pasarelaX)
                                         } else if (diaFinal_decimal < fechaEntradaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         } else if (diaFinal_decimal === fechaEntradaSeleccionada.dia) {
                                             if (seleccionableDiaLimite === "si") {
@@ -4032,6 +4115,7 @@ const casaVitini = {
                                             if (bloqueDia.getAttribute("estadoDia") === "noDisponible") {
                                             }
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                         }
                                         if (calendario.tiempo === "futuro") {
                                             if (diaFinal_decimal < fechaEntradaSeleccionada.dia) {
@@ -4083,6 +4167,7 @@ const casaVitini = {
                                         }
                                         if (diaFinal_decimal < fechaEntradaSeleccionada.dia) {
                                             bloqueDia.classList.add("calendarioDiaNoDisponible")
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
                                             bloqueDia.setAttribute("estadoDia", "noDisponible")
                                         }
                                     } else {
@@ -4364,7 +4449,7 @@ const casaVitini = {
                         const fechaEntrada_Humano = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
                         fechaEntrada.textContent = fechaEntrada_Humano
                         constructorInformacion = "Entrada el " + diaSeleccionado + " del " + mesSeleccionado + " del " + anoSeleccionado
-                        botonSiguientePaso.setAttribute("vista", "/reservas/salida")
+                        botonSiguientePaso.href = "/reservas/salida"
                         botonSiguientePaso.textContent = "Ir a seleccionar el día de salida44"
                         document.querySelector("[calendario=entrada]").setAttribute("memoriaVolatil", fechaEntrada_Humano)
                     }
@@ -4372,7 +4457,7 @@ const casaVitini = {
                         const fechaSalida_humano = `${diaSeleccionado}/${mesSeleccionado}/${anoSeleccionado}`
                         fechaSalida.textContent = fechaSalida_humano
                         constructorInformacion = "Salida el " + diaSeleccionado + " del " + mesSeleccionado + " del " + anoSeleccionado
-                        botonSiguientePaso.setAttribute("vista", "/reservas/alojamiento")
+                        botonSiguientePaso.href = "/reservas/alojamiento"
                         botonSiguientePaso.textContent = "Ir a seleccionar el alojamiento"
                         document.querySelector("[calendario=salida]").setAttribute("memoriaVolatil", fechaSalida_humano)
                     }
@@ -4910,15 +4995,16 @@ const casaVitini = {
             await casaVitini.shell.navegacion.controladorVista(zona)
         },
         privacidad: {
-            arranque: (vista) => {
-                const filtro = /privacidad(\/.*)?$/
-                const resultadoFiltro = filtro.test(vista)
-                if (vista && resultadoFiltro) {
-                    return false
-                }
-                const cookies = casaVitini.componentes.privacidad.obtenerCookies()
-                if (cookies.privacidad !== "consentimientoAceptado") {
-                    return true
+            arranque: function () {
+                const cookies = this.obtenerCookies()
+
+                if (!cookies?.privacidad) {
+
+                    const body = document.querySelector("body")
+                    const ui = this.privacidadUI()
+                    body.appendChild(ui)
+                } else {
+
                 }
             },
             obtenerCookies: () => {
@@ -4932,38 +5018,147 @@ const casaVitini = {
                 }
                 return cookiesObjeto
             },
-            borrarCookies: () => {
-                localStorage.clear()
-                const cookies = casaVitini.componentes.privacidad.obtenerCookies()
-                for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
-                    if ('cookieStore' in window) {
-                        cookieStore?.delete(nombreCookies)
-                    } else {
-                        document.cookie = nombreCookies + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            privacidadUI: function () {
+                const idiomaNavegador = navigator.language || navigator.languages[0];
+
+                let titulo
+                let mensaje
+                let aceptar
+                let rechazar
+
+                titulo = "Este sitio web utiliza cookies."
+                mensaje = "Las cookies en Casa Vitini se usan solo para funciones esenciales. No compartimos datos de navegación ni mostramos anuncios. El mapa de Google en la página de contacto puede enviar su ubicación a Google para funcionar correctamente."
+                aceptar = "Aceptar todas"
+                rechazar = "Solo las necesarias"
+                // if (idiomaNavegador.startsWith('es')) {
+                //     titulo = "Este sitio web utiliza cookies."
+                //     mensaje = "Las cookies nos permiten personalizar el contenido. Casa Vitini no ofrece anuncios y no compartimos sus datos de navegación con nadie. Solo usamos las cookies de manera esencial y técnica para mantener el control de las sesiones de usuarios identificados cuando estos se identifican en la página con su cuenta de usuario. En la página de contacto hay un mapa de Google que, al renderizarse, puede enviar su ubicación a Google para el correcto funcionamiento de dicho mapa. Si no está de acuerdo en que Google obtenga su posición cuando entra en la página de contacto, puede rechazar esta advertencia y, cuando entre, no se renderizará el mapa de Google y obtendrá una imagen estática desde Casa Vitini."
+                //     aceptar = "Aceptar"
+                //     rechazar = "Rechazar"
+                // } else if (idiomaNavegador.startsWith('es')) {
+                //     titulo = "This website uses cookies."
+                //     mensaje = "Cookies allow us to personalize content. Casa Vitini does not offer ads, and we do not share your browsing data with anyone. We only use cookies for essential and technical reasons, to maintain control of identified user sessions when they log in to the page with their user account. The contact page features a Google map, which, when rendered, may send your location to Google for proper functionality. If you do not agree that Google may obtain your position when you visit the contact page, you can reject this warning. When you visit, the Google map will not be rendered, and you will receive a static image of Casa Vitini."
+                //     aceptar = "Accept"
+                //     rechazar = "Decline"
+                // }
+
+                const ui = document.createElement("div")
+                ui.classList.add("privacidadUI")
+                ui.setAttribute("ui", "privacidad")
+
+                const grid = document.createElement("div")
+                grid.classList.add("flexVertical")
+                ui.appendChild(grid)
+
+                const cT = document.createElement("div")
+                cT.classList.add("flexVertical", "padding10", "contenedorInfo")
+                cT.style.paddingTop = "0px"
+                grid.appendChild(cT)
+
+                const tituloUI = document.createElement("p")
+                tituloUI.classList.add("negrita", "textoCentrado")
+                tituloUI.textContent = titulo
+                cT.appendChild(tituloUI)
+
+                const descripcion = document.createElement("p")
+                descripcion.textContent = mensaje
+                cT.appendChild(descripcion)
+
+                const contenedorBotones = document.createElement("div")
+                contenedorBotones.classList.add("gridHorizontal2C", "gap10")
+                grid.appendChild(contenedorBotones)
+
+                const botonAceptar = document.createElement("div")
+                botonAceptar.classList.add("botonV4", "negrita", "boton")
+                botonAceptar.style.background = "#ffffff80"
+                botonAceptar.setAttribute("respuesta", "aceptar")
+                botonAceptar.style.paddingTop = "0px !important"
+                botonAceptar.style.paddingBottom = "0px !important"
+                botonAceptar.addEventListener("click", (e) => {
+                    this.respuesta(e)
+                })
+                botonAceptar.textContent = aceptar
+                contenedorBotones.appendChild(botonAceptar)
+
+
+                const botonRechazar = document.createElement("div")
+                botonRechazar.classList.add("botonV4", "negrita", "boton")
+                botonRechazar.setAttribute("respuesta", "rechazar")
+                botonRechazar.style.background = "#ffffff80"
+                botonRechazar.addEventListener("click", (e) => {
+                    this.respuesta(e)
+                })
+                botonRechazar.textContent = rechazar
+                contenedorBotones.appendChild(botonRechazar)
+
+                return ui
+            },
+            respuesta: function (e) {
+                const respuesta = e.target.getAttribute("respuesta")
+                const ui = e.target.closest("[ui=privacidad]")
+
+                this.borrarCookies()
+
+                if (respuesta === "aceptar") {
+                    this.crearCookieAceptarConsentimiento()
+                } else if (respuesta === "rechazar") {
+                    this.crearCookieRechazarContensimiento()
+                }
+                ui?.remove()
+
+                const main = document.querySelector("main")
+                const espacio = main.querySelector("[espacio=politicas]")
+                if (espacio) {
+                    const cookies = this.obtenerCookies()
+                    if (
+                        cookies.privacidad === "consentimientoAceptado" ||
+                        cookies.privacidad === "consentimientoRechazado"
+                    ) {
+                        const revocarDecision = this.ui.revocarDecision()
+                        espacio.appendChild(revocarDecision)
                     }
                 }
+
+                if (casaVitini.view.hasOwnProperty("controlRenderizadoMapa")) {
+                    casaVitini.view?.controlRenderizadoMapa()
+
+                }
+
             },
-            crearCookieConsentimiento: () => {
+            crearCookieAceptarConsentimiento: () => {
                 const fecha = new Date();
                 fecha.setTime(fecha.getTime() + (365 * 24 * 60 * 60 * 1000));  // 24 horas desde ahora
                 const expira = "expires=" + fecha.toUTCString();
                 document.cookie = "privacidad=consentimientoAceptado; " + expira + "; SameSite=Strict; path=/; Secure";
             },
-            advertenciaPrivacidadInicial: () => {
-                const main = document.querySelector("main")
-                main.setAttribute("zonaCSS", "privacidad")
-                const titulo = document.createElement("p")
-                titulo.textContent = "Advertencia de privacidad y uso de cookies "
-                titulo.classList.add("tituloGris")
-                main.appendChild(titulo)
-                const resumenInicial = document.createElement("p")
-                resumenInicial.style.marginTop = "10px"
-                resumenInicial.textContent = `Este sitio web usa cookies propias y de terceros para soportar la navegación, mejorar la experiencia de usuario, personalizar el contenido y realizar análisis estadísticos sobre los hábitos de navegación.`
-                main.appendChild(resumenInicial)
-                const contenedorBotones = casaVitini.componentes.privacidad.ui.contenedorSecciones()
-                main.appendChild(contenedorBotones)
-                const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
-                main.appendChild(contenedorDecision)
+            crearCookieRechazarContensimiento: () => {
+                const fecha = new Date();
+                fecha.setTime(fecha.getTime() + (365 * 24 * 60 * 60 * 1000));  // 24 horas desde ahora
+                const expira = "expires=" + fecha.toUTCString();
+                document.cookie = "privacidad=consentimientoRechazado; " + expira + "; SameSite=Strict; path=/; Secure";
+            },
+            borrarCookies: async function () {
+                localStorage.clear()
+                const cookies = casaVitini.componentes.privacidad.obtenerCookies()
+                for (const [nombreCookies, valorCookie] of Object.entries(cookies)) {
+                    if ('cookieStore' in window) {
+                        await cookieStore.delete(nombreCookies);
+                    } else {
+
+                        document.cookie = nombreCookies + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    }
+                }
+            },
+            estadoPrivacidad: function () {
+
+                const cookies = this.obtenerCookies()
+                if (cookies.privacidad !== "consentimientoAceptado" &&
+                    cookies.privacidad !== "consentimientoRechazado"
+                ) {
+                    const body = document.querySelector("body")
+                    const ui = this.privacidadUI()
+                    body.appendChild(ui)
+                }
             },
             ui: {
                 contenedorSecciones: () => {
@@ -4979,20 +5174,17 @@ const casaVitini = {
                     botonPoliticaCookies.classList.add("botonV1")
                     botonPoliticaCookies.textContent = "Política de cookies"
                     botonPoliticaCookies.setAttribute("href", "/politicas/privacidad/cookies")
-                    botonPoliticaCookies.setAttribute("vista", "/politicas/privacidad/cookies")
                     botonPoliticaCookies.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     contenedorBotones.appendChild(botonPoliticaCookies)
                     const botonPoliticaPrivacidad = document.createElement("a")
                     botonPoliticaPrivacidad.classList.add("botonV1")
                     botonPoliticaPrivacidad.textContent = "Política de privacidad"
                     botonPoliticaPrivacidad.setAttribute("href", "/politicas/privacidad/politica_de_privacidad")
-                    botonPoliticaPrivacidad.setAttribute("vista", "/politicas/privacidad/politica_de_privacidad")
                     botonPoliticaPrivacidad.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     contenedorBotones.appendChild(botonPoliticaPrivacidad)
                     const botonCondicionesDeUso = document.createElement("a")
                     botonCondicionesDeUso.classList.add("botonV1")
                     botonCondicionesDeUso.setAttribute("href", "/politicas/privacidad/condiciones_de_uso")
-                    botonCondicionesDeUso.setAttribute("vista", "/politicas/privacidad/condiciones_de_uso")
                     botonCondicionesDeUso.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     botonCondicionesDeUso.textContent = "Condiciones de uso"
                     contenedorBotones.appendChild(botonCondicionesDeUso)
@@ -5024,29 +5216,40 @@ const casaVitini = {
                             const contenedorDecision = casaVitini.componentes.privacidad.ui.revocarDecision()
                             main.querySelector("[espacio=politicas]").appendChild(contenedorDecision)
                         } else {
-                            return casaVitini.shell.navegacion.controladorVista(url)
+                            return casaVitini.shell.navegacion.controladorVista({
+                                vista: url
+                            })
                         }
                     })
                     contenedorDecision.appendChild(botonAceptar)
                     return contenedorDecision
                 },
                 revocarDecision: () => {
+
+                    const cookies = casaVitini.componentes.privacidad.obtenerCookies()
+                    let mensaje
+
+                    if (cookies.privacidad === "consentimientoAceptado") {
+                        mensaje = "Ha aceptado las políticas de privacidad de Casa Vitini, si quiere, puede revocarlas en cualquier momento borrando la cache de su navegador o pulsando en el botón de revocar de abajo."
+
+                    } else if (cookies.privacidad === "consentimientoRechazado") {
+                        mensaje = "Ha rechazado las políticas de privacidad de Casa Vitini, si quiere, puede revocarlas en cualquier momento borrando la cache de su navegador o pulsando en el botón de revocar de abajo."
+                    }
+
                     const contenedorDecision = document.createElement("div")
                     contenedorDecision.classList.add("flexVertical", "gap10")
                     contenedorDecision.setAttribute("contenedor", "botones")
                     const textoInfo = document.createElement("div")
                     textoInfo.classList.add("padding14", "textoCentrado")
-                    textoInfo.textContent = "Ha aceptado las políticas de privacidad y condiciones de uso de Casa Vitini, si quiere, puede revocarlas en cualquier momento borrando la cache de su navegador o pulsando en el botón de revocar de abajo."
+                    textoInfo.textContent = mensaje
                     contenedorDecision.appendChild(textoInfo)
                     const botonRechazar = document.createElement("a")
                     botonRechazar.classList.add("botonV1")
                     botonRechazar.textContent = "Revocar decisión y borrar cookies"
-                    botonRechazar.addEventListener("click", () => {
-                        casaVitini.componentes.privacidad.borrarCookies()
-                        document.querySelector("[contenedor=botones]")?.remove()
-                        const main = document.querySelector("main")
-                        const contenedorDecision = casaVitini.componentes.privacidad.ui.contenedorDecision()
-                        main.querySelector("[espacio=politicas]").appendChild(contenedorDecision)
+                    botonRechazar.addEventListener("click", async () => {
+                        await casaVitini.componentes.privacidad.borrarCookies()
+                        contenedorDecision?.remove()
+                        casaVitini.componentes.privacidad.arranque()
                     })
                     contenedorDecision.appendChild(botonRechazar)
                     return contenedorDecision
@@ -5181,8 +5384,9 @@ const casaVitini = {
             },
             cadenaHaciaBase64ConTextDecoder: (cadena) => {
                 const encoder = new TextEncoder();
-                const datosCodificados = encoder.encode(cadena);
-                return btoa(String.fromCharCode(...datosCodificados));
+                const datosCodificados = encoder.encode(cadena); // Codifica la cadena como Uint8Array
+                const base64 = btoa(String.fromCharCode(...datosCodificados)); // Convierte los bytes en Base64
+                return base64;
             }
         },
         observador: {

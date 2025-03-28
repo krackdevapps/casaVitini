@@ -101,7 +101,7 @@
 
 [ui="reservaUI"] .administracion_reservas_detallesReserva_contenedorMenuExpandido {
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto 50px;
+    grid-template-columns: auto auto auto auto auto auto auto 5%;
     gap: 6px;
 }
 

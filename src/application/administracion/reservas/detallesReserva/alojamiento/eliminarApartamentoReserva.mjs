@@ -28,7 +28,7 @@ export const eliminarApartamentoReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const apartamentoUID = validadoresCompartidos.tipos.cadena({

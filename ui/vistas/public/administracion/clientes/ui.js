@@ -76,7 +76,7 @@ casaVitini.view = {
             const botonCrearCuenta = document.createElement("a")
             botonCrearCuenta.classList.add("botonV1")
             botonCrearCuenta.setAttribute("href", "/administracion/clientes/nuevo")
-            botonCrearCuenta.setAttribute("vista", "/administracion/clientes/nuevo")
+
             botonCrearCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             botonCrearCuenta.textContent = "Crear nuevo cliente"
             contenedorBotones.appendChild(botonCrearCuenta)
@@ -357,7 +357,7 @@ casaVitini.view = {
                     boton.setAttribute("boton", "editar")
                     boton.textContent = "Editar datos"
                     boton.href = `/administracion/clientes/cliente:${clienteUID}/editar`
-                    boton.setAttribute("vista", `/administracion/clientes/cliente:${clienteUID}/editar`)
+
                     boton.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
                     deatallesClienteUI.appendChild(boton)
@@ -714,7 +714,15 @@ casaVitini.view = {
                     const titulo = constructor.querySelector("[componente=titulo]")
                     titulo.textContent = "Eliminar irreversiblemente al cliente"
                     const mensaje = constructor.querySelector("[componente=mensajeUI]")
-                    mensaje.textContent = "Eliminar irreversiblemente a un cliente, elimina la información de este cliente en su ficha y en las reservas donde estuvo.Es decir, desaparecerá de las reservas donde estuvo este cliente."
+                    mensaje.textContent = "Eliminar irreversiblemente a un cliente, elimina la información de este cliente en la base de datos y en las reservas donde estuvo. Es decir, desaparecerá de las reservas donde estuvo este cliente. Si necesitas actualizar su información, puedes hacerlo y la actualización se verá reflejada en todas las reservas donde estuvo, está y estará. Sí, por el contrario, quieres eliminar este cliente porque es una ficha duplicada. Utiliza la herramienta de fusión, esta fusionará a dos clientes y luego eliminará al que selecciones como origen de fusión."
+
+                    const botonIrAFusion = document.createElement("div")
+                    botonIrAFusion.classList.add("botonV1BlancoIzquierda")
+                    botonIrAFusion.textContent = "Ir a la herramienta de fusión"
+                    botonIrAFusion.setAttribute("href", "/administracion/clientes/fusion")
+
+                    botonIrAFusion.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                    constructor.appendChild(botonIrAFusion)
 
                     const botonAceptar = constructor.querySelector("[boton=aceptar]")
                     botonAceptar.textContent = "Comfirmar la eliminacion del cliente"

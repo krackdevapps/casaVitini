@@ -61,9 +61,10 @@ export const buscar = async (entrada, salida) => {
             throw new Error(m)
         }
 
-        const pagina = validadoresCompartidos.tipos.granEntero({
+        const pagina = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
+            filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermiteCero: "no",

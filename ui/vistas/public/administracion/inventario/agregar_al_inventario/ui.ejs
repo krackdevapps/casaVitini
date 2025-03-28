@@ -1,0 +1,23 @@
+<div class="marcoElasticoRelativo" contenedor="menu">
+    <p class="padding10 colorGrisV1 negrita textoCentrado">Agregar al inventario</p>
+    <div class="flexVertical gap10">
+        <input type="text" campo="nombre" placeholder="Nombre de nuevo elemento del inventario">
+        <input type="number" campo="cantidad" placeholder="Cantidad inicial, por ejemplo 5">
+        <select campo="tipoLimite">
+            <option value="" disabled selected>Seleciona el tipo de limite</option>
+            <option value="sinLimite">El elemento no tiene un limite mínimo</option>
+            <option value="conLimite">El elemento tiene un limite mínimo</option>
+        </select>
+
+        <div class="flexVertical gap10 borderGrey1 borderRadius20 padding6 ocultoInicial" contenedor="limiteMinimo">
+            <p class="padding16">Seleciona el limite minimo que se usará par dar la notificación de aviso</p>
+            <input type="number" campo="cantidadMinima" placeholder="Cantidad inicial, por ejemplo 5">
+
+        </div>
+
+        <textarea campo="descripcion" placeholder="Descripción del elemento (Opcional)"></textarea>
+        <div class="botonV1BlancoIzquierda" boton="crear">Crear nuevo elemento en el iventaro general</div>
+    </div>
+
+
+</div>

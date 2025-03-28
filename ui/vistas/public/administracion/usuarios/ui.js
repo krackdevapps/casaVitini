@@ -52,7 +52,7 @@ casaVitini.view = {
             const botonCrearCuenta = document.createElement("a")
             botonCrearCuenta.classList.add("botonV1")
             botonCrearCuenta.setAttribute("href", "/administracion/usuarios/nuevo")
-            botonCrearCuenta.setAttribute("vista", "/administracion/usuarios/nuevo")
+
             botonCrearCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             botonCrearCuenta.textContent = "Crear cuenta de usuario"
             contenedorBotones.appendChild(botonCrearCuenta)
@@ -367,27 +367,27 @@ casaVitini.view = {
                     opcionInformacion.classList.add("detallesUsuario_opcionInformacion")
                     opcionInformacion.textContent = "Sus datos personales"
                     opcionInformacion.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/datos_personales`)
-                    opcionInformacion.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/datos_personales`)
+
                     opcionInformacion.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     contenedorOpciones.appendChild(opcionInformacion)
                     const opcionCambiarIDX = document.createElement("a")
                     opcionCambiarIDX.classList.add("detallesUsuario_opcionInformacion")
                     opcionCambiarIDX.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/modificar_idx`)
-                    opcionCambiarIDX.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/modificar_idx`)
+
                     opcionCambiarIDX.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     opcionCambiarIDX.textContent = "Modificar su VitiniID"
                     contenedorOpciones.appendChild(opcionCambiarIDX)
                     const opcionCambiarRol = document.createElement("a")
                     opcionCambiarRol.classList.add("detallesUsuario_opcionInformacion")
                     opcionCambiarRol.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/rol`)
-                    opcionCambiarRol.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/rol`)
+
                     opcionCambiarRol.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     opcionCambiarRol.textContent = "Cambiar su rol"
                     contenedorOpciones.appendChild(opcionCambiarRol)
                     const opcionClave = document.createElement("a")
                     opcionClave.classList.add("detallesUsuario_opcionInformacion")
                     opcionClave.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/cambiar_clave`)
-                    opcionClave.setAttribute("vista", `/administracion/usuarios/${usuarioIDX}/cambiar_clave`)
+
                     opcionClave.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     opcionClave.textContent = "Cambiar su contrasena"
                     contenedorOpciones.appendChild(opcionClave)

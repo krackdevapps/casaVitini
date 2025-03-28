@@ -69,15 +69,15 @@
 
 
 
-[zonaCSS="administracion/situacion"] .administracion_reservas_detallesReserva_tituloCheckIn {
+ .administracion_reservas_detallesReserva_tituloCheckIn {
     color: rgb(0, 140, 40);
 }
 
-[zonaCSS="administracion/situacion"] .letraRoja {
+ .letraRoja {
     color: red;
 }
 
-[zonaCSS="administracion/situacion"] .situacionApartamentoUI {
+ .situacionApartamentoUI {
     background: rgb(255 255 255 / 0.4);
     border-radius: 20px;
     padding: 6px;
@@ -92,26 +92,41 @@
     text-decoration: none;
 }
 
-[zonaCSS="administracion/situacion"] .espacioSituacion {
+ .espacioSituacion {
     display: grid;
     grid-gap: 6px;
     grid-auto-rows: minmax(auto, auto);
     justify-items: stretch;
     justify-content: center;
     align-content: center;
-    grid-template-columns: repeat(3, 1fr);
-    align-items: stretch;
+    grid-template-columns: repeat(4, 1fr);
     width: 100%;
+    align-items: start;
 }
+
 @media (max-width: 1000px) {
-    [zonaCSS="administracion/situacion"] .espacioSituacion {
+     .espacioSituacion {
         display: flex;
         flex-direction: column;
         align-items: stretch;
     }
 }
 
-[zonaCSS="administracion/situacion"] .situacionApartamentoTitutlo {
+.contenedorAlojamiento {
+
+}
+
+
+@media (max-width: 920px) {
+    .contenedorAlojamiento {
+       display: flex;
+       flex-direction: column;
+       align-items: stretch;
+   }
+}
+
+
+ .situacionApartamentoTitutlo {
     padding-right: 14px;
     margin: 0px;
     border-radius: 15px;
@@ -122,26 +137,26 @@
     cursor: default;
 }
 
-[zonaCSS="administracion/situacion"] .situacionApartamentoTitutlo:hover {
+ .situacionApartamentoTitutlo:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="administracion/situacion"] .situacionApartamentoEstado {
+ .situacionApartamentoEstado {
     margin: 0px;
     padding-right: 4px;
     padding-left: 10px;
     color: rgb(0 0 0 / 0.4);
 }
 
-[zonaCSS="administracion/situacion"] .situacionApartamentoEstadoPernoctacion {
+ .situacionApartamentoEstadoPernoctacion {
     background: #b8b8b88f;
     margin: 0;
     padding: 15px;
     border-radius: 15px;
 }
 
-[zonaCSS="administracion/situacion"] .situacionApartamentoEstadoReserva {
-    background: rgb(0 0 0 / 20%);
+ .situacionApartamentoEstadoReserva {
+    background: rgba(255, 255, 255, 0.767);
     height: 10px;
     border-radius: 10px;
     display: flex;
@@ -153,8 +168,8 @@
     overflow: hidden;
 }
 
-[zonaCSS="administracion/situacion"] .situacionBarraProgressoReserva {
-    background: #505050;
+ .situacionBarraProgressoReserva {
+    background: #0400f8;
     transition: width 500ms ease-in-out;
 
     @starting-style {
@@ -162,7 +177,7 @@
     }
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetallesGenerales {
+ .situacionDetallesGenerales {
 
     gap: 6px;
     padding: 20px;
@@ -178,7 +193,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetallesbloqueApartamentoUI {
+ .situacionDetallesbloqueApartamentoUI {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -188,24 +203,24 @@
     gap: 4px;
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetallesApartmentoTitulo {
+ .situacionDetallesApartmentoTitulo {
     font-weight: bold;
     font-size: 20px;
     border-radius: 6px;
     height: 100%;
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetalleTituloBloqueSimple {
+ .situacionDetalleTituloBloqueSimple {
     font-weight: bold;
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetalleBloqueSimpleInterno {
+ .situacionDetalleBloqueSimpleInterno {
     padding: 10px;
     border-radius: 6px;
     background: rgb(255 255 255 / 0.4);
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetalleBloqueSimpleExterno {
+ .situacionDetalleBloqueSimpleExterno {
     padding: 10px;
     border-radius: 10px;
     background: rgb(255 255 255 / 0.4);
@@ -215,12 +230,12 @@
     flex-direction: column;
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetallesEstadoApartamento {
+ .situacionDetallesEstadoApartamento {
 
     color: black;
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetallesReserva {
+ .situacionDetallesReserva {
     background: rgb(255 255 255 / 0.4);
     display: flex;
     flex-direction: row;
@@ -235,7 +250,7 @@
     padding: 6px;
 }
 
-[zonaCSS="administracion/situacion"] .sitaucionDetallesEspacioHabitaciones {
+ .sitaucionDetallesEspacioHabitaciones {
     display: grid;
     grid-gap: 4px;
     grid-auto-rows: minmax(auto, auto);
@@ -248,7 +263,7 @@
     width: 100%;
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetallesHabitacionBloque {
+ .situacionDetallesHabitacionBloque {
     border-radius: 10px;
     padding: 6px;
     display: flex;
@@ -260,7 +275,7 @@
     border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-[zonaCSS="administracion/situacion"] .situacionDetallestituloHabitacion {
+ .situacionDetallestituloHabitacion {
     background: #dadada;
     margin: 0px;
     padding: 10px;
@@ -268,27 +283,28 @@
     font-weight: bold;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_nombrePernoctante {
+ .administracion_situacion_detallesApartamento_nombrePernoctante {
     margin: 0px;
     font-weight: bold;
     padding: 0px;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_tipoCliente {
+ .administracion_situacion_detallesApartamento_tipoCliente {
     margin: 0px;
     padding: 0px;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorReserva {
+ .contenedorReserva {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    background: rgb(255 255 255 / 45%);
+    background: rgba(15, 111, 253, 0.45);
     padding: 6px;
     border-radius: 16px;
+    gap: 6px;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_portada_bloqueEntidad {
+ .administracion_situacion_portada_bloqueEntidad {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -296,18 +312,19 @@
     padding: 10px;
     text-decoration: none;
     color: black;
+    
 }
 
-[zonaCSS="administracion/situacion"] .adminsitracion_situacion_portada_datoEntidad {
+ .adminsitracion_situacion_portada_datoEntidad {
     font-weight: bold;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorSelecccionable:hover {
+ .administracion_situacion_portada_contenedorSelecccionable:hover {
     background: rgba(0, 0, 0, 0.1);
     cursor: default;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorFechas {
+ .administracion_situacion_portada_contenedorFechas {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 1fr;
@@ -316,7 +333,7 @@
     gap: 6px;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorFechas {
+ .administracion_situacion_detallesApartamento_contenedorFechas {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 1fr;
@@ -325,7 +342,7 @@
     gap: 6px;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situracion_detallesApartamento_bloqueReserva {
+ .administracion_situacion_detallesApartamento_bloqueReserva {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -340,7 +357,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situracion_detallesApartamento_reservaUI {
+ .administracion_situacion_detallesApartamento_reservaUI {
     padding: 10px;
     border-radius: 10px;
     font-size: 13;
@@ -350,11 +367,11 @@
     cursor: default;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situracion_detallesApartamento_reservaUI:hover {
+ .administracion_situacion_detallesApartamento_reservaUI:hover {
     background: rgba(0, 0, 0, 0.1);
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorCliente {
+ .administracion_situacion_detallesApartamento_contenedorCliente {
     display: flex;
     text-decoration: none;
     color: black;
@@ -366,11 +383,11 @@
     align-items: stretch;
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorCliente:hover {
+ .administracion_situacion_detallesApartamento_contenedorCliente:hover {
     background: rgba(0, 0, 0, 0.1);
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_detallesApartamento_contenedorHabitacion {
+ .administracion_situacion_detallesApartamento_contenedorHabitacion {
     border-radius: 10px;
     padding: 4px;
     display: flex;
@@ -383,14 +400,14 @@
     border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-[zonaCSS="administracion/situacion"] .administracion_situacion_portada_contenedorFecha {
+ .administracion_situacion_portada_contenedorFecha {
     display: flex;
     justify-content: center;
     font-weight: bold;
     padding: 10px;
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorEvento {
+ .espacioEventosAirbnb .contenedorEvento {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -402,18 +419,18 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .tituloPlataformaOrigen {
+ .espacioEventosAirbnb .tituloPlataformaOrigen {
     margin: 0px;
     padding: 12px;
     font-weight: bold;
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .descripcionEvento {
+ .espacioEventosAirbnb .descripcionEvento {
     margin: 0px;
     padding: 12px;
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorFechas {
+ .espacioEventosAirbnb .contenedorFechas {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 1fr;
@@ -424,12 +441,12 @@
 
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .fechaDatoUI {
+ .espacioEventosAirbnb .fechaDatoUI {
     margin: 0px;
     padding: 0px;
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .botonIrAlEvento {
+ .espacioEventosAirbnb .botonIrAlEvento {
     background: #80808042;
     padding: 10px;
     text-decoration: none;
@@ -437,11 +454,11 @@
     border-radius: 4px;
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .botonIrAlEvento:hover {
+ .espacioEventosAirbnb .botonIrAlEvento:hover {
     background: #808080a6;
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorFecha_ {
+ .espacioEventosAirbnb .contenedorFecha_ {
     background: #80808042;
     padding: 10px;
     border-radius: 16px;
@@ -450,6 +467,6 @@
     align-items: center;
 }
 
-[zonaCSS="administracion/situacion"] .espacioEventosAirbnb .contenedorTitulo {
+ .espacioEventosAirbnb .contenedorTitulo {
     padding: 4px;
 }

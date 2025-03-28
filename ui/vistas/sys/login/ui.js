@@ -2,7 +2,7 @@ casaVitini.view = {
     start: function () {
         const main = document.querySelector("main")
         main.setAttribute("zonaCSS", "/micasa")
-
+        this.gestionIdioma()
         document.querySelector("[boton=iniciarSession]").addEventListener("click", () => {
             this.botonIniciarSession("iniciarSession")
         })
@@ -36,7 +36,7 @@ casaVitini.view = {
             });
         }
     },
-    controladorCampos:function ()  {
+    controladorCampos: function () {
         const campoUsuario = document.querySelector("[componente=campoID][IDX=usuario]")
         const campoClave = document.querySelector("[componente=campoID][IDX=clave]")
         const contenedorBotones = document.querySelector("[componente=contenedorBotones]")
@@ -73,7 +73,7 @@ casaVitini.view = {
             return casaVitini.shell.IDX.iniciarSession(transaccion)
         }
     },
-    reseteaBloqueRespuesta: function() {
+    reseteaBloqueRespuesta: function () {
         const bloqueRespuesta = document.querySelector("[componente=bloqueRespuesta]")
         bloqueRespuesta.removeAttribute("style")
         bloqueRespuesta.textContent = "-"
@@ -81,5 +81,25 @@ casaVitini.view = {
         document.querySelectorAll("[componente=campoID]").forEach(campo => {
             campo.removeAttribute("style")
         });
+    },
+    gestionIdioma: function () {
+
+        const idiomaNavegador = navigator.language || navigator.languages[0];
+        if (idiomaNavegador.startsWith('en')) {
+            const main = document.querySelector("main")
+
+
+            const clave = main.querySelector("[IDX=clave]")
+            clave.placeholder = "Password"
+
+
+            const iniciarSession = main.querySelector("[boton=iniciarSession]")
+            iniciarSession.textContent = "Login"
+
+            const registraCuentaNueva = main.querySelector("[opcion=registraCuentaNueva]")
+            registraCuentaNueva.textContent = "Register a new account"
+        }
+
+
     }
 }

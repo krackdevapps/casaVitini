@@ -2,11 +2,13 @@ body {
     background-color: rgb(255 188 0 / 28%);
     background-image: url("/activos/imagenes/servicios/pescalancha7.png");
 }
-
-header .estructura {
-    background-color: rgba(0, 0, 0, 0.2);
+.menuGlobal_styloCompartido {
+    background-color: rgba(0, 0, 0, 0.3);
 }
-
+.botonMenuResponsivo {
+    background-image: url(/activos/iconos/menu_blanco.svg);
+    background-color: rgba(0, 0, 0, 0.3);
+}
 .uiCategoria {
     color: white;
 }
@@ -310,6 +312,7 @@ main {
     background-size: cover;
     background-position: center center;
 }
+
 @media (max-width: 720px) {
 
     .fotoFS {

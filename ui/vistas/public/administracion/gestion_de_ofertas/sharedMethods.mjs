@@ -1422,7 +1422,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                     "ratonDefault"
                 )
                 ofertaUI.setAttribute("href", `/administracion/gestion_de_ofertas/oferta:${ofertaUID}`)
-                ofertaUI.setAttribute("vista", `/administracion/gestion_de_ofertas/oferta:${ofertaUID}`)
+
                 ofertaUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedorLista.appendChild(ofertaUI)
 

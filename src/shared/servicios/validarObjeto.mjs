@@ -120,8 +120,8 @@ export const validarServicio = async (data) => {
                                     devuelveUnTipoNumber: "no",
                                     limpiezaEspaciosAlrededor: "si",
                                 })
-                                
-                                return precioOpcion;  
+
+                                return precioOpcion;
                             } catch (error) {
                                 const path = helpers.state.path.join('.');
                                 const mensajeError = `Error en ${path}: ${error.message}`;
@@ -152,8 +152,26 @@ export const validarServicio = async (data) => {
                                 const mensajeError = `Error en ${path}: ${error.message}`;
                                 return helpers.message(mensajeError);
                             }
-
                         }).messages(commonMessages),
+                        elementoEnlazado: Joi.object({
+                            elementoUID: Joi.string().custom((value, helpers) => {
+                                try {
+                                    return validadoresCompartidos.tipos.cadena({
+                                        string: value,
+                                        nombreCampo: "El campo del elementoUID solo espera un numero entero",
+                                        filtro: "cadenaConNumerosEnteros",
+                                        sePermiteVacio: "no",
+                                        limpiezaEspaciosAlrededor: "si",
+                                        devuelveUnTipoNumber: "no",
+                                        devuelveUnTipoBigInt: "no"
+                                    })
+                                } catch (error) {
+                                    const path = helpers.state.path.join('.');
+                                    const mensajeError = `Error en ${path}: ${error.message}`;
+                                    return helpers.message(mensajeError);
+                                }
+                            }).required()
+                        }).optional()
                     }).required()
                 ).required()
             }).required()
@@ -223,7 +241,7 @@ export const validarServicio = async (data) => {
         if (duracionIDV === "rango") {
             const fechaInicio = contenedor.fechaInicio
             const fechaFinal = contenedor.fechaFinal
-            
+
             await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: fechaInicio,
                 nombreCampo: "La fecha de inico del servicio"
@@ -273,7 +291,7 @@ export const validarServicio = async (data) => {
             limpiezaEspaciosAlrededor: "si",
             limpiezaEspaciosInternos: "si",
         })
-        
+
 
         objectoValidado.contenedor.gruposDeOpciones.forEach((grupo, ig) => {
             const grupoIDV = `grupo${ig}`

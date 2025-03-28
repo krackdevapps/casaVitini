@@ -48,8 +48,8 @@ casaVitini.view = {
             const botonAnadirApartamento = document.createElement("a")
             botonAnadirApartamento.classList.add("botonV1BlancoIzquierda")
             botonAnadirApartamento.textContent = "Crear un nuevo apartamento"
-            botonAnadirApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
-            botonAnadirApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento")
+            botonAnadirApartamento.href = "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:apartamento"
+
             botonAnadirApartamento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorBotonSeccionEntidad.appendChild(botonAnadirApartamento)
             const contenedorApartamentosExistentes = document.createElement("div")
@@ -68,9 +68,8 @@ casaVitini.view = {
                     const contenedorDetalleApartamento = document.createElement("a")
                     contenedorDetalleApartamento.classList.add("confAlojamiento_entidades_contenedorDetalles")
                     contenedorDetalleApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
-                    contenedorDetalleApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
-                    contenedorDetalleApartamento.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV)
-                    contenedorDetalleApartamento.addEventListener("click", (e) => { this.traductorCambioVista(e) })
+                    contenedorDetalleApartamento.href = "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/apartamento:" + apartamentoIDV
+                    contenedorDetalleApartamento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     const tituloApartamento = document.createElement("div")
                     tituloApartamento.classList.add("confAlojamiento_entidades_titulo")
                     tituloApartamento.classList.add("negrita")
@@ -93,8 +92,8 @@ casaVitini.view = {
             botonAnadirHabitacion.classList.add("botonV1BlancoIzquierda")
             botonAnadirHabitacion.textContent = "Crear una nueva habitación"
             botonAnadirHabitacion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:habitacion")
-            botonAnadirHabitacion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:habitacion")
-            botonAnadirHabitacion.addEventListener("click", (e) => { this.traductorCambioVista(e) })
+
+            botonAnadirHabitacion.addEventListener("click",  casaVitini.shell.navegacion.cambiarVista)
             contenedorBotonSeccionHabitacion.appendChild(botonAnadirHabitacion)
             contenedorHabitaciones.appendChild(contenedorBotonSeccionHabitacion)
             const contenedorHabitacionesExistentes = document.createElement("div")
@@ -113,8 +112,8 @@ casaVitini.view = {
                     contenedorDetalleHabitacion.classList.add("confAlojamiento_entidades_contenedorDetalles")
                     contenedorDetalleHabitacion.setAttribute("habitacionIDV", habitacionIDV)
                     contenedorDetalleHabitacion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/habitacion:" + habitacionIDV)
-                    contenedorDetalleHabitacion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/habitacion:" + habitacionIDV)
-                    contenedorDetalleHabitacion.addEventListener("click", (e) => { this.traductorCambioVista(e) })
+
+                    contenedorDetalleHabitacion.addEventListener("click",  casaVitini.shell.navegacion.cambiarVista)
                     const tituloHabitacion = document.createElement("div")
                     tituloHabitacion.classList.add("confAlojamiento_entidades_titulo")
                     tituloHabitacion.classList.add("negrita")
@@ -138,7 +137,7 @@ casaVitini.view = {
             botonAnadirCamas.classList.add("botonV1BlancoIzquierda")
             botonAnadirCamas.textContent = "Crear una nueva cama"
             botonAnadirCamas.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:cama")
-            botonAnadirCamas.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/crear_entidad/tipo:cama")
+
             botonAnadirCamas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorBotonSeccionCamas.appendChild(botonAnadirCamas)
             contenedorCamas.appendChild(contenedorBotonSeccionCamas)
@@ -158,8 +157,8 @@ casaVitini.view = {
                     contenedorDetalleCama.classList.add("confAlojamiento_entidades_contenedorDetalles")
                     contenedorDetalleCama.setAttribute("camaIDV", camaIDV)
                     contenedorDetalleCama.setAttribute("href", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/cama:" + camaIDV)
-                    contenedorDetalleCama.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/entidades/editar_entidad/cama:" + camaIDV)
-                    contenedorDetalleCama.addEventListener("click", (e) => { this.traductorCambioVista(e) })
+
+                    contenedorDetalleCama.addEventListener("click",  casaVitini.shell.navegacion.cambiarVista)
                     const tituloCama = document.createElement("div")
                     tituloCama.classList.add("confAlojamiento_entidades_titulo")
                     tituloCama.classList.add("negrita")
@@ -176,15 +175,5 @@ casaVitini.view = {
             contenedorGlobal.appendChild(contenedorCamas)
         }
     },
-    traductorCambioVista: function (entidad) {
-        entidad.preventDefault()
-        entidad.stopPropagation()
-        const vista = entidad.target.closest("[vista]").getAttribute("vista")
-        const entrada = {
-            "vista": vista,
-            "tipoOrigen": "menuNavegador"
-        }
-        casaVitini.shell.navegacion.controladorVista(entrada)
-    },
-  
+
 }

@@ -52,10 +52,11 @@ export const reservasDelCliente = async (entrada) => {
             soloMinusculas: "si"
         })
 
-        const pagina = validadoresCompartidos.tipos.granEntero({
+        const pagina = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina,
             nombreCampo: "El numero de página",
             sePermiteVacio: "no",
+            filtro: "numeroSimple",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })

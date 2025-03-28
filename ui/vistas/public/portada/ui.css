@@ -1,4 +1,4 @@
-[zonaCSS="/"] .tituloPortada {
+.tituloPortada {
     display: flex;
     place-content: center;
     align-items: flex-start;
@@ -12,6 +12,7 @@
 
 body {
     background-color: rgba(0, 0, 0, 0.3);
+    background-image: url("/activos/imagenes/instalaciones/2-editada.jpeg");
 }
 
 main {
@@ -20,16 +21,23 @@ main {
     height: 100%;
     overflow: hidden;
     gap: 6px;
-    z-Index: -1;
+    /* z-Index: -1; */
     position: absolute;
 }
-header .estructura {
-    background-color: rgba(255, 255, 255, 0.1);
+
+.menuGlobal_styloCompartido {
+    background-color: rgba(255, 255, 255, 0.4);
 }
+.botonMenuResponsivo {
+    background-image: url(/activos/iconos/menu_negro.svg);
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
 .uiCategoria {
     color: black;
 }
-[zonaCSS="/"] .tituloUI {
+
+.tituloUI {
     margin: 0px;
     padding: 10px;
     color: black;
@@ -44,10 +52,10 @@ header .estructura {
     white-space: pre-wrap;
 }
 
-[zonaCSS="/"] .conenedorReserva {
-    background: rgba(255, 255, 255, 0.3);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+.conenedorReserva {
+    background: rgba(238, 143, 0, 0.7);
+    /* -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); */
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -63,7 +71,7 @@ header .estructura {
     z-index: 5;
 }
 
-[zonaCSS="/"] .videoPresentacion {
+.videoPresentacion {
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -79,32 +87,46 @@ header .estructura {
 
 
 }
+[estructura=menu] {
+    backdrop-filter: blur(30px) !important;
+}
+.marcoElasticoRelativo {
+    padding-top: 120px;
+}
 
-[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-start-playback-button {
+
+
+
+
+.uiCategoria {
+    color: rgb(0, 0, 0);
+}
+
+.videoPresentacion::-webkit-media-controls-start-playback-button {
     display: none !important;
 }
 
-[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-play-button {
+.videoPresentacion::-webkit-media-controls-play-button {
     display: none !important;
 }
 
-[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-overlay-play-button {
+.videoPresentacion::-webkit-media-controls-overlay-play-button {
     display: none !important;
 }
 
-[zonaCSS="/"] .videoPresentacion::-webkit-media-controls-play-button-overlay {
+.videoPresentacion::-webkit-media-controls-play-button-overlay {
     display: none !important;
 }
 
-[zonaCSS="/"] .videoPresentacion::-webkit-media-controls {
+.videoPresentacion::-webkit-media-controls {
     visibility: hidden !important;
 }
 
-[zonaCSS="/"] .videoPresentacion ::-webkit-media-controls-enclosure {
+.videoPresentacion ::-webkit-media-controls-enclosure {
     visibility: hidden !important;
 }
 
-[zonaCSS="/"] .bloqueReservasPortada {
+.bloqueReservasPortada {
     margin: 0px;
     padding: 0px;
     color: rgba(0, 0, 0, 0.8);
@@ -115,26 +137,33 @@ header .estructura {
     align-content: center;
     flex-direction: row;
     position: fixed;
-    bottom: 15px;
+    top: 200px;
     display: flex;
     z-index: 5;
 }
 
-[zonaCSS="/"] .conenedorReserva {
-    background: rgba(255, 255, 255, 0.3);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    cursor: default;
-    user-select: none;
-    -webkit-user-select: none;
-    padding: 15px;
+
+.botonReserva {
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.8);
+}
+.conenedorReserva:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+
+.contenedorPrincipal {
+    display: grid;
+    position: absolute;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    backdrop-filter: blur(50px);
+    padding: 50px;
+    border-radius: 30px;
+    gap: 50px;
+    bottom: 20px;
+}
+.hl {
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    border-radius: 16px;
-    transition: all 250ms;
-    text-decoration: none;
-    color: black;
-    z-index: 5;
 }

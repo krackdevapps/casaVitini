@@ -7,6 +7,7 @@ export const insertarServicioPorReservaUID = async (data) => {
         const contenedor = data.contenedor
         const opcionesSel = data.opcionesSel
         const descuentoTotalServicio = data.descuentoTotalServicio
+        const estadoPagoIDV = data.estadoPagoIDV
 
         const consulta = `
         INSERT INTO "reservaServicios"
@@ -15,14 +16,16 @@ export const insertarServicioPorReservaUID = async (data) => {
         nombre,
         contenedor,
         "opcionesSel",
-        "descuentoTotalServicio"
+        "descuentoTotalServicio",
+        "estadoPagoIDV"
         )
         VALUES (
         $1,
         $2,
         $3,
         $4::jsonb,
-        $5::jsonb
+        $5::jsonb,
+        $6
         )
         RETURNING *
         `;
@@ -31,7 +34,8 @@ export const insertarServicioPorReservaUID = async (data) => {
             nombre,
             contenedor,
             opcionesSel,
-            descuentoTotalServicio
+            descuentoTotalServicio,
+            estadoPagoIDV
         ]
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

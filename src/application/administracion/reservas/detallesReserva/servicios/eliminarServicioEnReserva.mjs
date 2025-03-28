@@ -4,6 +4,8 @@ import { eliminarServicioEnReservaPorServicioUID } from "../../../../../infraest
 import { obtenerServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServicioEnReservaPorServicioUID.mjs"
 import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
+import { reversionDeMovimiento } from "../../../../../shared/inventario/reversionDeMovimiento.mjs"
+import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const eliminarServicioEnReserva = async (entrada) => {
@@ -25,12 +27,12 @@ export const eliminarServicioEnReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
-
+        await campoDeTransaccion("iniciar")
         const servicioEnReserva = await obtenerServicioEnReservaPorServicioUID(servicioUID_enReserva)
-        const reservaUID = Number(servicioEnReserva.reservaUID)
+        const reservaUID = servicioEnReserva.reservaUID
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV
         if (estadoReserva === "cancelada") {
@@ -38,7 +40,25 @@ export const eliminarServicioEnReserva = async (entrada) => {
             throw new Error(error)
         }
 
-        await campoDeTransaccion("iniciar")
+        // const opcionesSel = servicioEnReserva.opcionesSel
+        // for (const oS of Object.entries(opcionesSel)) {
+        //     const contenedorGrupo = oS[1]
+        //     for (const cG of contenedorGrupo) {
+        //         const registroEnlazado = cG.registroEnlazado
+        //         const registroUID = registroEnlazado.registroUID
+
+        //         await reversionDeMovimiento({
+        //             registroUID,
+        //         })
+        //     }
+        // }
+
+        await sincronizarRegistros({
+            servicioExistenteAccesible: servicioEnReserva,
+        })
+
+
+
         await eliminarServicioEnReservaPorServicioUID(servicioUID_enReserva)
         await actualizadorIntegradoDesdeInstantaneas(reservaUID)
         await campoDeTransaccion("confirmar")

@@ -92,11 +92,12 @@ export const totalesBasePorRango = async (data) => {
                 noche.precioNetoNoche = new Decimal(totalNetoNoche).plus(precioNetoApartamento).toFixed(2)
 
                 if (!desglosePorApartamento.hasOwnProperty(apartamentoIDV)) {
+
                     desglosePorApartamento[apartamentoIDV] = {
                         apartamentoUI: (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                             apartamentoIDV,
                             errorSi: "desactivado"
-                        })).apartamentoUI,
+                        }))?.apartamentoUI || apartamentoIDV,
                         totalNeto: new Decimal(0)
                     }
                 }
@@ -114,7 +115,7 @@ export const totalesBasePorRango = async (data) => {
             detallesApartamento.totalNetoConComplementos = "0.00"
             const totalNeto = totales.totalNeto
             estructura.entidades.reserva.global.totales.totalNeto = totalNeto.plus(totalNetoPorApartmento)
-            
+
         })
         const totalNeto = totales.totalNeto
         totales.totalNeto = totalNeto.toFixed(2)

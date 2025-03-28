@@ -24,7 +24,7 @@ export const asociarTitular = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -34,7 +34,7 @@ export const asociarTitular = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const detallesCliente = await obtenerDetallesCliente(clienteUID)

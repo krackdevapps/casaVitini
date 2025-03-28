@@ -15,6 +15,7 @@ export const cambiarVista = async (transaccion) => {
         if (arbol.length > 1 && arbol[0].toLowerCase() === "administracion") {
             zona = arbol[1].toLowerCase()
         }
+
         const controlFiltro = /^[a-z0-9_]+$/;
         let portal
         for (let rama of arbol) {
@@ -174,6 +175,7 @@ export const cambiarVista = async (transaccion) => {
             throw new Error(error)
         }
     } catch (errorCapturado) {
+
         throw errorCapturado;
     }
 }

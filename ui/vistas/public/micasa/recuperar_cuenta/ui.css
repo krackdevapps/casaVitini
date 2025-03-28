@@ -1,11 +1,13 @@
-[zonaCSS="/micasa"] .miCasa_marcoVitiniIDX {
+.miCasa_marcoVitiniIDX {
     display: flex;
     flex-direction: column;
     padding: 10px;
     align-items: center;
 }
-
-[zonaCSS="/micasa"] .vitiniIdLogin {
+.marcoElasticoRelativo {
+    max-width: 920px;
+}
+.vitiniIdLogin {
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -15,7 +17,7 @@
     gap: 6px;
 }
 
-[zonaCSS="/micasa"] .botonID {
+.botonID {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background-color: rgba(0, 0, 0, 0.2);
@@ -30,15 +32,15 @@
     padding-right: 20px;
 }
 
-[zonaCSS="/micasa"] .botonID:hover {
+.botonID:hover {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-[zonaCSS="/micasa"] .botonID:active {
+.botonID:active {
     background-color: black;
 }
 
-[zonaCSS="/micasa"] .bloqueBotonesID {
+.bloqueBotonesID {
     display: flex;
     visibility: hidden;
     pointer-events: none;
@@ -48,7 +50,7 @@
     justify-content: flex-start;
 }
 
-[zonaCSS="/micasa"] .campoID {
+.campoID {
     background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -62,11 +64,11 @@
     transition: background 250ms linear;
 }
 
-[zonaCSS="/micasa"] .campoID::placeholder {
+.campoID::placeholder {
     color: rgba(0, 0, 0, 0.337);
 }
 
-[zonaCSS="/micasa"] .bloqueRespuesta {
+.bloqueRespuesta {
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -83,7 +85,7 @@
     transition: opacity 250ms linear;
 }
 
-[zonaCSS="/micasa"] .botonUsuario,
+.botonUsuario,
 .informacionCerrarSession {
     border-radius: 8px;
     padding: 10px;
@@ -101,12 +103,12 @@
     display: block;
 }
 
-[zonaCSS="/micasa"] .botonUsuario:hover {
+.botonUsuario:hover {
     background-color: rgb(58, 13, 221);
     color: white;
 }
 
-[zonaCSS="/micasa"] .reservaDetallesBloqueGeneral {
+.reservaDetallesBloqueGeneral {
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
@@ -122,7 +124,7 @@
     align-content: center;
 }
 
-[zonaCSS="/micasa"] .reservaDetallesBloqueFecha {
+.reservaDetallesBloqueFecha {
     background-color: rgba(255, 255, 255, 0.3);
     display: flex;
     border-radius: 20px;
@@ -132,7 +134,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="/micasa"] .administracionReservaBloqueDual {
+.administracionReservaBloqueDual {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,7 +143,7 @@
     padding: 8px;
 }
 
-[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_bloqueDual {
+.miCasa_reservas_detallesReservas_bloqueDual {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -150,7 +152,7 @@
     padding: 8px;
 }
 
-[zonaCSS="/micasa"] .administracionReservasDetallesBloqueApartamento {
+.administracionReservasDetallesBloqueApartamento {
 
     margin: 0px;
     display: block;
@@ -169,7 +171,7 @@
     gap: 4px;
 }
 
-[zonaCSS="/micasa"] .apartamentoTituloUIInerte {
+.apartamentoTituloUIInerte {
     margin: 0px;
     padding-left: 10px;
     font-weight: bold;
@@ -180,7 +182,7 @@
     cursor: default;
 }
 
-[zonaCSS="/micasa"] .administracionReservasDetallesBloqueHabitacion {
+.administracionReservasDetallesBloqueHabitacion {
     overflow: hidden;
     background: #00000014;
 
@@ -195,7 +197,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="/micasa"] .habitacionUIInerte {
+.habitacionUIInerte {
 
     padding: 6px;
     border-radius: 7px;
@@ -206,7 +208,7 @@
     color: rgb(62, 62, 62);
 }
 
-[zonaCSS="/micasa"] .administracionReservasDetallesTituloTipoCama {
+.administracionReservasDetallesTituloTipoCama {
     background: rgba(0, 0, 0, 0.2);
     margin: 0px;
     padding: 4px;
@@ -215,7 +217,7 @@
     cursor: default;
 }
 
-[zonaCSS="/micasa"] .reservasDetallesBloqueAlojamiennto {
+.reservasDetallesBloqueAlojamiennto {
     display: grid;
     grid-gap: 4px;
     grid-auto-rows: minmax(auto, auto);
@@ -226,7 +228,7 @@
     align-items: start;
 }
 
-[zonaCSS="/micasa"] .opcionMicasa {
+.opcionMicasa {
     border-radius: 12px;
     padding: 10px;
     margin: 0px;
@@ -241,16 +243,16 @@
     transition: background 250ms linear;
 }
 
-[zonaCSS="/micasa"] .opcionMicasa:hover {
+.opcionMicasa:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="/micasa"] .adminsitracionReservasTituloNombre {
+.adminsitracionReservasTituloNombre {
     font-weight: bold;
     text-align: center;
 }
 
-[zonaCSS="/micasa"] .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
+.miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
     border-radius: 12px;
 
     display: flex;
@@ -263,7 +265,7 @@
     align-items: center;
 }
 
-[zonaCSS="/micasa"] .resertaDetallesPernoctantesSinalojamiento {
+.resertaDetallesPernoctantesSinalojamiento {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     margin: 0px;
@@ -279,7 +281,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
+.administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
     display: flex;
     padding: 4px;
     flex-direction: column;
@@ -287,7 +289,7 @@
     align-content: center;
 }
 
-[zonaCSS="/micasa"] .administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
+.administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
     padding: 4px;
     border-radius: 12px;
     margin: 0px;
@@ -302,7 +304,7 @@
     gap: 4px;
 }
 
-[zonaCSS="/micasa"] .resertaDetallesPropuestaCambioFechaReserva {
+.resertaDetallesPropuestaCambioFechaReserva {
     padding: 4px;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 12px;
@@ -320,7 +322,7 @@
     gap: 4px;
 }
 
-[zonaCSS="/micasa"] .marcoIDX {
+.marcoIDX {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -332,7 +334,7 @@
 
 }
 
-[zonaCSS="/micasa"] .vitiniID_contenedor_opciones {
+.vitiniID_contenedor_opciones {
     display: flex;
     gap: 6px;
     flex-direction: column;
@@ -343,7 +345,7 @@
     margin-top: 12px;
 }
 
-[zonaCSS="/micasa"] .marcoCuenta {
+.marcoCuenta {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -355,7 +357,7 @@
     padding: 10px;
 }
 
-[zonaCSS="/micasa"] .reserva_resumen_desglose_porNoche {
+.reserva_resumen_desglose_porNoche {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -367,18 +369,18 @@
     align-content: center;
 }
 
-[zonaCSS="/micasa"] .reserva_resumen_desglose_pago_titulo {
+.reserva_resumen_desglose_pago_titulo {
     padding: 4px;
     font-weight: bold;
 }
 
-[zonaCSS="/micasa"] .reserva_resumen_desglose_pago_elemento {
+.reserva_resumen_desglose_pago_elemento {
     background-color: #ffffff73;
     padding: 10px;
     border-radius: 10px;
 }
 
-[zonaCSS="/micasa"] .miCasa_marcoIDX_contenedor {
+.miCasa_marcoIDX_contenedor {
     padding: 10px;
     border-radius: 25px;
     backdrop-filter: blur(50px);
@@ -389,7 +391,7 @@
     align-items: center;
 }
 
-[zonaCSS="/micasa"] .infoCuenta {
+.infoCuenta {
     padding: 10px;
     border-radius: 25px;
     backdrop-filter: blur(50px);
@@ -397,7 +399,7 @@
     text-align: center;
 }
 
-[zonaCSS="/micasa"] .enlace {
+.enlace {
     text-decoration: none;
     color: black;
     font-weight: bold;
@@ -405,18 +407,18 @@
     height: fit-content;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_contenedorUsuarioIDX {
+.detallesUsuario_contenedorUsuarioIDX {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_rolUI {
+.detallesUsuario_rolUI {
     text-align: center;
 }
 
-[zonaCSS="/micasa"] .miCuenta_cambiarClave_testo {
+.miCuenta_cambiarClave_testo {
     padding: 6px;
     margin: 0px;
     display: flex;
@@ -424,7 +426,7 @@
     justify-content: center;
 }
 
-[zonaCSS="/micasa"] .miCuenta_cambiarClave_contenedor {
+.miCuenta_cambiarClave_contenedor {
     padding: 10px;
     border-radius: 16px;
     gap: 6px;
@@ -436,7 +438,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="/micasa"] .miCuenta_cambiarClave_botonV1 {
+.miCuenta_cambiarClave_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     padding: 10px;
     border-radius: 10px;
@@ -446,16 +448,16 @@
     cursor: default;
 }
 
-[zonaCSS="/micasa"] .miCuenta_cambiarClave_botonV1:hover {
+.miCuenta_cambiarClave_botonV1:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="/micasa"] .miCuenta_cambioClave_contenedorBotones {
+.miCuenta_cambioClave_contenedorBotones {
     display: flex;
     justify-content: flex-start;
 }
 
-[zonaCSS="/micasa"] .miCuenta_cambiarClave_campoClave {
+.miCuenta_cambiarClave_campoClave {
     outline: none;
     border: none;
     background: rgba(255, 255, 255, 0.3);
@@ -464,7 +466,7 @@
 
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_esferaUsuario {
+.detallesUsuario_esferaUsuario {
     background: rgba(255, 255, 255, 0.1);
     background-image: url(/activos/imagenes/iconoUsuario.svg);
     background-size: cover;
@@ -473,16 +475,16 @@
     border-radius: 100%;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_contenedorDatosGlobales {
+.detallesUsuario_contenedorDatosGlobales {
     padding: 10px;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_usuarioUI {
+.detallesUsuario_usuarioUI {
     font-size: 40px;
     font-weight: bold;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_contenedorDatosUsuario {
+.detallesUsuario_contenedorDatosUsuario {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     border-radius: 20px;
@@ -495,7 +497,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_campoDatosUsuario {
+.detallesUsuario_campoDatosUsuario {
     padding: 10px;
     border-radius: 10px;
     font-size: 13;
@@ -506,7 +508,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_contenedorCampoEInfo {
+.detallesUsuario_contenedorCampoEInfo {
     border-radius: 16px;
     text-decoration: none;
     color: black;
@@ -519,7 +521,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_contenedorBotones {
+.detallesUsuario_contenedorBotones {
     display: flex;
     border-radius: 16px;
     gap: 6px;
@@ -530,7 +532,7 @@
     display: none;
 }
 
-[zonaCSS="/micasa"] .detallesUsuario_botonV1 {
+.detallesUsuario_botonV1 {
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
@@ -542,14 +544,14 @@
     cursor: default;
 }
 
-[zonaCSS="/micasa"] .marcoCuenta .tituloDato {
+.marcoCuenta .tituloDato {
     padding: 8px;
     user-select: none;
     -webkit-user-select: none;
     cursor: default;
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_contenedorSession {
+.miCasa_sessiones_contenedorSession {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     padding: 6px;
@@ -560,7 +562,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_contenedorBloque {
+.miCasa_sessiones_contenedorBloque {
     display: flex;
     gap: 2px;
     border-radius: 10px;
@@ -568,7 +570,7 @@
     padding: 10px;
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_textoIP {
+.miCasa_sessiones_textoIP {
     display: flex;
     gap: 2px;
     border-radius: 10px;
@@ -576,12 +578,12 @@
     padding: 10px;
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_texto {
+.miCasa_sessiones_texto {
     display: flex;
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_marcoGlobal {
+.miCasa_sessiones_marcoGlobal {
     display: flex;
     gap: 6px;
     padding: 10px;
@@ -592,7 +594,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_botonCerrarSession {
+.miCasa_sessiones_botonCerrarSession {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 10px;
@@ -606,11 +608,11 @@
     -webkit-user-select: none;
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_botonCerrarSession:hover {
+.miCasa_sessiones_botonCerrarSession:hover {
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_botonV2 {
+.miCasa_sessiones_botonV2 {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     padding: 10px;
@@ -629,7 +631,7 @@
     background: rgba(255, 255, 255, 0.6);
 }
 
-[zonaCSS="/micasa"] .miCasa_sessiones_marcoBotones {
+.miCasa_sessiones_marcoBotones {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -637,7 +639,7 @@
     padding: 10px;
 }
 
-[zonaCSS="/micasa"] .miCasa_marcoUsuario {
+.miCasa_marcoUsuario {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -649,7 +651,7 @@
     align-content: center;
 }
 
-[zonaCSS="/micasa"] .miCasa_marcoUsuario_opcion {
+.miCasa_marcoUsuario_opcion {
     background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
     border-radius: 16px;
@@ -667,7 +669,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .miCasa_crearCuenta_contenedorCrearCuenta {
+.miCasa_crearCuenta_contenedorCrearCuenta {
 
     border-radius: 16px;
     padding: 6px;
@@ -676,7 +678,7 @@
     flex-direction: column;
 }
 
-[zonaCSS="/micasa"] .miCasa_crearCuenta_campo {
+.miCasa_crearCuenta_campo {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     padding: 10px;
@@ -687,7 +689,7 @@
     appearance: none;
 }
 
-[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_marcoAlojamiento {
+.miCasa_reservas_detallesReservas_marcoAlojamiento {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -699,7 +701,7 @@
     gap: 4px;
 }
 
-[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_contenedorGeneralReserva {
+.miCasa_reservas_detallesReservas_contenedorGeneralReserva {
 
     display: flex;
     flex-direction: column;
@@ -713,7 +715,7 @@
     gap: 6px;
 }
 
-[zonaCSS="/micasa"] .miCasa_reservas_detallesReservas_contenedorTotales {
+.miCasa_reservas_detallesReservas_contenedorTotales {
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
     background: rgba(255, 255, 255, 0.3);
@@ -725,7 +727,7 @@
     gap: 4px;
 }
 
-[zonaCSS="/micasa"] .componentes_ui_desloseTotales_contenedor {
+.componentes_ui_desloseTotales_contenedor {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -768,20 +770,20 @@
 }
 
 @media (max-width: 720px) {
-    [zonaCSS="/micasa"] .detallesUsuario_esferaUsuario {
+    .detallesUsuario_esferaUsuario {
         height: 80px;
         width: 80px;
     }
 
-    [zonaCSS="/micasa"] .detallesUsuario_usuarioUI {
+    .detallesUsuario_usuarioUI {
         font-weight: bold;
     }
 
-    [zonaCSS="/micasa"] .detallesUsuario_contenedorGlobal {
+    .detallesUsuario_contenedorGlobal {
         border-radius: 16px;
     }
 
-    [zonaCSS="/micasa"] .miCasa_marcoIDX_contenedor {
+    .miCasa_marcoIDX_contenedor {
         padding: 10px;
         border-radius: 25px;
         backdrop-filter: blur(50px);
@@ -792,27 +794,27 @@
         align-items: flex-start;
     }
 
-    [zonaCSS="/micasa"] .detallesUsuario_contenedorUsuarioIDX {
+    .detallesUsuario_contenedorUsuarioIDX {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         flex-direction: row;
     }
 
-    [zonaCSS="/micasa"] .detallesUsuario_rolUI {
+    .detallesUsuario_rolUI {
         text-align: left;
     }
 
 }
 
 @media screen and (max-width: 1280px) {
-    [zonaCSS="/micasa"] .reservasDetallesBloqueAlojamiennto {
+    .reservasDetallesBloqueAlojamiennto {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media screen and (max-width: 720px) {
-    [zonaCSS="/micasa"] .reservasDetallesBloqueAlojamiennto {
+    .reservasDetallesBloqueAlojamiennto {
         grid-template-columns: repeat(1, 1fr);
     }
 }
@@ -820,7 +822,7 @@
 @media screen and (max-width: 720px) {
 
 
-    [zonaCSS="/micasa"] .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
+    .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
         display: flex;
         flex-direction: column;
     }

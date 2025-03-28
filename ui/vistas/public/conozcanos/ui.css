@@ -1,5 +1,11 @@
 body {
-    background-color: rgb(255, 254, 245) !important;
+    /* background-color: rgb(255, 254, 245); */
+    /* background-image: url(/activos/imagenes/conozcanos/foto1_comprimida.jpg); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgb(255, 254, 245);
+
+    background-position: center;
 }
 
 main {
@@ -84,6 +90,11 @@ header .estructura {
 
 }
 
+.superContainer {
+    display: grid;
+    grid-template-rows: 100vh auto;
+
+}
 
 
 .contactos_bannerTextoInterno {
@@ -121,7 +132,7 @@ header .estructura {
 
 
 .plaza_conozcanos_primerBanner {
-    background-image: url("/activos/imagenes/leonciudad.jpg");
+    background-image: url("/activos/imagenes/transparente.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: scroll;
@@ -129,104 +140,113 @@ header .estructura {
 }
 
 .plaza_conozcanos_segundoBannerPalarax {
-    background-image: url("/activos/imagenes/fotos/image00004.jpeg");
+    background-image: url("/activos/imagenes/transparente.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 .plaza_conozcanos_segundoBannerPalarax2 {
-    background-image: url("/activos/imagenes/fotos/image00016.jpeg");
+    background-image: url("/activos/imagenes/transparente.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 .plaza_conozcanos_segundoBannerPalarax3 {
-    background-image: url("/activos/imagenes/fotos/image00014.jpeg");
+    background-image: url("/activos/imagenes/transparente.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
 }
 
 
-[zonaCSS="/conozcanos"] .texto111 {
+.texto111 {
     transform: translateY(0) translateZ(0) !important;
 }
 
-[zonaCSS="/conozcanos"] .fondoInicio {
+.fondoInicio {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
     /* background-image: url("/activos/imagenes/zonas_comunes/image00009V3.jpeg"); */
-    background-image: url("/activos/imagenes/conozcanos/foto1.jpg");
+    /* background-image: url("/activos/imagenes/conozcanos/foto1_comprimida.jpg"); */
 
 }
 
-[zonaCSS="/conozcanos"] .fondo1 {
+.fondo1 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/fotos/zonas_comunes/image00004.jpeg");
+    background-image: url("/activos/imagenes/transparente.png");
 }
 
-[zonaCSS="/conozcanos"] .fondo2 {
+.fondo2 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/imagen2.jpg");
+    /* background-image: url("/activos/imagenes/imagen2.jpg"); */
+    transition: background 1s linear;
+    background-image: url("/activos/imagenes/transparente.png");
 }
 
-[zonaCSS="/conozcanos"] .fondo3 {
+.fondo3 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/fotos/playaagua.jpeg");
+    background-image: url("/activos/imagenes/transparente.png");
+    transition: background 1s linear;
+
+    /* background-image: url("/activos/imagenes/fotos/playaagua.jpeg"); */
 }
 
-[zonaCSS="/conozcanos"] .fondo4 {
+.fondo4 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/fotos/salinas.jpg");
+    /* background-image: url("/activos/imagenes/fotos/salinas.jpg"); */
+    background-image: url("/activos/imagenes/transparente.png");
+    transition: background 1s linear;
 }
 
-[zonaCSS="/conozcanos"] .fondo5 {
+.fondo5 {
     background-position: center 0%;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/volcan3.jpg");
+    /* background-image: url("/activos/imagenes/volcan3.jpg"); */
+    background-image: url("/activos/imagenes/transparente.png");
+    transition: background 1s linear;
 }
 
-[zonaCSS="/conozcanos"] .fondo6 {
+.fondo6 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/nic.jpeg");
+    background-image: url("/activos/imagenes/transparente.png");
 }
 
-[zonaCSS="/conozcanos"] .fondo7 {
+.fondo7 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/fotos/image00016.jpeg");
+    background-image: url("/activos/imagenes/transparente.png");
 }
 
-[zonaCSS="/conozcanos"] .fondo8 {
+.fondo8 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/montana.jpg");
+    background-image: url("/activos/imagenes/transparente.png");
 }
 
-[zonaCSS="/conozcanos"] .fondo8 {
+.fondo8 {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("/activos/imagenes/leonciudad.jpg");
+    background-image: url("/activos/imagenes/transparente.png");
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax {
+.conozcanos .parallax {
 
     height: 100vh;
     overflow-x: hidden;
@@ -237,13 +257,13 @@ header .estructura {
 }
 
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax::-webkit-scrollbar {
+.conozcanos .parallax::-webkit-scrollbar {
     width: 0px;
 
     height: 0px;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax__group {
+.conozcanos .parallax__group {
     position: relative;
     height: 500px;
 
@@ -252,7 +272,7 @@ header .estructura {
     transform-style: preserve-3d;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax__layer {
+.conozcanos .parallax__layer {
     position: absolute;
     top: 0;
     left: 0;
@@ -262,20 +282,20 @@ header .estructura {
     -webkit-transform-origin-x: 100%;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .rojo {
+.conozcanos .rojo {
 
     background: grey;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .azul {
+.conozcanos .azul {
     background: blue;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .turquesa {
+.conozcanos .turquesa {
     background: turquoise;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .capaFondoFinal {
+.conozcanos .capaFondoFinal {
     background-color: cornflowerblue;
     position: absolute;
     height: 100%;
@@ -283,13 +303,13 @@ header .estructura {
     z-index: -10;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--fore {
+.conozcanos .parallax__layer--fore {
     -webkit-transform: translateZ(90px) scale(.7);
     transform: translateZ(90px) scale(.7);
     z-index: 1;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--base {
+.conozcanos .parallax__layer--base {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     z-index: 4;
@@ -298,19 +318,19 @@ header .estructura {
     overflow: hidden;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--back {
+.conozcanos .parallax__layer--back {
     -webkit-transform: translateZ(-300px) scale(2);
     transform: translateZ(-300px) scale(2);
     z-index: 3;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .parallax__layer--deep {
+.conozcanos .parallax__layer--deep {
     -webkit-transform: translateZ(-600px) scale(3);
     transform: translateZ(-600px) scale(3);
     z-index: 2;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .title {
+.conozcanos .title {
     color: white;
     text-align: center;
     position: absolute;
@@ -322,55 +342,55 @@ header .estructura {
     font-size: 15px;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .textoAnterior {
+.conozcanos .textoAnterior {
     top: -50vh;
     color: white;
     font-size: 30px;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .ultimoTexto {
+.conozcanos .ultimoTexto {
     top: 225vh;
     color: white;
     font-size: 30px;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group1 {
+.conozcanos #group1 {
     z-index: 10;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group2 {
+.conozcanos #group2 {
     z-index: 11;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group3 {
+.conozcanos #group3 {
     z-index: 9;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group4 {
+.conozcanos #group4 {
     z-index: 11;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group5 {
+.conozcanos #group5 {
     z-index: 3;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group6 {
+.conozcanos #group6 {
     z-index: 4;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group7 {
+.conozcanos #group7 {
     z-index: 2;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos #group8 {
+.conozcanos #group8 {
     z-index: 3;
 }
 
-[zonaCSS="/conozcanos"] .conozcanos .transparente {
+.conozcanos .transparente {
     background: transparent;
 }
 
-[zonaCSS="/conozcanos"] .texto_v2_parallax {
+.texto_v2_parallax {
     font-size: 45px;
     font-weight: bold;
     color: rgb(255 255 255 / 85%);
@@ -391,7 +411,7 @@ header .estructura {
     }
 }
 
-[zonaCSS="/conozcanos"] [animacion="contenedorTexto"] {
+[animacion="contenedorTexto"] {
     view-timeline-name: --text;
     view-timeline-axis: block;
     animation-timeline: --text;
@@ -400,7 +420,7 @@ header .estructura {
     animation-fill-mode: both;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax {
+.contenedorParalax {
     display: flex;
     flex-direction: column;
     /* max-width: 1480px; */
@@ -408,11 +428,20 @@ header .estructura {
     /* padding-right: 20px; */
     /* width: 100%; */
     gap: 80px;
+    /* background-color: rgb(255, 254, 245); */
+    margin-top: 120px;
+    padding-bottom: 20px;
+
 }
 
+.titulo1 {
+    font-size: 30px;
+    padding-left: 50px;
+    color: #2f2622;
+}
 
 @media (max-width: 1080px) {
-    [zonaCSS="/conozcanos"] .contenedorParalax {
+    .contenedorParalax {
         max-width: 2160px;
         gap: 80px;
 
@@ -454,7 +483,7 @@ header .estructura {
 
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .parallax {
+.contenedorParalax .parallax {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -464,11 +493,11 @@ header .estructura {
     flex-direction: column;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .primera_imagen {
+.contenedorParalax .primera_imagen {
     transition: all 1ms linear;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .parallax img {
+.contenedorParalax .parallax img {
     max-width: none;
     width: auto;
     height: 100%;
@@ -478,7 +507,7 @@ header .estructura {
     background-size: cover;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .imagenParalaje {
+.contenedorParalax .imagenParalaje {
     height: 100% !important;
     width: 100% !important;
     top: 0;
@@ -486,7 +515,7 @@ header .estructura {
     background-size: cover;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .parallax_comenzado {
+.contenedorParalax .parallax_comenzado {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -531,7 +560,7 @@ header .estructura {
 
 }
 
-[zonaCSS="/conozcanos"] .contenedorImagenNecesario {
+.contenedorImagenNecesario {
     overflow: hidden;
     /* border-radius: 0px; */
     z-index: 100;
@@ -539,7 +568,7 @@ header .estructura {
     width: 100%;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .texto_animado {
+.contenedorParalax .texto_animado {
     font-size: 50px;
     font-weight: bold;
     color: white;
@@ -551,7 +580,7 @@ header .estructura {
     overflow: hidden;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .texto {
+.contenedorParalax .texto {
     padding-left: 50px;
     padding-right: 50px;
     z-index: 2;
@@ -560,8 +589,8 @@ header .estructura {
     font-size: 15px;
 }
 
-[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll,
-[zonaCSS="/conozcanos"] .contenedorParalax .icon-scroll {
+.contenedorParalax .icon-scroll,
+.contenedorParalax .icon-scroll {
     pointer-events: none;
     width: 40px;
     height: 70px;
@@ -606,19 +635,36 @@ header .estructura {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    padding-top: 30px;
 }
 
 .textoFirst {
-    padding-top: 40px;
+    padding-top: 10px;
     /* padding-bottom: 20px; */
-    padding-left: 80px;
+    padding-left: 50px;
     padding-right: 50px;
     color: #2f2622;
     font-weight: 550;
-    font-size: 15px;
+    font-size: 16px;
 
 
 
+}
+.textoLateralFoto {
+    font-family: opensans-variable;
+    font-size: 16px;
+    text-align: left;
+    color: #2f2622;
+    font-weight: 550;
+
+}
+.tituloTextoLateral {
+    font-family: opensans-variable;
+    font-size: 30px;
+    text-align: left;
+    color: #2f2622;
+    
+    font-weight: 700;
 }
 
 .firstTextContainer {
@@ -706,7 +752,6 @@ header .estructura {
     width: 100%;
     height: 100%;
     border-radius: 0px;
-    background-color: green;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -780,15 +825,15 @@ header .estructura {
 .superContainerActividades {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 60px;
     align-items: center;
     width: 100%;
 }
 
 .tituloActividades {
     text-align: center;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     font-size: 60px;
     color: #271f1c;
     font-weight: bold;
@@ -805,9 +850,10 @@ header .estructura {
 .textoAdrenalinaCompartido {
     text-align: justify;
     font-weight: 550;
-    font-size: 15px;
+    font-size: 16px;
     padding-left: 12.5%;
     padding-right: 12.5%;
+    max-width: 1300px;
 }
 
 .textaArribaAdrenaliina {
@@ -824,19 +870,27 @@ header .estructura {
 }
 
 .gridImagen1 {
-    background-image: url(/activos/imagenes/actividades/caballos.jpg);
+    /* background-image: url(/activos/imagenes/actividades/caballos.jpg); */
+    transition: background 1s linear;
+    background-image: url("/activos/imagenes/transparente.png");
 }
 
 .gridImagen2 {
-    background-image: url(/activos/imagenes/actividades/pesca1.jpg);
+    transition: background 1s linear;
+    background-image: url("/activos/imagenes/transparente.png");
+    /* background-image: url(/activos/imagenes/actividades/pesca1.jpg); */
 }
 
 .gridImagen3 {
-    background-image: url(/activos/imagenes/actividades/skate.jpg);
+    transition: background 1s linear;
+    background-image: url("/activos/imagenes/transparente.png");
+    /* background-image: url(/activos/imagenes/actividades/skate.jpg); */
 }
 
 .gridImagen4 {
-    background-image: url(/activos/imagenes/actividades/surf.jpg);
+    transition: background 1s linear;
+    background-image: url("/activos/imagenes/transparente.png");
+    /* background-image: url(/activos/imagenes/actividades/surf.jpg); */
 }
 
 .tituloFotoActividades {
@@ -866,6 +920,7 @@ header .estructura {
     color: #4e3f39;
     font-weight: 550;
     text-align: justify;
+    align-items: flex-start;
     /* overflow: hidden; */
     /* padding-top: 56px; */
 }
@@ -943,6 +998,7 @@ header .estructura {
         gap: 40px;
 
     }
+
     .superContainerFoto>.cell-1 {
         order: 1;
     }
@@ -981,6 +1037,7 @@ header .estructura {
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-items: flex-start;
 }
 
 .superContainerIcons {

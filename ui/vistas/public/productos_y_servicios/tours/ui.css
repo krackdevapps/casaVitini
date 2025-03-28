@@ -10,11 +10,13 @@ main {
     position: absolute;
     padding-bottom: 0px !important;
 }
-
-header .estructura {
-    background-color: rgba(0, 0, 0, 0.2);
+.menuGlobal_styloCompartido {
+    background-color: rgba(0, 0, 0, 0.1);
 }
-
+.botonMenuResponsivo {
+    background-image: url(/activos/iconos/menu_blanco.svg);
+    background-color: rgba(0, 0, 0, 0.1);
+}
 .uiCategoria {
     color: white;
 }
@@ -164,7 +166,7 @@ header .estructura {
 
 @media (max-width: 1080px) {
     .containerItem {
-        height: 250px;
+        /* height: 250px; */
         width: 100vw;
         justify-content: flex-end;
         /* border-bottom: 2px white solid; */

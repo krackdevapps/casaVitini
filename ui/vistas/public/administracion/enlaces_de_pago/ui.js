@@ -28,7 +28,7 @@ casaVitini.view = {
         botonCrearEnlace.classList.add("gestionDeOfertasBotonCrearOferta")
         botonCrearEnlace.textContent = "Crear un enlace de pago"
         botonCrearEnlace.setAttribute("href", "/administracion/enlaces_de_pago/crear_enlace")
-        botonCrearEnlace.setAttribute("vista", "/administracion/enlaces_de_pago/crear_enlace")
+
         botonCrearEnlace.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
         contenedor.appendChild(contenedorBotones)
@@ -78,7 +78,7 @@ casaVitini.view = {
                     espacioEnlacesRenderizados.appendChild(enlaceUI)
 
 
-       
+
 
                     const enlaceUIContenedor = document.createElement("div")
                     enlaceUIContenedor.classList.add("paddingLateral14", "flexVertical", "gap14", "paddingVertical14")
@@ -90,7 +90,7 @@ casaVitini.view = {
                     tituloEnlace.setAttribute("valorInicial", nombreEnlace)
                     tituloEnlace.textContent = nombreEnlace
                     enlaceUIContenedor.appendChild(tituloEnlace)
-                    
+
                     const precioUI = document.createElement("p")
                     precioUI.textContent = totalReserva + "$ " + estadoPagoUI[estadoPagoIDV]
                     enlaceUIContenedor.appendChild(precioUI)
@@ -105,7 +105,7 @@ casaVitini.view = {
                     const tituloReserva = document.createElement("a")
                     tituloReserva.classList.add("botonV1BlancoIzquierda")
                     tituloReserva.setAttribute("href", "/administracion/reservas/reserva:" + reservaUID + "/zona:enlaces_de_pago")
-                    tituloReserva.setAttribute("vista", "/administracion/reservas/reserva:" + reservaUID + "/zona:enlaces_de_pago")
+
                     tituloReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     tituloReserva.textContent = `Reserva ${reservaUID} (Ir a la reserva)`
                     enlaceUI.appendChild(tituloReserva)
@@ -113,7 +113,7 @@ casaVitini.view = {
                     const irAlEnlace = document.createElement("a")
                     irAlEnlace.classList.add("botonV1BlancoIzquierda")
                     irAlEnlace.setAttribute("href", "/pagos/" + enlaceUID)
-                    irAlEnlace.setAttribute("vista", "/pagos/" + enlaceUID)
+
                     irAlEnlace.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     irAlEnlace.textContent = "Ir al enlace"
                     enlaceUI.appendChild(irAlEnlace)
@@ -179,14 +179,14 @@ casaVitini.view = {
                 const codigoUI = document.createElement("a")
                 codigoUI.classList.add("detallesEnlace_codigo")
                 codigoUI.setAttribute("href", "/pago: " + codigo)
-                codigoUI.setAttribute("vista", "/pago: " + codigo)
+
                 codigoUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 codigoUI.textContent = "Ir al enlace del pago"
                 contenedorDetallesEnlace.appendChild(codigoUI)
                 const reservaUI = document.createElement("a")
                 reservaUI.classList.add("detallesEnlace_codigo")
                 reservaUI.setAttribute("href", "/administracion/reservas/" + reserva)
-                reservaUI.setAttribute("vista", "/administracion/reservas/" + reserva)
+
                 reservaUI.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 reservaUI.textContent = `Ir a la reserva (${reserva})`
                 contenedorDetallesEnlace.appendChild(reservaUI)

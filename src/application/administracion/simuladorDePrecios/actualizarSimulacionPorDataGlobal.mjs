@@ -2,7 +2,7 @@ import { Mutex } from "async-mutex";
 import { validarDataGlobalSimulacion } from "../../../shared/contenedorFinanciero/entidades/simulacion/validarDataGlobalSimulacion.mjs";
 import { actualizarRangoFechasPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/actualizarRangoFechasPorSimulacionUID.mjs";
 import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
-import { controladorGeneracionDesgloseFinanciero } from "../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs";
+import { soloFiltroDataGlobal } from "../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs";
 
 export const actualizarSimulacionPorDataGlobal = async (entrada) => {
     const mutex = new Mutex()
@@ -34,11 +34,11 @@ export const actualizarSimulacionPorDataGlobal = async (entrada) => {
             zonaIDV
         })
 
-        const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
+        const llavesFaltantes = await soloFiltroDataGlobal(simulacionUID)
         const ok = {
             ok: "Se ha guardado la nueva simulación",
             simulacionUID: data.simulacionUID,
-            ...postProcesadoSimualacion
+            llavesFaltantes
         }
         return ok
     } catch (errorCapturado) {

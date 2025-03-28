@@ -80,14 +80,14 @@ casaVitini.view = {
         const botonReservasPendientes = document.createElement("a")
         botonReservasPendientes.classList.add("administracion_reservas_contenedorBotonesGlobales")
         botonReservasPendientes.textContent = "Reservas pendientes de revisión"
-        botonReservasPendientes.setAttribute("vista", "/administracion/reservas/pendientes_de_revision")
+
         botonReservasPendientes.setAttribute("href", "/administracion/reservas/pendientes_de_revision")
         botonReservasPendientes.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotonesGlobales.appendChild(botonReservasPendientes)
         const botonCrearReserva = document.createElement("a")
         botonCrearReserva.classList.add("administracion_reservas_contenedorBotonesGlobales")
         botonCrearReserva.textContent = "Crear una nueva reserva"
-        botonCrearReserva.setAttribute("vista", "/administracion/reservas/nueva")
+
         botonCrearReserva.setAttribute("href", "/administracion/reservas/nueva")
         botonCrearReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotonesGlobales.appendChild(botonCrearReserva)
@@ -624,7 +624,7 @@ casaVitini.view = {
             return
         }
 
-        const reservas = respuestaServidor.reservas
+        const reservas = respuestaServidor?.reservas || []
         const paginasTotales = respuestaServidor.paginasTotales
         const pagina = respuestaServidor.pagina
 

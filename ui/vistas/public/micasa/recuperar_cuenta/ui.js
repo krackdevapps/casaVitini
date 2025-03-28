@@ -83,14 +83,14 @@ casaVitini.view = {
             botonIniciarReserva.classList.add("botonV1BlancoIzquierda")
             botonIniciarReserva.textContent = "Ir a generar un nuevo código"
             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
-            botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
+
             botonIniciarReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIniciarReserva)
             const botonIrARegistrarse = document.createElement("a")
             botonIrARegistrarse.classList.add("botonV1BlancoIzquierda")
             botonIrARegistrarse.textContent = "Ir al portal de MiCasa"
             botonIrARegistrarse.setAttribute("href", "/micasa")
-            botonIrARegistrarse.setAttribute("vista", "/micasa")
+
             botonIrARegistrarse.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIrARegistrarse)
 
@@ -119,21 +119,21 @@ casaVitini.view = {
             botonIniciarReserva.classList.add("botonV1BlancoIzquierda")
             botonIniciarReserva.textContent = "Volver a generar otro código (Acabo de olvidar la nueva clave)"
             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
-            botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
+
             botonIniciarReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
             const botonIrARegistrarse = document.createElement("a")
             botonIrARegistrarse.classList.add("botonV1BlancoIzquierda")
             botonIrARegistrarse.textContent = "Ir al portal de MiCasa"
             botonIrARegistrarse.setAttribute("href", "/micasa")
-            botonIrARegistrarse.setAttribute("vista", "/micasa")
+
             botonIrARegistrarse.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
             const botonInciarSession = document.createElement("a")
             botonInciarSession.classList.add("botonV1BlancoIzquierda")
             botonInciarSession.textContent = "Ir a la página principal"
             botonInciarSession.setAttribute("href", "/")
-            botonInciarSession.setAttribute("vista", "/")
+
             botonInciarSession.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
             marcoElasticoRelatico.appendChild(marcoElastico)
@@ -161,21 +161,21 @@ casaVitini.view = {
             botonIniciarReserva.classList.add("plaza_reservas_reservaConfirmada_banner")
             botonIniciarReserva.textContent = "Volver a generar otro código (acabo de olvidar la nueva clave)"
             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
-            botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
+
             botonIniciarReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
             const botonIrARegistrarse = document.createElement("a")
             botonIrARegistrarse.classList.add("plaza_reservas_reservaConfirmada_banner")
             botonIrARegistrarse.textContent = "Ir al portal de MiCasa"
             botonIrARegistrarse.setAttribute("href", "/micasa")
-            botonIrARegistrarse.setAttribute("vista", "/micasa")
+
             botonIrARegistrarse.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
             const botonInciarSession = document.createElement("a")
             botonInciarSession.classList.add("plaza_reservas_reservaConfirmada_banner")
             botonInciarSession.textContent = "Ir a la página principal"
             botonInciarSession.setAttribute("href", "/")
-            botonInciarSession.setAttribute("vista", "/")
+
             botonInciarSession.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
             marcoElasticoRelatico.appendChild(marcoElastico)

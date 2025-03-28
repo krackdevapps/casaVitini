@@ -15,23 +15,50 @@ import { disponibilidadApartamentos } from "../../../shared/reservas/nuevaReserv
 export const preciosPorSeleccion = async (entrada) => {
     const mutex = new Mutex()
     try {
-        if (!await interruptor("aceptarReservasPublicas")) {
-            throw new Error(mensajesUI.aceptarReservasPublicas);
-        }
+ 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
-            numeroDeLLavesMaximo: 3
+            numeroDeLLavesMaximo: 4
         })
 
-        const fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: entrada.body.fechaEntrada,
-            nombreCampo: "La fecha de entrada en preciosPorSeleccion"
+        const tipoRango = validadoresCompartidos.tipos.cadena({
+            string: entrada.body.tipoRango,
+            nombreCampo: "El tipoRango",
+            filtro: "strictoIDV",
+            sePermiteVacio: "no",
+            limpiezaEspaciosAlrededor: "si",
+        })
+        console.log("ent", entrada.body)
+
+        let fechaEntrada
+        let fechaSalida
+
+        if (tipoRango === "personalizado") {
+            fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: entrada.body.fechaEntrada,
+                nombreCampo: "La fecha de entrada en preciosPorSeleccion"
+            }
+            ))
+            fechaSalida = (await validadoresCompartidos.fechas.validarFecha_ISO({
+                fecha_ISO: entrada.body.fechaSalida,
+                nombreCampo: "La fecha de salida en preciosPorSeleccion"
+            }))
+            if (!await interruptor("aceptarReservasPublicas")) {
+                throw new Error(mensajesUI.aceptarReservasPublicas);
+            }
+        } else if (tipoRango === "presente") {
+            const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
+            const tiempoZH = DateTime.now().setZone(zonaHoraria);
+            const fechaActual = tiempoZH.toISODate();
+            const fechaActualDiaSiguiente = tiempoZH.plus({day: 1}).toISODate();
+
+            fechaEntrada = fechaActual
+            fechaSalida = fechaActualDiaSiguiente
+        } else {
+            throw new Error("La llave tipoRango solo espera personalizo o presente")
+
         }
-        ))
-        const fechaSalida = (await validadoresCompartidos.fechas.validarFecha_ISO({
-            fecha_ISO: entrada.body.fechaSalida,
-            nombreCampo: "La fecha de salida en preciosPorSeleccion"
-        }))
+
         const apartamentosIDVARRAY = validadoresCompartidos.tipos.array({
             array: entrada.body.apartamentosIDVARRAY,
             filtro: "strictoIDV",
@@ -67,18 +94,23 @@ export const preciosPorSeleccion = async (entrada) => {
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
-        await validarHoraLimitePublica({
-            fechaEntrada
-        })
-        await limitesReservaPublica({
-            fechaEntrada: fechaEntrada,
-            fechaSalida: fechaSalida
-        })
-        await disponibilidadApartamentos({
-            fechaEntrada,
-            fechaSalida,
-            apartamentosIDVArray: apartamentosIDVARRAY
-        })
+      
+        if (tipoRango === "personalizado") {
+            await validarHoraLimitePublica({
+                fechaEntrada
+            })
+            await limitesReservaPublica({
+                fechaEntrada: fechaEntrada,
+                fechaSalida: fechaSalida
+            })    
+            await disponibilidadApartamentos({
+                fechaEntrada,
+                fechaSalida,
+                apartamentosIDVArray: apartamentosIDVARRAY
+            })
+        }
+        
+
         const desgloseFinanciero = await procesador({
             entidades: {
                 reserva: {

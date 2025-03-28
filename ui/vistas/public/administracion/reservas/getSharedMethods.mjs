@@ -6,7 +6,6 @@ import { sharedMethods } from "../gestion_de_ofertas/sharedMethods.mjs"
 import { reservaComponentes } from "./sharedMethods.mjs"
 
 export const shared = () => {
-
     return {
         ...reservaComponentes,
         ...contenedorFechasUI,

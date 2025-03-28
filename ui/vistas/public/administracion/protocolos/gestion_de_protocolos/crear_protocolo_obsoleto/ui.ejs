@@ -1,0 +1,33 @@
+<div class="marcoElasticoRelativo" contenedor="menu">
+    <div class="flexVertical gap10">
+        <div class="colorGrisV1 negrita padding10">
+            Crear protocolo
+        </div>
+        <select campo="selectorAlojamiento">
+            <option value="" disabled selected>
+                Seleciona el alojamiento para este protocolo
+            </option>
+        </select>
+
+        <!-- <p class="padding16">Inventario del alojamiento</p> -->
+        <div class="flexVertical borderRadius22 borderGrey1 padding6 gap6">
+            <div class="flexHorizontal">
+                <div class="botonV1BlancoIzquierda" boton="insertarElementoDelInventario">Insertar elemento del
+                    inventario</div>
+            </div>
+
+            <div contenedor="inventarioDelAlojamiento" class="backgroundGrey1 padding6 borderRadius18">
+                <p class="padding10">Inserta elementos del inventario general en el inventario del alojamiento</p>
+            </div>
+        </div>
+
+        <div class="flexVertical borderRadius22 borderGrey1 padding6 gap6">
+            <div class="flexHorizontal">
+                <div class="botonV1BlancoIzquierda" boton="insertarTarea">Crear tarea</div>
+            </div>
+            <div contenedor="tareasDelAlojamiento" class="backgroundGrey1 padding6 borderRadius18">
+                <p class="padding10">Crea tareas de preparación del alojamiento</p>
+            </div>
+        </div>
+    </div>
+</div>

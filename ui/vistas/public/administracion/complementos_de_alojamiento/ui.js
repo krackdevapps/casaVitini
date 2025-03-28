@@ -54,7 +54,7 @@ casaVitini.view = {
             const contenedor = document.createElement("a")
             contenedor.setAttribute("apartamentoIDV", apartamentoIDV)
             contenedor.href = "/administracion/complementos_de_alojamiento/alojamiento:" + apartamentoIDV
-            contenedor.setAttribute("vista", "/administracion/complementos_de_alojamiento/alojamiento:" + apartamentoIDV)
+
             contenedor.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedor.classList.add("flexVertical", "gap6", "backgroundGrey1", "borderRadius14", "padding14", "ratonDefault", "comportamientoBoton")
 
@@ -95,7 +95,7 @@ casaVitini.view = {
                 const botonCrearCuenta = document.createElement("a")
                 botonCrearCuenta.classList.add("botonV1")
                 botonCrearCuenta.setAttribute("href", `/administracion/complementos_de_alojamiento/alojamiento:${apartamentoIDV}/nuevo`)
-                botonCrearCuenta.setAttribute("vista", `/administracion/complementos_de_alojamiento/alojamiento:${apartamentoIDV}/nuevo`)
+
                 botonCrearCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 botonCrearCuenta.textContent = "Crear complemento"
                 contenedorBotones.appendChild(botonCrearCuenta)
@@ -153,7 +153,7 @@ casaVitini.view = {
 
                 const contenedor = document.createElement("a")
                 contenedor.setAttribute("href", `/administracion/complementos_de_alojamiento/complemento:${complementoUID}`)
-                contenedor.setAttribute("vista", `/administracion/complementos_de_alojamiento/complemento:${complementoUID}`)
+
                 contenedor.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 contenedor.classList.add(
                     "flexVertical",

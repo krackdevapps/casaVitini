@@ -31,7 +31,7 @@ casaVitini.view = {
         botonIrAlCalendario.classList.add("botonV1Blanco")
         botonIrAlCalendario.textContent = "Ver comportamientos en el calendario"
         botonIrAlCalendario.setAttribute("href", "/administracion/calendario/capa:todos_los_comportamientos_de_precio/capa:todos_los_precios_sumados")
-        botonIrAlCalendario.setAttribute("vista", "/administracion/calendario/capa:todos_los_comportamientos_de_precio/capa:todos_los_precios_sumados")
+
         botonIrAlCalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotones.appendChild(botonIrAlCalendario)
 
@@ -40,7 +40,7 @@ casaVitini.view = {
         botonCrearOfertas.classList.add("botonV1Blanco")
         botonCrearOfertas.textContent = "Crear un comportamiento de precios"
         botonCrearOfertas.setAttribute("href", "/administracion/comportamiento_de_precios/crear_comportamiento")
-        botonCrearOfertas.setAttribute("vista", "/administracion/comportamiento_de_precios/crear_comportamiento")
+
         botonCrearOfertas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotones.appendChild(botonCrearOfertas)
 
@@ -287,7 +287,7 @@ casaVitini.view = {
 
         const botonEntrar = document.createElement("a")
         botonEntrar.setAttribute("href", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
-        botonEntrar.setAttribute("vista", "/administracion/comportamiento_de_precios/comportamiento:" + comportamientoUID)
+
         botonEntrar.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         botonEntrar.classList.add("botonV1BlancoIzquierda")
         botonEntrar.textContent = "Editar el comportamiento de precio"
@@ -308,7 +308,7 @@ casaVitini.view = {
 
         const botonIrACalendario = document.createElement("a")
         botonIrACalendario.setAttribute("href", urlFinal)
-        botonIrACalendario.setAttribute("vista", urlFinal)
+
         botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         botonIrACalendario.classList.add("botonV1BlancoIzquierda")
         botonIrACalendario.textContent = "Ver el el comportamiento de precio en el calendario"

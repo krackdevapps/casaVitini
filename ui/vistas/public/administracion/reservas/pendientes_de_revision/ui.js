@@ -1,5 +1,5 @@
 casaVitini.view = {
-    start: async function() {
+    start: async function () {
         const sectionRenderizada = document.querySelector("main[instanciaUID]")
         const instanciaUID = sectionRenderizada.getAttribute("instanciaUID")
         const main = document.querySelector("main")
@@ -138,7 +138,7 @@ casaVitini.view = {
                         botonInsertarPago.classList.add("botonV1")
                         botonInsertarPago.textContent = "Ir a la reserva"
                         botonInsertarPago.setAttribute("href", `/administracion/reservas/reserva:${reservaUID}`)
-                        botonInsertarPago.setAttribute("vista", `/administracion/reservas/reserva:${reservaUID}`)
+
                         botonInsertarPago.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contenedorBotones.appendChild(botonInsertarPago)
                         contenedorReserva.appendChild(contenedorBotones)
@@ -149,7 +149,7 @@ casaVitini.view = {
         }
     },
     componentes: {
-        infoSinReservas: function(instanciaUID)  {
+        infoSinReservas: function (instanciaUID) {
             const espacioReservasPendientes = document.querySelector(`main[instanciaUID="${instanciaUID}"]`).querySelector("[componente=espacioReservasPendientesDeRevision]")
             if (espacioReservasPendientes) {
                 const info = document.createElement("div")

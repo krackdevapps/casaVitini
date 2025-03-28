@@ -1,67 +1,16 @@
-@media (max-width: 1300px) {
-
-    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] {
-        grid-template-columns: auto auto auto auto !important;
-    }
-
-    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="pasaporte"],
-    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="pasaporte"],
-    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="telefono"],
-    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="telefono"],
-    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [nombreColumna="mail"],
-    [zonaCSS="administracion/clientes/buscador"] [gridUID="gridClientes"] [celdaIDV="mail"] {
-        display: none
-    }
-
-    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [contenedor="filtrosOrden"] {
-        grid-template-rows: 1fr;
-        padding-bottom: 6px;
-    }
-
-}
-
-
-@media (max-width: 720px) {
-
-    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [gridUID="gridClientes"] {
-        display: none;
-    }
-
-    [zonaCSS="administracion/clientes/buscador"] [areaGrid="gridClientes"] [contenedor="tarjetas"] {
-        display: flex;
-        flex-direction: column;
-    }
-
-    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [gridUID="grisReservasDelCliente"] {
-        display: none;
-    }
-
-    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [contenedor="tarjetas"] {
-        display: flex;
-        flex-direction: column;
-    }
-
-    [zonaCSS="administracion/clientes/detalles"] [areaGrid="grisReservasDelCliente"] [contenedor="filtrosOrden"] {
-        grid-template-rows: 1fr;
-        padding-bottom: 6px;
-    }
-
-
-}
-
-[zonaCSS="administracion/clientes/buscador"] .clientes_contenedorBotones {
+.clientes_contenedorBotones {
     display: flex;
     justify-content: flex-end;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesReservaTituloCancelarReserva {
+.detallesReservaTituloCancelarReserva {
     font-size: 20px;
     font-weight: bold;
     margin: 4px;
     text-align: center;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarReservaBloqueBloqueoApartamentos {
+.detallesReservaCancelarReservaBloqueBloqueoApartamentos {
     border-radius: 12px;
     gap: 4px;
     row-gap: 4px;
@@ -72,7 +21,7 @@
     align-items: stretch;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarReservaTituloBloquoApartamentos {
+.detallesReservaCancelarReservaTituloBloquoApartamentos {
     margin: 0px;
     padding: 6px;
     display: flex;
@@ -80,7 +29,7 @@
     align-items: center;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesReservaCancelarBoton {
+.detallesReservaCancelarBoton {
     background: #00000036;
     padding: 8px;
     border-radius: 8px;
@@ -88,7 +37,7 @@
     text-align: center;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .espacioClientes {
+.espacioClientes {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -98,7 +47,7 @@
     gap: 6px;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteUI {
+.detallesClienteUI {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -112,7 +61,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontal {
+.detallesClienteBloqueHorizontal {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -124,7 +73,7 @@
     border-radius: 20px;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontalNotas {
+.detallesClienteBloqueHorizontalNotas {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -134,7 +83,7 @@
     align-content: center;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueVertical {
+.detallesClienteBloqueVertical {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -144,7 +93,7 @@
     gap: 20px;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueDato {
+.detallesClienteBloqueDato {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -153,12 +102,12 @@
     justify-content: center;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteTituloDato {
+.detallesClienteTituloDato {
 
     font-weight: bold;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .detallesClienteUIBotones {
+.detallesClienteUIBotones {
     display: flex;
     gap: 6px;
     border-radius: 10px;
@@ -169,12 +118,12 @@
     align-items: center;
 }
 
-[zonaCSS="administracion/clientes/detalles"] .contenedorOculto {
+.contenedorOculto {
     display: none;
 }
 
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteUIBotones {
+.detallesClienteUIBotones {
     display: flex;
     gap: 6px;
     border-radius: 10px;
@@ -185,7 +134,7 @@
     align-items: center;
 }
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueHorizontal {
+.detallesClienteBloqueHorizontal {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -197,13 +146,13 @@
 }
 
 @media (max-width: 720px) {
-    [zonaCSS="administracion/clientes/detalles"] .detallesClienteBloqueHorizontal {
+    .detallesClienteBloqueHorizontal {
         flex-direction: column;
     }
 }
 
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueDato {
+.detallesClienteBloqueDato {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -213,7 +162,7 @@
     gap: 0px;
 }
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteUI {
+.detallesClienteUI {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -227,7 +176,7 @@
     -webkit-backdrop-filter: blur(50px);
 }
 
-[zonaCSS="administracion/clientes/editar"] .espacioClientes {
+.espacioClientes {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -237,7 +186,7 @@
     gap: 6px;
 }
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueVertical {
+.detallesClienteBloqueVertical {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -247,13 +196,13 @@
     gap: 20px;
 }
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteTituloDato {
+.detallesClienteTituloDato {
 
     font-weight: bold;
     padding: 6px;
 }
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteBloqueHorizontalNotas {
+.detallesClienteBloqueHorizontalNotas {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -264,11 +213,11 @@
     padding: 12px;
 }
 
-[zonaCSS="administracion/clientes/editar"] .detallesClienteDatoCampo {
+.detallesClienteDatoCampo {
     resize: none;
 }
 
-[zonaCSS="administracion/clientes/buscador"] .espacioClientes {
+.espacioClientes {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -278,7 +227,7 @@
     gap: 6px;
 }
 
-[zonaCSS="administracion/clientes/buscador"] .campoBuscadorClientes {
+.campoBuscadorClientes {
     -webkit-appearance: none;
     appearance: none;
     background: rgb(255 255 255 / 0.3);
@@ -293,6 +242,58 @@
 }
 
 
-[zonaCSS="administracion/clientes/buscador"] .campoBuscadorClientes::placeholder {
+.campoBuscadorClientes::placeholder {
     color: black;
+}
+
+
+@media (max-width: 1300px) {
+
+    [gridUID="gridClientes"] {
+        grid-template-columns: auto auto auto auto !important;
+    }
+
+    [gridUID="gridClientes"] [nombreColumna="pasaporte"],
+    [gridUID="gridClientes"] [celdaIDV="pasaporte"],
+    [gridUID="gridClientes"] [nombreColumna="telefono"],
+    [gridUID="gridClientes"] [celdaIDV="telefono"],
+    [gridUID="gridClientes"] [nombreColumna="mail"],
+    [gridUID="gridClientes"] [celdaIDV="mail"] {
+        display: none
+    }
+
+    [areaGrid="gridClientes"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+}
+
+
+@media (max-width: 720px) {
+
+    [areaGrid="gridClientes"] [gridUID="gridClientes"] {
+        display: none;
+    }
+
+    [areaGrid="gridClientes"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [areaGrid="grisReservasDelCliente"] [gridUID="grisReservasDelCliente"] {
+        display: none;
+    }
+
+    [areaGrid="grisReservasDelCliente"] [contenedor="tarjetas"] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    [areaGrid="grisReservasDelCliente"] [contenedor="filtrosOrden"] {
+        grid-template-rows: 1fr;
+        padding-bottom: 6px;
+    }
+
+
 }

@@ -5,7 +5,7 @@ casaVitini.view = {
         main.setAttribute("zonaCSS", "administracion/arquitecturaDelAlojamiento/entidades/entidadUI")
         const granuladorURL = casaVitini.utilidades.granuladorURL()
         const parametros = granuladorURL.parametros
-      this.portadaUI(Object.entries(parametros)[0])
+        this.portadaUI(Object.entries(parametros)[0])
     },
     portadaUI: async function (entidadMatriz) {
         const main = document.querySelector("main")
@@ -37,25 +37,31 @@ casaVitini.view = {
                 casaVitini.ui.componentes.mensajeSimple(info)
             }
             if (respuestaServidor?.ok) {
-
+                console.log("de",respuestaServidor)
                 const apartamentoIDV = respuestaServidor?.ok.apartamentoIDV
                 const apartamentoUI = respuestaServidor?.ok.apartamentoUI
                 const apartamentoUIPublico = respuestaServidor?.ok.apartamentoUIPublico
                 const definicionPublica = respuestaServidor?.ok.definicionPublica
+                const numeroHuespedes = respuestaServidor?.ok.numeroHuespedes
+                const descripcionbB4 = respuestaServidor?.ok.descripcion
+                console.log("de", descripcionbB4)
+                const descripcion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(descripcionbB4)
+
+                console.log("descripcion", descripcion)
 
 
                 const caracteristicas = respuestaServidor.caracteristicas
                 selectorTitulo.textContent = "Editar apartamento como entidad"
                 const contenedorEntidad = document.createElement("div")
-                contenedorEntidad.classList.add("confAlojamiento_entidades_crearEntidad_contenedorEntidad")
+                contenedorEntidad.classList.add("flexVertical", "gap6")
                 contenedorEntidad.setAttribute("tipoEntidad", "apartamento")
                 contenedorEntidad.setAttribute("entidadIDV", apartamentoIDV)
 
                 const contenedorEntidadDatos = document.createElement("div")
-                contenedorEntidadDatos.classList.add("confAlojamiento_entidades_editarEntidad_contenedorEntidadDatos")
+                contenedorEntidadDatos.classList.add("flexVertical", "gap6")
                 contenedorEntidadDatos.setAttribute("componente", "contenedorEntidadDatos")
                 const bloqueTituloApartamento = document.createElement("div")
-                bloqueTituloApartamento.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                bloqueTituloApartamento.classList.add("flexVertical", "gap6")
                 contenedorEntidadDatos.appendChild(bloqueTituloApartamento)
 
                 const infoTituloApartamento = document.createElement("div")
@@ -106,11 +112,13 @@ casaVitini.view = {
 
 
                 const bloqueApartamentoIDV = document.createElement("div")
-                bloqueApartamentoIDV.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                bloqueApartamentoIDV.classList.add("flexVertical", "gap6")
                 const infoApartamentoIDV = document.createElement("div")
                 infoApartamentoIDV.classList.add("padding14")
                 infoApartamentoIDV.textContent = "Identificador visual del apartamento"
                 bloqueApartamentoIDV.appendChild(infoApartamentoIDV)
+
+
 
                 const campoApartamentoIDV = document.createElement("input")
                 campoApartamentoIDV.classList.add("botonV1BlancoIzquierda_campo")
@@ -122,6 +130,37 @@ casaVitini.view = {
                 bloqueApartamentoIDV.appendChild(campoApartamentoIDV)
                 contenedorEntidadDatos.appendChild(bloqueApartamentoIDV)
 
+
+
+                const contenedorH = document.createElement("div")
+                contenedorH.classList.add("flexVertical", "gap6")
+                contenedorEntidadDatos.appendChild(contenedorH)
+
+                const tituloH = document.createElement("div")
+                tituloH.classList.add("padding14")
+                tituloH.textContent = "Numero de huespedes"
+                contenedorH.appendChild(tituloH)
+
+                const campoHuespedes = document.createElement("input")
+                campoHuespedes.classList.add("botonV1BlancoIzquierda_campo")
+                campoHuespedes.placeholder = "Escribe el numero de huespedes"
+                campoHuespedes.setAttribute("valorInicial", numeroHuespedes)
+                campoHuespedes.setAttribute("componente", "entidadIDV")
+                campoHuespedes.setAttribute("campo", "numeroHuespedes")
+                campoHuespedes.value = numeroHuespedes || ""
+                contenedorH.appendChild(campoHuespedes)
+
+
+                const descripcionCampo = document.createElement("textarea")
+                descripcionCampo.classList.add("botonV1BlancoIzquierda_campo", "textAreaRedimenzionHorizontal")
+                descripcionCampo.placeholder = "Descripción del alojamiento"
+                descripcionCampo.setAttribute("valorInicial", descripcion)
+                descripcionCampo.setAttribute("componente", "entidadIDV")
+                descripcionCampo.setAttribute("campo", "descripcion")
+                descripcionCampo.value = descripcion
+                contenedorH.appendChild(descripcionCampo)
+
+
                 const superBloqueCaracteristicas = document.createElement("div")
                 superBloqueCaracteristicas.classList.add("contenedorCaracteristicas")
 
@@ -131,7 +170,7 @@ casaVitini.view = {
                 superBloqueCaracteristicas.appendChild(infoSuperficie)
 
                 const contenedorCaracteristicas = document.createElement("div")
-                contenedorCaracteristicas.classList.add("administracion_arquitectura_entidades_detallesEntidad_contenedorCaracteristicas")
+                contenedorCaracteristicas.classList.add("flexVertical", "gap6")
                 contenedorCaracteristicas.setAttribute("contenedor", "caracteristicas")
                 contenedorCaracteristicas.setAttribute("caracteristicasIniciales", JSON.stringify(caracteristicas))
                 for (const caracteristica of caracteristicas) {
@@ -191,14 +230,14 @@ casaVitini.view = {
                 const habitacionUI = respuestaServidor?.ok.habitacionUI
                 selectorTitulo.textContent = "Editar habitación como entidad"
                 const contenedorEntidad = document.createElement("div")
-                contenedorEntidad.classList.add("confAlojamiento_entidades_crearEntidad_contenedorEntidad")
+                contenedorEntidad.classList.add("flexVertical", "gap6")
                 contenedorEntidad.setAttribute("tipoEntidad", "habitacion")
                 contenedorEntidad.setAttribute("entidadIDV", habitacionIDV)
                 const contenedorEntidadDatos = document.createElement("div")
-                contenedorEntidadDatos.classList.add("confAlojamiento_entidades_editarEntidad_contenedorEntidadDatos")
+                contenedorEntidadDatos.classList.add("flexVertical", "gap6")
                 contenedorEntidadDatos.setAttribute("componente", "contenedorEntidadDatos")
                 const bloqueTituloHabitacion = document.createElement("div")
-                bloqueTituloHabitacion.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                bloqueTituloHabitacion.classList.add("flexVertical", "gap6")
                 const infoTituloHabitacion = document.createElement("div")
                 infoTituloHabitacion.classList.add("padding14")
                 infoTituloHabitacion.textContent = "Nombre de la habitación"
@@ -212,7 +251,7 @@ casaVitini.view = {
                 bloqueTituloHabitacion.appendChild(campoTituloHabitacion)
                 contenedorEntidadDatos.appendChild(bloqueTituloHabitacion)
                 const bloqueHabitacionIDV = document.createElement("div")
-                bloqueHabitacionIDV.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                bloqueHabitacionIDV.classList.add("flexVertical", "gap6")
                 const infoHabitacionIDV = document.createElement("div")
                 infoHabitacionIDV.classList.add("padding14")
                 infoHabitacionIDV.textContent = "Identificador visual de la nueva habitación"
@@ -282,14 +321,14 @@ casaVitini.view = {
 
                 selectorTitulo.textContent = "Editar cama como entidad"
                 const contenedorEntidad = document.createElement("div")
-                contenedorEntidad.classList.add("confAlojamiento_entidades_crearEntidad_contenedorEntidad")
+                contenedorEntidad.classList.add("flexVertical", "gap6")
                 contenedorEntidad.setAttribute("tipoEntidad", "cama")
                 contenedorEntidad.setAttribute("entidadIDV", camaIDV)
                 const contenedorEntidadDatos = document.createElement("div")
-                contenedorEntidadDatos.classList.add("confAlojamiento_entidades_editarEntidad_contenedorEntidadDatos")
+                contenedorEntidadDatos.classList.add("flexVertical", "gap6")
                 contenedorEntidadDatos.setAttribute("componente", "contenedorEntidadDatos")
                 const bloqueTituloCama = document.createElement("div")
-                bloqueTituloCama.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                bloqueTituloCama.classList.add("flexVertical", "gap6")
 
 
                 const infoDescription = document.createElement("div")
@@ -311,7 +350,7 @@ casaVitini.view = {
                 bloqueTituloCama.appendChild(campoTituloCama)
                 contenedorEntidadDatos.appendChild(bloqueTituloCama)
                 const bloqueCamaIDV = document.createElement("div")
-                bloqueCamaIDV.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                bloqueCamaIDV.classList.add("flexVertical", "gap6")
                 const infoCamaIDV = document.createElement("div")
                 infoCamaIDV.classList.add("padding14")
                 infoCamaIDV.textContent = "Identificador visual de la nueva cama"
@@ -327,7 +366,7 @@ casaVitini.view = {
                 contenedorEntidadDatos.appendChild(bloqueCamaIDV)
                 contenedorEntidad.appendChild(contenedorEntidadDatos)
                 const bloqueCapacidadPernoctativa = document.createElement("div")
-                bloqueCapacidadPernoctativa.classList.add("confAlojamiento_entidades_crearEntidad_bloqueTitulo")
+                bloqueCapacidadPernoctativa.classList.add("flexVertical", "gap6")
                 const infoCapacidadPernoctativa = document.createElement("div")
                 infoCapacidadPernoctativa.classList.add("padding14")
                 infoCapacidadPernoctativa.textContent = "Capacidad pernoctativa de la cama"
@@ -489,9 +528,17 @@ casaVitini.view = {
         const selectorCampos = document.querySelectorAll("[campo]")
         selectorCampos.forEach((campo) => {
             const nombreCampo = campo.getAttribute("campo")
+            
             if (nombreCampo !== "caracteristica") {
-                const datoCampo = campo.value
-                metadatos[nombreCampo] = datoCampo
+                if (nombreCampo === "descripcion") {
+                    const descripcion = campo.value
+                    const descripcionB64 = casaVitini.utilidades.conversor.cadenaHaciaBase64ConTextDecoder(descripcion)
+                    metadatos["descripcion"] = descripcionB64
+                } else {
+                    const datoCampo = campo.value
+                    metadatos[nombreCampo] = datoCampo
+    
+                }
             }
         })
         if (selectorTipoEntidada === "apartamento") {
@@ -505,6 +552,7 @@ casaVitini.view = {
 
             })
         }
+        
 
         const respuestaServidor = await casaVitini.shell.servidor(metadatos)
         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)

@@ -4,6 +4,7 @@ import { validadoresCompartidos } from "../../../../../validadores/validadoresCo
 import { controlInstanciaDecimal } from "../../controlInstanciaDecimal.mjs"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
+import { controlTotalNetoAlojamiento } from "../../../../../contenedorFinanciero/shared/controlTotalNetoAlojamiento.mjs"
 
 export const perfil_porDiasDelRango = async (data) => {
     try {
@@ -49,19 +50,10 @@ export const perfil_porDiasDelRango = async (data) => {
                     const descuentoTotal = new Decimal(apartamento.descuentoTotal)
                     const tipoAplicacion = apartamento.tipoAplicacion
 
-                    const totalPorApartamento = estructura.entidades.reserva
-                        ?.desglosePorNoche
-                    [fechaDelDia]
-                        ?.apartamentosPorNoche
-                    [apartamentoIDV]
-                        ?.precioNetoApartamentoComplementos
-                        ||
-                        estructura.entidades.reserva
-                            ?.desglosePorNoche
-                        [fechaDelDia]
-                            ?.apartamentosPorNoche
-                        [apartamentoIDV]
-                            ?.precioNetoApartamento
+                    const totalPorApartamento = controlTotalNetoAlojamiento({
+                        totalNetoConComplementos: estructura.entidades.reserva?.desglosePorNoche[fechaDelDia]?.apartamentosPorNoche[apartamentoIDV]?.precioNetoApartamentoComplementos,
+                        totalNetoSinComplementos: estructura.entidades.reserva?.desglosePorNoche[fechaDelDia]?.apartamentosPorNoche[apartamentoIDV]?.precioNetoApartamento
+                    })
 
                     if (!totalPorApartamento) {
                         continue
@@ -124,8 +116,12 @@ export const perfil_porDiasDelRango = async (data) => {
 
                 const descuentoTotal = descuentoPorDia.descuentoTotal
                 const tipoAplicacion = descuentoPorDia.tipoAplicacion
-                const totalNetoPorDia = estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNocheConComplementos
-                    || estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+
+                const totalNetoPorDia = controlTotalNetoAlojamiento({
+                    totalNetoConComplementos: estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNocheConComplementos,
+                    totalNetoSinComplementos: estructura.entidades.reserva.desglosePorNoche[fechaDelDia].precioNetoNoche
+
+                })
 
                 const totalCalculado = calcularTotal({
                     tipoAplicacion,

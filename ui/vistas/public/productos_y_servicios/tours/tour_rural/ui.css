@@ -3,17 +3,14 @@ body {
     height: 100vh;
 }
 
-/* header .estructura{
-    color:black;
-    background-color: rgba(255, 255, 255, 0.329);
-}
-.uiCategoria {
-    color: black;
-} */
-header .estructura {
-    background-color: rgba(0, 0, 0, 0.2);
-}
 
+.menuGlobal_styloCompartido {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.botonMenuResponsivo {
+    background-image: url(/activos/iconos/menu_blanco.svg);
+    background-color: rgba(0, 0, 0, 0.3);
+}
 .uiCategoria {
     color: white;
 }

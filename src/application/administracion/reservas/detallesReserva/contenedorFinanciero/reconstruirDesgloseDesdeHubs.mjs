@@ -11,6 +11,7 @@ import { eliminarServicioEnReservaPorServicioUID } from "../../../../../infraest
 import { insertarServicioPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/insertarServicioPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroDesdeHubsPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroDesdeHubsPorReservaUID.mjs"
 import { obtenerServiciosPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServiciosPorReservaUID.mjs"
+import { estadoInicialPagoServicio } from "../../../../../shared/reservas/servicios/estadoInicialPagoServicio.mjs"
 
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
@@ -87,6 +88,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             const servicioUID = servicio.contenedor.servicioUID
             const opcionesSel = servicio.opcionesSel
             const descuentoTotalServicio = servicio.descuentoTotalServicio
+            const estadoPagoIDV = servicio.estadoPagoIDV
             await eliminarServicioEnReservaPorServicioUID(servicioUID_enSimulacion)
 
             let servicioDelHub
@@ -96,6 +98,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 continue
             }
 
+
             const nombreServicico = servicioDelHub.nombre
             const contenedorServicio = servicioDelHub.contenedor
             contenedorServicio.servicioUID = servicioDelHub.servicioUID
@@ -104,7 +107,8 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 nombre: nombreServicico,
                 contenedor: contenedorServicio,
                 opcionesSel,
-                descuentoTotalServicio
+                descuentoTotalServicio,
+                estadoPagoIDV
             })
         }
         const desgloseFinanciero = await procesador({

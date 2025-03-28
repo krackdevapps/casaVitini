@@ -3196,7 +3196,7 @@ export const contenedorFinanciero = {
                                 contenedor.appendChild(nombreOfertaUI)
                                 const descripcionDescuento = document.createElement("div")
                                 if (tipoAplicacion === "porcentaje") {
-                                    descripcionDescuento.textContent = `Esta oferta aplica un descuento del ${porcentaje}% y generando un descuento del ${descuentoAplicado}.`
+                                    descripcionDescuento.textContent = `Esta oferta aplica un descuento del ${porcentaje}% y generando un descuento de ${descuentoAplicado}.`
                                 } else if (tipoAplicacion === "cantidadFija") {
                                     descripcionDescuento.textContent = `Esta oferta aplica un descuento del ${descuentoAplicado} sobre el total neto del apartamento.`
                                 }
@@ -3241,7 +3241,7 @@ export const contenedorFinanciero = {
                             }
                             const descuentosGlobales_renderizado = contendorNoche.querySelector("[contenedor=descuentosGlobales]")
                             const totalDescuentosAplicadosUI = descuentosGlobales_renderizado.querySelector("[dato=totalDescuentosAplicados]")
-                            totalDescuentosAplicadosUI.textContent = totalDescuentosAplicados + "$ Suma total de los descuentos aplicados al total neto de la noache"
+                            totalDescuentosAplicadosUI.textContent = totalDescuentosAplicados + "$ Suma total de los descuentos aplicados al total neto de la noche"
                             const totalConDescuentosUI = descuentosGlobales_renderizado.querySelector("[dato=totalConDescuentos]")
                             totalConDescuentosUI.textContent = totalConDescuentos + "$ Total neto noche con descuentos aplicados"
                             if (porTotalNetoDia.length > 0) {
@@ -3359,7 +3359,7 @@ export const contenedorFinanciero = {
                                     contenedor.appendChild(nombreOfertaUI)
                                     const descripcionDescuento = document.createElement("div")
                                     if (tipoAplicacion === "porcentaje") {
-                                        descripcionDescuento.textContent = `Esta oferta aplica un descuento del ${porcentaje}% al total neto del apartamento, generando un descuento del ${descuentoAplicado}.`
+                                        descripcionDescuento.textContent = `Esta oferta aplica un descuento del ${porcentaje}% al total neto del apartamento, generando un descuento de ${descuentoAplicado}.`
                                     } else if (tipoAplicacion === "cantidadFija") {
                                         descripcionDescuento.textContent = `Esta oferta aplica un descuento del ${descuentoAplicado}, al total neto del apartamento`
                                     }

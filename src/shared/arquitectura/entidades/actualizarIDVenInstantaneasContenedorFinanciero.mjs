@@ -22,7 +22,7 @@ export const actualizarIDVenInstantaneasContenedorFinanciero = async (data) => {
         }
         for (const contenedor of contenedoresFinancieros) {
             const componenteUID = contenedor.componenteUID
-            const reservaUID = Number(contenedor.reservaUID)
+            const reservaUID = contenedor.reservaUID
             const instantaneaNoches = contenedor.instantaneaNoches || {}
             const instantaneaSobreControlPrecios = contenedor.instantaneaSobreControlPrecios || {}
             const instantaneaOfertasPorCondicion = contenedor.instantaneaOfertasPorCondicion || []

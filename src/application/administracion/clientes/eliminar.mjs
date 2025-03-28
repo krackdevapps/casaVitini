@@ -23,7 +23,7 @@ export const eliminar = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         await obtenerDetallesCliente(clienteUID)
         await eliminarClientePorClienteUID(clienteUID)

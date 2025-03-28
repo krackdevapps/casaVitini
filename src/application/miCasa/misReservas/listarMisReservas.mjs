@@ -29,7 +29,7 @@ export const listarMisReservas = async (entrada) => {
             objeto: entrada.body
         })
 
-        const paginaActual = validadoresCompartidos.tipos.granEntero({
+        const paginaActual = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina,
             nombreCampo: "El numero de página",
             sePermiteVacio: "no",

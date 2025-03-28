@@ -849,7 +849,7 @@ export const sharedMethods = {
 
             const infoPrecio = document.createElement("p")
             infoPrecio.classList.add(
-                "padding6",
+                "padding16",
             )
             infoPrecio.textContent = "Si esta opción tiene un precio, escríbalo abajo, si la opción no tiene precio, déjalo en blanco."
             contenedor.appendChild(infoPrecio)
@@ -879,6 +879,45 @@ export const sharedMethods = {
             selectorOpcionCantidad.appendChild(optionO2);
 
 
+            const contenedorEnlaceInventario = document.createElement("div")
+            contenedorEnlaceInventario.classList.add("flexVertical")
+            contenedorEnlaceInventario.setAttribute("contenedor", "enlaceInventario")
+            contenedor.appendChild(contenedorEnlaceInventario)
+
+            const cEI_sinEnlace = document.createElement("div")
+            cEI_sinEnlace.classList.add("flexVertical")
+            cEI_sinEnlace.setAttribute("contenedro", "sinEnlace")
+            contenedorEnlaceInventario.appendChild(cEI_sinEnlace)
+
+
+            const infoEI = document.createElement("p")
+            infoEI.classList.add(
+                "padding16",
+            )
+            infoEI.textContent = "Si esta opción es un elemento del inventario, enlazela para poder generar registros en el inventario y actualizar las cantidades"
+            cEI_sinEnlace.appendChild(infoEI)
+
+            const botonEI = document.createElement("div")
+            botonEI.style.borderRadius = "10px"
+            botonEI.classList.add("botonV1")
+            botonEI.textContent = "Enlazar opción con elemento en el inventario"
+            botonEI.addEventListener("click", () => {
+                this.enlazarOpcionConInventario.ui({
+                    contenedorEnlaceInventario
+
+                })
+
+            })
+            cEI_sinEnlace.appendChild(botonEI)
+
+
+            const cEI_conEnlace = document.createElement("div")
+            cEI_conEnlace.classList.add("flexVertical", "ocultoInicial")
+            cEI_conEnlace.setAttribute("contenedro", "conEnlace")
+            contenedorEnlaceInventario.appendChild(cEI_conEnlace)
+
+
+
 
             const contenedorBotones = document.createElement("div")
             contenedorBotones.classList.add(
@@ -891,6 +930,7 @@ export const sharedMethods = {
             boton.classList.add(
                 "botonV4"
             )
+
             boton.textContent = "Eliminar opción"
             boton.addEventListener("click", (e) => {
                 const contenedorOpciones = e.target.closest("[contenedor=opciones]")
@@ -905,6 +945,240 @@ export const sharedMethods = {
 
             return contenedor
         },
+        enlazarOpcionConInventario: {
+            ui: function (data) {
+                const contenedorEnlaceInventario = data.contenedorEnlaceInventario
+                const main = document.querySelector("main")
+                const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada({
+                    alineacion: "arriba"
+                })
+                const instanciaUID = ui.getAttribute("instanciaUID")
+                const contenedor = ui.querySelector("[componente=contenedor]")
+                main.appendChild(ui)
+
+                const botonCerrar = document.createElement("div")
+                botonCerrar.classList.add("botonV1BlancoIzquierda")
+                botonCerrar.textContent = "Cerrar y volver"
+                botonCerrar.addEventListener("click", () => {
+                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                })
+                contenedor.appendChild(botonCerrar)
+
+                const titulo = document.createElement("p")
+                titulo.classList.add("colorGrisV1", "negrita", "padding10")
+                titulo.textContent = "Buscar elementos del inventario para insertarlo en el protocolo"
+                contenedor.appendChild(titulo)
+
+                const contenedorBuscador = document.createElement("div")
+                contenedorBuscador.setAttribute("area", "buscador")
+                contenedorBuscador.classList.add("flexVertical", "gap6")
+                contenedor.appendChild(contenedorBuscador)
+
+                const buscadorUI = document.createElement("input")
+                buscadorUI.placeholder = "Buscar en el inventario general"
+                buscadorUI.addEventListener("input", (e) => {
+                    this.buscadorPorCampo({
+                        e,
+                        contenedorEnlaceInventario
+                    })
+                })
+                contenedorBuscador.appendChild(buscadorUI)
+
+                const estadoBusqueda = document.createElement("p")
+                estadoBusqueda.classList.add("padding16", "ocultoInicial")
+                estadoBusqueda.textContent = "Buscando..."
+                estadoBusqueda.setAttribute("contenedor", "estadoBusqueda")
+                contenedorBuscador.appendChild(estadoBusqueda)
+
+
+                const contenedorResultados = document.createElement("div")
+                contenedorResultados.classList.add("flexVertical", "gap6")
+                contenedorResultados.setAttribute("contenedor", "resultados")
+                contenedorResultados.textContent = "contenedor"
+                contenedorBuscador.appendChild(contenedorResultados)
+
+
+            },
+            buscadorPorCampo: async function (data) {
+                const buscadorCampo = data.e.target
+                const terminoBusqueda = buscadorCampo.value
+                const contenedorEnlaceInventario = data.contenedorEnlaceInventario
+                const areaBuscador = buscadorCampo.closest("[area=buscador")
+
+                areaBuscador.querySelector("[contenedor=estadoBusqueda]").classList.remove("ocultoInicial")
+                areaBuscador.querySelector("[contenedor=resultados]").textContent = ""
+                clearTimeout(casaVitini.componentes.temporizador);
+                const campoVacio = terminoBusqueda.length
+                if (campoVacio === 0) {
+                    areaBuscador.querySelector("[contenedor=estadoBusqueda]").classList.remove("ocultoInicial")
+                    areaBuscador.querySelector("[contenedor=resultados]").textContent = ""
+                    //crearTimeout(casaVitini.componentes.temporizador)
+                    return
+                }
+                casaVitini.componentes.temporizador = setTimeout(async () => {
+                    this.iniciarBusqueda({
+                        terminoBusqueda,
+                        areaBuscador,
+                        contenedorEnlaceInventario
+                    })
+                }, 1500);
+            },
+            iniciarBusqueda: async function (data) {
+
+
+                const terminoBusqueda = data.terminoBusqueda
+                const areaBuscador = data.areaBuscador
+                const contenedorEnlaceInventario = data.contenedorEnlaceInventario
+                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                areaBuscador.setAttribute("instanciaUID", instanciaUID)
+                const contenedorResultados = areaBuscador.querySelector("[contenedor=resultados]")
+
+                const respuestaServidor = await casaVitini.shell.servidor({
+                    zona: "administracion/inventario/buscador",
+                    buscar: terminoBusqueda,
+                    // nombreColumna: transaccion.nombreColumna,
+                    // sentidoColumna: transaccion.sentidoColumna,
+                    pagina: Number(1)
+                })
+                const instanciaRenderizada = areaBuscador.getAttribute(`instanciaUID`)
+                if (instanciaRenderizada !== instanciaUID) { return }
+                areaBuscador.querySelector("[contenedor=estadoBusqueda]").classList.add("ocultoInicial")
+
+
+
+                if (respuestaServidor?.error) {
+                    contenedorResultados.textContent = null
+                    casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor.error)
+                    return
+                }
+                if (respuestaServidor.totalElementos === 0) {
+                    contenedorResultados.textContent = "No se ha encontrado resultados"
+                    return
+                }
+                if (respuestaServidor.ok) {
+                    const main = document.querySelector("main")
+
+                    const elementos = respuestaServidor.elementos
+                    elementos.forEach(e => {
+
+                        const UID = e.UID
+                        const nombre = e.nombre
+                        const descripcion = e.descripcion
+
+                        const resultadoUI = this.resultadoUI({
+                            UID,
+                            nombre,
+                            descripcion
+                        })
+                        resultadoUI.addEventListener("click", () => {
+
+                            this.insertarInventario({
+                                elementoUID: UID,
+                                nombre,
+                                contenedorEnlaceInventario
+
+                            })
+                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+
+                        })
+                        contenedorResultados.appendChild(resultadoUI)
+                    })
+                }
+            },
+            resultadoUI: function (data) {
+                const UID = data.UID
+                const nombre = data.nombre
+                const descripcion = data.descripcion
+
+                const ui = document.createElement("div")
+                ui.classList.add("flexVertical", "padding10", "backgroundGrey1", "borderRadius16", "gap6", "comportamientoBoton")
+                ui.setAttribute("elementoUID", UID)
+
+                const nombreUI = document.createElement("p")
+                nombreUI.classList.add("negrita", "padding6")
+                nombreUI.textContent = nombre
+                ui.appendChild(nombreUI)
+
+                const cD = document.createElement("details")
+                cD.classList.add("padding6", "flexVertical")
+                // ui.appendChild(cD)
+
+                const s = document.createElement("summary")
+                s.classList.add("padding10")
+                s.textContent = "Descripción del elemento"
+                cD.append(s)
+
+                const descripcionUI = document.createElement("p")
+                descripcionUI.classList.add("negrita")
+                descripcionUI.textContent = descripcion
+                cD.appendChild(descripcionUI)
+
+
+                return ui
+            },
+            insertarInventario: async function (data) {
+                const elementoUID = data.elementoUID
+                const nombre = data.nombre
+                const contenedorEnlaceInventario = data.contenedorEnlaceInventario
+                const main = document.querySelector("main")
+
+                const enlaceUI = this.elementoEnlazadoUI({
+                    nombre,
+                    elementoUID
+                })
+                const contenedorSinEnlace = contenedorEnlaceInventario.querySelector("[contenedro=sinEnlace]")
+                contenedorSinEnlace.classList.add("ocultoInicial")
+                const contenedorConEnlace = contenedorEnlaceInventario.querySelector("[contenedro=conEnlace]")
+                contenedorConEnlace.classList.remove("ocultoInicial")
+
+                contenedorConEnlace.appendChild(enlaceUI)
+            },
+            elementoEnlazadoUI: function (data) {
+                const nombre = data.nombre
+                const elementoUID = data.elementoUID
+
+                const ui = document.createElement("div")
+                ui.classList.add("flexVertical", "padding6", "borderRadius20", "borderGrey1")
+                ui.setAttribute("contenedor", "elementoEnlazado")
+                ui.setAttribute("elementoUID", elementoUID)
+
+                const c = document.createElement("div")
+                c.classList.add("padding16")
+                ui.appendChild(c)
+
+                const t = document.createElement("p")
+                t.textContent = "Elemento enlazado"
+                c.appendChild(t)
+
+                const titulo = document.createElement("p")
+                titulo.setAttribute("campo", "nombre")
+                titulo.textContent = nombre
+                c.appendChild(titulo)
+
+                const botonQuitarEnlace = document.createElement("div")
+                botonQuitarEnlace.classList.add("botonV1BlancoIzquierda")
+                botonQuitarEnlace.textContent = "Desenlazar elemento del inventario"
+                botonQuitarEnlace.addEventListener("click", (e) => {
+
+                    this.desenlazarElemento({
+                        e: e.target
+                    })
+                })
+                ui.appendChild(botonQuitarEnlace)
+                return ui
+
+            },
+            desenlazarElemento: function (data) {
+                const e = data.e
+                const contenedorEnlaceInventario = e.closest("[contenedor=enlaceInventario]")
+
+                const contenedorSinEnlace = contenedorEnlaceInventario.querySelector("[contenedro=sinEnlace]")
+                contenedorSinEnlace.classList.remove("ocultoInicial")
+                const contenedorConEnlace = contenedorEnlaceInventario.querySelector("[contenedro=conEnlace]")
+                contenedorConEnlace.classList.add("ocultoInicial")
+                contenedorConEnlace.textContent = null
+            }
+        }
 
     },
     constructorObjeto: function () {
@@ -966,12 +1240,20 @@ export const sharedMethods = {
                 const nombreOpcion = og.querySelector("[campo=nombreOpcion]").value
                 const precioOpcion = og.querySelector("[campo=precioOpcion]").value
                 const interruptorCantidad = og.querySelector("[campo=interruptorCantidad]").value
+                const contenedorElementoEnlazado = og.querySelector("[contenedor=elementoEnlazado]")
 
                 const opcion = {
                     nombreOpcion,
                     precioOpcion,
-                    interruptorCantidad
+                    interruptorCantidad,
                 }
+                if (contenedorElementoEnlazado) {
+                    const elementoUID = contenedorElementoEnlazado.getAttribute("elementoUID")
+                    opcion.elementoEnlazado = {
+                        elementoUID
+                    }
+                }
+
                 contenedorOpciones.opcionesGrupo.push(opcion)
             })
             o.contenedor.gruposDeOpciones.push(contenedorOpciones)

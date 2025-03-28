@@ -1,14 +1,24 @@
-
 body {
-    background-color: rgb(255 188 0 / 0.05);
+    /* background-color: rgb(255 188 0 / 0.05); */
+    background-image: url(/activos/imagenes/fotos/image00001_2s_comprimida.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 main {
     position: absolute;
+
+}
+
+.superContainer {
+    display: grid;
+    grid-template-rows: 100vh auto;
+
 }
 
 
-[zonaCSS=instalaciones] .plaza_servicios_infoGlobal {
+.plaza_servicios_infoGlobal {
     padding: 10px;
     border-radius: 10px;
     backdrop-filter: blur(50px);
@@ -16,14 +26,14 @@ main {
     text-align: justify;
 }
 
-[zonaCSS=instalaciones] .bloqueCaracteristicas {
+.bloqueCaracteristicas {
     padding: 0px;
     border-radius: 15px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    height: 400px;
+    height: 600px;
     -webkit-overflow-scrolling: touch;
     box-shadow: 0px 0px 20px 5px rgb(0 0 0 / 25%);
     transition: all 2s ease-in-out !important;
@@ -32,8 +42,17 @@ main {
 
 }
 
+.fondoAnimacion {
+    background-image: url("/activos/imagenes/transparente.png");
+    transition: background 1s linear;
+}
 
-[zonaCSS=instalaciones] main * {
+.contenedorPresentacion {
+    display: flex;
+    flex: row;
+}
+
+main * {
     font-family: opensans-semibold !important;
 }
 
@@ -44,32 +63,36 @@ main {
     gap: 20px;
     transition: padding 1s linear, scale 250ms ease-in-out !important;
     padding: 0px;
+    background-color: rgb(255, 254, 245);
+    margin-top: 78vh;
+    padding-bottom: 20px;
+
 }
 
-[zonaCSS=instalaciones] .marcoElasticoRelativo>* {
+.marcoElasticoRelativo>* {
     transition: scale 250ms ease-in-out !important;
 
 }
 
 @media (max-width: 720px) {
-    [zonaCSS=instalaciones] .bloqueCaracteristicas {
+    .bloqueCaracteristicas {
         align-items: center;
         transition: all 250ms ease-in-out !important;
         padding: 0px;
 
     }
 
-    [zonaCSS=instalaciones] .marcoElasticoRelativo {
+    .marcoElasticoRelativo {
         padding-left: 0px;
         padding-right: 0px;
     }
 
-    [zonaCSS=instalaciones] .imagenBancoBambu {
+    .imagenBancoBambu {
         background-position: 80% center !important;
     }
 }
 
-[zonaCSS=instalaciones] .imagenPortada {
+.imagenPortada {
     height: 100vh;
     padding: 14px;
     /* margin-left: 100px;
@@ -80,11 +103,11 @@ main {
 }
 
 .imagenPortadaIMG {
-    background-image: url(/activos/imagenes/fotos/image00001_2s.jpeg)
+    background-image: url(/activos/imagenes/fotos/image00001_2s_comprimida.jpg)
 }
 
 @media (max-width: 920px) {
-    [zonaCSS=instalaciones] .imagenPortada {
+    .imagenPortada {
         padding-right: 0px;
         padding-left: 0px;
         padding-bottom: 0px;
@@ -92,37 +115,38 @@ main {
         margin-left: 0px;
         margin-right: 0px;
     }
+
     .imagenPortadaIMG {
         background-image: url(activos/imagenes/fotos/image00007_1_reto1V3.jpeg);
     }
 }
 
-[zonaCSS=instalaciones] .plaza_servicios_superBloque {
+.plaza_servicios_superBloque {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-[zonaCSS=instalaciones] .fontForImg {
+.fontForImg {
     font-family: opensans-variable !important;
     font-weight: 550;
 }
 
-[zonaCSS=instalaciones] .plaza_servicios_tituloCaracteristica {
+.plaza_servicios_tituloCaracteristica {
     /* font-weight: bold; */
     margin: 0px;
 }
 
 
-[zonaCSS=instalaciones] .photoSuperContainer {
+.photoSuperContainer {
     width: 100%;
     max-width: 100%;
     display: grid;
     grid-template-columns: min-content 100% min-content;
 }
 
-[zonaCSS=instalaciones] .photoContainer {
-    width: calc(100% - 40px);
+.photoContainer {
+    width: calc(100% - 156px);
     max-width: 100%;
     overflow: scroll;
     padding-bottom: 8px;
@@ -132,13 +156,12 @@ main {
     border-radius: 20px;
     padding: 10px;
     background: #80808029;
-    margin-left: 20px;
-
+    margin-left: 77px;
 }
 
 
 
-[zonaCSS=instalaciones] .photoContainer .button {
+.photoContainer .button {
     cursor: default;
     user-select: none;
     -webkit-user-select: none;
@@ -152,22 +175,20 @@ main {
     display: flex;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-
-
 }
 
-[zonaCSS=instalaciones] .photoContainer .butonStart {
+.photoContainer .butonStart {
     margin-left: 10px;
     padding-right: 12px;
 
 }
 
-[zonaCSS=instalaciones] .photoContainer .butonEnd {
+.photoContainer .butonEnd {
     padding-left: 12px;
-    right: calc(0% + 50px);
+    right: calc(0% + 100px);
 }
 
-[zonaCSS=instalaciones] .triangleL {
+.triangleL {
     width: 0px;
     height: 0px;
     border-style: solid;
@@ -177,7 +198,7 @@ main {
     pointer-events: none;
 }
 
-[zonaCSS=instalaciones] .triangleR {
+.triangleR {
     width: 0px;
     height: 0px;
     border-style: solid;
@@ -188,18 +209,18 @@ main {
 }
 
 @media (max-width: 720px) {
-    [zonaCSS=instalaciones] .photoContainer .button {
+    .photoContainer .button {
         display: none;
 
 
     }
 }
 
-[zonaCSS=instalaciones] .photoContainer::-webkit-scrollbar {
+.photoContainer::-webkit-scrollbar {
     display: none;
 }
 
-/* [zonaCSS=instalaciones] .photoGrid {
+/*  .photoGrid {
     display: grid;
     height: 300px;
     transition: all 2s ease-in-out !important;
@@ -207,12 +228,12 @@ main {
     grid-gap: 10px;
     scrollbar-width: none; 
 } */
-[zonaCSS=instalaciones] .overridePiscina {
+.overridePiscina {
     background-position: center 75% !important;
 
 }
 
-[zonaCSS=instalaciones] .photoGrid {
+.photoGrid {
     display: grid;
     height: 300px;
     transition: all 2s ease-in-out !important;
@@ -228,7 +249,7 @@ main {
 }
 
 @media (max-width: 720px) {
-    [zonaCSS=instalaciones] .photoGrid {
+    .photoGrid {
         padding: 0px;
         height: 150px;
         grid-template-rows: 1fr;
@@ -238,32 +259,32 @@ main {
     }
 }
 
-[zonaCSS=instalaciones] .photoInGrid {
+.photoInGrid {
     height: 100%;
     width: 100%;
     border-radius: 10px;
 }
 
-[zonaCSS=instalaciones] .posicionImagen {
+.posicionImagen {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     transition: all 150ms linear;
 }
 
-[zonaCSS=instalaciones] .apliarImagen:hover {
+.apliarImagen:hover {
 
     box-shadow: 0px 0px 20px 0px #0000007a;
 }
 
 
-[zonaCSS=instalaciones] .contenedorImagenesInstalaciones {
+.contenedorImagenesInstalaciones {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento {
+.plaza_servicios_superBloque .contenedorApartamento {
     background: #f6e1af;
     margin-right: 30px;
     margin-left: 30px;
@@ -272,19 +293,19 @@ main {
 
 }
 
-[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .titulo {
+.plaza_servicios_superBloque .contenedorApartamento .titulo {
     font-size: 16px;
     font-weight: bold;
     margin: 0px;
     text-align: center;
 }
 
-[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .descripcion {
+.plaza_servicios_superBloque .contenedorApartamento .descripcion {
     padding: 30px;
     text-align: center;
 }
 
-[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .contenedorImagenes {
+.plaza_servicios_superBloque .contenedorApartamento .contenedorImagenes {
     margin: 0px;
     display: grid;
     grid-template-columns: auto auto auto;
@@ -295,7 +316,7 @@ main {
 
 }
 
-[zonaCSS=instalaciones] .plaza_servicios_superBloque .contenedorApartamento .imagenContenedor {
+.plaza_servicios_superBloque .contenedorApartamento .imagenContenedor {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -314,92 +335,7 @@ main {
 }
 
 
-[zonaCSS=instalaciones] .apartamento_5_imagen1 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image1.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_5_imagen2 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image2.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_5_imagen3 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image3.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_5_imagen4 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image4.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_5_imagen5 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image5.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_5_imagen6 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_5/image6.jpeg");
-}
-
-
-
-[zonaCSS=instalaciones] .apartamento_6_imagen1 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image1.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_6_imagen2 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image2.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_6_imagen3 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image3.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_6_imagen4 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image4.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_6_imagen5 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image5.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_6_imagen6 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image6.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_6_imagen7 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_6/image7.jpeg");
-}
-
-
-
-[zonaCSS=instalaciones] .apartamento_7_imagen1 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image1.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_7_imagen2 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image2.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_7_imagen3 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image3.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_7_imagen4 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image4.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_7_imagen5 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image5.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_7_imagen6 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image6.jpeg");
-}
-
-[zonaCSS=instalaciones] .apartamento_7_imagen7 {
-    background-image: url("/activos/imagenes/apartamentos/apartamento_7/image7.jpeg");
-}
-
-
-[zonaCSS=instalaciones] [animacion="contenedorImagen"] {
+[animacion="contenedorImagen"] {
     view-timeline-name: --image;
     view-timeline-axis: block;
     animation-timeline: --image;
@@ -409,17 +345,18 @@ main {
 }
 
 
-[zonaCSS=instalaciones] .textoPresentacion {
+.textoPresentacion {
     padding-left: 120px;
     padding-right: 120px;
     text-align: justify;
-    font-size: 13px;
-    color: #8D6E63;
+    font-size: 16px;
+    color: #2f2622;
     padding-top: 30px;
+    padding-bottom: 50px;
 }
 
 @media (max-width: 720px) {
-    [zonaCSS=instalaciones] .textoPresentacion {
+    .textoPresentacion {
         padding-left: 20px;
         padding-right: 20px;
         padding-top: 30px;
@@ -428,7 +365,7 @@ main {
 
 
 
-[zonaCSS=instalaciones] .cuadradoInicioTexto {
+.cuadradoInicioTexto {
     text-align: center;
     padding: 10px;
     background: #b1afaf66;
@@ -438,23 +375,24 @@ main {
 
 }
 
-[zonaCSS=instalaciones] .contenedorImagen {
-    height: 200px;
+.contenedorImagen {
     gap: 6px;
     background: #00000021;
-    border-radius: 14px;
+    /* border-radius: 14px; */
     overflow: hidden;
 
-    scale: 1;
-    transition: all 250ms ease-in-out;
+}
 
-    @starting-style {
-        scale: 0;
-    }
+.contenedorImagenMovimientoNormal {
+    transition: width 500ms linear;
+}
+
+.contenedorImangeControMovimiento {
+    transition: width 100ms linear !important;
 }
 
 
-[zonaCSS=instalaciones] .contenedorImagenFondo {
+.contenedorImagenFondo {
     background-size: cover;
     background-position: center center;
     flex: 1;
@@ -467,24 +405,61 @@ main {
     transition: background-image 250ms linear !important;
 }
 
-[zonaCSS=instalaciones] .gridImagenesApartamento {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 10px;
+.gridImagenesApartamento {
+    display: flex;
+    /* gap: 20px; */
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border-radius: 16px;
+    height: 400px;
+    width: 100%;
+    justify-content: flex-end;
+    overflow: hidden;
+
 }
 
-[zonaCSS=instalaciones] .contenedorInfoGlobal {
+.gridImagenesApartamento1 {
+    display: grid;
+    /* gap: 20px; */
+    background-color: green;
+    border-radius: 16px;
+    height: 100%;
+    width: 100%;
+    grid-auto-columns: max-content;
+    /* Las columnas se adaptan al tamaño del contenido */
+    grid-auto-flow: column;
+
+}
+
+
+
+.gridImagenesApartamento_antiguo {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+    background-color: green;
+    border-radius: 16px;
+    width: 850px;
+    height: 100%;
+}
+
+.nombreApartmento {
+    font-size: 28px;
+}
+
+.contenedorInfoGlobal {
     position: sticky;
     top: 10px;
-    width: 400px;
+    height: 100%;
+
 }
 
 @media (max-width: 990px) {
-    [zonaCSS=instalaciones] .gridImagenesApartamento {
+    .gridImagenesApartamento_antiguo {
         grid-template-columns: 1fr;
     }
 
-    [zonaCSS=instalaciones] .contenedorInfoGlobal {
+    .contenedorInfoGlobal {
         position: relative;
         width: 100%;
         top: auto;
@@ -500,8 +475,8 @@ main {
     grid-column-gap: 0px;
     grid-row-gap: 0px;
     gap: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 80px;
+    padding-right: 80px;
 }
 
 @media (max-width: 720px) {
@@ -567,11 +542,13 @@ main {
 }
 
 .botonDinamico.plegado {
-    font-size: 13px;
+    font-size: 18px;
     box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(50px);
+    font-weight: 700;
     -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.4)
+    background: rgb(255, 238, 202);
+    color: black !important;
 }
 
 .botonDinamico.desplegado {
@@ -587,4 +564,80 @@ main {
         font-size: 25px;
     }
 
+}
+
+.contenedorIconoHuesped {
+    background-image: url(/activos/iconos/guest.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.contenedorIconoCompatido {
+    height: 18px;
+}
+
+.iconoH {
+    height: 18px;
+    width: 18px;
+}
+
+.subtituloApartramento {
+    font-size: 15px;
+}
+
+.botonMasInfo {
+    padding: 10px;
+    border-radius: 10px;
+    transition: all 250ms linear;
+}
+
+.botonMasInfo:hover {
+    background: rgba(0, 0, 0, 0.137);
+
+}
+
+.imagenTest {
+    background-image: url(/activos/imagenes/apartamentos/apartamento_6/image1.jpeg);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.contenedorApartamento {
+    background: rgb(255, 238, 202) !important;
+    box-shadow: 0 0 20px 0px #0000002c;
+
+}
+
+
+[superContenedor=imagenes] .button {
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    background: hsl(0deg 0% 100% / 50%);
+    z-index: 2;
+    /* position: absolute; */
+    padding: 10px;
+    /* padding-left: 2px; */
+    border-radius: 20px;
+    font-size: 20px;
+    display: flex;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    align-content: center;
+    justify-content: center;
+}
+
+[superContenedor=imagenes] .botonAtras {
+    width: 32px;
+    translate: 10px;
+    padding-left: 8px;
+
+}
+
+[superContenedor=imagenes] .botonAdelante {
+    translate: -42px;
+    width: 32px;
+    padding-right: 8px;
 }

@@ -1,5 +1,6 @@
 import Decimal from "decimal.js"
 import { calcularTotal } from "../calcularTotal.mjs"
+import { controlTotalNetoAlojamiento } from "../../../../contenedorFinanciero/shared/controlTotalNetoAlojamiento.mjs"
 export const perfil_mismoDescuentoParaCadaApartamento = (data) => {
     try {
         const descuentos = data.descuentos
@@ -14,7 +15,13 @@ export const perfil_mismoDescuentoParaCadaApartamento = (data) => {
 
         for (const apartamentoIDV of apartamentosIDVArray) {
             const desgloseDelApartamento = estructura.entidades.reserva?.desglosePorApartamento[apartamentoIDV]
-            const totalPorApartametno = desgloseDelApartamento?.totalNetoConComplementos || desgloseDelApartamento?.totalNeto
+
+            const totalPorApartametno = controlTotalNetoAlojamiento({
+                totalNetoConComplementos: desgloseDelApartamento?.totalNetoConComplementos,
+                totalNetoSinComplementos: desgloseDelApartamento?.totalNeto
+            })
+
+
             if (!totalPorApartametno) {
                 continue
             }

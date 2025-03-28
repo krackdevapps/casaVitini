@@ -136,7 +136,7 @@ casaVitini.view = {
 
                 const botonEntrarPerfil = document.createElement("a")
                 botonEntrarPerfil.setAttribute("href", "/administracion/precios/apartamentos:" + apartamentoIDV)
-                botonEntrarPerfil.setAttribute("vista", "/administracion/precios/apartamentos:" + apartamentoIDV)
+
                 botonEntrarPerfil.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 botonEntrarPerfil.classList.add("botonV1BlancoIzquierda")
                 botonEntrarPerfil.textContent = "Editar perfil del precio"
@@ -145,7 +145,7 @@ casaVitini.view = {
 
                 const botonIrACalendario = document.createElement("a")
                 botonIrACalendario.setAttribute("href", `/administracion/calendario/capa:comportamientos_por_apartamento/capa:precio_noche_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}/precio_noche_por_apartamento:${apartamentoIDV}`)
-                botonIrACalendario.setAttribute("vista", `/administracion/calendario/capa:comportamientos_por_apartamento/capa:precio_noche_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}/precio_noche_por_apartamento:${apartamentoIDV}`)
+
                 botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                 botonIrACalendario.classList.add("botonV1BlancoIzquierda")
                 botonIrACalendario.textContent = "Ver precio y oscilaciones por comportamientos de precio en el calendario"
@@ -407,7 +407,7 @@ casaVitini.view = {
             botonIrALaConfiguracion.classList.add("botonV1BlancoIzquierda")
             botonIrALaConfiguracion.textContent = "Ir a la configuración del apartamento"
             botonIrALaConfiguracion.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
-            botonIrALaConfiguracion.setAttribute("vista", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
+
             botonIrALaConfiguracion.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorBotones.appendChild(botonIrALaConfiguracion)
         }

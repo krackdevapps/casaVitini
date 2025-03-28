@@ -71,7 +71,7 @@ casaVitini.view = {
             botonNuevoMensaje.classList.add("botonV1")
             botonNuevoMensaje.textContent = "Nuevo mensaje en portada"
             botonNuevoMensaje.setAttribute("href", "/administracion/configuracion/mensajes_en_portada/nuevo")
-            botonNuevoMensaje.setAttribute("vista", "/administracion/configuracion/mensajes_en_portada/nuevo")
+
             botonNuevoMensaje.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorBotones.appendChild(botonNuevoMensaje)
 
@@ -196,7 +196,7 @@ casaVitini.view = {
         botonModificar.classList.add("boton")
         botonModificar.textContent = "Modificar mensaje"
         botonModificar.setAttribute("href", "/administracion/configuracion/mensajes_en_portada/" + mensajeUID)
-        botonModificar.setAttribute("vista", "/administracion/configuracion/mensajes_en_portada/" + mensajeUID)
+
         botonModificar.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         contenedorBotonesMensaje.appendChild(botonModificar)
 

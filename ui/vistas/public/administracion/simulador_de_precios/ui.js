@@ -189,7 +189,7 @@ casaVitini.view = {
             botonCrearImpuesto.classList.add("botonV1")
             botonCrearImpuesto.textContent = "Nueva simulación"
             botonCrearImpuesto.setAttribute("href", "/administracion/simulador_de_precios/nueva_simulacion")
-            botonCrearImpuesto.setAttribute("vista", "/administracion/simulador_de_precios/nueva_simulacion")
+
             botonCrearImpuesto.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorBotones.appendChild(botonCrearImpuesto)
             espacioImpuestos.appendChild(contenedorBotones)
@@ -238,10 +238,12 @@ casaVitini.view = {
                 const fechaCreacion = simulacionData?.fechaCreacion
                 const fechaEntrada = simulacionData?.fechaEntrada
                 const fechaSalida = simulacionData?.fechaSalida
+                const llavesFaltantes = simulacionData?.llavesFaltantes || []
+
                 const apartamentos = simulacionData.apartamentos
                 const servicios = simulacionData.servicios || []
                 const complementosDeAlojamiento = simulacionData.complementosDeAlojamiento
-                const desglosePorServicios = simulacionData.desgloseFinanciero.entidades.servicios.desglosePorServicios
+                const desglosePorServicios = simulacionData?.contenedorFinanciero?.desgloseFinanciero?.entidades?.servicios?.desglosePorServicios || []
 
                 const selectorEspacio = document.querySelector("[componente=espacio]")
                 const contenedor = document.createElement("div")
@@ -251,8 +253,9 @@ casaVitini.view = {
 
                 const simulacionUI = casaVitini.view.componentes.simulacionUI({ simulacionUID })
                 simulacionUI.setAttribute("componente", `simulacionUID_${simulacionUID}`)
-
                 selectorEspacio.appendChild(simulacionUI)
+
+
 
                 const selectorTitulo = document.querySelector(".tituloGris")
                 selectorTitulo.classList.add(
@@ -315,6 +318,9 @@ casaVitini.view = {
                         sobreControl: "activado"
                     })
                 })
+
+
+
 
                 const componenteSelectorApartamentos = simulacionUI.querySelector("[componente=selectorApartamentos]")
                 const instanciaUID_sA = componenteSelectorApartamentos.getAttribute("instanciaUID")
@@ -393,7 +399,14 @@ casaVitini.view = {
                     pantallaDeCargaObsoleta?.remove()
 
                     if (respuestaServidor?.error) {
-                        casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+
+                        const errorID = respuestaServidor?.errorID
+                        if (errorID === "llavesFaltantes") {
+                            casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                        } else {
+                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        }
+
 
                     } else if (respuestaServidor?.ok) {
                         const nuevoApartamento = respuestaServidor.nuevoApartamento
@@ -456,14 +469,15 @@ casaVitini.view = {
                         casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
                     }
                     if (respuestaServidor?.ok) {
-                        const alojamiento = respuestaServidor.ok
-                        casaVitini.view.componentes.postProcesamientoTransaccion(respuestaServidor)
                         casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.eliminarApartamentoUI({
                             e
                         })
-
                         const contenedorComplementosAlojamiento = document.querySelector(`[contenedor=complementosAlojamiento] [componente=contenedorLista] [apartamentoIDV="${apartamentoIDV}"]`)
                         contenedorComplementosAlojamiento?.remove()
+                        casaVitini.view.componentes.postProcesamientoTransaccion(respuestaServidor)
+                        casaVitini.view.componentes.servicios.renderizarListaServicios({
+                            simulacionUID,
+                        })
                     }
                 }
             },
@@ -759,7 +773,7 @@ casaVitini.view = {
                                     )
                                     botonVerOferta.textContent = "Ir al complemento"
                                     botonVerOferta.setAttribute("href", "/administracion/complementos_de_alojamiento/complemento:" + complementoUID)
-                                    botonVerOferta.setAttribute("vista", "/administracion/complementos_de_alojamiento/complemento:" + complementoUID)
+
                                     botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                     contendorBotones.appendChild(botonVerOferta)
 
@@ -931,7 +945,7 @@ casaVitini.view = {
                         const info = document.createElement("p")
                         info.classList.add("flexVertical", "textoCentrado", "padding14")
                         info.setAttribute("componente", "sinInfo")
-                        info.textContent = "No hay ningún complemento en este alojamiento."
+                        info.textContent = "No hay ningún complemento."
                         return info
                     },
                     complementoUI: (data) => {
@@ -1265,7 +1279,7 @@ casaVitini.view = {
                             )
                             botonVerOferta.textContent = "Ir a la oferta"
                             botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
-                            botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+
                             botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                             contendorBotones.appendChild(botonVerOferta)
 
@@ -1314,8 +1328,14 @@ casaVitini.view = {
                     if (!uiRenderizada) { return }
 
                     if (respuestaServidor?.error) {
-                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                        return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                        const errorID = respuestaServidor?.errorID
+                        if (errorID === "llavesFaltantes") {
+                            casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                        } else {
+                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        }
+
+
                     }
                     if (respuestaServidor?.ok) {
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -1461,7 +1481,7 @@ casaVitini.view = {
                             )
                             botonVerOferta.textContent = "Ir a la oferta"
                             botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
-                            botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+
                             botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                             contendorBotones.appendChild(botonVerOferta)
 
@@ -1510,8 +1530,13 @@ casaVitini.view = {
                     if (!uiRenderizada) { return }
 
                     if (respuestaServidor?.error) {
-                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                        return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                        const errorID = respuestaServidor?.errorID
+                        if (errorID === "llavesFaltantes") {
+                            casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                        } else {
+                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        }
+
                     }
                     if (respuestaServidor?.ok) {
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -1744,7 +1769,12 @@ casaVitini.view = {
                         return
                     }
                     if (respuestaServidor?.error) {
-                        return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        const errorID = respuestaServidor?.errorID
+                        if (errorID === "llavesFaltantes") {
+                            casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                        } else {
+                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        }
                     }
                     if (respuestaServidor?.ok) {
                         casaVitini.view.componentes.postProcesamientoTransaccion(respuestaServidor)
@@ -1971,7 +2001,13 @@ casaVitini.view = {
 
 
                     if (respuestaServidor?.error) {
-                        return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                        const errorID = respuestaServidor?.errorID
+                        if (errorID === "llavesFaltantes") {
+                            casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                        } else {
+                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        }
+
                     }
                     if (respuestaServidor.ok) {
 
@@ -2133,7 +2169,13 @@ casaVitini.view = {
 
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
                 if (respuestaServidor?.error) {
-                    casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                    const errorID = respuestaServidor?.errorID
+                    if (errorID === "llavesFaltantes") {
+                        casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                    } else {
+                        casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                    }
+
                 }
                 if (respuestaServidor?.ok) {
                     const estadoAutorizado = respuestaServidor.autorizacion
@@ -2272,7 +2314,7 @@ casaVitini.view = {
                             )
                             botonVerOferta.textContent = "Ir al impuesto"
                             botonVerOferta.setAttribute("href", "/administracion/impuestos/" + impuestoUID)
-                            botonVerOferta.setAttribute("vista", "/administracion/impuestos/" + impuestoUID)
+
                             botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                             contendorBotones.appendChild(botonVerOferta)
 
@@ -2321,8 +2363,13 @@ casaVitini.view = {
                     if (!uiRenderizada) { return }
 
                     if (respuestaServidor?.error) {
-                        casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                        return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                        const errorID = respuestaServidor?.errorID
+                        if (errorID === "llavesFaltantes") {
+                            casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                        } else {
+                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        }
+
                     }
                     if (respuestaServidor?.ok) {
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -2578,7 +2625,13 @@ casaVitini.view = {
                     if (!uiRenderizada) { return }
 
                     if (respuestaServidor?.error) {
-                        return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        const errorID = respuestaServidor?.errorID
+                        if (errorID === "llavesFaltantes") {
+                            casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                        } else {
+                            casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                        }
+
                     }
                     if (respuestaServidor?.ok) {
                         casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -2718,8 +2771,13 @@ casaVitini.view = {
                         if (!uiRenderizada) { return }
 
                         if (respuestaServidor?.error) {
-                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                            const errorID = respuestaServidor?.errorID
+                            if (errorID === "llavesFaltantes") {
+                                casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                            } else {
+                                casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                            }
+
                         }
                         if (respuestaServidor?.ok) {
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
@@ -2803,12 +2861,22 @@ casaVitini.view = {
                         if (!uiRenderizada) { return }
 
                         if (respuestaServidor?.error) {
-                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                            const errorID = respuestaServidor?.errorID
+                            if (errorID === "llavesFaltantes") {
+                                casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                            } else {
+                                casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                            }
+
                         }
                         if (respuestaServidor?.ok) {
                             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                             const servicios = respuestaServidor.instantaneaServicios
-                            casaVitini.view.componentes.servicios.actualizarContenedor({ servicios })
+                            casaVitini.view.componentes.servicios.actualizarContenedor({
+                                servicios,
+                                simulacionUID,
+                                desglosePorServicios: []
+                            })
 
                             const desgloseFinanciero = respuestaServidor.desgloseFinanciero
                             casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
@@ -2834,8 +2902,13 @@ casaVitini.view = {
                     return
                 }
                 if (respuestaServidor?.error) {
-                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                    return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+                    const errorID = respuestaServidor?.errorID
+                    if (errorID === "llavesFaltantes") {
+                        casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                    } else {
+                        casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                    }
+
                 }
                 if (respuestaServidor?.ok) {
 
@@ -3048,7 +3121,11 @@ casaVitini.view = {
                 }
 
             },
-
+            errorPorLLavesFaltantes: function (data) {
+                casaVitini.view.componentes.postProcesamientoTransaccion(data)
+                return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(data?.error)
+                // Esto marcara la llaves faltantes, es decir se llamara a la funcion que hace esto
+            }
         },
         eliminarSimulacion: {
             UI: function () {
@@ -3153,14 +3230,7 @@ casaVitini.view = {
 
             const campoNombre = document.createElement("input")
             campoNombre.setAttribute("campo", "nombre")
-            campoNombre.classList.add(
-                "padding6",
-                "backgroundGrey1",
-                "borderRadius8",
-                "padding10",
-                "simplificadorCampo",
-                "noSelecionable"
-            )
+            campoNombre.classList.add()
             campoNombre.placeholder = "Escriba un nombre para la simulación"
             contenedorBotones.appendChild(campoNombre)
 
@@ -3201,7 +3271,7 @@ casaVitini.view = {
             )
             botonEliminar.textContent = "Eliminar simulación"
             botonEliminar.addEventListener("click", () => {
-                this.eliminarSimulacion.UI()
+                casaVitini.view.detallesSimulacion.eliminarSimulacion.UI()
             })
             cBotones.appendChild(botonEliminar)
 
@@ -3245,12 +3315,7 @@ casaVitini.view = {
                 casaVitini.view.componentes.actualizaSimulacion()
             })
 
-            selectorZonaIDV.classList.add(
-                "selectorZonas",
-                "padding10",
-                "borderRadius6",
-                "selectorLista"
-            )
+            selectorZonaIDV.classList.add()
             selectorZonaIDV.setAttribute("selector", "zonaIDV")
             opcionesEntidad.forEach((e) => {
                 const zonaIDV = e.zonaIDV
@@ -3344,6 +3409,7 @@ casaVitini.view = {
                 }
             })
             contenedor.appendChild(selectorRangoSimulado)
+
 
             const menuGlobal = casaVitini.view.detallesSimulacion.componentesUI.categoriasGlobalesUI.despliege({
                 simulacionUID
@@ -3611,10 +3677,9 @@ casaVitini.view = {
                 })
 
             } else if (desgloseFinanciero) {
-
-                document.querySelector(`[simulacionUID="${simulacionUID}"] [contenedor=simulacion] [info=llavesFaltantes]`)?.remove()
+                document.querySelector(`[simulacionUID] [contenedor=simulacion] [info=llavesFaltantes]`)?.remove()
                 casaVitini.view.__sharedMethods__.contenedorFinanciero.constructor({
-                    destino: `[simulacionUID="${simulacionUID}"] [contenedor=simulacion]`,
+                    destino: `[simulacionUID] [contenedor=simulacion]`,
                     contenedorFinanciero: { desgloseFinanciero },
                     modoUI: "simulador"
                 })
@@ -3821,7 +3886,7 @@ casaVitini.view = {
                                 )
                                 botonVerOferta.textContent = "Ir al servicio"
                                 botonVerOferta.setAttribute("href", "/administracion/servicios/servicio:" + servicioUID)
-                                botonVerOferta.setAttribute("vista", "/administracion/servicios/servicio:" + servicioUID)
+
                                 botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                                 contendorBotones.appendChild(botonVerOferta)
 
@@ -3960,11 +4025,16 @@ casaVitini.view = {
                             opcionesSeleccionadasDelServicio
                         })
                         const uiRenderizada = document.querySelector(`[simulacionUID="${simulacionUID}"] [contenedor=servicios]`)
-
+                        document.querySelector(`[instanciaUID="${instanciaPantallaCarga}"]`)?.remove()
                         if (!uiRenderizada) { return }
                         if (respuestaServidor?.error) {
-                            casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-                            return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
+
+                            const errorID = respuestaServidor?.errorID
+                            if (errorID === "llavesFaltantes") {
+                                casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                            } else {
+                                casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                            }
                         }
                         if (respuestaServidor?.ok) {
                             casaVitini.view.componentes.servicios.renderizarListaServicios({
@@ -3991,7 +4061,7 @@ casaVitini.view = {
                     const definicion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(definicionBase64)
 
 
-                    const totalServicio = desgloseFinancieroDelServicio.totalesDelServicio.global.totalServicio
+                    const totalServicio = desgloseFinancieroDelServicio?.totalesDelServicio?.global?.totalServicio || []
 
 
                     const fechaAdquisicionLocal = contenedor.fechaAdquisicionLocal
@@ -4764,11 +4834,11 @@ casaVitini.view = {
                     const servicioUID = dPS.servicio.servicioUID
                     contenedorServiciosIdizadosPorUID[servicioUID] = dPS
                 })
-                simulacionUI.querySelector("[componente=contenedorInfoSinServicios]")?.remove()
+                serviciosUI.querySelector("[componente=contenedorInfoSinServicios]")?.remove()
                 if (servicios.length === 0) {
                     cLS_sel?.remove()
                     const infoSinEnlaces = this.componentesUI.infoSinServiciosUI()
-                    simulacionUI.appendChild(infoSinEnlaces)
+                    serviciosUI.appendChild(infoSinEnlaces)
                 }
 
                 if (servicios.length > 0) {
@@ -4808,7 +4878,7 @@ casaVitini.view = {
                     casaVitini.view.componentes.servicios.actualizarContenedor({
                         servicios: respuestaServidor.servicios,
                         simulacionUID,
-                        desglosePorServicios: respuestaServidor.desgloseFinanciero.entidades.servicios.desglosePorServicios
+                        desglosePorServicios: respuestaServidor?.contenedorFinanciero?.desgloseFinanciero?.entidades?.servicios?.desglosePorServicios || []
                     })
                 }
             }
@@ -5189,7 +5259,7 @@ casaVitini.view = {
                         )
                         botonVerOferta.textContent = "Ir a la oferta"
                         botonVerOferta.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
-                        botonVerOferta.setAttribute("vista", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
+
                         botonVerOferta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                         contendorBotones.appendChild(botonVerOferta)
 
@@ -5237,7 +5307,13 @@ casaVitini.view = {
 
 
                         if (respuestaServidor?.error) {
-                            return casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                            const errorID = respuestaServidor?.errorID
+                            if (errorID === "llavesFaltantes") {
+                                casaVitini.view.detallesSimulacion.componentesUI.errorPorLLavesFaltantes(respuestaServidor)
+                            } else {
+                                casaVitini.ui.componentes.advertenciaInmersivaSuperPuesta(respuestaServidor?.error)
+                            }
+
                         }
 
                         if (respuestaServidor?.ok) {
@@ -5296,7 +5372,7 @@ casaVitini.view = {
             const info = data.info
             const llavesFaltantes = data.llavesFaltantes
 
-            const contenedorDesgloseFinancniero = document.querySelector(`[simulacionUID="${simulacionUID}"] [zonaSimulacion=desgloseFinanciero]`)
+            const contenedorDesgloseFinancniero = document.querySelector(`[simulacionUID] [zonaSimulacion=desgloseFinanciero]`)
             const contenedorFinancieroRenderizado = contenedorDesgloseFinancniero.querySelector("[contenedor=financiero]")
             contenedorFinancieroRenderizado?.remove()
 

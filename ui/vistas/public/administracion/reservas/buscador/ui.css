@@ -24,7 +24,9 @@
 }
 
 [zonaCSS="administracion/reservas/buscador"] .botonMostrarDisponibilidad:hover {
-    background: #8ac4ff;
+    background-color: rgb(0 0 0 / 70%);
+    color: white;
+
 }
 
 [zonaCSS="administracion/reservas/buscador"] .navegacionZonaAdministracion {

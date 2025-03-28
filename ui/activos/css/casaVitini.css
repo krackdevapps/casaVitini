@@ -48,6 +48,25 @@
     box-sizing: border-box;
 }
 
+body {
+   min-height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    background-image: url(/activos/imagenes/transparente.png);
+    transition: background 700ms linear;
+    flex-wrap: nowrap;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .uiPanelGlobal {
     background-color: rgba(161, 161, 161, 0);
     padding: 10px;
@@ -81,7 +100,7 @@
 
 #uiLogo {
     height: 70px;
-    width: 171px;
+    width: 180px;
     color: rgba(0, 0, 0, 0.9);
     cursor: default;
     transition: all 500ms linear;
@@ -144,22 +163,6 @@
     height: 20px;
 }
 
-body {
-    background: rgba(0, 0, 0, 0.3);
-    background-image: url(/activos/imagenes/transparente.png);
-    transition: background 700ms linear;
-    flex-wrap: nowrap;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    -webkit-tap-highlight-color: transparent;
-}
 
 main {
     display: flex;
@@ -171,6 +174,7 @@ main {
     align-items: center;
     max-width: 2160px;
     width: 100%;
+
 }
 
 header {
@@ -184,16 +188,15 @@ header .simulador {
     position: absolute;
 }
 
-header .estructura {
+header .estructuraHoriontal {
     display: flex;
     padding: 6px;
-    gap: 6px;
+    gap: 0px;
     transition: all 500ms linear;
     border-radius: 30px;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
     gap: 6px;
-    background-color: rgba(255, 255, 255, 0.2);
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
@@ -209,6 +212,8 @@ header .estructura {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
+    padding: 6px;
+    border-radius: 15px;
 }
 
 header .contenedorIntermedio {
@@ -374,14 +379,14 @@ header .zonas {
     align-content: center;
     justify-content: center;
     align-items: center;
-    font-weight: 550;
+    font-weight: 700;
     height: 33px;
     width: 100%;
     transition: background 250ms linear, color 250ms linear, scale 250ms ease-in-out;
     justify-content: flex-start;
     scale: 1;
     white-space: nowrap;
-    font-size: 11px;
+    font-size: 12px;
 
     @starting-style {
         scale: 0;
@@ -389,18 +394,16 @@ header .zonas {
 }
 
 
-.uiCategoria>* {
-    font-size: 11px;
-
-}
 
 .uiCategoria:hover {
     background: rgba(0, 0, 0, 0.1);
 }
+.menuGlobal_styloCompartido {
+    background-color: rgba(255, 255, 255, 0.1);
 
+}
 .botonMenuResponsivo {
     transition: all 250ms linear;
-    background-color: rgba(255, 255, 255, 0.5);
     text-align: center;
     border-radius: 10px;
     height: 40px;
@@ -411,11 +414,12 @@ header .zonas {
     justify-content: center;
     -webkit-tap-highlight-color: transparent;
     background-position: center center;
-    background-image: url(/activos/iconos/menu5.svg);
+    background-image: url(/activos/iconos/menu_negro.svg);
     background-size: cover;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
-    scale: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+   scale: 0;
 }
 
 .esferaUI_flotante {
@@ -521,7 +525,6 @@ header .zonas {
     transition: all 250ms;
     -webkit-backdrop-filter: blur(50px);
     backdrop-filter: blur(50px);
-    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 17px;
     align-content: center;
     justify-content: center;
@@ -529,12 +532,12 @@ header .zonas {
     flex-direction: column;
     flex-wrap: nowrap;
     position: absolute;
-    gap: 6px;
+    /* gap: 6px; */
     top: 70px;
     right: 25px;
     position: fixed;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
-    padding: 6px;
+    /* padding: 6px; */
     z-index: 1000;
     scale: 1;
     transition: scale 250ms ease-in-out;
@@ -646,8 +649,9 @@ header .zonas {
 
 @media print {
     * {
-      -webkit-print-color-adjust: exact; /* Para navegadores basados en Webkit */
-      print-color-adjust: exact; /* Para navegadores compatibles */
+        -webkit-print-color-adjust: exact;
+        /* Para navegadores basados en Webkit */
+        print-color-adjust: exact;
+        /* Para navegadores compatibles */
     }
-  }
-  
+}

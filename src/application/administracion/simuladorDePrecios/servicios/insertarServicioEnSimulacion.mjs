@@ -30,7 +30,7 @@ export const insertarServicioEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const servicioUID = validadoresCompartidos.tipos.cadena({
@@ -40,7 +40,7 @@ export const insertarServicioEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
@@ -92,7 +92,11 @@ export const insertarServicioEnSimulacion = async (entrada) => {
         const postProcesadoSimualacion = await controladorGeneracionDesgloseFinanciero(simulacionUID)
         servicioInsertado.contenedor.fechaAdquisicionLocal = await obtenerFechaLocal(fechaUTC)
 
+
+
         await campoDeTransaccion("confirmar")
+
+
         const ok = {
             ok: "Se ha insertado el servicio correctamente en la reserva y el contenedor financiero se ha renderizado.",
             servicio: servicioInsertado,
@@ -100,8 +104,11 @@ export const insertarServicioEnSimulacion = async (entrada) => {
             ...postProcesadoSimualacion
         }
         return ok
+
+
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
+
         throw errorCapturado
     }
 }

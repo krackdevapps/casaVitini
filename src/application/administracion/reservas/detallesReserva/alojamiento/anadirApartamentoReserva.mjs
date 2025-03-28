@@ -32,7 +32,7 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({

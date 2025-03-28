@@ -11,9 +11,17 @@ export const obtenerConfiguracionPorApartamentoIDV = async (data) => {
         "configuracionUID",
         "apartamentoIDV",
         "estadoConfiguracionIDV",
-        "zonaIDV"
+        "zonaIDV",
+        (
+            SELECT
+            "apartamentoUI"
+            FROM
+            apartamentos
+            WHERE
+            apartamentos."apartamentoIDV" = "configuracionApartamento"."apartamentoIDV"
+        ) AS "apartamentoUI"
         FROM "configuracionApartamento"
-        WHERE "apartamentoIDV" = $1
+        WHERE "apartamentoIDV" = $1;
         `;
         const resuelve = await conexion.query(consulta, [apartamentoIDV]);
         if (errorSi === "noExiste") {

@@ -42,12 +42,14 @@ export const listaSimulacionesPaginados = async (entrada) => {
             soloMinusculas: "si"
         })
 
-        const pagina = validadoresCompartidos.tipos.granEntero({
+        const pagina = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
             sePermiteVacio: "no",
+            filtro: "numeroSimple",
             limpiezaEspaciosAlrededor: "si",
-            sePermitenNegativos: "no"
+            sePermitenNegativos: "no",
+            devuelveUnTipoNumber: "si"
         })
 
         if (nombreColumna) {

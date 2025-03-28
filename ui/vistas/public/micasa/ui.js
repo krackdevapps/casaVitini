@@ -43,86 +43,104 @@ casaVitini.view = {
             const bannerIDX = this.__sharedMethods__.bannerIDX(metadatosBanner)
             contenedorBanner.appendChild(bannerIDX)
             marcoCuenta.appendChild(contenedorBanner)
+
+
+            const marcoUsuario = document.createElement("div")
+            marcoUsuario.classList.add("miCasa_marcoUsuario")
+            marcoUsuario.setAttribute("componente", "marcoUsuario")
+            marcoCuenta.appendChild(marcoUsuario)
+
+            if (rolIDV === "administrador" || rolIDV === "empleado") {
+                const botonAdministracion = document.createElement("a")
+                botonAdministracion.setAttribute("class", "botonUsuario")
+                botonAdministracion.setAttribute("href", "/administracion")
+
+                botonAdministracion.classList.add("miCasa_marcoUsuario_opcion")
+                botonAdministracion.textContent = "Administracion"
+                botonAdministracion.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                marcoUsuario.appendChild(botonAdministracion)
+
+            }
+
             const botonReservas = document.createElement("a")
             botonReservas.setAttribute("class", "botonUsuario")
             botonReservas.setAttribute("href", "/micasa/reservas")
-            botonReservas.setAttribute("vista", "/micasa/reservas")
+
             botonReservas.classList.add("miCasa_marcoUsuario_opcion")
             botonReservas.textContent = "Mis Reservas"
             botonReservas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoUsuario.appendChild(botonReservas)
+
+
             const botonModificarIDX = document.createElement("a")
             botonModificarIDX.setAttribute("class", "botonUsuario")
             botonModificarIDX.setAttribute("href", "/micasa/modificar_nombre_de_usuario")
-            botonModificarIDX.setAttribute("vista", "/micasa/modificar_nombre_de_usuario")
+
             botonModificarIDX.classList.add("miCasa_marcoUsuario_opcion")
             botonModificarIDX.textContent = "Modificar nombre de usuario"
             botonModificarIDX.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoUsuario.appendChild(botonModificarIDX)
+
+
             const botonDatosPersonales = document.createElement("a")
             botonDatosPersonales.setAttribute("class", "botonUsuario")
             botonDatosPersonales.setAttribute("href", "/micasa/mis_datos_personales")
-            botonDatosPersonales.setAttribute("vista", "/micasa/mis_datos_personales")
+
             botonDatosPersonales.classList.add("miCasa_marcoUsuario_opcion")
             botonDatosPersonales.textContent = "Mis datos personales"
             botonDatosPersonales.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoUsuario.appendChild(botonDatosPersonales)
+
+
             const botonCambiarContrasena = document.createElement("a")
             botonCambiarContrasena.setAttribute("class", "botonUsuario")
             botonCambiarContrasena.setAttribute("href", "/micasa/cambiar_clave")
-            botonCambiarContrasena.setAttribute("vista", "/micasa/cambiar_clave")
+
             botonCambiarContrasena.classList.add("miCasa_marcoUsuario_opcion")
             botonCambiarContrasena.textContent = "Cambiar contrasena"
             botonCambiarContrasena.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoUsuario.appendChild(botonCambiarContrasena)
+
+
             const botonSessionesActivas = document.createElement("a")
             botonSessionesActivas.setAttribute("class", "botonUsuario")
             botonSessionesActivas.setAttribute("href", "/micasa/sessiones")
-            botonSessionesActivas.setAttribute("vista", "/micasa/sessiones")
+
             botonSessionesActivas.classList.add("miCasa_marcoUsuario_opcion")
             botonSessionesActivas.textContent = "Sessiones activas"
             botonSessionesActivas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoUsuario.appendChild(botonSessionesActivas)
+
+
             const botonZonaHoraria = document.createElement("a")
             botonZonaHoraria.setAttribute("class", "botonUsuario")
             botonZonaHoraria.setAttribute("href", "/micasa/zona_horaria")
-            botonZonaHoraria.setAttribute("vista", "/micasa/zona_horaria")
+
             botonZonaHoraria.classList.add("miCasa_marcoUsuario_opcion")
             botonZonaHoraria.textContent = "Configuración de la zona horaria"
             botonZonaHoraria.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+
+
+
+            const botonEliminarCuenta = document.createElement("a")
+            botonEliminarCuenta.setAttribute("class", "botonUsuario")
+            botonEliminarCuenta.setAttribute("href", "/micasa/eliminar_cuenta")
+
+            botonEliminarCuenta.setAttribute("componente", "botonEliminarCuenta")
+            botonEliminarCuenta.classList.add("miCasa_marcoUsuario_opcion")
+            botonEliminarCuenta.textContent = "Eliminar cuenta"
+            botonEliminarCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoUsuario.appendChild(botonEliminarCuenta)
+
+
             const botonCerrarSession = document.createElement("a")
             botonCerrarSession.setAttribute("class", "botonUsuario")
             botonCerrarSession.setAttribute("componente", "botonCerrarSession")
             botonCerrarSession.classList.add("miCasa_marcoUsuario_opcion")
             botonCerrarSession.textContent = "Cerrar session"
             botonCerrarSession.addEventListener("click", () => { this.cerrarSession() })
-            const botonEliminarCuenta = document.createElement("a")
-            botonEliminarCuenta.setAttribute("class", "botonUsuario")
-            botonEliminarCuenta.setAttribute("href", "/micasa/eliminar_cuenta")
-            botonEliminarCuenta.setAttribute("vista", "/micasa/eliminar_cuenta")
-            botonEliminarCuenta.setAttribute("componente", "botonEliminarCuenta")
-            botonEliminarCuenta.classList.add("miCasa_marcoUsuario_opcion")
-            botonEliminarCuenta.textContent = "Eliminar cuenta"
-            botonEliminarCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            marcoUsuario.appendChild(botonCerrarSession)
 
-            const marcoUsuario = document.createElement("div")
-            marcoUsuario.classList.add("miCasa_marcoUsuario")
-            marcoUsuario.setAttribute("componente", "marcoUsuario")
-            if (rolIDV === "cliente") {
-                marcoUsuario.appendChild(botonReservas)
-                marcoUsuario.appendChild(botonModificarIDX)
-                marcoUsuario.appendChild(botonDatosPersonales)
-                marcoUsuario.appendChild(botonSessionesActivas)
-                marcoUsuario.appendChild(botonCambiarContrasena)
-                marcoUsuario.appendChild(botonEliminarCuenta)
-                marcoUsuario.appendChild(botonCerrarSession)
-            }
-            if (rolIDV === "administrador" || rolIDV === "empleado") {
-                marcoUsuario.appendChild(botonReservas)
-                marcoUsuario.appendChild(botonModificarIDX)
-                marcoUsuario.appendChild(botonDatosPersonales)
-                marcoUsuario.appendChild(botonSessionesActivas)
-
-                marcoUsuario.appendChild(botonCambiarContrasena)
-                marcoUsuario.appendChild(botonEliminarCuenta)
-                marcoUsuario.appendChild(botonCerrarSession)
-            }
-            marcoCuenta.appendChild(marcoUsuario)
         }
     },
     cerrarSession: async () => {

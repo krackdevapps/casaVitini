@@ -15,6 +15,7 @@ import { jsonHeader } from './middleware/jsonHeader.mjs';
 import { antiPrototypePollution } from './middleware/antiPrototypePollution.mjs';
 import compression from 'compression';
 import { csp } from './middleware/csp.mjs';
+import { simpleLog } from './middleware/simpleLog.mjs';
 dotenv.config()
 process.on('uncaughtException', (error) => {
   console.error('Alerta! ->>:', error.message);
@@ -46,6 +47,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(controlTipoVerbo)
 app.disable('x-powered-by')
 app.use(csp);
+app.use(simpleLog)
 
 app.use('/activos', express.static(path.join('./ui/activos')))
 app.use(controlBaseDeDatos)

@@ -18,6 +18,8 @@ import { enviarMailDeAvisoPorReservaPublica } from "../../../shared/mail/enviarM
 import { validarComplementosAlojamiento } from "../../../shared/reservas/nuevaReserva/reservaPulica/validarComplementosAlojamiento.mjs";
 import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 import { esquemaGlobal } from "../../administracion/reservas/detallesReserva/pdf/contenedores/esquemaGlobal.mjs";
+import { obtenerTodasLasCaracteristicasDelApartamento } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerTodasLasCaracteristicasDelApartamento.mjs";
+import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const preConfirmarReserva = async (entrada) => {
     try {
@@ -104,7 +106,6 @@ export const preConfirmarReserva = async (entrada) => {
         const reservaUID = resolvertInsertarReserva.reservaUID
 
         await actualizarEstadoPago(reservaUID)
-        await campoDeTransaccion("confirmar")
         const resolverDetallesReserva = await detallesReserva({
             reservaUID: reservaUID,
             capas: [
@@ -117,6 +118,22 @@ export const preConfirmarReserva = async (entrada) => {
             ]
         })
         limpiarContenedorFinacieroInformacionPrivada(resolverDetallesReserva)
+
+        //apartamentosIDVArray > Obtener caracteristias por apartametno, añadirlo al objeto y devolverlo para guardarlo en cache        
+        const caracteristicasPorApartamento = {}
+        const informacionPublicaPorApartamento = {}
+
+        for (const apartamentoIDV of apartamentosIDVArray) {
+            const caracteristicas = await obtenerTodasLasCaracteristicasDelApartamento(apartamentoIDV)
+            caracteristicasPorApartamento[apartamentoIDV] = caracteristicas
+            const infoPublica = await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                apartamentoIDV,
+                errorSi: "noExiste"
+            })
+            informacionPublicaPorApartamento[apartamentoIDV] = infoPublica
+        }
+        await campoDeTransaccion("confirmar")
+
         const pdf = await esquemaGlobal({
             incluirTitular: "si",
             reserva: resolverDetallesReserva,
@@ -133,9 +150,13 @@ export const preConfirmarReserva = async (entrada) => {
             // enviarMailDeAvisoPorReservaPublica(reservaUID)
         }
 
+
+        
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,
+            caracteristicasPorApartamento: caracteristicasPorApartamento,
+            informacionPublicaPorApartamento:informacionPublicaPorApartamento,
             pdf
         }
         return ok

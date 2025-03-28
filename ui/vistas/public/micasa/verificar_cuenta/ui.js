@@ -37,7 +37,7 @@ casaVitini.view = {
             botonRecuperarCuenta.classList.add("botonV1BlancoIzquierda")
             botonRecuperarCuenta.textContent = "Ir a recuperar mi cuenta para mandar un enlace de verificación a mi correo"
             botonRecuperarCuenta.setAttribute("href", "/micasa/recuperar_cuenta")
-            botonRecuperarCuenta.setAttribute("vista", "/micasa/recuperar_cuenta")
+
             botonRecuperarCuenta.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             const contenedorCrearCuenta = document.createElement('div');
             contenedorCrearCuenta.classList.add('flexVertical', "gap6")
@@ -91,7 +91,7 @@ casaVitini.view = {
             botonIniciarReserva.classList.add("botonV1BlancoIzquierda")
             botonIniciarReserva.textContent = "Ir a generar un nuevo código de verificación"
             botonIniciarReserva.setAttribute("href", "/micasa/recuperar_cuenta")
-            botonIniciarReserva.setAttribute("vista", "/micasa/recuperar_cuenta")
+
             botonIniciarReserva.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIniciarReserva)
 
@@ -99,7 +99,7 @@ casaVitini.view = {
             irALogin.classList.add("botonV1BlancoIzquierda")
             irALogin.textContent = "Ir a la pantalla de login"
             irALogin.setAttribute("href", "/micasa")
-            irALogin.setAttribute("vista", "/micasa")
+
             irALogin.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(irALogin)
 
@@ -128,14 +128,14 @@ casaVitini.view = {
             botonIrARegistrarse.classList.add("botonV1BlancoIzquierda")
             botonIrARegistrarse.textContent = "Ir al portal de MiCasa"
             botonIrARegistrarse.setAttribute("href", "/micasa")
-            botonIrARegistrarse.setAttribute("vista", "/micasa")
+
             botonIrARegistrarse.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonIrARegistrarse)
             const botonInciarSession = document.createElement("a")
             botonInciarSession.classList.add("botonV1BlancoIzquierda")
             botonInciarSession.textContent = "Ir a la página principal"
             botonInciarSession.setAttribute("href", "/")
-            botonInciarSession.setAttribute("vista", "/")
+
             botonInciarSession.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             marcoElastico.appendChild(botonInciarSession)
             marcoElasticoRelatico.appendChild(marcoElastico)

@@ -2,9 +2,10 @@ import { validadoresCompartidos } from "../../validadores/validadoresCompartidos
 
 export const validadorBusqueda = (configuracion) => {
     try {
-        const pagina = validadoresCompartidos.tipos.granEntero({
+        const pagina = validadoresCompartidos.tipos.numero({
             number: configuracion.pagina,
             nombreCampo: "El número de página aquí",
+            filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
