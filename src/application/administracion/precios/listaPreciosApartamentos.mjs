@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerTodasLasConfiguracionDeLosApartamento } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamento.mjs";
 import { obtenerPerfilPrecioPorApartamentoIDV } from "../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
@@ -6,11 +6,7 @@ import { obtenerImpuestosPorEntidadIDV } from "../../../infraestructure/reposito
 
 export const listaPreciosApartamentos = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const configuracionesDeAlojamiento = await obtenerTodasLasConfiguracionDeLosApartamento()
 

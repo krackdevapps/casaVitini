@@ -2,15 +2,11 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraes
 import { obtenerComplementosPorApartamentoIDV } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementosPorApartamentoIDV.mjs";
 import { acoplarHabitacionesAComplemento } from "../../../shared/complementosDeAlojamiento/acoplarHabitacionesAComplemento.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 
 export const obtenerComplementosPorAlojamiento = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
 
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({

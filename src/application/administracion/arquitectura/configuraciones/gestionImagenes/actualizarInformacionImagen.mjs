@@ -2,15 +2,13 @@ import { actualizarInformacionImagenPorImagenUIDPorApartamentoIDV } from "../../
 import { obtenerImagenPorImagenUIDPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/gestionDeImagenes/obtenerImagenPorImagenUIDPorApartamentoIDV.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 
 export const actualizarInformacionImagen = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 4
@@ -29,7 +27,7 @@ export const actualizarInformacionImagen = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const titulo = validadoresCompartidos.tipos.cadena({
@@ -64,6 +62,10 @@ export const actualizarInformacionImagen = async (entrada) => {
             titulo,
             descripcion
         })
+
+
+
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado la informacion de la imagen correctamente",

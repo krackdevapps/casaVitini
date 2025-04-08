@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerHabitacionDelLaReserva } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
@@ -15,11 +15,7 @@ import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompar
 export const gestionarCamasDeHabitacion = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         await semaforoCompartidoReserva.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
@@ -35,7 +31,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const habitacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacionUID,
@@ -46,7 +42,7 @@ export const gestionarCamasDeHabitacion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const nuevaCamaIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevaCamaIDV,

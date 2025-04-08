@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerPerfilPrecioPorApartamentoIDV } from "../../../../infraestructure/repository/precios/obtenerPerfilPrecioPorApartamentoIDV.mjs";
 import { Mutex } from "async-mutex";
@@ -12,10 +12,7 @@ export const cambiarEstadoConfiguracionAlojamiento = async (entrada) => {
     const mutex = new Mutex()
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
 
 

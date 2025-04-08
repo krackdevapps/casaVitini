@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerClientesPorMail } from "../../../infraestructure/repository/clientes/obtenerClientesPorMail.mjs";
 import { obtenerTitularReservaPorClienteUID_array } from "../../../infraestructure/repository/reservas/titulares/obtenerTitularReservaPorClienteUID.mjs";
@@ -12,9 +12,7 @@ import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstr
 export const listarMisReservas = async (entrada) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.control()
+
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const usuario = entrada.session.usuario
@@ -33,6 +31,7 @@ export const listarMisReservas = async (entrada) => {
             number: entrada.body.pagina,
             nombreCampo: "El numero de página",
             sePermiteVacio: "no",
+            filtro: "numeroSimple",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"
         })
@@ -54,7 +53,7 @@ export const listarMisReservas = async (entrada) => {
         }
 
         const sentidoColumna = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.sentidoColumna || "",
+            string: entrada.body.sentidoColumna || "ascendente",
             nombreCampo: "El campo del sentido de la columna",
             filtro: "strictoConEspacios",
             sePermiteVacio: "si",

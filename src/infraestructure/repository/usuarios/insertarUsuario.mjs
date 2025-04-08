@@ -2,7 +2,6 @@ import { conexion } from "../globales/db.mjs";
 
 export const insertarUsuario = async (data) => {
     const usuarioIDX = data.usuarioIDX
-    const rolIDV = data.rolIDV
     const estadoCuenta = data.estadoCuenta
     const nuevaSal = data.nuevaSal
     const hashCreado = data.hashCreado
@@ -16,7 +15,6 @@ export const insertarUsuario = async (data) => {
         INSERT INTO usuarios
         (
         usuario,
-        "rolIDV",
         "estadoCuentaIDV",
         sal,
         clave,
@@ -26,13 +24,12 @@ export const insertarUsuario = async (data) => {
         "testingVI"
         )
         VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING
         *
         `;
         const parametros = [
             usuarioIDX,
-            rolIDV,
             estadoCuenta,
             nuevaSal,
             hashCreado,

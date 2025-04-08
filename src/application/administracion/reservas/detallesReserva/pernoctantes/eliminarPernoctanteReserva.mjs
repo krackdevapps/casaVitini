@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -13,11 +13,7 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -33,7 +29,7 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
@@ -42,7 +38,7 @@ export const eliminarPernoctanteReserva = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const tipoEliminacion = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoEliminacion,

@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 import { validarObjetoOferta } from "../../../../../shared/ofertas/entidades/reserva/validarObjetoOferta.mjs"
 import { obtenerOfertasPorNombreUI } from "../../../../../infraestructure/repository/ofertas/obtenerOfertasPorNombreUI.mjs"
@@ -13,10 +13,7 @@ import { DateTime } from "luxon"
 export const insertarDescuentoDedicado = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,

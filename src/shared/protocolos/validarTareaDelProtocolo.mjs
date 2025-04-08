@@ -13,7 +13,7 @@ export const validarTareaDelProtocolo = (data) => {
 
         if (filtrosIDV.includes("uid")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 uid: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -35,7 +35,7 @@ export const validarTareaDelProtocolo = (data) => {
         }
         if (filtrosIDV.includes("posicion")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 posicion: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -57,13 +57,13 @@ export const validarTareaDelProtocolo = (data) => {
         }
         if (filtrosIDV.includes("tareaUI")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 tareaUI: Joi.string().required()
             });
         }
         if (filtrosIDV.includes("apartamentoIDV")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 apartamentoIDV: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -83,7 +83,7 @@ export const validarTareaDelProtocolo = (data) => {
         }
         if (filtrosIDV.includes("tipoDiasIDV")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 tipoDiasIDV: Joi.array().items(
                     Joi.string().required().custom((value, helpers) => {
                         try {
@@ -103,13 +103,9 @@ export const validarTareaDelProtocolo = (data) => {
                 ).min(1)
             });
         }
-
         if (numeroFiltros !== filtrosIDV.length) {
             throw new Error("validarElemento mas configurado, hay filtros que no se reconocen")
-
         }
-
-
 
         const oVal = controlEstructuraPorJoi({
             schema: schema,
@@ -133,7 +129,6 @@ export const validarTareaDelProtocolo = (data) => {
 
             if (tipoDiasIDV.includes("siempre")) {
                 oVal.tipoDiasIDV = ["siempre"]
-
             }
         }
         return oVal

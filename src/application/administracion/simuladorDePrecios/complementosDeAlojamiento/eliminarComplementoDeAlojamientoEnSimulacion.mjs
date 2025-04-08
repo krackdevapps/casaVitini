@@ -2,15 +2,11 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { eliminarComplementoAlojamientoEnSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/complementosDeAlojamiento/eliminarComplementoAlojamientoEnSimulacionPorSimulacionUID.mjs"
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 
 export const eliminarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const complementoUID_enSimulacion = validadoresCompartidos.tipos.cadena({
             string: entrada.body.complementoUID_enSimulacion,

@@ -16,7 +16,7 @@ export const validarRevisionInventarioAlojamiento = (data) => {
 
         if (filtrosIDV.includes("respuestas")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 respuestas: Joi.array().items(
                     Joi.object({
                         cantidadEncontrada: Joi.string().required().custom((value, helpers) => {
@@ -88,7 +88,7 @@ export const validarRevisionInventarioAlojamiento = (data) => {
 
         if (filtrosIDV.includes("uid")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
 
                 uid: Joi.string().optional().custom((value, helpers) => {
                     try {

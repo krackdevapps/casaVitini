@@ -216,6 +216,7 @@ export const validadoresCompartidos = {
     fechas: {
         validarFecha_ISO: async (configuracion) => {
             try {
+
                 if (!configuracion.hasOwnProperty("nombreCampo")) {
                     throw new Error("El validador de fechas ISO mal configurado. No encuentra la llave nombreCampo en el objeto");
                 }
@@ -233,8 +234,10 @@ export const validadoresCompartidos = {
                 const filtroFecha_ISO = /^\d{4}-\d{2}-\d{2}$/;
                 if (!filtroFecha_ISO.test(fecha_ISO)) {
                     const error = `${nombreCampo} no cumple el formato ISO esperado`
+
                     throw new Error(error)
                 }
+
                 const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria
                 const fechaControl = DateTime.fromISO(fecha_ISO, { zone: zonaHoraria }).isValid;
                 if (!fechaControl) {
@@ -242,8 +245,9 @@ export const validadoresCompartidos = {
                     throw new Error(error)
                 }
                 return fecha_ISO
-            } catch (errorCapturado) {
-                throw errorCapturado
+            } catch (error) {
+                console.error("Error capturado en validarFecha_ISO:", error);
+                throw error
             }
         },
         validarFecha_Humana: async (fecha_Humana) => {
@@ -587,6 +591,11 @@ export const validadoresCompartidos = {
                 string = string.replace(filtro, '');
             } else if (filtro === "cadenaConNumerosConDosDecimales") {
                 try {
+                    const filtroEntero = /^-?\d+$/;
+                    if (filtroEntero.test(string)) {
+                        string = string + ".00"    
+                    }
+
                     const filtroComa = /^\d+\,\d{2}$/
                     if (filtroComa.test(string)) {
                         const mensaje = `${nombreCampo} cambia la coma por un punto, gracias.`

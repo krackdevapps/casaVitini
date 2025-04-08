@@ -1,16 +1,12 @@
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerBloqueoPorBloqueoUID } from "../../../infraestructure/repository/bloqueos/obtenerBloqueoPorBloqueoUID.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 
 export const detallesDelBloqueo = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -30,7 +26,7 @@ export const detallesDelBloqueo = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
 

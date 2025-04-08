@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 import { obtenerHabitacionDelApartamentoPorHabitacionIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionIDV.mjs";
@@ -9,11 +9,7 @@ import { obtenerTodasLasCamaPorTipoIDV } from "../../../../../infraestructure/re
 
 export const listarTipoCamasHabitacion = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2

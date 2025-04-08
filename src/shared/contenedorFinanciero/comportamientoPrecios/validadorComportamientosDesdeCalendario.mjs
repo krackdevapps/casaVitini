@@ -12,7 +12,7 @@ export const validadorComportamientosDesdeCalendario = async (data) => {
 
         const schema = Joi.object({
             fechasSel: Joi.array().items(
-                Joi.date().iso().required()
+                Joi.string().required()
             ).min(1).required().messages(commonMessages),
             apartamentosIDVSel: Joi.array().items(
                 Joi.string().required().messages(commonMessages)
@@ -21,7 +21,7 @@ export const validadorComportamientosDesdeCalendario = async (data) => {
             cantidad: Joi.string().messages(commonMessages)
         }).required().messages(commonMessages)
 
-        controlEstructuraPorJoi({
+        const oVal = controlEstructuraPorJoi({
             schema: schema,
             objeto: entrada.body
         })
@@ -40,6 +40,7 @@ export const validadorComportamientosDesdeCalendario = async (data) => {
                 throw new Error(m)
             }
             controlUnicidadFechas[f] = true
+            
         }
         const apartamentosIDVSel = entrada.body.apartamentosIDVSel
         const controlUnicidadApartamentosiDV = {}
@@ -94,8 +95,9 @@ export const validadorComportamientosDesdeCalendario = async (data) => {
                 devuelveUnTipoNumber: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
+            oVal.cantidad = cantidad
         }
-
+        return oVal
 
 
     } catch (error) {

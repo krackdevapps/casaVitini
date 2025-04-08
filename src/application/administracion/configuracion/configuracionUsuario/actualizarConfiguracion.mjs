@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { controlEstructuraPorJoi } from "../../../../shared/validadores/controlEstructuraPorJoi.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { actualizarConfiguracionUsuario } from "../../../../infraestructure/repository/configuracion/configuracionUsuario/actualizarConfiguracionUsuario.mjs";
 import { utilidades } from "../../../../shared/utilidades.mjs";
@@ -8,11 +8,7 @@ import { insertarConfiguracionUsuario } from "../../../../infraestructure/reposi
 
 export const actualizarConfiguracion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         const usuario = entrada.session.usuario
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 

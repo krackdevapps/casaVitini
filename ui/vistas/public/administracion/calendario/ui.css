@@ -1,357 +1,371 @@
- [zonaCSS="administracion/calendario"] .infoEvento {
-     text-overflow: ellipsis;
-     overflow: hidden;
-     white-space: nowrap;
-     width: 100%;
-     pointer-events: none;
- }
+body {
+    height: 100%;
+    position: fixed;
+    background-color: white;
+}
 
- [zonaCSS="administracion/calendario"] .contenedorDiasSemana {
-     list-style: none;
-     display: grid;
-     grid-template-columns: repeat(7, 1fr);
-     grid-template-rows: min-content;
-     grid-gap: 6px;
-     scale: 1;
-     transition: all 250ms ease-in-out;
+.infoEvento {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    pointer-events: none;
+}
 
-     @starting-style {
-         scale: 0;
-     }
- }
+.contenedorDiasSemana {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: min-content;
+    grid-gap: 6px;
+    scale: 1;
+    transition: all 250ms ease-in-out;
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_marcoMes {
-     list-style: none;
-     display: grid;
-     grid-template-columns: repeat(7, 1fr);
-     flex: 1;
-     grid-template-rows: auto;
-     grid-gap: 6px;
-     scale: 1;
-     transition: scale 250ms ease-in-out;
+    @starting-style {
+        scale: 0;
+    }
+}
 
-     @starting-style {
-         scale: 0;
-     }
- }
+.administracion_calendario_marcoMes {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    flex: 1;
+    grid-template-rows: auto;
+    grid-gap: 6px;
+    scale: 1;
+    transition: scale 250ms ease-in-out;
+
+    @starting-style {
+        scale: 0;
+    }
+}
 
 
- @media (max-width: 720px) {
-    [zonaCSS="administracion/calendario"] .administracion_calendario_marcoMes {
+@media (max-width: 720px) {
+    .administracion_calendario_marcoMes {
         grid-gap: 4px;
     }
 }
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_marcoMes_verticalMinimo {
-     min-height: 100%;
- }
+.administracion_calendario_marcoMes_verticalMinimo {
+    min-height: 100%;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_marcoMes_vertical {
-     list-style: none;
-     display: grid;
-     grid-template-columns: repeat(7, 1fr);
-     flex: 1;
-     grid-gap: 6px;
-     scale: 1;
-     transition: all 250ms ease-in-out;
+@media (max-width: 720px) {
+    .administracion_calendario_marcoMes_verticalMinimo {
+        min-height: auto;
+    }
 
-     @starting-style {
-         scale: 0;
-     }
- }
+}
 
- [zonaCSS="administracion/calendario"] .diasSemana_calendarioVertical {
-     display: grid;
-     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
- }
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 1):nth-of-type(-n + 7) {
-     grid-row: 1;
+.administracion_calendario_marcoMes_vertical {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    flex: 1;
+    grid-gap: 1px;
+    scale: 1;
+    transition: all 250ms ease-in-out;
 
- }
+    @starting-style {
+        scale: 0;
+    }
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 8):nth-of-type(-n + 14) {
-     grid-row: 2;
- }
+.diasSemana_calendarioVertical {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 15):nth-of-type(-n + 21) {
-     grid-row: 3;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 1):nth-of-type(-n + 7) {
+    grid-row: 1;
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 22):nth-of-type(-n + 28) {
-     grid-row: 4;
- }
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 29):nth-of-type(-n + 35) {
-     grid-row: 5;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 8):nth-of-type(-n + 14) {
+    grid-row: 2;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 36):nth-of-type(-n + 42) {
-     grid-row: 6;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 15):nth-of-type(-n + 21) {
+    grid-row: 3;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 43):nth-of-type(-n + 49) {
-     grid-row: 7;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 22):nth-of-type(-n + 28) {
+    grid-row: 4;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 50):nth-of-type(-n + 56) {
-     grid-row: 8;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 29):nth-of-type(-n + 35) {
+    grid-row: 5;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(n + 57):nth-of-type(-n + 63) {
-     grid-row: 9;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 36):nth-of-type(-n + 42) {
+    grid-row: 6;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 1) {
-     grid-column: 1/1;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 43):nth-of-type(-n + 49) {
+    grid-row: 7;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 2) {
-     grid-column: 2/2;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 50):nth-of-type(-n + 56) {
+    grid-row: 8;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 3) {
-     grid-column: 3/3;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(n + 57):nth-of-type(-n + 63) {
+    grid-row: 9;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 4) {
-     grid-column: 4/4;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 1) {
+    grid-column: 1/1;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 5) {
-     grid-column: 5/5;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 2) {
+    grid-column: 2/2;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 6) {
-     grid-column: 6/6;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 3) {
+    grid-column: 3/3;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 7) {
-     grid-column: 7/7;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 4) {
+    grid-column: 4/4;
+}
 
- [zonaCSS="administracion/calendario"] .animacion_eventoUI {
-     transition: height 500ms linear, padding 500ms linear, opacity 500ms linear, margin-bottom 500ms linear, margin-top 500ms linear, scale 500ms linear;
-     opacity: 1;
-     scale: 1;
+.administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 5) {
+    grid-column: 5/5;
+}
 
-     @starting-style {
-         height: 0px;
-         padding: 0px;
-         opacity: 0;
-         margin-bottom: 0px;
-         margin-top: 0px;
-         scale: 1;
-     }
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 6) {
+    grid-column: 6/6;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_transicion {
-     background: rgba(255, 255, 255, 0.3);
-     height: 40px;
-     display: flex;
-     flex-direction: column;
-     flex-wrap: nowrap;
-     align-content: center;
-     justify-content: center;
-     align-items: center;
-     text-decoration: none;
-     color: black;
-     cursor: default;
-     user-select: none;
-     -webkit-user-select: none;
-     z-index: 10;
-     -webkit-backdrop-filter: blur(50px);
-     backdrop-filter: blur(50px);
-     margin-bottom: 10px;
-     overflow: hidden;
-     padding-left: 10px;
-     padding-right: 10px;
- }
+.administracion_calendario_componenteCalendario_dia:nth-of-type(7n + 7) {
+    grid-column: 7/7;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioFinal {
-     background: rgba(255, 255, 255, 0.3);
-     border-radius: 10px;
-     margin-left: 9px;
-     margin-right: 9px;
-     height: 40px;
-     display: flex;
-     flex-direction: column;
-     flex-wrap: nowrap;
-     align-content: center;
-     justify-content: center;
-     align-items: center;
-     text-decoration: none;
-     color: black;
-     z-index: 10;
-     cursor: default;
-     user-select: none;
-     -webkit-user-select: none;
-     -webkit-backdrop-filter: blur(50px);
-     backdrop-filter: blur(50px);
-     margin-bottom: 10px;
-     overflow: hidden;
+.animacion_eventoUI {
+    transition: height 500ms linear, padding 500ms linear, opacity 500ms linear, margin-bottom 500ms linear, margin-top 500ms linear, scale 500ms linear;
+    opacity: 1;
+    scale: 1;
 
-     padding-left: 10px;
-     padding-right: 10px;
+    @starting-style {
+        height: 0px;
+        padding: 0px;
+        opacity: 0;
+        margin-bottom: 0px;
+        margin-top: 0px;
+        scale: 1;
+    }
+}
 
- }
+.administracion_calendario_eventoUI_transicion {
+    background: rgba(255, 255, 255, 0.3);
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    z-index: 10;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    margin-bottom: 10px;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_inicioSolo {
-     background: rgba(255, 255, 255, 0.3);
-     border-bottom-left-radius: 10px;
-     border-top-left-radius: 10px;
-     margin-left: 9px;
-     height: 40px;
-     display: flex;
-     flex-direction: column;
-     flex-wrap: nowrap;
-     align-content: center;
-     justify-content: center;
-     align-items: center;
-     text-decoration: none;
-     color: black;
-     z-index: 10;
-     cursor: default;
-     user-select: none;
-     -webkit-user-select: none;
-     -webkit-backdrop-filter: blur(50px);
-     backdrop-filter: blur(50px);
-     margin-bottom: 10px;
-     overflow: hidden;
+.administracion_calendario_eventoUI_inicioFinal {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    margin-left: 9px;
+    margin-right: 9px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    z-index: 10;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    margin-bottom: 10px;
+    overflow: hidden;
 
-     padding-left: 10px;
-     padding-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 
- }
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_finalSolo {
-     background: rgba(255, 255, 255, 0.3);
-     margin-right: 9px;
-     border-bottom-right-radius: 10px;
-     border-top-right-radius: 10px;
-     height: 40px;
-     display: flex;
-     flex-direction: column;
-     flex-wrap: nowrap;
-     align-content: center;
-     justify-content: center;
-     align-items: center;
-     text-decoration: none;
-     color: black;
-     z-index: 10;
-     cursor: default;
-     user-select: none;
-     -webkit-user-select: none;
-     -webkit-backdrop-filter: blur(50px);
-     backdrop-filter: blur(50px);
-     margin-bottom: 10px;
-     overflow: hidden;
+.administracion_calendario_eventoUI_inicioSolo {
+    background: rgba(255, 255, 255, 0.3);
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    margin-left: 9px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    z-index: 10;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    margin-bottom: 10px;
+    overflow: hidden;
 
-     padding-left: 10px;
-     padding-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 
- }
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_eventoUI_selecionado {
-     background: grey;
- }
+.administracion_calendario_eventoUI_finalSolo {
+    background: rgba(255, 255, 255, 0.3);
+    margin-right: 9px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    z-index: 10;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    margin-bottom: 10px;
+    overflow: hidden;
 
- [zonaCSS="administracion/calendario"] .nombreDia {
-     font-weight: bold;
-     padding: 8px;
-     text-align: center;
-     pointer-events: none;
-     align-items: center;
-     justify-content: center;
- }
+    padding-left: 10px;
+    padding-right: 10px;
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI {
-     cursor: default;
-     user-select: none;
-     -webkit-user-select: none;
-     text-align: center;
-     width: fit-content;
-     transition: all 250ms linear;
-     display: flex;
-     flex-direction: column;
-     align-items: stretch;
-     width: 100%;
-     gap: 6px;
-     padding: 6px;
-     flex: 1;
-     justify-content: flex-start;
- }
+}
 
- @media (max-width: 720px) {
+.administracion_calendario_eventoUI_selecionado {
+    background: grey;
+}
 
-    [zonaCSS="administracion/calendario"] .administracion_calendario_calendarioUI {
+.nombreDia {
+    font-weight: bold;
+    padding: 8px;
+    text-align: center;
+    pointer-events: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.administracion_calendario_calendarioUI {
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    text-align: center;
+    width: fit-content;
+    transition: all 250ms linear;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 6px;
+    padding: 6px;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+@media (max-width: 720px) {
+
+    .administracion_calendario_calendarioUI {
         padding: 4px;
     }
 }
 
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_selectorCapa {
-     -webkit-backdrop-filter: blur(50px);
-     backdrop-filter: blur(50px);
-     padding: 10px;
-     border-radius: 10px;
-     appearance: none;
-     outline: none;
-     border: none;
-     background: rgb(37 37 37 / 0.2);
-     text-align: center;
- }
+.administracion_calendario_selectorCapa {
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    padding: 10px;
+    border-radius: 10px;
+    appearance: none;
+    outline: none;
+    border: none;
+    background: rgb(37 37 37 / 0.2);
+    text-align: center;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_contenedorHerramientasCalendario {
-     display: flex;
-     gap: 6px;
-     align-items: center;
- }
+.administracion_calendario_contenedorHerramientasCalendario {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_contenedorCentralCalendario {
-     display: grid;
-     grid-template-columns: 3fr auto 3fr;
-     grid-template-rows: 1fr;
-     grid-column-gap: 0px;
-     grid-row-gap: 0px;
- }
+.administracion_calendario_contenedorCentralCalendario {
+    display: grid;
+    grid-template-columns: 3fr auto 3fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_navegacionMes {
-     display: grid;
-     grid-template-columns: 1fr 10fr 1fr;
-     grid-template-rows: 1fr;
-     grid-column-gap: 0px;
-     grid-row-gap: 0px;
-     align-items: center;
-     gap: 6px;
-     background: rgba(255, 255, 255, 0.6);
-     padding: 6px;
-     border-radius: 16px;
-     transition: 250ms all linear;
- }
+.administracion_calendario_navegacionMes {
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 6px;
+    border-radius: 16px;
+    transition: 250ms all linear;
+}
 
- @media (max-width: 720px) {
-    [zonaCSS="administracion/calendario"] .administracion_calendario_navegacionMes {
+@media (max-width: 720px) {
+    .administracion_calendario_navegacionMes {
         margin-top: 2px;
 
     }
 }
 
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_botonNavegacion {
-     padding-top: 10px;
-     padding-bottom: 10px;
-     padding-left: 30px;
-     padding-right: 30px;
-     background-color: rgb(37 37 37 / 0.2);
+.administracion_calendario_botonNavegacion {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: rgb(37 37 37 / 0.2);
 
-     border-radius: 10px;
-     transition: all 500ms;
-     opacity: 0;
-     pointer-events: none;
-     -webkit-backdrop-filter: blur(50px);
-     backdrop-filter: blur(50px);
- }
+    border-radius: 10px;
+    transition: all 500ms;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+}
 
 
 @media (max-width: 720px) {
@@ -361,222 +375,224 @@
     }
 }
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_botonNavegacion:hover {
-     background-color: rgb(37 37 37 / 0.8);
-     color: white;
- }
-
- [zonaCSS="administracion/calendario"] .adminsitracion_calendario_bloqueCalendario {
-     display: flex;
-     flex-direction: column;
-     flex-wrap: nowrap;
-     align-content: center;
-     align-items: stretch;
-     justify-content: flex-start;
-     width: 100%;
-     flex: 1;
- }
-
- [zonaCSS="administracion/calendario"] .administracion_calendario_contenedorCalentadioIntermedio {
-     display: flex;
-
-
-     flex-direction: column;
-     justify-content: flex-start;
-     align-content: center;
-     align-items: stretch;
-
-     flex: 0;
-
- }
-
- [zonaCSS="administracion/calendario"] .administracion_calendario_contenedorInformacionDia {
-     display: grid;
-     grid-template-columns: auto;
-     grid-template-rows: auto 1fr auto;
-     grid-column-gap: 0px;
-     grid-row-gap: 0px;
-     flex-direction: column;
-     flex: 1;
-     overflow: hidden;
- }
-
- [zonaCSS="administracion/calendario"] .celdaDiaContenedorData {
-     display: block;
-     flex: 1;
-     padding-bottom: 10px;
-     padding-right: 14px;
-     padding-left: 14px;
-     text-overflow: ellipsis;
-     overflow: hidden;
-     white-space: nowrap;
-     text-align: end;
-     transition: all 250 linear;
- }
- @media (max-width: 720px) {
-    [zonaCSS="administracion/calendario"] .celdaDiaContenedorData {
-        padding-bottom: 10px;
-        padding-right: 10px;
-        padding-left: 10px;
-    }
+.administracion_calendario_botonNavegacion:hover {
+    background-color: rgb(37 37 37 / 0.8);
+    color: white;
 }
 
+.adminsitracion_calendario_bloqueCalendario {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+    flex: 1;
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_numeroDiaUI {
-     display: flex;
-     flex-direction: column;
-     align-items: flex-end;
-     justify-content: flex-start;
-     padding-top: 14px;
-     padding-right: 14px;
-     transition: all 250 linear;
- }
+.administracion_calendario_contenedorCalentadioIntermedio {
+    display: flex;
+
+
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: stretch;
+
+    flex: 0;
+
+}
+
+.administracion_calendario_contenedorInformacionDia {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.celdaDiaContenedorData {
+    display: block;
+    flex: 1;
+    padding-bottom: 10px;
+    padding-right: 14px;
+    padding-left: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: end;
+    transition: all 250 linear;
+}
 
 @media (max-width: 720px) {
-    [zonaCSS="administracion/calendario"] .administracion_calendario_numeroDiaUI {
-        padding-top: 10px;
-        padding-right: 10px;
+    .celdaDiaContenedorData {
+        padding-bottom: 10px;
+        padding-right: 0px;
+        padding-left: 0px;
+        font-size: 13px;
+
+        text-align: center;
     }
 }
 
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia {
-     position: relative;
-     min-height: 46px;
-     min-width: 20px;
-     transition: all 250ms linear;
-     opacity: 1;
-     display: flex;
-     border-radius: 12px;
+.administracion_calendario_numeroDiaUI {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding-top: 14px;
+    padding-right: 14px;
+    transition: all 250 linear;
+}
 
-     @starting-style {
-         opacity: 0;
-     }
- }
+@media (max-width: 720px) {
+    .administracion_calendario_numeroDiaUI {
+        padding-top: 10px;
+        padding-right: 10px;
+        align-items: center
+    }
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia_vertical {
-     position: relative;
-     min-height: 46px;
-     min-width: 20px;
-     transition: all 250ms linear;
-     opacity: 1;
-     display: flex;
-     background-color: #a29f9f6e;
 
-     @starting-style {
-         opacity: 0;
-     }
- }
+.administracion_calendario_componenteCalendario_dia {
+    position: relative;
+    min-height: 46px;
+    min-width: 20px;
+    transition: all 250ms linear;
+    opacity: 1;
+    display: flex;
+    border-radius: 12px;
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_componenteCalendario_dia::before {
-     content: '';
-     position: absolute;
-     top: 0;
-     right: 0;
-     bottom: 0;
-     left: 0;
-     background-color: rgb(37 37 37 / 0.2);
-     border-radius: 12px;
-     z-index: -1;
-     backdrop-filter: blur(50px);
-     -webkit-backdrop-filter: blur(50px);
- }
+    @starting-style {
+        opacity: 0;
+    }
+}
 
- [zonaCSS="administracion/calendario"] .diaParcial,
- .administracion_calendario_componenteCalendario_dia.diaParcial::before {
-     background: rgb(253 132 0 / 50%);
-     transition: background 250ms linear;
- }
+.administracion_calendario_componenteCalendario_dia_vertical {
+    position: relative;
+    min-height: 46px;
+    min-width: 20px;
+    transition: all 250ms linear;
+    opacity: 1;
+    display: flex;
+    background-color: #a29f9f6e;
 
- [zonaCSS="administracion/calendario"] .diaCompleto,
- .administracion_calendario_componenteCalendario_dia.diaCompleto::before {
-     background-color: rgba(255, 0, 0, 0.5);
-     transition: background 250ms linear
- }
+    @starting-style {
+        opacity: 0;
+    }
+}
 
- [zonaCSS="administracion/calendario"] .diaDisponible,
- .administracion_calendario_componenteCalendario_dia.diaDisponible::before {
-     background-color: #a29f9f6e;
-     transition: background 250ms linear
- }
+.administracion_calendario_componenteCalendario_dia::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(37 37 37 / 0.2);
+    border-radius: 12px;
+    z-index: -1;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
 
- [zonaCSS="administracion/calendario"] .diaDeHoy {
-     background-color: #3b92c7;
+.diaParcial,
+.administracion_calendario_componenteCalendario_dia.diaParcial::before {
+    background: rgb(253 132 0 / 50%);
+    transition: background 250ms linear;
+}
 
- }
+.diaCompleto,
+.administracion_calendario_componenteCalendario_dia.diaCompleto::before {
+    background-color: rgba(255, 0, 0, 0.5);
+    transition: background 250ms linear
+}
 
- [zonaCSS="administracion/calendario"] .diaSel {
-     background: black;
-     color: white;
- }
+.diaDisponible,
+.administracion_calendario_componenteCalendario_dia.diaDisponible::before {
+    background-color: #a29f9f2d;
+    transition: background 250ms linear
+}
 
- [zonaCSS="administracion/calendario"] .diaSelecionable:hover {
-     background: blue;
-     color: white;
- }
+.diaDeHoy {
+    background-color: #3b92c7;
 
- [zonaCSS="administracion/calendario"] .diaDeHoy_calendarioVertical {
-     background-color: #3b92c7;
- }
+}
 
- [zonaCSS="administracion/calendario"] .administracion_calendario_reservaUIInicio {
-     background: rgba(255, 255, 255, 0.3);
-     margin-left: 20px;
-     border-bottom-left-radius: 20px;
-     border-top-left-radius: 20px;
-     backdrop-filter: blur(50px);
-     -webkit-backdrop-filter: blur(50px);
-     text-decoration: none;
-     color: black;
-     font-weight: bold;
-     cursor: default;
-     user-select: none;
-     -webkit-user-select: none;
 
-     padding: 4px;
-     text-overflow: ellipsis;
-     white-space: nowrap;
-     overflow: hidden;
- }
+/* .diaSelecionable:hover {
+    background: blue;
+    color: white;
+} */
 
- [zonaCSS="administracion/calendario"] .marcoBotonesGlobales {
-     display: grid;
-     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-     grid-gap: 6px;
-     transition: 250ms all linear;
-     width: 100%;
-     padding-left: 6px;
-     padding-right: 6px;
- }
+.diaDeHoy_calendarioVertical {
+    background-color: #3b92c7;
+}
 
- @media (max-width: 720px) {
-    [zonaCSS="administracion/calendario"] .marcoBotonesGlobales {
+.administracion_calendario_reservaUIInicio {
+    background: rgba(255, 255, 255, 0.3);
+    margin-left: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+
+    padding: 4px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.marcoBotonesGlobales {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 6px;
+    transition: 250ms all linear;
+    width: 100%;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+@media (max-width: 720px) {
+    .marcoBotonesGlobales {
         padding-left: 6px;
         padding-right: 6px;
     }
 }
- [zonaCSS="administracion/calendario"] .botonGlobal {
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     padding: 10px;
-     background: rgb(37 37 37 / 0.2);
-     border-radius: 10px;
-     user-select: none;
-     -webkit-user-select: none;
-     transition: all 125ms;
-     cursor: default;
- }
 
- [zonaCSS="administracion/calendario"] .botonGlobal:hover {
-     background: rgb(37 37 37 / 0.4);
- }
+.botonGlobal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: rgb(37 37 37 / 0.2);
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 125ms;
+    cursor: default;
+}
 
- [zonaCSS="administracion/calendario"] .botonFlotante {
-     transition: all 250ms ease-in-out;
-     position: fixed;
-     z-index: 50;
- }
+.botonGlobal:hover {
+    background: rgb(37 37 37 / 0.4);
+}
+
+.botonFlotante {
+    transition: all 250ms ease-in-out;
+    position: fixed;
+    z-index: 50;
+}
 
 
 
@@ -675,4 +691,41 @@
     flex-direction: column;
     align-items: stretch;
 }
+.tituloPorMesVertical {
+    padding: 40px;
+    text-align: left;
+    font-size: 22px;
+    font-weight: bold;
+}
 
+@media (max-width: 720px) {
+    .tituloCalendarioVerticalResponsivo {
+        display: none;
+    }
+
+    .administracion_calendario_componenteCalendario_dia_vertical {
+        min-height: 80px;
+    }
+
+    .administracion_calendario_numeroDiaUI {
+        padding-left: 0px;
+        padding-right: 0px;
+        font-weight: bold;
+    }
+    .tituloPorMesVertical {
+        padding: 30px;
+        text-align: left;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+}
+
+
+.diaPasado {
+    background-color: #00000067;
+}
+.diaSel {
+    background: black;
+    color: white;
+}

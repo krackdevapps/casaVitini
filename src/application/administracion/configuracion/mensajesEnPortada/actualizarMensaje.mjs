@@ -1,15 +1,13 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerMensajePorMensajeUID } from "../../../../infraestructure/repository/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 import { actualizarContenidoMensajeDePortada } from "../../../../infraestructure/repository/configuracion/mensajesPortada/actualizarContenidoMensajeDePortada.mjs";
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 
+
 export const actualizarMensaje = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -21,7 +19,7 @@ export const actualizarMensaje = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const mensaje = validadoresCompartidos.tipos.cadena({
             string: entrada.body.mensaje,
@@ -47,6 +45,7 @@ export const actualizarMensaje = async (entrada, salida) => {
             mensajeUID: mensajeUID
         }
         await actualizarContenidoMensajeDePortada(dataActualizarContenidoMensajePortada)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado correctamente el interruptor",

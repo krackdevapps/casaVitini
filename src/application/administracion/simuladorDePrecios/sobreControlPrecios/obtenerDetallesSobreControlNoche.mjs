@@ -1,16 +1,12 @@
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../infraestructure/repository/simulacionDePrecios/sobreControlDePrecios/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { obtenerSobreControlDeLaNocheDesdeSimulacion } from "../../../../infraestructure/repository/simulacionDePrecios/sobreControlDePrecios/obtenerSobreControlDeLaNocheDesdeSimulacion.mjs"
 
 export const obtenerDetallesSobreControlNoche = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -24,7 +20,7 @@ export const obtenerDetallesSobreControlNoche = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,

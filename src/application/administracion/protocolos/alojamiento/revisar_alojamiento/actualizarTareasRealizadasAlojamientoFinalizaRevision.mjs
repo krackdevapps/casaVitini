@@ -1,38 +1,29 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerRevisionPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerRevisionPorUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { obtenerTareaPorApartamentoIDV } from "../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/obtenerTareaPorApartamentoIDV.mjs";
 import { validarTareaRealizada } from "../../../../../shared/protocolos/validarTareaRealizada.mjs";
 import { filtroTareasPorDia } from "../../../../../shared/protocolos/filtroTareasPorDia.mjs";
-import { actualizarTareasPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/actualizarTareasPorUID.mjs";
-import { DateTime } from "luxon";
+import { finalizaRevision } from "../../../../../shared/protocolos/finalizaRevision.mjs";
 import { codigoZonaHoraria } from "../../../../../shared/configuracion/codigoZonaHoraria.mjs";
+import { DateTime } from "luxon";
 import { obtenerElementoInventarioDesdeUIDDelElementoEnProtoolo } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerElementoInventarioDesdeUIDDelElementoEnProtoolo.mjs";
-import { actualizarCantidadPorElementoUID } from "../../../../../infraestructure/repository/inventario/actualizarCantidadPorElementoUID.mjs";
-import { insertarRegistro } from "../../../../../infraestructure/repository/inventario/insertarRegistro.mjs";
-import Decimal from "decimal.js";
 import { controladorDelMovimiento } from "../../../../../shared/inventario/controladorDeMovimiento.mjs";
+import { actualizarTareasPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/actualizarTareasPorUID.mjs";
 
-export const actualizarTareasRealizadasAlojamientoFinalizaRevision = async (entrada, salida) => {
+export const actualizarTareasRealizadasAlojamientoFinalizaRevision = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
-
-        const data = entrada.body
 
         const protocolVal = await validarTareaRealizada({
-            o: data,
+            o: entrada.body,
             filtrosIDV: [
                 "uid",
                 "respuestas"
             ]
         })
 
-        const usuarioSolicitante = IDX.usuario
+        const usuarioSolicitante = entrada.session.usuario
         const uidRevision = protocolVal.uid
         await campoDeTransaccion("iniciar")
 
@@ -43,8 +34,6 @@ export const actualizarTareasRealizadasAlojamientoFinalizaRevision = async (entr
         }
         const estadoRevision = reposicionParaActualizar.estadoRevision
         const apartamentoIDV = reposicionParaActualizar.apartamentoIDV
-        const revisionUID = reposicionParaActualizar.uid
-
         if (estadoRevision === "finalizada") {
             throw {
                 error: `La revision ya esta finalizada, para volver ha realizar otra revision, inicia otra revision `,
@@ -86,10 +75,12 @@ export const actualizarTareasRealizadasAlojamientoFinalizaRevision = async (entr
         tareasDelDia.forEach(t => {
             const uid = t.uid
             const tareaUI = t.tareaUI
+
             if (!tareasRespuestaIndizadas.hasOwnProperty(uid)) {
                 throw new Error(`Por favor revisa la tarea ${tareaUI}`)
             }
         })
+
         const tiempoZH = DateTime.now();
         const fechaActual = tiempoZH.toISO();
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
@@ -116,30 +107,21 @@ export const actualizarTareasRealizadasAlojamientoFinalizaRevision = async (entr
             }
         }
 
-
-        const revisionCompletada = await actualizarTareasPorUID({
+        await actualizarTareasPorUID({
             uid: uidRevision,
             tareas: JSON.stringify(protocolVal.respuestas),
-            fechaFin: fechaActual,
-            estadoRevision: "finalizada",
             reposicionInventario: JSON.stringify(reposicionInventario)
 
         })
-        const alojamiento = await obtenerConfiguracionPorApartamentoIDV({
-            apartamentoIDV,
-            errorSi: "noExiste"
+
+        const revisionCompletada = await finalizaRevision({
+            revisionUID: uidRevision
         })
-        const apartamentoUI = alojamiento.apartamentoUI
-
-
 
         await campoDeTransaccion("confirmar")
-
         const ok = {
             ok: "Se ha actualizado las tareas del protocolo de alojamineto",
             revisionCompletada,
-            apartamentoUI,
-            fechaFinLocal: fechaActualLocal,
         }
         return ok
     } catch (errorCapturado) {

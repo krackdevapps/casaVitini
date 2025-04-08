@@ -1,19 +1,13 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../shared/VitiniIDX/vitiniCrypto.mjs";
 import { actualizarClave } from "../../../infraestructure/repository/usuarios/actualizarClave.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
-import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
-import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -35,12 +29,9 @@ export const actualizarClaveUsuarioAdministracion = async (entrada, salida) => {
             const error = "No has escrito dos veces la misma nueva contraseña";
             throw new Error(error);
         }
-        validadoresCompartidos.claves.minimoRequisitos(claveNuevaDos);
-     
-        await controlRol({
-            usuarioOperacion: IDX.vitiniIDX(),
-            usuarioDestino: usuarioIDX
-        })
+        //validadoresCompartidos.claves.minimoRequisitos(claveNuevaDos);
+
+    
 
         const cryptoData = {
             sentido: "cifrar",

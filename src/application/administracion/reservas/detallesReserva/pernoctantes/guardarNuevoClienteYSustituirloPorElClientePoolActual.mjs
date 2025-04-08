@@ -1,6 +1,6 @@
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../../../infraestructure/repository/clientes/insertarCliente.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../../../infraestructure/repository/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
 import { actualizarClienteUIDDelPernoctantePorComponenteUID } from "../../../../../infraestructure/repository/reservas/pernoctantes/actualizarClienteUIDDelPernoctantePorComponenteUID.mjs";
@@ -9,11 +9,7 @@ import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompar
 export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 8
@@ -27,7 +23,7 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
@@ -36,7 +32,7 @@ export const guardarNuevoClienteYSustituirloPorElClientePoolActual = async (entr
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const nuevoCliente = {
             cliente: {

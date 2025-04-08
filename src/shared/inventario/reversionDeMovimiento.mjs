@@ -16,7 +16,10 @@ export const reversionDeMovimiento = async (data) => {
             const cantidadEnMovimiento_enRegistro = registro.cantidadEnMovimiento
             const sentidoMovimiento = registro.sentidoMovimiento
             const elementoUID = registro.elementoUID
-            const elemento = await obtenerElementoPorElementoUID(elementoUID)
+            const elemento = await obtenerElementoPorElementoUID({
+                elementoUID: elementoUID,
+                errorSi: "noExiste"
+            })
             const cantidaEnInventario = elemento.cantidad
             let cantidadDiferencial
 
@@ -35,13 +38,7 @@ export const reversionDeMovimiento = async (data) => {
                 cantidad: String(cantidadDiferencial)
             })
             return ok
-
-
-
-        } else {
-            console.info("el registro noo se ha encontrado")
-        }
-  
+        } 
 
     } catch (error) {
         throw error

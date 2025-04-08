@@ -67,7 +67,8 @@ describe('payment in bookin', () => {
             body: {
                 reservaUID: String(reservaUID),
                 plataformaDePago: "efectivo",
-                cantidad: "10.00"
+                cantidad: "10.00",
+                conceptoPago: ""
             },
             session: fakeAdminSession
         }
@@ -85,7 +86,7 @@ describe('payment in bookin', () => {
         const m = {
             body: {
 
-                pagoUID: pagoUID
+                pagoUID: String(pagoUID)
             },
             session: fakeAdminSession
         }

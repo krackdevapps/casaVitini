@@ -1,21 +1,13 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
-import { validarTareaDelProtocolo } from "../../../../../shared/protocolos/validarTareaDelProtocolo.mjs";
-import { eliminarTareaDelProtocoloPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/tareas/eliminarTareaDelProtocoloPorUID.mjs";
-import { actualizarOrdenDePosicionesTareas } from "../../../../../infraestructure/repository/protocolos/alojamiento/tareas/actualizarOrdenDePosicionesTareas.mjs";
-import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { campoDeTransaccion } from "../../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
+import { actualizarOrdenDePosicionesTareas } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/actualizarOrdenDePosicionesTareas.mjs"
+import { eliminarTareaDelProtocoloPorUID } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/eliminarTareaDelProtocoloPorUID.mjs"
+import { validarTareaDelProtocolo } from "../../../../../../shared/protocolos/validarTareaDelProtocolo.mjs"
 
-export const eliminarTareaDelProtocolo = async (entrada, salida) => {
+export const eliminarTareaDelProtocolo = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
-
-        const data = entrada.body
-
 
         const protocolVal = validarTareaDelProtocolo({
-            o: data,
+            o: entrada.body,
             filtrosIDV: [
                 "uid",
             ]
@@ -25,10 +17,10 @@ export const eliminarTareaDelProtocolo = async (entrada, salida) => {
         const elementoEliminado = await eliminarTareaDelProtocoloPorUID(protocolVal.uid)
         const posicionEliminada = elementoEliminado.posicion
         const apartamentoIDV = elementoEliminado.apartamentoIDV
-        
+
         await actualizarOrdenDePosicionesTareas({
             posicion: posicionEliminada,
-            apartamentoIDV : apartamentoIDV
+            apartamentoIDV: apartamentoIDV
         })
         await campoDeTransaccion("confirmar")
 

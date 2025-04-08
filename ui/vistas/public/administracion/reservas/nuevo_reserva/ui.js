@@ -33,16 +33,5 @@ casaVitini.view = {
             // }
         });
         document.querySelector("main").appendChild(comJS)
-
-
-
-
-
-
-
-
-
     }
-
-
 }

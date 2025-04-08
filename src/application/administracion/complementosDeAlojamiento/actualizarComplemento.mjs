@@ -1,5 +1,5 @@
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { Mutex } from "async-mutex";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { obtenerComplementoPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs";
@@ -9,13 +9,11 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraes
 import { obtenerHabitacionesDelApartamentoPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionesDelApartamentoPorApartamentoIDV.mjs";
 import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerHabitacionComoEntidadPorHabitacionIDV.mjs";
 
+
 export const actualizarComplemento = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire()
 
@@ -27,7 +25,7 @@ export const actualizarComplemento = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const complementoControl = await obtenerComplementoPorComplementoUID(complementoUID)
@@ -74,6 +72,7 @@ export const actualizarComplemento = async (entrada) => {
                 habitacionSeleccionada = h
             }
         }
+
         await campoDeTransaccion("confirmar")
         delete complemento.testingVI
         const ok = {

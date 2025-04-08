@@ -70,7 +70,7 @@ casaVitini.view = {
                     contenedorApartamento.setAttribute("apartamentoIDV", apartamentoIDV)
                     contenedorApartamento.setAttribute("href", "/administracion/arquitectura_del_alojamiento/configuraciones/alojamiento:" + apartamentoIDV)
 
-                    contenedorApartamento.addEventListener("click", (e) => { this.traductorCambioVista(e) })
+                    contenedorApartamento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     const contenedorTitulo = document.createElement("div")
                     contenedorTitulo.classList.add("arquitecturaConfAlojamiento_configuracionesTitulo")
                     contenedorTitulo.classList.add("negrita")
@@ -90,16 +90,7 @@ casaVitini.view = {
             }
         }
     },
-    traductorCambioVista: function (configuracion) {
-        configuracion.preventDefault()
-        configuracion.stopPropagation()
-        const vista = configuracion.target.closest("[vista]").getAttribute("vista")
-        const entrada = {
-            "vista": vista,
-            "tipoOrigen": "menuNavegador"
-        }
-        casaVitini.shell.navegacion.controladorVista(entrada)
-    },
+
     detallesConfiguracion: {
         arranque: function (data) {
             const main = document.querySelector("main")

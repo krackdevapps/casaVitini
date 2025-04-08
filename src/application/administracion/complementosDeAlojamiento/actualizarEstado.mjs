@@ -1,17 +1,15 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { obtenerComplementoPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs";
 import { actualizarEstadoIDVPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/actualizarEstadoIDVPorComplementoUID.mjs";
 
+
 export const actualizarEstado = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
 
@@ -28,7 +26,7 @@ export const actualizarEstado = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const estadoIDV = validadoresCompartidos.tipos.cadena({
@@ -55,6 +53,7 @@ export const actualizarEstado = async (entrada, salida) => {
             estadoIDV: estadoIDV,
             complementoUID: complementoUID,
         })
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "El estado del complemento se ha actualizado correctamente",

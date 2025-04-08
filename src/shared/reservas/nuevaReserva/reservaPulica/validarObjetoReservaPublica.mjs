@@ -337,8 +337,6 @@ export const validarObjetoReservaPublica = async (data) => {
             const servicioUID = contenedor.servicioUID
             const opcionesSeleccionadas = contenedor.opcionesSeleccionadas
 
-
-
             validadoresCompartidos.tipos.cadena({
                 string: servicioUID,
                 nombreCampo: `En la llave servicioUID de la posicion ${i + 1} del array de servicios, se esperaba una cadena con un numero entero`,

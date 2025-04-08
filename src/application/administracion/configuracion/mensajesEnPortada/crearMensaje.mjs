@@ -1,16 +1,14 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 
 import { obtenerTodosLosMensjaes } from "../../../../infraestructure/repository/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs";
 import { insertarMensajeEnPortada } from "../../../../infraestructure/repository/configuracion/mensajesPortada/insertarMensajeEnPortada.mjs";
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 
+
 export const crearMensaje = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -42,6 +40,7 @@ export const crearMensaje = async (entrada, salida) => {
         }
 
         const nuevoMensaje = await insertarMensajeEnPortada(dataNuevoMensaje)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado el nuevo mensaje",

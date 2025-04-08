@@ -8,18 +8,18 @@ export const validarComportamiento = async (comportamiento) => {
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const schema = Joi.object({
-            comportamientoUID: Joi.optional(),
-            nombreComportamiento: Joi.required(),
+            comportamientoUID: Joi.string().optional(),
+            nombreComportamiento: Joi.string().required(),
             // testingVI: Joi.string(),
             estadoInicialDesactivado: Joi.string(),
             transaccion: Joi.string(),
             contenedor: Joi.object({
                 tipo: Joi.required(),
-                fechaInicio: Joi.date(),
-                fechaFinal: Joi.date(),
+                fechaInicio: Joi.string(),
+                fechaFinal: Joi.string(),
                 dias: Joi.array(),
-                fechaInicio_creacionReserva: Joi.date(),
-                fechaFinal_creacionReserva: Joi.date(),
+                fechaInicio_creacionReserva: Joi.string(),
+                fechaFinal_creacionReserva: Joi.string(),
                 apartamentos: Joi.array().items(Joi.object({
                     apartamentoIDV: Joi.required(),
                     simboloIDV: Joi.required(),
@@ -28,24 +28,24 @@ export const validarComportamiento = async (comportamiento) => {
             }).required(),
         }).required().messages(commonMessages)
 
-        controlEstructuraPorJoi({
+        const oVal = controlEstructuraPorJoi({
             schema: schema,
             objeto: comportamiento
         })
 
 
         validadoresCompartidos.tipos.cadena({
-            string: comportamiento.nombreComportamiento,
+            string: oVal.nombreComportamiento,
             nombreCampo: "El campo del nombreComportamiento",
             filtro: "strictoConEspacios",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
         const contenedor = validadoresCompartidos.tipos.objetoLiteral({
-            objetoLiteral: comportamiento.contenedor,
+            objetoLiteral: oVal.contenedor,
             nombreCampo: "El array de apartamentos",
         })
-        const testingVI = comportamiento.testingVI
+        const testingVI = oVal.testingVI
         if (testingVI) {
             validadoresCompartidos.tipos.cadena({
                 string: testingVI,
@@ -69,7 +69,6 @@ export const validarComportamiento = async (comportamiento) => {
                 const m = `En el objeto de ${tipo} no se esperan más de ${llaves_nivel_1.length} llaves`
                 throw new Error(m)
             }
-
             const fechaInicio_ISO = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaInicio,
                 nombreCampo: "La fecha de inicio del comportamiento"
@@ -100,6 +99,7 @@ export const validarComportamiento = async (comportamiento) => {
                 fechaSalida: fechaFinal_ISO,
                 tipoVector: "igual"
             })
+
             const fechaInicio_creacionReserva = await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: contenedor.fechaInicio_creacionReserva,
                 nombreCampo: "La fecha de inicio del rango de creación"
@@ -219,7 +219,7 @@ export const validarComportamiento = async (comportamiento) => {
                 const error = `El campo símbolo de ${apartamentoIDV} solo admite aumentoPorcentaje, aumentoCantidad, reducirCantidad, reducirPorcentaje y precioEstablecido`;
                 throw new Error(error);
             }
-            validadoresCompartidos.tipos.cadena({
+            detallesApartamento.cantidad = validadoresCompartidos.tipos.cadena({
                 string: cantidad,
                 nombreCampo: "El campo cantidad",
                 filtro: "cadenaConNumerosConDosDecimales",
@@ -229,7 +229,7 @@ export const validarComportamiento = async (comportamiento) => {
                 limpiezaEspaciosAlrededor: "si",
             })
         }
-
+        return oVal
     } catch (errorCapturado) {
         throw errorCapturado
     }

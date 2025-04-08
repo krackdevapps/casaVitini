@@ -10,7 +10,10 @@ export const controladorDelMovimiento = async (data) => {
         let cantidadEnMovimiento = data.cantidadEnMovimiento
         const operacionIDV = data.operacionIDV
 
-        const elemento = await obtenerElementoPorElementoUID(elementoUID)
+        const elemento = await obtenerElementoPorElementoUID({
+            elementoUID: elementoUID,
+            errorSi: "noExiste"
+        })
         if (!elemento) {
             throw new Error(`No existe el elemento en el inventario con el elemenotuID ${elementoUID}`)
         }

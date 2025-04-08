@@ -3,15 +3,11 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestru
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 
 export const obtenerImagenesDelAlojamiento = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2

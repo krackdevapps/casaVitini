@@ -41,7 +41,7 @@ describe('services of simulation', () => {
         duracionIDV: "rango",
         disponibilidadIDV: "constante",
         tituloPublico: "Pack entretenimiento",
-        definicion: "Este pack de entretenimiento es un pack temporal para testing.\n\nEste pack tiene diferentes opciones.\n\nPor favor seleccione las opciones",
+        definicion: "dGVzdA==",
         gruposDeOpciones: [
             {
                 nombreGrupo: "Viaje a Francia",
@@ -56,11 +56,13 @@ describe('services of simulation', () => {
                 opcionesGrupo: [
                     {
                         nombreOpcion: "Viaje en avión, restaurante includio",
-                        precioOpcion: "100.00"
+                        precioOpcion: "100.00",
+                        interruptorCantidad: "desactivado"
                     },
                     {
                         nombreOpcion: "Viaje en Tren, desayuno incluido",
-                        precioOpcion: "50.00"
+                        precioOpcion: "50.00",
+                        interruptorCantidad: "desactivado"
                     }
                 ]
             },
@@ -77,11 +79,13 @@ describe('services of simulation', () => {
                 opcionesGrupo: [
                     {
                         nombreOpcion: "Viaje en Tren",
-                        precioOpcion: "50.00"
+                        precioOpcion: "50.00",
+                        interruptorCantidad: "desactivado"
                     },
                     {
                         nombreOpcion: "Incluir el desayuno",
-                        precioOpcion: "10.00"
+                        precioOpcion: "10.00",
+                        interruptorCantidad: "desactivado"
                     }
                 ]
             }
@@ -170,24 +174,6 @@ describe('services of simulation', () => {
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
     })
-
-    test('insert hostin in simulation with ok', async () => {
-        try {
-            const response = await insertarAlojamientoEnSimulacion({
-                body: {
-                    simulacionUID: String(simulacionUID),
-                    apartamentoIDV: String(apartamentoIDV)
-                },
-                session: fakeAdminSession
-            })
-        } catch (error) {
-            expect(error).not.toBeUndefined();
-            expect(typeof error).toBe('object');
-            expect(error).toHaveProperty('info');
-        }
-    })
-
-
     test('insert global data in simulation created with ok', async () => {
         const m = {
             body: {
@@ -206,6 +192,24 @@ describe('services of simulation', () => {
     })
 
 
+    test('insert hostin in simulation with ok', async () => {
+        try {
+            const response = await insertarAlojamientoEnSimulacion({
+                body: {
+                    simulacionUID: String(simulacionUID),
+                    apartamentoIDV: String(apartamentoIDV)
+                },
+                session: fakeAdminSession
+            })
+        } catch (error) {
+            expect(error).not.toBeUndefined();
+            expect(typeof error).toBe('object');
+            expect(error).toHaveProperty('info');
+        }
+    })
+
+
+
 
     test('insert service in simulation with ok', async () => {
         const gruposDeOpciones = servicioTemporal.ok.contenedor.gruposDeOpciones
@@ -216,11 +220,17 @@ describe('services of simulation', () => {
             if (!opcionesSeleccionadas.hasOwnProperty(grupoIDV)) {
                 opcionesSeleccionadas[grupoIDV] = []
             }
-            contenedor.opcionesGrupo.forEach(og => {
-                const opcionIDV = og.opcionIDV
-                opcionesSeleccionadas[grupoIDV].push(opcionIDV)
+            contenedor.opcionesGrupo.forEach(og => {             
+                
+                opcionesSeleccionadas[grupoIDV].push({
+                    opcionIDV: og.opcionIDV,
+                    cantidad: "1",
+                    tipoDescuento: "sinDescuento",
+                    cantidadDescuento: "0.00",
+                })
             })
         })
+
         const response = await insertarServicioEnSimulacion({
             body: {
                 simulacionUID: String(simulacionUID),
@@ -259,9 +269,14 @@ describe('services of simulation', () => {
             if (!opcionesSeleccionadas.hasOwnProperty(grupoIDV)) {
                 opcionesSeleccionadas[grupoIDV] = []
             }
-            contenedor.opcionesGrupo.forEach(og => {
-                const opcionIDV = og.opcionIDV
-                opcionesSeleccionadas[grupoIDV].push(opcionIDV)
+            contenedor.opcionesGrupo.forEach(og => {             
+                
+                opcionesSeleccionadas[grupoIDV].push({
+                    opcionIDV: og.opcionIDV,
+                    cantidad: "1",
+                    tipoDescuento: "sinDescuento",
+                    cantidadDescuento: "0.00",
+                })
             })
         })
 

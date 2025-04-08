@@ -1,18 +1,14 @@
 import { eliminarTitularPoolPorReservaUID } from "../../../../../infraestructure/repository/reservas/titulares/eliminarTitularPoolPorReservaUID.mjs";
 import { eliminarTitularPorReservaUID } from "../../../../../infraestructure/repository/reservas/titulares/eliminarTitularPorReservaUID.mjs";
 import { obtenerDetallesCliente } from "../../../../../infraestructure/repository/clientes/obtenerDetallesCliente.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { insertarTitularEnReserva } from "../../../../../infraestructure/repository/reservas/titulares/insertarTitularEnReserva.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 
 export const asociarTitular = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2

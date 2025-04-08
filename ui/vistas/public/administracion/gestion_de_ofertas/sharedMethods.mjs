@@ -299,9 +299,9 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 divOpcionTipoOferta.setAttribute("tipoOferta", tipoOferta);
                 divOpcionTipoOferta.addEventListener("click", () => {
                     const espacioCrearOferta = document.querySelector("[componente=espacioCrearOferta] [contenedor=condiciones]")
-                    const ofertaUI = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.condicionesUI[tipoOferta]()
+                    const ofertaUI = casaVitini.view.__sharedMethods__.componenteUI.condicionesUI[tipoOferta]()
                     espacioCrearOferta.appendChild(ofertaUI)
-                    casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.controlDespliegeContenedorDescuento()
+                    casaVitini.view.__sharedMethods__.componenteUI.controlDespliegeContenedorDescuento()
                     return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                 })
                 const pTituloTipoOferta = document.createElement("p");
@@ -344,7 +344,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
         },
         eliminarContenedorCondicion: (tipoCondicion) => {
             tipoCondicion.target.closest("[zonaOferta]").remove()
-            return casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.controlDespliegeContenedorDescuento()
+            return casaVitini.view.__sharedMethods__.componenteUI.controlDespliegeContenedorDescuento()
         },
         controlDespliegeContenedorDescuento: () => {
             const contenedorCondiciones = document.querySelector("[componente=espacioCrearOferta] [contenedor=condiciones]")
@@ -363,7 +363,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 botonBorrarCondicion.classList.add("botonV1")
                 botonBorrarCondicion.setAttribute("componente", "titulo")
                 botonBorrarCondicion.textContent = "Eliminar condición"
-                botonBorrarCondicion.addEventListener("click", casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.eliminarContenedorCondicion)
+                botonBorrarCondicion.addEventListener("click", casaVitini.view.__sharedMethods__.componenteUI.eliminarContenedorCondicion)
                 return botonBorrarCondicion
             },
             porNumeroDeApartamentos: function () {
@@ -891,7 +891,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                     textoContenedorVacio: "No hay ningún apartamento dentro de esta reserva.Pulse el botón Añadir apartamento para añadir apartamentos en específico.",
                     opcionesUI: {
-                        ui: casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.compartidos.opcionesContenedorApartamentoUI
+                        ui: casaVitini.view.__sharedMethods__.componenteUI.compartidos.opcionesContenedorApartamentoUI
                     }
                 })
 
@@ -1017,7 +1017,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                     selectorTipoDescuento.setAttribute("campoOferta", "contextoAplicacion");
                     selectorTipoDescuento.setAttribute("componente", "subTipoDescuento");
                     selectorTipoDescuento.addEventListener("change", (e) => {
-                        casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.componentes.controladorUI({
+                        casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.componentes.controladorUI({
                             contenedorIDV: e.target.value
                         })
                     })
@@ -1048,10 +1048,10 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                     }
                     contenedorDescuento.appendChild(selectorTipoDescuento)
 
-                    const totalNetoPorRango = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.totalNetoPorRango()
+                    const totalNetoPorRango = casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.totalNetoPorRango()
                     contenedorDescuento.appendChild(totalNetoPorRango)
 
-                    const porDiasDelRango = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.porDiasDelRango.arranque()
+                    const porDiasDelRango = casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.porDiasDelRango.arranque()
                     contenedorDescuento.appendChild(porDiasDelRango)
 
                     return contenedorDescuento
@@ -1110,7 +1110,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         contenedor.setAttribute("contenedor", "porDiasDentroDelRango")
                         contenedor.setAttribute("contenedorPorRango", "porDiasDelRango")
                         contenedor.classList.add("contenedorOculto", "flexVertical", "gap6")
-                        const info = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.infoInicialSinApartametno()
+                        const info = casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.infoInicialSinApartametno()
                         contenedor.appendChild(info)
                         return contenedor
                     },
@@ -1181,7 +1181,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         const selectorApartamentosEspecificosUI = casaVitini.view.__sharedMethods__.selectorApartamentosEspecificosUI.despliegue({
                             textoContenedorVacio: "Añade apartamentos a esta condición para determinar qué apartamentos en concreto tienen que estar en una reserva para acceder a esta oferta.",
                             opcionesUI: {
-                                ui: casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.compartidos.opcionesContenedorApartamentoUI
+                                ui: casaVitini.view.__sharedMethods__.componenteUI.compartidos.opcionesContenedorApartamentoUI
                             }
                         })
 
@@ -1213,14 +1213,14 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                             for (const fecha of fechas) {
                                 const selectorDiaRenderizado = contenedorPorDiasDentro.querySelector(`[instanciaUID="${fecha}"]`)
                                 if (!selectorDiaRenderizado) {
-                                    const contenedorDia = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.componentes.constructorDiaUI({
+                                    const contenedorDia = casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.componentes.constructorDiaUI({
                                         fecha: fecha
                                     })
                                     contenedorPorDiasDentro.appendChild(contenedorDia)
                                 }
                             }
                         } else {
-                            const info = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.infoInicialSinApartametno()
+                            const info = casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.infoInicialSinApartametno()
                             contenedorPorDiasDentro.appendChild(info)
                         }
 
@@ -1293,12 +1293,12 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                         if (tipoDescuento) {
                             selectorEnDia.value = tipoDescuento
                         }
-                        const totalNetoPorDiaUI = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.porDiasDelRango.totalNetoPorDiaUI({
+                        const totalNetoPorDiaUI = casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.porDiasDelRango.totalNetoPorDiaUI({
                             instanciaUID: fecha
                         })
                         contenedorDia.appendChild(totalNetoPorDiaUI)
 
-                        const totalNetoPorApartametnosDelDiaUI = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.descuentosUI.porRango.porDiasDelRango.totalNetoPorApartamentosDelDiaUI({
+                        const totalNetoPorApartametnosDelDiaUI = casaVitini.view.__sharedMethods__.componenteUI.descuentosUI.porRango.porDiasDelRango.totalNetoPorApartamentosDelDiaUI({
                             instanciaUID: fecha
                         })
                         contenedorDia.appendChild(totalNetoPorApartametnosDelDiaUI)
@@ -1582,7 +1582,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
                 botonAnadirCondicion.style.display = "none"
             }
             botonAnadirCondicion.textContent = "Añadir condición"
-            botonAnadirCondicion.addEventListener("click", casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.selectorTipoOferta)
+            botonAnadirCondicion.addEventListener("click", casaVitini.view.__sharedMethods__.componenteUI.selectorTipoOferta)
             divPrincipal.appendChild(botonAnadirCondicion)
 
             const contonenedorPropiedades = document.createElement("div")
@@ -1607,7 +1607,7 @@ Esta opción permite aplicar descuentos individuales a los netos de los días se
             infoCondiciones.textContent = "Inserta condiciones a esta oferta."
             contenedorCondiciones.appendChild(infoCondiciones)
 
-            const descuentosUI = casaVitini.view.__sharedMethods__.ofertas_componentesUI.componenteUI.contenedorDescuento()
+            const descuentosUI = casaVitini.view.__sharedMethods__.componenteUI.contenedorDescuento()
             contonenedorPropiedades.appendChild(descuentosUI)
 
             return divPrincipal

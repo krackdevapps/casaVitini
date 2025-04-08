@@ -80,6 +80,7 @@ describe('hostin plugins of simulation', () => {
                 complementoUI: "Complemento temporal",
                 definicion: "Complemento temporal de alojamiento para testing",
                 tipoPrecio: "porNoche",
+                tipoUbicacion: "alojamiento",
                 precio: "100.00",
             },
             session: fakeAdminSession
@@ -116,7 +117,7 @@ describe('hostin plugins of simulation', () => {
         } catch (error) {
             expect(error).not.toBeUndefined();
             expect(typeof error).toBe('object');
-            expect(error).toHaveProperty('info');
+            expect(error).toHaveProperty('errorID');
         }
   
   

@@ -28,7 +28,7 @@ casaVitini.view = {
         const contenedor = main.querySelector("[contenedor=mapa]")
         contenedor.textContent = null
         if (cookies.privacidad === "consentimientoAceptado") {
-            console.log("test")
+
             const mapaGooble = this.mapaGoogle()
             contenedor.appendChild(mapaGooble)
         } else if (cookies.privacidad === "consentimientoRechazado") {

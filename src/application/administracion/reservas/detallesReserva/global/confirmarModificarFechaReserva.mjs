@@ -1,7 +1,7 @@
 import { codigoZonaHoraria } from "../../../../../shared/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validarModificacionRangoFechaResereva } from "../../../../../shared/reservas/validarModificacionRangoFechaResereva.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaEntradaReserva } from "../../../../../infraestructure/repository/reservas/rangoFlexible/actualizarFechaEntradaReserva.mjs";
@@ -14,11 +14,7 @@ import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompar
 export const confirmarModificarFechaReserva = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         await semaforoCompartidoReserva.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({

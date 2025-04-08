@@ -57,7 +57,7 @@ export const validarApartamentos = async (data) => {
                 if (tipoDescuentoApartamento === "porcentaje") {
                     validadoresCompartidos.filtros.limiteCienNumero(cantidadPorApartamento)
                 }
-
+                apartamentoSeleccionado.cantidad = cantidadPorApartamento
             }
         }
 

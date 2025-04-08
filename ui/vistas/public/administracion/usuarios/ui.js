@@ -189,14 +189,10 @@ casaVitini.view = {
                     columnaUI: "Usuario",
                     columnaIDV: "usuario",
                 },
-                {
-                    columnaUI: "Rol",
-                    columnaIDV: "rolIDV",
-                },
-                {
-                    columnaUI: "Correo",
-                    columnaIDV: "mail",
-                },
+                // {
+                //     columnaUI: "Rol",
+                //     columnaIDV: "rolIDV",
+                // },
                 {
                     columnaUI: "Nombre",
                     columnaIDV: "nombre",
@@ -206,17 +202,21 @@ casaVitini.view = {
                     columnaIDV: "primerApellido",
                 },
                 {
-                    columnaUI: "Segundo Apellido",
-                    columnaIDV: "segundoApellido",
+                    columnaUI: "Correo",
+                    columnaIDV: "mail",
                 },
-                {
-                    columnaUI: "Pasaporte",
-                    columnaIDV: "pasaporte",
-                },
-                {
-                    columnaUI: "Teléfono",
-                    columnaIDV: "telefono",
-                },
+                // {
+                //     columnaUI: "Segundo Apellido",
+                //     columnaIDV: "segundoApellido",
+                // },
+                // {
+                //     columnaUI: "Pasaporte",
+                //     columnaIDV: "pasaporte",
+                // },
+                // {
+                //     columnaUI: "Teléfono",
+                //     columnaIDV: "telefono",
+                // },
             ]
             const parametrosFinales = {
                 buscar: buscar
@@ -377,13 +377,13 @@ casaVitini.view = {
                     opcionCambiarIDX.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
                     opcionCambiarIDX.textContent = "Modificar su VitiniID"
                     contenedorOpciones.appendChild(opcionCambiarIDX)
-                    const opcionCambiarRol = document.createElement("a")
-                    opcionCambiarRol.classList.add("detallesUsuario_opcionInformacion")
-                    opcionCambiarRol.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/rol`)
+                    // const opcionCambiarRol = document.createElement("a")
+                    // opcionCambiarRol.classList.add("detallesUsuario_opcionInformacion")
+                    // opcionCambiarRol.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/rol`)
 
-                    opcionCambiarRol.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
-                    opcionCambiarRol.textContent = "Cambiar su rol"
-                    contenedorOpciones.appendChild(opcionCambiarRol)
+                    // opcionCambiarRol.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+                    // opcionCambiarRol.textContent = "Cambiar su rol"
+                    // contenedorOpciones.appendChild(opcionCambiarRol)
                     const opcionClave = document.createElement("a")
                     opcionClave.classList.add("detallesUsuario_opcionInformacion")
                     opcionClave.setAttribute("href", `/administracion/usuarios/${usuarioIDX}/cambiar_clave`)
@@ -423,7 +423,6 @@ casaVitini.view = {
                 if (respuestaServidor?.ok) {
                     const detallesUsuario = respuestaServidor?.ok
                     const usuarioIDX = detallesUsuario.usuarioIDX
-                    const rol = detallesUsuario.rol
                     const datosUsuario = detallesUsuario.datosUsuario
                     const nombre = datosUsuario.nombre || ""
                     const primerApellido = datosUsuario.primerApellido || ""
@@ -434,11 +433,10 @@ casaVitini.view = {
                     const contenedorDetallesUsuario = document.createElement("div")
                     contenedorDetallesUsuario.classList.add("detallesUsuario_contenedorGlobal")
                     contenedorDetallesUsuario.setAttribute("componente", "contenedorGlobal")
-                    const datosBanner = {
+                    
+                    const contenedorUsuarioIDX = casaVitini.view.detallesUsuario.componentes.bannerIDX({
                         usuarioIDX: usuarioIDX,
-                        rol: rol
-                    }
-                    const contenedorUsuarioIDX = casaVitini.view.detallesUsuario.componentes.bannerIDX(datosBanner)
+                    })
                     contenedorDetallesUsuario.appendChild(contenedorUsuarioIDX)
                     espacioUsuario.appendChild(contenedorDetallesUsuario)
                     const contenedorDatosUsuario = document.createElement("div")
@@ -1019,7 +1017,7 @@ casaVitini.view = {
             bannerIDX: function (metadatos) {
                 const usuarioIDX = metadatos.usuarioIDX
                 const rol = metadatos.rol
-                const rolUITexto = rol.substring(0, 1).toUpperCase() + rol.substring(1);
+                //const rolUITexto = rol.substring(0, 1).toUpperCase() + rol.substring(1);
                 const contenedorUsuarioIDX = document.createElement("div")
                 contenedorUsuarioIDX.classList.add("detallesUsuario_contenedorUsuarioIDX")
                 contenedorUsuarioIDX.setAttribute("componente", "contenedorUsuarioUX")
@@ -1035,11 +1033,11 @@ casaVitini.view = {
                 usuarioIDXUI.setAttribute("usuarioIDX", usuarioIDX)
                 usuarioIDXUI.textContent = usuarioIDX
                 contenedorDatosGlobales.appendChild(usuarioIDXUI)
-                const rolUI = document.createElement("div")
-                rolUI.classList.add("detallesUsuario_rolUI")
-                rolUI.setAttribute("componente", "rolUI")
-                rolUI.textContent = rolUITexto
-                contenedorDatosGlobales.appendChild(rolUI)
+                // const rolUI = document.createElement("div")
+                // rolUI.classList.add("detallesUsuario_rolUI")
+                // rolUI.setAttribute("componente", "rolUI")
+                // rolUI.textContent = rolUITexto
+                //contenedorDatosGlobales.appendChild(rolUI)
                 contenedorUsuarioIDX.appendChild(contenedorDatosGlobales)
                 return contenedorUsuarioIDX
             }

@@ -2,18 +2,14 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { obtenerOferatPorOfertaUID } from "../../../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarDescuentoPorAdministrador = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -25,7 +21,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const ofertaUID = validadoresCompartidos.tipos.cadena({
@@ -35,7 +31,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const reserva = await obtenerReservaPorReservaUID(reservaUID)
         const estadoReserva = reserva.estadoIDV

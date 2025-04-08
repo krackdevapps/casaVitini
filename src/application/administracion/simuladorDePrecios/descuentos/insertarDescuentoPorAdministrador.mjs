@@ -2,18 +2,14 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { obtenerOferatPorOfertaUID } from "../../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs"
 import { actualizarDesgloseFinacieroPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/actualizarDesgloseFinacieroPorSimulacionUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarDescuentoPorAdministrador = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -27,7 +23,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const ofertaUID = validadoresCompartidos.tipos.cadena({
@@ -37,7 +33,7 @@ export const insertarDescuentoPorAdministrador = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const llavesGlobalesFaltantes = await soloFiltroDataGlobal(simulacionUID)

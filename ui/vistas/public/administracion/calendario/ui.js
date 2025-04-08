@@ -9,10 +9,10 @@ casaVitini.view = {
 
             if (instanciaRenderizada) {
                 const html = document.querySelector("html")
-                html.style.height = "100%"
+
 
                 const sectionRenderizada = document.querySelector("main")
-                sectionRenderizada.style.maxWidth = "100%"
+                // sectionRenderizada.style.maxWidth = "100%"
 
                 const contenedorBotonesGlobales = this.contenedorBotonesGlobales()
                 main.appendChild(contenedorBotonesGlobales)
@@ -27,18 +27,15 @@ casaVitini.view = {
 
                 if (instanciaRenderizada) {
 
-
-
-
                     const vision = configuracionUI.paresConfiguracion["calendario.tipoVision"]
                     const tipoSeleccion = configuracionUI.paresConfiguracion["calendario.tipoSeleccion"]
-                    const botonSel = main.querySelector("[panel=botonesGlobales] [boton=tipoSel]")
+                    // const botonSel = main.querySelector("[panel=botonesGlobales] [boton=tipoSel]")
 
-                    if (!tipoSeleccion) {
-                        botonSel?.setAttribute("tipoSel", "porDiasIndividual")
-                    } else {
-                        botonSel?.setAttribute("tipoSel", tipoSeleccion)
-                    }
+                    // if (!tipoSeleccion) {
+                    //     botonSel?.setAttribute("tipoSel", "porDiasIndividual")
+                    // } else {
+                    //     botonSel?.setAttribute("tipoSel", tipoSeleccion)
+                    // }
                     if (!vision || vision === "horizontal") {
                         return this?.vision?.visionHorizontal({
                             instanciaUID
@@ -130,14 +127,14 @@ casaVitini.view = {
         })
         marcoBotonesGlobales.appendChild(botonVision)
 
-        const botonTipoSel = document.createElement("div")
-        botonTipoSel.classList.add("botonGlobal")
-        botonTipoSel.setAttribute("boton", "tipoSel")
-        botonTipoSel.textContent = "Selección"
-        botonTipoSel.addEventListener("click", () => {
-            this.seleccion.controladorSeleccion()
-        })
-        marcoBotonesGlobales.appendChild(botonTipoSel)
+        // const botonTipoSel = document.createElement("div")
+        // botonTipoSel.classList.add("botonGlobal")
+        // botonTipoSel.setAttribute("boton", "tipoSel")
+        // botonTipoSel.textContent = "Selección"
+        // botonTipoSel.addEventListener("click", () => {
+        //     this.seleccion.controladorSeleccion()
+        // })
+        // marcoBotonesGlobales.appendChild(botonTipoSel)
 
         return marcoBotonesGlobales
     },
@@ -393,7 +390,7 @@ casaVitini.view = {
                 main.appendChild(contenedor)
 
                 const tituloMesGlobal = document.createElement("div")
-                tituloMesGlobal.classList.add("flexVertical", "padding6", "textoCentrado")
+                tituloMesGlobal.classList.add("flexVertical", "padding6", "textoCentrado", "tituloCalendarioVerticalResponsivo")
                 tituloMesGlobal.setAttribute("data", "fechaActual1")
                 tituloMesGlobal.textContent = "Esperando al servidor..."
                 contenedor.appendChild(tituloMesGlobal)
@@ -424,96 +421,91 @@ casaVitini.view = {
                 contenedor.appendChild(mesesUI)
                 const container = document.querySelector("[contenedor=meses]");
 
-                let mesVisibleActual = null;
-                const contextoVerical = document.querySelector('[componente=calendarioGlobal][vision=vertical]');
+                casaVitini.view.__observers__.controlTituloMes = () => {
+                    const elementos = document.querySelectorAll('[mesIDV]');
+                    const observer = new IntersectionObserver((entries, observer) => {
 
-                const visibilidadMeses = new Map();
-                casaVitini.view.__observers__.observer_titulo = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
+                        entries.forEach(entry => {
+                            const contenedorMesExistente = entry.target
+                            if (!contenedorMesExistente) {
+                                observer.disconnect()
+                            } else if (entry.isIntersecting) {
 
-                        const contenedorMesExistente = entry.target
-                        if (!contenedorMesExistente) {
-                            observer.disconnect();
-                        } else {
-                            const mesIDV = entry.target.getAttribute('mesIDV');
-                            visibilidadMeses.set(mesIDV, entry.intersectionRatio);
-                            let mesConMayorVisibilidad = null;
-                            let maxPorcentajeVisibilidad = 0;
-                            visibilidadMeses.forEach((porcentaje, mes) => {
-                                if (porcentaje > maxPorcentajeVisibilidad) {
-                                    maxPorcentajeVisibilidad = porcentaje;
-                                    mesConMayorVisibilidad = mes;
-                                }
-                            });
+                                if (entry.intersectionRatio >= 0.5) {
+                                    const div = entry.target;
+                                    const mesVisibleActual = div.getAttribute("mesIDV")
 
-                            if (mesConMayorVisibilidad && mesConMayorVisibilidad !== mesVisibleActual) {
-                                mesVisibleActual = mesConMayorVisibilidad;
-
-                                const traductorURL = casaVitini.view.traductorURL();
-                                const [mes, ano] = mesVisibleActual.split("-");
-                                const fechaUI = `${nombreMes[mes - 1]} ${ano}`;
-                                const tituloMesGlobal = document.querySelector("[data=fechaActual1]");
-                                if (tituloMesGlobal) {
-                                    tituloMesGlobal.textContent = fechaUI;
-                                    tituloMesGlobal.setAttribute("mesVisible", mesVisibleActual);
-                                    traductorURL.fecha = `${Number(mes)}-${ano}`;
-                                }
-
-                                setTimeout(() => {
-                                    if (casaVitini?.view?.controladorRegistros) {
-                                        casaVitini.view.controladorRegistros({
-                                            tipoRegistro: "actualizar",
-                                            traductorURL: traductorURL,
-                                        });
+                                    const [mes, ano] = mesVisibleActual.split("-");
+                                    const fechaUI = `${nombreMes[mes - 1]} ${ano}`;
+                                    const tituloMesGlobal = document.querySelector("[data=fechaActual1]");
+                                    if (tituloMesGlobal) {
+                                        tituloMesGlobal.textContent = fechaUI;
+                                        tituloMesGlobal.setAttribute("mesVisible", mesVisibleActual);
                                     }
+                                    const traductorURL = casaVitini.view.traductorURL();
+                                    traductorURL.fecha = String(Number(mes) + "-" + ano)
 
-                                }, 700);
+                                    setTimeout(() => {
+                                        if (casaVitini.view?.controladorRegistros) {
+                                            casaVitini.view.controladorRegistros({
+                                                tipoRegistro: "actualizar",
+                                                traductorURL: traductorURL,
+                                            });
+                                        }
+                                    }, 700);
+                                }
                             }
-                        }
+                        });
+                    }, {
+                        threshold: 0.5
                     });
-                }, {
-                    root: container,
-                    threshold: Array.from(Array(101).keys(), n => n / 100), // Umbrales del 0% al 100%
-                });
+                    elementos.forEach(el => observer.observe(el));
+                    return observer;
+                };
 
-                casaVitini.view.__observers__.observer_data = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        const contenedorMesExistente = entry.target
-                        if (!contenedorMesExistente) {
-                            observer.disconnect()
-                        } else if (entry.isIntersecting) {
-                            const traductorURL = casaVitini.view.traductorURL()
-                            const contenedorMes = entry.target
-                            const mesIDV = contenedorMes.getAttribute('mesIDV')
-                            const fecha = mesIDV.split("-")
+                casaVitini.view.__observers__.controlDataMes = () => {
+                    const elementos = document.querySelectorAll('[mesIDV]');
+                    const observer = new IntersectionObserver((entries, observer) => {
+                        entries.forEach(entry => {
+                            const contenedorMesExistente = entry.target
+                            if (!contenedorMesExistente) {
+                                observer.disconnect()
+                            } else if (entry.isIntersecting) {
+                                const traductorURL = casaVitini.view.traductorURL()
+                                const contenedorMes = entry.target
+                                const mesIDV = contenedorMes.getAttribute('mesIDV')
+                                const fecha = mesIDV.split("-")
 
-                            const mes = fecha[0]
-                            const ano = fecha[1]
-                            this.renderizaDataEnMes({
-                                configuracionCalendario: {
-                                    tipo: "personalizado",
-                                    ano: Number(ano),
-                                    mes: Number(mes),
-                                },
-                                instanciaUID_main,
-                                traductorURL
-                            })
-                        }
+                                const mes = fecha[0]
+                                const ano = fecha[1]
+                                this.renderizaDataEnMes({
+                                    configuracionCalendario: {
+                                        tipo: "personalizado",
+                                        ano: Number(ano),
+                                        mes: Number(mes),
+                                    },
+                                    instanciaUID_main,
+                                    traductorURL
+                                })
+                            }
+                        });
+                    }, {
+                        root: container,
+                        //  threshold: 0.1   
                     });
-                }, {
-                    root: container, // El contenedor de los meses con scroll
-                    //  threshold: 0.1   // 60% del mes debe estar visible para considerarlo "visible"
-                });
+                    elementos.forEach(el => observer.observe(el));
+                    return observer;
+                }
 
-                const months = contextoVerical.querySelectorAll('[mesIDV]');
-                months.forEach(month => {
-                    casaVitini.view.__observers__.observer_titulo.observe(month)
-                    casaVitini.view.__observers__.observer_data.observe(month)
-                });
+                casaVitini.view.__observers__.controlTituloMes();
+                casaVitini.view.__observers__.controlDataMes();
+
+
                 const fechaInicial = document.querySelector(`[mesIDV="${mesInicial}-${anoInicial}"]`).closest("[contenedor=mes]");
                 if (fechaInicial) {
                     fechaInicial.scrollIntoView({ behavior: "instant" });
                 }
+
                 const correctorIOS = () => {
                     if (fechaInicial) {
                         fechaInicial.scrollIntoView({ behavior: "instant" });
@@ -589,7 +581,7 @@ casaVitini.view = {
                     const indicadorMesAno = nombreMesFinal + " " + ano
 
                     const tituloMesGlobal = document.createElement("div")
-                    tituloMesGlobal.classList.add("flexVertical", "padding6", "textoCentrado")
+                    tituloMesGlobal.classList.add("tituloPorMesVertical")
                     tituloMesGlobal.textContent = indicadorMesAno
                     // contenedorMeses.appendChild(tituloMesGlobal)
                     const instanciaUIDMes = casaVitini.utilidades.codigoFechaInstancia()
@@ -616,7 +608,7 @@ casaVitini.view = {
 
                     const marcoMes = document.createElement("div")
                     marcoMes.classList.add("administracion_calendario_marcoMes_vertical")
-                    marcoMes.style.gap = "1px"
+                    //  marcoMes.style.gap = "1px"
                     marcoMes.setAttribute("mesIDV", `${String(mes).padStart(2, "0")}-${ano}`)
                     marcoMes.setAttribute("componente", "marcoMes")
                     marcoMes.setAttribute("instanciaUID", instanciaUIDMes)
@@ -769,12 +761,12 @@ casaVitini.view = {
         traductorURL.fecha = `${String(mesActual).padStart("2", 0)}-${anoActual}`
 
         casaVitini.view.controladorRegistros({
-            tipoRegistro: "crear",
+            tipoRegistro: "actualizar",
             traductorURL: traductorURL
         })
 
         await this.irAFecha({
-            tipoRegistro: "crear",
+            tipoRegistro: "actualizar",
             tipoResolucion: "personalizado",
             ano: anoActual,
             mes: mesActual,
@@ -796,6 +788,7 @@ casaVitini.view = {
 
 
         if (vision === "vertical") {
+
             const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
                 tipo: "actual"
             })
@@ -803,7 +796,8 @@ casaVitini.view = {
             const calendario = { traductorURL: traductorURL }
             calendario.tipoRegistro = "actualizar"
             this.controladorRegistros(calendario)
-            const fechaInicial = document.querySelector(`[mesIDV="${String(calendarioResuelto.mes).padStart("2", 0)}-${calendarioResuelto.ano}"] [dia="${calendarioResuelto.dia}"]`);
+            const fechaInicial = document.querySelector(`[mesIDV="${String(calendarioResuelto.mes).padStart("2", 0)}-${calendarioResuelto.ano}"] [dia="${String(calendarioResuelto.dia).padStart("2", 0)}"]`);
+
             if (fechaInicial) {
                 fechaInicial.scrollIntoView({ behavior: "instant" });
             }
@@ -1331,6 +1325,8 @@ casaVitini.view = {
             const eventosMes = contenedorEventos.eventosMes
             const eventosEnDetalle = contenedorEventos.eventosEnDetalle
             const instanciaUIDMes = contenedorEventos.instanciaUIDMes
+
+
             const selectorMesDestino = calendarioRenderizado.querySelector(`[instanciaUID="${instanciaUIDMes}"]`)
             if (selectorMesDestino) {
 
@@ -1415,7 +1411,7 @@ casaVitini.view = {
                     const eventoUID = detallesDelEvento.eventoUID
                     const contenedorFechasDelEvento = detallesDelEvento.contenedorFechasDelEvento
                     const tipoEvento = detallesDelEvento.tipoEvento
-
+                    //   
                     contenedorFechasDelEvento.forEach((c) => {
 
                         const fechaEntrada = c.fechaEntrada
@@ -1452,7 +1448,7 @@ casaVitini.view = {
                         }
 
                         const selectorContenedorDia = selectorMesDestino.querySelector(`[dia="${String(diaEntrada).padStart(2, "0")}"]`)
-
+                        // 
                         const eventosContenedor = selectorContenedorDia.getAttribute("eventosContenedor")
 
                         const posicionEventoUI = (JSON.parse(eventosContenedor)).eventos[eventoUID]
@@ -1633,9 +1629,12 @@ casaVitini.view = {
                 if (
                     capasIDV.includes("comportamientosPorApartamento") ||
                     capasIDV.includes("global") ||
-                    capasIDV.includes("todosLosComportamientosDePrecio")
+                    capasIDV.includes("todosLosComportamientosDePrecio") ||
+                    capasIDV.includes("todosLosPreciosSumados") ||
+                    capasIDV.includes("precioNochePorApartamento")
                 ) {
                     const apartamentos = respuestaServidor.apartamentos
+
                     this.controladorSelecionDias.arranque({
                         instanciaUIDMes,
                         apartamentos,
@@ -1644,7 +1643,7 @@ casaVitini.view = {
 
                     })
                 } else {
-                    document.querySelector("[contenedorcompartidofechassel]")?.removeAttribute("contenedorcompartidofechassel")
+                    document.querySelector("[contenedorCompartidoFechasSel]")?.removeAttribute("contenedorCompartidoFechasSel")
                     document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
                 }
             }
@@ -1688,7 +1687,7 @@ casaVitini.view = {
         if (!mes || !ano) { return }
 
         const resuelveDiasCompletos = await casaVitini.shell.servidor({
-            zona: "componentes/diasOcupadosTotalmentePorMes",
+            zona: "administracion/componentes/diasOcupadosTotalmentePorMes",
             mes: Number(mes),
             ano: Number(ano)
         })
@@ -2770,7 +2769,7 @@ casaVitini.view = {
                 })
 
                 casaVitini.view.controladorRegistros({
-                    tipoRegistro: "crear",
+                    tipoRegistro: "actualizar",
                     ano: anoActual,
                     mes: mesActual,
                     contenedorCapas: estructura
@@ -3209,12 +3208,12 @@ casaVitini.view = {
                     const instanciaUID_main = sectionRenderizada.getAttribute("instanciaUID")
 
                     casaVitini.view.controladorRegistros({
-                        tipoRegistro: "crear",
+                        tipoRegistro: "actualizar",
                         traductorURL: traductorURL
                     })
 
                     await casaVitini.view.irAFecha({
-                        tipoRegistro: "crear",
+                        tipoRegistro: "actualizar",
                         tipoResolucion: "personalizado",
                         ano: Number(ano),
                         mes: Number(mes),
@@ -3227,7 +3226,7 @@ casaVitini.view = {
                     //  traductorURL.vision = `vertical`
 
                     casaVitini.view.controladorRegistros({
-                        tipoRegistro: "crear",
+                        tipoRegistro: "actualizar",
                         traductorURL: traductorURL
                     })
                     const fechaDestino = document.querySelector(`[mesIDV="${String(mes).padStart("2", 0)}-${ano}"]`).closest("[contenedor=mes]");
@@ -3264,7 +3263,7 @@ casaVitini.view = {
             traductorURL.capas = []
             traductorURL.capasCompuestas = {}
             casaVitini.view.controladorRegistros({
-                tipoRegistro: "crear",
+                tipoRegistro: "actualizar",
                 traductorURL: traductorURL
             })
         },
@@ -3311,7 +3310,8 @@ casaVitini.view = {
                     const fecha = `${ano}-${String(mes).padStart(2, "0")}-${numeroDia}`
 
                     if (eventosUID.length === 0) {
-                        dia.addEventListener("click", casaVitini.view.controladorSelecionDias.selectorDia.hub)
+                        dia.addEventListener("mousedown", casaVitini.view.controladorSelecionDias.selectorDia.hub)
+                        dia.addEventListener("touchstart", casaVitini.view.controladorSelecionDias.selectorDia.hub)
                         dia.classList.add("diaSelecionable")
                         if (contenedorCompartidoFechasSel.hasOwnProperty(fecha)) {
                             casaVitini.view.controladorSelecionDias.estadosDia({
@@ -3340,12 +3340,12 @@ casaVitini.view = {
                                 }
                             } else if (tipoEventoIDV === "comportamientosPorApartamentoBasadoEnDia") {
                                 decisionFinal = false
-
                             }
                         }
 
                         if (decisionFinal === true) {
-                            dia.addEventListener("click", casaVitini.view.controladorSelecionDias.selectorDia.hub)
+                            dia.addEventListener("mousedown", casaVitini.view.controladorSelecionDias.selectorDia.hub)
+                            dia.addEventListener("touchstart", casaVitini.view.controladorSelecionDias.selectorDia.hub)
                             dia.classList.add("diaSelecionable")
                             if (contenedorCompartidoFechasSel.hasOwnProperty(fecha)) {
                                 casaVitini.view.controladorSelecionDias.estadosDia({
@@ -3445,28 +3445,8 @@ casaVitini.view = {
 
             },
             selectorPorRango: {
-                inicioRango: function (e) {
-                    const contenedorDia = e.target.closest("[dia]")
-                    contenedorDia.setAttribute("rango", "inicio")
-                    // contenedorDia.setAttribute("estadoSel", "activado")
-
-                    contenedorDia.classList.add("diaSel")
-
-                    const diasRenderizados = document.querySelectorAll("[dia]")
-                    diasRenderizados.forEach((d) => {
-                        if (d !== contenedorDia) {
-                            d.removeAttribute("rango")
-                            d.classList.remove("diaSel")
-                        }
-                        d.addEventListener("mouseover", casaVitini.view.controladorSelecionDias.selectorDia.selectorPorRango.controlHover)
-                    })
-                },
-                finalRango: function (e) {
-                    const contenedorDia = e.target.closest("[dia]")
-                    const estadoDia = contenedorDia.getAttribute("estadoSel")
-                    const diasRenderizados = document.querySelectorAll("[dia]")
+                finalRango: function () {
                     const diasDelRango = document.querySelectorAll("[dia][rango]")
-
                     const contenedorCompartidoFechasSel = {}
                     diasDelRango.forEach(d => {
                         d.setAttribute("estadoSel", "activado")
@@ -3479,145 +3459,258 @@ casaVitini.view = {
                         const fechaSel = `${ano}-${String(mes).padStart(2, "0")}-${String(diaSel).padStart(2, "0")}`
                         contenedorCompartidoFechasSel[fechaSel] = "diaSeleccioando"
                     })
-                    diasRenderizados.forEach((d) => {
-                        d.removeEventListener("mouseover", casaVitini.view.controladorSelecionDias.selectorDia.selectorPorRango.controlHover)
-                        d.removeAttribute("rango")
-                    })
+
                     document.querySelector("main configuracion").setAttribute("contenedorCompartidoFechasSel", JSON.stringify(contenedorCompartidoFechasSel))
-
                     casaVitini.view.controladorSelecionDias.selectorDia.controladorUISelDia()
-
-
                 },
-                controlHover: function (e) {
-                    const diaInicioRango = document.querySelector("[dia][rango=inicio]");
-                    const diaDebajoComoFinalRango = e.target.closest("[dia]");
+                // controlHover1: function (e) {
+                //     e.preventDefault(); // Previene acciones predeterminadas
+                //     const diaInicioRango = document.querySelector("[dia][rango=inicio]");
+                //     const diaDebajoComoFinalRango = e.target.closest("[dia]");
+
+
+                //     const elementosEntre = [];
+
+                //     if (diaDebajoComoFinalRango.getAttribute("rango") !== "inicio") {
+                //         const todosLosDias = document.querySelectorAll("[dia]");
+
+                //         const inicioIndex = Array.from(todosLosDias).indexOf(diaInicioRango);
+                //         const finIndex = Array.from(todosLosDias).indexOf(diaDebajoComoFinalRango);
+
+                //         const start = Math.min(inicioIndex, finIndex);
+                //         const end = Math.max(inicioIndex, finIndex);
+
+                //         for (let i = start; i <= end; i++) {
+                //             elementosEntre.push(todosLosDias[i]);
+                //         }
+                //         elementosEntre.forEach(e => {
+                //             const tipoRango = e.getAttribute("rango")
+                //             if (tipoRango !== "inicio") {
+
+                //                 const contenedor = JSON.parse(e.getAttribute("eventosContenedor") || "{}")
+                //                 const eventosDelDia = contenedor.eventos
+                //                 const eventosUID = Object.keys(eventosDelDia)
+                //                 let decisionFinal = true
+                //                 if (eventosUID.length > 0) {
+                //                     for (const eventoUID of eventosUID) {
+                //                         const mesIDV = e.closest("[mesIDV]")
+                //                         const contenedorEvento = mesIDV.querySelector(`[eventoUID="${eventoUID}"]`)
+                //                         const detallesDelEvento = JSON.parse(contenedorEvento.getAttribute("detallesDelEvento"))
+                //                         const tipoEventoIDV = detallesDelEvento.tipoEvento
+
+                //                         if (tipoEventoIDV === "comportamientosPorApartamento") {
+                //                             const contenedor = detallesDelEvento.contenedor
+                //                             const tipoEvento = contenedor.tipo
+                //                             const apartamentos = contenedor.apartamentos
+                //                             const fechaInicio = contenedor.fechaInicio
+                //                             const fechaFinal = contenedor.fechaFinal
+                //                             if (tipoEvento === "porRango" && apartamentos.length === 1 && fechaInicio === fechaFinal) {
+                //                                 decisionFinal = true
+                //                                 break
+                //                             } else {
+                //                                 decisionFinal = false
+                //                             }
+                //                         } else if (tipoEventoIDV === "comportamientosPorApartamentoBasadoEnDia") {
+                //                             decisionFinal = false
+
+                //                         }
+                //                     }
+                //                 }
+
+                //                 if (decisionFinal === true) {
+                //                     e.classList.add("diaSel")
+                //                     e.setAttribute("rango", "intermedio");
+                //                 }
+
+                //             }
+                //         });
+                //     }
+                //     const diasPreseleccionados = document.querySelectorAll("[dia][rango=intermedio]");
+                //     diasPreseleccionados.forEach(e => {
+                //         if (!elementosEntre.includes(e)) {
+                //             e.classList.remove("diaSel")
+                //             e.removeAttribute("rango", "intermedio");
+                //         }
+                //     });
+                // },
+                controlHover: function (data) {
+                    //  data.e.preventDefault();
+
+                    const e = data.e
+                    const diaInicioRango = data.diaInicioRango
+                    let diaDebajoComoFinalRango;
+                    const instanciaUID = data.instanciaUID
+
+                    if (e.type === "mousemove") {
+
+                        diaDebajoComoFinalRango = e.target.closest("[dia]");
+                    } else if (e.type === "touchmove") {
+                        const touch = e.touches[0];
+                        diaDebajoComoFinalRango = document.elementFromPoint(touch.clientX, touch.clientY)?.closest("[dia]");
+                        if (!diaDebajoComoFinalRango) {
+                            return
+                        }
+                    }
 
                     const elementosEntre = [];
+                    const todosLosDias = document.querySelectorAll("[dia]");
 
-                    if (diaDebajoComoFinalRango.getAttribute("rango") !== "inicio") {
-                        const todosLosDias = document.querySelectorAll("[dia]");
+                    const inicioIndex = Array.from(todosLosDias).indexOf(diaInicioRango);
+                    const finIndex = Array.from(todosLosDias).indexOf(diaDebajoComoFinalRango);
 
-                        const inicioIndex = Array.from(todosLosDias).indexOf(diaInicioRango);
-                        const finIndex = Array.from(todosLosDias).indexOf(diaDebajoComoFinalRango);
+                    const start = Math.min(inicioIndex, finIndex);
+                    const end = Math.max(inicioIndex, finIndex);
 
-                        const start = Math.min(inicioIndex, finIndex);
-                        const end = Math.max(inicioIndex, finIndex);
+                    for (let i = start; i <= end; i++) {
+                        elementosEntre.push(todosLosDias[i]);
+                    }
 
-                        for (let i = start; i <= end; i++) {
-                            elementosEntre.push(todosLosDias[i]);
-                        }
-                        elementosEntre.forEach(e => {
-                            const tipoRango = e.getAttribute("rango")
-                            if (tipoRango !== "inicio") {
 
-                                const contenedor = JSON.parse(e.getAttribute("eventosContenedor") || "{}")
-                                const eventosDelDia = contenedor.eventos
-                                const eventosUID = Object.keys(eventosDelDia)
-                                let decisionFinal = true
-                                if (eventosUID.length > 0) {
-                                    for (const eventoUID of eventosUID) {
-                                        const mesIDV = e.closest("[mesIDV]")
-                                        const contenedorEvento = mesIDV.querySelector(`[eventoUID="${eventoUID}"]`)
-                                        const detallesDelEvento = JSON.parse(contenedorEvento.getAttribute("detallesDelEvento"))
-                                        const tipoEventoIDV = detallesDelEvento.tipoEvento
+                    if (elementosEntre.length > 1) {
+                        for (const dia of elementosEntre) {
 
-                                        if (tipoEventoIDV === "comportamientosPorApartamento") {
-                                            const contenedor = detallesDelEvento.contenedor
-                                            const tipoEvento = contenedor.tipo
-                                            const apartamentos = contenedor.apartamentos
-                                            const fechaInicio = contenedor.fechaInicio
-                                            const fechaFinal = contenedor.fechaFinal
-                                            if (tipoEvento === "porRango" && apartamentos.length === 1 && fechaInicio === fechaFinal) {
-                                                decisionFinal = true
-                                                break
-                                            } else {
-                                                decisionFinal = false
-                                            }
-                                        } else if (tipoEventoIDV === "comportamientosPorApartamentoBasadoEnDia") {
-                                            decisionFinal = false
+                            const contenedor = JSON.parse(dia?.getAttribute("eventosContenedor") || "{}");
+                            const eventosDelDia = contenedor?.eventos || {};
+                            const eventosUID = Object.keys(eventosDelDia);
+                            let decisionFinal = true;
 
+                            if (eventosUID.length > 0) {
+                                for (const eventoUID of eventosUID) {
+                                    const mesIDV = dia.closest("[mesIDV]");
+                                    const contenedorEvento = mesIDV.querySelector(`[eventoUID="${eventoUID}"]`);
+                                    const detallesDelEvento = JSON.parse(contenedorEvento.getAttribute("detallesDelEvento"));
+                                    const tipoEventoIDV = detallesDelEvento.tipoEvento;
+
+                                    if (tipoEventoIDV === "comportamientosPorApartamento") {
+                                        const contenedor = detallesDelEvento.contenedor;
+                                        const tipoEvento = contenedor.tipo;
+                                        const apartamentos = contenedor.apartamentos;
+                                        const fechaInicio = contenedor.fechaInicio;
+                                        const fechaFinal = contenedor.fechaFinal;
+
+                                        if (tipoEvento === "porRango" && apartamentos.length === 1 && fechaInicio === fechaFinal) {
+                                            decisionFinal = true;
+                                            break;
+                                        } else {
+                                            decisionFinal = false;
                                         }
+                                    } else if (tipoEventoIDV === "comportamientosPorApartamentoBasadoEnDia") {
+                                        decisionFinal = false;
                                     }
                                 }
-
-                                if (decisionFinal === true) {
-                                    e.classList.add("diaSel")
-                                    e.setAttribute("rango", "intermedio");
-                                }
-
                             }
-                        });
-                    }
-                    const diasPreseleccionados = document.querySelectorAll("[dia][rango=intermedio]");
-                    diasPreseleccionados.forEach(e => {
-                        if (!elementosEntre.includes(e)) {
-                            e.classList.remove("diaSel")
-                            e.removeAttribute("rango", "intermedio");
-                        }
-                    });
-                },
-                controlHoverAntiguo: function (e) {
 
-                    const diaInicioRango = document.querySelector("[dia][rango=inicio]")
-                    const diaDebajoComoFinalRango = e.target.closest("[dia]")
+                            if (decisionFinal === true) {
 
-                    // Recorremos hasta llegar al elementoFin
-                    // Si el elemento de inicio está antes que el de fin, recorremos hacia adelante
-                    const elementosEntre = [];
-                    if (diaDebajoComoFinalRango.getAttribute("rango") !== "inicio") {
-                        let currentElement = diaInicioRango;
-                        // Determinar si elementoInicio está antes o después de elementoFin
-                        if (diaInicioRango.compareDocumentPosition(diaDebajoComoFinalRango) & Node.DOCUMENT_POSITION_FOLLOWING) {
-                            // Si elementoInicio está antes, recorremos hacia adelante
-                            currentElement = diaInicioRango.nextElementSibling;
-                            while (currentElement && currentElement !== diaDebajoComoFinalRango) {
-                                elementosEntre.push(currentElement);
-                                currentElement = currentElement.nextElementSibling; // Avanzamos
-                            }
-                        } else {
-                            // Si elementoInicio está después, recorremos hacia atrás
-                            currentElement = diaInicioRango.previousElementSibling;
-                            while (currentElement && currentElement !== diaDebajoComoFinalRango) {
-                                elementosEntre.push(currentElement);
-                                currentElement = currentElement.previousElementSibling; // Retrocedemos
+                                dia.style.background = "pink"
+                                dia.setAttribute("estadoSel", "enSelecion")
+                                dia.setAttribute("instanciaUID", instanciaUID)
                             }
                         }
-                        elementosEntre.forEach(e => {
-                            e.classList.add("diaSel")
-                            e.setAttribute("rango", "intermedio")
-                        })
+
                     }
-                    const diasPreselecioandos = document.querySelectorAll("[dia][rango=intermedio]")
-                    diasPreselecioandos.forEach(e => {
-                        if (!elementosEntre.includes(e)) {
-                            e.removeAttribute("rango")
-                            e.classList.remove("diaSel")
+
+                    const elementosFueraDeRango = [];
+                    for (let i = 0; i < todosLosDias.length; i++) {
+                        if (i < start || i > end) {
+                            elementosFueraDeRango.push(todosLosDias[i]);
+                        }
+                    }
+                    elementosFueraDeRango.forEach(dia => {
+                        const instanciaUID_dia = dia.getAttribute("instanciaUID")
+                        if (instanciaUID_dia === instanciaUID) {
+                            dia.removeAttribute("estadoSel")
+                            dia.removeAttribute("style")
                         }
                     })
+                },
 
-                }
             },
-
             hub: function (e) {
-                const tipoSel = document.querySelector("[boton=tipoSel]").getAttribute("tipoSel")
-                if (tipoSel === "porRango") {
-                    const diaSelecionadoComoRangoInicio = document.querySelector("[dia][rango=inicio]")
-                    if (diaSelecionadoComoRangoInicio) {
-                        casaVitini.view.controladorSelecionDias.selectorDia.selectorPorRango.finalRango(e)
-                    } else {
-                        casaVitini.view.controladorSelecionDias.selectorDia.selectorPorRango.inicioRango(e)
+                e.preventDefault();
+                const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+
+                const diaInicioRango = e.target.closest("[dia]")
+                diaInicioRango.style.background = "pink"
+                diaInicioRango.setAttribute("estadoSel", "enSelecion")
+                const manejarTouchMove = (e) => {
+                    casaVitini.view.controladorSelecionDias.selectorDia.selectorPorRango.controlHover({
+                        e,
+                        diaInicioRango,
+                        instanciaUID
+                    })
+                };
+                const diasRenderizados = document.querySelectorAll("[dia]")
+
+                const finalFlujo = (e) => {
+                    let diaFinal
+                    if (e.type === "mouseup") {
+                        diaFinal = e.target.closest("[dia]")
+                    } else if (e.type === "touchend") {
+
+                        const touch = e.changedTouches[0]
+                        diaFinal = document.elementFromPoint(touch.clientX, touch.clientY)?.closest("[dia]");
+
                     }
-                } else if (tipoSel === "porDiasIndividual") {
-                    casaVitini.view.controladorSelecionDias.selectorDia.selectorDiaIndividual(e)
+
+                    if (diaFinal === diaInicioRango) {
+                        const estadoInicial = diaInicioRango.getAttribute("rango")
+                        if (estadoInicial === "sel") {
+                            diaInicioRango.classList.remove("diaSel");
+                            diaInicioRango.removeAttribute("rango", "sel");
+                            diaInicioRango.removeAttribute("instanciaID")
+                        } else {
+                            diaInicioRango.classList.add("diaSel");
+                            diaInicioRango.setAttribute("rango", "sel");
+                            diaInicioRango.setAttribute("instanciaID", instanciaUID)
+                        }
+                    } else {
+                        const diasSelPorMovimiento = document.querySelectorAll(`[instanciaUID="${instanciaUID}"][estadoSel=enSelecion]`)
+                        let controFlujoSel = false
+                        diasSelPorMovimiento.forEach(d => {
+                            if (d.getAttribute("rango") !== "sel") {
+                                controFlujoSel = true
+                            }
+                        })
+                        diasSelPorMovimiento.forEach(d => {
+                            if (!controFlujoSel) {
+                                d.classList.remove("diaSel");
+                                d.removeAttribute("rango");
+                            } else {
+                                d.setAttribute("rango", "sel");
+                                d.classList.add("diaSel");
+                            }
+                        })
+                    }
+                    diasRenderizados.forEach((d) => {
+                        d.removeEventListener("touchmove", manejarTouchMove);
+                        d.removeEventListener("mousemove", manejarTouchMove);
+                        d.removeAttribute("estadoSel")
+                        d.removeAttribute("style")
+                    });
+
+                    casaVitini.view.controladorSelecionDias.selectorDia.selectorPorRango.finalRango()
                 }
+
+                document.addEventListener("mouseup", (e) => {
+                    finalFlujo(e)
+                }, { once: true })
+                document.addEventListener("touchend", (e) => {
+                    finalFlujo(e)
+                }, { once: true })
+
+                diasRenderizados.forEach((d) => {
+                    d.addEventListener("touchmove", manejarTouchMove);
+                    d.addEventListener("mousemove", manejarTouchMove);
+                });
+
             }
         },
 
         botonFlotante: function () {
 
             const ui = document.createElement("div")
-            ui.classList.add("backgroundWhite1", "padding8", "borderRadius22", "blur50", "efectoAparicion", "sombraCompartida", "gridHorizontal2C_minContent_auto", "gap8", "botonFlotante", "botonFlotante_abajo", "sobreControlAnimacionGlobal")
+            ui.classList.add("backgroundGrey1", "padding8", "borderRadius22", "blur50", "efectoAparicion", "sombraCompartida", "gridHorizontal2C_minContent_auto", "gap8", "botonFlotante", "botonFlotante_abajo", "sobreControlAnimacionGlobal")
             ui.setAttribute("componente", "botonFlotanteOpcioneDiasSel")
             ui.style.top = "calc(100% - 70px)";
 
@@ -3666,8 +3759,6 @@ casaVitini.view = {
             main.appendChild(ui)
             const contenedor = ui.querySelector("[componente=contenedor]")
 
-
-
             const botonCancelar = document.createElement("div")
             botonCancelar.classList.add("botonV1")
             botonCancelar.setAttribute("boton", "cancelar")
@@ -3690,19 +3781,15 @@ casaVitini.view = {
                 return
             }
 
-
-
-
             const infoDeSel = document.createElement("p")
             infoDeSel.classList.add("padding10")
-            infoDeSel.textContent = "Si quiere puede borrar todos los dias selecionados y volver a comenzar con la selección"
-            contenedor.appendChild(infoDeSel)
+            infoDeSel.textContent = "Deseleccionar todos los días seleccionados y volver al calendario"
+            // contenedor.appendChild(infoDeSel)
 
             const botonDeSel = document.createElement("div")
             botonDeSel.classList.add("botonV1")
-            botonDeSel.textContent = "Deselecionar todos los dias selecionados en todos los meses y volver al calendario"
+            botonDeSel.textContent = "Deselecionar todos los dias selecionados y volver al calendario"
             botonDeSel.addEventListener("click", () => {
-                const instanciaUIDMes = document.querySelector("[componente=marcoMes]").getAttribute("instanciaUID")
                 document.querySelector("main configuracion").removeAttribute("contenedorCompartidoFechasSel")
                 document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
                 const diasRenderizados = document.querySelectorAll("[dia]")
@@ -3711,16 +3798,31 @@ casaVitini.view = {
                         dia: d,
                         haciaEstado: "noSel"
                     })
-                    //   d.classList.remove("diaSelecionable")
                 })
                 return casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
             })
             contenedor.appendChild(botonDeSel)
 
+            const contenedorMasInfo = document.createElement("details")
+            contenedorMasInfo.classList.add("padding6")
+            contenedor.appendChild(contenedorMasInfo)
+
+
+            const tituloMasInfo = document.createElement("summary")
+            tituloMasInfo.textContent = "Más información y opciones"
+            tituloMasInfo.classList.add("padding10")
+            contenedorMasInfo.appendChild(tituloMasInfo)
+
+
+            const cInternoMasInfo = document.createElement("div")
+            cInternoMasInfo.classList.add("flexVertical", "gap6")
+            contenedorMasInfo.appendChild(cInternoMasInfo)
+
+
             const info = document.createElement("p")
             info.classList.add("padding10")
             info.textContent = "La alteracion de precios se aplicara a las fechas y alojamientos seleccionados. Si los dias tiene ya un comportamiento de precio simple, este sera actualziado. Si el dia no tiene un comportamiento de precio simple se creara."
-            contenedor.appendChild(info)
+            //  contenedor.appendChild(info)
 
             const listaPlegable = () => {
 
@@ -3756,7 +3858,7 @@ casaVitini.view = {
                 fechasArray.push(fecha)
             })
 
-            contenedor.appendChild(listaPlegableFechas)
+            cInternoMasInfo.appendChild(listaPlegableFechas)
 
             const listaPlegableApartamentosAfectados = listaPlegable()
             listaPlegableApartamentosAfectados.querySelector("[componente=titulo]").textContent = "Apartamentos seleccionados"
@@ -3771,16 +3873,50 @@ casaVitini.view = {
                 listaPlegableApartamentosAfectados.querySelector("[contenedor=lista]").appendChild(linea)
                 apartamentosIDVArray.push(apartamentoIDV)
             })
-            contenedor.appendChild(listaPlegableApartamentosAfectados)
+            cInternoMasInfo.appendChild(listaPlegableApartamentosAfectados)
+
+
+            const infoDel = document.createElement("p")
+            infoDel.classList.add("padding10")
+            infoDel.textContent = "Si quiere, puede eliminar todos los comportamientos simples para los días y los apartamentos seleccionados."
+            cInternoMasInfo.appendChild(infoDel)
+
+            const botonEliminarComportamientos = document.createElement("div")
+            botonEliminarComportamientos.classList.add("botonV1BlancoIzquierda")
+            botonEliminarComportamientos.setAttribute("boton", "cancelar")
+            botonEliminarComportamientos.textContent = "Eliminar precios alterados de los días selecionados"
+            botonEliminarComportamientos.addEventListener("click", () => {
+                casaVitini.view.controladorSelecionDias.eliminarComportamientos({
+                    fechasArray,
+                    apartamentosIDVArray
+                })
+                const diasRenderizados = document.querySelectorAll("[dia]")
+                diasRenderizados.forEach(d => {
+                    casaVitini.view.controladorSelecionDias.estadosDia({
+                        dia: d,
+                        haciaEstado: "noSel"
+                    })
+                    //   d.classList.remove("diaSelecionable")
+                })
+            })
+            cInternoMasInfo.appendChild(botonEliminarComportamientos)
 
             const infoCom = document.createElement("p")
             infoCom.classList.add("padding10")
             infoCom.textContent = "Selecione la actualización de los precios para los días y los apartamentos selecionados."
-            contenedor.appendChild(infoCom)
+            //contenedor.appendChild(infoCom)
+
+
+            const contenedorCantidad = document.createElement("div")
+            contenedorCantidad.classList.add("flexVertical")
+            contenedor.appendChild(contenedorCantidad)
 
             const tipoDescuento = document.createElement("select")
+            tipoDescuento.style.background = "white"
             tipoDescuento.setAttribute("campoApartamentoSeleccionado", "simboloIDV")
-            contenedor.appendChild(tipoDescuento)
+            tipoDescuento.style.borderBottomLeftRadius = "0px"
+            tipoDescuento.style.borderBottomRightRadius = "0px"
+            contenedorCantidad.appendChild(tipoDescuento)
 
             const opcionPredeterminada = document.createElement("option")
             opcionPredeterminada.disabled = true;
@@ -3800,19 +3936,26 @@ casaVitini.view = {
                 const opcion = document.createElement("option");
                 opcion.value = opcionData.value;
                 opcion.text = opcionData.text;
+                if (opcionData.value === "precioEstablecido") {
+                    opcion.selected = true
+                }
                 tipoDescuento.appendChild(opcion);
             }
 
             const cantidadUI = document.createElement("input")
+            cantidadUI.style.borderTopLeftRadius = "0px"
+            cantidadUI.style.borderTopRightRadius = "0px"
+            cantidadUI.style.background = "white"
+            cantidadUI.type = "number"
             cantidadUI.setAttribute("campoApartamentoSeleccionado", "cantidad")
-            cantidadUI.placeholder = "Inserta la cantidad"
-            cantidadUI.value = "0.00"
-            contenedor.appendChild(cantidadUI)
+            cantidadUI.placeholder = "Escribe la cantidad"
+            cantidadUI.classList.add("fontSize20", "negrita")
+            contenedorCantidad.appendChild(cantidadUI)
 
             const botonActualizar = document.createElement("div")
             botonActualizar.classList.add("botonV1BlancoIzquierda")
             botonActualizar.setAttribute("boton", "cancelar")
-            botonActualizar.textContent = "Actualizar precios de los dias seleccionados"
+            botonActualizar.textContent = "Confirmar"
             botonActualizar.addEventListener("click", () => {
                 casaVitini.view.controladorSelecionDias.actualizarComportamientos({
                     fechasArray,
@@ -3823,22 +3966,7 @@ casaVitini.view = {
             })
             contenedor.appendChild(botonActualizar)
 
-            const infoDel = document.createElement("p")
-            infoDel.classList.add("padding10")
-            infoDel.textContent = "Si quiere puede eliminar todos los comportamientos simples para los días y los apartamentos selecionados."
-            contenedor.appendChild(infoDel)
 
-            const botonEliminarComportamientos = document.createElement("div")
-            botonEliminarComportamientos.classList.add("botonV1BlancoIzquierda")
-            botonEliminarComportamientos.setAttribute("boton", "cancelar")
-            botonEliminarComportamientos.textContent = "Eliminar comportamientos simples de los días y apartamentos selecionados"
-            botonEliminarComportamientos.addEventListener("click", () => {
-                casaVitini.view.controladorSelecionDias.eliminarComportamientos({
-                    fechasArray,
-                    apartamentosIDVArray
-                })
-            })
-            contenedor.appendChild(botonEliminarComportamientos)
         },
         actualizarComportamientos: async function (data) {
             const fechasArray = data.fechasArray
@@ -3895,6 +4023,15 @@ casaVitini.view = {
                 document.querySelector("main configuracion").removeAttribute("contenedorCompartidoFechasSel")
                 document.querySelector("[componente=botonFlotanteOpcioneDiasSel]")?.remove()
                 casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+
+                const diasRenderizados = document.querySelectorAll("[dia]")
+                diasRenderizados.forEach(d => {
+                    casaVitini.view.controladorSelecionDias.estadosDia({
+                        dia: d,
+                        haciaEstado: "noSel"
+                    })
+                })
+
 
                 if (vision === "horizontal") {
                     casaVitini.view.limpiezaCalendario.hub({

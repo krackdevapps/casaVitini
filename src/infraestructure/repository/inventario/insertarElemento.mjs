@@ -7,6 +7,7 @@ export const insertarElemento = async (data) => {
         const tipoLimite = data.tipoLimite
         const cantidadMinima = data.cantidadMinima
         const descripcion = data.descripcion
+        const testingVI = data.testingVI
 
         const consulta = `
         INSERT INTO "inventarioGeneral"
@@ -15,9 +16,10 @@ export const insertarElemento = async (data) => {
         cantidad,
         "tipoLimite",
         "cantidadMinima",
-        "descripcion"
+        "descripcion",
+        "testingVI"
         )
-        VALUES ($1, $2, $3, $4, $5)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *
         `;
         const parametros = [
@@ -25,7 +27,8 @@ export const insertarElemento = async (data) => {
             cantidad,
             tipoLimite,
             cantidadMinima,
-            descripcion
+            descripcion,
+            testingVI
         ];
         const resuelve = await conexion.query(consulta, parametros);
         if (resuelve.rowCount === 0) {

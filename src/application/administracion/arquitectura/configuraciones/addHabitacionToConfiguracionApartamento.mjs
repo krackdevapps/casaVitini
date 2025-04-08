@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarHabitacionEnApartamento } from "../../../../infraestructure/repository/arquitectura/configuraciones/insertarHabitacionEnApartamento.mjs";
@@ -8,10 +8,7 @@ import { obtenerHabitacionDelApartamentoPorHabitacionIDV } from "../../../../inf
 
 export const addHabitacionToConfiguracionApartamento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,

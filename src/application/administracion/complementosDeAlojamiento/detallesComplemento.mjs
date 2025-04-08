@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerComplementoPorComplementoUID } from "../../../infraestructure/repository/complementosDeAlojamiento/obtenerComplementoPorComplementoUID.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
@@ -6,11 +6,7 @@ import { acoplarHabitacionesAComplemento } from "../../../shared/complementosDeA
 
 export const detallesComplemento = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -23,7 +19,7 @@ export const detallesComplemento = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const complemento = await obtenerComplementoPorComplementoUID(complementoUID)
         const apartamentoIDV = complemento.apartamentoIDV

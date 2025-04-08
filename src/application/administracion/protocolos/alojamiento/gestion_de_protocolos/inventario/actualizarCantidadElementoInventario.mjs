@@ -1,13 +1,9 @@
-import { VitiniIDX } from "../../../../../../shared/VitiniIDX/control.mjs";
-import { actualizarCantidadEnElemento } from "../../../../../../infraestructure/repository/protocolos/alojamiento/inventario/actualizarCantidadEnElemento.mjs";
+
+import { actualizarCantidadEnElemento } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/actualizarCantidadEnElemento.mjs";
 import { validarInventarioDelProtocolo } from "../../../../../../shared/protocolos/validarInventarioDelProtocolo.mjs";
+
 export const actualizarCantidadElementoInventario = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
-
         const nuevoElemento = entrada.body
         const protocolVal = validarInventarioDelProtocolo({
             o: nuevoElemento,

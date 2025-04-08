@@ -6,6 +6,7 @@ import { eliminarSessionPorRolPorCaducidad } from "../../infraestructure/reposit
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../infraestructure/repository/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { actualizarUltimoLogin } from "../../infraestructure/repository/usuarios/actualizarUltimoLogin.mjs";
 import { validador } from "../../shared/IDX/validador.mjs";
+import { obtenerGruposDelUsuario } from "../../infraestructure/repository/secOps/obtenerGruposDelUsuario.mjs";
 
 export const conectar = async (entrada) => {
     try {
@@ -18,7 +19,7 @@ export const conectar = async (entrada) => {
             const m = "No se esperan mas de dos llaves en el objeto de identificacion"
             throw new Error(m)
         }
-        
+
         const usuarioRaw = entrada.body.usuario;
         const clave = entrada.body.clave;
         validador({
@@ -63,7 +64,6 @@ export const conectar = async (entrada) => {
         }
 
         const cuentaUsuario = await obtenerIDX(usuario)
-        const rolIDV = cuentaUsuario.rolIDV;
         const sal = cuentaUsuario.sal;
         const claveHash = cuentaUsuario.clave;
         const estadoCuenta = cuentaUsuario.estadoCuentaIDV;
@@ -102,13 +102,12 @@ export const conectar = async (entrada) => {
             fechaActualISO: fechaActualISO
         })
         entrada.session.usuario = usuario;
-
-        entrada.session.rolIDV = rolIDV;
         entrada.session.ip = ip;
         entrada.session.userAgent = userAgent;
+        const gruposDelUsuario = await obtenerGruposDelUsuario(usuario)
         const ok = {
             ok: usuario,
-            rolIDV: rolIDV,
+            gruposDelUsuario,
 
         };
         return ok

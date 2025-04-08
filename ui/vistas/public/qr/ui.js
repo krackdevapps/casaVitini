@@ -7,7 +7,7 @@ casaVitini.view = {
         if (Object.keys(parametros).length === 1 && parametros.hasOwnProperty("reserva")) {
 
             const respuestaServidor = await casaVitini.shell.servidor({
-                zona: "componentes/resolverQR",
+                zona: "micasa/componentes/resolverQR",
                 codigoIDV: "reserva",
                 reservaUID: parametros.reserva
             })

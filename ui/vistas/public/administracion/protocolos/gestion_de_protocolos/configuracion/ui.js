@@ -1,7 +1,6 @@
 casaVitini.view = {
     start: function () {
-               this.obtenerConfiguracion()
-
+        this.obtenerConfiguracion()
     },
     obtenerConfiguracion: async function () {
 
@@ -15,7 +14,7 @@ casaVitini.view = {
 
         diasAntelacionPorReserva.value = "Obteniendo configuración..."
 
-        
+
         const respuestaServidor = await casaVitini.shell.servidor({
             zona: "administracion/protocolos/alojamiento/configuracion/obtenerConfiguracion",
         })
@@ -24,7 +23,7 @@ casaVitini.view = {
             casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor?.error)
         }
         if (respuestaServidor?.ok) {
-            console.log("respuestaServidor", respuestaServidor)
+
 
             const dCR = respuestaServidor?.configuracion?.diasCaducidadRevision || ""
             const dAPR = respuestaServidor?.configuracion?.diasAntelacionPorReserva || ""
@@ -38,12 +37,8 @@ casaVitini.view = {
             botonActualizar.addEventListener("click", () => {
                 this.actualizarConfiguracion()
             })
-
         }
-
     },
-
-
     actualizarConfiguracion: async function () {
 
         const main = document.querySelector("main")
@@ -71,6 +66,7 @@ casaVitini.view = {
         }
         if (respuestaServidor?.ok) {
             casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+            casaVitini.ui.componentes.advertenciaInmersiva("Configuración actualizada")
         }
 
     },

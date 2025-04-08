@@ -1,5 +1,5 @@
 import { obtenerServicioPorServicioUID } from "../../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
@@ -13,11 +13,7 @@ import { obtenerFechaLocal } from "../../../../shared/obtenerFechaLocal.mjs"
 
 export const insertarServicioEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3

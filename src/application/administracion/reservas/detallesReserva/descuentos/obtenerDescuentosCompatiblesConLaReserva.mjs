@@ -1,17 +1,13 @@
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { selecionarOfertasPorCondicion } from "../../../../../shared/ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const obtenerDescuentosCompatiblesConLaReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -24,7 +20,7 @@ export const obtenerDescuentosCompatiblesConLaReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

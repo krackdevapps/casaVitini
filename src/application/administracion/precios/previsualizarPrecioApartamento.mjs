@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { obtenerImpuestosPorEntidadIDV } from "../../../infraestructure/repository/impuestos/obtenerImpuestosPorEntidadIDV.mjs";
@@ -8,11 +8,7 @@ import Decimal from "decimal.js";
 export const previsualizarPrecioApartamento = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2

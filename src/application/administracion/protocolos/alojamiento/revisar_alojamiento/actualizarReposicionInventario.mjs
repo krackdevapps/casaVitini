@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validarRevisionInventarioAlojamiento } from "../../../../../shared/protocolos/validarRevisionInventarioAlojamiento.mjs";
 import { obtenerRevisionPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerRevisionPorUID.mjs";
 import { obtenerProtocolosPorApartamentoIDV } from "../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/obtenerProtocolosPorApartamentoIDV.mjs";
@@ -6,26 +6,22 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestru
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import Decimal from "decimal.js";
 import { actualizarReposicionInventarioPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/actualizarReposicionInventarioPorUID.mjs";
+import { obtenerTareaPorApartamentoIDV } from "../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/obtenerTareaPorApartamentoIDV.mjs";
+import { finalizaRevision } from "../../../../../shared/protocolos/finalizaRevision.mjs";
 
-export const actualizarReposicionInventario = async (entrada, salida) => {
+export const actualizarReposicionInventario = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
 
-        const data = entrada.body
 
         const protocolVal = await validarRevisionInventarioAlojamiento({
-            o: data,
+            o: entrada.body,
             filtrosIDV: [
                 "uid",
                 "respuestas"
             ]
         })
 
-        const usuarioSolicitante = IDX.usuario
+        const usuarioSolicitante = entrada.session.usuario
         const uidRevision = protocolVal.uid
         await campoDeTransaccion("iniciar")
 
@@ -125,13 +121,23 @@ export const actualizarReposicionInventario = async (entrada, salida) => {
             uid: uidRevision,
             reposicionInventario: JSON.stringify(protocolVal.respuestas)
         })
-        await campoDeTransaccion("confirmar")
-
         const ok = {
             ok: "Se ha actualizado la reposicion del inventario",
-            //revisionInventario,
             reposicionInventario
         }
+
+        const tareasDelProtocolo = await obtenerTareaPorApartamentoIDV(apartamentoIDV)
+        if (tareasDelProtocolo.length === 0) {
+            ok.siguientePaso = "fin"
+            ok.revisionCompletada = await finalizaRevision({
+                revisionUID: uidRevision
+            })
+        } else {
+            ok.siguientePaso = "tareas"
+            ok.tareasDelProtocolo = tareasDelProtocolo
+        }
+
+        await campoDeTransaccion("confirmar")
 
         return ok
     } catch (errorCapturado) {

@@ -1,15 +1,12 @@
 import { obtenerTodosEnlaceDePago } from "../../../infraestructure/repository/enlacesDePago/obtenerTodosLosEnlaceDePago.mjs";
 import { obtenerDesgloseFinancieroPorReservaUID } from "../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUID.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { controlCaducidadEnlacesDePago } from "../../../shared/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 
 export const obtenerEnlaces = async (entrada) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         await controlCaducidadEnlacesDePago();
         const enlacesDePago = await obtenerTodosEnlaceDePago()

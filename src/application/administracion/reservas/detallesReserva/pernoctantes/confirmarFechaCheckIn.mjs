@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../../../infraestructure/repository/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { actualizarFechaCheckinPernoctante } from "../../../../../infraestructure/repository/reservas/pernoctantes/actualizarFechaCheckinPernoctante.mjs";
@@ -9,11 +9,7 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 
 export const confirmarFechaCheckIn = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -26,7 +22,7 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -36,7 +32,7 @@ export const confirmarFechaCheckIn = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
 

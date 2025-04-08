@@ -83,22 +83,6 @@ describe('taxes of simulation', () => {
         expect(response).toHaveProperty('ok');
         simulacionUID = response.simulacionUID
     })
-    test('insert hostin in simulation with ok', async () => {
-        try {
-            const response = await insertarAlojamientoEnSimulacion({
-                body: {
-                    simulacionUID: String(simulacionUID),
-                    apartamentoIDV: String(apartamentoIDV)
-                },
-                session: fakeAdminSession
-            })
-        } catch (error) {
-            expect(error).not.toBeUndefined();
-            expect(typeof error).toBe('object');
-            expect(error).toHaveProperty('info');
-        }
-    })
-
     test('insert global data in simulation created with ok', async () => {
         const m = {
             body: {
@@ -115,6 +99,23 @@ describe('taxes of simulation', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
+    test('insert hostin in simulation with ok', async () => {
+        try {
+            const response = await insertarAlojamientoEnSimulacion({
+                body: {
+                    simulacionUID: String(simulacionUID),
+                    apartamentoIDV: String(apartamentoIDV)
+                },
+                session: fakeAdminSession
+            })
+        } catch (error) {
+            expect(error).not.toBeUndefined();
+            expect(typeof error).toBe('object');
+            expect(error).toHaveProperty('info');
+        }
+    })
+
+
 
     test('insert tax in simulation with ok', async () => {
         const m = {

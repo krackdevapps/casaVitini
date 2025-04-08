@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../../../infraestructure/repository/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
@@ -8,11 +8,7 @@ import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompar
 export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -27,7 +23,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const habitacionDestinoUID = validadoresCompartidos.tipos.cadena({
@@ -37,7 +33,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.pernoctanteUID,
@@ -46,7 +42,7 @@ export const cambiarPernoctanteDeHabitacion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

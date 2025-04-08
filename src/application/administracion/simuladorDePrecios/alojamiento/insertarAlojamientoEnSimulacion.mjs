@@ -6,16 +6,12 @@ import { obtenerAlojamientoDeLaSimulacionPorApartamentoIDV } from "../../../../i
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 
 
 export const insertarAlojamientoEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({

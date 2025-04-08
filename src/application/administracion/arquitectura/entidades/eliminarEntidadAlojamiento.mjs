@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { eliminarApartamentoComoEntidad } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/eliminarApartamentoComoEntidad.mjs";
 import { eliminarHabitacionComoEntidad } from "../../../../infraestructure/repository/arquitectura/entidades/habitacion/eliminarHabitacionComoEntidad.mjs";
@@ -12,10 +12,7 @@ import { obtenerHabitacionComoEntidadPorHabitacionIDV } from "../../../../infrae
 
 export const eliminarEntidadAlojamiento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
 
         const tipoEntidad = validadoresCompartidos.tipos.cadena({

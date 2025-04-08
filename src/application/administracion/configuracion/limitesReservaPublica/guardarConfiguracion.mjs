@@ -1,14 +1,12 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { actualizarParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/actualizarParConfiguracion.mjs";
 
+
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -22,7 +20,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             impedirCero: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const limiteFuturoReserva = validadoresCompartidos.tipos.cadena({
@@ -33,7 +31,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             impedirCero: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const diasMaximosReserva = validadoresCompartidos.tipos.cadena({
             string: entrada.body.diasMaximosReserva,
@@ -42,7 +40,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const horaLimiteDelMismoDia = entrada.body?.horaLimiteDelMismoDia || ""
@@ -82,6 +80,9 @@ export const guardarConfiguracion = async (entrada, salida) => {
             limiteFuturoReserva: limiteFuturoReserva,
             horaLimiteDelMismoDia: horaLimiteDelMismoDia
         }
+
+
+
         await actualizarParConfiguracion(dataActualizarParConfiguracion)
 
         await campoDeTransaccion("confirmar")

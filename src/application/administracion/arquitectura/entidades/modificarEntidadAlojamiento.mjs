@@ -1,5 +1,5 @@
 
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { actualizarApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/actualizarApartamentoComoEntidadPorApartamentoIDV.mjs";
@@ -25,10 +25,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
     const mutex = new Mutex();
 
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         await mutex.acquire();
 
         const tipoEntidad = validadoresCompartidos.tipos.cadena({
@@ -68,7 +65,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "si",
                 limpiezaEspaciosAlrededor: "si",
             })
-            console.log("entrada.body", entrada.body)
+
             const numeroHuespedes = validadoresCompartidos.tipos.cadena({
                 string: entrada.body.numeroHuespedes,
                 nombreCampo: "El campo del numeroHuespedes",
@@ -286,7 +283,7 @@ export const modificarEntidadAlojamiento = async (entrada) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
                 devuelveUnTipoNumber: "no",
-                devuelveUnTipoBigInt: "si"
+                devuelveUnTipoBigInt: "no"
             })
             await campoDeTransaccion("iniciar")
 

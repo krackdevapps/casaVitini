@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerDetallesCliente } from "../../../../../infraestructure/repository/clientes/obtenerDetallesCliente.mjs";
 import { obtenerPernoctanteDeLaReservaPorClienteUID } from "../../../../../infraestructure/repository/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorClienteUID.mjs";
@@ -15,11 +15,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
         const m = "Funcion deshabilitada"
         throw new Error(m)
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         await mutex.acquire();
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -29,7 +25,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
@@ -39,7 +35,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const clienteUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID,
@@ -48,7 +44,7 @@ export const cambiarTipoCliente = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

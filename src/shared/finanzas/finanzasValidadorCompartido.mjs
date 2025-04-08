@@ -13,7 +13,7 @@ export const finanzasValidadorCompartido = (data) => {
 
         if (filtrosIDV.includes("nombre")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 nombre: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -34,7 +34,7 @@ export const finanzasValidadorCompartido = (data) => {
 
         if (filtrosIDV.includes("plataforma")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 plataforma: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -54,7 +54,7 @@ export const finanzasValidadorCompartido = (data) => {
         }
         if (filtrosIDV.includes("operacionIDV")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 operacionIDV: Joi.string().required().custom((value, helpers) => {
                     try {
                         const operacionIDV = validadoresCompartidos.tipos.cadena({
@@ -82,7 +82,7 @@ export const finanzasValidadorCompartido = (data) => {
         }
         if (filtrosIDV.includes("uid")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 uid: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -105,7 +105,7 @@ export const finanzasValidadorCompartido = (data) => {
 
         if (filtrosIDV.includes("nombre")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 nombre: Joi.string().required(),
 
             });
@@ -113,7 +113,7 @@ export const finanzasValidadorCompartido = (data) => {
         if (filtrosIDV.includes("cantidad")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 cantidad: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -136,7 +136,7 @@ export const finanzasValidadorCompartido = (data) => {
         if (filtrosIDV.includes("tipoLimite")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 tipoLimite: Joi.string().required().custom((value, helpers) => {
                     try {
                         const tiposLimite = [
@@ -158,7 +158,7 @@ export const finanzasValidadorCompartido = (data) => {
         if (filtrosIDV.includes("cantidadMinima")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 cantidadMinima: Joi.required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -181,7 +181,7 @@ export const finanzasValidadorCompartido = (data) => {
         if (filtrosIDV.includes("descripcion")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 descripcion: Joi.string().allow('').required()
 
             });

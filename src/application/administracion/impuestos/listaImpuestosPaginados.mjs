@@ -1,17 +1,13 @@
 import Joi from "joi";
 import { obtenerTodosImpuestosConOrdenamiento } from "../../../infraestructure/repository/impuestos/obtenerTodosImpuestosConOrdenamiento.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
 
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
 export const listaImpuestosPaginados = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const esquemaBusqueda = Joi.object({
             pagina: Joi.number(),

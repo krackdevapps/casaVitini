@@ -1,6 +1,5 @@
 import { conexion } from "../../../../globales/db.mjs";
 
-
 export const obtenerTareasDelProtocolosPorApartamentoIDV = async (apartamentoIDV) => {
     try {
         const consulta = `
@@ -21,5 +20,4 @@ export const obtenerTareasDelProtocolosPorApartamentoIDV = async (apartamentoIDV
     } catch (errorCapturado) {
         throw errorCapturado
     }
-
 }

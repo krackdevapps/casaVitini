@@ -1,14 +1,12 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { actualizarParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/actualizarParConfiguracion.mjs";
 
+
 export const actualizarNumero = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -27,6 +25,7 @@ export const actualizarNumero = async (entrada) => {
         await actualizarParConfiguracion({
             "telefonoPublicoWhatsApp": telefonoPublicoWhatsApp,
         })
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado correctamente la configuración",

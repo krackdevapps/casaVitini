@@ -97,11 +97,11 @@ casaVitini.view = {
         const contenedoresImagenVisible = gridImagenes.querySelectorAll("[imagenUID][estado=visible]")
         const contenedoresImagen = gridImagenes.querySelectorAll("[imagenUID]")
         const contenedoresDuranteMovimiento = gridImagenes.querySelectorAll("[imagenUID][durante=movimiento]")
-        console.log("contenedoresDuranteMovimiento", contenedoresDuranteMovimiento.length)
+
         if (contenedoresDuranteMovimiento.length >= 2) {
-            console.log("se activa")
+
             contenedoresImagen.forEach(c => {
-                console.log("dos p mas", c)
+
                 c.classList.remove("contenedorImagenMovimientoNormal")
                 c.style.width = getComputedStyle(c).width;
                 c.offsetWidth;
@@ -110,7 +110,7 @@ casaVitini.view = {
             })
         } else {
             contenedoresImagen.forEach(c => {
-                console.log("menos de dos", c)
+
                 c.classList.remove("contenedorImangeControMovimiento")
                 c.classList.add("contenedorImagenMovimientoNormal")
                 c.style.width = "0%"
@@ -187,7 +187,7 @@ casaVitini.view = {
 
 
     contenedorApartmentoUI: async function (data) {
-        console.log(data)
+
         const cA = data.cA
         const contenedorApartamento = data.contenedorApartamento
         const apartamentoIDV = cA.apartamentoIDV
@@ -219,15 +219,21 @@ casaVitini.view = {
         tituloPublicoRes.textContent = apartamentoUIPublico
         cInfoResponsive.appendChild(tituloPublicoRes)
 
-        const definicionPublicaUIRes = document.createElement("p")
-        definicionPublicaUIRes.classList.add("subtituloApartramento")
-        definicionPublicaUIRes.textContent = definicionPublica
-        cInfoResponsive.appendChild(definicionPublicaUIRes)
+        if (definicionPublica.length > 0) {
+            const definicionPublicaUIRes = document.createElement("p")
+            definicionPublicaUIRes.classList.add("subtituloApartramento")
+            definicionPublicaUIRes.textContent = definicionPublica
+            cInfoResponsive.appendChild(definicionPublicaUIRes)
+        }
+
+
+
 
         const superContenedorImagenes = document.createElement("div")
         superContenedorImagenes.classList.add("grid3x3_0_fr_0", "flextJustificacion_center", "flexAHCentrad")
         superContenedorImagenes.setAttribute("superContenedor", "imagenes")
         ui.appendChild(superContenedorImagenes)
+
 
 
         const contenedorBotonAtras = document.createElement("div")
@@ -268,7 +274,7 @@ casaVitini.view = {
 
 
         const contenedorInfoGlobal = document.createElement("div")
-        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "padding18", "contenedorInfoGlobal", "gap12", "fontForImg", "elementosExpandidos")
+        contenedorInfoGlobal.classList.add("flexVertical", "borderRadius14", "paddingLateral18", "paddinVertical10", "contenedorInfoGlobal", "gap12", "fontForImg")
         ui.appendChild(contenedorInfoGlobal)
 
 
@@ -281,34 +287,49 @@ casaVitini.view = {
         tituloPublico.textContent = apartamentoUIPublico
         cInfoNORes.appendChild(tituloPublico)
 
-        const definicionPublicaUI = document.createElement("p")
-        definicionPublicaUI.classList.add("subtituloApartramento")
-        definicionPublicaUI.textContent = definicionPublica
-        cInfoNORes.appendChild(definicionPublicaUI)
-
-        const infoGlobalAlojamiento = document.createElement("div")
-        infoGlobalAlojamiento.classList.add("flexVertical", "gap10")
-        contenedorInfoGlobal.appendChild(infoGlobalAlojamiento)
+        if (definicionPublica.length > 0) {
+            const definicionPublicaUI = document.createElement("p")
+            definicionPublicaUI.classList.add("subtituloApartramento")
+            definicionPublicaUI.textContent = definicionPublica
+            cInfoNORes.appendChild(definicionPublicaUI)
+        }
 
 
+        // const infoGlobalAlojamiento = document.createElement("div")
+        // infoGlobalAlojamiento.classList.add("flexVertical", "gap10")
+        // contenedorInfoGlobal.appendChild(infoGlobalAlojamiento)
+
+        const contendorDetallesInfo = document.createElement("div")
+        contendorDetallesInfo.setAttribute("aqui", "este")
+        contendorDetallesInfo.classList.add("flexVertical", "elementosExpandidos", "flex1", "gap10")
+        contenedorInfoGlobal.appendChild(contendorDetallesInfo)
+
+        const cSuperior = document.createElement("div")
+        cSuperior.classList.add("flexVertical", "gap10")
+        contendorDetallesInfo.appendChild(cSuperior)
+
+        const cInferior = document.createElement("div")
+        cInferior.classList.add("flexVertical", "gap10")
+        contendorDetallesInfo.appendChild(cInferior)
 
 
-        const infoDown = document.createElement("div")
-        infoDown.classList.add("flexVertical", "gap10")
-        contenedorInfoGlobal.appendChild(infoDown)
+
+        // const infoDown = document.createElement("div")
+        // infoDown.classList.add("flexVertical", "gap10")
+        // infoDown.setAttribute("informacion", "detalles")
+        // contendorDetallesInfo.appendChild(infoDown)
 
 
 
-        
 
-        const contenedorCGlobales = document.createElement("div")
-        contenedorCGlobales.classList.add("flexVertical")
-        //   contenedorCGlobales.style.gridTemplateColumns = "min-content min-content"
-        infoGlobalAlojamiento.appendChild(contenedorCGlobales)
+        // const contenedorCGlobales = document.createElement("div")
+        // contenedorCGlobales.classList.add("flexVertical")
+        // //   contenedorCGlobales.style.gridTemplateColumns = "min-content min-content"
+        // infoGlobalAlojamiento.appendChild(contenedorCGlobales)
 
         const cHuespuedes = document.createElement("div")
         cHuespuedes.classList.add("flexHorizontal", "whiteSpaceNoWrap", "gap6")
-        contenedorCGlobales.appendChild(cHuespuedes)
+        cSuperior.appendChild(cHuespuedes)
 
         const cHuespedesIcono = document.createElement("div")
         cHuespedesIcono.classList.add("flexHorizontal", "contenedorIconoCompatido")
@@ -338,9 +359,9 @@ casaVitini.view = {
         cHuespedesTitulo.textContent = "Huespedes"
         cHuespuedes.appendChild(cHuespedesTitulo)
 
-        const cH = document.createElement("div")
-        cH.classList.add("flexHorizontal", "gap6")
-        contenedorCGlobales.appendChild(cH)
+        // const cH = document.createElement("div")
+        // cH.classList.add("flexHorizontal", "gap6")
+        // contendorDetallesInfo.appendChild(cH)
 
         // const cHI = document.createElement("div")
         // cHI.classList.add("flexVertical", "contenedorIconoCompatido", "flextJustificacion_center", "flexAHCentrad")
@@ -355,15 +376,28 @@ casaVitini.view = {
         // cH.appendChild(cHT)
 
 
+        const contenedorCaracteristicas = document.createElement("div")
+        contenedorCaracteristicas.classList.add("flexVertical")
+        cSuperior.appendChild(contenedorCaracteristicas)
+
+
+        caracteristicas.forEach(c => {
+            const caracteristicaUI = c.caracteristicaUI
+            const cUI = document.createElement("p")
+            cUI.style.fontWeight = "normal"
+            cUI.textContent = caracteristicaUI
+            contenedorCaracteristicas.appendChild(cUI)
+
+        })
 
 
         const contenedorResto = document.createElement("div")
         contenedorResto.classList.add("grid")
         contenedorResto.style.gridTemplateColumns = "auto 1fr"
-        infoDown.appendChild(contenedorResto)
+        cInferior.appendChild(contenedorResto)
 
         const cMasInfo = document.createElement("div")
-  
+
         if (descripcion.length > 0) {
             cMasInfo.classList.add("flexVertical", "botonMasInfo", "ratonDefault")
 
@@ -394,19 +428,7 @@ casaVitini.view = {
         })
 
 
-        const contenedorCaracteristicas = document.createElement("div")
-        contenedorCaracteristicas.classList.add("flexVertical")
-        infoGlobalAlojamiento.appendChild(contenedorCaracteristicas)
 
-
-        caracteristicas.forEach(c => {
-            const caracteristicaUI = c.caracteristicaUI
-            const cUI = document.createElement("p")
-            cUI.style.fontWeight = "normal"
-            cUI.textContent = caracteristicaUI
-            contenedorCaracteristicas.appendChild(cUI)
-
-        })
         const respuestaServidor = await casaVitini.shell.servidor({
             zona: "componentes/obtenerTodoImagenUIDPorApartamentoIDVPublico",
             apartamentoIDV
@@ -695,7 +717,8 @@ casaVitini.view = {
         contenedor.style.gap = "20px"
         main.appendChild(ui)
 
-        const texto = document.createElement("div")
+        const texto = document.createElement("pre")
+        texto.classList.add("whiteSpace")
         texto.style.background = "white"
         texto.style.borderRadius = "14px"
         texto.style.padding = "20px"

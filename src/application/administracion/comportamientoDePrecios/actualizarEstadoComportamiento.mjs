@@ -1,17 +1,15 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
 import { actualizarEstadoDelComportamientoDePrecio } from "../../../infraestructure/repository/comportamientoDePrecios/actualizarEstadoDelComportamientoDePrecio.mjs";
 import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
+
 export const actualizarEstadoComportamiento = async (entrada, salida) => {
 
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -24,7 +22,7 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const estadoPropuesto = validadoresCompartidos.tipos.cadena({
@@ -41,8 +39,6 @@ export const actualizarEstadoComportamiento = async (entrada, salida) => {
             estadoPropuesto,
             comportamientoUID
         })
-
-
 
         await campoDeTransaccion("confirmar")
         const ok = {

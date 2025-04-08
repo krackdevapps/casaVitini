@@ -1,17 +1,15 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { actualizarImpuesto } from "../../../infraestructure/repository/impuestos/actualizarImpuesto.mjs";
 import { obtenerImpuestosPorNombreDelImpuestoIgnorandoImpuestoUID } from "../../../infraestructure/repository/impuestos/obtenerImpuestosPorNombreDelImpuestoIgnorandoImpuestoUID.mjs";
 import { validarImpuesto } from "../../../shared/impuestos/validarImpuesto.mjs";
 
+
 export const guardarModificacionImpuesto = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
 
@@ -22,7 +20,7 @@ export const guardarModificacionImpuesto = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const impuesto = entrada.body

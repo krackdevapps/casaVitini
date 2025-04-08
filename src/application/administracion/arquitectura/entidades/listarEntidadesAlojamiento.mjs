@@ -2,16 +2,12 @@
 import { obtenerTodasLasCamas } from "../../../../infraestructure/repository/arquitectura/entidades/cama/obtenerTodasLasCama.mjs";
 import { obtenerTodasLasHabitaciones } from "../../../../infraestructure/repository/arquitectura/entidades/habitacion/obtenerTodasLasHabitaciones.mjs";
 import { obtenerTodasLosApartamentos } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerTodasLosApartamentos.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 
 
 export const listarEntidadesAlojamiento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const estructuraFinal = {};
         const apartamentosComoEntidad = await obtenerTodasLosApartamentos()

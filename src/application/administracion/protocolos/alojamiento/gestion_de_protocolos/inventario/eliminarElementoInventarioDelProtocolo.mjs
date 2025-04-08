@@ -1,21 +1,12 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
-import { eliminarElementoDelProtocoloPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/inventario/eliminarElementoDelProtocoloPorUID.mjs";
-import { validarInventarioDelProtocolo } from "../../../../../shared/protocolos/validarInventarioDelProtocolo.mjs";
-import { actualizarOrdenDePosicionesInventario } from "../../../../../infraestructure/repository/protocolos/alojamiento/inventario/actualizarOrdenDePosicionesInventario.mjs";
-import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { campoDeTransaccion } from "../../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
+import { actualizarOrdenDePosicionesInventario } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/actualizarOrdenDePosicionesInventario.mjs"
+import { eliminarElementoDelProtocoloPorUID } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/eliminarElementoDelProtocoloPorUID.mjs"
+import { validarInventarioDelProtocolo } from "../../../../../../shared/protocolos/validarInventarioDelProtocolo.mjs"
 
-export const eliminarElementoInventarioDelProtocolo = async (entrada, salida) => {
+export const eliminarElementoInventarioDelProtocolo = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
-
-        const data = entrada.body
-
-
         const protocolVal = validarInventarioDelProtocolo({
-            o: data,
+            o: entrada.body,
             filtrosIDV: [
                 "uid",
             ]
@@ -27,10 +18,10 @@ export const eliminarElementoInventarioDelProtocolo = async (entrada, salida) =>
         const apartamentoIDV = elementoEliminado.apartamentoIDV
         await actualizarOrdenDePosicionesInventario({
             posicion: posicionEliminada,
-            apartamentoIDV : apartamentoIDV
+            apartamentoIDV: apartamentoIDV
         })
-        await campoDeTransaccion("confirmar")
 
+        await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha eliminado el elemento del inventario del alojamiento",
             elementoEliminado
@@ -38,7 +29,6 @@ export const eliminarElementoInventarioDelProtocolo = async (entrada, salida) =>
         return ok
     } catch (errorCapturado) {
         await campoDeTransaccion("cancelar")
-
         throw errorCapturado
     }
 }

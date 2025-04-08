@@ -21,7 +21,7 @@ casaVitini.view = {
             await this.portada.arranque()
             this.portada.controlDespliegue()
         } else if (parametros.alojamiento) {
-            
+
             const apartamentoIDV = parametros.alojamiento
             await this.detallesApartamento.arranque(apartamentoIDV)
             this.portada.controlDespliegue()
@@ -115,11 +115,11 @@ casaVitini.view = {
             function actualizarDetalles(e) {
                 const contenedores = document.querySelectorAll("[superContenedor=alojamiento]");
                 if (contenedores.length === 0) {
-                    console.log("fin")
+
                     mediaQuery.removeEventListener("change", actualizarDetalles);
                     return
                 }
-                console.log("test")
+
                 contenedores.forEach((c) => {
                     if (e.matches) {
                         c.setAttribute("open", "");
@@ -225,12 +225,14 @@ casaVitini.view = {
     },
     componentesUI: {
         tarjetaApartamentoUI: async function (data) {
+
             const apartamentoIDV = data.apartamentoIDV
             const estadoPernoctacion = data.estadoPernoctacion
             const estadoApartamento = data.estadoApartamento
             const apartamentoUI = data.apartamentoUI
             const zonaIDV = data.zonaIDV
-
+            const estadoPreparacion = data.estadoPreparacion
+            const revisionResumen = estadoPreparacion?.revisionResumen || null
             const dic = {
                 estadoApartamento: {
                     activado: "Activada",
@@ -271,16 +273,12 @@ casaVitini.view = {
             )
 
             apartamentoTitulo.textContent = apartamentoUI
-
-
             apartamentoGUI.appendChild(apartamentoTitulo)
-
 
             const contenedorGlobal = document.createElement("div")
             contenedorGlobal.classList.add("flexVertical", "gap6")
             contenedorGlobal.setAttribute("contenedor", "alojamiento")
             apartamentoGUI.appendChild(contenedorGlobal)
-
 
             const botonAlojamiento = document.createElement("a")
             botonAlojamiento.classList.add("botonV1BlancoIzquierda")
@@ -290,23 +288,71 @@ casaVitini.view = {
             botonAlojamiento.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             contenedorGlobal.appendChild(botonAlojamiento)
 
+            if (revisionResumen) {
+                const estadoPreparacion = data.estadoPreparacion
+                const ultimaRevision = estadoPreparacion.ultimaRevision
+                const revisionUID = ultimaRevision.uid
 
-            const contenedorInfoGlobal = document.createElement("div")
+
+                const estadoRevision = casaVitini.ui.componentes.constructorElemento({
+                    tipoElemento: "a",
+                    classList: [
+                        "botonV1BlancoIzquierda",
+                    ],
+                    textContent: revisionResumen,
+                    atributos: {
+                        href: `/administracion/protocolos/registro_de_revisiones/revision:${revisionUID}`
+                    }
+                })
+
+                contenedorGlobal.appendChild(estadoRevision)
+            } else {
+                const sinRevision = casaVitini.ui.componentes.constructorElemento({
+                    tipoElemento: "a",
+                    classList: [
+                        "botonV1BlancoIzquierda"
+                    ],
+                    textContent: "Este apartamento no está revisado, iniciar revisión",
+                    atributos: {
+                        href: `/administracion/protocolos/revisar_alojamiento/alojamiento:${apartamentoIDV}`
+                    }
+                })
+
+                contenedorGlobal.appendChild(sinRevision)
+            }
+
+            const contenedorInfoGlobal = document.createElement("details")
             contenedorInfoGlobal.classList.add(
                 "flexVertical",
-                "gap10",
-                "padding14",
+                "padding6",
                 "backgroundGrey1",
                 "borderRadius16"
             )
             contenedorGlobal.appendChild(contenedorInfoGlobal)
+
+            const infoEstados = casaVitini.ui.componentes.constructorElemento({
+                tipoElemento: "summary",
+                classList: [
+                    "padding10"
+                ],
+                textContent: "Estados del apartamento"
+            })
+            contenedorInfoGlobal.appendChild(infoEstados)
+
+            const contenedorEstados = casaVitini.ui.componentes.constructorElemento({
+                tipoElemento: "div",
+                classList: [
+                    "padding10"
+                ],
+            })
+            contenedorInfoGlobal.appendChild(contenedorEstados)
 
             const contenedorEstadoPernoctacion = casaVitini.ui.componentes.widgetsUI.contenedorTituloDescripcionSimple({
                 titulo: "Estado pernoctativo",
                 dato: dic.estadoPernoctacion[estadoPernoctacion]
             })
             contenedorEstadoPernoctacion.querySelector("[data=dataUI]").style.fontWeight = "bold"
-            contenedorInfoGlobal.appendChild(contenedorEstadoPernoctacion)
+            contenedorEstados.appendChild(contenedorEstadoPernoctacion)
 
             const contenedorEstadoConfiguracionAlojamiento = casaVitini.ui.componentes.widgetsUI.contenedorTituloDescripcionSimple({
                 titulo: "Estado configuracíon de la alojamiento",
@@ -314,14 +360,14 @@ casaVitini.view = {
             })
             contenedorEstadoConfiguracionAlojamiento.querySelector("[data=dataUI]").style.fontWeight = "bold"
 
-            contenedorInfoGlobal.appendChild(contenedorEstadoConfiguracionAlojamiento)
+            contenedorEstados.appendChild(contenedorEstadoConfiguracionAlojamiento)
 
             const contenedorZonaPublicacion = casaVitini.ui.componentes.widgetsUI.contenedorTituloDescripcionSimple({
                 titulo: "Zona de publicación",
                 dato: dic.zona[zonaIDV]
             })
             contenedorZonaPublicacion.querySelector("[data=dataUI]").style.fontWeight = "bold"
-            contenedorInfoGlobal.appendChild(contenedorZonaPublicacion)
+            contenedorEstados.appendChild(contenedorZonaPublicacion)
 
             const calendariosListaAirnbnb = await casaVitini.view.__sharedMethods__.obtenerCalendariosSincronizados.airbnb()
 
@@ -333,21 +379,27 @@ casaVitini.view = {
             })
             // const urlBase = `administracion/calendario/capa:por_apartamento/por_apartamento:${apartamentoIDV}/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}`
 
-            const urlBase = `administracion/calendario/capa:reservas_por_apartamento/reservas_por_apartamento:${apartamentoIDV}/capa:bloqueos_por_apartamento/bloqueos_por_apartamento:${apartamentoIDV}`
+            const urlBase = `administracion/calendario/capa:reservas_por_apartamento/reservas_por_apartamento:${apartamentoIDV}/capa:bloqueos_por_apartamento/bloqueos_por_apartamento:${apartamentoIDV}/capa:precio_noche_por_apartamento/precio_noche_por_apartamento:${apartamentoIDV}/capa:comportamientos_por_apartamento/comportamientos_por_apartamento:${apartamentoIDV}`
             let urlCalendarioAirbnb = ""
             if (calendariosAirbnb.length > 0) {
                 urlCalendarioAirbnb = `/capa:calendarios_airbnb/calendarios_airbnb:${calendariosAirbnb.join("=")}`
             }
+
+            const urlBaseCalendarioPreciosPorNoche = `administracion/calendario/capa:precio_noche_por_apartamento/precio_noche_por_apartamento:${apartamentoIDV}`
+
             const botonIrACalendario = document.createElement("a")
             botonIrACalendario.setAttribute("href", urlBase + urlCalendarioAirbnb)
-
             botonIrACalendario.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
             botonIrACalendario.classList.add("botonV1BlancoIzquierda")
             botonIrACalendario.textContent = "Ver reservas, eventos por calendarios sincronizados y bloqueos del apartamento en el calendario"
             contenedorGlobal.appendChild(botonIrACalendario)
 
-
-
+            const botonCalendarioPrecios = document.createElement("a")
+            botonCalendarioPrecios.setAttribute("href", urlBaseCalendarioPreciosPorNoche)
+            botonCalendarioPrecios.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+            botonCalendarioPrecios.classList.add("botonV1BlancoIzquierda")
+            botonCalendarioPrecios.textContent = "Ir al calendario de precios por noche"
+            contenedorGlobal.appendChild(botonCalendarioPrecios)
 
             return apartamentoGUI
         },

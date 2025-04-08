@@ -3,7 +3,7 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarServicioPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/actualizarServicioPorReservaUID.mjs"
 import { obtenerServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServicioEnReservaPorServicioUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { validarObjetoDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarObjetoDelServicio.mjs"
 import { validarOpcionesDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
@@ -11,14 +11,11 @@ import { validadoresCompartidos } from "../../../../../shared/validadores/valida
 import { obtenerFechaLocal } from "../../../../../shared/obtenerFechaLocal.mjs"
 import { controladorDelMovimiento } from "../../../../../shared/inventario/controladorDeMovimiento.mjs"
 import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs"
+import { obtenerElementoPorElementoUID } from "../../../../../infraestructure/repository/inventario/obtenerElementoPorElementoUID.mjs"
 
 export const actualizarServicioEnReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -41,7 +38,7 @@ export const actualizarServicioEnReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
@@ -65,6 +62,27 @@ export const actualizarServicioEnReserva = async (entrada) => {
             opcionesSeleccionadasDelServicio: oSdS_validado,
             servicioExistenteAccesible: servicio,
         })
+
+        const gruposDeOpciones = contenedorServicio.gruposDeOpciones
+
+        for (const [grupoIDV, gDO] of Object.entries(gruposDeOpciones)) {
+            const opcionesGrupo = gDO.opcionesGrupo
+            for (const og of opcionesGrupo) {
+                const elementoUID = og?.elementoEnlazado?.elementoUID
+                const nombreOpcion = og.nombreOpcion
+                if (elementoUID) {
+                    const elemento = await obtenerElementoPorElementoUID({
+                        elementoUID,
+                        errorSi: "desactivado"
+                    })
+                    if (!elemento) {
+                        throw new Error(`No se puede actualizar este servicio porque la opción ${nombreOpcion} está enlazada con un elemento que ya no está en el inventario. Por favor, ves al servicio y desenlaza la opción`)
+                    }
+                }
+            }
+        }
+
+
         const opcionesSeleccionadas = oSdS_validado.opcionesSeleccionadas
         const descuentoTotalServicio = oSdS_validado.descuentoTotalServicio
         const fechaUTC = DateTime.utc().toISO();

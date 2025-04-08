@@ -1,15 +1,11 @@
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { obtenerServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServicioEnReservaPorServicioUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const obtenerDetallesDelServicioEnReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3

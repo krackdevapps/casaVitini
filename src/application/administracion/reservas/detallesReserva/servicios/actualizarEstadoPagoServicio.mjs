@@ -2,17 +2,13 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { actualizarEstadoPagoServicioPorServicioUIDPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/actualizarEstadoPagoServicioPorServicioUIDPorReservaUID.mjs"
 import { obtenerServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServicioEnReservaPorServicioUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const actualizarEstadoPagoServicio = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -36,7 +32,7 @@ export const actualizarEstadoPagoServicio = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
 

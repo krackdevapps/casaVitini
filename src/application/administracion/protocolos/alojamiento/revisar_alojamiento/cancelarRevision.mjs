@@ -1,28 +1,22 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validarRevisionInventarioAlojamiento } from "../../../../../shared/protocolos/validarRevisionInventarioAlojamiento.mjs";
 import { obtenerRevisionPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerRevisionPorUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { eliminarRevisionPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/eliminarRevisionPorUID.mjs";
 
-export const cancelarRevision = async (entrada, salida) => {
+export const cancelarRevision = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
 
-        const data = entrada.body
 
         const protocolVal = await validarRevisionInventarioAlojamiento({
-            o: data,
+            o: entrada.body,
             filtrosIDV: [
                 "uid"
             ]
         })
 
-        const usuarioSolicitante = IDX.usuario
+        const usuarioSolicitante = entrada.session.usuario
         const uidRevision = protocolVal.uid
         await campoDeTransaccion("iniciar")
 

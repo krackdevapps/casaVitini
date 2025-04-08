@@ -1,16 +1,12 @@
 import { actualizarEstadoReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/actualizarEstadoReservaPorReservaUID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 
 export const actualizarEstadoReserva = async (entrada) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -22,7 +18,7 @@ export const actualizarEstadoReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const nuevoEstado = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nuevoEstado,
@@ -42,6 +38,9 @@ export const actualizarEstadoReserva = async (entrada) => {
             const error = "La reserva no se puede modificar porque está cancelada.";
             throw new Error(error);
         }
+
+        // Si se confirma que mueva los elementos del iventario
+        // Si se pasas a pendiente que no inserte elementos del inventario
 
         await actualizarEstadoReservaPorReservaUID({
             reservaUID,

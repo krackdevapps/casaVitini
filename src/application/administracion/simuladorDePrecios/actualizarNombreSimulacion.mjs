@@ -1,16 +1,12 @@
 import { actualizarNombrePorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/actualizarNombrePorSimulacionUID.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 export const actualizarNombreSimulacion = async (entrada) => {
     const mutex = new Mutex()
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,

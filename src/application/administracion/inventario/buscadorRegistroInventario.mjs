@@ -1,21 +1,12 @@
 import Joi from "joi";
-import { obtenerResultadosBusqueda } from "../../../infraestructure/repository/inventario/obtenerResultadosBusqueda.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
-
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
 import { obtenerResultadosBusquedaEnElRegistro } from "../../../infraestructure/repository/inventario/obtenerResultadosBusquedaEnElRegistro.mjs";
-import { operacionesRegistro } from "../../../shared/inventario/traductorOperacionIDV.mjs";
 
 export const buscadorRegistroInventario = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
-        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
+        const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const esquemaBusqueda = Joi.object({
             buscar: Joi.string().messages(commonMessages).allow(''),
@@ -101,7 +92,7 @@ export const buscadorRegistroInventario = async (entrada, salida) => {
         const consultaConteoTotalFilas = resultadosBusqueda[0]?.totalElementos ? resultadosBusqueda[0].totalElementos : 0;
         resultadosBusqueda.forEach((elemento) => {
             delete elemento.totalElementos;
- 
+
         });
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         //  const corretorNumeroPagina = String(pagina).replace("0", "");

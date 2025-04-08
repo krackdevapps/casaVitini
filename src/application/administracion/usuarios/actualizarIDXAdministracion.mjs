@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { actualizarUsuarioSessionActiva } from "../../../infraestructure/repository/usuarios/actualizarSessionActiva.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../../infraestructure/repository/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
@@ -7,15 +7,10 @@ import { actualizarIDX } from "../../../infraestructure/repository/usuarios/actu
 import { usuariosLimite } from "../../../shared/usuarios/usuariosLimite.mjs";
 import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
 import { validadorIDX } from "../../../shared/VitiniIDX/validadorIDX.mjs";
-import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const actualizarIDXAdministracion = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -38,10 +33,6 @@ export const actualizarIDXAdministracion = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
-        })
-        await controlRol({
-            usuarioOperacion: IDX.vitiniIDX(),
-            usuarioDestino: usuarioIDX
         })
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         usuariosLimite(nuevoIDX)

@@ -1,16 +1,12 @@
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { selecionarOfertasPorCondicion } from "../../../../shared/ofertas/entidades/reserva/selecionarOfertasPorCondicion.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -23,7 +19,7 @@ export const obtenerDescuentosCompatiblesConLaSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const simulacion = await obtenerSimulacionPorSimulacionUID(simulacionUID)

@@ -5,7 +5,7 @@ import { eliminarReservaPorTestingVI } from '../../src/infraestructure/repositor
 import { crearReservaSimpleAdministrativa } from '../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
 import { obtenerReserva } from '../../src/application/administracion/reservas/detallesReserva/global/obtenerReserva.mjs';
 
-describe('critical: financiarContianer', () => {
+describe('critical: financialContianer', () => {
     const testingVI = "testingfinanciarcontainer"
 
     const apartamentoIDV = "apartmenttestingfinanciarcontainer"

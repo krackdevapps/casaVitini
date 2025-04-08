@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoUI } from "../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoUI.mjs";
@@ -12,10 +12,7 @@ import { obtenerCamaComoEntidadPorCamaIDVPorTipoIDV } from "../../../../infraest
 
 export const crearEntidadAlojamiento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         const tipoEntidad = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoEntidad,
@@ -211,7 +208,7 @@ export const crearEntidadAlojamiento = async (entrada, salida) => {
                 limpiezaEspaciosAlrededor: "si",
                 sePermitenNegativos: "no",
                 devuelveUnTipoNumber: "no",
-                devuelveUnTipoBigInt: "si"
+                devuelveUnTipoBigInt: "no"
             })
 
 

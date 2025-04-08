@@ -37,17 +37,17 @@ casaVitini.view = {
                 casaVitini.ui.componentes.mensajeSimple(info)
             }
             if (respuestaServidor?.ok) {
-                console.log("de",respuestaServidor)
+
                 const apartamentoIDV = respuestaServidor?.ok.apartamentoIDV
                 const apartamentoUI = respuestaServidor?.ok.apartamentoUI
                 const apartamentoUIPublico = respuestaServidor?.ok.apartamentoUIPublico
                 const definicionPublica = respuestaServidor?.ok.definicionPublica
                 const numeroHuespedes = respuestaServidor?.ok.numeroHuespedes
                 const descripcionbB4 = respuestaServidor?.ok.descripcion
-                console.log("de", descripcionbB4)
+
                 const descripcion = casaVitini.utilidades.conversor.base64HaciaConTextDecoder(descripcionbB4)
 
-                console.log("descripcion", descripcion)
+
 
 
                 const caracteristicas = respuestaServidor.caracteristicas
@@ -528,7 +528,7 @@ casaVitini.view = {
         const selectorCampos = document.querySelectorAll("[campo]")
         selectorCampos.forEach((campo) => {
             const nombreCampo = campo.getAttribute("campo")
-            
+
             if (nombreCampo !== "caracteristica") {
                 if (nombreCampo === "descripcion") {
                     const descripcion = campo.value
@@ -537,7 +537,7 @@ casaVitini.view = {
                 } else {
                     const datoCampo = campo.value
                     metadatos[nombreCampo] = datoCampo
-    
+
                 }
             }
         })
@@ -552,7 +552,7 @@ casaVitini.view = {
 
             })
         }
-        
+
 
         const respuestaServidor = await casaVitini.shell.servidor(metadatos)
         const instanciaRenderizada = document.querySelector(`[instanciaUID="${instanciaUID}"]`)

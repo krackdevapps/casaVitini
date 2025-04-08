@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../../../shared/utilidades.mjs";
 import { actualizarEstadoPago } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { detallesDelPago as detallesDelPago_square } from "../../../../../infraestructure/paymentGateway/square/detallesDelPago.mjs";
 import { insertarPago } from "../../../../../infraestructure/repository/reservas/transacciones/pagos/insertarPago.mjs";
 import { obtenerPagoPorPagoUIDPasaresa } from "../../../../../infraestructure/repository/reservas/transacciones/pagos/obtenerPagoPorPagoUIDPasaresa.mjs";
@@ -11,11 +11,7 @@ import { codigoZonaHoraria } from "../../../../../shared/configuracion/codigoZon
 
 export const crearPagoManual = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 4
@@ -36,7 +32,7 @@ export const crearPagoManual = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const conceptoPago = validadoresCompartidos.tipos.cadena({

@@ -3,14 +3,11 @@ import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestru
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { utilidades } from "../../../../../shared/utilidades.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 
 export const subirNuevaImagen = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -30,7 +27,7 @@ export const subirNuevaImagen = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        
+
         utilidades.filtroBase64Imagenes(contenidoArchivo)
         await campoDeTransaccion("iniciar")
 
@@ -43,6 +40,7 @@ export const subirNuevaImagen = async (entrada) => {
             apartamentoIDV,
             imagenBase64: contenidoArchivo
         })
+
         await campoDeTransaccion("confirmar")
 
         const ok = {

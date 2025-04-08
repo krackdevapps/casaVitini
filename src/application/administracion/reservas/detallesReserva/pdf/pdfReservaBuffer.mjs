@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { generadorPDF } from "../../../../../shared/pdf/generadorPDF.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { detallesReserva } from "../../../../../shared/reservas/detallesReserva.mjs";
@@ -7,11 +7,7 @@ import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repo
 
 export const pdfReservaBuffer = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -23,7 +19,7 @@ export const pdfReservaBuffer = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         await obtenerReservaPorReservaUID(reservaUID)

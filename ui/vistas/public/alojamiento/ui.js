@@ -35,13 +35,13 @@ casaVitini.view = {
         // Función para verificar el estado
         function handleMediaQueryChange(event) {
             if (event.matches) {
-                console.log('Estás debajo de 720px.');
+
 
                 casaVitini.shell.controladoresUI.ocultarElementos({})
             } else {
 
                 const reservaLocal = JSON.parse(sessionStorage.getItem("preReservaLocal"))
-                console.log("reservaLocal", reservaLocal)
+
                 if (!reservaLocal) {
                     casaVitini.ui.componentes.calendario.configurarCalendario({
                         perfilMes: "calendario_entrada_publico_sinPasado",

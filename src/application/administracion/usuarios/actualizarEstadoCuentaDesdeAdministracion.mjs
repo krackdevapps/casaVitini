@@ -1,17 +1,13 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
 import { eliminarSessionUsuario } from "../../../infraestructure/repository/usuarios/eliminarSessionUsuario.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { actualizarEstadoCuenta } from "../../../infraestructure/repository/usuarios/actualizarEstadoCuenta.mjs";
-import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -43,10 +39,7 @@ export const actualizarEstadoCuentaDesdeAdministracion = async (entrada, salida)
             usuario: usuarioIDX,
             errorSi: "noExiste"
         })
-        await controlRol({
-            usuarioOperacion: IDX.vitiniIDX(),
-            usuarioDestino: usuarioIDX
-        })
+
         if (!cuentaIDX.clave) {
             const error = "No se puede activar una cuenta que carece de contraseña. Por favor, establece una contraseña primero.";
             throw new Error(error);

@@ -108,19 +108,19 @@ export const calculadora = (entrada) => {
                         sePermiteVacio: "si",
                         limpiezaEspaciosAlrededor: "si",
                         devuelveUnTipoNumber: "no",
-                        devuelveUnTipoBigInt: "si"
+                        devuelveUnTipoBigInt: "no"
                     })
                 }),
                 calculo: Joi.string()
             }).required().messages(commonMessages)
 
 
-            controlEstructuraPorJoi({
+            const oval = controlEstructuraPorJoi({
                 schema: schema,
                 objeto: entrada.body
             })
 
-            const numeros = entrada.body.numeros
+            const numeros = oval.numeros
 
             let resultado = new Decimal(0);
             numeros.forEach(n => {

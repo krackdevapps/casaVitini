@@ -8437,6 +8437,7 @@ export const reservaComponentes = {
                                 instanciaUID: instanciaPantallaCarga
                             })
 
+
                             const respuestaServidor = await casaVitini.shell.servidor({
                                 zona: "administracion/reservas/detallesReserva/servicios/insertarServicioEnReserva",
                                 reservaUID,
@@ -9059,7 +9060,7 @@ export const reservaComponentes = {
                                     area: servicioUI
                                 })
 
-                                opcionUI.querySelector("[data=opcionUI]").textContent = nombreOpcion + "    + + "
+                                opcionUI.querySelector("[data=opcionUI]").textContent = nombreOpcion
                                 opcionUI.querySelector("[com=precioData]").textContent = precioOpcion
                                 opcionUI.querySelector("[com=total]").textContent = precioOpcion
                                 opcionUI.querySelector("[selector=opcion]").addEventListener("click", (e) => {

@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
 import { eliminarImpuestoPorImpuestoUIDPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/eliminarImpuestoPorImpuestoUIDPorSimulacionUID.mjs"
@@ -10,11 +10,7 @@ import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simu
 export const eliminarImpuestoEnSimulacion = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -28,7 +24,7 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const impuestoUID = validadoresCompartidos.tipos.cadena({
@@ -38,7 +34,7 @@ export const eliminarImpuestoEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         mutex.acquire()

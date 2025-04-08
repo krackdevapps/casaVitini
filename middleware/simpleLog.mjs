@@ -5,6 +5,5 @@ export const simpleLog = (req, res, next) => {
         method: req.method,
         headers: JSON.stringify(req.headers)
     }
-    console.info(logO);
     next();
 };

@@ -8,12 +8,14 @@ export const validarElemento = (data) => {
         const filtrosIDV = data.filtrosIDV
         let numeroFiltros = 0;
 
+
+
         let schema = Joi.object({
         }).required().messages(commonMessages)
 
         if (filtrosIDV.includes("elementoUID")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 elementoUID: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -33,10 +35,40 @@ export const validarElemento = (data) => {
                 }),
             });
         }
+        if (filtrosIDV.includes("categoriaUID")) {
+            numeroFiltros++
+            schema = schema.keys({
+                categoriaUID: Joi.string().required().custom((value, helpers) => {
+                    try {
+                        return validadoresCompartidos.tipos.cadena({
+                            string: value,
+                            nombreCampo: "El campo de categoriaUID",
+                            filtro: "cadenaConNumerosEnteros",
+                            sePermiteVacio: "no",
+                            limpiezaEspaciosAlrededor: "si",
+                            devuelveUnTipoNumber: "no",
+                            devuelveUnTipoBigInt: "no"
+                        })
+                    } catch (error) {
+                        const path = helpers.state.path.join('.');
+                        const mensajeError = `Error en ${path}: ${error.message}`;
+                        return helpers.message(mensajeError);
+                    }
+                }),
+            });
+        }
+
+        if (filtrosIDV.includes("categoriaUI")) {
+            numeroFiltros++
+            schema = schema.keys({
+                categoriaUI: Joi.string().required(),
+
+            });
+        }
 
         if (filtrosIDV.includes("revisionUID")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 revisionUID: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -58,7 +90,7 @@ export const validarElemento = (data) => {
         }
         if (filtrosIDV.includes("operacionIDV")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 operacionIDV: Joi.string().required().custom((value, helpers) => {
                     try {
                         const operacionIDV = validadoresCompartidos.tipos.cadena({
@@ -86,7 +118,7 @@ export const validarElemento = (data) => {
         }
         if (filtrosIDV.includes("uid")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 uid: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -109,7 +141,7 @@ export const validarElemento = (data) => {
 
         if (filtrosIDV.includes("nombre")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 nombre: Joi.string().required(),
 
             });
@@ -117,7 +149,7 @@ export const validarElemento = (data) => {
         if (filtrosIDV.includes("cantidad")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 cantidad: Joi.string().required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -140,7 +172,7 @@ export const validarElemento = (data) => {
         if (filtrosIDV.includes("tipoLimite")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 tipoLimite: Joi.string().required().custom((value, helpers) => {
                     try {
                         const tiposLimite = [
@@ -162,7 +194,7 @@ export const validarElemento = (data) => {
         if (filtrosIDV.includes("cantidadMinima")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 cantidadMinima: Joi.required().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -170,6 +202,7 @@ export const validarElemento = (data) => {
                             nombreCampo: "El campo de cantidad",
                             filtro: "cadenaConNumerosEnteros",
                             sePermiteVacio: "si",
+                            impedirCero: "no",
                             limpiezaEspaciosAlrededor: "si",
                             devuelveUnTipoNumber: "no",
                             devuelveUnTipoBigInt: "no"
@@ -185,7 +218,7 @@ export const validarElemento = (data) => {
         if (filtrosIDV.includes("descripcion")) {
             numeroFiltros++
 
-            schema = schema.append({
+            schema = schema.keys({
                 descripcion: Joi.string().allow('').required()
 
             });

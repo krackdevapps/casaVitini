@@ -118,7 +118,7 @@ export const validarServicio = async (data) => {
                                     sePermiteVacio: "si",
                                     impedirCero: "si",
                                     devuelveUnTipoNumber: "no",
-                                    limpiezaEspaciosAlrededor: "si",
+                                    limpiezaEspaciosAlrededor: "si"
                                 })
 
                                 return precioOpcion;

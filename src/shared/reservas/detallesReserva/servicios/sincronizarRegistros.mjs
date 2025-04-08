@@ -11,17 +11,19 @@ export const sincronizarRegistros = async (data) => {
         const opcionesSel = servicioExistenteAccesible?.opcionesSel || {}
 
         for (const oS of Object.entries(opcionesSel)) {
+
             const contenedorGrupo = oS[1]
             for (const cG of contenedorGrupo) {
                 const registroEnlazado = cG.registroEnlazado
-
-
-                const registroUID = registroEnlazado.registroUID
-                await reversionDeMovimiento({
-                    registroUID,
-                })
+                if (registroEnlazado) {
+                    const registroUID = registroEnlazado.registroUID
+                    await reversionDeMovimiento({
+                        registroUID,
+                    })
+                }
             }
         }
+
 
         for (const [grupoIDV, grupoDeOpciones] of Object.entries(gruposDeOpcionesDelServicio)) {
             const opcionesGrupo = grupoDeOpciones.opcionesGrupo
@@ -35,6 +37,7 @@ export const sincronizarRegistros = async (data) => {
                 if (!gpv) {
                     continue
                 }
+
                 if (elementoEnlazado) {
                     const cantidad = gpv.cantidad
                     const elementoUID = elementoEnlazado.elementoUID
@@ -52,6 +55,7 @@ export const sincronizarRegistros = async (data) => {
                 }
             }
         }
+
     } catch (error) {
         throw error
     }

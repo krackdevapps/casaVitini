@@ -1,17 +1,13 @@
 import Joi from "joi";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
 import { obtenerRegistroPorUID } from "../../../infraestructure/repository/inventario/obtenerRegistroPorUID.mjs";
 import { operacionesRegistro } from "../../../shared/inventario/traductorOperacionIDV.mjs";
 
-export const detallesDelRegistroDelInventario = async (entrada, salida) => {
+export const detallesDelRegistroDelInventario = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const esquemaBusqueda = Joi.object({

@@ -1,18 +1,16 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerOfertasPorNombreUI } from "../../../infraestructure/repository/ofertas/obtenerOfertasPorNombreUI.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { insertarOferta } from "../../../infraestructure/repository/ofertas/insertarOferta.mjs";
 import { validarObjetoOferta } from "../../../shared/ofertas/entidades/reserva/validarObjetoOferta.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
+
 export const crearOferta = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -27,7 +25,7 @@ export const crearOferta = async (entrada) => {
         const fechaFinal = entrada.body.fechaFinal
         const condicionesArray = entrada.body.condicionesArray
         const descuentosJSON = entrada.body.descuentosJSON
-        const estadoInicial = "desactivado"
+        
 
         const oferta = {
             nombreOferta,
@@ -37,12 +35,13 @@ export const crearOferta = async (entrada) => {
             fechaFinal,
             condicionesArray,
             descuentosJSON,
-            estado: estadoInicial,
-         }
+           // estado: estadoInicial,
+        }
         await validarObjetoOferta({
             oferta: oferta,
             modo: "crearOferta"
         })
+        oferta.estado = "desactivado"
         await campoDeTransaccion("iniciar")
         const ofertasPorNombre = await obtenerOfertasPorNombreUI(nombreOferta)
         if (ofertasPorNombre.length > 0) {
@@ -51,6 +50,7 @@ export const crearOferta = async (entrada) => {
         }
 
         const nuevaOferta = await insertarOferta(oferta)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado la oferta",

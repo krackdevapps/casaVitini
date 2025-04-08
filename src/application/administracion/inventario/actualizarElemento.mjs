@@ -1,13 +1,10 @@
 import { actualizarElementoPorElementoUID } from "../../../infraestructure/repository/inventario/actualizarElementoPorElementoUID.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { validarElemento } from "../../../shared/inventario/validarElemento.mjs";
 
-export const actualizarElemento = async (entrada, salida) => {
+
+export const actualizarElemento = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         const actualizarElemento = entrada.body
 
@@ -16,7 +13,6 @@ export const actualizarElemento = async (entrada, salida) => {
             o: actualizarElemento,
             filtrosIDV: [
                 "nombre",
-                "cantidad",
                 "tipoLimite",
                 "cantidadMinima",
                 "descripcion",
@@ -31,15 +27,11 @@ export const actualizarElemento = async (entrada, salida) => {
 
         const elemento = await actualizarElementoPorElementoUID({
             nombre: elementoValidado.nombre,
-            cantidad: elementoValidado.cantidad,
             tipoLimite: elementoValidado.tipoLimite,
             cantidadMinima: elementoValidado.cantidadMinima,
             descripcion: elementoValidado.descripcion,
             elementoUID: elementoValidado.elementoUID
         })
-
-
-
 
         const ok = {
             ok: "Se ha creado el nuevo elemento en el inventario",

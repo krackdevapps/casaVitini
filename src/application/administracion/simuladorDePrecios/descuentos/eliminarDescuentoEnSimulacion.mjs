@@ -2,17 +2,13 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/eliminarOfertaDeInstantaneaPorAdministradorPorOfertaUID.mjs"
 import { eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/eliminarOfertaDeInstantaneaPorCondicionPorOfertaUID.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const eliminarDescuentoEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 4
@@ -25,7 +21,7 @@ export const eliminarDescuentoEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const ofertaUID = validadoresCompartidos.tipos.cadena({
@@ -44,7 +40,7 @@ export const eliminarDescuentoEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         if (posicion === "0") {
             const m = "No puedes pasar una posición en 0, recuerda que aquí las posiciones empiezan a contar desde 1"

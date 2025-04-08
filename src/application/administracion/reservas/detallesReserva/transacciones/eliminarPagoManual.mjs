@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { actualizarEstadoPago } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizarEstadoPago.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -8,11 +8,7 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 export const eliminarPagoManual = async (entrada) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,

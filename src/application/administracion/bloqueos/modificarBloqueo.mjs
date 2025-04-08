@@ -1,5 +1,4 @@
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { obtenerBloqueoPorBloqueoUID } from "../../../infraestructure/repository/bloqueos/obtenerBloqueoPorBloqueoUID.mjs";
 import { actualizarBloqueoPorBloqueoUID } from "../../../infraestructure/repository/bloqueos/actualizarBloqueoPorBloqueoUID.mjs";
@@ -9,10 +8,7 @@ import { valdiarEsquemaEntrada } from "../../../shared/bloqueos/validarEsquemaEn
 
 export const modificarBloqueo = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
 
         valdiarEsquemaEntrada(entrada.body)
@@ -25,7 +21,7 @@ export const modificarBloqueo = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const tipoBloqueoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoBloqueoIDV,
@@ -102,6 +98,7 @@ export const modificarBloqueo = async (entrada, salida) => {
         })
         const bufferObjPreDecode = Buffer.from(bloqueActualizado.motivo, "base64");
         bloqueActualizado.motivo = bufferObjPreDecode.toString("utf8");
+
 
         const ok = {
             ok: "Se ha actualizado el bloqueo correctamente",

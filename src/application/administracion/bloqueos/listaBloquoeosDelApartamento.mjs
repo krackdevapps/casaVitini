@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
@@ -7,11 +7,7 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraes
 
 export const listaBloquoeosDelApartamento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -49,9 +45,9 @@ export const listaBloquoeosDelApartamento = async (entrada, salida) => {
                 if (bloqueoDelApartamento.motivo) {
                     const bufferObjPreDecode = Buffer.from(bloqueoDelApartamento.motivo, "base64");
                     bloqueoDelApartamento.motivo = bufferObjPreDecode.toString("utf8");
-            
+
                 }
-       
+
 
                 const bloqueoUID = bloqueoDelApartamento.bloqueoUID;
                 const tipoBloqueoIDV = bloqueoDelApartamento.tipoBloqueoIDV;

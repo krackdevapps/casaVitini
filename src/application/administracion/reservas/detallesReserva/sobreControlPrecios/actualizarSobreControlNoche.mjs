@@ -3,7 +3,7 @@ import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repo
 import { actualizarDesgloseFinacieroPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarDesgloseFinacieroPorReservaUID.mjs"
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
 import { actualizarSobreControlDeLaNoche } from "../../../../../infraestructure/repository/reservas/transacciones/sobreControl/actualizarSobreControlDeLaNoche.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { procesador } from "../../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
@@ -12,11 +12,7 @@ import { validadoresCompartidos } from "../../../../../shared/validadores/valida
 
 export const actualizarSobreControlNoche = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 5
@@ -29,7 +25,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,

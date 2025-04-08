@@ -1,5 +1,5 @@
 import { actualizarDatos } from "../../infraestructure/repository/usuarios/actualizarDatos.mjs";
-import { VitiniIDX } from "../../shared/VitiniIDX/control.mjs";
+;
 import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { desactivarCuenta } from "../../infraestructure/repository/usuarios/desactivarCuenta.mjs";
@@ -8,10 +8,6 @@ import { obtenerDatosPersonales } from "../../infraestructure/repository/usuario
 export const actualizarDatosUsuarioDesdeMiCasa = async (entrada) => {
 
     try {
-
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 6

@@ -1,7 +1,7 @@
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { apartamentosPorRango } from "../../../../shared/selectoresCompartidos/apartamentosPorRango.mjs";
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { eliminarBloqueoCaducado } from "../../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { DateTime } from "luxon";
 import { insertarReservaAdministrativa } from "../../../../infraestructure/repository/reservas/reserva/insertarReservaAdministrativa.mjs";
@@ -17,11 +17,7 @@ import { semaforoCompartidoReserva } from "../../../../shared/semaforosCompartid
 
 export const crearReservaSimpleAdministrativa = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         await semaforoCompartidoReserva.acquire();
 

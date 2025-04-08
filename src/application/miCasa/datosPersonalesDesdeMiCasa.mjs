@@ -1,16 +1,13 @@
 import { Mutex } from "async-mutex";
 import { obtenerDatosPersonales } from "../../infraestructure/repository/usuarios/obtenerDatosPersonales.mjs";
 import { obtenerUsuario } from "../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
-import { VitiniIDX } from "../../shared/VitiniIDX/control.mjs";
+;
 import { campoDeTransaccion } from "../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 
 export const datosPersonalesDesdeMiCasa = async (entrada) => {
 
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.control()
 
         mutex.acquire()
         await campoDeTransaccion("iniciar")

@@ -1,5 +1,5 @@
 import { apartamentosPorRango } from "../../../../../shared/selectoresCompartidos/apartamentosPorRango.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { eliminarBloqueoCaducado } from "../../../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
@@ -14,11 +14,7 @@ import { semaforoCompartidoReserva } from "../../../../../shared/semaforosCompar
 export const anadirApartamentoReserva = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -70,8 +66,6 @@ export const anadirApartamentoReserva = async (entrada, salida) => {
             const error = "El apartamento ya existe en la reserva";
             throw new Error(error);
         }
-        const rol = entrada.session.rolIDV;
-
         const resuelveApartamentosDisponibles = await apartamentosPorRango({
             fechaEntrada: fechaEntrada,
             fechaSalida: fechaSalida,

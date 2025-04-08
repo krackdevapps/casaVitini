@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { bloquearApartamentos } from "../../../../../shared/bloqueos/bloquearApartamentos.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -15,11 +15,7 @@ export const cancelarReserva = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         await mutex.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
@@ -33,7 +29,7 @@ export const cancelarReserva = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const tipoBloqueoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoBloqueoIDV,

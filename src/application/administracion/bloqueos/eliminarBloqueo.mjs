@@ -1,16 +1,12 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
-import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
+import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoPorBloqueoUID } from "../../../infraestructure/repository/bloqueos/eliminarBloqueoPorBloqueoUID.mjs";
 import { obtenerBloqueoPorBloqueoUID } from "../../../infraestructure/repository/bloqueos/obtenerBloqueoPorBloqueoUID.mjs";
 import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from "../../../infraestructure/repository/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs";
 
 export const eliminarBloqueo = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -22,7 +18,7 @@ export const eliminarBloqueo = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const bloqueoSeleccionado = await obtenerBloqueoPorBloqueoUID(bloqueoUID)
@@ -37,6 +33,7 @@ export const eliminarBloqueo = async (entrada, salida) => {
         if (bloqueosPorApartamento.length >= 1) {
             tipoDeRetroceso = "aApartamento";
         }
+
 
         const ok = {
             ok: "Se ha eliminado el bloqueo correctamente",

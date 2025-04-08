@@ -321,7 +321,7 @@ casaVitini.view = {
                 contenedor.appendChild(spinner)
 
                 const respuestaServidor = await casaVitini.shell.servidor({
-                    zona: "administracion/protocolos/alojamientogestion_de_protocolosinventario/insertarInventarioEnProtocolo",
+                    zona: "administracion/protocolos/alojamiento/gestion_de_protocolos/inventario/insertarInventarioEnProtocolo",
                     elementoUID,
                     apartamentoIDV,
                     cantidad_enAlojamiento

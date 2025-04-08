@@ -1,5 +1,4 @@
 import ICAL from 'ical.js';
-import { VitiniIDX } from '../../../../../shared/VitiniIDX/control.mjs';
 import { validadoresCompartidos } from '../../../../../shared/validadores/validadoresCompartidos.mjs';
 import { obtenerConfiguracionPorApartamentoIDV } from '../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs';
 import { actualizarCalendarioSincronizado } from '../../../../../infraestructure/repository/calendario/actualizarCalendarioSincronizado.mjs';
@@ -9,10 +8,7 @@ import axios from 'axios';
 
 export const actualizarCalendario = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 4
@@ -24,7 +20,7 @@ export const actualizarCalendario = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const nombre = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombre,
@@ -88,7 +84,8 @@ export const actualizarCalendario = async (entrada) => {
             calendarioUID: calendarioUID
         }
 
-        await actualizarCalendarioSincronizado(dataActualizarCalendarioSincronizado)
+        const calendarioActualizado = await actualizarCalendarioSincronizado(dataActualizarCalendarioSincronizado)
+
         const ok = {
             ok: "Se ha actualizado correctamente el calendario"
         };

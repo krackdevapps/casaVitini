@@ -1,0 +1,59 @@
+body {
+    background-color: white;
+}
+.tituloContextoAdministracion {
+    background-color: rgba(0, 0, 0, 0.144);
+    padding: 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 100px;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+}
+
+.titulo {
+    font-size: 30px;
+}
+
+.contenedorBotones {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 0px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-content: left;
+    gap: 6px;
+}
+.tituloContextoAdministracion:hover {
+    background-color: rgba(0, 0, 0, 0.45);
+    color: white;
+    transition: all 250ms linear;
+}
+
+
+@media (max-width: 1280px) {
+     .contenedorBotones {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+     .contenedorBotones {
+        grid-template-columns: 1fr ;
+    }
+}
+
+@media (max-width: 480px) {
+     .contenedorBotones {
+        grid-template-columns: 1fr;
+    }
+}

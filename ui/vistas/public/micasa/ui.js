@@ -13,29 +13,22 @@ casaVitini.view = {
         if (respuestaServidor?.usuario) {
 
             const usuarioIDX = respuestaServidor?.usuario
-            const rolIDV = respuestaServidor?.rolIDV
+            const gruposDelUsuario = respuestaServidor?.gruposDelUsuario || []
             const cuentaVerificadaIDV = respuestaServidor?.cuentaVerificadaIDV
             const metadatosBanner = {
                 usuarioIDX: usuarioIDX,
-                rolIDV: rolIDV
             }
-            let rolUI
-            if (rolIDV === "empleado") {
-                rolUI = "empleado"
-            }
-            if (rolIDV === "cliente") {
-                rolUI = "usuario"
-            }
-            if (cuentaVerificadaIDV === "no" && rolIDV !== "administrador") {
+    
+            if (cuentaVerificadaIDV === "no" && gruposDelUsuario.length === 0) {
                 const infoCuentaNoVerificada = document.createElement("p")
                 infoCuentaNoVerificada.classList.add("infoCuenta")
-                infoCuentaNoVerificada.innerHTML = `Tu cuenta de ${rolUI} no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta de ${rolUI}, no podrás acceder a tus reservas, no podras recuperar tu cuenta en caso de olvido de la contraseña y la cuenta se eliminará pasadas 24h. Si necesitas que te reenviemos otra vez el mail de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
+                infoCuentaNoVerificada.innerHTML = `Tu cuenta de no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta de, no podrás acceder a tus reservas, no podras recuperar tu cuenta en caso de olvido de la contraseña y la cuenta se eliminará pasadas 24h. Si necesitas que te reenviemos otra vez el mail de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
                 marcoCuenta.appendChild(infoCuentaNoVerificada)
             }
-            if (cuentaVerificadaIDV === "no" && rolIDV === "administrador") {
+            if (cuentaVerificadaIDV === "no"&& gruposDelUsuario.length > 0) {
                 const infoCuentaNoVerificada = document.createElement("p")
                 infoCuentaNoVerificada.classList.add("infoCuenta")
-                infoCuentaNoVerificada.innerHTML = `Tu cuenta administrativa no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta administrativa, aunque podrás usar el panel de administración, no podrás acceder a tus reservas personales y si olvidas tu contraseña, no podrás recuperar tu cuenta a menos que te pongas en contacto con otro administrador. Las cuentas administrativas no verificadas no caducan con el tiempo. Si necesitas que te reenviemos otra vez el mail de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
+                infoCuentaNoVerificada.innerHTML = `Tu cuenta con grupos administrativos no está verificada. Para verificar tu cuenta, valida tu correo electrónico. Si no verificas tu cuenta administrativa, aunque podrás usar el panel de administración, no podrás acceder a tus reservas personales y si olvidas tu contraseña, no podrás recuperar tu cuenta a menos que te pongas en contacto con otro administrador. Las cuentas administrativas no verificadas no caducan con el tiempo. Si necesitas que te reenviemos otra vez el mail de verificación, entra en la sección de recuperación de cuentas yendo a Mi Casa > <a href="/micasa/recuperar_cuenta" class="enlace">Recuperar mi cuenta</a>`
                 marcoCuenta.appendChild(infoCuentaNoVerificada)
             }
             const contenedorBanner = document.createElement("div")
@@ -50,7 +43,7 @@ casaVitini.view = {
             marcoUsuario.setAttribute("componente", "marcoUsuario")
             marcoCuenta.appendChild(marcoUsuario)
 
-            if (rolIDV === "administrador" || rolIDV === "empleado") {
+            if (gruposDelUsuario.length > 0) {
                 const botonAdministracion = document.createElement("a")
                 botonAdministracion.setAttribute("class", "botonUsuario")
                 botonAdministracion.setAttribute("href", "/administracion")

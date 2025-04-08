@@ -1,28 +1,22 @@
-import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
-import { obtenerDatosPersonales } from "../../infraestructure/repository/usuarios/obtenerDatosPersonales.mjs";
-import { obtenerUsuario } from "../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
-import { obtenerReservaPorReservaUID } from "../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { obtenerTitularPoolReservaPorReservaUID } from "../../infraestructure/repository/reservas/titulares/obtenerTitularPoolReservaPorReservaUID.mjs";
-import { obtenerTitularReservaPorReservaUID } from "../../infraestructure/repository/reservas/titulares/obtenerTitularReservaPorReservaUID.mjs";
-import { obtenerDetallesCliente } from "../../infraestructure/repository/clientes/obtenerDetallesCliente.mjs";
-import { VitiniIDX } from "../../shared/VitiniIDX/control.mjs";
+import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
+import { obtenerDatosPersonales } from "../../../infraestructure/repository/usuarios/obtenerDatosPersonales.mjs";
+import { obtenerUsuario } from "../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
+import { obtenerReservaPorReservaUID } from "../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
+import { obtenerTitularPoolReservaPorReservaUID } from "../../../infraestructure/repository/reservas/titulares/obtenerTitularPoolReservaPorReservaUID.mjs";
+import { obtenerTitularReservaPorReservaUID } from "../../../infraestructure/repository/reservas/titulares/obtenerTitularReservaPorReservaUID.mjs";
+import { obtenerDetallesCliente } from "../../../infraestructure/repository/clientes/obtenerDetallesCliente.mjs";
+import { obtenerGruposDelUsuario } from "../../../infraestructure/repository/secOps/obtenerGruposDelUsuario.mjs";
+;
 
 export const resolverQR = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.clientes()
-        IDX.control()
-
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
         })
 
-        const usuario = entrada.session.usuario
-        const rol = IDX.rol()
+        const usuario = entrada?.session?.usuario
+
         const codigoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.codigoIDV,
             nombreCampo: "El campo codigoIDV",
@@ -43,22 +37,18 @@ export const resolverQR = async (entrada) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
                 devuelveUnTipoNumber: "no",
-                devuelveUnTipoBigInt: "si"
+                devuelveUnTipoBigInt: "no"
             })
             await obtenerReservaPorReservaUID(reservaUID)
+            const gruposDelUsuario = await obtenerGruposDelUsuario(usuario)
+            if (gruposDelUsuario.length === 0) {
 
-
-            if (rol === "administrador" || rol === "empleado") {
-                ok.url = "/administracion/reservas/reserva:" + reservaUID
-            } else if (rol === "cliente") {
                 const datosDelUsuario = await obtenerDatosPersonales(usuario)
                 const usuarioMail = datosDelUsuario.mail;
                 if (!usuarioMail) {
                     const error = "Se necesita que definas tu dirección de correo electrónico en mis datos dentro de tu cuenta. Las reservas se asocian a tu cuenta mediante la dirección de correo electrónico que usaste para confirmar la reserva. Es decir, debes de ir a Mis datos dentro de tu cuenta, escribir tu dirección de correo electrónico y confirmarlo con el correo de confirmación que te enviaremos. Una vez hecho eso, podrás ver tus reservas.";
                     throw new Error(error);
                 }
-
-
 
                 const cuentaUsuario = await obtenerUsuario({
                     usuario,
@@ -69,7 +59,6 @@ export const resolverQR = async (entrada) => {
                     const error = "Tienes que verificar tu dirección de correo electrónico para poder acceder a las reservas asociadas a tu dirección de correo electrónico. Para ello, pulsa en verificar tu correo electrónico.";
                     throw new Error(error);
                 }
-
 
                 const titular = await obtenerTitularReservaPorReservaUID(reservaUID)
                 const titularUID = titular?.titularUID
@@ -91,11 +80,9 @@ export const resolverQR = async (entrada) => {
                 }
                 ok.url = "/micasa/reservas/reserva:" + reservaUID
 
-
+            } else {
+                ok.url = "/administracion/reservas/reserva:" + reservaUID
             }
-
-
-
         } else {
             const m = "No se reconoce el codigoIDV"
             throw new Error(m)

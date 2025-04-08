@@ -15,7 +15,7 @@ import { disponibilidadApartamentos } from "../../../shared/reservas/nuevaReserv
 export const preciosPorSeleccion = async (entrada) => {
     const mutex = new Mutex()
     try {
- 
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 4
@@ -28,12 +28,16 @@ export const preciosPorSeleccion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        console.log("ent", entrada.body)
+
 
         let fechaEntrada
         let fechaSalida
 
         if (tipoRango === "personalizado") {
+            if (!await interruptor("aceptarReservasPublicas")) {
+                throw new Error(mensajesUI.aceptarReservasPublicas);
+            }
+
             fechaEntrada = (await validadoresCompartidos.fechas.validarFecha_ISO({
                 fecha_ISO: entrada.body.fechaEntrada,
                 nombreCampo: "La fecha de entrada en preciosPorSeleccion"
@@ -43,14 +47,12 @@ export const preciosPorSeleccion = async (entrada) => {
                 fecha_ISO: entrada.body.fechaSalida,
                 nombreCampo: "La fecha de salida en preciosPorSeleccion"
             }))
-            if (!await interruptor("aceptarReservasPublicas")) {
-                throw new Error(mensajesUI.aceptarReservasPublicas);
-            }
+
         } else if (tipoRango === "presente") {
             const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
             const tiempoZH = DateTime.now().setZone(zonaHoraria);
             const fechaActual = tiempoZH.toISODate();
-            const fechaActualDiaSiguiente = tiempoZH.plus({day: 1}).toISODate();
+            const fechaActualDiaSiguiente = tiempoZH.plus({ day: 1 }).toISODate();
 
             fechaEntrada = fechaActual
             fechaSalida = fechaActualDiaSiguiente
@@ -94,7 +96,7 @@ export const preciosPorSeleccion = async (entrada) => {
             throw new Error(error);
         }
         await eliminarBloqueoCaducado();
-      
+
         if (tipoRango === "personalizado") {
             await validarHoraLimitePublica({
                 fechaEntrada
@@ -102,14 +104,14 @@ export const preciosPorSeleccion = async (entrada) => {
             await limitesReservaPublica({
                 fechaEntrada: fechaEntrada,
                 fechaSalida: fechaSalida
-            })    
+            })
             await disponibilidadApartamentos({
                 fechaEntrada,
                 fechaSalida,
                 apartamentosIDVArray: apartamentosIDVARRAY
             })
         }
-        
+
 
         const desgloseFinanciero = await procesador({
             entidades: {

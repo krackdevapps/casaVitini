@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { controlEstructuraPorJoi } from "../../../../../shared/validadores/controlEstructuraPorJoi.mjs";
 import { obtenerResultadosBusquedaEnElRegistro } from "../../../../../infraestructure/repository/inventario/obtenerResultadosBusquedaEnElRegistro.mjs";
@@ -7,11 +7,7 @@ import { obtenerBusquedaRevisiones } from "../../../../../infraestructure/reposi
 
 export const buscadorRegistroRevisiones = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
 
@@ -99,7 +95,7 @@ export const buscadorRegistroRevisiones = async (entrada, salida) => {
         const consultaConteoTotalFilas = resultadosBusqueda[0]?.totalElementos ? resultadosBusqueda[0].totalElementos : 0;
         resultadosBusqueda.forEach((elemento) => {
             delete elemento.totalElementos;
- 
+
         });
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
         //  const corretorNumeroPagina = String(pagina).replace("0", "");

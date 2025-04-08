@@ -1,30 +1,20 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validarInventarioDelProtocolo } from "../../../../../shared/protocolos/validarInventarioDelProtocolo.mjs";
-import { crearRevisionPorUsuario } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/crearRevisionPorUsuario.mjs";
-import { DateTime } from "luxon";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { obtenerRevisionPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerRevisionPorUID.mjs";
 import { obtenerProtocolosPorApartamentoIDV } from "../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/obtenerProtocolosPorApartamentoIDV.mjs";
 import Decimal from "decimal.js";
 
-export const obtenerReposicion = async (entrada, salida) => {
+export const obtenerReposicion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
-
-        const data = entrada.body
-
         const protocolVal = validarInventarioDelProtocolo({
-            o: data,
+            o: entrada.body,
             filtrosIDV: [
                 "uid"
             ]
         })
-        const usuarioSolicitante = IDX.usuario
+        const usuarioSolicitante = entrada.session.usuario
         const uid = protocolVal.uid
         await campoDeTransaccion("iniciar")
 
@@ -34,6 +24,13 @@ export const obtenerReposicion = async (entrada, salida) => {
         }
         const estadoRevision = revision.estadoRevision
         const apartamentoIDV = revision.apartamentoIDV
+
+        //revisar que exista al conf de alojamiento
+        const alojamiento = await obtenerConfiguracionPorApartamentoIDV({
+            apartamentoIDV,
+            errorSi: "noExiste"
+        })
+        const apartamentoUI = alojamiento.apartamentoUI
 
         if (estadoRevision === "finalizada") {
             throw new Error("La revision esta finalizada")
@@ -57,7 +54,8 @@ export const obtenerReposicion = async (entrada, salida) => {
         })
         const ok = {
             ok: "Lista de elementos para reponer en el alojamiento",
-            reposicionFinal: []
+            reposicionFinal: [],
+            apartamentoUI
         }
 
         revisionInventario.forEach(r => {

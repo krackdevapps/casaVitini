@@ -71,6 +71,7 @@ describe('hostin plugin in bookins', () => {
                 complementoUI: "Complemento temporal",
                 definicion: "Complemento temporal de alojamiento para testing",
                 tipoPrecio: "porNoche",
+                tipoUbicacion: "alojamiento",
                 precio: "100.00",
             },
             session: fakeAdminSession

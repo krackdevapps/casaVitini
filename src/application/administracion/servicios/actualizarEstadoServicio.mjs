@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { obtenerServicioPorServicioUID } from "../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs";
@@ -8,10 +8,7 @@ import { actualizarEstadoServicioPorServicioUID } from "../../../infraestructure
 export const actualizarEstadoServicio = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
 
@@ -28,7 +25,7 @@ export const actualizarEstadoServicio = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const estadoIDV = validadoresCompartidos.tipos.cadena({

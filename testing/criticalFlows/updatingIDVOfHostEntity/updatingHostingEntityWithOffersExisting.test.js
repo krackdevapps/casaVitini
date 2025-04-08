@@ -307,21 +307,6 @@ describe('critical: updating hosting entity with offers existing', () => {
         simulacionUID = response.simulacionUID
     })
 
-    test('insert hostin in simulation with ok', async () => {
-        try {
-            const response = await insertarAlojamientoEnSimulacion({
-                body: {
-                    simulacionUID: String(simulacionUID),
-                    apartamentoIDV: String(apartamentoIDV)
-                },
-                session: fakeAdminSession
-            })
-        } catch (error) {
-            expect(error).not.toBeUndefined();
-            expect(typeof error).toBe('object');
-            expect(error).toHaveProperty('info');
-        }
-    })
     test('insert global data in simulation created with ok', async () => {
         const m = {
             body: {
@@ -337,6 +322,22 @@ describe('critical: updating hosting entity with offers existing', () => {
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
+    })
+
+    test('insert hostin in simulation with ok', async () => {
+        try {
+            const response = await insertarAlojamientoEnSimulacion({
+                body: {
+                    simulacionUID: String(simulacionUID),
+                    apartamentoIDV: String(apartamentoIDV)
+                },
+                session: fakeAdminSession
+            })
+        } catch (error) {
+            expect(error).not.toBeUndefined();
+            expect(typeof error).toBe('object');
+            expect(error).toHaveProperty('info');
+        }
     })
     test('insert hostin in simulation with ok', async () => {
         const response = await insertarAlojamientoEnSimulacion({
@@ -426,6 +427,8 @@ describe('critical: updating hosting entity with offers existing', () => {
                 apartamentoIDV: apartamentoIDV_actualizado,
                 apartamentoUI: apartamentoUI,
                 apartamentoUIPublico: "Apartamento",
+                numeroHuespedes: "1",
+                descripcion: "",
                 definicionPublica: "definicion",
                 caracteristicas: [
                     "testing"

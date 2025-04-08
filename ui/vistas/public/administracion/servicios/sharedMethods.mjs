@@ -694,8 +694,6 @@ export const sharedMethods = {
                         contenedorSelecioando.setAttribute("estado", "activado")
                         contenedorSelecioando.querySelector("[componente=indicadorSelecion]").style.background = "blue"
 
-
-
                     })
                     opcionesDelContenedor.appendChild(contenedorGlobal)
 
@@ -1120,7 +1118,6 @@ export const sharedMethods = {
                 const elementoUID = data.elementoUID
                 const nombre = data.nombre
                 const contenedorEnlaceInventario = data.contenedorEnlaceInventario
-                const main = document.querySelector("main")
 
                 const enlaceUI = this.elementoEnlazadoUI({
                     nombre,
@@ -1134,6 +1131,7 @@ export const sharedMethods = {
                 contenedorConEnlace.appendChild(enlaceUI)
             },
             elementoEnlazadoUI: function (data) {
+
                 const nombre = data.nombre
                 const elementoUID = data.elementoUID
 

@@ -502,7 +502,7 @@
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .contenedorOculto {
-    display: none !important;
+    display: none;
 }
 
 [zonaCSS="administracion/ofertas/ofertaUI"] .editarOfertaSoloLecturaUI {

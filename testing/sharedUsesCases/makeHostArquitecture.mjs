@@ -120,6 +120,7 @@ export const makeHostArquitecture = async (data) => {
                     definicion: "Definicion temporal del complementos de alojamiento creado para testing",
                     tipoPrecio: "porNoche",
                     precio: "100.00",
+                    tipoUbicacion: "alojamiento"
                 },
                 session: fakeAdminSession
             })

@@ -1,16 +1,13 @@
 import { insertarEnlaceDePago } from "../../../infraestructure/repository/enlacesDePago/insertarEnlaceDePago.mjs";
 import { obtenerEnlaceDePagoPorCodigoUPID } from "../../../infraestructure/repository/enlacesDePago/obtenerEnlaceDePagoPorCodigoUPID.mjs";
 import { obtenerReservaPorReservaUID } from "../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { controlCaducidadEnlacesDePago } from "../../../shared/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
 export const crearNuevoEnlace = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 5
@@ -22,7 +19,7 @@ export const crearNuevoEnlace = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
 

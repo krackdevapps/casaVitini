@@ -5,8 +5,15 @@ export const eliminarSessionPorRolPorCaducidad = async () => {
 
         const consultaCuentaAntiguas = `
         DELETE FROM usuarios
-        WHERE "ultimoLogin" < NOW() - interval '6 months' AND "rolIDV" <> $1;`;
-        await conexion.query(consultaCuentaAntiguas, ["administrador"]);
+        WHERE "ultimoLogin" < NOW() - interval '6 months'
+        AND NOT EXISTS (
+              SELECT 1
+              FROM permisos."usuariosEnGrupos"
+              WHERE permisos."usuariosEnGrupos".usuario = usuarios.usuario
+        );
+
+  `;
+        await conexion.query(consultaCuentaAntiguas);
     } catch (errorCapturado) {
         throw errorCapturado;
     }

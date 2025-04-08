@@ -1,17 +1,17 @@
 body {
-    /* background-color: rgba(0, 0, 0, 0.1); */
+    background-color: white;
 }
 
 .menuGlobal_styloCompartido {
     background-color: rgba(0, 0, 0, 0.1);
 }
-.botonMenuResponsivo {
-    background-image: url(/activos/iconos/menu_blanco.svg);
-    background-color: rgba(0, 0, 0, 0.1);
-}
+
 
 .uiCategoria {
     color: black;
+}
+summary:hover {
+    background-color: rgba(76, 160, 255, 0.164);
 }
 
 .textoBoton {
@@ -92,4 +92,8 @@ details .contenedor * {
     .contenedor {
         grid-template-columns: 1fr;
     }
+}
+
+.ocultoInicial {
+    display: none;
 }

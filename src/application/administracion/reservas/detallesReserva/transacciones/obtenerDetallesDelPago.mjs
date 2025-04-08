@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../../../shared/configuracion/codigoZonaHoraria.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerPagoPorPagoUID } from "../../../../../infraestructure/repository/reservas/transacciones/pagos/obtenerPagoPorPagoUID.mjs";
@@ -8,11 +8,7 @@ import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../../infraestru
 
 export const obtenerDetallesDelPago = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -26,7 +22,7 @@ export const obtenerDetallesDelPago = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const detallesDelPago = await obtenerPagoPorPagoUID(pagoUID)

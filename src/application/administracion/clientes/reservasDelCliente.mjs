@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerReservasDelClienteComoTitular } from "../../../infraestructure/repository/clientes/obtenerReservasDelClienteComoTitular.mjs";
 import { obtenerReservasDelClienteComoPernoctante } from "../../../infraestructure/repository/clientes/obtenerReservasDelClienteComoPernoctante.mjs";
@@ -8,11 +8,7 @@ import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstr
 
 export const reservasDelCliente = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const esquemaBusqueda = Joi.object({
             clienteUID: Joi.string(),
@@ -33,7 +29,7 @@ export const reservasDelCliente = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         let nombreColumna = validadoresCompartidos.tipos.cadena({
             string: entrada.body.nombreColumna || "",

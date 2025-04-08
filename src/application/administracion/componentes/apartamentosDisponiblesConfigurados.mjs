@@ -1,15 +1,11 @@
 import { obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 
 
 export const apartamentosDisponiblesConfigurados = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const apartamentosDisponiblesConfigurados_ = await obtenerConfiguracionesDeAlojamientoPorEstadoIDVPorZonaIDV({
             estadoIDV: "activado",

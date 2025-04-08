@@ -1,15 +1,11 @@
 import { eliminarSessionPorUsuarioPorSessionIDX } from "../../infraestructure/repository/sessiones/eliminarSessionPorUsuarioPorSessionIDX.mjs";
 import { eliminarTodasLasSessionesMenosPorUsuario } from "../../infraestructure/repository/sessiones/eliminarTodasLasSessionesMenosPorUsuario.mjs";
 import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../shared/VitiniIDX/control.mjs";
+;
 
 
 export const cerrarSessionSelectivamenteDesdeMiCasa = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.control()
-
         const usuarioIDX = entrada.session.usuario;
         const tipoOperacion = entrada.body.tipoOperacion;
 

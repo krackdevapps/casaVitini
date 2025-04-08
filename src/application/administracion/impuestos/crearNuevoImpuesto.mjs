@@ -1,16 +1,13 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { obtenerImpuestosPorNombreDelImpuesto } from "../../../infraestructure/repository/impuestos/obtenerImpuestosPorNombreDelImpuesto.mjs";
 import { insertarImpuesto } from "../../../infraestructure/repository/impuestos/insertarImpuesto.mjs";
 import { validarImpuesto } from "../../../shared/impuestos/validarImpuesto.mjs";
 
+
 export const crearNuevoImpuesto = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
 
@@ -25,6 +22,7 @@ export const crearNuevoImpuesto = async (entrada, salida) => {
         }
         impuestoValidado.estadoIDV = "desactivado"
         const nuevoImpuesto = await insertarImpuesto(impuestoValidado)
+
         const ok = {
             ok: "Se ha creado el nuevo impuesto",
             nuevoImpuestoUID: nuevoImpuesto.impuestoUID

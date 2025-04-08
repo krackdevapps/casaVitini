@@ -9,15 +9,11 @@ import { insertarComplementoAlojamientoPorSimulacionUID } from "../../../../infr
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 
 export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
@@ -31,12 +27,12 @@ export const insertarComplementoDeAlojamientoEnSimulacion = async (entrada) => {
         })
         const complementoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.complementoUID,
-            nombreCampo: "El  complementoUID",
+            nombreCampo: "El complementoUID",
             filtro: "cadenaConNumerosEnteros",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         await obtenerSimulacionPorSimulacionUID(simulacionUID)
         const complemento = await obtenerComplementoPorComplementoUID(complementoUID)

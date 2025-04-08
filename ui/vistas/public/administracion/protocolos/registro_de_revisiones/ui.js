@@ -17,7 +17,7 @@ casaVitini.view = {
     registroRevisiones: {
         arranque: function () {
             const granuladoURL = casaVitini.utilidades.granuladorURL()
-            const parametroBuscar = granuladoURL.parametros.buscar
+            const parametroBuscar = granuladoURL.parametros.buscar || ""
             const main = document.querySelector("main")
 
             const marcoElasticoRelativo = document.createElement("div")
@@ -40,7 +40,6 @@ casaVitini.view = {
             const contenedorLista = document.createElement("div")
             contenedorLista.setAttribute("contenedor", "lista")
             revisionesUI.appendChild(contenedorLista)
-
 
             const parametrosFormatoURL = granuladoURL.parametros
             const parametrosFormatoIDV = {}
@@ -66,8 +65,6 @@ casaVitini.view = {
             this.mostrarElementosResueltos(parametrosFormatoIDV)
         },
         mostrarElementosResueltos: async function (transaccion) {
-
-
 
             const main = document.querySelector("main")
 
@@ -123,6 +120,7 @@ casaVitini.view = {
                 selectorInventarioUI.querySelector("[componente=estadoBusqueda]").textContent = "No se han encontrado elementos en el registro de revisiones"
                 return
             }
+
             selectorInventarioUI.querySelector("[componente=estadoBusqueda]")?.remove()
             const elementos = respuestaServidor.elementos
             const buscar = respuestaServidor?.buscar || ""
@@ -174,13 +172,15 @@ casaVitini.view = {
             if (pagina > 1 && paginasTotales > 1) {
                 parametrosFinales.pagina = pagina
             }
+
             const estructuraParametrosFinales = []
             for (const [parametroFinal, valorFinal] of Object.entries(parametrosFinales)) {
                 const estructura = `${parametroFinal}:${valorFinal}`
-                if (parametroFinal !== "buscar" && valorFinal !== "") {
+                if (valorFinal !== "") {
                     estructuraParametrosFinales.push(estructura)
                 }
             }
+
             let parametrosURLFInal = ""
             if (estructuraParametrosFinales.length > 0) {
                 parametrosURLFInal = "/" + estructuraParametrosFinales.join("/")
@@ -266,10 +266,10 @@ casaVitini.view = {
                 const granuladoURL = casaVitini.utilidades.granuladorURL()
                 selectorInventarioUI.querySelector("[areaGrid=gridListaRevisiones]")?.remove()
                 const titulo = "casavitini"
-                const estado = casaVitini.view.verTodoInventario.navegacion.estadoInicial
-                const url = "/administracion/inventario/ver_todo_el_inventario"
+                const estado = casaVitini.view.registroRevisiones.navegacion.estadoInicial
+                const url = "/administracion/protocolos/registro_de_revisiones"
                 if (url !== granuladoURL.raw.toLocaleLowerCase()) {
-                    window.history.pushState(estado, titulo, "/administracion/inventario/ver_todo_el_inventario");
+                    window.history.pushState(estado, titulo, "/administracion/protocolos/registro_de_revisiones");
                 }
 
             }
@@ -343,7 +343,7 @@ casaVitini.view = {
                 main.appendChild(ui)
             }
             if (respuestaServidor.ok) {
-                console.log("r", respuestaServidor)
+
 
                 const revision = respuestaServidor.revision
 
@@ -366,7 +366,7 @@ casaVitini.view = {
 
                 const aUI = document.createElement("p")
                 aUI.classList.add("padding10", "fontSize20", "negrita")
-                aUI.textContent = apartamentoUI + `(${apartamentoIDV})`
+                aUI.textContent = apartamentoUI + ` (${apartamentoIDV})`
                 mE.appendChild(aUI)
 
 
@@ -559,7 +559,7 @@ casaVitini.view = {
 
 
                 tareas.forEach(t => {
-                    console.log("t", t)
+
                     const tareaUI = t.tareaUI
                     const color = t.color
                     const explicacion = t.explicacion || "El realizante no dejo ninguna nota de por que no se puedo realizar la revisión"

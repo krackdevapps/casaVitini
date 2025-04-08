@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex"
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { procesador } from "../../../../shared/contenedorFinanciero/procesador.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs"
@@ -18,11 +18,7 @@ import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simu
 export const reconstruirDesgloseDesdeHubs = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -34,7 +30,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const sobreControl = validadoresCompartidos.tipos.cadena({
@@ -44,7 +40,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         if (sobreControl !== "" && sobreControl !== "activado") {
             const error = "El campo sobreControl si esta definido solo puede ser activado o un string vacío"
@@ -58,7 +54,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
                 devuelveUnTipoNumber: "no",
-                devuelveUnTipoBigInt: "si"
+                devuelveUnTipoBigInt: "no"
             })
             if (palabra !== "reconstruir") {
                 const error = "Por favor, escribe correctamente la palabra, reconstruir en el campo de texto. Escribe la palabra, reconstruir en minúsculas y sin espacios internos. Esto está así para evitar falsos clics."
@@ -77,7 +73,7 @@ export const reconstruirDesgloseDesdeHubs = async (entrada) => {
         const alojamientosSimulacion = await obtenerTodoElAlojamientoDeLaSimulacionPorSimulacionUID(simulacionUID)
         const apartamentosArray = alojamientosSimulacion.map(a => a.apartamentoIDV)
 
-       const serviciosInstantaneaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
+        const serviciosInstantaneaSimulacion = await obtenerServiciosPorSimulacionUID(simulacionUID)
 
         for (const servicio of serviciosInstantaneaSimulacion) {
             const servicioUID_enSimulacion = servicio.servicioUID

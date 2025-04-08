@@ -1,16 +1,12 @@
 import Joi from "joi";
 import { obtenerParConfiguracionUsuario } from "../../../../infraestructure/repository/configuracion/configuracionUsuario/obtenerParConfiguracionUsuario.mjs";
 import { controlEstructuraPorJoi } from "../../../../shared/validadores/controlEstructuraPorJoi.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 
 export const obtenerConfiguracion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         const usuario = entrada.session.usuario
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
@@ -18,7 +14,7 @@ export const obtenerConfiguracion = async (entrada) => {
             paresConfIDV: Joi.array().items(
                 Joi.string().custom((value, helpers) => {
                     try {
-                            return validadoresCompartidos.tipos.cadena({
+                        return validadoresCompartidos.tipos.cadena({
                             string: value,
                             nombreCampo: "El identificador de paresConfIDV",
                             filtro: "rutaArbol",
@@ -33,21 +29,21 @@ export const obtenerConfiguracion = async (entrada) => {
                 })).min(1).messages(commonMessages).required(),
         }).required().messages(commonMessages)
 
-      const objectoValidado = controlEstructuraPorJoi({
+        const objectoValidado = controlEstructuraPorJoi({
             schema: esquema,
             objeto: entrada.body
         })
         const paresConfIDV = objectoValidado.paresConfIDV
-        
+
         const paresConfiguracion = await obtenerParConfiguracionUsuario({
             paresConfIDV,
             usuario
         })
 
 
-        
+
         const ok = {
-            ok: "Configuraciones encontradas del usuarios" ,
+            ok: "Configuraciones encontradas del usuarios",
             paresConfiguracion
         };
         return ok

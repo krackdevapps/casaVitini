@@ -19,7 +19,7 @@ export const validarDataGlobalSimulacion = async (data) => {
                         sePermiteVacio: "no",
                         limpiezaEspaciosAlrededor: "si",
                         devuelveUnTipoNumber: "no",
-                        devuelveUnTipoBigInt: "si"
+                        devuelveUnTipoBigInt: "no"
                     })
 
                 } catch (error) {
@@ -69,9 +69,9 @@ export const validarDataGlobalSimulacion = async (data) => {
                 dataFecha: fechaCreacionVal,
                 nombreCampo: "El cammpo de fecha de creación"
             })
-    
+
         }
-    
+
 
         const fechaEntradaVal = objectoValidado?.fechaEntrada
         if (fechaEntradaVal) {
@@ -79,9 +79,9 @@ export const validarDataGlobalSimulacion = async (data) => {
                 dataFecha: fechaEntradaVal,
                 nombreCampo: "El cammpo de fecha de entrad"
             })
-       
+
         }
-   
+
 
         const fechaSalidaVal = objectoValidado.fechaSalida
         if (fechaSalidaVal) {
@@ -89,7 +89,7 @@ export const validarDataGlobalSimulacion = async (data) => {
                 dataFecha: fechaSalidaVal,
                 nombreCampo: "El cammpo de fecha de salida"
             })
-    
+
         }
 
         const simulacionUID = objectoValidado.simulacionUID

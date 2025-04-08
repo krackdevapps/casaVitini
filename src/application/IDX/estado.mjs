@@ -3,6 +3,7 @@ import { obtenerUsuario } from "../../infraestructure/repository/usuarios/obtene
 import { eliminarSessionPorRolPorCaducidad } from "../../infraestructure/repository/sessiones/eliminarSessionPorRolPorCaducidad.mjs";
 import { eliminarUsuarioPorRolPorEstadoVerificacion } from "../../infraestructure/repository/usuarios/eliminarUsuarioPorRolPorEstadoVerificacion.mjs";
 import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
+import { obtenerGruposDelUsuario } from "../../infraestructure/repository/secOps/obtenerGruposDelUsuario.mjs";
 
 export const estado = async (entrada) => {
     try {
@@ -14,13 +15,15 @@ export const estado = async (entrada) => {
         await eliminarUsuarioPorRolPorEstadoVerificacion();
         await eliminarSessionPorRolPorCaducidad();
 
+        
         const usuario = entrada.session?.usuario;
-        const rolIDV = entrada.session?.rolIDV;
         const respuesta = {};
         if (usuario) {
+
+            const gruposDelUsuario = await obtenerGruposDelUsuario(usuario)
             respuesta.estadoIDV = "conectado";
             respuesta.usuario = usuario;
-            respuesta.rolIDV = rolIDV;
+            respuesta.gruposDelUsuario = gruposDelUsuario;
             respuesta.cuentaVerificadaIDV = "no";
             const cuentaUsuario = await obtenerUsuario({
                 usuario,

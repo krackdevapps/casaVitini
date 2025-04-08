@@ -42,8 +42,7 @@ casaVitini.view = {
             const marcoCuenta = instanciaRenderizada.querySelector("[componente=marcoCuenta]")
 
             const info = document.createElement("div")
-            info.classList.add("miCuenta_cambiarClave_testo")
-            info.classList.add("negrita")
+                        info.classList.add("negrita", "textoCentrado")
             info.textContent = "Se ha cambiado la clave correctamente, ya puede usarla. También se recomienda que revise las sesiones abiertas. Diríjase a Mi Casa > Sesiones"
             marcoCuenta.appendChild(info)
 

@@ -6,17 +6,13 @@ import { rango } from "../../../../shared/reservas/buscador/rango.mjs";
 import { validadorBusqueda } from "../../../../shared/reservas/buscador/validarBusqueda.mjs";
 import { controlEstructuraPorJoi } from "../../../../shared/validadores/controlEstructuraPorJoi.mjs";
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { todo } from "../../../../shared/reservas/buscador/todo.mjs";
 
 export const listarReservas = async (entrada) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
 
         const esquemaBusqueda = Joi.object({
@@ -25,8 +21,8 @@ export const listarReservas = async (entrada) => {
             nombreColumna: Joi.string(),
             sentidoColumna: Joi.string(),
             tipoCoincidencia: Joi.string(),
-            fechaEntrada: Joi.date(),
-            fechaSalida: Joi.date(),
+            fechaEntrada: Joi.string(),
+            fechaSalida: Joi.string(),
             termino: Joi.string()
         }).required()
 

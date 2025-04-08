@@ -1,26 +1,30 @@
 import { evitarDuplicados } from "../../../shared/contenedorFinanciero/comportamientoPrecios/evitarDuplicados.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { insertarComportamientoDePrecio } from "../../../infraestructure/repository/comportamientoDePrecios/insertarComportamientoDePrecio.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { validarComportamiento } from "../../../shared/contenedorFinanciero/comportamientoPrecios/validarComportamiento.mjs";
 import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
+
 export const crearComportamiento = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         await semaforoCompartidoReserva.acquire();
-        const comportamiento = {
+
+
+        const oVal = await validarComportamiento({
             nombreComportamiento: entrada.body.nombreComportamiento,
             estadoInicialDesactivado: "desactivado",
             contenedor: entrada.body.contenedor,
             estadoInicialDesactivado: "crear",
+        })
+        const comportamiento = {
+            nombreComportamiento: oVal.nombreComportamiento,
+            estadoInicialDesactivado: "desactivado",
+            contenedor: oVal.contenedor,
+            estadoInicialDesactivado: "crear",
         }
 
-
-        await validarComportamiento(comportamiento)
         await campoDeTransaccion("iniciar")
 
         const testingVI = process.env.TESTINGVI
@@ -36,6 +40,7 @@ export const crearComportamiento = async (entrada) => {
 
         await evitarDuplicados(dataEvitarDuplicados);
         const nuevoComportamiento = await insertarComportamientoDePrecio(comportamiento)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha creado correctamente el comportamiento",

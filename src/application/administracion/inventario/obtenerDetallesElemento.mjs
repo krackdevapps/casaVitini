@@ -1,14 +1,11 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
+import { obtenerCategoriasDelElementoPorElementoUID } from "../../../infraestructure/repository/inventario/categorias/obtenerCategoriasDelElementoPorElementoUID.mjs";
 import { obtenerElementoPorElementoUID } from "../../../infraestructure/repository/inventario/obtenerElementoPorElementoUID.mjs";
 import { validarElemento } from "../../../shared/inventario/validarElemento.mjs";
 
 export const obtenerDetallesElemento = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
 
         const elementoValidado = validarElemento({
@@ -18,9 +15,18 @@ export const obtenerDetallesElemento = async (entrada) => {
             ]
         })
 
-        const elemento = await obtenerElementoPorElementoUID(elementoValidado.elementoUID)
+        const elemento = await obtenerElementoPorElementoUID({
+            elementoUID: elementoValidado.elementoUID,
+            errorSi: "noExiste"
+        })
+        const categoriasDelEmento = await obtenerCategoriasDelElementoPorElementoUID({
+            elementoUID: elementoValidado.elementoUID,
+            errorSi: "desactivado"
+        })
+        // obtener categorias del elemento
         const ok = {
-            ok: elemento
+            ok: elemento,
+            categoriasDelEmento
         };
         return ok
     } catch (errorCapturado) {

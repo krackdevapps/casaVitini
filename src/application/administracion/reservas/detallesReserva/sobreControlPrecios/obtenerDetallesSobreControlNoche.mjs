@@ -1,16 +1,12 @@
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
 import { obtenerSobreControlDeLaNocheDesdeReserva } from "../../../../../infraestructure/repository/reservas/transacciones/sobreControl/obtenerSobreControlDeLaNocheDesdeReserva.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const obtenerDetallesSobreControlNoche = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -23,7 +19,7 @@ export const obtenerDetallesSobreControlNoche = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,

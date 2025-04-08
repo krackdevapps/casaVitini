@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { obtenerTodosLosBloqueos } from "../../../infraestructure/repository/bloqueos/obtenerTodosLosBloqueos.mjs";
 import { obtenerBloqueosDelApartamentoPorApartamentoIDV } from "../../../infraestructure/repository/bloqueos/obtenerBloqueosDelApartamentoPorApartamentoIDV.mjs";
@@ -6,11 +6,7 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraes
 
 export const listarApartamentosConBloqueos = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
 
         await eliminarBloqueoCaducado();

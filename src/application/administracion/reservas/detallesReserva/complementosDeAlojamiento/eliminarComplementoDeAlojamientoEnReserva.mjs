@@ -2,17 +2,12 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { eliminarComplementoAlojamientoEnReservaPorComplementoUID } from "../../../../../infraestructure/repository/reservas/complementosAlojamiento/eliminarComplementoAlojamientoEnReservaPorComplementoUID.mjs"
 import { obtenerComplementoAlojamientoEnReservaPorComplementoUID } from "../../../../../infraestructure/repository/reservas/complementosAlojamiento/obtenerComplementoAlojamientoEnReservaPorComplementoUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const eliminarComplementoDeAlojamientoEnReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1

@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validarElemento } from "../../../../../shared/inventario/validarElemento.mjs";
 import { obtenerRevisionPorRevisionUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerRevisionPorRevisionUID.mjs";
 import { obtenerTareaPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/obtenerTareaPorUID.mjs";
@@ -6,11 +6,7 @@ import { obtenerProtocoloPorUID } from "../../../../../infraestructure/repositor
 
 export const obtenerDetallesRevision = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const elementoValidado = validarElemento({
             o: entrada.body,

@@ -270,6 +270,8 @@ describe('crudEntitiys', () => {
                 entidadIDV: apartamentoIDV,
                 apartamentoIDV: apartamentoIDV,
                 apartamentoUI: apartamentoUI,
+                numeroHuespedes: "1",
+                descripcion: "",
                 apartamentoUIPublico: "apartamento actualziado",
                 definicionPublica: "Definicion actualizada",
                 caracteristicas: [

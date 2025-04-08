@@ -102,11 +102,13 @@ const casaVitini = {
                 // }
                 //  await casaVitini.utilidades.ralentizador(5000)
                 const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
                 const contenedorVista = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
                 if (contenedorVista) {
                     const selectorPantallaCargaRenderizdaPostPeticion = document.querySelector("[ui=pantallaDeCarga]")
                     main.removeAttribute("rama")
                     if (respuestaServidor?.error) {
+
                         casaVitini.shell.controladoresUI.limpiarMain()
                         contenedorVista.removeAttribute("rama")
                         await casaVitini.shell.controladoresUI.controladorEstadoIDX()
@@ -119,8 +121,15 @@ const casaVitini = {
                         marcoError.classList.add("plaza_marcoError_seccion")
                         marcoError.setAttribute("ui", "global")
                         marcoError.textContent = respuestaServidor.error
-
                         contenedorVista.appendChild(marcoError)
+
+                        if (respuestaServidor.detallesDelPermiso) {
+                            const detallesDelPermiso = respuestaServidor.detallesDelPermiso
+                            const infoPermiso = document.createElement("p")
+                            infoPermiso.textContent = detallesDelPermiso?.vista || detallesDelPermiso?.controlador
+                            contenedorVista.appendChild(infoPermiso)
+                        }
+
                         main.removeAttribute("style")
 
                     } else if (respuestaServidor?.ok) {
@@ -129,6 +138,8 @@ const casaVitini = {
                         const html = respuestaServidor.html
                         const css = respuestaServidor.css
                         const js = respuestaServidor.js
+
+
                         const sharedMethods = respuestaServidor.sharedMethods
                         const urlWithoutParams = respuestaServidor.urlWithoutParams
                         const params = respuestaServidor.params
@@ -316,7 +327,7 @@ const casaVitini = {
                     nombre: "Situación",
                     zona: "situacion"
                 }, {
-                    href: "/administracion/calendario",
+                    href: "/administracion/calendario/alojamientos",
                     nombre: "Calendario",
                     zona: "calendario"
                 }, {
@@ -512,14 +523,14 @@ const casaVitini = {
                 }
                 if (respuestaServidor?.ok) {
                     let tipo;
-                    const rolIDV = respuestaServidor?.rolIDV;
-                    if (rolIDV === "cliente") {
+                    const gruposDelUsuario = respuestaServidor?.gruposDelUsuario || []
+
+                    if (gruposDelUsuario.length > 0) {
+                        tipo = "panelControl"
+                    } else {
                         tipo = "publica"
                     }
-                    if (rolIDV === "administrador" ||
-                        rolIDV === "empleado") {
-                        tipo = "panelControl"
-                    }
+
                     const zonaActual = document.querySelector("header [estructura=menu]").getAttribute("vistaActual")
                     return casaVitini.shell.navegacion.controladorVista({
                         vista: zonaActual,
@@ -635,7 +646,7 @@ const casaVitini = {
             controladorEstadoIDX: async () => {
                 const IDX = await casaVitini.shell.IDX.estadoSession()
                 const estadoIDV = IDX?.estadoIDV || null
-                const rolIDV = IDX?.rolIDV
+                const gruposDelUsuario = IDX?.gruposDelUsuario
                 if (estadoIDV === "desconectado" || !estadoIDV) {
                     const navegacion = {
                         tipo: "publica",
@@ -644,20 +655,20 @@ const casaVitini = {
                         estadoIDV: estadoIDV
                     }
                     casaVitini.shell.navegacion.controladorNavegacion(navegacion)
-                } else if (estadoIDV === "conectado" && (rolIDV === "administrador" || rolIDV === "empleado")) {
+                } else if (estadoIDV === "conectado" && (gruposDelUsuario.length > 0)) {
                     const navegacion = {
                         tipo: "panelControl",
                         usuario: IDX.usuario,
-                        rolIDV: rolIDV,
+                        // rolIDV: rolIDV,
                         estadoIDV: estadoIDV,
                         origen: "controlador"
                     }
                     casaVitini.shell.navegacion.controladorNavegacion(navegacion)
-                } else if (estadoIDV === "conectado" && rolIDV === "cliente") {
+                } else if (estadoIDV === "conectado" && (gruposDelUsuario.length === 0)) {
                     const navegacion = {
                         tipo: "publica",
                         usuario: IDX.usuario,
-                        rolIDV: rolIDV,
+                        // rolIDV: rolIDV,
                         estadoIDV: estadoIDV,
                         origen: "controlador"
                     }
@@ -920,7 +931,19 @@ const casaVitini = {
                         })
                     })
                 }
-            }
+            },
+            ocultarCalendario: (e) => {
+                if (e?.target) {
+                    const bloqueCalendario = e.target.closest("[contenedor=bloqueCalendario]")
+                    if (bloqueCalendario) {
+                        return
+                    }
+                }
+                const bloqueCalendario = document.querySelectorAll("[componente=bloqueCalendario]")
+                bloqueCalendario.forEach(calendarioRenderizado => {
+                    calendarioRenderizado.remove()
+                });
+            },
         },
         servidor: async function (transaccion) {
             const puerto = '/puerto';
@@ -934,6 +957,7 @@ const casaVitini = {
             try {
                 const servidor = await fetch(puerto, peticion);
                 const respuestaServidor = await servidor.json();
+
                 if (!respuestaServidor) {
                     this.controladoresUI.interrumpirTransicionVistas()
                     return casaVitini.ui.componentes.errorUI()
@@ -958,6 +982,32 @@ const casaVitini = {
                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                     casaVitini.shell.controladoresUI.limpiarMain()
                     return casaVitini.ui.componentes.urlDesconocida()
+                } else if (respuestaServidor?.error && respuestaServidor.detallesDelPermiso) {
+                    this.controladoresUI.interrumpirTransicionVistas()
+                    casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                    casaVitini.shell.controladoresUI.limpiarMain()
+                    const main = document.querySelector("main")
+
+                    const marcoElasticoRelativo = document.createElement("div")
+                    marcoElasticoRelativo.classList.add("marcoElasticoRelativo")
+                    marcoElasticoRelativo.style.maxWidth = "720px"
+                    main.appendChild(marcoElasticoRelativo)
+
+                    const marcoError = document.createElement("div")
+                    marcoError.classList.add("padding22")
+                    marcoError.setAttribute("ui", "global")
+                    marcoError.textContent = respuestaServidor.error
+                    marcoElasticoRelativo.appendChild(marcoError)
+
+                    if (respuestaServidor.detallesDelPermiso) {
+                        const detallesDelPermiso = respuestaServidor.detallesDelPermiso
+                        const infoPermiso = document.createElement("p")
+                        infoPermiso.classList.add("negrita")
+                        infoPermiso.textContent = detallesDelPermiso?.vista || detallesDelPermiso?.controlador
+                        marcoElasticoRelativo.appendChild(infoPermiso)
+                    }
+
+
                 } else {
                     return respuestaServidor
                 }
@@ -1960,7 +2010,6 @@ const casaVitini = {
                     const perfilMes = data.perfilMes
                     const zonaDespliegue = data?.zonaDespliegue || "main"
 
-
                     const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
                     const metodoSelectorDia = data?.metodoSelectorDia || "ui.componentes.calendario.calendarioCompartido.seleccionarDia"
                     const areaContenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
@@ -2002,7 +2051,9 @@ const casaVitini = {
 
 
                     document.querySelector(zonaDespliegue).appendChild(calendarioUI)
+
                     document.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
+
                     const configGlobal = calendarioUI.querySelector("[contenedor=calendario]")
                     const fechasSeleccionadas = () => {
                         const fechaEntradaVolatil = areaContenedorFechas.querySelector("[calendario=entrada]").
@@ -2033,6 +2084,7 @@ const casaVitini = {
                         return contenedorFechas
                     }
                     const resolverCalendario = {}
+
                     if (rangoIDV === "inicioRango") {
                         const tituloCalendario = data?.tituloCalendario || "Selecciona una fecha"
                         if (fechasSeleccionadas().fechaEntrada?.volatil) {
@@ -2131,10 +2183,12 @@ const casaVitini = {
                             configGlobal.setAttribute("calendarioIO", "unico")
                             configGlobal.querySelector("[componente=infoCalendario]").textContent = tituloCalendario
                         }
+
                     } else {
                         const m = "configurarCalendario no reconoce el rango, puede ser inicioRango, finalRango o unico"
                         return casaVitini.ui.componentes.advertenciaInmersiva(m)
                     }
+
                     const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo(resolverCalendario)
                     calendarioResuelto.origen = "configuracionCalendario"
                     calendarioResuelto.instanciaUID = instanciaUID
@@ -2269,10 +2323,14 @@ const casaVitini = {
                     try {
                         const instanciaUID = calendario.instanciaUID
                         const instanciaUID_contenedorFechas = calendario.instanciaUID_contenedorFechas
+
+
+
                         const origen = calendario.origen
                         const selectorCalendarioRenderizado = document.querySelector(`[instanciaUID="${instanciaUID}"]`)
                         const instanciaUID_procesoCambioMes = calendario.instanciaUID_procesoCambioMes
                         if (!selectorCalendarioRenderizado) {
+
                             return
                         }
                         const metodoSelectorDia = selectorCalendarioRenderizado.querySelector("[metodoSelectorDia]").getAttribute("metodoSelectorDia")
@@ -4278,6 +4336,60 @@ const casaVitini = {
                             selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
                             selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
+                        } else if (perfilMes === "calendario_unico_asistido_sinPasado") {
+                            const contenedorFechas = document.querySelector(`[instanciaUID_contenedorFechas="${instanciaUID_contenedorFechas}"]`)
+                            if (!contenedorFechas) {
+                                const error = "El perfil de calendario_unico_perfilSimple no encuentra el contenedor de fechas de destino"
+                                casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
+                                casaVitini.ui.componentes.advertenciaInmersiva(error)
+                            }
+                            const mesActual_decimal = parseInt(calendario.mes, 10)
+                            const anoActual_decimal = parseInt(calendario.ano, 10)
+                            const selectorFechaUnica = contenedorFechas.querySelector("[calendario=unico]")?.getAttribute("memoriaVolatil")
+                            const fechaUnicaSeleccionada = {}
+                            if (selectorFechaUnica) {
+                                fechaUnicaSeleccionada.dia = parseInt(selectorFechaUnica.split("-")[2], 10)
+                                fechaUnicaSeleccionada.mes = parseInt(selectorFechaUnica.split("-")[1], 10)
+                                fechaUnicaSeleccionada.ano = parseInt(selectorFechaUnica.split("-")[0], 10)
+                            }
+                            marcoCalendario?.setAttribute("perfilMes", perfilMes)
+                            for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                                const diaFinal_decimal = parseInt(numeroDia + 1, 10);
+                                const bloqueDia = document.createElement("li")
+                                bloqueDia.setAttribute("class", "dia")
+                                bloqueDia.textContent = diaFinal_decimal
+                                bloqueDia.classList.add("calendarioDiaDisponible")
+                                bloqueDia.addEventListener("click", pasarelaX)
+                                if (diaFinal_decimal === 1) {
+                                    bloqueDia.style.gridColumnStart = posicionDia1
+                                }
+                                bloqueDia.setAttribute("dia", diaFinal_decimal)
+                                if (calendario.tiempo === "presente") {
+                                    if (diaFinal_decimal === diaActual_decimal) {
+                                        bloqueDia.style.border = "3px solid ghostwhite"
+                                    }
+                                }
+                                if (detallesDiasOcupacion[diaFinal_decimal]?.estadoDia === "diaParcial") {
+                                    bloqueDia.classList.add("calendarioDiaParcial")
+                                }
+                                if (detallesDiasOcupacion[diaFinal_decimal]?.estadoDia === "diaCompleto") {
+                                    bloqueDia.classList.add("calendarioDiaCompleto")
+                                }
+                                if (Object.keys(fechaUnicaSeleccionada).length) {
+                                    if (mesActual_decimal === fechaUnicaSeleccionada.mes && anoActual_decimal === fechaUnicaSeleccionada.ano) {
+                                        if (diaFinal_decimal === fechaUnicaSeleccionada.dia) {
+                                            bloqueDia.classList.remove("calendarioDiaDisponible")
+                                            bloqueDia.classList.add("calendarioDiaSeleccionado")
+                                            bloqueDia.setAttribute("estadoDia", "seleccionado")
+                                        }
+                                    }
+                                }
+                                marcoMes?.appendChild(bloqueDia)
+                            }
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAtras").style.pointerEvents = "all"
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.opacity = 1
+                            selectorCalendarioRenderizado.querySelector("#botonAdelante").style.pointerEvents = "all"
                         }
                         if (instanciaUID_procesoCambioMes) {
                             const selectorMarcoMesRenderizadoEnEspera = selectorCalendarioRenderizado
@@ -4291,7 +4403,9 @@ const casaVitini = {
                             selectorCalendarioRenderizado.querySelector("[contenedor=calendario]").removeAttribute("style")
                         }
                     } catch (errorCapturado) {
+
                         throw errorCapturado
+
                     }
                 },
                 resolverCalendarioNuevo: async (data) => {
@@ -4710,6 +4824,640 @@ const casaVitini = {
                     }
                 },
             },
+            nuevoMotorCalendaio: {
+                arranque: async function (data) {
+                    let calendarioUI
+                    try {
+                        const mesInicial = data.mesInicial
+                        const anoInicial = data.anoInicial
+                        const tipoFechaInicial = data.tipoFechaInicial || "actual"
+                        const destino = data.destino
+
+                        const mensajeCalendario = data?.mensajeCalendario || "Seleciona una fecha"
+                        const configuracionLimites = data?.configuracionLimites || {}
+                        const fechaLimitePasado = configuracionLimites.fechaLimitePasado
+                        const fechaLimiteFuturo = configuracionLimites.fechaLimiteFuturo
+                        const incluirMismoDiaEnElLimitePasado = configuracionLimites?.incluirMismoDiaEnElLimitePasado || "no"
+                        const incluirMismoDiaEnElLimiteFuturo = configuracionLimites?.incluirMismoDiaEnElLimiteFuturo || "no"
+                        const primeraFechaDisponible = configuracionLimites.primeraFechaDisponible || "desactivado"
+                        const limiteFuturo = configuracionLimites.limiteFuturo || "desactivado"
+
+                        const selecion = data.selecion
+                        const diaSelecionado = selecion.diaSelecionado
+                        const inicioRango = selecion.inicioRango
+                        const finalRango = selecion.finalRango
+                        const metodoSelectorDia = selecion.metodoSelectorDia
+                        const autoCerrar = data.autoCerrar || "activado"
+                        const objetoPipe = data?.objetoPipe
+
+                        const resolucion = {
+                            tipo: "actual"
+                        }
+
+                        if (tipoFechaInicial === "personalizado") {
+                            if (!mesInicial) {
+                                throw new Error("Si se especifica tipoFechaInicial en personalizado, hay que definir mesInicial")
+                            } else if (!anoInicial) {
+                                throw new Error("Si se especifica tipoFechaInicial en personalizado, hay que definir anoInicial")
+                            }
+                            resolucion.tipo = "personalizado"
+                            resolucion.mes = mesInicial
+                            resolucion.ano = anoInicial
+                        }
+                        this.preLimpieza()
+                        const instanciaUID = casaVitini.utilidades.codigoFechaInstancia()
+                        calendarioUI = this.calendarioUI({
+                            mensajeCalendario
+                        })
+                        if (objetoPipe) {
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("objetoPipe", JSON.stringify(objetoPipe))
+                        }
+
+                        if (metodoSelectorDia) {
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("metodoSelectorDia", metodoSelectorDia)
+                        }
+
+                        if (fechaLimitePasado && fechaLimiteFuturo) {
+                            this.controRangoLimites({
+                                pasado: fechaLimitePasado,
+                                futuro: fechaLimitePasado
+                            })
+                        }
+
+                        if (incluirMismoDiaEnElLimitePasado) {
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("incluirMismoDiaEnElLimitePasado", incluirMismoDiaEnElLimitePasado)
+                        }
+                        if (incluirMismoDiaEnElLimiteFuturo) {
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("incluirMismoDiaEnElLimiteFuturo", incluirMismoDiaEnElLimiteFuturo)
+                        }
+                        if (fechaLimitePasado) {
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("fechaLimitePasado", fechaLimitePasado)
+                        }
+
+
+                        if (fechaLimiteFuturo) {
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("fechaLimiteFuturo", fechaLimiteFuturo)
+                        }
+
+                        if (diaSelecionado) {
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("diaSelecionado", diaSelecionado)
+                        }
+
+                        if (inicioRango && finalRango) {
+                            this.controRangoLimites({
+                                pasado: inicioRango,
+                                futuro: finalRango
+                            })
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("inicioRango", inicioRango)
+                            calendarioUI.querySelector("[contenedor=calendario]").setAttribute("finalRango", finalRango)
+                        }
+
+                        calendarioUI.setAttribute("instanciaUID", instanciaUID)
+                        document.querySelector(destino).appendChild(calendarioUI)
+
+                        const calendarioResuelto = await this.resolucion(resolucion)
+                        if (calendarioResuelto.error) {
+                            throw new Error(calendarioResuelto.error)
+                        }
+
+                        this.controlLimitesReservaPublica({
+                            calendarioResuelto,
+                            calendarioUI,
+                            primeraFechaDisponible,
+                            limiteFuturo
+                        })
+
+                        this.mesUI({
+                            calendarioResuelto,
+                            calendarioUI,
+                        })
+
+                        this.controlBotonesDeNavegacionPorLimites({
+                            calendarioUI,
+                            mesActual: calendarioResuelto.mes,
+                            anoActual: calendarioResuelto.ano,
+                            calendarioResuelto,
+                            fechaLimitePasado,
+                            fechaLimiteFuturo
+                        })
+
+                        if (autoCerrar === "activado") {
+                            const cierraCalendario = (e) => {
+                                if (e?.target) {
+                                    const bloqueCalendario = e.target.closest("[componente=bloqueCalendario]");
+                                    if (bloqueCalendario) {
+                                        // Remueve el event listener cuando se cumple la condición
+
+                                        return;
+                                    } else {
+                                        document.removeEventListener('click', cierraCalendario);
+
+                                    }
+                                }
+                                calendarioUI?.remove();
+                                const calendarioObsoletos = document.querySelectorAll("[componente=bloqueCalendario]")
+                                if (calendarioObsoletos.length === 0) {
+                                    document.removeEventListener('click', cierraCalendario);
+                                }
+                            };
+                            document.removeEventListener('click', cierraCalendario);
+                            document.addEventListener('click', cierraCalendario);
+                        }
+                    } catch (error) {
+                        calendarioUI?.remove()
+                        //casaVitini.ui.componentes.advertenciaInmersiva(error)
+                        //console.error(error)
+                        throw error
+                    }
+                },
+                calendarioUI: function (data) {
+                    try {
+                        const mensajeCalendario = data.mensajeCalendario
+                        const bloqueCalendario = document.createElement("div")
+                        bloqueCalendario.classList.add(
+                            "bloqueCalendarioNuevo",
+                            "calendarioFlotante",
+                            "sobreControlAnimacionGlobal"
+                        )
+                        bloqueCalendario.setAttribute("componente", "bloqueCalendario")
+
+                        const calendario = document.createElement("div")
+                        calendario.classList.add("calendarioNuevo")
+                        calendario.setAttribute("contenedor", "calendario")
+                        bloqueCalendario.appendChild(calendario)
+
+                        const botonCerrarCalResponsivo = document.createElement("div")
+                        botonCerrarCalResponsivo.classList.add(
+                            "padding10",
+                            "borderRadius10",
+                            "selectorRojo",
+                            "flextJustificacion_center",
+                            // "mostrarSoloEnResponsivo"
+                        )
+                        botonCerrarCalResponsivo.textContent = "Cerrar calendario"
+                        botonCerrarCalResponsivo.addEventListener("click", casaVitini.shell.controladoresUI.ocultarElementos)
+                        calendario.appendChild(botonCerrarCalResponsivo)
+
+                        const navegacionMes = document.createElement("nav")
+                        navegacionMes.classList.add("navegacionMes")
+                        calendario.appendChild(navegacionMes)
+
+                        const botonNavegacionMesAtras = document.createElement("div")
+                        botonNavegacionMesAtras.classList.add("botonNavegacionMes")
+                        botonNavegacionMesAtras.setAttribute("boton", "atras")
+                        botonNavegacionMesAtras.textContent = "Atrás"
+                        botonNavegacionMesAtras.addEventListener("click", () => {
+                            this.navegacionCalendario({
+                                sentido: "atras",
+                                calendarioUI: bloqueCalendario
+                            })
+                        })
+                        navegacionMes.appendChild(botonNavegacionMesAtras)
+
+                        const navegacionMesReferencia = document.createElement("div")
+                        navegacionMesReferencia.classList.add("navegacionMesReferencia")
+                        navegacionMesReferencia.setAttribute("componente", "mesReferencia")
+                        navegacionMes.appendChild(navegacionMesReferencia)
+
+                        const botonNavegacionMesAdelante = document.createElement("div")
+                        botonNavegacionMesAdelante.classList.add("botonNavegacionMes")
+                        botonNavegacionMesAdelante.setAttribute("boton", "adelante")
+                        botonNavegacionMesAdelante.textContent = "Adelante"
+                        botonNavegacionMesAdelante.addEventListener("click", () => {
+                            this.navegacionCalendario({
+                                sentido: "adelante",
+                                calendarioUI: bloqueCalendario
+                            })
+                        })
+                        navegacionMes.appendChild(botonNavegacionMesAdelante)
+
+                        const cartelInfoCalendarioEstado = document.createElement("div")
+                        cartelInfoCalendarioEstado.classList.add("cartelInfoCalendarioEstado")
+                        cartelInfoCalendarioEstado.setAttribute("componente", "infoCalendario")
+                        cartelInfoCalendarioEstado.textContent = mensajeCalendario
+                        calendario.appendChild(cartelInfoCalendarioEstado)
+
+                        const marcoMes = document.createElement("ol")
+                        marcoMes.classList.add("marcoMes")
+                        marcoMes.setAttribute("componente", "marcoMes")
+                        marcoMes.style.gridTemplateRows = "min-content min-content"
+                        marcoMes.style.flex = "0"
+                        calendario.appendChild(marcoMes)
+
+                        const pilaDias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+                        for (const nombreDia of pilaDias) {
+                            const diaSemana = document.createElement("li")
+                            diaSemana.classList.add("nombreDia")
+                            diaSemana.setAttribute("tipoNombreDia", "extendido")
+                            diaSemana.textContent = nombreDia
+                            marcoMes.appendChild(diaSemana)
+                        }
+                        const pilaDiasAbreviados = ["L", "M", "X", "J", "V", "S", "D"]
+                        for (const nombreDia of pilaDiasAbreviados) {
+                            const diaSemana = document.createElement("li")
+                            diaSemana.classList.add("nombreDia")
+                            diaSemana.setAttribute("tipoNombreDia", "abreviado")
+                            diaSemana.textContent = nombreDia
+                            marcoMes.appendChild(diaSemana)
+                        }
+
+
+                        const spinner = casaVitini.ui.componentes.spinnerSimple()
+                        const contenedorCarga = document.createElement("div")
+                        contenedorCarga.classList.add("componente_calendario_contenedoCarga_Mes")
+                        contenedorCarga.setAttribute("contenedor", "construyendoMes")
+                        contenedorCarga.appendChild(spinner)
+                        calendario.appendChild(contenedorCarga)
+
+                        return bloqueCalendario
+                    } catch (errorCapturado) {
+                        throw errorCapturado
+                    }
+                },
+                mesUI: function (data) {
+                    try {
+
+                        const calendarioResuelto = data.calendarioResuelto
+                        const calendarioUI = data.calendarioUI
+                        const fechaLimitePasado = calendarioUI.querySelector("[contenedor=calendario]")?.getAttribute("fechaLimitePasado") || ""
+                        const fechaLimiteFuturo = calendarioUI.querySelector("[contenedor=calendario]")?.getAttribute("fechaLimiteFuturo") || ""
+                        const diaSelecionado = calendarioUI.querySelector("[diaSelecionado]")?.getAttribute("diaSelecionado") || ""
+                        const fechaInicioRango = calendarioUI.querySelector("[inicioRango]")?.getAttribute("inicioRango") || ""
+                        const fechaFinalRango = calendarioUI.querySelector("[finalRango]")?.getAttribute("finalRango") || ""
+                        const incluirMismoDiaEnElLimitePasado = calendarioUI.querySelector("[incluirMismoDiaEnElLimitePasado]")?.getAttribute("incluirMismoDiaEnElLimitePasado") || ""
+                        const incluirMismoDiaEnElLimiteFuturo = calendarioUI.querySelector("[incluirMismoDiaEnElLimiteFuturo]")?.getAttribute("incluirMismoDiaEnElLimiteFuturo") || ""
+
+                        calendarioUI.querySelector("[contenedor=construyendoMes]")?.remove()
+                        const marcoMes = calendarioUI.querySelector(`[componente=marcoMes]`)
+                        marcoMes.removeAttribute("style")
+                        const metodoSelectorDia = calendarioUI.querySelector("[metodoSelectorDia]")?.getAttribute("metodoSelectorDia") || ""
+
+                        const pasarelaX = (e) => {
+                            return casaVitini.utilidades.ejecutarFuncionPorNombreDinamicoConContexto({
+                                ruta: metodoSelectorDia,
+                                args: e
+                            })
+                        }
+
+                        const tiempo = calendarioResuelto.tiempo
+                        const diaActual_decimal = parseInt(calendarioResuelto.dia, 10)
+                        const mesActual_decimal = parseInt(calendarioResuelto.mes, 10)
+                        const anoActual_decimal = parseInt(calendarioResuelto.ano, 10)
+
+                        this.fechaUI({
+                            calendarioUI,
+                            mes: mesActual_decimal,
+                            ano: anoActual_decimal
+                        })
+
+                        const posicionDia1 = calendarioResuelto.posicionDia1
+                        const numeroDiasPorMes = calendarioResuelto.numeroDiasPorMes;
+
+                        const valorDinamico = (data) => {
+                            const numeroDiasPorMes = data.numeroDiasPorMes
+                            const posicionDia1 = data.posicionDia1
+                            const filasFuturoGrid = casaVitini.utilidades.calendarios.calcularNumeroSemanasDelMes({
+                                posicionPrimerDiaSemana: posicionDia1,
+                                numeroDiasPorMes: numeroDiasPorMes
+                            })
+                            const final = []
+                            for (let index = 0; index < filasFuturoGrid + 1; index++) {
+                                if (index === 0) {
+                                    final.push("auto")
+                                } else {
+                                    final.push("1fr")
+                                }
+                            }
+                            return final.join(" ")
+                        }
+
+                        marcoMes.style.gridTemplateRows = valorDinamico({
+                            numeroDiasPorMes,
+                            posicionDia1
+                        })
+
+                        for (let numeroDia = 0; numeroDia < numeroDiasPorMes; numeroDia++) {
+                            const diaFinal_decimal = parseInt(numeroDia + 1, 10);
+                            const bloqueDia = document.createElement("li")
+                            bloqueDia.setAttribute("class", "dia")
+                            bloqueDia.setAttribute("tipoDia", "disponible")
+
+                            if (diaFinal_decimal === 1) {
+                                bloqueDia.style.gridColumnStart = posicionDia1
+                            }
+
+                            bloqueDia.setAttribute("dia", diaFinal_decimal)
+                            bloqueDia.addEventListener("click", pasarelaX)
+                            const fechaRenderizada = `${anoActual_decimal}-${String(mesActual_decimal).padStart(2, "0")}-${String(diaFinal_decimal).padStart(2, "0")}`
+                            if (tiempo === "presente" && diaFinal_decimal === diaActual_decimal) {
+                                bloqueDia.style.border = "3px solid white";
+                                bloqueDia.setAttribute("tipoDia", "hoy")
+                            }
+
+                            const limitePasado = this.controlLimiteDiasCalendario({
+                                tiempoLimite: "pasado",
+                                incluirMismoDiaEnElLimite: incluirMismoDiaEnElLimitePasado,
+                                fechaLimite: fechaLimitePasado,
+                                fechaActual: fechaRenderizada
+                            })
+
+                            if (limitePasado) {
+                                bloqueDia.setAttribute("tipoDia", "noDisponible")
+                                bloqueDia.style.background = "red"
+                            }
+
+                            const limiteFuturo = this.controlLimiteDiasCalendario({
+                                tiempoLimite: "futuro",
+                                incluirMismoDiaEnElLimite: incluirMismoDiaEnElLimiteFuturo,
+                                fechaLimite: fechaLimiteFuturo,
+                                fechaActual: fechaRenderizada
+                            })
+
+                            if (limiteFuturo) {
+                                bloqueDia.setAttribute("tipoDia", "noDisponible")
+                                bloqueDia.style.background = "yellow"
+                            }
+
+                            const fechaSelecionada = this.renderizaDiaSelecionado({
+                                fechaActual: fechaRenderizada,
+                                fechaDiaSelecionado: diaSelecionado
+                            })
+
+                            if (fechaSelecionada) {
+                                bloqueDia.setAttribute("tipoDia", "selecionado")
+                                bloqueDia.style.background = "green"
+                            }
+
+                            const rangoSelecionado = this.renderizaRango({
+                                fechaInicioRango: fechaInicioRango,
+                                fechaFinalRango: fechaFinalRango,
+                                fechaActual: fechaRenderizada
+                            })
+
+                            if (rangoSelecionado) {
+                                bloqueDia.setAttribute("tipoDia", "enRango")
+                                bloqueDia.style.background = "pink"
+                            }
+
+                            bloqueDia.textContent = diaFinal_decimal
+                            marcoMes.appendChild(bloqueDia)
+                        }
+
+                    } catch (error) {
+                        throw error
+                    }
+                },
+                controlBotonesDeNavegacionPorLimites: function (data) {
+                    const calendarioUI = data.calendarioUI
+                    const mesActual = data.mesActual
+                    const anoActual = data.anoActual
+                    const fechaLimitePasado = data.fechaLimitePasado || ""
+                    const fechaLimiteFuturo = data.fechaLimiteFuturo || ""
+
+                    const botonAtras = calendarioUI.querySelector("[boton=atras]")
+                    const botonAdelante = calendarioUI.querySelector("[boton=adelante]")
+                    const pasadoGranulado = this.granularFecha(fechaLimitePasado)
+                    const futuroGranulado = this.granularFecha(fechaLimiteFuturo)
+
+                    if (pasadoGranulado.mes === mesActual && pasadoGranulado.ano === anoActual) {
+                        botonAtras.style.opacity = "0"
+                        botonAtras.style.pointerEvents = "none"
+                    } else {
+                        botonAtras.style.opacity = "1"
+                        botonAtras.style.pointerEvents = "all"
+                    }
+
+                    if (futuroGranulado.mes === mesActual && futuroGranulado.ano === anoActual) {
+                        botonAdelante.style.opacity = "0"
+                        botonAdelante.style.pointerEvents = "none"
+                    } else {
+                        botonAdelante.style.opacity = "1"
+                        botonAdelante.style.pointerEvents = "all"
+                    }
+                },
+                granularFecha: function (fecha) {
+                    const fechaGranulada = fecha.split("-")
+                    return {
+                        dia: parseInt(fechaGranulada[2], 10),
+                        mes: parseInt(fechaGranulada[1], 10),
+                        ano: parseInt(fechaGranulada[0], 10)
+                    }
+                },
+                navegacionCalendario: async function (data) {
+                    const boton = data.sentido
+                    const calendarioUI = data.calendarioUI
+
+                    const mesReferencia = calendarioUI.querySelector("[componente=mesReferencia]")
+                    let mesActual = Number(mesReferencia.getAttribute("mes"))
+                    let anoActual = Number(mesReferencia.getAttribute("ano"))
+                    const fechaLimitePasado = calendarioUI.querySelector("[contenedor=calendario]").getAttribute("fechaLimitePasado")
+                    const fechaLimiteFuturo = calendarioUI.querySelector("[contenedor=calendario]").getAttribute("fechaLimiteFuturo")
+                    mesReferencia.textContent = null
+
+                    calendarioUI.querySelectorAll("[dia]").forEach((diaRenderizado) => {
+                        diaRenderizado.remove()
+                    })
+
+                    const spinnerRenderizado = calendarioUI.querySelector("[contenedor=construyendoMes]")
+                    if (!spinnerRenderizado) {
+
+                        const marcoMes = calendarioUI.querySelector("[componente=marcoMes]")
+                        marcoMes.removeAttribute("style")
+                        marcoMes.style.gridTemplateRows = "min-content min-content"
+                        marcoMes.style.flex = "0"
+
+                        const spinner = casaVitini.ui.componentes.spinnerSimple()
+                        const contenedorCarga = document.createElement("div")
+                        contenedorCarga.classList.add("componente_calendario_contenedoCarga_Mes")
+                        contenedorCarga.setAttribute("contenedor", "construyendoMes")
+                        contenedorCarga.appendChild(spinner)
+                        calendarioUI.appendChild(contenedorCarga)
+                    }
+                    if (boton === "adelante") {
+                        if (mesActual + 1 < 13) {
+                            mesActual = mesActual + 1
+                        } else {
+                            mesActual = 1
+                            anoActual = anoActual + 1
+                        }
+                    } else if (boton === "atras") {
+                        if (mesActual - 1 > 0) {
+                            mesActual = mesActual - 1
+                        } else {
+                            mesActual = 12
+                            anoActual = anoActual - 1
+                        }
+                    }
+
+                    this.controlBotonesDeNavegacionPorLimites({
+                        calendarioUI,
+                        mesActual,
+                        anoActual,
+                        fechaLimitePasado,
+                        fechaLimiteFuturo
+                    })
+
+                    this.fechaUI({
+                        calendarioUI,
+                        mes: mesActual,
+                        ano: anoActual
+                    })
+
+                    const calendarioResuelto = await casaVitini.ui.componentes.calendario.resolverCalendarioNuevo({
+                        tipo: "personalizado",
+                        ano: anoActual,
+                        mes: mesActual
+                    })
+                    if (calendarioResuelto.mes === mesActual && calendarioResuelto.ano === anoActual) {
+                        this.mesUI({
+                            calendarioResuelto,
+                            calendarioUI
+                        })
+                    }
+                },
+                fechaUI: function (data) {
+                    const calendarioUI = data.calendarioUI
+                    const mes = data.mes
+                    const ano = data.ano
+
+                    const nombreMes = [
+                        "Enero",
+                        "Febrero",
+                        "Marzo",
+                        "Abrir",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agost",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Diciembre"
+                    ]
+                    const nombreMesFinal = nombreMes[mes - 1]
+                    const indicadorMesAno = nombreMesFinal + " " + ano
+
+                    const navegacionMesReferencia = calendarioUI.querySelector("[componente=mesReferencia]")
+                    navegacionMesReferencia.textContent = indicadorMesAno
+                    navegacionMesReferencia.setAttribute("ano", ano)
+                    navegacionMesReferencia.setAttribute("mes", mes)
+                },
+                resolucion: async (data) => {
+                    const respuestaServidor = await casaVitini.shell.servidor({
+                        zona: "componentes/calendario",
+                        ...data
+                    })
+                    return respuestaServidor
+                },
+                controRangoLimites: function (data) {
+                    try {
+                        const pasado = data.pasado
+                        const futuro = data.futuro
+
+                        const fechaPasado = new Date(pasado)
+                        const fechaFuturo = new Date(futuro)
+
+                        // Comparar si una fecha es inferior a otra
+                        if (fechaPasado > fechaFuturo) {
+                            throw new Error(`El pasado ${pasado} es superior al futuro ${futuro}`)
+                        }
+                    } catch (error) {
+                        throw error
+                    }
+                },
+                renderizaRango: function (data) {
+                    try {
+                        const fechaInicioRango = new Date(data.fechaInicioRango)
+                        const fechaFinalRango = new Date(data.fechaFinalRango)
+                        const fechaActual = new Date(data.fechaActual)
+                        return fechaActual >= fechaInicioRango && fechaActual <= fechaFinalRango;
+                    } catch (error) {
+                        throw error
+                    }
+                },
+                renderizaDiaSelecionado: function (data) {
+                    try {
+                        const fechaDiaSelecionado = new Date(data.fechaDiaSelecionado)
+                        const fechaActual = new Date(data.fechaActual)
+                        return fechaActual.getTime() === fechaDiaSelecionado.getTime()
+                    } catch (error) {
+                        throw error
+                    }
+                },
+                controlLimitesReservaPublica: function (data) {
+                    const primeraFechaDisponible = data.primeraFechaDisponible
+                    const calendarioResuelto = data.calendarioResuelto
+                    const calendarioUI = data.calendarioUI
+                    const limiteFuturo = data.limiteFuturo
+
+                    if (primeraFechaDisponible === "activado") {
+                        const primerFechaDisponibleResuelta = calendarioResuelto.limites.primeraFechaDisponible
+                        const dia = primerFechaDisponibleResuelta.dia
+                        const mes = primerFechaDisponibleResuelta.mes
+                        const ano = primerFechaDisponibleResuelta.ano
+                        const numeroDiasPorMes = primerFechaDisponibleResuelta.numeroDiasPorMes
+                        const posicionDia1 = primerFechaDisponibleResuelta.posicionDia1
+                        const tiempo = primerFechaDisponibleResuelta.tiempo
+
+                        const fechaLimitePasado = `${ano}-${mes}-${dia}`
+                        calendarioUI.querySelector("[contenedor=calendario]").setAttribute("fechaLimitePasado", fechaLimitePasado)
+
+                        calendarioResuelto.dia = dia
+                        calendarioResuelto.mes = mes
+                        calendarioResuelto.ano = ano
+                        calendarioResuelto.numeroDiasPorMes = numeroDiasPorMes
+                        calendarioResuelto.posicionDia1 = posicionDia1
+                        calendarioResuelto.tiempo = tiempo
+
+                    } else if (primeraFechaDisponible === "desactivado") {
+                        calendarioUI.querySelector("[contenedor=calendario]").setAttribute("primeraFechaDisponible", "desactivado")
+                    } else {
+                        throw new Error("No se reconoce primeraFechaDisponible, solo puede estar en activado o desactivado")
+                    }
+
+                    calendarioUI.querySelector("[contenedor=calendario]").setAttribute("primeraFechaDisponible", primeraFechaDisponible)
+
+                    if (limiteFuturo === "activado") {
+                        const limiteFuturoResuelto = calendarioResuelto.limites.limiteFuturo
+                        const dia = limiteFuturoResuelto.dia
+                        const mes = limiteFuturoResuelto.mes
+                        const ano = limiteFuturoResuelto.ano
+
+                        const fechaLimiteFuturo = `${ano}-${mes}-${dia}`
+                        calendarioUI.querySelector("[contenedor=calendario]").setAttribute("fechaLimiteFuturo", fechaLimiteFuturo)
+                    } else if (limiteFuturo === "desactivado") {
+                        calendarioUI.querySelector("[contenedor=calendario]").setAttribute("limiteFuturo", "desactivado")
+                    } else {
+                        throw new Error("No se reconoce limiteFuturo, solo puede estar en activado o desactivado")
+                    }
+                },
+                controlLimiteDiasCalendario: function (data) {
+                    try {
+                        const tiempoLimite = data.tiempoLimite
+                        const incluirMismoDiaEnElLimite = data.incluirMismoDiaEnElLimite
+                        const fechaLimite = new Date(data.fechaLimite)
+                        const fechaActual = new Date(data.fechaActual)
+                        if (tiempoLimite === "futuro" && incluirMismoDiaEnElLimite === "no") {
+                            return fechaActual > fechaLimite;
+                        } else if (tiempoLimite === "futuro" && incluirMismoDiaEnElLimite === "si") {
+                            return fechaActual >= fechaLimite;
+                        } else if (tiempoLimite === "pasado" && incluirMismoDiaEnElLimite === "no") {
+                            return fechaActual < fechaLimite;
+                        } else if (tiempoLimite === "pasado" && incluirMismoDiaEnElLimite === "si") {
+                            return fechaActual <= fechaLimite;
+                        }
+
+                    } catch (error) {
+                        throw error
+                    }
+                },
+                preLimpieza: function () {
+
+                    const calendarioObsoletos = document.querySelectorAll("[componente=bloqueCalendario]")
+                    calendarioObsoletos.forEach(c => { c?.remove() })
+
+                }
+            },
             widgetsUI: {
                 contenedorTituloDescripcionSimple: (data) => {
                     const titulo = data.titulo
@@ -4753,6 +5501,28 @@ const casaVitini = {
                 ui.appendChild(botonAceptar)
 
                 return ui
+            },
+            constructorElemento: function (data) {
+                const tipoElemento = data.tipoElemento
+                const textContent = data.textContent
+                const classList = data?.classList || []
+                const text = data.text
+                const atributos = data?.atributos || {}
+
+                const ui = document.createElement(tipoElemento)
+                if (textContent) {
+                    ui.textContent = textContent
+                } else if (text) {
+                    ui.text = text
+                }
+                if (classList.length > 0) {
+                    ui.classList.add(...classList)
+                }
+                for (const [nombre, valor] of Object.entries(atributos)) {
+                    ui.setAttribute(nombre, valor)
+                }
+                return ui
+
             }
         },
         obtenerComponentes: async function (data) {
@@ -5361,6 +6131,17 @@ const casaVitini = {
                     return casaVitini.ui.componentes.advertenciaInmersiva(m)
                 }
             },
+            fecha_ISOCompleta_limpieza: (fecha) => {
+                if (fecha.length > 0) {
+                    return fecha.split("T")[0] + " " + fecha.split("T")[1].split(".")[0];
+                } else {
+                    return ""
+                }
+
+
+
+
+            },
             extraerFechasInternas: (inicio, fin) => {
                 const fechas = [];
                 const inicio_objeto = new Date(inicio);
@@ -5594,7 +6375,7 @@ const casaVitini = {
                     throw new Error(`La ruta ${ruta} no corresponde a una función`);
                 }
             } catch (error) {
-                console.error(error)
+                throw error
             }
         },
         calendarios: {

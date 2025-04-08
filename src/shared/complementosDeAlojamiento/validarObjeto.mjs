@@ -121,7 +121,7 @@ export const validarObjeto = async (data) => {
                         "habitacion"
                     ]
                     if (!tiposUbicaciones.includes(tipoUbicacion)) {
-                        const m = "El selector de ubiacion del complemento solo acepta apartamento o habitación"
+                        const m = "El selector de ubiacion del complemento solo acepta alojamiento o habitación"
                         throw new Error(m)
                     }
                     return tipoUbicacion
@@ -178,7 +178,7 @@ export const validarObjeto = async (data) => {
                             limpiezaEspaciosAlrededor: "si",
                             limpiezaEspaciosInternos: "si",
                             devuelveUnTipoNumber: "no",
-                            devuelveUnTipoBigInt: "si"
+                            devuelveUnTipoBigInt: "no"
                         })
                     } catch (error) {
                         const path = helpers.state.path.join('.');

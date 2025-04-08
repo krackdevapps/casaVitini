@@ -1,0 +1,827 @@
+.miCasa_marcoVitiniIDX {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    align-items: center;
+}
+
+.vitiniIdLogin {
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: stretch;
+    align-items: stretch;
+    gap: 6px;
+}
+
+.botonID {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background-color: rgba(0, 0, 0, 0.2);
+    margin: 0px;
+    padding: 8px;
+    color: white;
+    cursor: default;
+    user-select: none;
+    transition: all 100ms linear;
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.botonID:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.botonID:active {
+    background-color: black;
+}
+
+.bloqueBotonesID {
+    display: flex;
+    visibility: hidden;
+    pointer-events: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+.campoID {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 10px;
+
+    outline: none;
+    border: none;
+    color: black;
+    border-radius: 10px;
+    margin: 0px;
+    transition: background 250ms linear;
+}
+
+.campoID::placeholder {
+    color: rgba(0, 0, 0, 0.337);
+}
+
+.bloqueRespuesta {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    color: transparent;
+    padding: 14px;
+    border-radius: 16px;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    gap: 12px;
+    transition: opacity 250ms linear;
+}
+
+.botonUsuario,
+.informacionCerrarSession {
+    border-radius: 8px;
+    padding: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    transition: all 250ms linear;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    color: black;
+    text-decoration: none;
+    background-color: #ffffff66;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: block;
+}
+
+.botonUsuario:hover {
+    background-color: rgb(58, 13, 221);
+    color: white;
+}
+
+.reservaDetallesBloqueGeneral {
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 4fr));
+    grid-gap: 4px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+.reservaDetallesBloqueFecha {
+    background-color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    border-radius: 20px;
+    padding: 4px;
+    justify-content: space-around;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+.administracionReservaBloqueDual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+}
+
+.miCasa_reservas_detallesReservas_bloqueDual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+}
+
+.administracionReservasDetallesBloqueApartamento {
+
+    margin: 0px;
+    display: block;
+    flex-direction: column;
+    align-content: flex-start;
+    flex-wrap: nowrap;
+
+
+    padding: 4px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    border: 1px solid #0000003b;
+    gap: 4px;
+}
+
+.apartamentoTituloUIInerte {
+    margin: 0px;
+    padding-left: 10px;
+    font-weight: bold;
+    padding-top: 6px;
+    padding-bottom: 6px;
+
+    border-radius: 7px;
+    cursor: default;
+}
+
+.administracionReservasDetallesBloqueHabitacion {
+    overflow: hidden;
+    background: #00000014;
+
+    border-radius: 10px;
+    padding: 4px;
+    gap: 4px;
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.habitacionUIInerte {
+
+    padding: 6px;
+    border-radius: 7px;
+    font-weight: bold;
+    padding-left: 10px;
+    user-select: none;
+    cursor: default;
+    color: rgb(62, 62, 62);
+}
+
+.administracionReservasDetallesTituloTipoCama {
+    background: rgba(0, 0, 0, 0.2);
+    margin: 0px;
+    padding: 4px;
+    padding-left: 10px;
+    user-select: none;
+    cursor: default;
+}
+
+.reservasDetallesBloqueAlojamiennto {
+    display: grid;
+    grid-gap: 4px;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+}
+
+.opcionMicasa {
+    border-radius: 12px;
+    padding: 10px;
+    margin: 0px;
+    cursor: default;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    cursor: default;
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background 250ms linear;
+}
+
+.opcionMicasa:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.adminsitracionReservasTituloNombre {
+    font-weight: bold;
+    text-align: center;
+}
+
+.miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
+    border-radius: 12px;
+
+    display: flex;
+    grid-template-columns: 1fr 7fr;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 4px;
+    justify-items: stretch;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+}
+
+.resertaDetallesPernoctantesSinalojamiento {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    margin: 0px;
+    max-width: 1920px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: none;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    align-items: stretch;
+    gap: 0px;
+    flex-direction: column;
+}
+
+.administracion_reservas_detallesReservas_tituloPernoctantesSinHabitacion {
+    display: flex;
+    padding: 4px;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
+
+.administracion_reservas_detallesReserva_contenedorPernoctantesSinHabitacion {
+    padding: 4px;
+    border-radius: 12px;
+    margin: 0px;
+    max-width: 1920px;
+    display: grid;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
+    gap: 4px;
+}
+
+.resertaDetallesPropuestaCambioFechaReserva {
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    margin: 0px;
+    max-width: 1920px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: none;
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: stretch;
+    gap: 4px;
+}
+
+.marcoIDX {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: center;
+    gap: 6px;
+
+}
+
+.vitiniID_contenedor_opciones {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: center;
+    width: 100%;
+    max-width: 720px;
+    margin-top: 12px;
+}
+
+.marcoCuenta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+}
+
+.reserva_resumen_desglose_porNoche {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+.reserva_resumen_desglose_pago_titulo {
+    padding: 4px;
+    font-weight: bold;
+}
+
+.reserva_resumen_desglose_pago_elemento {
+    background-color: #ffffff73;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.miCasa_marcoIDX_contenedor {
+    padding: 10px;
+    border-radius: 25px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.infoCuenta {
+    padding: 10px;
+    border-radius: 25px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    text-align: center;
+}
+
+.enlace {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    width: fit-content;
+    height: fit-content;
+}
+
+.detallesUsuario_contenedorUsuarioIDX {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.detallesUsuario_rolUI {
+    text-align: center;
+}
+
+.miCuenta_cambiarClave_testo {
+    padding: 6px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.miCuenta_cambiarClave_contenedor {
+    padding: 10px;
+    border-radius: 16px;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.miCuenta_cambiarClave_botonV1 {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.miCuenta_cambiarClave_botonV1:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.miCuenta_cambioClave_contenedorBotones {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.miCuenta_cambiarClave_campoClave {
+    outline: none;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.detallesUsuario_esferaUsuario {
+    background: rgba(255, 255, 255, 0.1);
+    background-image: url(/activos/imagenes/iconoUsuario.svg);
+    background-size: cover;
+    height: 150px;
+    width: 150px;
+    border-radius: 100%;
+}
+
+.detallesUsuario_contenedorDatosGlobales {
+    padding: 10px;
+}
+
+.detallesUsuario_usuarioUI {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.detallesUsuario_contenedorDatosUsuario {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 20px;
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-auto-rows: minmax(auto, auto);
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+.detallesUsuario_campoDatosUsuario {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13;
+    outline: none;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+.detallesUsuario_contenedorCampoEInfo {
+    border-radius: 16px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.detallesUsuario_contenedorBotones {
+    display: flex;
+    border-radius: 16px;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: none;
+}
+
+.detallesUsuario_botonV1 {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    padding: 10px;
+    display: flex;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.marcoCuenta .tituloDato {
+    padding: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.miCasa_sessiones_contenedorSession {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 6px;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: column;
+}
+
+.miCasa_sessiones_contenedorBloque {
+    display: flex;
+    gap: 2px;
+    border-radius: 10px;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.miCasa_sessiones_textoIP {
+    display: flex;
+    gap: 2px;
+    border-radius: 10px;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.miCasa_sessiones_texto {
+    display: flex;
+    flex-direction: column;
+}
+
+.miCasa_sessiones_marcoGlobal {
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+    justify-content: center;
+    align-content: center;
+    justify-items: stretch;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+.miCasa_sessiones_botonCerrarSession {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: column;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.miCasa_sessiones_botonCerrarSession:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.miCasa_sessiones_botonV2 {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    gap: 6px;
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.miCasa_sessiones_botonV2:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.miCasa_sessiones_marcoBotones {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 10px;
+}
+
+.miCasa_marcoUsuario {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 6px;
+    grid-auto-rows: minmax(auto, auto);
+    padding: 0px;
+    justify-items: stretch;
+    justify-content: center;
+    align-content: center;
+}
+
+.miCasa_marcoUsuario_opcion {
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 10px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 250ms linear;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    padding-top: 40px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.miCasa_crearCuenta_contenedorCrearCuenta {
+
+    border-radius: 16px;
+    padding: 6px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.miCasa_crearCuenta_campo {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.miCasa_reservas_detallesReservas_marcoAlojamiento {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+
+.miCasa_reservas_detallesReservas_contenedorGeneralReserva {
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    justify-content: space-between;
+    align-content: center;
+    flex-wrap: nowrap;
+    margin-top: 100px;
+    margin: 0px;
+    gap: 6px;
+}
+
+.miCasa_reservas_detallesReservas_contenedorTotales {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+
+.componentes_ui_desloseTotales_contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+[zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_banner {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    transition: all 500ms;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_banner:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+[zonaCSS=miCasa] .plaza_reservas_reservaConfirmada_bannerV2 {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-radius: 10px;
+    padding: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    text-decoration: none;
+    color: black;
+    cursor: default;
+    transition: all 500ms;
+    text-align: center;
+}
+
+@media (max-width: 720px) {
+    .detallesUsuario_esferaUsuario {
+        height: 80px;
+        width: 80px;
+    }
+
+    .detallesUsuario_usuarioUI {
+        font-weight: bold;
+    }
+
+    .detallesUsuario_contenedorGlobal {
+        border-radius: 16px;
+    }
+
+    .miCasa_marcoIDX_contenedor {
+        padding: 10px;
+        border-radius: 25px;
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .detallesUsuario_contenedorUsuarioIDX {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row;
+    }
+
+    .detallesUsuario_rolUI {
+        text-align: left;
+    }
+
+}
+
+@media screen and (max-width: 1280px) {
+    .reservasDetallesBloqueAlojamiennto {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .reservasDetallesBloqueAlojamiennto {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media screen and (max-width: 720px) {
+
+
+    .miCasa_misReservas_detallesReserva_marcoInformacionGlobal {
+        display: flex;
+        flex-direction: column;
+    }
+}

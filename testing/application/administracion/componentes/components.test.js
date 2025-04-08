@@ -1,7 +1,7 @@
 
 import { describe, expect, test } from '@jest/globals';
 import { apartamentosDisponiblesConfigurados } from '../../../../src/application/administracion/componentes/apartamentosDisponiblesConfigurados.mjs';
-import { calculadora } from '../../../../src/application/administracion/componentes/calculadora.mjs';
+import { calculadora } from '../../../../src/application/componentes/calculadora.mjs';
 
 describe('components', () => {
     const fakeAdminSession = {
@@ -23,9 +23,11 @@ describe('components', () => {
     test('server calc with ok', async () => {
         const newClient = {
             body: {
+                calculo: "simple",
                 numero1: "4",
                 numero2: "10",
-                operador: "+"
+                operador: "+",
+                redondeo: "2"
             },
             session: fakeAdminSession
         }

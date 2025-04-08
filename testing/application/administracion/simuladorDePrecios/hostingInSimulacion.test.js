@@ -95,7 +95,7 @@ describe('hosting of simulation', () => {
         } catch (error) {
             expect(error).not.toBeUndefined();
             expect(typeof error).toBe('object');
-            expect(error).toHaveProperty('info');
+            expect(error).toHaveProperty('errorID');
         }
 
     })

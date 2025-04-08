@@ -26,8 +26,8 @@ const app = express()
 app.use(controlHTTPS)
 //app.use(compression());
 app.use(compression({
-  level: 9, // Nivel de compresión (de 0 a 9)
-  threshold: 1024 // Tamaño mínimo de bytes para comprimir));
+  level: 9, 
+  threshold: 1024 
   }))
 app.set('views', './ui/constructor')
 app.set('view engine', 'ejs')
@@ -39,16 +39,13 @@ app.use(express.json({
   extended: true,
   strict: true
 }))
-
 app.use(controlJSON)
 app.use(antiPrototypePollution)
-
 app.use(express.urlencoded({ extended: true }))
 app.use(controlTipoVerbo)
 app.disable('x-powered-by')
 app.use(csp);
 app.use(simpleLog)
-
 app.use('/activos', express.static(path.join('./ui/activos')))
 app.use(controlBaseDeDatos)
 app.use(configuracionSession)

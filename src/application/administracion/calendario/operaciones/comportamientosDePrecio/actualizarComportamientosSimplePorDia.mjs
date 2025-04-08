@@ -1,7 +1,5 @@
-import Joi from "joi";
 import { Mutex } from "async-mutex";
 import { DateTime } from "luxon";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
 import { obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray } from "../../../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray.mjs";
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
@@ -13,22 +11,18 @@ export const actualizarComportamientosSimplePorDia = async (entrada) => {
     const mutex = new Mutex();
 
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
-
         await mutex.acquire();
-
-        await validadorComportamientosDesdeCalendario({
+        const oVal = await validadorComportamientosDesdeCalendario({
             entrada,
             conf: "todo"
         })
 
-        const cantidad = entrada.body.cantidad
-        const simboloIDV = entrada.body.simboloIDV
-        const fechasSel = entrada.body.fechasSel
-        const apartamentosIDVSel = entrada.body.apartamentosIDVSel
+        const cantidad = oVal.cantidad
+        const simboloIDV = oVal.simboloIDV
+        const fechasSel = oVal.fechasSel
+        const apartamentosIDVSel = oVal.apartamentosIDVSel
+
+
 
         const diasMap = {
             1: 'lunes',
@@ -51,6 +45,7 @@ export const actualizarComportamientosSimplePorDia = async (entrada) => {
             diasArray.push(nombreDia)
         }
 
+
         const comportamientosEnConflicto = []
         const cPorDias = await obtenerComportamientosPorTipoIDVPorDiasArrayPorApartamentoIDVArray({
             tipoIDV: "porDias",
@@ -61,6 +56,7 @@ export const actualizarComportamientosSimplePorDia = async (entrada) => {
         comportamientosEnConflicto.push(...cPorDias)
 
         for (const f of fechasSel) {
+
             const cPorCreacion = await obtenerComportamientosPorRangoPorTipoIDV({
                 fechaInicio: f,
                 fechaFinal: f,
@@ -73,6 +69,9 @@ export const actualizarComportamientosSimplePorDia = async (entrada) => {
 
         const preSelectorCPorRango = []
         for (const f of fechasSel) {
+            // 
+
+
             const cPorCreacion = await obtenerComportamientosPorRangoPorTipoIDV({
                 fechaInicio: f,
                 fechaFinal: f,
@@ -146,6 +145,8 @@ export const actualizarComportamientosSimplePorDia = async (entrada) => {
                         comportamientoUID: cSimplePorApartamento
                     })
                     comportamientosResultantes.push(cActualizado)
+
+
                 } else {
 
                     const cCreado = await insertarComportamientoDePrecio({
@@ -154,9 +155,14 @@ export const actualizarComportamientosSimplePorDia = async (entrada) => {
                         estadoInicial: "activado"
                     })
                     comportamientosResultantes.push(cCreado)
+
                 }
             }
         }
+
+
+
+
         const ok = {
             ok: "Se han actualizado los precios de los dias y los apartamentos seleccionados correctamente",
             comportamientosResultantes

@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { validarObjetoDelServicio } from "../../../../shared/reservas/detallesReserva/servicios/validarObjetoDelServicio.mjs"
 import { validarOpcionesDelServicio } from "../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
 import { actualizarServicioPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/servicios/actualizarServicioPorSimulacionUID.mjs"
@@ -12,11 +12,7 @@ import { obtenerFechaLocal } from "../../../../shared/obtenerFechaLocal.mjs"
 
 export const actualizarServicioEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3

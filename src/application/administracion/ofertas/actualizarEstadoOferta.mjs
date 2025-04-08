@@ -1,18 +1,16 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
 import { obtenerOferatPorOfertaUID } from "../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs";
 import { actualizarEstadoOferata } from "../../../infraestructure/repository/ofertas/actualizarEstadoOferta.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 
+
 export const actualizarEstadoOferta = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
@@ -27,7 +25,7 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const estadoIDV = validadoresCompartidos.tipos.cadena({
@@ -48,6 +46,7 @@ export const actualizarEstadoOferta = async (entrada, salida) => {
             estadoIDV: estadoIDV,
         }
         const ofertaActualizada = await actualizarEstadoOferata(data)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "El estado de la oferta se ha actualizado correctamente",

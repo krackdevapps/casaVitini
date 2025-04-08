@@ -1,16 +1,12 @@
 import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { insertarCliente } from "../../../infraestructure/repository/clientes/insertarCliente.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 
 export const crearCliente = async (entrada, salida) => {
     const mutex = new Mutex();
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         await mutex.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
@@ -39,6 +35,7 @@ export const crearCliente = async (entrada, salida) => {
 
         const nuevoUIDCliente = await insertarCliente(datosValidados);
         if (nuevoUIDCliente) {
+
             const ok = {
                 ok: "Se ha añadido correctamente el cliente",
                 nuevoUIDCliente: nuevoUIDCliente.clienteUID
@@ -48,6 +45,8 @@ export const crearCliente = async (entrada, salida) => {
             const error = "Ha ocurrido un error interno y no se ha podido obtener el nuevo UID de cliente";
             throw new Error(error);
         }
+
+
     } catch (errorCapturado) {
         throw errorCapturado
     } finally {

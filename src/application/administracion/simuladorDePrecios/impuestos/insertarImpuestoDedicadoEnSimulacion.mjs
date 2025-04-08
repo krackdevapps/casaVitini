@@ -2,18 +2,14 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { insertarImpuestoPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/insertarImpuestoPorSimulacionUID.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorSimulacionUID_simple } from "../../../../infraestructure/repository/simulacionDePrecios/desgloseFinanciero/obtenerImpuestoPorImpuestoUIDPorSimulacionUID_simple.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { validarImpuesto } from "../../../../shared/impuestos/validarImpuesto.mjs"
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
@@ -23,7 +19,7 @@ export const insertarImpuestoDedicadoEnSimulacion = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const impuesto = entrada.body

@@ -1,7 +1,7 @@
 
 import { controlCaducidadEnlacesDePago } from "../../../shared/enlacesDePago/controlCaducidadEnlacesDePago.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { actualizarEnlaceDePagoPorEnlaceUID } from "../../../infraestructure/repository/enlacesDePago/actualizarEnlaceDePagoPorEnlaceUID.mjs";
 import { obtenerEnlaceDePagoPorEnlaceUID } from "../../../infraestructure/repository/enlacesDePago/obtenerEnlaceDePagoPorEnlaceUID.mjs";
 import { codigoZonaHoraria } from "../../../shared/configuracion/codigoZonaHoraria.mjs";
@@ -9,10 +9,7 @@ import { DateTime } from "luxon";
 
 export const modificarEnlace = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 5
@@ -24,7 +21,7 @@ export const modificarEnlace = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const horasCaducidad = validadoresCompartidos.tipos.cadena({
             string: entrada.body.horasCaducidad || "72",
@@ -33,7 +30,7 @@ export const modificarEnlace = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const nombreEnlace = validadoresCompartidos.tipos.cadena({

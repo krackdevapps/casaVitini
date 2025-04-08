@@ -1,20 +1,17 @@
 import { Mutex } from "async-mutex";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerDetallesCliente } from "../../../infraestructure/repository/clientes/obtenerDetallesCliente.mjs";
 import { actualizarPernoctanteEnReservaPorClienteUID } from "../../../infraestructure/repository/clientes/actualizarPernoctanteEnReservaPorClienteUID.mjs";
 import { actualizarTitularEnReservaPorClienteUID } from "../../../infraestructure/repository/clientes/actualizarTitularEnReservaPorClienteUID.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { eliminarClientePorClienteUID } from "../../../infraestructure/repository/clientes/eliminarClientePorClienteUID.mjs";
 
+
 export const fusion = async (entrada, salida) => {
     const mutex = new Mutex();
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -28,7 +25,7 @@ export const fusion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const clienteUID_destino = validadoresCompartidos.tipos.cadena({
             string: entrada.body.clienteUID_destino,
@@ -38,7 +35,7 @@ export const fusion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         await campoDeTransaccion("iniciar")
 
@@ -71,6 +68,7 @@ export const fusion = async (entrada, salida) => {
         })
 
         await eliminarClientePorClienteUID(clienteUID_origen)
+
 
         await campoDeTransaccion("confirmar")
         const ok = {

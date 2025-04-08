@@ -3,17 +3,13 @@ import { obtenerImpuestosPorImppuestoUID } from "../../../../../infraestructure/
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { insertarImpuestoPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/impuestos/insertarImpuestoPorReservaUID.mjs"
 import { obtenerImpuestoPorImpuestoUIDPorReservaUID } from "../../../../../infraestructure/repository/reservas/transacciones/impuestos/obtenerImpuestoPorImpuestoUIDPorReservaUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 
 export const insertarImpuestoEnReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -25,7 +21,7 @@ export const insertarImpuestoEnReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const impuestoUID = validadoresCompartidos.tipos.cadena({
@@ -35,7 +31,7 @@ export const insertarImpuestoEnReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const reserva = await obtenerReservaPorReservaUID(reservaUID)

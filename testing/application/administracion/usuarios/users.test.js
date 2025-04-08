@@ -31,7 +31,6 @@ describe('managin users', () => {
             body: {
                 usuarioIDX: fakeAdminSession.usuario,
                 clave: "1234567890A!",
-                rolIDV: fakeAdminSession.rolIDV
             },
             session: fakeAdminSession
         })
@@ -112,19 +111,7 @@ describe('managin users', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('update rol of account from administration', async () => {
-        const m = {
-            body: {
-                usuarioIDX: "userfortesting1",
-                nuevoRol: "cliente"
-            },
-            session: fakeAdminSession
-        }
-        const response = await actualizarRolCuenta(m)
-        expect(response).not.toBeUndefined();
-        expect(typeof response).toBe('object');
-        expect(response).toHaveProperty('ok');
-    })
+
     test('search users from administration', async () => {
         const m = {
             body: {

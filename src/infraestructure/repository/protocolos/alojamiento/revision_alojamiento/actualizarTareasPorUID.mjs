@@ -6,8 +6,6 @@ export const actualizarTareasPorUID = async (data) => {
     try {
         const tareas = data.tareas
         const uid = data.uid
-        const fechaFin = data.fechaFin
-        const estadoRevision = data.estadoRevision
         const reposicionInventario = data.reposicionInventario
 
         const consulta = `
@@ -15,19 +13,15 @@ export const actualizarTareasPorUID = async (data) => {
         protocolos."revisionAlojamiento"
         SET
         tareas = $1,
-        "fechaFin" = $2,
-        "estadoRevision" = $3,
-        "reposicionInventario" = $4
+        "reposicionInventario" = $2
         WHERE
-        uid = $5
+        uid = $3
         RETURNING *
         ;
         `;
 
         const p = [
             tareas,
-            fechaFin,
-            estadoRevision,
             reposicionInventario,
             uid
         ]

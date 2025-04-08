@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validarServicio } from "../../../shared/servicios/validarObjeto.mjs";
 import { insertarServicio } from "../../../infraestructure/repository/servicios/insertarServicio.mjs";
 import { obtenerElementoPorElementoUID } from "../../../infraestructure/repository/inventario/obtenerElementoPorElementoUID.mjs";
@@ -7,11 +7,7 @@ import { obtenerElementoPorElementoUID } from "../../../infraestructure/reposito
 export const crearServicio = async (entrada) => {
     const mutex = new Mutex();
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         await mutex.acquire();
 
@@ -40,7 +36,10 @@ export const crearServicio = async (entrada) => {
                 const elementoEnlazado = oDG.elementoEnlazado
                 if (elementoEnlazado) {
                     const elementoUID = elementoEnlazado.elementoUID
-                    const elementoInventario = await obtenerElementoPorElementoUID(elementoUID)
+                    const elementoInventario = await obtenerElementoPorElementoUID({
+                        elementoUID,
+                        errorSi: "desactivado"
+                    })
                     if (!elementoInventario) {
                         throw new Error(`No se reconode el elementoUID ${elementoUID} del elemento de invetario para enlazar`)
                     }
@@ -64,7 +63,7 @@ export const crearServicio = async (entrada) => {
             const error = "Ha ocurrido un error interno y no se ha podido obtener el nuevo servicio";
             throw new Error(error);
         }
-     
+
 
     } catch (errorCapturado) {
         throw errorCapturado

@@ -1,14 +1,10 @@
 import { obtenerTodosLosMensjaes } from "../../../../infraestructure/repository/configuracion/mensajesPortada/obtenerTodosLosMensajes.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 
 
 export const obtenerMensajes = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const mensajesDePortada = await obtenerTodosLosMensjaes()
         for (const detallesDelMensaje of mensajesDePortada) {

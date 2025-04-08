@@ -1,17 +1,13 @@
 import { Mutex } from "async-mutex";
 import { validarDataGlobalSimulacion } from "../../../shared/contenedorFinanciero/entidades/simulacion/validarDataGlobalSimulacion.mjs";
 import { actualizarRangoFechasPorSimulacionUID } from "../../../infraestructure/repository/simulacionDePrecios/actualizarRangoFechasPorSimulacionUID.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { soloFiltroDataGlobal } from "../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs";
 
 export const actualizarSimulacionPorDataGlobal = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         mutex.acquire()
         const data = entrada.body

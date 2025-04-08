@@ -82,7 +82,7 @@ describe('Global Operations Simulation', () => {
         } catch (error) {
             expect(error).not.toBeUndefined();
             expect(typeof error).toBe('object');
-            expect(error).toHaveProperty('info');
+            expect(error).toHaveProperty('errorID');
         }
     })
     test('insert global data in simulation created with ok', async () => {

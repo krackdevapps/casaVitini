@@ -80,7 +80,6 @@ export const buscarUsuariosPorTermino = async (data) => {
         SELECT
          d.usuario,
          d.mail,
-         u."rolIDV", 
          d.nombre,
          d."primerApellido",
          d."segundoApellido",
@@ -98,8 +97,7 @@ export const buscarUsuariosPorTermino = async (data) => {
         LOWER(COALESCE(d.nombre, '')) ILIKE ANY($1) OR
         LOWER(COALESCE(d."primerApellido", '')) ILIKE ANY($1) OR
         LOWER(COALESCE(d."segundoApellido", '')) ILIKE ANY($1) OR
-        LOWER(COALESCE(d.pasaporte, '')) ILIKE ANY($1) OR
-        LOWER(COALESCE(u."rolIDV", '')) ILIKE ANY(array_remove($1, NULL))
+        LOWER(COALESCE(d.pasaporte, '')) ILIKE ANY($1)
         )
         ORDER BY
         (
@@ -113,7 +111,7 @@ export const buscarUsuariosPorTermino = async (data) => {
               (LOWER(COALESCE(d.nombre, '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(d."primerApellido", '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(d."segundoApellido", '')) ILIKE ANY($1))::int -- +
-             -- (LOWER(COALESCE(u."rolIDV", '')) ILIKE ANY($1))::int
+             
             ) = 1 THEN 1
             WHEN (
               (LOWER(COALESCE(d.usuario, '')) ILIKE ANY($1))::int +
@@ -123,7 +121,7 @@ export const buscarUsuariosPorTermino = async (data) => {
               (LOWER(COALESCE(d.nombre, '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(d."primerApellido", '')) ILIKE ANY($1))::int +
               (LOWER(COALESCE(d."segundoApellido", '')) ILIKE ANY($1))::int --+
-             -- (LOWER(COALESCE(u."rolIDV", '')) ILIKE ANY($1))::int
+             
             ) = 3 THEN 3
             ELSE 2
           END

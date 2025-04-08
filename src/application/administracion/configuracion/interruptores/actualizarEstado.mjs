@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerInterruptorPorInterruptorIDV } from "../../../../infraestructure/repository/configuracion/interruptores/obtenerInterruptorPorInterruptorIDV.mjs";
 import { actualizarEstadoDelInterruptor } from "../../../../infraestructure/repository/configuracion/interruptores/actualizarEstadoDelInterruptor.mjs";
@@ -6,12 +6,10 @@ import { campoDeTransaccion } from "../../../../infraestructure/repository/globa
 import { interruptoresIDV } from "../../../../shared/configuracion/interruptores/interruptoresIDV.mjs";
 import { insertarInterruptor } from "../../../../infraestructure/repository/configuracion/interruptores/insertarInterruptor.mjs";
 
+
 export const actualizarEstado = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -36,7 +34,7 @@ export const actualizarEstado = async (entrada, salida) => {
         interruptoresIDV(interruptorIDV)
 
         await campoDeTransaccion("iniciar")
-       const interruptor = await obtenerInterruptorPorInterruptorIDV(interruptorIDV)
+        const interruptor = await obtenerInterruptorPorInterruptorIDV(interruptorIDV)
         if (!interruptor) {
             await insertarInterruptor({
                 interruptorIDV,

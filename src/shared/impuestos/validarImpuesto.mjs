@@ -5,7 +5,6 @@ export const validarImpuesto = (impuesto) => {
     try {
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
-
         const esquemaBusqueda = Joi.object({
             reservaUID: Joi.string().optional(),
             simulacionUID: Joi.string().optional(),
@@ -18,20 +17,20 @@ export const validarImpuesto = (impuesto) => {
         }).required().messages(commonMessages)
 
 
-        controlEstructuraPorJoi({
+        const oVal = controlEstructuraPorJoi({
             schema: esquemaBusqueda,
             objeto: impuesto
         })
 
 
-        validadoresCompartidos.tipos.cadena({
+        oVal.nombre =  validadoresCompartidos.tipos.cadena({
             string: impuesto.nombre,
             nombreCampo: "El nombre del impuesto",
             filtro: "strictoConEspacios",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
         })
-        validadoresCompartidos.tipos.cadena({
+        oVal.tipoImpositivo =  validadoresCompartidos.tipos.cadena({
             string: impuesto.tipoImpositivo,
             nombreCampo: "El tipo tipoImpositivo",
             filtro: "cadenaConNumerosConDosDecimales",
@@ -70,10 +69,10 @@ export const validarImpuesto = (impuesto) => {
             throw new Error(m)
 
         }
-        const estadoIDV = impuesto.estadoIDV
+        const estadoIDV = oVal.estadoIDV
         if (estadoIDV && (estadoIDV !== "desactivado" && estadoIDV !== "activado")) {
             validadoresCompartidos.tipos.cadena({
-                string: impuesto.estadoIDV || "",
+                string: oVal.estadoIDV || "",
                 nombreCampo: "El tipo estadoIDV",
                 filtro: "strictoIDV",
                 sePermiteVacio: "si",
@@ -92,9 +91,9 @@ export const validarImpuesto = (impuesto) => {
                 sePermiteVacio: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
-            impuesto.testingVI = testingVI
+            oVal.testingVI = testingVI
         }
-        return impuesto
+        return oVal
     } catch (error) {
         throw error
     }

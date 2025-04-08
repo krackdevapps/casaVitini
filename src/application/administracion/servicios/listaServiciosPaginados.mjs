@@ -1,16 +1,12 @@
 import Joi from "joi";
 import { obtenerServiciosConOrdenamiento } from "../../../infraestructure/repository/servicios/obtenerServiciosConOrdenamiento.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
 export const listaServiciosPaginados = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
@@ -45,7 +41,7 @@ export const listaServiciosPaginados = async (entrada) => {
         const pagina = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
-            filtro:"numeroSimple",
+            filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no"

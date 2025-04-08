@@ -369,7 +369,7 @@ casaVitini.view = {
                     deatallesClienteUI.setAttribute("clienteUID", clienteUID)
                     deatallesClienteUI.setAttribute("componente", "clienteUID" + clienteUID)
                     let bloqueHorizontal = document.createElement("div")
-                    bloqueHorizontal.classList.add("detallesClienteBloqueHorizontal")
+                    bloqueHorizontal.classList.add("flexVertical")
                     let bloqueVertical = document.createElement("div")
                     bloqueVertical.classList.add("detallesClienteBloqueVertical")
 
@@ -465,7 +465,7 @@ casaVitini.view = {
                     bloqueHorizontal.appendChild(bloqueVertical)
                     deatallesClienteUI.appendChild(bloqueHorizontal)
                     bloqueHorizontal = document.createElement("div")
-                    bloqueHorizontal.classList.add("detallesClienteBloqueHorizontal")
+                    bloqueHorizontal.classList.add("flexVertical")
 
                     bloqueDato = document.createElement("div")
                     bloqueDato.classList.add("detallesClienteBloqueDato")
@@ -812,7 +812,7 @@ casaVitini.view = {
 
 
                     let bloqueHorizontal = document.createElement("div")
-                    bloqueHorizontal.classList.add("detallesClienteBloqueHorizontal")
+                    bloqueHorizontal.classList.add("flexVertical")
                     let bloqueVertical = document.createElement("div")
                     bloqueVertical.classList.add("detallesClienteBloqueVertical")
 
@@ -901,7 +901,7 @@ casaVitini.view = {
                     deatallesClienteUI.appendChild(bloqueHorizontal)
 
                     bloqueHorizontal = document.createElement("div")
-                    bloqueHorizontal.classList.add("detallesClienteBloqueHorizontalNotas")
+                    bloqueHorizontal.classList.add("flexVerticalNotas")
 
                     bloqueDato = document.createElement("div")
                     bloqueDato.classList.add("detallesClienteBloqueDato")
@@ -924,7 +924,6 @@ casaVitini.view = {
                     contenedorBotones.classList.add(
                         "flexVertical",
                         "gap6",
-                        "padding12"
                     )
                     deatallesClienteUI.appendChild(contenedorBotones)
                     let boton = document.createElement("div")

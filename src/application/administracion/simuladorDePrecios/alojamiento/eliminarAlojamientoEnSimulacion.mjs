@@ -7,15 +7,11 @@ import { eliminarTodosLosServiciosDeLaSimulacion } from "../../../../infraestruc
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
 import { soloFiltroDataGlobal } from "../../../../shared/simuladorDePrecios/soloFiltroDataGlobal.mjs"
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 
 export const eliminarAlojamientoEnSimulacion = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const simulacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.simulacionUID,

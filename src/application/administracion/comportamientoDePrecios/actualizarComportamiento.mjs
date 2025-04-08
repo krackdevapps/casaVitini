@@ -1,5 +1,5 @@
 import { evitarDuplicados } from "../../../shared/contenedorFinanciero/comportamientoPrecios/evitarDuplicados.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { actualizarComportamientoDePrecio } from "../../../infraestructure/repository/comportamientoDePrecios/actualizarComportamientoDePrecio.mjs";
 import { obtenerComportamientoDePrecioPorComportamientoUID } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientoPorComportamientoUID.mjs";
@@ -8,18 +8,17 @@ import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraes
 import { validarComportamiento } from "../../../shared/contenedorFinanciero/comportamientoPrecios/validarComportamiento.mjs";
 import { semaforoCompartidoReserva } from "../../../shared/semaforosCompartidos/semaforoCompartidoReserva.mjs";
 
+
 export const actualizarComportamiento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
         })
+
         await semaforoCompartidoReserva.acquire();
         const comportamientoUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.comportamientoUID,
@@ -28,16 +27,22 @@ export const actualizarComportamiento = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
-        const comportamiento = {
+
+        const oVal = await validarComportamiento({
             nombreComportamiento: entrada.body.nombreComportamiento,
             contenedor: entrada.body.contenedor,
             comportamientoUID: comportamientoUID,
             transaccion: "actualizar"
+        })
+        const comportamiento = {
+            nombreComportamiento: oVal.nombreComportamiento,
+            contenedor: oVal.contenedor,
+            comportamientoUID: comportamientoUID,
+            transaccion: "actualizar"
         }
-        await validarComportamiento(comportamiento)
         await campoDeTransaccion("iniciar")
         const dataEvitarDuplicados = {
             transaccion: "actualizar",
@@ -66,6 +71,7 @@ export const actualizarComportamiento = async (entrada, salida) => {
                 errorSi: "desactivado"
             })).apartamentoUI
         }
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "El comportamiento se ha actualizado bien junto con los apartamentos dedicados.",

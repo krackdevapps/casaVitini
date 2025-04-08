@@ -15,7 +15,7 @@ export const validarInventarioDelProtocolo = (data) => {
 
         if (filtrosIDV.includes("elementoUID")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 elementoUID: Joi.string().optional().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -38,7 +38,7 @@ export const validarInventarioDelProtocolo = (data) => {
 
         if (filtrosIDV.includes("cantidad_enAlojamiento")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 cantidad_enAlojamiento: Joi.string().optional().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -61,7 +61,7 @@ export const validarInventarioDelProtocolo = (data) => {
 
         if (filtrosIDV.includes("apartamentoIDV")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
 
                 apartamentoIDV: Joi.string().required().custom((value, helpers) => {
                     try {
@@ -81,9 +81,32 @@ export const validarInventarioDelProtocolo = (data) => {
             });
         }
 
+        if (filtrosIDV.includes("usuario")) {
+            numeroFiltros++
+            schema = schema.keys({
+                usuario: Joi.string().required().custom((value, helpers) => {
+                    try {
+                        return validadoresCompartidos.tipos.cadena({
+                            string: value,
+                            nombreCampo: "El usuario",
+                            filtro: "strictoIDV",
+                            sePermiteVacio: "no",
+                            soloMinusculas: "si",
+                            limpiezaEspaciosAlrededor: "si",
+                        })
+                    } catch (error) {
+                        const path = helpers.state.path.join('.');
+                        const mensajeError = `Error en ${path}: ${error.message}`;
+                        return helpers.message(mensajeError);
+                    }
+                }),
+            });
+        }
+
+
         if (filtrosIDV.includes("posicion")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 posicion: Joi.string().optional().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -106,7 +129,7 @@ export const validarInventarioDelProtocolo = (data) => {
 
         if (filtrosIDV.includes("uid")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
 
                 uid: Joi.string().optional().custom((value, helpers) => {
                     try {

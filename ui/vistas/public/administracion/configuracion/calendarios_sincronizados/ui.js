@@ -20,15 +20,8 @@ casaVitini.view = {
 
             aBotonMas.setAttribute("href", "/administracion/configuracion/calendarios_sincronizados/crear_calendario");
             aBotonMas.setAttribute("componente", "botonGlobal");
-            aBotonMas.addEventListener("click", (boton) => {
-                boton.preventDefault()
-                const vista = boton.target.closest("[vista]").getAttribute("vista")
-                const navegacion = {
-                    vista: vista,
-                    tipoOrigen: "menuNavegador"
-                }
-                casaVitini.shell.navegacion.controladorVista(navegacion)
-            })
+            aBotonMas.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
+
             aBotonMas.textContent = "Añadir calendario";
             const divContenedorCalendarios = document.createElement("div");
             divContenedorCalendarios.classList.add("contenedorCalendarios");

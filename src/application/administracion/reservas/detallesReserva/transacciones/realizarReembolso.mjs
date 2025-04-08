@@ -1,7 +1,7 @@
 import Decimal from "decimal.js";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { DateTime } from "luxon";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { insertarReembolso } from "../../../../../infraestructure/repository/reservas/transacciones/reembolsos/insertarReembolso.mjs";
 import { obtenerReembolsosPorPagoUID_ordenados } from "../../../../../infraestructure/repository/reservas/transacciones/reembolsos/obtenerReembolsosPorPagoUID_ordenados.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -11,10 +11,7 @@ import Joi from "joi";
 
 export const realizarReembolso = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
+
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
         const reservaUID = validadoresCompartidos.tipos.cadena({
@@ -24,7 +21,7 @@ export const realizarReembolso = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const cantidad = validadoresCompartidos.tipos.cadena({
@@ -42,7 +39,7 @@ export const realizarReembolso = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
 
         })
 

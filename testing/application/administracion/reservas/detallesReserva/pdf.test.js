@@ -3,9 +3,10 @@ import { describe, expect, test } from '@jest/globals';
 import { makeHostArquitecture } from '../../../../sharedUsesCases/makeHostArquitecture.mjs';
 import { eliminarReservaPorTestingVI } from '../../../../../src/infraestructure/repository/reservas/reserva/eliminarReservaPorTestingVI.mjs';
 import { crearReservaSimpleAdministrativa } from '../../../../../src/application/administracion/reservas/nuevaReserva/crearReservaSimpleAdministrativa.mjs';
-import { pdfReserva } from '../../../../../src/application/administracion/reservas/detallesReserva/miscelanea/pdfReserva.mjs';
 import { crearTitular } from '../../../../../src/application/administracion/reservas/detallesReserva/gestionTitular/crearTitular.mjs';
 import { eliminarClientePorTestingVI } from '../../../../../src/infraestructure/repository/clientes/eliminarClientePorTestingVI.mjs';
+import { obtenerPDF } from '../../../../../src/application/miCasa/misReservas/obtenerPDF.mjs';
+import { renderizar } from '../../../../../src/application/administracion/reservas/detallesReserva/pdf/renderizar.mjs';
 
 describe('pdf in bookins', () => {
     const fakeAdminSession = {
@@ -77,19 +78,31 @@ describe('pdf in bookins', () => {
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
-    test('generate pdf of booking with ok', async () => {
+
+
+    test('generate pdf of administrative booking with ok', async () => {
         const m = {
             body: {
-                reservaUID: String(reservaUID)
+                reservaUID: String(reservaUID),
+                incluirTitular: "si",
+                tipoIDV: "base64",
+                tablasIDV: [
+                    "fechas",
+                    "alojamiento",
+                    "servicios",
+                    "totalesGlobales"
+                ]
             },
+
             session: fakeAdminSession
         }
-        const response = await pdfReserva(m)
+        const response = await renderizar(m)
         expect(response).not.toBeUndefined();
         expect(typeof response).toBe('object');
         expect(response).toHaveProperty('ok');
     })
 
+    
     afterAll(async () => {
         await eliminarClientePorTestingVI(testingVI)
         await eliminarReservaPorTestingVI(testingVI)

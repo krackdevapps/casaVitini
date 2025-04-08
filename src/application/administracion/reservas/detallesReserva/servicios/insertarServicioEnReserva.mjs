@@ -4,7 +4,6 @@ import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repo
 import { insertarServicioPorReservaUID } from "../../../../../infraestructure/repository/reservas/servicios/insertarServicioPorReservaUID.mjs"
 import { obtenerServicioPorCriterioPublicoPorServicioUIDArray } from "../../../../../infraestructure/repository/servicios/obtenerServicioPorCriterioPublicoPorServicioUIDArray.mjs"
 import { obtenerServicioPorServicioUID } from "../../../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { validarObjetoDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarObjetoDelServicio.mjs"
 import { validarOpcionesDelServicio } from "../../../../../shared/reservas/detallesReserva/servicios/validarOpcionesDelServicio.mjs"
@@ -12,14 +11,11 @@ import { validadoresCompartidos } from "../../../../../shared/validadores/valida
 import { obtenerFechaLocal } from "../../../../../shared/obtenerFechaLocal.mjs"
 import { estadoInicialPagoServicio } from "../../../../../shared/reservas/servicios/estadoInicialPagoServicio.mjs"
 import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs"
+import { obtenerElementoPorElementoUID } from "../../../../../infraestructure/repository/inventario/obtenerElementoPorElementoUID.mjs"
 
 export const insertarServicioEnReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -42,10 +38,11 @@ export const insertarServicioEnReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const opcionesSeleccionadasDelServicio = entrada.body.opcionesSeleccionadasDelServicio
+
         const oSdS_validado = validarObjetoDelServicio({ opcionesSeleccionadasDelServicio })
 
 
@@ -55,8 +52,12 @@ export const insertarServicioEnReserva = async (entrada) => {
             const error = "La reserva está cancelada, es inmutable."
             throw new Error(error)
         }
+        await campoDeTransaccion("iniciar")
 
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
+
+
+
         const nombreServicico = servicio.nombre
         const contenedorServicio = servicio.contenedor
         contenedorServicio.servicioUID = servicio.servicioUID
@@ -74,7 +75,6 @@ export const insertarServicioEnReserva = async (entrada) => {
             const m = "No se encuentra el servicio, verifique que el servicio este configurado en la zona global o privada y que este Activado"
             throw new Error(m)
         }
-        await campoDeTransaccion("iniciar")
         const contenedorInventario_pipe = []
         await validarOpcionesDelServicio({
             opcionesSeleccionadasDelServicio: oSdS_validado,
@@ -87,6 +87,23 @@ export const insertarServicioEnReserva = async (entrada) => {
         const fechaUTC = DateTime.utc().toISO();
         contenedorServicio.fechaAdquisicion = fechaUTC
         const gruposDeOpciones = contenedorServicio.gruposDeOpciones
+
+        for (const [grupoIDV, gDO] of Object.entries(gruposDeOpciones)) {
+            const opcionesGrupo = gDO.opcionesGrupo
+            for (const og of opcionesGrupo) {
+                const elementoUID = og?.elementoEnlazado?.elementoUID
+                const nombreOpcion = og.nombreOpcion
+                if (elementoUID) {
+                    const elemento = await obtenerElementoPorElementoUID({
+                        elementoUID,
+                        errorSi: "desactivado"
+                    })
+                    if (!elemento) {
+                        throw new Error(`No se puede insertar este servicio porque la opción ${nombreOpcion} está enlazada con un elemento que ya no está en el inventario. Por favor, ves al servicio y desenlaza la opción`)
+                    }
+                }
+            }
+        }
         const eIP = estadoInicialPagoServicio({
             gruposDeOpciones
         })

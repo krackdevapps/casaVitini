@@ -1,17 +1,11 @@
 import Joi from "joi";
 import { obtenerResultadosBusqueda } from "../../../infraestructure/repository/inventario/obtenerResultadosBusqueda.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
-
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
 
-export const buscador = async (entrada, salida) => {
+export const buscador = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
 
@@ -35,7 +29,7 @@ export const buscador = async (entrada, salida) => {
             sePermiteVacio: "si",
             limpiezaEspaciosAlrededor: "si",
         })
-        
+
         const tipoBusqueda = validadoresCompartidos.tipos.cadena({
             string: entrada.body.tipoBusqueda || "",
             nombreCampo: "El tipoBusqueda",
@@ -98,7 +92,7 @@ export const buscador = async (entrada, salida) => {
             delete elemento.totalElementos;
         });
         const totalPaginas = Math.ceil(consultaConteoTotalFilas / numeroPorPagina);
-      //  const corretorNumeroPagina = String(pagina).replace("0", "");
+        //  const corretorNumeroPagina = String(pagina).replace("0", "");
         const respuesta = {
             ok: "Resultados de la busqueda",
             buscar: buscar,

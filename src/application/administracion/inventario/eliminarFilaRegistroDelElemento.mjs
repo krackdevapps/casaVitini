@@ -3,18 +3,13 @@ import { campoDeTransaccion } from "../../../infraestructure/repository/globales
 import { actualizarCantidadPorElementoUID } from "../../../infraestructure/repository/inventario/actualizarCantidadPorElementoUID.mjs";
 import { obtenerElementoPorElementoUID } from "../../../infraestructure/repository/inventario/obtenerElementoPorElementoUID.mjs";
 import { obtenerRegistroPorUID } from "../../../infraestructure/repository/inventario/obtenerRegistroPorUID.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
 import { validarElemento } from "../../../shared/inventario/validarElemento.mjs";
 import { eliminarFilaRegistroPorUID } from "../../../infraestructure/repository/inventario/eliminarFilaRegistroPorUID.mjs";
-import { controladorDelMovimiento } from "../../../shared/inventario/controladorDeMovimiento.mjs";
+import { reversionDeMovimiento } from "../../../shared/inventario/reversionDeMovimiento.mjs";
 
-export const eliminarFilaRegistroDelElemento = async (entrada, salida) => {
+
+export const eliminarFilaRegistroDelElemento = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
-
 
         const oVal = await validarElemento({
             o: entrada.body,
@@ -31,7 +26,10 @@ export const eliminarFilaRegistroDelElemento = async (entrada, salida) => {
         const sentidoMovimiento = registro.sentidoMovimiento
         const elementoUID = registro.elementoUID
 
-        const elemento = await obtenerElementoPorElementoUID(elementoUID)
+        const elemento = await obtenerElementoPorElementoUID({
+            elementoUID,
+            errorSi: "noExiste"
+        })
         const cantidaEnInventario = elemento.cantidad
 
 
@@ -52,11 +50,8 @@ export const eliminarFilaRegistroDelElemento = async (entrada, salida) => {
 
         await eliminarFilaRegistroPorUID(uid)
 
-        await controladorDelMovimiento({
-            elementoUID,
-            operacionIDV: "reversion",
-            origenReversion: "elementoUID"
-
+        await reversionDeMovimiento({
+            registroUID: uid,
         })
 
 

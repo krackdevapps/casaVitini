@@ -16,23 +16,6 @@ casaVitini.view = {
                     { apartamentoIDV: parametros.alojamiento }
                 )
             }
-            // else {
-            //     const zonas = this.zonas
-            //     const main = document.querySelector("main")
-
-            //     if (!zonas.hasOwnProperty(zona)) {
-            //         const uiSelector = main.querySelector("[zona=desconocida]")
-            //         uiSelector.classList.remove("ocultoInicial")
-            //     } else {
-            //         const uiSelector = main.querySelector("[contenedor=zonas]")
-            //         const zonaSelector = uiSelector.querySelector(`[zona="${zona}"]`)
-            //         zonaSelector.classList.remove("ocultoInicial")
-
-            //         zonas[zona].arranque(
-            //             { apartamentoIDV: parametros.alojamiento }
-            //         )
-            //     }
-            // }
         } else {
             this.mostrarAlojamientos()
         }
@@ -195,7 +178,6 @@ casaVitini.view = {
                     zona.appendChild(error)
                     return casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
                 }
-
                 if (respuestaServidor.ok) {
 
                     const alojamiento = respuestaServidor.alojamiento
@@ -204,32 +186,18 @@ casaVitini.view = {
 
                     const apartamentoUI = alojamiento.apartamentoUI
 
-
                     const tI = document.createElement("div")
                     tI.classList.add("textoNegrita", "padding16", "negrita")
                     tI.textContent = `Inventario del ${apartamentoUI}`
                     zona.appendChild(tI)
 
-
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("botonV1BlancoIzquierda")
-                    botonCancelar.setAttribute("boton", "dinamico")
-                    botonCancelar.textContent = "Cancelar el protocolo de preparación"
-                    botonCancelar.addEventListener("click", () => {
-                        casaVitini.view.cancelarRevision.ui({
-                            uid
-                        })
-                    })
-                    zona.appendChild(botonCancelar)
-
                     const contenedorIventario = document.createElement("div")
                     contenedorIventario.classList.add("flexVertical", "gap10")
                     zona.appendChild(contenedorIventario)
 
-
                     const info = document.createElement("div")
                     info.classList.add("textoNegrita", "padding16")
-                    info.textContent = `Vamos a realizar el inventario del apartamento. Por favor, revisa si en el alojamiento están los siguientes elementos. Si están, marca la casilla verde; si no están o faltan en cantidad, marca la casilla roja del elemento.`
+                    info.textContent = `Por favor, revisa si están los siguientes elementos. Si están, marca la casilla verde; si no están o faltan en cantidad, marca la casilla roja.`
                     contenedorIventario.appendChild(info)
 
                     const cI = document.createElement("div")
@@ -267,7 +235,7 @@ casaVitini.view = {
                     const boton = document.createElement("div")
                     boton.classList.add("botonV1BlancoIzquierda")
                     boton.setAttribute("boton", "dinamico")
-                    boton.textContent = "Finalizar revision del inventario del alojamiento"
+                    boton.textContent = "Continuar"
                     boton.addEventListener("click", () => {
                         this.finalizarResivionIventarioAlojamiento({
                             uid,
@@ -275,28 +243,19 @@ casaVitini.view = {
                         })
                     })
                     zona.appendChild(boton)
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("botonV1BlancoIzquierda")
+                    botonCancelar.setAttribute("boton", "dinamico")
+                    botonCancelar.textContent = "Cancelar revisión"
+                    botonCancelar.addEventListener("click", () => {
+                        casaVitini.view.cancelarRevision.ui({
+                            uid
+                        })
+                    })
+                    zona.appendChild(botonCancelar)
                 }
 
-
-                // tareasDelProtocolo.forEach(tDP => {
-                //     const uid = tDP.uid
-                //     const tareaUI = tDP.tareaUI
-                //     const tipoDiasIDV = tDP.tipoDiasIDV
-                //     const posicion = tDP.posicion
-                //     const totalPosiciones = tDP.totalPosiciones
-                //     const posicionUID = Number(posicion - 1)
-                //     
-
-                //     const inventarioUID = this.tareaUI({
-                //         uid,
-                //         tareaUI,
-                //         tipoDiasIDV,
-                //         posicion,
-                //         totalPosiciones
-
-                //     })
-                //     contenedorTareas.replaceChild(inventarioUID, contenedorTareas.children[posicionUID]);
-                // })
 
             },
             opcionInventarioUI: function (data) {
@@ -412,7 +371,6 @@ casaVitini.view = {
                 const cantidad_enAlojamiento = area.querySelector("[cantidad_enAlojamiento]").getAttribute("cantidad_enAlojamiento")
                 const contenedorPostRevision = area.querySelector("[contenedor=postRevision]")
 
-
                 const main = document.querySelector("main")
                 const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada({
                     alineacion: "arriba"
@@ -420,11 +378,9 @@ casaVitini.view = {
                 const contenedor = ui.querySelector("[componente=contenedor]")
                 main.appendChild(ui)
 
-
-
                 const tUI = document.createElement("p")
                 tUI.classList.add("colorGrisV1", "negrita", "padding10")
-                tUI.textContent = `¿Cual es la cantidad de ${nombre} que has encontrado en el alojamiento?`
+                tUI.textContent = `¿Cual es la cantidad de ${nombre} que encontraste en el alojamiento?`
                 contenedor.appendChild(tUI)
 
                 const contenedorCantidad = document.createElement("div")
@@ -471,11 +427,10 @@ casaVitini.view = {
                 })
                 contenedorCantidad.appendChild(botonMenos)
 
-
                 const boton = document.createElement("div")
                 boton.classList.add("botonV1BlancoIzquierda")
                 boton.setAttribute("boton", "dinamico")
-                boton.textContent = "Guardar y volver"
+                boton.textContent = "Continuar"
                 boton.addEventListener("click", (e) => {
                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                     contenedorPostRevision.textContent = `${cCantidad.value} Encontrados`
@@ -484,7 +439,6 @@ casaVitini.view = {
 
                 })
                 contenedor.appendChild(boton)
-
 
             },
             finalizarResivionIventarioAlojamiento: async function (data) {
@@ -544,37 +498,24 @@ casaVitini.view = {
                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
                 }
                 if (respuestaServidor.ok) {
-                    const revision = respuestaServidor.revision
+                    const siguientePaso = respuestaServidor.siguientePaso
 
-                    const revisionInventario = revision.revisionInventario || []
-                    const reposicionInventario = revision.reposicionInventario || []
-                    const estadoReposicon = ["noHaceFalta"]
-                    for (const rI of revisionInventario) {
-                        const color = rI.color
-
-                        if (color === "rojo") {
-                            estadoReposicon[0] = "pendiente"
-                            break
-                        }
-                    }
-
-                    if (estadoReposicon[0] === "pendiente") {
+                    if (siguientePaso === "reposicion") {
                         await casaVitini.view.zonas.resposicion.arranque({
                             apartamentoIDV,
                             uid
                         })
-                        if (reposicionInventario.length > 0) {
-                            casaVitini.view.zonas.resposicion.recuperarReposicion({
-                                apartamentoIDV,
-                                uid
-                            })
-                        }
-                    } else if (estadoReposicon[0] === "noHaceFalta") {
+                    } else if (siguientePaso === "tareas") {
                         casaVitini.view.zonas.limpieza.arranque({
-                            apartamentoIDV,
-                            uid
+                            uid,
+                            apartamentoIDV
+                        })
+                    } else if (siguientePaso === "fin") {
+                        casaVitini.view.zonas.revisionCompletada.arranque({
+                            apartamentoUI: respuestaServidor.revisionCompletada.apartamentoUI
                         })
                     }
+
                 }
             },
             recuperarInventario: async function (data) {
@@ -636,16 +577,8 @@ casaVitini.view = {
                             indicador.classList.remove("ocultoInicial")
 
                         }
-
-
-
-
-
-
                     })
-
                 }
-
             }
         },
         resposicion: {
@@ -678,21 +611,12 @@ casaVitini.view = {
                     tI.textContent = `Reposicion del inventario del ${apartamentoUI}`
                     zona.appendChild(tI)
 
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("botonV1BlancoIzquierda")
-                    botonCancelar.setAttribute("boton", "dinamico")
-                    botonCancelar.textContent = "Cancelar el protocolo de preparación"
-                    botonCancelar.addEventListener("click", () => {
-                        casaVitini.view.cancelarRevision.ui({
-                            uid
-                        })
-                    })
-                    zona.appendChild(botonCancelar)
+
 
                     const botonVolverAlInventario = document.createElement("div")
                     botonVolverAlInventario.classList.add("botonV1BlancoIzquierda")
                     botonVolverAlInventario.setAttribute("boton", "dinamico")
-                    botonVolverAlInventario.textContent = "Volver al inventario"
+                    botonVolverAlInventario.textContent = "Atras"
                     botonVolverAlInventario.addEventListener("click", async () => {
                         await casaVitini.view.zonas.inventario.arranque({
                             apartamentoIDV,
@@ -712,11 +636,9 @@ casaVitini.view = {
 
 
                     const info = document.createElement("div")
-                    info.classList.add("textoNegrita", "padding16")
-                    info.textContent = `Por favor, dirígete al almacén y revisa si puedes obtener los elementos necesarios para la reposición del inventario del alojamiento`
+                    info.classList.add("textoNegrita", "padding16", "fontSize16")
+                    info.textContent = `Por favor, dirígete al almacén y revisa si están los elementos siguientes:`
                     contenedorIventario.appendChild(info)
-
-
 
                     const cI = document.createElement("div")
                     cI.classList.add("flexVertical", "gap10")
@@ -745,7 +667,7 @@ casaVitini.view = {
                     const boton = document.createElement("div")
                     boton.classList.add("botonV1BlancoIzquierda")
                     boton.setAttribute("boton", "dinamico")
-                    boton.textContent = "Finalizar reposicion del inventario del alojamiento"
+                    boton.textContent = "Continuar"
                     boton.addEventListener("click", (e) => {
                         this.finalizarReposicionAlojamiento({
                             apartamentoIDV,
@@ -753,6 +675,17 @@ casaVitini.view = {
                         })
                     })
                     zona.appendChild(boton)
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("botonV1BlancoIzquierda")
+                    botonCancelar.setAttribute("boton", "dinamico")
+                    botonCancelar.textContent = "Cancelar revisión"
+                    botonCancelar.addEventListener("click", () => {
+                        casaVitini.view.cancelarRevision.ui({
+                            uid
+                        })
+                    })
+                    zona.appendChild(botonCancelar)
                 }
             },
             reposicionUI: function (data) {
@@ -763,8 +696,6 @@ casaVitini.view = {
                 const c = document.createElement("div")
                 c.classList.add("gridHorizontal3C_minContent_auto", "gap10", "borderRadius16", "padding6", "borderGrey1")
                 c.setAttribute("uid", uid)
-
-
 
                 const esferaContenedorVerde = document.createElement("div")
                 esferaContenedorVerde.setAttribute("color", "verde")
@@ -821,7 +752,6 @@ casaVitini.view = {
                 cRevision.setAttribute("contenedor", "postRevision")
                 cD.appendChild(cRevision)
 
-
                 return c
 
             },
@@ -875,7 +805,7 @@ casaVitini.view = {
 
                 const tUI = document.createElement("p")
                 tUI.classList.add("colorGrisV1", "negrita", "padding10")
-                tUI.textContent = `¿Cual es la cantidad de ${nombre} que has encontrado en el almancen?`
+                tUI.textContent = `¿Cual es la cantidad de ${nombre} que encontraste en el almancen?`
                 contenedor.appendChild(tUI)
 
                 const contenedorCantidad = document.createElement("div")
@@ -927,7 +857,7 @@ casaVitini.view = {
                 const boton = document.createElement("div")
                 boton.classList.add("botonV1BlancoIzquierda")
                 boton.setAttribute("boton", "dinamico")
-                boton.textContent = "Guardar y volver"
+                boton.textContent = "Continuar"
                 boton.addEventListener("click", (e) => {
                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
                     contenedorPostRevision.textContent = `${cCantidad.value} Encontrados`
@@ -995,10 +925,18 @@ casaVitini.view = {
                     casaVitini.ui.componentes.advertenciaInmersiva(respuestaServidor.error)
                 }
                 if (respuestaServidor.ok) {
-                    casaVitini.view.zonas.limpieza.arranque({
-                        apartamentoIDV,
-                        uid
-                    })
+                    const siguientePaso = respuestaServidor.siguientePaso
+
+                    if (siguientePaso === "tareas") {
+                        casaVitini.view.zonas.limpieza.arranque({
+                            uid,
+                            apartamentoIDV
+                        })
+                    } else if (siguientePaso === "fin") {
+                        casaVitini.view.zonas.revisionCompletada.arranque({
+                            apartamentoUI: respuestaServidor.revisionCompletada.apartamentoUI
+                        })
+                    }
                 }
 
             },
@@ -1093,40 +1031,48 @@ casaVitini.view = {
                     const alojamiento = respuestaServidor.alojamiento
                     const tareasDelDia = respuestaServidor.tareasDelDia
                     const apartamentoUI = alojamiento.apartamentoUI
+                    const revisionEnCurso = respuestaServidor?.revisionEnCurso
+                    const reposicionInventario = revisionEnCurso?.reposicionInventario || []
+
+
 
                     const tI = document.createElement("div")
                     tI.classList.add("textoNegrita", "padding16", "negrita")
-                    tI.textContent = `Tareas del ${apartamentoUI}`
+                    tI.textContent = `Protocolo de preparación del ${apartamentoUI}`
                     zona.appendChild(tI)
-
-
-                    const botonCancelar = document.createElement("div")
-                    botonCancelar.classList.add("botonV1BlancoIzquierda")
-                    botonCancelar.setAttribute("boton", "dinamico")
-                    botonCancelar.textContent = "Cancelar el protocolo de preparación"
-                    botonCancelar.addEventListener("click", () => {
-                        casaVitini.view.cancelarRevision.ui({
-                            uid
-                        })
-                    })
-                    zona.appendChild(botonCancelar)
-
 
                     const botonVolverALaReposicicion = document.createElement("div")
                     botonVolverALaReposicicion.classList.add("botonV1BlancoIzquierda")
                     botonVolverALaReposicicion.setAttribute("boton", "dinamico")
-                    botonVolverALaReposicicion.textContent = "Volver a la reposicion del alojamiento"
-                    botonVolverALaReposicicion.addEventListener("click", async () => {
-                        await casaVitini.view.zonas.resposicion.arranque({
-                            apartamentoIDV,
-                            uid
-                        })
 
-                        casaVitini.view.zonas.resposicion.recuperarReposicion({
-                            apartamentoIDV,
-                            uid
+                    if (reposicionInventario.length > 0) {
+                        botonVolverALaReposicicion.textContent = "Volver a la reposición"
+                        botonVolverALaReposicicion.addEventListener("click", async () => {
+                            await casaVitini.view.zonas.resposicion.arranque({
+                                apartamentoIDV,
+                                uid
+                            })
+
+                            casaVitini.view.zonas.resposicion.recuperarReposicion({
+                                apartamentoIDV,
+                                uid
+                            })
                         })
-                    })
+                    } else {
+                        botonVolverALaReposicicion.textContent = "Volver al inventario"
+                        botonVolverALaReposicicion.addEventListener("click", async () => {
+                            await casaVitini.view.zonas.inventario.arranque({
+                                apartamentoIDV,
+                                uid
+                            })
+                            casaVitini.view.zonas.inventario.recuperarInventario({
+                                apartamentoIDV,
+                                uid
+                            })
+                        })
+                    }
+
+
                     zona.appendChild(botonVolverALaReposicicion)
 
 
@@ -1142,6 +1088,8 @@ casaVitini.view = {
                     const cI = document.createElement("div")
                     cI.classList.add("flexVertical", "gap10")
                     contenedorIventario.appendChild(cI)
+
+
 
                     tareasDelDia.forEach(tDP => {
                         const uid = tDP.uid
@@ -1171,6 +1119,17 @@ casaVitini.view = {
                         })
                     })
                     zona.appendChild(boton)
+
+                    const botonCancelar = document.createElement("div")
+                    botonCancelar.classList.add("botonV1BlancoIzquierda")
+                    botonCancelar.setAttribute("boton", "dinamico")
+                    botonCancelar.textContent = "Cancelar revisión"
+                    botonCancelar.addEventListener("click", () => {
+                        casaVitini.view.cancelarRevision.ui({
+                            uid
+                        })
+                    })
+                    zona.appendChild(botonCancelar)
                 }
             },
             controlSel: function (e) {
@@ -1304,7 +1263,7 @@ casaVitini.view = {
 
                 const tUI = document.createElement("p")
                 tUI.classList.add("colorGrisV1", "negrita", "padding10")
-                tUI.textContent = `Si no puedes completar la tarea ${tareaUI} , selecciona la opción 'No puedo realizar esta tarea'. Si lo consideras oportuno, puedes dejar una nota opcional explicando el motivo por el cual no se ha podido realizar la tarea`
+                tUI.textContent = `Por que no pudiste realizar esta tarea: ${tareaUI}`
                 contenedor.appendChild(tUI)
 
                 const campoExplicacion = document.createElement("textarea")
@@ -1317,25 +1276,19 @@ casaVitini.view = {
                 const boton = document.createElement("div")
                 boton.classList.add("botonV1BlancoIzquierda")
                 boton.setAttribute("boton", "dinamico")
-                boton.textContent = "Confirmo que no puedo realizar esta tarea"
+                boton.textContent = "Continuar"
                 boton.addEventListener("click", () => {
                     casaVitini.shell.controladoresUI.limpiarAdvertenciasInmersivas()
-
                     const contenedorExplicacion = contenedorPostRevision.querySelector("[contenedor=explicacion]")
-
-
-
                     contenedorExplicacion.textContent = campoExplicacion.value
                     contenedorPostRevision.setAttribute("explicacion", campoExplicacion.value)
                     contenedorPostRevision.classList.remove("ocultoInicial")
                 })
                 contenedor.appendChild(boton)
-
             },
             finalizarLimpiezaAlojamiento: async function (data) {
 
                 const uid = data.uid
-                const apartamentoIDV = data.apartamentoIDV
                 const main = document.querySelector("main")
                 const ui = casaVitini.ui.componentes.pantallaInmersivaPersonalizada()
                 const contenedor = ui.querySelector("[componente=contenedor]")
@@ -1386,18 +1339,16 @@ casaVitini.view = {
         },
         revisionCompletada: {
             arranque: async function (data) {
-                const respuestaServidor = data.respuestaServidor
-                const apartamentoUI = respuestaServidor.apartamentoUI
-                const fechaFinLocal = respuestaServidor.fechaFinLocal
-                const revisionCompletada = respuestaServidor.revisionCompletada
+                const apartamentoUI = data.apartamentoUI
 
                 const main = document.querySelector("main")
                 const zona = main.querySelector("[zona=protocolo]")
                 zona.textContent = null
 
-                const tI = document.createElement("p")
+                const tI = document.createElement("pre")
                 tI.classList.add("textoNegrita", "padding16", "negrita")
-                tI.textContent = `Gracias por realizar el protocolo de preparación del ${apartamentoUI}, si has de realizar otra preparación, pulsa en el botón de abajo para volver a seleccionar el alojamiento`
+                tI.textContent = `Muchas gracias por haber realizado el protocolo de preparación del ${apartamentoUI}.
+Si tienes que realizar otra preparación, pulsa aquí.`
                 zona.appendChild(tI)
 
                 const botonCancelar = document.createElement("a")
@@ -1405,11 +1356,9 @@ casaVitini.view = {
                 botonCancelar.setAttribute("boton", "dinamico")
                 botonCancelar.textContent = "Ir a la pantalla de seleción del alojamiento"
                 botonCancelar.href = `/administracion/protocolos/revisar_alojamiento`
-
                 botonCancelar.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
 
                 zona.appendChild(botonCancelar)
-
             },
         }
     },
@@ -1421,12 +1370,13 @@ casaVitini.view = {
             const constructor = pantallaInmersiva.querySelector("[componente=constructor]")
 
             const titulo = constructor.querySelector("[componente=titulo]")
-            titulo.textContent = `Confirmar revisión`
+            titulo?.remove()
+            //titulo.textContent = `Cancelar revisión`
             const mensaje = constructor.querySelector("[componente=mensajeUI]")
-            mensaje.textContent = `Var a cancelar la revision, ¿Estas de acuerdo?`
+            mensaje.textContent = `¿Quieres cancelar la revisión?`
 
             const botonAceptar = constructor.querySelector("[boton=aceptar]")
-            botonAceptar.textContent = "Comfirmar la cancelación de la revision"
+            botonAceptar.textContent = "Cancelar la revisión"
             botonAceptar.addEventListener("click", () => {
                 return this.confirmar({
                     uid,
@@ -1475,7 +1425,7 @@ casaVitini.view = {
             const signo = data.signo
             const campo = data.campo
 
-            console.log("data", data)
+
 
             const cantidaEntrada = Number(campo?.value || 0)
             let cantidaFinal
@@ -1487,10 +1437,8 @@ casaVitini.view = {
             }
             campo.value = cantidaFinal
         }
-
     },
     protocoloNoDefinido: function (data) {
-
         const apartmentoUI = data.apartamentoUI
         const main = document.querySelector("main [zona=protocolo]")
 
@@ -1506,9 +1454,5 @@ casaVitini.view = {
 
         botonVolver.addEventListener("click", casaVitini.shell.navegacion.cambiarVista)
         main.appendChild(botonVolver)
-
-
-
-
     }
 }

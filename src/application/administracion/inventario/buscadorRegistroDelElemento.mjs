@@ -1,19 +1,11 @@
 import Joi from "joi";
-import { obtenerResultadosBusqueda } from "../../../infraestructure/repository/inventario/obtenerResultadosBusqueda.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
-
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
-import { obtenerResultadosBusquedaEnElRegistro } from "../../../infraestructure/repository/inventario/obtenerResultadosBusquedaEnElRegistro.mjs";
 import { obtenerResultadosBusquedaEnElRegistroDelElemento } from "../../../infraestructure/repository/inventario/obtenerResultadosBusquedaEnElRegistroDelElemento.mjs";
 
 export const buscadorRegistroDelElemento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
 
@@ -40,7 +32,7 @@ export const buscadorRegistroDelElemento = async (entrada, salida) => {
             }).required()
         }).required().messages(commonMessages)
 
-      const oVal = controlEstructuraPorJoi({
+        const oVal = controlEstructuraPorJoi({
             schema: esquemaBusqueda,
             objeto: entrada.body
         })

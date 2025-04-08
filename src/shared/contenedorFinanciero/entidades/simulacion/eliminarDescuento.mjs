@@ -34,7 +34,7 @@ export const eliminarDescuento = async (data) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const ofertaUIDParaEliminar = validadoresCompartidos.tipos.granEntero({

@@ -1,5 +1,5 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { actualizarPerfilPrecioPorApartamentoUID } from "../../../infraestructure/repository/precios/actualizarPerfilPrecioPorApartamentoUID.mjs";
@@ -7,13 +7,11 @@ import { obtenerPerfilPrecioPorApartamentoIDV } from "../../../infraestructure/r
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerImpuestosPorEntidadIDV } from "../../../infraestructure/repository/impuestos/obtenerImpuestosPorEntidadIDV.mjs";
 
+
 export const establecerNuevoPrecioApartamento = async (entrada) => {
     const mutex = new Mutex
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
@@ -113,6 +111,7 @@ export const establecerNuevoPrecioApartamento = async (entrada) => {
             detallesApartamento.totalImpuestos = sumaTotalImpuestos.toFixed(2);
             detallesApartamento.totalBrutoPorNoche = totalNocheBruto;
         }
+
         const ok = {
             ok: detallesApartamento
         };

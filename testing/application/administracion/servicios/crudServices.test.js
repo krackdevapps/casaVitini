@@ -22,7 +22,7 @@ describe('services clients', () => {
         duracionIDV: "rango",
         disponibilidadIDV: "constante",
         tituloPublico: "Pack entretenimiento",
-        definicion: "Este pack de entretenimiento es un pack temporal para testing.\n\nEste pack tiene diferentes opciones.\n\nPor favor seleccione las opciones",
+        definicion: "dGVzdA==",
         gruposDeOpciones: [
             {
                 nombreGrupo: "Viaje a Francia",
@@ -31,17 +31,19 @@ describe('services clients', () => {
                         "unaObligatoria"
                     ],
                     confSelNumero: [
-                        "maximoUnaOpcion"
+                        "variasOpcionesAlMismoTiempo"
                     ]
                 },
                 opcionesGrupo: [
                     {
                         nombreOpcion: "Viaje en avión, restaurante includio",
-                        precioOpcion: "100.00"
+                        precioOpcion: "100.00",
+                        interruptorCantidad: "desactivado"
                     },
                     {
                         nombreOpcion: "Viaje en Tren, desayuno incluido",
-                        precioOpcion: "50.00"
+                        precioOpcion: "50.00",
+                        interruptorCantidad: "desactivado"
                     }
                 ]
             },
@@ -58,11 +60,13 @@ describe('services clients', () => {
                 opcionesGrupo: [
                     {
                         nombreOpcion: "Viaje en Tren",
-                        precioOpcion: "50.00"
+                        precioOpcion: "50.00",
+                        interruptorCantidad: "desactivado"
                     },
                     {
                         nombreOpcion: "Incluir el desayuno",
-                        precioOpcion: "10.00"
+                        precioOpcion: "10.00",
+                        interruptorCantidad: "desactivado"
                     }
                 ]
             }

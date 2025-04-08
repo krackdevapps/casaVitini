@@ -15,6 +15,14 @@ body {
     background-image: url("/activos/imagenes/instalaciones/2-editada.jpeg");
 }
 
+@media (max-width: 920px) {
+    body {
+        background-position: 0% center;
+        background-image: url("/activos/imagenes/fotos/portadaMovil.jpeg");
+    }
+}
+
+
 main {
     width: 100%;
     max-width: 100%;
@@ -28,6 +36,7 @@ main {
 .menuGlobal_styloCompartido {
     background-color: rgba(255, 255, 255, 0.4);
 }
+
 .botonMenuResponsivo {
     background-image: url(/activos/iconos/menu_negro.svg);
     background-color: rgba(255, 255, 255, 0.4);
@@ -87,9 +96,11 @@ main {
 
 
 }
+
 [estructura=menu] {
     backdrop-filter: blur(30px) !important;
 }
+
 .marcoElasticoRelativo {
     padding-top: 120px;
 }
@@ -148,6 +159,7 @@ main {
     font-weight: 500;
     color: rgba(0, 0, 0, 0.8);
 }
+
 .conenedorReserva:hover {
     background: rgba(0, 0, 0, 0.5);
 }
@@ -163,6 +175,7 @@ main {
     gap: 50px;
     bottom: 20px;
 }
+
 .hl {
     display: flex;
     flex-direction: column;

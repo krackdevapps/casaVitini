@@ -87,7 +87,7 @@ casaVitini.view = {
                         ofertaUI.setAttribute("ofertaUID", ofertaUID)
                         ofertaUI.setAttribute("href", "/administracion/gestion_de_ofertas/oferta:" + ofertaUID)
 
-                        ofertaUI.addEventListener("click", (e) => { casaVitini.view.traductorCambioVista(e) })
+                        ofertaUI.addEventListener("click",casaVitini.shell.navegacion.cambiarVista)
                         const tituloOferta = document.createElement("p")
                         tituloOferta.classList.add("ofertaUITituloOferta")
                         tituloOferta.textContent = nombreOferta
@@ -866,14 +866,5 @@ casaVitini.view = {
             }
         }
     },
-    traductorCambioVista: function (oferta) {
-        oferta.preventDefault()
-        oferta.stopPropagation()
-        const vista = oferta.target.closest("[vista]").getAttribute("vista")
-        const entrada = {
-            vista: vista,
-            tipoOrigen: "menuNavegador"
-        }
-        casaVitini.shell.navegacion.controladorVista(entrada)
-    },
+
 }

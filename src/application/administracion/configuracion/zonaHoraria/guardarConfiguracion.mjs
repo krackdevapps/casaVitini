@@ -1,14 +1,12 @@
 import { listaZonasHorarias } from "../../../../shared/zonasHorarias.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { actualizarParConfiguracion } from "../../../../infraestructure/repository/configuracion/parConfiguracion/actualizarParConfiguracion.mjs";
 
+
 export const guardarConfiguracion = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -29,6 +27,7 @@ export const guardarConfiguracion = async (entrada, salida) => {
         await actualizarParConfiguracion({
             zonaHoraria: zonaHoraria
         })
+
         const ok = {
             ok: "Se ha actualizado correctamente la configuración"
         }

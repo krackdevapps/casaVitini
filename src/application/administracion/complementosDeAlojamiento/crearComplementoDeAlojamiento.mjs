@@ -1,15 +1,13 @@
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validarObjeto } from "../../../shared/complementosDeAlojamiento/validarObjeto.mjs";
 import { insertarComplemento } from "../../../infraestructure/repository/complementosDeAlojamiento/insertarComplemento.mjs";
+
 
 export const crearComplementoDeAlojamiento = async (entrada) => {
     const mutex = new Mutex();
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
         const oV = await validarObjeto({
@@ -23,6 +21,7 @@ export const crearComplementoDeAlojamiento = async (entrada) => {
         oV.estadoIDV = "desactivado"
         const nuevoComplemento = await insertarComplemento(oV);
         if (nuevoComplemento) {
+
             const ok = {
                 ok: "Se ha añadido correctamente el servicio",
                 nuevoComplementoUID: nuevoComplemento.complementoUID,

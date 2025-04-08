@@ -138,6 +138,17 @@ casaVitini.view = {
             const pagina = respuestaServidor.pagina
             const sentidoColumna = respuestaServidor.sentidoColumna
 
+
+            misReservas.forEach(r => {
+                const estadoReservaIDV = r.estadoReservaIDV
+                if (estadoReservaIDV === "confirmada") {
+                    r.estadoReservaIDV = "Cofirmada"
+                } else if (estadoReservaIDV === "pendiente") {
+                    r.estadoReservaIDV = "Pendiente"
+                }
+
+            })
+
             const columnasGrid = [
                 {
                     columnaUI: "Reserva",
@@ -155,10 +166,10 @@ casaVitini.view = {
                     columnaUI: "Estado de la reserva",
                     columnaIDV: "estadoReservaIDV",
                 },
-                {
-                    columnaUI: "Estado del pago",
-                    columnaIDV: "estadoPagoIDV",
-                },
+                // {
+                //     columnaUI: "Estado del pago",
+                //     columnaIDV: "estadoPagoIDV",
+                // },
                 {
                     columnaUI: "Fecha de la reserva",
                     columnaIDV: "fechaCreacion",

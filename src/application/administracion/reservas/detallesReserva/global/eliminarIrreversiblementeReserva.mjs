@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex";
 import { vitiniCrypto } from "../../../../../shared/VitiniIDX/vitiniCrypto.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerUsuario } from "../../../../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -12,10 +12,7 @@ import { sincronizarRegistros } from "../../../../../shared/reservas/detallesRes
 export const eliminarIrreversiblementeReserva = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -28,7 +25,7 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const clave = entrada.body.clave;
         if (!clave) {
@@ -57,15 +54,7 @@ export const eliminarIrreversiblementeReserva = async (entrada) => {
             const error = "Revisa la contraseña actual que has escrito porque no es correcta";
             throw new Error(error);
         }
-        const rol = usuario.rolIDV;
-        const rolAdministrador = "administrador";
-        if (rol !== rolAdministrador) {
-            const error = "Tu cuenta no está autorizada para eliminar reservas. Puedes cancelar las reservas pero no eliminarlas.";
-            throw new Error(error);
-        }
         await obtenerReservaPorReservaUID(reservaUID)
-
-
         const servicios_EnReserva = await obtenerServiciosPorReservaUID(reservaUID)
         for (const sER of servicios_EnReserva) {
             await sincronizarRegistros({

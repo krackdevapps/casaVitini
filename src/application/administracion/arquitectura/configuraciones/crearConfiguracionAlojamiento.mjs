@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { insertarPerfilPrecio } from "../../../../infraestructure/repository/precios/insertarPerfilPrecio.mjs";
 import { Mutex } from "async-mutex";
@@ -11,10 +11,7 @@ export const crearConfiguracionAlojamiento = async (entrada) => {
     const mutex = new Mutex()
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2

@@ -2,21 +2,18 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../shared/configuracion/codigoZonaHoraria.mjs";
 import { utilidades } from "../../../shared/utilidades.mjs";
 import { apartamentosOcupadosHoy_paraSitaucion } from "../../../shared/calendariosSincronizados/airbnb/apartamentosOcupadosHoyAirbnb_paraSitaucion.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../shared/configuracion/horasSalidaEntrada.mjs";
 import { obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc.mjs";
 import { obtenerReservaPorReservaUID } from "../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
 import { obtenerApartamentosDeLaReservaPorReservaUID } from "../../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerReservasQueRodeanUnaFecha } from "../../../infraestructure/repository/reservas/selectoresDeReservas/obtenerReservasQueRodeanUnaFecha.mjs";
+import { obtenerEstadoRevisionDelAlojamiento } from "../../../shared/protocolos/obtenerEstadoRevisionDelAlojamiento.mjs";
 
 export const obtenerSituacion = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const apartamentosObjeto = {};
         const configuracionesDeAlojamiento = await obtenerTodasLasConfiguracionDeLosApartamentoConOrdenAsc()
@@ -37,8 +34,18 @@ export const obtenerSituacion = async (entrada, salida) => {
                 estadoApartamento: estadoApartamento,
                 zonaIDV,
                 reservas: [],
-                estadoPernoctacion: "libre"
+                estadoPernoctacion: "libre",
+                estadoPreparacion: {}
             };
+
+
+
+            const estadoPreparacion = await obtenerEstadoRevisionDelAlojamiento({
+                apartamentoIDV
+            })
+
+            apartamentosObjeto[apartamentoIDV].estadoPreparacion = estadoPreparacion
+
         }
         const zonaHoraria = (await codigoZonaHoraria()).zonaHoraria;
         const tiempoZH = DateTime.now().setZone(zonaHoraria);
@@ -81,8 +88,10 @@ export const obtenerSituacion = async (entrada, salida) => {
                 const apartamentosDeLaReserva = await obtenerApartamentosDeLaReservaPorReservaUID(reservaUID)
                 if (apartamentosDeLaReserva.length > 0) {
                     apartamentosDeLaReserva.forEach((apartamento) => {
-                        if (apartamentosObjeto[apartamento.apartamentoIDV]) {
-                            apartamentosObjeto[apartamento.apartamentoIDV].estadoPernoctacion = "ocupado";
+                        const apartamentoIDV = apartamento.apartamentoIDV
+
+                        if (apartamentosObjeto[apartamentoIDV]) {
+                            apartamentosObjeto[apartamentoIDV].estadoPernoctacion = "ocupado";
                         }
                         const tiempoRestante = utilidades.calcularTiempoRestanteEnFormatoISO(fechaConHoraSalidaFormato_ISO_ZH, fechaActualCompletaTZ);
                         const cantidadDias = utilidades.calcularDiferenciaEnDias(fechaConHoraEntradaFormato_ISO_ZH, fechaConHoraSalidaFormato_ISO_ZH);
@@ -130,9 +139,11 @@ export const obtenerSituacion = async (entrada, salida) => {
                             tiempoRestante: tiempoRestante,
                             numeroDiasReserva: numeroDiaReservaUI
                         };
-                        if (apartamentosObjeto[apartamento.apartamentoIDV]) {
-                            apartamentosObjeto[apartamento.apartamentoIDV].reservas.push(detalleReservaApartamento);
+                        if (apartamentosObjeto[apartamentoIDV]) {
+                            apartamentosObjeto[apartamentoIDV].reservas.push(detalleReservaApartamento);
                         }
+
+
                     });
                 }
             }

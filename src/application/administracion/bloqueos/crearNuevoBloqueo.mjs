@@ -2,8 +2,6 @@ import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../shared/configuracion/codigoZonaHoraria.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { eliminarBloqueoCaducado } from "../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
-
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
 import { insertarNuevoBloqueo } from "../../../infraestructure/repository/bloqueos/insertarNuevoBloqueo.mjs";
 import { valdiarEsquemaEntrada } from "../../../shared/bloqueos/validarEsquemaEntrada.mjs";
@@ -11,10 +9,7 @@ import { valdiarEsquemaEntrada } from "../../../shared/bloqueos/validarEsquemaEn
 export const crearNuevoBloqueo = async (entrada, salida) => {
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
 
         valdiarEsquemaEntrada(entrada.body)

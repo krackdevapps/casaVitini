@@ -1,10 +1,9 @@
 import { existsSync, readFileSync, readFile } from 'fs';
-export const cambiarVista = async (transaccion) => {
+import { secPort } from './secOps/secPort.mjs';
+export const cambiarVista = async (entrada) => {
     try {
-        const vista = transaccion.vista
+        const vista = entrada.vista
         const arbol = vista.split("/").filter(n => n)
-        const usuarioIDX = transaccion.usuario
-        const rolIDV = transaccion.rolIDV
         let selectorRama = './ui/vistas/public'
         let urlResuelta = "";
         if (arbol.length === 0) {
@@ -17,59 +16,11 @@ export const cambiarVista = async (transaccion) => {
         }
 
         const controlFiltro = /^[a-z0-9_]+$/;
-        let portal
         for (let rama of arbol) {
             rama = rama.toLowerCase()
             if (controlFiltro.test(rama)) {
                 selectorRama = selectorRama + "/" + rama
-
-                if (existsSync(selectorRama)) {
-
-                    const archivoIDX = selectorRama + "/IDX.json"
-
-                    if (existsSync(archivoIDX)) {
-
-                        const secFile = readFileSync(archivoIDX, 'utf-8')
-                        const secConf = JSON.parse(secFile)
-                        const mode = secConf?.mode ?? "private"
-
-                        const modes = [
-                            "private",
-                            "public"
-                        ]
-                        if (!modes.includes(mode)) {
-                            return {
-                                error: "mode en IDX mal configurado"
-                            }
-                        }
-                        if (mode === "public") {
-                            portal = null
-                            urlResuelta + "/" + rama
-
-                        } else if (mode === "private") {
-                            const roles = secConf?.roles
-
-                            const rolesVal = [
-                                "administrador",
-                                "empleado",
-                                "cliente"
-                            ]
-
-                            const controlRol = roles.some(r => !rolesVal.includes(r));
-                            if (controlRol || roles.length === 0) {
-                                return {
-                                    error: "rol en IDX mal configurado"
-                                }
-                            }
-
-                            if (!usuarioIDX) {
-                                portal = "IDX"
-                            } else if (roles.length > 0 && !roles.includes(rolIDV)) {
-                                portal = "ROL"
-                            }
-                        }
-                    }
-                } else {
+                if (!existsSync(selectorRama)) {
                     break
                 }
                 urlResuelta = urlResuelta + "/" + rama
@@ -77,7 +28,13 @@ export const cambiarVista = async (transaccion) => {
                 break
             }
         }
-
+        const portal = await secPort({
+            arbol: arbol,
+            usuario: entrada.usuario,
+            tipoPermiso: "vista"
+        })
+        
+        //let portal
         let parametros = []
         let urlResueltoParseador = urlResuelta.split("/")
         urlResueltoParseador = urlResueltoParseador.filter(rama => rama)
@@ -104,13 +61,15 @@ export const cambiarVista = async (transaccion) => {
         } else if (portal === "ROL") {
             urlResuelta = "/sys/portal/rol"
             vistaSelector = "./ui/vistas/sys/rol/ui.ejs"
-
             jsOptionalSelector = "./ui/vistas/sys/rol/ui.js"
             cssOptionalSelector = "./ui/vistas/sys/rol/ui.css"
         } else {
             jsOptionalSelector = "./ui/vistas/public" + urlResuelta + "/ui.js"
             cssOptionalSelector = "./ui/vistas/public" + urlResuelta + "/ui.css"
         }
+
+
+
 
         if (existsSync(vistaSelector)) {
 
@@ -174,8 +133,8 @@ export const cambiarVista = async (transaccion) => {
             const error = "noExisteLaVista"
             throw new Error(error)
         }
-    } catch (errorCapturado) {
+    } catch (error) {
 
-        throw errorCapturado;
+        throw error;
     }
 }

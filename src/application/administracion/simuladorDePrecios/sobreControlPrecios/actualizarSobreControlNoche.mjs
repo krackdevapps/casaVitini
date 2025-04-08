@@ -1,7 +1,7 @@
 import { utilidades } from "../../../../shared/utilidades.mjs"
 import { obtenerDetalleNochePorFechaNochePorApartamentoIDV } from "../../../../infraestructure/repository/simulacionDePrecios/sobreControlDePrecios/obtenerDetalleNochePorFechaNochePorApartamentoIDV.mjs"
 import { actualizarSobreControlDeLaNoche } from "../../../../infraestructure/repository/simulacionDePrecios/sobreControlDePrecios/actualizarSobreControlDeLaNoche.mjs"
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs"
 import { obtenerSimulacionPorSimulacionUID } from "../../../../infraestructure/repository/simulacionDePrecios/obtenerSimulacionPorSimulacionUID.mjs"
 import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simuladorDePrecios/controladorGeneracionDesgloseFinanciero.mjs"
@@ -9,11 +9,7 @@ import { controladorGeneracionDesgloseFinanciero } from "../../../../shared/simu
 
 export const actualizarSobreControlNoche = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 5
@@ -26,7 +22,7 @@ export const actualizarSobreControlNoche = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const apartamentoIDV = validadoresCompartidos.tipos.cadena({
             string: entrada.body.apartamentoIDV,

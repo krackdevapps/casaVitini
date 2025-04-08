@@ -1,16 +1,13 @@
 import { eliminarCamaDeLaHabitacionPorCamaUID } from "../../../../infraestructure/repository/arquitectura/configuraciones/eliminarCamaDeLaHabitacionPorCamaUID.mjs";
 import { obtenerCamasDeLaHabitacionPorCamaUID } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerCamasDeLaHabitacionPorCamaUID.mjs";
 import { obtenerConfiguracionPorApartamentoIDV } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerConfiguracionPorApartamentoIDV.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerHabitacionDelApartamentoPorHabitacionUID } from "../../../../infraestructure/repository/arquitectura/configuraciones/obtenerHabitacionDelApartamentoPorHabitacionUID.mjs";
 
 export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -22,7 +19,7 @@ export const eliminarCamaDeConfiguracionDeAlojamiento = async (entrada, salida) 
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const detallesCamaEnLaHabitacion = await obtenerCamasDeLaHabitacionPorCamaUID(camaUID)

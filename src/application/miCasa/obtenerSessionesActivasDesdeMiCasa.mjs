@@ -1,13 +1,10 @@
 import { DateTime } from "luxon";
-import { VitiniIDX } from "../../shared/VitiniIDX/control.mjs";
+;
 import { obtenerSessionesActivasPorUsuario } from "../../infraestructure/repository/sessiones/obtenerSessionesActivasPorUsuario.mjs";
 import { campoDeTransaccion } from "../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 
 export const obtenerSessionesActivasDesdeMiCasa = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.control()
 
         const usuarioIDX = entrada.session.usuario;
         await campoDeTransaccion("iniciar")

@@ -1,12 +1,8 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
 export const cancelarReserva = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.control()
-
         const mensaje = "Función temporalmente deshabilitada."
         throw new Error(mensaje)
 
@@ -18,7 +14,7 @@ export const cancelarReserva = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
     } catch (errorCapturado) {
         throw errorCapturado

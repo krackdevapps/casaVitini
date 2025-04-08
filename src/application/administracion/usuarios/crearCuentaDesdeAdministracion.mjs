@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../../shared/VitiniIDX/vitiniCrypto.mjs";
 import { insertarUsuario } from "../../../infraestructure/repository/usuarios/insertarUsuario.mjs";
@@ -10,16 +10,11 @@ import { campoDeTransaccion } from "../../../infraestructure/repository/globales
 import { usuariosLimite } from "../../../shared/usuarios/usuariosLimite.mjs";
 import { obtenerUsuarioPorCodigoVerificacion } from "../../../infraestructure/repository/usuarios/obtenerUsuarioPorCodigoVerificacion.mjs";
 import { validadorIDX } from "../../../shared/VitiniIDX/validadorIDX.mjs";
-import { rolesIDV } from "../../../shared/usuarios/rolesIDV.mjs";
 
 export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         mutex.acquire()
         await campoDeTransaccion("iniciar")
@@ -39,14 +34,7 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             limpiezaEspaciosAlrededor: "si",
             soloMinusculas: "si"
         })
-        const rolIDV = validadoresCompartidos.tipos.cadena({
-            string: entrada.body.rolIDV,
-            nombreCampo: "El nombre del rolIDV",
-            filtro: "strictoIDV",
-            sePermiteVacio: "no",
-            limpiezaEspaciosAlrededor: "si",
-            soloMinusculas: "si"
-        })
+ 
         const testingVI = process.env.TESTINGVI
         if (testingVI) {
             validadoresCompartidos.tipos.cadena({
@@ -58,10 +46,6 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
             })
         }
         await validadorIDX(usuarioIDX)
-        rolesIDV({
-            operacion: "validar",
-            rolIDV: rolIDV
-        })
         await obtenerUsuario({
             usuario: usuarioIDX,
             errorSi: "existe"
@@ -69,14 +53,6 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
         usuariosLimite(usuarioIDX)
 
         await eliminarUsuarioPorRolPorEstadoVerificacion();
-        const rolOperacion = IDX.rol()
-        if (rolOperacion !== "administrador") {
-            if (rolIDV !== "cliente") {
-                const m = "Solo cuentas administrativas pueden crear con roles distintos a roles cliente. Por favor seleciona el rol cliente para crear la cuenta"
-                throw new Error(m)
-            }
-        }
-
         const estadoCuenta = "desactivado";
         await campoDeTransaccion("iniciar")
         const cryptoData = {
@@ -119,7 +95,6 @@ export const crearCuentaDesdeAdministracion = async (entrada, salida) => {
 
         const nuevoUsuario = await insertarUsuario({
             usuarioIDX: usuarioIDX,
-            rolIDV: rolIDV,
             estadoCuenta: estadoCuenta,
             nuevaSal: nuevaSal,
             hashCreado: hashCreado,

@@ -12,8 +12,8 @@ export const valdiarEsquemaEntrada = (data) => {
             tipoBloqueoIDV: Joi.string().allow(''),
             zonaIDV: Joi.string().allow(''),
             motivo: Joi.string().allow(''),
-            fechaInicio: Joi.date().optional(),
-            fechaFin: Joi.date().optional(),
+            fechaInicio: Joi.string().optional(),
+            fechaFin: Joi.string().optional(),
         }).required().messages(commonMessages)
         controlEstructuraPorJoi({
             schema: schema,

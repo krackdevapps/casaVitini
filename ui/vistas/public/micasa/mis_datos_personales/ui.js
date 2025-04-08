@@ -32,11 +32,11 @@ casaVitini.view = {
             contenedorBanner.appendChild(contenedorUsuarioIDX)
             contenedorDatosPersonales.appendChild(contenedorBanner)
             const contenedorDatosUsuario = document.createElement("div")
-            contenedorDatosUsuario.classList.add("detallesUsuario_contenedorDatosUsuario")
-            const nombreUI = document.createElement("a")
-            nombreUI.classList.add("detallesUsuario_contenedorCampoEInfo")
+            contenedorDatosUsuario.classList.add("flexVertical")
+            const nombreUI = document.createElement("div")
+            nombreUI.classList.add("flexVertical", "gap6")
             let titulo = document.createElement("p")
-            titulo.classList.add("textoNegita", "padding14")
+            titulo.classList.add("negrita", "padding14")
             titulo.textContent = "Nombre"
             nombreUI.appendChild(titulo)
             const campoNombre = document.createElement("input")
@@ -46,10 +46,10 @@ casaVitini.view = {
             campoNombre.value = nombre
             nombreUI.appendChild(campoNombre)
             contenedorDatosUsuario.appendChild(nombreUI)
-            const primerApellidoUI = document.createElement("a")
-            primerApellidoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
+            const primerApellidoUI = document.createElement("div")
+            primerApellidoUI.classList.add("flexVertical")
             titulo = document.createElement("p")
-            titulo.classList.add("textoNegita", "padding14")
+            titulo.classList.add("negrita", "padding14")
             titulo.textContent = "Primero apellido"
             primerApellidoUI.appendChild(titulo)
             const campoPrimerApellido = document.createElement("input")
@@ -59,10 +59,10 @@ casaVitini.view = {
             campoPrimerApellido.value = primerApellido
             primerApellidoUI.appendChild(campoPrimerApellido)
             contenedorDatosUsuario.appendChild(primerApellidoUI)
-            const segundoApellidoUI = document.createElement("a")
-            segundoApellidoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
+            const segundoApellidoUI = document.createElement("div")
+            segundoApellidoUI.classList.add("flexVertical")
             titulo = document.createElement("p")
-            titulo.classList.add("textoNegita", "padding14")
+            titulo.classList.add("negrita", "padding14")
             titulo.textContent = "Segundo apellido"
             segundoApellidoUI.appendChild(titulo)
             const campoSegundoApellido = document.createElement("input")
@@ -72,10 +72,10 @@ casaVitini.view = {
             campoSegundoApellido.value = segundoApellido
             segundoApellidoUI.appendChild(campoSegundoApellido)
             contenedorDatosUsuario.appendChild(segundoApellidoUI)
-            const pasaporteUI = document.createElement("a")
-            pasaporteUI.classList.add("detallesUsuario_contenedorCampoEInfo")
+            const pasaporteUI = document.createElement("div")
+            pasaporteUI.classList.add("flexVertical")
             titulo = document.createElement("p")
-            titulo.classList.add("textoNegita", "padding14")
+            titulo.classList.add("negrita", "padding14")
 
             titulo.textContent = "Pasaporte"
             pasaporteUI.appendChild(titulo)
@@ -87,9 +87,9 @@ casaVitini.view = {
             pasaporteUI.appendChild(campoPasaporte)
             contenedorDatosUsuario.appendChild(pasaporteUI)
             const telefonoUI = document.createElement("a")
-            telefonoUI.classList.add("detallesUsuario_contenedorCampoEInfo")
+            telefonoUI.classList.add("flexVertical")
             titulo = document.createElement("p")
-            titulo.classList.add("textoNegita", "padding14")
+            titulo.classList.add("negrita", "padding14")
             titulo.textContent = "Teléfono"
             telefonoUI.appendChild(titulo)
             const campoTelefono = document.createElement("input")
@@ -99,10 +99,10 @@ casaVitini.view = {
             campoTelefono.value = telefono
             telefonoUI.appendChild(campoTelefono)
             contenedorDatosUsuario.appendChild(telefonoUI)
-            const mailUI = document.createElement("a")
-            mailUI.classList.add("detallesUsuario_contenedorCampoEInfo")
+            const mailUI = document.createElement("div")
+            mailUI.classList.add("flexVertical")
             titulo = document.createElement("p")
-            titulo.classList.add("textoNegita", "padding14")
+            titulo.classList.add("negrita", "padding14")
             titulo.textContent = "Correo electroníco"
             mailUI.appendChild(titulo)
             const campomail = document.createElement("input")
@@ -114,7 +114,7 @@ casaVitini.view = {
             contenedorDatosUsuario.appendChild(mailUI)
             contenedorDatosPersonales.appendChild(contenedorDatosUsuario)
             const contenedorBotones = document.createElement("div")
-            contenedorBotones.classList.add("detallesUsuario_contenedorBotones")
+            contenedorBotones.classList.add("flexVertical", "gap10", "ocultoInicial")
             contenedorBotones.setAttribute("componente", "contenedorBotones")
             const botonGuardarCambios = document.createElement("div")
             botonGuardarCambios.classList.add("botonV1BlancoIzquierda")

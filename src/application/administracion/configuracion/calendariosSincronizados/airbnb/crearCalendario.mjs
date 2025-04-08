@@ -8,12 +8,10 @@ import { obtenerCalendarioPorCalendarioUIDPublico } from '../../../../../infraes
 import { insertarCalendarioSincronizado } from '../../../../../infraestructure/repository/calendario/insertarCalendarioSincronizado.mjs';
 import axios from 'axios';
 
+
 export const crearCalendario = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -80,6 +78,7 @@ export const crearCalendario = async (entrada, salida) => {
         }
 
         const nuevoCalendario = await insertarCalendarioSincronizado(dataInsertarCalendarioSincronizado)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha guardado el nuevo calendario y está listo para ser sincronizado.",

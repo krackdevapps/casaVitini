@@ -1,7 +1,7 @@
 import { Mutex } from "async-mutex";
 import { insertarCliente } from "../../../../../infraestructure/repository/clientes/insertarCliente.mjs";
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerHabitacionDelLaReserva } from "../../../../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelLaReserva.mjs";
 import { insertarPernoctanteEnLaHabitacion } from "../../../../../infraestructure/repository/reservas/pernoctantes/insertarPernoctanteEnLaHabitacion.mjs";
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs";
@@ -10,11 +10,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
     const mutex = new Mutex()
     try {
 
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 9
@@ -28,7 +24,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const habitacionUID = validadoresCompartidos.tipos.cadena({
             string: entrada.body.habitacionUID,
@@ -37,7 +33,7 @@ export const crearClienteDesdeReservaYAnadirloAreserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const resolverReserva = await obtenerReservaPorReservaUID(reservaUID)

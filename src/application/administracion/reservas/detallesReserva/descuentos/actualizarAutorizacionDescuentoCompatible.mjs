@@ -3,7 +3,7 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { obtenerOferatPorOfertaUID } from "../../../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs"
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/obtenerDesgloseFinancieroPorReservaUIDPorOfertaUIDEnInstantaneaOfertasPorCondicion.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs"
 import { actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID } from "../../../../../infraestructure/repository/reservas/transacciones/desgloseFinanciero/actualizarAutorizacionOfertaPorReservaUIDPorOfertaUID.mjs"
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
@@ -11,11 +11,7 @@ import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/co
 export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 3
@@ -27,7 +23,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const ofertaUID = validadoresCompartidos.tipos.cadena({
@@ -37,7 +33,7 @@ export const actualizarAutorizacionDescuentoCompatible = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const nuevaAutorizacion = entrada.body.nuevaAutorizacion

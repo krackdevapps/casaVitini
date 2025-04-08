@@ -55,6 +55,7 @@ describe('hosting plugins system', () => {
                 definicion: "Complemento temporal de alojamiento para testing",
                 tipoPrecio: "porNoche",
                 precio: "100.00",
+                tipoUbicacion: "alojamiento"
             },
             session: fakeAdminSession
         })
@@ -75,6 +76,8 @@ describe('hosting plugins system', () => {
                 definicion: "Complemento temporal de alojamiento para testing",
                 tipoPrecio: "porNoche",
                 precio: "100.00",
+                tipoUbicacion: "alojamiento"
+
             },
             session: fakeAdminSession
         }

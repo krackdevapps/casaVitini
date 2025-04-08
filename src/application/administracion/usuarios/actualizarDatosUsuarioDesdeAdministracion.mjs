@@ -1,16 +1,12 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerIDX } from "../../../infraestructure/repository/usuarios/obtenerIDX.mjs";
 import { actualizarDatos } from "../../../infraestructure/repository/usuarios/actualizarDatos.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
-import { controlRol } from "../../../shared/usuarios/controlRol.mjs";
 
 export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -85,10 +81,6 @@ export const actualizarDatosUsuarioDesdeAdministracion = async (entrada, salida)
             mail: mail
         };
         await validadoresCompartidos.usuarios.unicidadCorreo(validarDatosUsuario);
-        await controlRol({
-            usuarioOperacion: IDX.vitiniIDX(),
-            usuarioDestino: usuarioIDX
-        })  
         await campoDeTransaccion("iniciar")
 
 

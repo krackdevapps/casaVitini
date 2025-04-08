@@ -1,14 +1,11 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerServicioPorServicioUID } from "../../../infraestructure/repository/servicios/obtenerServicioPorServicioUID.mjs";
+import { obtenerElementoPorElementoUID } from "../../../infraestructure/repository/inventario/obtenerElementoPorElementoUID.mjs";
 
 export const detallesServicio = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -21,9 +18,30 @@ export const detallesServicio = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
         const servicio = await obtenerServicioPorServicioUID(servicioUID)
+        const gruposDeOpciones = servicio.contenedor.gruposDeOpciones
+
+        for (const [grupoIDV, gDO] of Object.entries(gruposDeOpciones)) {
+            const opcionesGrupo = gDO.opcionesGrupo
+            for (const og of opcionesGrupo) {
+                const elementoUID = og?.elementoEnlazado?.elementoUID
+                if (elementoUID) {
+                    const elemento = await obtenerElementoPorElementoUID({
+                        elementoUID,
+                        errorSi: "desactivado"
+                    })
+                    if (!elemento) {
+                        og.elementoEnlazado.nombre = "Elemento no encontrado en el inventario"
+                    } else {
+                        og.elementoEnlazado.nombre = elemento.nombre
+                    }
+
+                }
+            }
+        }
+
         delete servicio.testingVI
         const ok = {
             ok: servicio

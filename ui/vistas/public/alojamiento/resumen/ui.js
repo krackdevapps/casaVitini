@@ -383,7 +383,7 @@ casaVitini.view = {
         campoNombreTitular.classList.add(
             "campoTitular"
         )
-        campoNombreTitular.placeholder = "Nombre del titular de la reserva"
+        campoNombreTitular.placeholder = "Nombre completo del titular de la reserva"
         campoNombreTitular.setAttribute("campo", "nombreTitular")
         campoNombreTitular.value = "test"
         contenedorTitular.appendChild(campoNombreTitular)
@@ -812,7 +812,7 @@ Un depósito del 20% para reservas de 15 días o más.`
 
                         const info = document.createElement("p")
                         info.classList.add("padding16")
-                        info.textContent = "Esta habitación dispone de más de un tipo de configuración para el descanso. Por favor, seleccione el tipo de cama:"
+                        info.textContent = "Esta habitación dispone de más de un tipo de cama. Por favor, seleccione el tipo de cama:"
                         bloqueHabitacion.appendChild(info)
                         const selectorCama = document.createElement("select")
                         selectorCama.setAttribute("componente", "selectorCama")
@@ -864,7 +864,7 @@ Un depósito del 20% para reservas de 15 días o más.`
                     } else {
                         const info = document.createElement("p")
                         info.classList.add("padding10")
-                        info.textContent = "Esta habitación dispone únicamente de la siguiente configuración para el descanso:"
+                        info.textContent = "Esta habitación dispone del siguiente tipo de cama:"
                         bloqueHabitacion.appendChild(info)
 
 

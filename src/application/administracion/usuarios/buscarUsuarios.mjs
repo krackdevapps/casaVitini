@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { buscarUsuariosPorTermino } from "../../../infraestructure/repository/usuarios/buscarUsuarios.mjs";
 import { controlEstructuraPorJoi } from "../../../shared/validadores/controlEstructuraPorJoi.mjs";
@@ -8,11 +8,7 @@ import { rolesIDV } from "../../../shared/usuarios/rolesIDV.mjs";
 
 export const buscarUsuarios = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         const commonMessages = validadoresCompartidos.herramientasExternas.joi.mensajesErrorPersonalizados
 
@@ -53,11 +49,14 @@ export const buscarUsuarios = async (entrada, salida) => {
             soloMinusculas: "si"
         })
 
-        const pagina = validadoresCompartidos.tipos.granEntero({
+
+        const pagina = validadoresCompartidos.tipos.numero({
             number: entrada.body.pagina || 1,
             nombreCampo: "El numero de página",
+            filtro: "numeroSimple",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
+            sePermiteCero: "no",
             sePermitenNegativos: "no"
         })
 

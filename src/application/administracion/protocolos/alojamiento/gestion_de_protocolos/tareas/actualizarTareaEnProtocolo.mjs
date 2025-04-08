@@ -1,13 +1,9 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
-import { validarTareaDelProtocolo } from "../../../../../shared/protocolos/validarTareaDelProtocolo.mjs";
-import { actualizarTareaEnProtocoloPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/tareas/actualizarTareaEnProtocoloPorUID.mjs";
+import { actualizarTareaEnProtocoloPorUID } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/actualizarTareaEnProtocoloPorUID.mjs"
+import { validarTareaDelProtocolo } from "../../../../../../shared/protocolos/validarTareaDelProtocolo.mjs"
 
 export const actualizarTareaEnProtocolo = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         const nuevoElemento = entrada.body
         const protocolVal = validarTareaDelProtocolo({

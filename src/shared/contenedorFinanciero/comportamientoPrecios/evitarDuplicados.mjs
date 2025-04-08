@@ -1,7 +1,7 @@
 import Decimal from "decimal.js"
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs"
 import { obtenerNombreComportamientoPorNombreUI } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientoPorNombreUI.mjs"
-import {  obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID.mjs"
+import { obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosDistintosPorTipoIDVPorDiasArrayPorApartamentoIDV_ignorandoComportamientoUID.mjs"
 import { obtenerComportamientosPorRangoPorCreacionPorTipoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorCreacionPorTipoIDV.mjs"
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs"
 import { obtenerComportamientosPorTipoPorApartamentoIDV } from "../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorTipoPorApartamentoIDV.mjs"
@@ -88,6 +88,7 @@ export const evitarDuplicados = async (data) => {
                 estadoArray: ["activado", "desactivado"]
             })
 
+
             comportamientosEnConflicto.push(...comportamientosPorRango)
             const comportamientosPorAntelacion = await obtenerComportamientosPorRangoPorCreacionPorTipoIDV({
                 fechaInicio_ISO: fechaInicio_ISO,
@@ -128,20 +129,20 @@ export const evitarDuplicados = async (data) => {
             if (transaccion === "actualizar") {
                 const selector = comportamientosEnConflicto.findIndex((item) => {
                     const comportamientoUID_interno = Number(item.comportamientoUID)
-                    return comportamientoUID_interno === comportamientoUID
+
+                    return String(comportamientoUID_interno) === String(comportamientoUID)
                 })
                 if (selector !== -1) {
                     comportamientosEnConflicto.splice(comportamientosEnConflicto, 1);
                 }
             }
             if (comportamientosEnConflicto.length > 0) {
+
                 for (const comportamiento of comportamientosEnConflicto) {
                     const apartamentos = comportamiento.contenedor.apartamentos
                     for (const [i, detallesApartmento] of apartamentos.entries()) {
 
                         const apartamentoIDV = detallesApartmento.apartamentoIDV
-
-
                         if (contenedorApartamentosIDV.includes(apartamentoIDV)) {
                             const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
                                 apartamentoIDV: apartamentoIDV,
@@ -154,6 +155,7 @@ export const evitarDuplicados = async (data) => {
                         }
                     }
                 }
+
                 const error = {
                     error: "No se puede crear este comportamiento porque entra en conflicto con los apartamentos en otros comportamientos.",
                     comportamientosEnConflicto: comportamientosEnConflicto,

@@ -1,17 +1,14 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
-import { actualizarPosicionEnElementoPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/inventario/actualizarPosicionEnElementoPorUID.mjs";
-import { obtenerProtocolosPorApartamentoIDV } from "../../../../../infraestructure/repository/protocolos/alojamiento/inventario/obtenerProtocolosPorApartamentoIDV.mjs";
-import { obtenerProtocoloPorUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/inventario/obtenerProtocoloPorUID.mjs";
-import { campoDeTransaccion } from "../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
-import { obtenerProtocoloPorApartamentoUIDPorPosicion } from "../../../../../infraestructure/repository/protocolos/alojamiento/inventario/obtenerProtocoloPorApartamentoUIDPorPosicion.mjs";
-import { validarInventarioDelProtocolo } from "../../../../../shared/protocolos/validarInventarioDelProtocolo.mjs";
+
+import { validarInventarioDelProtocolo } from "../../../../../../shared/protocolos/validarInventarioDelProtocolo.mjs";
+import { obtenerProtocoloPorUID } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/obtenerProtocoloPorUID.mjs";
+import { obtenerProtocolosPorApartamentoIDV } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/obtenerProtocolosPorApartamentoIDV.mjs";
+import { obtenerProtocoloPorApartamentoUIDPorPosicion } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/obtenerProtocoloPorApartamentoUIDPorPosicion.mjs";
+import { campoDeTransaccion } from "../../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
+import { actualizarPosicionEnElementoPorUID } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/actualizarPosicionEnElementoPorUID.mjs";
 
 export const actualizarPosicionElementoInventario = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         const nuevoElemento = entrada.body
 
@@ -51,6 +48,10 @@ export const actualizarPosicionElementoInventario = async (entrada, salida) => {
             apartamentoIDV,
             posicion: nuevaPosicion
         })
+        if (!elementoAfectado) {
+            const error = "Ningún elemento tiene esa posición";
+            throw new Error(error);
+        }
         const posicionElementoAfectado = elementoAfectado.posicion
 
 

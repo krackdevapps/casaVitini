@@ -1,19 +1,17 @@
 import { Mutex } from "async-mutex";
 import { obtenerUsuario } from "../../infraestructure/repository/usuarios/obtenerUsuario.mjs";
-import { VitiniIDX } from "../../shared/VitiniIDX/control.mjs";
+;
 import { vitiniCrypto } from "../../shared/VitiniIDX/vitiniCrypto.mjs";
 import { obtenerAdministradores } from "../../infraestructure/repository/usuarios/obtenerAdministradores.mjs";
 import { eliminarUsuario } from "../../infraestructure/repository/usuarios/eliminarUsuario.mjs";
 import { eliminarSessionPorUsuario } from "../../infraestructure/repository/sessiones/eliminarSessionPorUsuario.mjs";
 import { campoDeTransaccion } from "../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
+import { adminControlIntegrity } from "../../shared/secOps/adminControlIntegrity.mjs";
 
 export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.control()
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1
@@ -47,15 +45,12 @@ export const eliminarCuentaDesdeMiCasa = async (entrada, salida) => {
             throw new Error(error);
         }
 
-        const rol = cuentaDeUsuario.rolIDV;
-        const rolAdministrador = "administrador";
-        if (rol === rolAdministrador) {
-            const adminsitradores = await obtenerAdministradores(rolAdministrador)
-            if (adminsitradores.length === 1) {
-                const error = "No se puede eliminar esta cuenta porque es la única cuenta administrativa existente. Si quieres eliminar esta cuenta, tienes que crear otra cuenta administradora. En el sistema debe de existir al menos una cuenta administrador";
-                throw new Error(error);
-            }
-        }
+        await adminControlIntegrity({
+            usuario: usuarioIDX,
+            contexto: "cuentas"
+        })
+
+
         await eliminarUsuario(usuarioIDX)
         await eliminarSessionPorUsuario(usuarioIDX)
         await campoDeTransaccion("confirmar")

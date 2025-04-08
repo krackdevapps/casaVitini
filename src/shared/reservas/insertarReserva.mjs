@@ -24,6 +24,7 @@ import { obtenerHabitacionDelApartamentoPorHabitacionUID } from '../../infraestr
 import { obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV } from '../../infraestructure/repository/reservas/apartamentos/obtenerHabitacionDelApartamentoPorApartamentoUIDPorHabitacionIDV.mjs';
 import { obtenerApartamentosDeLaReservaPorReservaUID } from '../../infraestructure/repository/reservas/apartamentos/obtenerApartamentosDeLaReservaPorReservaUID.mjs';
 import { estadoInicialPagoServicio } from './servicios/estadoInicialPagoServicio.mjs';
+import { sincronizarRegistros } from './detallesReserva/servicios/sincronizarRegistros.mjs';
 
 export const insertarReserva = async (reserva) => {
     try {
@@ -140,7 +141,6 @@ export const insertarReserva = async (reserva) => {
             }
         }
         const apartamentosArray = Object.keys(alojamiento);
-        const serviciosUID = contendorServicios.map((contenedor) => contenedor.servicioUID)
         const soloCodigosBase64Descunetos = []
         codigosDescuento.forEach((contenedor) => {
             const codigosUID = contenedor.codigosUID
@@ -214,6 +214,10 @@ export const insertarReserva = async (reserva) => {
             const eIP = estadoInicialPagoServicio({
                 gruposDeOpciones
             })
+            await sincronizarRegistros({
+                opcionesSeleccionadasDelServicio: servicioSolicitado,
+                servicioExistenteAccesible: servicio,
+            })
 
             await insertarServicioPorReservaUID({
                 reservaUID,
@@ -226,6 +230,10 @@ export const insertarReserva = async (reserva) => {
                 },
                 estadoPagoIDV: eIP
             })
+
+       
+    
+          //  throw new Error("reserva<1")
         }
 
         const desgloseFinanciero = await procesador({

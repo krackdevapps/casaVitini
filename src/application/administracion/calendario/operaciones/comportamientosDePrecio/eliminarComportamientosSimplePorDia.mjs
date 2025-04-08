@@ -1,6 +1,5 @@
-import Joi from "joi";
 import { Mutex } from "async-mutex";
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerComportamientosPorRangoPorTipoIDV } from "../../../../../infraestructure/repository/comportamientoDePrecios/obtenerComportamientosPorRangoPorTipoIDV.mjs";
 import { validadorComportamientosDesdeCalendario } from "../../../../../shared/contenedorFinanciero/comportamientoPrecios/validadorComportamientosDesdeCalendario.mjs";
 import { eliminarComportamientoDePrecioPorComportamientoUID } from "../../../../../infraestructure/repository/comportamientoDePrecios/eliminarComportamientoDePrecioPorComportamientoUID.mjs";
@@ -9,19 +8,16 @@ export const eliminarComportamientosSimplePorDia = async (entrada) => {
     const mutex = new Mutex();
 
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire();
 
-        await validadorComportamientosDesdeCalendario({
+       const oVal = await validadorComportamientosDesdeCalendario({
             entrada
         })
 
-        const fechasSel = entrada.body.fechasSel
-        const apartamentosIDVSel = entrada.body.apartamentosIDVSel
+        const fechasSel = oVal.fechasSel
+        const apartamentosIDVSel = oVal.apartamentosIDVSel
 
         const preSelectorCPorRango = []
         for (const f of fechasSel) {
@@ -69,6 +65,7 @@ export const eliminarComportamientosSimplePorDia = async (entrada) => {
                 }
             }
         }
+
         const ok = {
             ok: "Se han eliminado los precios de los dias y los apartamentos seleccionados correctamente",
             comportamientosResultantes

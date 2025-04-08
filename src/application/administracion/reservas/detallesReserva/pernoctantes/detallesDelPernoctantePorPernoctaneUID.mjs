@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerPernoctanteDeLaReservaPorPernoctaneUID } from "../../../../../infraestructure/repository/reservas/pernoctantes/obtenerPernoctanteDeLaReservaPorPernoctaneUID.mjs";
 import { obtenerClientePoolPorPernoctanteUID } from "../../../../../infraestructure/repository/pool/obtenerClientePoolPorPernoctanteUID.mjs";
@@ -7,11 +7,7 @@ import { obtenerDetallesCliente } from "../../../../../infraestructure/repositor
 
 export const detallesDelPernoctantePorPernoctaneUID = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -25,7 +21,7 @@ export const detallesDelPernoctantePorPernoctaneUID = async (entrada, salida) =>
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const pernoctanteUID = validadoresCompartidos.tipos.cadena({
@@ -35,7 +31,7 @@ export const detallesDelPernoctantePorPernoctaneUID = async (entrada, salida) =>
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         await obtenerReservaPorReservaUID(reservaUID);

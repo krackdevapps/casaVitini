@@ -2,7 +2,7 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { obtenerReservaPorReservaUID } from "../../../../../infraestructure/repository/reservas/reserva/obtenerReservaPorReservaUID.mjs"
 import { eliminarServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/eliminarServicioEnReservaPorServicioUID.mjs"
 import { obtenerServicioEnReservaPorServicioUID } from "../../../../../infraestructure/repository/reservas/servicios/obtenerServicioEnReservaPorServicioUID.mjs"
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs"
+
 import { actualizadorIntegradoDesdeInstantaneas } from "../../../../../shared/contenedorFinanciero/entidades/reserva/actualizadorIntegradoDesdeInstantaneas.mjs"
 import { reversionDeMovimiento } from "../../../../../shared/inventario/reversionDeMovimiento.mjs"
 import { sincronizarRegistros } from "../../../../../shared/reservas/detallesReserva/servicios/sincronizarRegistros.mjs"
@@ -10,11 +10,7 @@ import { validadoresCompartidos } from "../../../../../shared/validadores/valida
 
 export const eliminarServicioEnReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 1

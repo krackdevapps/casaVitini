@@ -1,5 +1,7 @@
 import { existsSync } from 'fs'
 import { filtroError } from '../../src/shared/error/filtroError.mjs';
+import { secPort } from '../../src/shared/secOps/secPort.mjs';
+import { crearRegistro } from '../../src/shared/registros/crearRegistro.mjs';
 
 export const puerto = async (entrada, salida) => {
     try {
@@ -24,7 +26,7 @@ export const puerto = async (entrada, salida) => {
             .split("/")
             .filter(rama => rama.trim() !== "")
 
-        if (!arbol) {
+        if (!arbol || arbol.length === 0) {
             const error = "arbolNoDefinido";
             throw new Error(error);
         }
@@ -33,11 +35,19 @@ export const puerto = async (entrada, salida) => {
         const pathControllers = directorioRaiz + "/src/application/" + zonaRaw + ".mjs"
 
         if (existsSync(pathControllers)) {
-
+            await secPort({
+                arbol: arbol,
+                usuario: entrada?.session?.usuario,
+                tipoPermiso: "controlador"
+            })
             const controllerSelected = await import(pathControllers)
             const nombreMetodo = arbol.pop();
             if (typeof controllerSelected[nombreMetodo] === 'function') {
                 const respuesta = await controllerSelected[nombreMetodo](entrada, salida);
+                await crearRegistro({
+                    registroUI: respuesta,
+                    entrada
+                })
                 salida.json(respuesta)
             } else {
                 const error = "Dentro de esta zona no hay ninguna función."
@@ -48,9 +58,13 @@ export const puerto = async (entrada, salida) => {
             throw new Error(error)
         }
 
-    } catch (errorCapturado) {
-        console.error("errorCapturado", errorCapturado.stack);
-        const errorFinal = filtroError(errorCapturado)
+    } catch (error) {
+        await crearRegistro({
+            registroUI: error,
+            entrada
+        })
+        console.error("errorCapturado", error.stack);
+        const errorFinal = filtroError(error)
         salida.json(errorFinal)
     }
 }

@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../../shared/VitiniIDX/control.mjs";
+
 import { campoDeTransaccion } from "../../../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 import { validarTareaDelProtocolo } from "../../../../../../shared/protocolos/validarTareaDelProtocolo.mjs";
 import { obtenerTareasDelProtocolosPorApartamentoIDV } from "../../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/obtenerTareasDelProtocolosPorApartamentoIDV.mjs";
@@ -8,10 +8,7 @@ import { obtenerTareaPorApartamentoIDVPorPosicion } from "../../../../../../infr
 
 export const actualizarPosicionTarea = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
 
         const nuevoElemento = entrada.body
 
@@ -52,9 +49,6 @@ export const actualizarPosicionTarea = async (entrada, salida) => {
             apartamentoIDV,
             posicion: nuevaPosicion
         })
-        const posicionElementoAfectado = elementoAfectado.posicion
-
-
         await campoDeTransaccion("iniciar")
 
         await actualizarTareaEnElementoPorUID({

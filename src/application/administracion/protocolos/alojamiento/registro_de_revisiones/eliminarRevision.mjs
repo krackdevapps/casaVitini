@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { validarElemento } from "../../../../../shared/inventario/validarElemento.mjs";
 import { obtenerRevisionPorRevisionUID } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerRevisionPorRevisionUID.mjs";
 import { reversionDeMovimiento } from "../../../../../shared/inventario/reversionDeMovimiento.mjs";
@@ -7,12 +7,6 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 
 export const eliminarRevision = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
-
         const elementoValidado = validarElemento({
             o: entrada.body,
             filtrosIDV: [

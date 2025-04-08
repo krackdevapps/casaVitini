@@ -36,7 +36,10 @@ textarea {
     appearance: none;
     outline: none;
 }
+textarea {
+    resize: vertical;
 
+}
 .textAreaRedimenzionHorizontal {
     resize: vertical;
 }
@@ -145,6 +148,7 @@ summary:hover {
     justify-content: flex-end;
     align-items: center;
     scale: 1;
+    background-color: rgba(0, 0, 0, 0.1);
 
     @starting-style {
         scale: 0;
@@ -396,6 +400,12 @@ summary:hover {
     padding-right: 50px !important;
 }
 
+.paddingLateral6 {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+
 .paddingLateral10 {
     padding-left: 10px;
     padding-right: 10px;
@@ -404,6 +414,10 @@ summary:hover {
 .paddingLateral14 {
     padding-left: 14px;
     padding-right: 14px;
+}
+.paddingLateral12 {
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 .paddingLateral16 {
@@ -435,6 +449,11 @@ summary:hover {
 .paddingLateral24 {
     padding-left: 24px;
     padding-right: 24px;
+}
+
+.paddingVertical10 {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .paddingVertical14 {
@@ -1287,8 +1306,8 @@ summary:hover {
     flex-wrap: nowrap;
     gap: 20px;
     border-radius: 20px;
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
+    /* backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px); */
 }
 
 .fondoTransparente {
@@ -2461,7 +2480,7 @@ summary:hover {
 }
 
 .contenedorOculto {
-    display: none !important;
+    display: none;
 }
 
 .tarjetaGris {
@@ -2732,6 +2751,11 @@ textarea {
     font-size: 20px;
 }
 
+.fontSize16 {
+    font-size: 16px;
+}
+
+
 
 .fontSize40 {
     font-size: 40px;
@@ -2866,4 +2890,11 @@ textarea {
     background-color: blue !important;
     color: white !important;
     box-shadow: 0 0 20px 4px #00000078;
+}
+.flex1 {
+    flex: 1
+}
+
+.positionAbsolute {
+    position: absolute;
 }

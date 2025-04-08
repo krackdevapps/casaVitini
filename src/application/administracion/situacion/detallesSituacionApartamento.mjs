@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { codigoZonaHoraria } from "../../../shared/configuracion/codigoZonaHoraria.mjs";
 import { eventosDelApartamento } from "../../../shared/calendariosSincronizados/airbnb/eventosDelApartamento.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { horasSalidaEntrada as horasSalidaEntrada_ } from "../../../shared/configuracion/horasSalidaEntrada.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { utilidades } from "../../../shared/utilidades.mjs";
@@ -14,14 +14,11 @@ import { obtenerApartamentoDeLaReservaPorApartamentoIDVPorReservaUID } from "../
 import { obtenerTodosLosPernoctantesDeLaReserva } from "../../../infraestructure/repository/reservas/pernoctantes/obtenerTodosLosPernoctantesDeLaReserva.mjs";
 import { obtenerApartamentoComoEntidadPorApartamentoIDV } from "../../../infraestructure/repository/arquitectura/entidades/apartamento/obtenerApartamentoComoEntidadPorApartamentoIDV.mjs";
 import { obtenerReservasQueRodeanUnaFecha } from "../../../infraestructure/repository/reservas/selectoresDeReservas/obtenerReservasQueRodeanUnaFecha.mjs";
+import { obtenerEstadoRevisionDelAlojamiento } from "../../../shared/protocolos/obtenerEstadoRevisionDelAlojamiento.mjs";
 
 export const detallesSituacionApartamento = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
@@ -62,8 +59,16 @@ export const detallesSituacionApartamento = async (entrada, salida) => {
             horaSalida: horaSalidaTZ,
             horaEntrada: horaEntradaTZ,
             estadoPernoctacion: "libre",
-            reservas: {}
+            reservas: {},
+            estadoPreparacion: null
         };
+
+
+        const estadoPreparacion = await obtenerEstadoRevisionDelAlojamiento({
+            apartamentoIDV
+        })
+
+        objetoFinal.estadoPreparacion = estadoPreparacion
 
         const reservasUIDHoy = await obtenerReservasQueRodeanUnaFecha({
             fechaReferencia: fechaActualTZ,

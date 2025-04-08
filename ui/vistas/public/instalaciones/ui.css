@@ -1,16 +1,80 @@
 body {
     /* background-color: rgb(255 188 0 / 0.05); */
-    background-image: url(/activos/imagenes/fotos/image00001_2s_comprimida.jpg);
+    background-image: url(/activos/imagenes/fotos/image00001-v4.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
-    /* background: linear-gradient(to bottom, #f0f0f0 50%, #ffffff 50%);
-    background-size: 100% 200%; */
+    background-position: top center;
+    /* background: linear-gradient(to bottom, #f0f0f0 50%, #ffffff 50%);*/
+    /* background-size: auto 50vh; */
+    /* animation: none; */
+    transition: background 250ms linear;
+    background-color: rgb(255, 254, 245);
+}
+
+#uiLogo {
+    translate: 0px -10px;
+}
+
+@media (min-width: 2160px) {
+    body {
+        background-size: 2160px auto;
+        background-position: center center;
+
+        /* Limita el ancho máximo a 2160px si la ventana es más grande */
+    }
 }
 
 main {
     position: absolute;
+}
 
+.contenedorInicial {
+    height: 100vh;
+    width: 100%;
+}
+
+.marcoElasticoRelativo {
+    /* padding-left: 80px;
+    padding-right: 80px; */
+    max-width: 2160px;
+    gap: 20px;
+    transition: padding 1s linear, scale 250ms ease-in-out !important;
+    padding: 0px;
+    /* background-color: rgb(255, 254, 245); */
+    /* margin-top: 78vh; */
+    padding-bottom: 20px;
+    background: linear-gradient(to bottom, transparent 100vh, rgb(255, 254, 245) 20px);
+
+}
+
+.marcoElasticoRelativo>* {
+    transition: scale 250ms ease-in-out !important;
+
+}
+
+
+@media (max-width: 720px) {
+    body {
+        background-position: top center;
+        background-size: auto 50vh;
+
+    }
+
+    .contenedorInicial {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        overflow: hidden;
+        height: 50vh;
+
+        /* Limita el ancho máximo a 2160px si la ventana es más grande */
+    }
+
+    .marcoElasticoRelativo {
+        padding-left: 0px;
+        padding-right: 0px;
+        background: linear-gradient(to bottom, transparent 50vh, rgb(255, 254, 245) 20px);
+
+    }
 }
 
 .superContainer {
@@ -58,24 +122,6 @@ main * {
     font-family: opensans-semibold !important;
 }
 
-.marcoElasticoRelativo {
-    /* padding-left: 80px;
-    padding-right: 80px; */
-    max-width: 2160px;
-    gap: 20px;
-    transition: padding 1s linear, scale 250ms ease-in-out !important;
-    padding: 0px;
-    background-color: rgb(255, 254, 245);
-    margin-top: 78vh;
-    padding-bottom: 20px;
-
-}
-
-.marcoElasticoRelativo>* {
-    transition: scale 250ms ease-in-out !important;
-
-}
-
 @media (max-width: 920px) {
     .bloqueCaracteristicas {
         align-items: center;
@@ -86,12 +132,6 @@ main * {
         box-shadow: 0px 0px 0px 0px;
     }
 
-    .marcoElasticoRelativo {
-        padding-left: 0px;
-        padding-right: 0px;
-        margin-top: 80vh;
-
-    }
 
     .imagenBancoBambu {
         background-position: 80% center !important;
@@ -392,9 +432,13 @@ main * {
     .textoPresentacion {
         padding-left: 20px;
         padding-right: 20px;
-        padding-top: 20px;
+        padding-top: 0px;
         padding-bottom: 0px;
-
+        /* text-align: left; */
+        text-wrap: pretty;
+        hyphens: auto;
+        word-wrap: break-word;
+        /* text-indent: 20px; */
     }
 }
 
@@ -455,12 +499,8 @@ main * {
 
 @media (max-width: 920px) {
     .gridImagenesApartamento {
-
         height: 200px;
-
     }
-
-
 }
 
 .gridImagenesApartamento1 {
@@ -639,6 +679,7 @@ main * {
     border-radius: 10px;
     transition: all 250ms linear;
     background: rgba(0, 0, 0, 0.1);
+    translate: -10px;
 
 }
 
@@ -692,15 +733,16 @@ main * {
     padding-right: 8px;
 }
 
-.tituloApartmentoResponsivo{
+.tituloApartmentoResponsivo {
     display: none;
 }
 
 
 @media (max-width: 920px) {
-    .tituloApartmentoResponsivo{
+    .tituloApartmentoResponsivo {
         display: flex;
     }
+
     .tituloApartmentoNOResponsivo {
         display: none;
 

@@ -196,6 +196,7 @@ export const validarObjetoOferta = async (data) => {
                         sePermiteVacio: "no",
                         impedirCero: "si",
                         devuelveUnTipoNumber: "no",
+                        devuelveUnTipoBigInt: "no",
                         limpiezaEspaciosAlrededor: "si",
                     })
 
@@ -294,6 +295,7 @@ export const validarObjetoOferta = async (data) => {
                         filtro: "cadenaConNumerosEnteros",
                         sePermiteVacio: "no",
                         devuelveUnTipoNumber: "no",
+                        devuelveUnTipoBigInt: "no",
                         impedirCero: "si",
                         limpiezaEspaciosAlrededor: "si",
                     })
@@ -322,6 +324,7 @@ export const validarObjetoOferta = async (data) => {
                         sePermiteVacio: "no",
                         impedirCero: "si",
                         devuelveUnTipoNumber: "no",
+                        devuelveUnTipoBigInt: "no",
                         limpiezaEspaciosAlrededor: "si",
                     })
 
@@ -447,7 +450,7 @@ export const validarObjetoOferta = async (data) => {
                 const error = `En el descuento ${tipoDescuento}, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
                 throw new Error(error)
             }
-            validadoresCompartidos.tipos.cadena({
+            descuentosJSON.descuentoTotal = validadoresCompartidos.tipos.cadena({
                 string: descuentoTotal,
                 nombreCampo: `El campo descuentoTotal en ${tipoDescuento} solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                 filtro: "cadenaConNumerosConDosDecimales",
@@ -456,6 +459,7 @@ export const validarObjetoOferta = async (data) => {
                 devuelveUnTipoNumber: "no",
                 limpiezaEspaciosAlrededor: "si",
             })
+
 
         } else if (tipoDescuento === "mismoDescuentoParaCadaApartamento") {
 
@@ -471,7 +475,7 @@ export const validarObjetoOferta = async (data) => {
                 const error = `En el descuento, el campo tipoAplicacion solo puede ser porcentaje o cantidadFija`
                 throw new Error(error)
             }
-            validadoresCompartidos.tipos.cadena({
+            descuentosJSON.descuentoTotal = validadoresCompartidos.tipos.cadena({
                 string: descuentoTotal,
                 nombreCampo: `El campo descuentoTotla solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                 filtro: "cadenaConNumerosConDosDecimales",
@@ -525,7 +529,7 @@ export const validarObjetoOferta = async (data) => {
                 apartamentoIndividual.apartamentoUI = entidadAlojamiento.apartamentoUI
 
 
-                validadoresCompartidos.tipos.cadena({
+                apartamentoIndividual.descuentoTotal = validadoresCompartidos.tipos.cadena({
                     string: descuentoTotal,
                     nombreCampo: `El campo descuentoTotal en ${tipoDescuento}, en el ${apartamentoIDV} solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                     filtro: "cadenaConNumerosConDosDecimales",
@@ -571,7 +575,7 @@ export const validarObjetoOferta = async (data) => {
                     const error = `En ${subTipoDescuento} el tipo aplicación del descuento solo puede ser porcentaje o cantidadFija`
                     throw new Error(error)
                 }
-                validadoresCompartidos.tipos.cadena({
+                descuentosJSON.descuentoTotal = validadoresCompartidos.tipos.cadena({
                     string: descuentoTotal,
                     nombreCampo: `El campo descuentoTotal en ${subTipoDescuento} del día solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                     filtro: "cadenaConNumerosConDosDecimales",
@@ -630,13 +634,14 @@ export const validarObjetoOferta = async (data) => {
                             const error = `En el día ${fechaDelDia} el tipo aplicación del descuento solo puede ser porcentaje o cantidadFija`
                             throw new Error(error)
                         }
-                        validadoresCompartidos.tipos.cadena({
+                        dia.descuentoTotal = validadoresCompartidos.tipos.cadena({
                             string: descuentoTotal,
                             nombreCampo: `En el día ${fechaDelDia}, el campo descuentoTotal solo puede ser una cadena con un número con dos decimales separados por punto.`,
                             filtro: "cadenaConNumerosConDosDecimales",
                             sePermiteVacio: "no",
                             impedirCero: "si",
                             devuelveUnTipoNumber: "no",
+                            devuelveUnTipoBigInt: "no",
                             limpiezaEspaciosAlrededor: "si",
                         })
                     } else if (tipoDescuentoDelDia === "netoPorApartamentoDelDia") {
@@ -690,13 +695,14 @@ export const validarObjetoOferta = async (data) => {
                                 throw new Error(error)
                             }
 
-                            validadoresCompartidos.tipos.cadena({
+                            apartmentoDelDia.descuentoTotal = validadoresCompartidos.tipos.cadena({
                                 string: apartmentoDelDia.descuentoTotal,
                                 nombreCampo: `El campo descuentoTotal del día ${fechaDelDia} en el ${apartamentoUI} (${apartamentoIDV}) solo puede ser una cadena con un número con dos decimales separados por punto, tal que así 0.00`,
                                 filtro: "cadenaConNumerosConDosDecimales",
                                 sePermiteVacio: "no",
                                 impedirCero: "si",
                                 devuelveUnTipoNumber: "no",
+                                devuelveUnTipoBigInt: "no",
                                 limpiezaEspaciosAlrededor: "si",
                             })
                         }

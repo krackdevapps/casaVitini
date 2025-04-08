@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../../../shared/VitiniIDX/control.mjs";
+
 import { obtenerRevisionPorApartamentoIDVPorEstado } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/obtenerRevisionPorApartamentoIDVPorEstado.mjs";
 import { validarInventarioDelProtocolo } from "../../../../../shared/protocolos/validarInventarioDelProtocolo.mjs";
 import { crearRevisionPorUsuario } from "../../../../../infraestructure/repository/protocolos/alojamiento/revision_alojamiento/crearRevisionPorUsuario.mjs";
@@ -8,23 +8,16 @@ import { campoDeTransaccion } from "../../../../../infraestructure/repository/gl
 import { obtenerProtocolosPorApartamentoIDV } from "../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/inventario/obtenerProtocolosPorApartamentoIDV.mjs";
 import { obtenerTareasDelProtocolosPorApartamentoIDV } from "../../../../../infraestructure/repository/protocolos/alojamiento/gestion_de_protocolos/tareas/obtenerTareasDelProtocolosPorApartamentoIDV.mjs";
 
-export const obtenerRevision = async (entrada, salida) => {
+export const obtenerRevision = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
-
-        const data = entrada.body
 
         const protocolVal = validarInventarioDelProtocolo({
-            o: data,
+            o: entrada.body,
             filtrosIDV: [
                 "apartamentoIDV"
             ]
         })
-        const usuarioSolicitante = IDX.usuario
+        const usuarioSolicitante = entrada.session.usuario
         const apartamentoIDV = protocolVal.apartamentoIDV
         await campoDeTransaccion("iniciar")
 
@@ -55,6 +48,7 @@ export const obtenerRevision = async (entrada, salida) => {
         } else {
             const tiempoZH = DateTime.now();
             const fechaActual = tiempoZH.toISO();
+
             const nuevaRevision = await crearRevisionPorUsuario({
                 fechaInicio: fechaActual,
                 usuario: usuarioSolicitante,
@@ -67,7 +61,6 @@ export const obtenerRevision = async (entrada, salida) => {
         }
         const inventarioAlojamiento = await obtenerProtocolosPorApartamentoIDV(apartamentoIDV)
         const tareasAlojamiento = await obtenerTareasDelProtocolosPorApartamentoIDV(apartamentoIDV)
-
 
         ok.protocolo = {
             inventarioAlojamiento,

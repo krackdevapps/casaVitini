@@ -16,7 +16,7 @@ export const validarTareaRealizada = (data) => {
 
         if (filtrosIDV.includes("respuestas")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 respuestas: Joi.array().items(
                     Joi.object({
                         explicacion: Joi.string().required().allow(""),
@@ -64,14 +64,14 @@ export const validarTareaRealizada = (data) => {
                         }),
                     })
 
-                ).min(1).required()
+                ).required()
 
             });
         }
 
         if (filtrosIDV.includes("uid")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
 
                 uid: Joi.string().optional().custom((value, helpers) => {
                     try {

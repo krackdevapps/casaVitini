@@ -146,17 +146,15 @@ export const preConfirmarReserva = async (entrada) => {
             configuracionPorTabla: {}
         });
         if (!testingVI) {
-            //  enviarMailReservaConfirmadaAlCliente(reservaUID)
+            // enviarMailReservaConfirmadaAlCliente(reservaUID)
             // enviarMailDeAvisoPorReservaPublica(reservaUID)
         }
 
-
-        
         const ok = {
             ok: "Reserva confirmada",
             detalles: resolverDetallesReserva,
             caracteristicasPorApartamento: caracteristicasPorApartamento,
-            informacionPublicaPorApartamento:informacionPublicaPorApartamento,
+            informacionPublicaPorApartamento: informacionPublicaPorApartamento,
             pdf
         }
         return ok

@@ -2,7 +2,6 @@ import { eventosReservas } from "../../../../shared/calendarios/eventos/eventosR
 import { eventosTodosLosApartamentos } from "../../../../shared/calendarios/eventos/eventosTodosLosApartamentos.mjs";
 import { eventosTodosLosBloqueos } from "../../../../shared/calendarios/eventos/eventosTodosLosBloqueos.mjs";
 import { eventosPorApartamentoAirbnb } from "../../../../shared/calendarios/eventos/calendariosSincronizados/airbnb/eventosPorApartamentoAirbnb.mjs";
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
 import { eliminarBloqueoCaducado } from "../../../../shared/bloqueos/eliminarBloqueoCaducado.mjs";
 import { DateTime } from "luxon";
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
@@ -20,11 +19,7 @@ import { bloqueosPorApartamento } from "../../../../shared/calendarios/capasComo
 
 export const multiCapa = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.empleados()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -207,6 +202,15 @@ export const multiCapa = async (entrada) => {
                     });
 
                     estructuraGlobal.contenedorDia.desglosePorNoche = desglosePorNoche
+
+                    for (const apartamentoIDV of apartamentosIDV) {
+                        const apartamento = (await obtenerApartamentoComoEntidadPorApartamentoIDV({
+                            apartamentoIDV: apartamentoIDV,
+                            errorSi: "noExiste"
+                        }))
+                        const apartamentoUI = apartamento.apartamentoUI
+                        estructuraGlobal.apartamentos[apartamentoIDV] = apartamentoUI
+                    }
                 }
             },
             reservasPorApartamento: async () => {

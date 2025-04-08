@@ -231,7 +231,9 @@ casaVitini.view = {
                 zona: "administracion/servicios/detallesServicio",
                 servicioUID: String(servicioUID)
             }
+
             const respuestaServidor = await casaVitini.shell.servidor(transaccion)
+
             const seccionRenderizada = document.querySelector(`main[instanciaUID="${instanciaUID}"]`)
             if (!seccionRenderizada) { return }
             if (respuestaServidor?.error) {
@@ -319,13 +321,6 @@ casaVitini.view = {
                 selectorContenedorFechas.style.display = "none"
             }
 
-
-
-
-
-
-
-
             const nombreServicioCampo = servicioUI.querySelector("[campo=nombreServicio]")
             nombreServicioCampo.value = nombre
 
@@ -337,9 +332,6 @@ casaVitini.view = {
 
             const disponibilidadIDVSelector = servicioUI.querySelector("[campo=disponibilidadIDV]")
             disponibilidadIDVSelector.value = disponibilidadIDV
-
-
-
 
             const tituloPublicoCampo = servicioUI.querySelector("[campo=tituloPublico]")
             tituloPublicoCampo.value = tituloPublico
@@ -397,6 +389,7 @@ casaVitini.view = {
                     gpUI.querySelector("[contenedor=opciones]").appendChild(ogUI)
 
                     if (elementoEnlazado) {
+
                         const nombre = elementoEnlazado.nombre
                         const elementoUID = elementoEnlazado.elementoUID
 
@@ -404,9 +397,9 @@ casaVitini.view = {
                             nombre,
                             elementoUID
                         })
-                        const contenedorSinEnlace = gpUI.querySelector("[contenedro=sinEnlace]")
+                        const contenedorSinEnlace = ogUI.querySelector("[contenedro=sinEnlace]")
                         contenedorSinEnlace.classList.add("ocultoInicial")
-                        const contenedorConEnlace = gpUI.querySelector("[contenedro=conEnlace]")
+                        const contenedorConEnlace = ogUI.querySelector("[contenedro=conEnlace]")
                         contenedorConEnlace.classList.remove("ocultoInicial")
 
                         contenedorConEnlace.appendChild(enlaceUI)

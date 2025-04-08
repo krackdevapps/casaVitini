@@ -76,7 +76,7 @@ export const obtenerResultadosBusquedaEnElRegistroDelElemento = async (data) => 
                 SELECT "UID"
                 FROM "inventarioGeneral"
                 WHERE LOWER(COALESCE(nombre, '')) ILIKE ANY($1)
-                    )
+                )
            
                 )
             ORDER BY

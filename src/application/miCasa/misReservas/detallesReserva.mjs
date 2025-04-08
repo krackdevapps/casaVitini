@@ -1,4 +1,4 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { detallesReserva as detallesReserva_ } from "../../../shared/reservas/detallesReserva.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 import { obtenerDatosPersonales } from "../../../infraestructure/repository/usuarios/obtenerDatosPersonales.mjs";
@@ -11,10 +11,6 @@ import { limpiarContenedorFinacieroInformacionPrivada } from "../../../shared/mi
 
 export const detallesReserva = async (entrada) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.control()
-
         const usuario = entrada.session.usuario;
 
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
@@ -28,7 +24,7 @@ export const detallesReserva = async (entrada) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const datosDelUsuario = await obtenerDatosPersonales(usuario)

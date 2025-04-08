@@ -1,14 +1,11 @@
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { totalesBasePorRango } from "../../../shared/contenedorFinanciero/entidades/reserva/totalesBasePorRango.mjs";
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
 
 
 export const precioRangoApartamentos = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2

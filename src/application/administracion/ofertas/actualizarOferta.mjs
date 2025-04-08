@@ -1,5 +1,5 @@
 import { validadoresCompartidos } from "../../../shared/validadores/validadoresCompartidos.mjs";
-import { VitiniIDX } from "../../../shared/VitiniIDX/control.mjs";
+
 import { Mutex } from "async-mutex";
 import { obtenerOferatPorOfertaUID } from "../../../infraestructure/repository/ofertas/obtenerOfertaPorOfertaUID.mjs";
 import { campoDeTransaccion } from "../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
@@ -7,13 +7,11 @@ import { validarObjetoOferta } from "../../../shared/ofertas/entidades/reserva/v
 import { actualizarOfertaPorOfertaUID } from "../../../infraestructure/repository/ofertas/actualizarOfertaPorOfertaUID.mjs";
 import { insertarApartamentoUIEnObjetoOfertas } from "../../../shared/ofertas/entidades/reserva/insertarApartamentoUIEnObjetoOfertas.mjs";
 
+
 export const actualizarOferta = async (entrada) => {
     const mutex = new Mutex()
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session)
-        IDX.administradores()
-        IDX.control()
+
 
         await mutex.acquire()
 
@@ -25,7 +23,7 @@ export const actualizarOferta = async (entrada) => {
             limpiezaEspaciosAlrededor: "si",
             sePermitenNegativos: "no",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const oferta = await obtenerOferatPorOfertaUID(ofertaUID)
@@ -64,6 +62,7 @@ export const actualizarOferta = async (entrada) => {
         await campoDeTransaccion("iniciar")
         const ofertaActualizada = await actualizarOfertaPorOfertaUID(ofertaPorActualizar);
         await insertarApartamentoUIEnObjetoOfertas(ofertaActualizada)
+
         await campoDeTransaccion("confirmar")
 
         ofertaActualizada.condicionesArray.forEach((condicion) => {

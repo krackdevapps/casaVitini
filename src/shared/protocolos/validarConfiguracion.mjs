@@ -15,7 +15,7 @@ export const validarConfiguracion = (data) => {
 
         if (filtrosIDV.includes("diasCaducidadRevision")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 diasCaducidadRevision: Joi.string().optional().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({
@@ -37,7 +37,7 @@ export const validarConfiguracion = (data) => {
         }
         if (filtrosIDV.includes("diasAntelacionPorReserva")) {
             numeroFiltros++
-            schema = schema.append({
+            schema = schema.keys({
                 diasAntelacionPorReserva: Joi.string().optional().custom((value, helpers) => {
                     try {
                         return validadoresCompartidos.tipos.cadena({

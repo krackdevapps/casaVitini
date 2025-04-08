@@ -2,7 +2,6 @@ import { DateTime } from "luxon";
 import { enviarMailAlCrearCuentaNueva } from "../../shared/mail/enviarMailAlCrearCuentaNueva.mjs";
 import { validadoresCompartidos } from "../../shared/validadores/validadoresCompartidos.mjs";
 import { vitiniCrypto } from "../../shared/VitiniIDX/vitiniCrypto.mjs";
-
 import { obtenerUsuarioPorCodigoVerificacion } from "../../infraestructure/repository/usuarios/obtenerUsuarioPorCodigoVerificacion.mjs";
 import { insertarUsuario } from "../../infraestructure/repository/usuarios/insertarUsuario.mjs";
 import { insertarFilaDatosPersonales } from "../../infraestructure/repository/usuarios/insertarFilaDatosPersonales.mjs";
@@ -27,7 +26,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
 
         const usuarioIDX = validadoresCompartidos.tipos.cadena({
             string: entrada.body.usuarioIDX,
-            nombreCampo: "El nombre de usuario (VitiniIDX)",
+            nombreCampo: "El nombre de usuario",
             filtro: "strictoIDV",
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
@@ -108,11 +107,9 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         const fechaCaducidadCuentaNoVerificada = fechaActualUTC.plus({ minutes: 30 });
         const estadoCuenta = "activado";
         const cuentaVerificada = "no";
-        const rolIDV = "cliente";
 
         const nuevoUsuario = await insertarUsuario({
             usuarioIDX: usuarioIDX,
-            rolIDV: rolIDV,
             estadoCuenta: estadoCuenta,
             nuevaSal: nuevaSal,
             hashCreado: hashCreado,
@@ -137,6 +134,7 @@ export const crearCuentaDesdeMiCasa = async (entrada, salida) => {
         }
         return ok
     } catch (errorCapturado) {
+
         await campoDeTransaccion("cancelar");
         throw errorCapturado
     }

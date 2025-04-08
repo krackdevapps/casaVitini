@@ -1,16 +1,14 @@
-import { VitiniIDX } from "../../../../shared/VitiniIDX/control.mjs";
+
 import { validadoresCompartidos } from "../../../../shared/validadores/validadoresCompartidos.mjs";
 
 import { obtenerMensajePorMensajeUID } from "../../../../infraestructure/repository/configuracion/mensajesPortada/obtenerMensajePorMensajeUID.mjs";
 import { actualizarEstadoMensajeDePortada } from "../../../../infraestructure/repository/configuracion/mensajesPortada/actualizarEstadoMensajeDePortada.mjs";
 import { campoDeTransaccion } from "../../../../infraestructure/repository/globales/campoDeTransaccion.mjs";
 
+
 export const actualizarEstado = async (entrada, salida) => {
     try {
-        const session = entrada.session
-        const IDX = new VitiniIDX(session, salida)
-        IDX.administradores()
-        IDX.control()
+
         validadoresCompartidos.filtros.numeroDeLLavesEsperadas({
             objeto: entrada.body,
             numeroDeLLavesMaximo: 2
@@ -22,7 +20,7 @@ export const actualizarEstado = async (entrada, salida) => {
             sePermiteVacio: "no",
             limpiezaEspaciosAlrededor: "si",
             devuelveUnTipoNumber: "no",
-            devuelveUnTipoBigInt: "si"
+            devuelveUnTipoBigInt: "no"
         })
 
         const estadoIDV = validadoresCompartidos.tipos.cadena({
@@ -41,6 +39,7 @@ export const actualizarEstado = async (entrada, salida) => {
             estadoIDV: estadoIDV
         }
         await actualizarEstadoMensajeDePortada(dataActualizarEstadoMensaje)
+
         await campoDeTransaccion("confirmar")
         const ok = {
             ok: "Se ha actualizado el estado correctamente",
